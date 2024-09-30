@@ -13,7 +13,7 @@
             class="mt-3.5"
         >
           <el-form-item :label="t('view.systemTools.system.portValue')">
-            <el-input v-model.number="config.system.addr" placeholder="请输入端口值"/>
+            <el-input-number v-model.number="config.system.addr" placeholder="请输入端口值"/>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.dbType')">
             <el-select
@@ -50,7 +50,7 @@
             <el-switch v-model="config.system['use-mongo']"/>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.strictRoleMode')">
-            <el-checkbox v-model="config.system['use-strict-auth']">{{ t('general.enable') }}</el-checkbox>
+            <el-switch v-model="config.system['use-strict-auth']"/>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.ipLimitCount')">
             <el-input-number v-model.number="config.system['iplimit-count']"/>
@@ -75,18 +75,18 @@
           <el-form-item :label="t('view.systemTools.system.jwtSignature')">
             <el-input v-model.trim="config.jwt['signing-key']" :placeholder="t('view.systemTools.system.jwtSignatureNote')">
               <template #append>
-                <el-button @click="CreateUUID">{{ t('view.systemTools.system.generate') }}</el-button>
+                <el-button @click="getUUID">{{ t('view.systemTools.system.generate') }}</el-button>
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item :label="t('view.systemTools.system.expirationSec')">
+          <el-form-item :label="t('view.systemTools.system.expirartionSec')">
             <el-input v-model.trim="config.jwt['expires-time']" :placeholder="t('view.systemTools.system.expirationTimeNote')"/>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.bufferPeriodSec')">
             <el-input v-model.trim="config.jwt['buffer-time']" :placeholder="t('view.systemTools.system.bufferPeriodNote')"/>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.issuer')">
-            <el-input v-model.trim="config.jwt.issuer" placeholder="t('view.systemTools.system.issuerNote')"/>
+            <el-input v-model.trim="config.jwt.issuer" :placeholder="t('view.systemTools.system.issuerNote')"/>
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane
@@ -161,8 +161,8 @@
         >
           <el-form-item :label="t('view.systemTools.system.recipientEmail')">
             <el-input
-              v-model="config.email.to"
-              :placeholder="t('view.systemTools.system.emailNote')"
+                v-model="config.email.to"
+                placeholder="可多个，以逗号分隔"
             />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.port')">
@@ -695,10 +695,11 @@
 
 <script setup>
 import { getSystemConfig, reloadSystem, setSystemConfig } from '@/api/system'
-import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Minus, Plus } from '@element-plus/icons-vue'
 import { emailTest } from '@/api/email'
+import {CreateUUID} from "@/utils/format";
+import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -750,7 +751,7 @@ const config = ref({
   local: {},
   email: {},
   timer: {
-    detail: {}
+    detail: {},
   },
   language: {}
 })
@@ -816,16 +817,8 @@ const email = async() => {
   }
 }
 
-const CreateUUID = () => {
-  let d = new Date().getTime()
-  if (window.performance && typeof window.performance.now === 'function') {
-    d += performance.now()
-  }
-  config.value.jwt['signing-key'] = '00000000-0000-0000-0000-000000000000'.replace(/0/g, (c) => {
-    const r = (d + Math.random() * 16) % 16 | 0    // d是随机种子
-    d = Math.floor(d / 16)
-    return (c === '0' ? r : (r & 0x3 | 0x8)).toString(16)
-  })
+const getUUID = () => {
+  config.value.jwt['signing-key'] = CreateUUID()
 }
 
 const addNode = () => {

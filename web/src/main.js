@@ -15,9 +15,9 @@ import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
+import i18n from './i18n' // added by mohamed hassan to multilangauge
 //消除警告
 import 'default-passive-events'
-import i18n from './i18n' // added by mohamed hassan to multilangauge
 
 const app = createApp(App)
 app.config.productionTip = false

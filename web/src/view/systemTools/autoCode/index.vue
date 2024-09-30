@@ -37,7 +37,7 @@
         ref="getTableForm"
         :inline="true"
         :model="dbform"
-        label-width="120px"
+        label-width="140px"
       >
         <el-row class="w-full">
           <el-col :span="6">
@@ -386,6 +386,20 @@
               <el-checkbox v-model="form.autoCreateResource" />
             </el-form-item>
           </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
+                    :content="t('view.systemTools.autoCode.createResourceIDNote')"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> {{ t('view.systemTools.autoCode.basicTemplate') }} <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.onlyTemplate" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
@@ -395,6 +409,7 @@
         <el-button
           type="primary"
           @click="editAndAddField()"
+          :disabled="form.onlyTemplate"
         >
           {{ t('view.systemTools.autoCode.addNewFields') }}
         </el-button>
@@ -575,7 +590,7 @@
           <el-table-column
             align="left"
             prop="dataTypeLong"
-            label="数据库字段长度"
+            :label="t('view.systemTools.autoCode.dbFieldLength')"
             width="160"
           >
             <template #default="{row}">
@@ -585,7 +600,7 @@
           <el-table-column
             align="left"
             prop="columnName"
-            label="数据库字段"
+            :label="t('view.systemTools.autoCode.columnName')"
             width="160"
           >
             <template #default="{row}">
@@ -595,7 +610,7 @@
           <el-table-column
             align="left"
             prop="comment"
-            label="数据库字段描述"
+            :label="t('view.systemTools.autoCode.comment')"
             width="160"
           >
             <template #default="{row}">
@@ -605,14 +620,14 @@
           <el-table-column
             align="left"
             prop="fieldSearchType"
-            label="搜索条件"
+            :label="t('general.searchCriteria')"
             width="130"
           >
             <template #default="{row}">
               <el-select
                 v-model="row.fieldSearchType"
                 style="width:100%"
-                placeholder="请选择字段查询条件"
+                :placeholder="t('view.systemTools.autoCode.searchConditionNote')"
                 clearable
                 :disabled="row.fieldType!=='json'"
               >
@@ -631,7 +646,7 @@
           </el-table-column>
           <el-table-column
             align="left"
-            label="操作"
+            :label="t('general.operations')"
             width="300"
             fixed="right"
           >
@@ -643,7 +658,7 @@
                 icon="edit"
                 @click="editAndAddField(scope.row)"
               >
-                高级编辑
+                {{ t('view.systemTools.autoCode.seniorEditor') }}
               </el-button>
               <el-button
                 type="primary"
@@ -651,7 +666,7 @@
                 icon="delete"
                 @click="deleteField(scope.$index)"
               >
-                删除
+                {{ t('general.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -663,7 +678,7 @@
             type="primary"
             @click="exportJson()"
         >
-          导出json
+          {{ t('view.systemTools.autoCode.exportJSON') }}
         </el-button>
         <el-upload
             class="flex items-center"
@@ -671,19 +686,19 @@
             show-file-list="false"
             accept=".json"
         >
-          <el-button type="primary" class="mx-2">导入json</el-button>
+          <el-button type="primary" class="mx-2">{{ t('view.systemTools.autoCode.importJSON') }}</el-button>
         </el-upload>
         <el-button
           type="primary"
           @click="clearCatch()"
         >
-          清除暂存
+        {{ t('view.systemTools.autoCode.clearTempStorage') }}
         </el-button>
         <el-button
           type="primary"
           @click="catchData()"
         >
-          暂存
+        {{ t('view.systemTools.autoCode.tempStorage') }}
         </el-button>
         <el-button
           type="primary"
@@ -707,16 +722,16 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">组件内容</span>
+          <span class="text-lg">{{ t('view.systemTools.autoCode.componentContent') }}</span>
           <div>
             <el-button @click="closeDialog">
-              取 消
+              {{ t('general.close') }}
             </el-button>
             <el-button
               type="primary"
               @click="enterDialog"
             >
-              确 定
+            {{ t('general.confirm') }}
             </el-button>
           </div>
         </div>
@@ -739,7 +754,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">操作栏</span>
+          <span class="text-lg">{{ t('view.systemTools.autoCode.actionBar') }}</span>
           <div>
             <el-button
               type="primary"
@@ -875,47 +890,47 @@ const dataModelList = ['created_by', 'updated_by', 'deleted_by']
 
 const typeOptions = ref([
   {
-    label: '字符串',
+    label: t('view.systemTools.autoCode.string'),
     value: 'string'
   },
   {
-    label: '富文本',
+    label: t('view.systemTools.autoCode.richText'),
     value: 'richtext'
   },
   {
-    label: '整型',
+    label: t('view.systemTools.autoCode.integer'),
     value: 'int'
   },
   {
-    label: '布尔值',
+    label: t('view.systemTools.autoCode.boolean'),
     value: 'bool'
   },
   {
-    label: '浮点型',
+    label: t('view.systemTools.autoCode.float'),
     value: 'float64'
   },
   {
-    label: '时间',
+    label: t('view.systemTools.autoCode.time'),
     value: 'time.Time'
   },
   {
-    label: '枚举',
+    label: t('view.systemTools.autoCode.enum'),
     value: 'enum'
   },
   {
-    label: '单图片（字符串）',
+    label: t('view.systemTools.autoCode.singleImage'),
     value: 'picture',
   },
   {
-    label: '多图片（json字符串）',
+    label: t('view.systemTools.autoCode.multipleImages'),
     value: 'pictures',
   },
   {
-    label: '视频（字符串）',
+    label: t('view.systemTools.autoCode.video'),
     value: 'video',
   },
   {
-    label: '文件（json字符串）',
+    label: t('view.systemTools.autoCode.file'),
     value: 'file',
   },
   {
@@ -923,7 +938,7 @@ const typeOptions = ref([
     value: 'json',
   },
   {
-    label: '数组',
+    label: t('view.systemTools.autoCode.arrays'),
     value: 'array',
   }
 ])
@@ -1024,6 +1039,7 @@ const form = ref({
   autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
+  onlyTemplate: false,
   fields: []
 })
 const rules = ref({
@@ -1044,7 +1060,7 @@ const rules = ref({
     }
   ],
   package: [
-    { required: true, message: '请选择package', trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.selectPackageNote'), trigger: 'blur' }
   ]
 })
 
@@ -1056,11 +1072,11 @@ const previewFlag = ref(false)
 const useGva = (e) => {
   if (e && form.value.fields.length) {
     ElMessageBox.confirm(
-      '如果您开启GVA默认结构，会自动添加ID,CreatedAt,UpdatedAt,DeletedAt字段，此行为将自动清除您目前在下方创建的重名字段，是否继续？',
-      '注意',
+      t('view.systemTools.autoCode.useGVAStructNote'),
+      t('view.systemTools.autoCode.note'),
       {
-        confirmButtonText: '继续',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning',
       }
     )
@@ -1132,9 +1148,9 @@ const closeDialog = () => {
 }
 
 const deleteField = (index) => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText:  t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
     form.value.fields.splice(index, 1)
@@ -1144,6 +1160,9 @@ const deleteField = (index) => {
 const autoCodeForm = ref(null)
 
 const enterForm = async(isPreview) => {
+
+  if(!form.value.onlyTemplate){
+
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
@@ -1155,7 +1174,7 @@ const enterForm = async(isPreview) => {
   if (!form.value.gvaModel && form.value.fields.every(item => !item.primaryKey)) {
     ElMessage({
       type: 'error',
-      message: '您至少需要创建一个主键才能保证自动化代码的可行性'
+      message: t('view.systemTools.autoCode.primeryKeyError')
     })
     return false
   }
@@ -1170,22 +1189,24 @@ const enterForm = async(isPreview) => {
     return false
   }
 
-  if (form.value.package === form.value.abbreviation) {
-    ElMessage({
-      type: 'error',
-      message: 'package和结构体简称不可同名'
-    })
-    return false
-  }
-
 
   if (form.value.fields.some(item => !item.fieldType)) {
     ElMessage({
       type: 'error',
-      message: '请填写所有字段类型后进行提交'
+      message: t('view.systemTools.autoCode.allFieldError')
     })
     return false
   }
+
+  if (form.value.package === form.value.abbreviation) {
+    ElMessage({
+      type: 'error',
+      message: t('view.systemTools.autoCode.packageStructAbbreviationError')
+    })
+    return false
+  }
+  }
+
 
   autoCodeForm.value.validate(async valid => {
     if (valid) {
@@ -1385,6 +1406,7 @@ const clearCatch = async () => {
     autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,
+    onlyTemplate: false,
     fields: []
   }
   await nextTick()
@@ -1409,16 +1431,31 @@ const exportJson = () => {
 const importJson = (file) =>{
   const reader = new FileReader()
   reader.onload = (e) => {
-    console.log(e)
     try {
       form.value = JSON.parse(e.target.result)
-      ElMessage.success('JSON 文件导入成功')
+      ElMessage.success(t('view.systemTools.autoCode.jsonImportedSuccessfully'))
     } catch (error) {
-      ElMessage.error('无效的 JSON 文件')
+      ElMessage.error(t('view.systemTools.autoCode.invalidJsonDocumentError'))
     }
   }
   reader.readAsText(file)
   return false
 }
+
+watch(()=>form.value.onlyTemplate,(val)=>{
+  if(val){
+    ElMessageBox.confirm(t('view.systemTools.autoCode.basicTemplateNote'), t('view.systemTools.autoCode.note'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
+      type: 'warning',
+    })
+      .then(() => {
+        form.value.fields = []
+      })
+      .catch(() => {
+        form.value.onlyTemplate = false
+      })
+  }
+})
 
 </script>

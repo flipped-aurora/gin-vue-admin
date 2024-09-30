@@ -198,6 +198,7 @@
               <el-input
                 v-model="form.meta.title"
                 autocomplete="off"
+                placeholder="示例：system.menu.website"
               />
             </el-form-item>
           </el-col>
@@ -287,7 +288,7 @@
               prop="meta.icon"
             >
               <icon
-                :meta="form.meta"
+                v-model="form.meta.icon"
               />
             </el-form-item>
           </el-col>

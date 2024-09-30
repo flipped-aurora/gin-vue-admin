@@ -245,6 +245,10 @@ func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi
 	}
 	err = global.GVA_DB.Order("id desc").Find(&apis).Error
 	if parentAuthorityID == 0 || !global.GVA_CONFIG.System.UseStrictAuth {
+		for i := range apis {
+			apis[i].Description = global.Translate(apis[i].Description)
+			apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+		}
 		return
 	}
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(authorityID)
@@ -253,6 +257,8 @@ func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi
 	for i := range apis {
 		for j := range paths {
 			if paths[j].Path == apis[i].Path && paths[j].Method == apis[i].Method {
+				apis[i].Description = global.Translate(apis[i].Description)
+				apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
 				authApis = append(authApis, apis[i])
 			}
 		}

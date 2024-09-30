@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import chokidar from 'chokidar';
 
 // 递归获取目录下所有的 .vue 文件
 const getAllVueFiles = (dir, fileList = []) => {
@@ -46,50 +47,19 @@ const vueFilePathPlugin = (outputFilePath) => {
 
     const watchDirectoryChanges = () => {
         const watchDirectories = [path.join(root, 'src/view'), path.join(root, 'src/plugin')];
-        watchDirectories.forEach(dir => {
-            fs.watch(dir, { recursive: true }, (eventType, filename) => {
-                if (filename) {
-                    generatePathNameMap();
-                }
-            });
+        const watcher = chokidar.watch(watchDirectories, { persistent: true, ignoreInitial: true });
+        watcher.on('all', (event, path) => {
+            console.log(`File ${path} has been ${event}`);
+            generatePathNameMap();
         });
     };
 
-    const injectBeforeUnloadScript = () => {
-        if (process.env.NODE_ENV === 'development') {
-            return {
-                name: 'inject-before-unload-script',
-                transformIndexHtml(html) {
-                    return html.replace(
-                        '</body>',
-                        `<script>
-                        const isWindowActive = () => !document.hidden;
-                        window.addEventListener('beforeunload', function () {
-                            if (!isWindowActive()) {
-                                return;
-                            }
-                            fetch('/generate-path-name-map');
-                        });
-                    </script></body>`
-                    );
-                }
-            };
-        }
-        return {}
-    };
+
 
     return {
         name: 'vue-file-path-plugin',
         configResolved(resolvedConfig) {
             root = resolvedConfig.root;
-        },
-        configureServer(server) {
-            if (process.env.NODE_ENV === 'development') {
-                server.middlewares.use('/generate-path-name-map', (req, res) => {
-                    generatePathNameMap();
-                    res.end('Path name map generated');
-                });
-            }
         },
         buildEnd() {
             generatePathNameMap();
@@ -97,7 +67,6 @@ const vueFilePathPlugin = (outputFilePath) => {
                 watchDirectoryChanges();
             }
         },
-        ...injectBeforeUnloadScript()
     };
 }
 

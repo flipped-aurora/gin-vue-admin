@@ -91,7 +91,7 @@ defineOptions({
   name: 'SysDictionary',
 })
 
-const selectID = ref(1)
+const selectID = ref(0)
 
 const formData = ref({
   name: null,
@@ -130,6 +130,7 @@ const getTableData = async () => {
   const res = await getSysDictionaryList()
   if (res.code === 0) {
     dictionaryData.value = res.data
+    selectID.value = res.data[0].ID
   }
 }
 

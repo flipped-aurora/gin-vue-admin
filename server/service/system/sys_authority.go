@@ -203,7 +203,9 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint)
 	} else {
 		err = db.Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authorities).Error
 	}
-
+	for i := range authorities {
+		authorities[i].AuthorityName = global.Translate(authorities[i].AuthorityName)
+	}
 	for k := range authorities {
 		err = authorityService.findChildrenAuthority(&authorities[k])
 	}

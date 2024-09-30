@@ -85,7 +85,6 @@ router.beforeEach(async(to, from) => {
   } else {
     // 不在白名单中并且已经登录的时候
     if (token) {
-      console.log(sessionStorage.getItem("needCloseAll"))
       if(sessionStorage.getItem("needToHome") === 'true') {
         sessionStorage.removeItem("needToHome")
         return { path: '/'}

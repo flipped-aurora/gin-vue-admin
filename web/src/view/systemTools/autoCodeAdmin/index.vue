@@ -9,28 +9,21 @@
       <el-table :data="tableData">
         <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="id" width="60" prop="ID" />
-        <el-table-column align="left" :label="t('general.createdAt')" width="180">
-          <template #default="scope">
-            {{
-              formatDate(scope.row.CreatedAt)
-            }}
-          </template>
-        </el-table-column>
         <el-table-column
           align="left"
-          :label="t('autoCode.structName')"
+          :label="t('view.systemTools.autoCode.structName')"
           min-width="150"
           prop="structName"
         />
         <el-table-column
           align="left"
-          :label="t('autoCode.structChineseName')"
+          :label="t('view.systemTools.autoCode.structChineseName')"
           min-width="150"
           prop="structCNName"
         />
         <el-table-column
           align="left"
-          :label="t('autoCode.tableName')"
+          :label="t('view.systemTools.autoCode.tableName')"
           min-width="150"
           prop="tableName"
         />
@@ -47,6 +40,13 @@
             <el-tag v-else type="success" effect="dark">
               {{ t("autoCodeAdmin.notRolledBack") }}
             </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" :label="t('general.createdAt')" width="180">
+          <template #default="scope">
+            {{
+              formatDate(scope.row.CreatedAt)
+            }}
           </template>
         </el-table-column>
         <el-table-column align="left" :lable="t('general.operations')" min-width="240">
@@ -177,6 +177,9 @@
           <el-form-item label="缩写：">
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
+          <el-form-item label="方法介绍：">
+            <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+          </el-form-item>
           <el-form-item label="方法名：">
             <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
           </el-form-item>
@@ -206,10 +209,10 @@ import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
 import { formatDate } from "@/utils/format";
-import { toUpperCase } from "@/utils/stringFun"
 import { useI18n } from 'vue-i18n'; // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+import { toUpperCase } from "@/utils/stringFun"
 
 defineOptions({
   name: "AutoCodeAdmin",
@@ -241,6 +244,7 @@ const autoFunc = ref({
   humpPackageName:"",
   businessDB:"",
   method:"",
+  funcDesc: ""
 })
 
 const addFuncBtn =  (row) => {
@@ -255,6 +259,7 @@ const addFuncBtn =  (row) => {
   autoFunc.value.method = ""
   autoFunc.value.funcName = ""
   autoFunc.value.router = ""
+  autoFunc.value.funcDesc = "方法介绍"
   funcFlag.value = true;
 };
 

@@ -175,8 +175,11 @@ func (menuService *MenuService) getBaseMenuTreeMap(authorityID uint) (treeMap ma
 	}
 
 	err = db.Find(&allMenus).Error
-	for _, v := range allMenus {
-		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
+
+	for i := range allMenus {
+		titleKey, params := getTitleAndRemainder(allMenus[i].Title)
+		allMenus[i].Title = global.Translate(titleKey) + params
+		treeMap[allMenus[i].ParentId] = append(treeMap[allMenus[i].ParentId], allMenus[i])
 	}
 	return treeMap, err
 }

@@ -112,10 +112,6 @@
         </div>
       </div>
 
-      <el-alert type="warning" :closable="false">
-        {{ t('layout.setting.configSaveNote1') }}
-        <el-tag>config.json</el-tag> {{ t('layout.setting.configSaveNote2') }}
-      </el-alert>
 
       <el-button type="primary" class="mt-4" @click="copyConfig"
         >{{ t('layout.setting.copyConfig') }}</el-button
@@ -129,6 +125,7 @@ import { useAppStore } from "@/pinia";
 import { storeToRefs } from "pinia";
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
+import {setSelfSetting} from "@/api/user";
 import { useI18n } from 'vue-i18n'; // added by mohamed hassan to support multilanguage
 
 const appStore = useAppStore();
@@ -173,8 +170,8 @@ const sideModes = [
   }
 ];
 
-const copyConfig = () => {
-  const input = document.createElement("textarea");
+const saveConfig = async () => {
+  /*const input = document.createElement("textarea");
   input.value = JSON.stringify(config.value);
   // 添加回车
   input.value = input.value.replace(/,/g, ",\n");
@@ -183,13 +180,16 @@ const copyConfig = () => {
   document.execCommand("copy");
   document.body.removeChild(input);
   ElMessage.success(t('layout.setting.copyConfigSuccess'));
+  ElMessage.success("复制成功, 请自行保存到本地文件中");*/
+  const res = await setSelfSetting(config.value)
+  if(res.code === 0){
+    localStorage.setItem('originSetting', JSON.stringify(config.value))
+    ElMessage.success('保存成功')
+    drawer.value = false
+  }
 };
 
 const customColor = ref("");
-
-const handleSideModelChange = (e) => {
-  console.log(e);
-};
 </script>
 
 <style lang="scss" scoped>

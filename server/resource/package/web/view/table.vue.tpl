@@ -1,42 +1,44 @@
 {{- $global := . }}
+{{- $top := . -}}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
+{{- if not .OnlyTemplate}}
 <template>
   <div>
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
-      <el-form-item label="创建日期" prop="createdAt">
+      <el-form-item :label="t('general.createDate')" prop="createdAt">
       <template #label>
         <span>
-          创建日期
-          <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+          {{"{{"}}t('general.createDate'){{"}}"}}
+          <el-tooltip :content="t('general.searchDesc')">
             <el-icon><QuestionFilled /></el-icon>
           </el-tooltip>
         </span>
       </template>
-      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"></el-date-picker>
+      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" :placeholder="t('general.startData')" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"></el-date-picker>
        —
-      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
+      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" :placeholder="t('general.endData')" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
       {{ end -}}
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if not .FieldSearchHide }} {{- if eq .FieldType "bool" }}
             <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')">
                 <el-option
                     key="true"
-                    label="是"
+                    :label="t('general.yes')"
                     value="true">
                 </el-option>
                 <el-option
                     key="false"
-                    label="否"
+                    label="t('general.no')"
                     value="false">
                 </el-option>
             </el-select>
             </el-form-item>
            {{- else if .DictType}}
            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
             </el-select>
             </el-form-item>
@@ -44,36 +46,36 @@
         <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
+            <el-input v-model.number="searchInfo.start{{.FieldName}}" :placeholder="t('general.min')" />
             —
-            <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
+            <el-input v-model.number="searchInfo.end{{.FieldName}}" :placeholder="t('general.max')" />
            {{- else}}
              {{- if .DictType}}
-              <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
+              <el-select v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.pleaseSelect')" style="width:100%" :clearable="true" >
                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
              </el-select>
                     {{- else}}
-             <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+             <el-input v-model.number="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
                     {{- end }}
           {{- end}}
         {{- else if eq .FieldType "time.Time"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <template #label>
             <span>
-              {{"{{"}}t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}'){{"}}"}}
-              <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+              {{"{{"}} t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}') {{"}}"}}
+              <el-tooltip :content="t('general.searchDesc')">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
           </template>
-            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
+            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" :placeholder="t('general.startData')" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
             —
-            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
+            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" :placeholder="t('general.endData')" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
            {{- else}}
-           <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" placeholder="搜索条件"></el-date-picker>
+           <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" :placeholder="t('general.searchCriteria')"></el-date-picker>
           {{- end}}
         {{- else}}
-         <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+         <el-input v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
         {{- end}}
 
         </el-form-item>{{ end }}{{ end }}{{ end }}{{ end }}
@@ -82,22 +84,22 @@
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if .FieldSearchHide }} {{- if eq .FieldType "bool" }}
           <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
-                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
+                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')">
                           <el-option
                               key="true"
-                              label="是"
+                              :label="t('general.yes')"
                               value="true">
                           </el-option>
                           <el-option
                               key="false"
-                              label="否"
+                              :label="t('general.no')"
                               value="false">
                           </el-option>
                       </el-select>
                       </el-form-item>
                      {{- else if .DictType}}
                      <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
-                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
                         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
                       </el-select>
                       </el-form-item>
@@ -105,36 +107,36 @@
                   <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
                   {{- if eq .FieldType "float64" "int"}}
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-                      <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
+                      <el-input v-model.number="searchInfo.start{{.FieldName}}" :placeholder="t('general.min')" />
                       —
-                      <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
+                      <el-input v-model.number="searchInfo.end{{.FieldName}}" :placeholder="t('general.max')" />
                      {{- else}}
                        {{- if .DictType}}
-                        <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
+                        <el-select v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.pleaseSelect')" style="width:100%" :clearable="true" >
                          <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
                        </el-select>
                               {{- else}}
-                       <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+                       <el-input v-model.number="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
                               {{- end }}
                     {{- end}}
                   {{- else if eq .FieldType "time.Time"}}
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
                       <template #label>
                       <span>
-                        {{"{{"}}t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}'){{"}}"}}
-                        <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+                        {{"{{"}} t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}') {{"}}"}}
+                        <el-tooltip :content="t('general.searchDesc')">
                           <el-icon><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </span>
                     </template>
-                      <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
+                      <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" :placeholder="t('general.startData')" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
                       —
-                      <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
+                      <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" :placeholder="t('general.endData')" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
                      {{- else}}
-                     <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" placeholder="搜索条件"></el-date-picker>
+                     <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime":placeholder="t('general.searchCriteria')"></el-date-picker>
                     {{- end}}
                   {{- else}}
-                   <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+                   <el-input v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
                   {{- end}}
 
                   </el-form-item>
@@ -142,17 +144,17 @@
         </template>
 
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button icon="refresh" @click="onReset">重置</el-button>
-          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
-          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{"{{"}}t('general.search'){{"}}"}}</el-button>
+          <el-button icon="refresh" @click="onReset">{{"{{"}}t('general.reset'){{"}}"}}</el-button>
+          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">{{"{{"}}t('general.expand'){{"}}"}}</el-button>
+          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>{{"{{"}}t('general.collapse'){{"}}"}}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">新增</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">{{"{{"}}t('general.add'){{"}}"}}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">{{"{{"}}t('general.delete'){{"}}"}}</el-button>
             {{ if .HasExcel -}}
             <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
             <ExportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportExcel"{{ end }} template-id="{{$templateID}}" />
@@ -172,7 +174,7 @@
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" prop="createdAt" width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -233,7 +235,7 @@
            {{- else if eq .FieldType "richtext" }}
                       <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
                          <template #default="scope">
-                            [富文本内容]
+                            [RichText]
                          </template>
                       </el-table-column>
            {{- else if eq .FieldType "file" }}
@@ -251,21 +253,22 @@
               </template>
           </el-table-column>
            {{- else if eq .FieldType "array" }}
-           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+           <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
                <template #default="scope">
                   <ArrayCtrl v-model="scope.row.{{ .FieldJson }}"/>
                </template>
            </el-table-column>
           {{- else }}
-          <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120" />
           {{- end }}
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
-            </template>
+        <el-table-column align="left" :label="t('general.operations')" fixed="right" min-width="240">
+          <template #default="scope">
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}}t('general.desc'){{"}}"}}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{"{{"}}t('general.change'){{"}}"}}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">{{"{{"}}t('general.delete'){{"}}"}}</el-button>
+          </template>
         </el-table-column>
         </el-table>
         <div class="gva-pagination">
@@ -283,10 +286,10 @@
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
-                <span class="text-lg">{{"{{"}}type==='create'?'添加':'修改'{{"}}"}}</span>
+                <span class="text-lg">{{"{{"}}type==='create'?t('general.add'):t('general.edit'){{"}}"}}</span>
                 <div>
-                  <el-button type="primary" @click="enterDialog">确 定</el-button>
-                  <el-button @click="closeDialog">取 消</el-button>
+                  <el-button type="primary" @click="enterDialog">{{"{{"}}t('general.confirm'){{"}}"}}</el-button>
+                  <el-button @click="closeDialog">{{"{{"}}t('general.close'){{"}}"}}</el-button>
                 </div>
               </div>
             </template>
@@ -294,14 +297,14 @@
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
         {{- range .Fields}}
           {{- if .Form}}
-            <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
             <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
             </el-select>
           {{- else }}
           {{- if eq .FieldType "bool" }}
-              <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+              <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
           {{- end }}
           {{- if eq .FieldType "string" }}
           {{- if .DictType}}
@@ -326,7 +329,7 @@
               <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
-              <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
+              <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" :placeholder="t('general.selectData')" :clearable="{{.Clearable}}"  />
           {{- end }}
           {{- if eq .FieldType "float64" }}
               <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
@@ -440,6 +443,11 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+const i18n = useI18n() // added by mohamed hassan to support multilanguage
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 {{- if .AutoCreateBtnAuth }}
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
@@ -544,7 +552,7 @@ const rule = reactive({
                {{- if eq .FieldType "string" }}
                {
                    whitespace: true,
-                   message: '不能只输入空格',
+                   message: t('general.noOnlySpace'),
                    trigger: ['input', 'blur'],
               }
               {{- end }}
@@ -558,11 +566,11 @@ const searchRule = reactive({
   createdAt: [
     { validator: (rule, value, callback) => {
       if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写结束日期'))
+        callback(new Error(t('general.placeInputEndData')))
       } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写开始日期'))
+        callback(new Error(t('general.placeInputStartData')))
       } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
-        callback(new Error('开始日期应当早于结束日期'))
+        callback(new Error(t('general.startDataMustBeforeEndData')))
       } else {
         callback()
       }
@@ -573,11 +581,11 @@ const searchRule = reactive({
       {{- if eq .FieldType "time.Time" }}
         {{.FieldJson }} : [{ validator: (rule, value, callback) => {
         if (searchInfo.value.start{{.FieldName}} && !searchInfo.value.end{{.FieldName}}) {
-          callback(new Error('请填写结束日期'))
+          callback(new Error(t('general.placeInputEndData')))
         } else if (!searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}}) {
-          callback(new Error('请填写开始日期'))
+          callback(new Error(t('general.placeInputStartData')))
         } else if (searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}} && (searchInfo.value.start{{.FieldName}}.getTime() === searchInfo.value.end{{.FieldName}}.getTime() || searchInfo.value.start{{.FieldName}}.getTime() > searchInfo.value.end{{.FieldName}}.getTime())) {
-          callback(new Error('开始日期应当早于结束日期'))
+          callback(new Error(t('general.startDataMustBeforeEndData')))
         } else {
           callback()
         }
@@ -690,9 +698,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
         type: 'warning'
     }).then(() => {
             delete{{.StructName}}Func(row)
@@ -701,16 +709,16 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
       const {{.PrimaryField.FieldJson}}s = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: '请选择要删除的数据'
+          message: t('general.selectDataToDelete')
         })
         return
       }
@@ -752,7 +760,7 @@ const delete{{.StructName}}Func = async (row) => {
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
-                message: '删除成功'
+                message: t('general.deleteSuccess')
             })
             if (tableData.value.length === 1 && page.value > 1) {
             page.value--
@@ -835,7 +843,7 @@ const enterDialog = async () => {
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: '创建/更改成功'
+                  message: t('general.createUpdateSuccess')
                 })
                 closeDialog()
                 getTableData()
@@ -897,3 +905,15 @@ const closeDetailShow = () => {
 }
 {{end}}
 </style>
+{{- else}}
+<template>
+<div>form</div>
+</template>
+<script setup>
+defineOptions({
+  name: '{{.StructName}}'
+})
+</script>
+<style>
+</style>
+{{- end}}

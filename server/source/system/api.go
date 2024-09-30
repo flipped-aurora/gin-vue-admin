@@ -57,6 +57,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.systemUser", Method: "POST", Path: "/user/changePassword", Description: "system.api.desc.changePassword"},
 		{ApiGroup: "system.api.group.systemUser", Method: "POST", Path: "/user/setUserAuthority", Description: "system.api.desc.modifyUserRole"},
 		{ApiGroup: "system.api.group.systemUser", Method: "POST", Path: "/user/resetPassword", Description: "system.api.desc.resetUserPassword"},
+		{ApiGroup: "system.api.group.systemUser", Method: "PUT", Path: "/user/setSelfSetting", Description: "system.api.desc.resetUserWeb"},
 
 		{ApiGroup: "system.api.group.api", Method: "POST", Path: "/api/createApi", Description: "system.api.desc.createAPI"},
 		{ApiGroup: "system.api.group.api", Method: "POST", Path: "/api/deleteApi", Description: "system.api.desc.deleteAPI"},
@@ -99,6 +100,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/deleteFile", Description: "system.api.desc.deleteFile"},
 		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/editFileName", Description: "system.api.desc.editFileNameOrRemark"},
 		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/getFileList", Description: "system.api.desc.getUploadFileList"},
+        {ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/importURL", Description: "system.api.desc.importURL"},
 
 		{ApiGroup: "system.api.group.systemService", Method: "POST", Path: "/system/getServerInfo", Description: "system.api.desc.getServerInfo"},
 		{ApiGroup: "system.api.group.systemService", Method: "POST", Path: "/system/getSystemConfig", Description: "system.api.desc.getConfigFileContent"},

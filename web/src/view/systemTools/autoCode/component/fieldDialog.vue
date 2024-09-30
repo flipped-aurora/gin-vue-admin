@@ -1,10 +1,10 @@
 <template>
   <div>
-    <warning-bar :title="t('fieldDialog.note')" />
+    <warning-bar :title="t('view.systemTools.autoCode.fieldDialog.note')" />
     <el-form
       ref="fieldDialogForm"
       :model="middleDate"
-      label-width="120px"
+      label-width="180px"
       label-position="right"
       :rules="rules"
       class="grid grid-cols-2"
@@ -22,7 +22,7 @@
           style="width:18%;margin-left:2%"
           @click="autoFill"
         >
-          <span style="font-size: 12px">{{ t('fieldDialog.autoFill') }}</span>
+          <span style="font-size: 12px">{{ t('view.systemTools.autoCode.fieldDialog.autoFill') }}</span>
         </el-button>
       </el-form-item>
       <el-form-item
@@ -68,7 +68,7 @@
         <el-select
           v-model="middleDate.fieldType"
           style="width:100%"
-          :placeholder="t('fieldDialog.selectDataType')"
+          :placeholder="t('view.systemTools.autoCode.fieldDialog.selectDataType')"
           clearable
           @change="clearOther"
         >
@@ -82,12 +82,12 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'"
+        :label="middleDate.fieldType === 'enum' ? t('view.systemTools.autoCode.fieldDialog.enumValue') : t('view.systemTools.autoCode.fieldDialog.typeLength')"
         prop="dataTypeLong"
       >
         <el-input
           v-model="middleDate.dataTypeLong"
-          :placeholder="middleDate.fieldType === 'enum'?`例:'北京','天津'`:'数据库类型长度'"
+          :placeholder="middleDate.fieldType === 'enum'? t('view.systemTools.autoCode.fieldDialog.enumExample') : t('view.systemTools.autoCode.fieldDialog.dataTypeLength')"
         />
       </el-form-item>
       <el-form-item
@@ -98,7 +98,7 @@
           v-model="middleDate.fieldSearchType"
           :disabled="middleDate.fieldType === 'json'"
           style="width:100%"
-          :placeholder="t('fieldDialog.selectSearchType')"
+          :placeholder="t('view.systemTools.autoCode.fieldDialog.selectSearchType')"
           clearable
         >
           <el-option
@@ -111,14 +111,14 @@
         </el-select>
       </el-form-item>
       <el-form-item
-        :label="t('fieldDialog.associativeDictionary')"
+        :label="t('view.systemTools.autoCode.fieldDialog.associativeDictionary')"
         prop="dictType"
       >
         <el-select
           v-model="middleDate.dictType"
           style="width:100%"
           :disabled="middleDate.fieldType!=='string'"
-          :placeholder="t('fieldDialog.selectDictionary')"
+          :placeholder="t('view.systemTools.autoCode.fieldDialog.selectDictionary')"
           clearable
         >
           <el-option
@@ -129,24 +129,24 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="默认值">
+      <el-form-item :label="t('view.systemTools.autoCode.defaultValue')">
         <el-input
           v-model="middleDate.defaultValue"
-          placeholder="请输入默认值"
+          :placeholder="t('view.systemTools.autoCode.fieldDialog.enterDefaultValueNote')"
         />
       </el-form-item>
-      <el-form-item label="主键">
+      <el-form-item :label="t('view.systemTools.autoCode.primaryKey')">
         <el-checkbox v-model="middleDate.primaryKey" />
       </el-form-item>
       <el-form-item
-        label="索引类型"
+        :label="t('view.systemTools.autoCode.indexType')"
         prop="fieldIndexType"
       >
         <el-select
           v-model="middleDate.fieldIndexType"
           :disabled="middleDate.fieldType === 'json'"
           style="width:100%"
-          placeholder="请选择字段索引类型"
+          :placeholder="t('view.systemTools.autoCode.selectIndexType')"
           clearable
         >
           <el-option
@@ -158,37 +158,37 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="前端新建/编辑">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.frontendCreateEdit')">
         <el-switch v-model="middleDate.form" />
       </el-form-item>
-      <el-form-item label="前端表格列">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.frontendTableColmuns')">
         <el-switch v-model="middleDate.table" />
       </el-form-item>
-      <el-form-item label="前端详情">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.frontendDetails')">
         <el-switch v-model="middleDate.desc" />
       </el-form-item>
-      <el-form-item label="导入/导出">
+      <el-form-item :label="t('view.systemTools.autoCode.importExport')">
         <el-switch v-model="middleDate.excel" />
       </el-form-item>
-      <el-form-item label="是否排序">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.sort')">
         <el-switch v-model="middleDate.sort" />
       </el-form-item>
-      <el-form-item label="是否必填">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.required')">
         <el-switch v-model="middleDate.require" />
       </el-form-item>
-      <el-form-item label="是否可清空">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.canBeCleared')">
         <el-switch v-model="middleDate.clearable" />
       </el-form-item>
-      <el-form-item label="隐藏查询条件">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.hideSearch')">
         <el-switch v-model="middleDate.fieldSearchHide" :disabled="!middleDate.fieldSearchType" />
       </el-form-item>
-      <el-form-item label="校验失败文案">
+      <el-form-item :label="t('view.systemTools.autoCode.fieldDialog.verificationError')">
         <el-input v-model="middleDate.errorText" />
       </el-form-item>
     </el-form>
     <el-collapse v-model="activeNames">
       <el-collapse-item
-        title="数据源配置（此配置为高级配置，如编程基础不牢，可能导致自动化代码不可用）"
+        :title="t('view.systemTools.autoCode.fieldDialog.dataSourceConfigNote')"
         name="1"
       >
         <el-row :gutter="8">
@@ -197,15 +197,15 @@
           >
             <el-select
               v-model="middleDate.dataSource.association"
-              placeholder="关联模式"
+              :placeholder="t('view.systemTools.autoCode.fieldDialog.associationMode')"
               @change="associationChange"
             >
               <el-option
-                label="一对一"
+                :label="t('view.systemTools.autoCode.fieldDialog.oneToOne')"
                 :value="1"
               />
               <el-option
-                label="一对多"
+                :label="t('view.systemTools.autoCode.fieldDialog.oneToMany')"
                 :value="2"
               />
             </el-select>
@@ -213,7 +213,7 @@
 
           <el-col :span="7">
             <el-select
-              v-model="middleDate.dataSource.table" placeholder="请选择数据源表"
+              v-model="middleDate.dataSource.table" :placeholder="t('view.systemTools.autoCode.fieldDialog.selectDataSourceTable')"
               filterable allow-create @focus="getDBTableList" @change="selectDB"
             >
               <el-option
@@ -224,14 +224,14 @@
             <!-- <el-input v-model="middleDate.dataSource.table" placeholder="数据源表" /> -->
           </el-col>
           <el-col :span="7">
-            <el-select v-model="middleDate.dataSource.value" placeholder="请先选择需要存储的数据">
+            <el-select v-model="middleDate.dataSource.value" :placeholder="t('view.systemTools.autoCode.fieldDialog.selectDataToStore')">
               <template #label="{ value }">
-                <span>存储: </span>
+                <span>{{ t('view.systemTools.autoCode.fieldDialog.storage') }}</span>
                 <span style="font-weight: bold">{{ value }}</span>
               </template>
               <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
                 <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
-                  {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
+                  {{ item.isPrimary ? t('view.systemTools.autoCode.primaryKey') : t('view.systemTools.autoCode.nonPrimaryKey') }}
                 </el-tag> {{ item.columnName }}</span>
                 <span
                   style="
@@ -241,21 +241,21 @@
           font-size: 13px;
         "
                 >
-                  类型：{{ item.type }} <block v-if="item.comment != ''">，字段说明：{{ item.comment }}</block>
+                  {{ t('view.systemTools.autoCode.fieldDialog.type') }}{{ item.type }} <block v-if="item.comment != ''">{{ t('view.systemTools.autoCode.fieldDialog.fileDesc') }}{{ item.comment }}</block>
                 </span>
               </el-option>
             </el-select>
             <!-- <el-input v-model="middleDate.dataSource.value" placeholder="存储用字段" /> -->
           </el-col>
           <el-col :span="7">
-            <el-select v-model="middleDate.dataSource.label" placeholder="请先选择需要展示的数据">
+            <el-select v-model="middleDate.dataSource.label" :placeholder="t('view.systemTools.autoCode.fieldDialog.selectDataToDisplay')">
               <template #label="{ value }">
-                <span>展示: </span>
+                <span>{{ t('view.systemTools.autoCode.fieldDialog.display') }}</span>
                 <span style="font-weight: bold">{{ value }}</span>
               </template>
               <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
                 <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
-                  {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
+                  {{ item.isPrimary ? t('view.systemTools.autoCode.primaryKey') : t('view.systemTools.autoCode.nonPrimaryKey') }}
                 </el-tag> {{ item.columnName }}</span>
                 <span
                     style="
@@ -265,7 +265,7 @@
           font-size: 13px;
         "
                 >
-                  类型：{{ item.type }} <span v-if="item.comment != ''">，字段说明：{{ item.comment }}</span>
+                {{ t('view.systemTools.autoCode.fieldDialog.type') }}{{ item.type }} <span v-if="item.comment != ''">{{ t('view.systemTools.autoCode.fieldDialog.fileDesc') }}{{ item.comment }}</span>
                 </span>
               </el-option>
             </el-select>
@@ -281,7 +281,7 @@
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import {getColumn, getTable} from "@/api/autoCode";
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
@@ -327,7 +327,7 @@ const dictOptions = ref([])
 const validateDataTypeLong = (rule, value, callback) => {
   const regex = /^('([^']*)'(?:,'([^']+)'*)*)$/;
   if (middleDate.value.fieldType == "enum" && !regex.test(value)) {
-    callback(new Error("枚举值校验错误"));
+    callback(new Error(t('view.systemTools.autoCode.fieldDialog.enumValueValidationError')));
   } else {
     callback();
   }
@@ -335,19 +335,19 @@ const validateDataTypeLong = (rule, value, callback) => {
 
 const rules = ref({
   fieldName: [
-    { required: true, message: t('fieldDialog.entFieldName'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.fieldDialog.entFieldName'), trigger: 'blur' }
   ],
   fieldDesc: [
-    { required: true, message: t('fieldDialog.entFieldDesc'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.fieldDialog.entFieldDesc'), trigger: 'blur' }
   ],
   fieldJson: [
-    { required: true, message: t('fieldDialog.entFieldJson'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.fieldDialog.entFieldJson'), trigger: 'blur' }
   ],
   columnName: [
-    { required: true, message: t('fieldDialog.entColumnName'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.fieldDialog.entColumnName'), trigger: 'blur' }
   ],
   fieldType: [
-    { required: true, message: t('fieldDialog.entFieldDataType'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.fieldDialog.entFieldDataType'), trigger: 'blur' }
   ],
   dataTypeLong: [
     { validator: validateDataTypeLong, trigger: "blur" }
@@ -390,11 +390,11 @@ const clearOther = () => {
 const associationChange = (val) => {
   if (val === 2) {
     ElMessageBox.confirm(
-      '一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？',
-      '提示',
+      t('view.systemTools.autoCode.fieldDialog.oneToManyNote'),
+      t('general.hint'),
       {
-        confirmButtonText: '继续',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
       }
     ).then(() => {
@@ -426,7 +426,7 @@ const selectDB = async (val) => {
   const res = await getColumn({
     tableName: val
   })
-  console.log(res)
+
   if (res.code === 0) {
     let list = res.data.columns; // 确保这里正确获取到 tables 数组
     dbColumnList.value = list.map(item => ({
@@ -446,4 +446,10 @@ const selectDB = async (val) => {
 
 const fieldDialogForm = ref(null)
 defineExpose({ fieldDialogForm })
+
+onMounted(()=>{
+  if(middleDate.value.dataSource.table){
+    selectDB(middleDate.value.dataSource.table)
+  }
+})
 </script>

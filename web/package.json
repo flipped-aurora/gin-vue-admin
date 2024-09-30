@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.7.4",
+    "version": "2.7.5",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
@@ -11,6 +11,8 @@
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.3.1",
+        "@form-create/designer": "^3.2.6",
+        "@form-create/element-ui": "^3.2.10",
         "@vue-office/docx": "^1.6.2",
         "@vue-office/excel": "^1.7.11",
         "@vue-office/pdf": "^2.0.2",
@@ -22,7 +24,7 @@
         "core-js": "^3.38.1",
         "default-passive-events": "^2.0.0",
         "echarts": "5.5.1",
-        "element-plus": "^2.8.1",
+        "element-plus": "^2.8.4",
         "highlight.js": "^11.10.0",
         "js-cookie": "^3.0.5",
         "marked": "14.1.1",
@@ -36,6 +38,7 @@
         "sortablejs": "^1.15.3",
         "spark-md5": "^3.0.2",
         "tailwindcss": "^3.4.10",
+        "vform3-builds": "^3.0.10",
         "vite-auto-import-svg": "^1.1.0",
         "vue": "^3.5.7",
         "vue-echarts": "^7.0.3",
@@ -59,8 +62,6 @@
         "eslint-plugin-vue": "^9.28.0",
         "sass": "^1.78.0",
         "terser": "^5.31.6",
-        "unplugin-auto-import": "^0.18.2",
-        "unplugin-vue-components": "^0.27.4",
         "vite": "^5.4.3",
         "vite-plugin-banner": "^0.8.0",
         "vite-plugin-importer": "^0.2.5",

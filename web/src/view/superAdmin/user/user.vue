@@ -1,6 +1,53 @@
 <template>
   <div>
     <warning-bar title="注：右上角头像下拉可切换角色" />
+    <div class="gva-search-box">
+      <el-form
+          ref="searchForm"
+          :inline="true"
+          :model="searchInfo"
+      >
+        <el-form-item label="用户名">
+          <el-input
+              v-model="searchInfo.username"
+              placeholder="用户名"
+          />
+        </el-form-item>
+        <el-form-item label="昵称">
+          <el-input
+              v-model="searchInfo.nickname"
+              placeholder="昵称"
+          />
+        </el-form-item>
+        <el-form-item label="手机号">
+          <el-input
+              v-model="searchInfo.phone"
+              placeholder="手机号"
+          />
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input
+              v-model="searchInfo.email"
+              placeholder="邮箱"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+              type="primary"
+              icon="search"
+              @click="onSubmit"
+          >
+            查询
+          </el-button>
+          <el-button
+              icon="refresh"
+              @click="onReset"
+          >
+            重置
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button
@@ -246,7 +293,27 @@ defineOptions({
   name: 'User',
 })
 
-const path = ref(import.meta.env.VITE_BASE_API + '/')
+const searchInfo = ref({
+  username: '',
+  nickname: '',
+  phone: '',
+  email: ''
+})
+
+const onSubmit = () => {
+  page.value = 1
+  getTableData()
+}
+
+const onReset = () => {
+  searchInfo.value = {
+    username: '',
+    nickname: '',
+    phone: '',
+    email: ''
+  }
+  getTableData()
+}
 // 初始化相关
 const setAuthorityOptions = (AuthorityData, optionsData) => {
   AuthorityData &&
@@ -286,7 +353,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getUserList({ page: page.value, pageSize: pageSize.value })
+  const table = await getUserList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -339,11 +406,6 @@ const setAuthorityIds = () => {
       return i.authorityId
     })
   })
-}
-
-const chooseImg = ref(null)
-const openHeaderChange = () => {
-  chooseImg.value.open()
 }
 
 const authOptions = ref([])

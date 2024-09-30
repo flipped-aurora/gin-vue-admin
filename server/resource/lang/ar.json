@@ -496,7 +496,14 @@
 
         "gvaPluginUserInjection": "اختبار حقن Gva Plugin User",
         "chineseInjection": "اختبار حقن اللغة الصينية",
-        "gvaPluginUserRollback": "اختبار تراجع Gva Plugin User"
+        "gvaPluginUserRollback": "اختبار تراجع Gva Plugin User",
+
+        "registrationError": "تم تسجيله بالفعل ولا يمكن تسجيله مرة أخرى",
+        "valueCannotBeEmpty": "لا يمكن أن تكون فارغة",
+        "formatValidationFailed": "فشل التحقق من تنسيق",
+        "lengthOrValueOutOfRange": "طول أو القيمة خارج النطاق القانوني",
+        "sysNoSupport": "النظام غير مدعوم",
+        "fileNameInvalid": "اسم الملف غير صالح"
     },
     "router": {
 

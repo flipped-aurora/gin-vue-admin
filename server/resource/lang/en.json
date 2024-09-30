@@ -499,7 +499,14 @@
 
         "gvaPluginUserInjection": "Test injection of Gva Plugin User",
         "chineseInjection": "Test injection of Chinese",
-        "gvaPluginUserRollback": "Test rollback of Gva Plugin User"
+        "gvaPluginUserRollback": "Test rollback of Gva Plugin User",
+
+        "registrationError": "is already registered and cannot be registered again",
+        "valueCannotBeEmpty": "cannot be empty",
+        "formatValidationFailed": "format validation failed",
+        "lengthOrValueOutOfRange": "length or value is out of valid range",
+        "sysNoSupport": "The system does not support",
+        "fileNameInvalid": "File name is invalid"
     },
     "router": {
 

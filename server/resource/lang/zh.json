@@ -514,8 +514,14 @@
 
         "gvaPluginUserInjection": "测试 Gva插件User 注入",
         "chineseInjection": "测试 中文 注入",
-        "gvaPluginUserRollback": "测试 Gva插件User 回滚"
+        "gvaPluginUserRollback": "测试 Gva插件User 回滚",
 
+        "registrationError": "已注册,无法重复注册",
+        "valueCannotBeEmpty": "值不能为空",
+        "formatValidationFailed": "格式校验不通过",
+        "lengthOrValueOutOfRange": "长度或值不在合法范围",
+        "sysNoSupport": "系统不支持",
+        "fileNameInvalid": "文件名不合法"
 
     },
     "router": {

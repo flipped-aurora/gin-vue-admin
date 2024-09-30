@@ -62,7 +62,7 @@ func (o *Obs) DeleteFile(key string) error {
 	var output *obs.DeleteObjectOutput
 	output, err = client.DeleteObject(input)
 	if err != nil {
-		return errors.Wrapf(err, fmt.Sprintf(global.Translate("deleteObjectFailed"), key, output))
+		return errors.Wrapf(err, fmt.Sprintf(global.Translate("utils.deleteObjectFailed"), key, output))
 	}
 	return nil
 }

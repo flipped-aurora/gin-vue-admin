@@ -24,7 +24,7 @@ func (a *Base) Parse(filename string, writer io.Writer) (file *ast.File, err err
 		file, err = parser.ParseFile(fileSet, filename, writer, parser.ParseComments)
 	}
 	if err != nil {
-		return nil, errors.Wrapf(err, "[filepath:%s]打开/解析文件失败!", filename)
+		return nil, errors.Wrapf(err, global.Translate("fileOpenParseFailed"), filename)
 	}
 	return file, nil
 }
@@ -43,13 +43,13 @@ func (a *Base) Format(filename string, writer io.Writer, file *ast.File) error {
 		open, err := os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC, 0666)
 		defer open.Close()
 		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", filename)
+			return errors.Wrapf(err, global.Translate("fileOpenFailed"), filename)
 		}
 		writer = open
 	}
 	err := format.Node(writer, fileSet, file)
 	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", filename)
+		return errors.Wrapf(err, global.Translate("injectionFailed"), filename)
 	}
 	return nil
 }

@@ -21,7 +21,7 @@ func TestPackageEnter_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试ExampleApiGroup回滚",
+			name: global.Translate("utils.exampleApiGroupRollback"),
 			fields: fields{
 				Type:              TypePackageApiEnter,
 				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", "enter.go"),
@@ -33,7 +33,7 @@ func TestPackageEnter_Rollback(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试ExampleRouterGroup回滚",
+			name: global.Translate("utils.exampleRouterGroupRollback"),
 			fields: fields{
 				Type:              TypePackageRouterEnter,
 				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
@@ -45,7 +45,7 @@ func TestPackageEnter_Rollback(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试ExampleServiceGroup回滚",
+			name: global.Translate("utils.exampleServiceGroupRollback"),
 			fields: fields{
 				Type:              TypePackageServiceEnter,
 				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
@@ -95,7 +95,7 @@ func TestPackageEnter_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试ExampleApiGroup注入",
+			name: global.Translate("utils.exampleApiGroupInjection"),
 			fields: fields{
 				Type:              TypePackageApiEnter,
 				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", "enter.go"),
@@ -106,7 +106,7 @@ func TestPackageEnter_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试ExampleRouterGroup注入",
+			name: global.Translate("utils.exampleRouterGroupInjection"),
 			fields: fields{
 				Type:              TypePackageRouterEnter,
 				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
@@ -118,7 +118,7 @@ func TestPackageEnter_Injection(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试ExampleServiceGroup注入",
+			name: global.Translate("utils.exampleServiceGroupInjection"),
 			fields: fields{
 				Type:              TypePackageServiceEnter,
 				Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),

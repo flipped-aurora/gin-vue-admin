@@ -460,11 +460,63 @@
         "checkFailZeroValue": "校验失败，未能捕捉0值",
         "checkFailNameEmpty": "校验失败，未能正常检测name为空",
         "checkFailPass": "校验失败，未能正常通过检测",
-
         "getHuaweiObjectFailed": "获取华为对象存储对象失败!",
         "fileUploadFailed": "文件上传失败!",
         "getHuaweiObjectFailedDuplicate": "获取华为对象存储对象失败!",
-        "deleteObjectFailed": "删除对象(%s)失败!, output: %v"
+        "deleteObjectFailed": "删除对象(%s)失败!, output: %v",
+
+        "fileOpenParseFailed": "[filepath:%s]打开/解析文件失败!",
+        "fileOpenFailed": "[filepath:%s]打开文件失败!",
+        "injectionFailed": "[filepath:%s]注入失败!",
+        "test_gva_user_injection": "测试 GvaUser 结构体注入",
+        "test_gva_user_rollback": "测试 GvaUser 回滚",
+        "test_user_injection": "测试 &model.User{} 注入",
+        "test_exa_customer_injection": "测试 new(model.ExaCustomer) 注入",
+        "test_sys_users_injection": "测试 new(model.SysUsers) 注入",
+        "test_user_rollback": "测试 &model.User{} 回滚",
+        "test_exa_customer_rollback": "测试 new(model.ExaCustomer) 回滚",
+        "cookieRewriteFailed": "重新写入cookie token失败,未能成功解析token,请检查请求头是否存在x-token且claims是否为规定结构",
+        "jwtParseFailed": "从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构",
+        "gvaPluginRegister": "测试 Gva插件 注册注入",
+        "gvaPluginRollback": "测试 Gva插件 回滚",
+        "initCustomerRouterRollback": "测试 InitCustomerRouter 回滚",
+        "initFileUploadAndDownloadRouterRollback": "测试 InitFileUploadAndDownloadRouter 回滚",
+        "exaFileUploadAndDownloadInjection": "测试 &example.ExaFileUploadAndDownload{} 注入",
+        "exaCustomerInjection": "测试 &example.ExaCustomer{} 注入",
+        "newExaFileUploadAndDownloadInjection": "测试 new(example.ExaFileUploadAndDownload) 注入",
+        "newExaCustomerInjection": "测试 new(example.ExaCustomer) 注入",
+        "exaFileUploadAndDownloadRollback": "测试 &example.ExaFileUploadAndDownload{} 回滚",
+        "exaCustomerRollback": "测试 &example.ExaCustomer{} 回滚",
+        "newExaFileUploadAndDownloadRollback": "测试 new(example.ExaFileUploadAndDownload) 回滚",
+        "newExaCustomerRollback": "测试 new(example.ExaCustomer) 回滚",
+
+        "fileUploadAndDownloadRouterRollback": "测试 FileUploadAndDownloadRouter 回滚",
+        "fileUploadAndDownloadApiRollback": "测试 FileUploadAndDownloadApi 回滚",
+        "fileUploadAndDownloadServiceRollback": "测试 FileUploadAndDownloadService 回滚",
+        "fileUploadAndDownloadRouterInjection": "测试 FileUploadAndDownloadRouter 注入",
+        "fileUploadAndDownloadApiInjection": "测试 FileUploadAndDownloadApi 注入",
+        "fileUploadAndDownloadServiceInjection": "测试 FileUploadAndDownloadService 注入",
+
+        "exampleApiGroupRollback": "测试ExampleApiGroup回滚",
+        "exampleRouterGroupRollback": "测试ExampleRouterGroup回滚",
+        "exampleServiceGroupRollback": "测试ExampleServiceGroup回滚",
+        "exampleApiGroupInjection": "测试ExampleApiGroup注入",
+        "exampleRouterGroupInjection": "测试ExampleRouterGroup注入",
+        "exampleServiceGroupInjection": "测试ExampleServiceGroup注入",
+
+        "gvaPluginUserApiInjection": "测试 Gva插件UserApi 注入",
+        "gvaPluginUserRouterInjection": "测试 Gva插件UserRouter 注入",
+        "gvaPluginUserServiceInjection": "测试 Gva插件UserService 注入",
+        "gvaUserInjection": "测试 gva的User 注入",
+        "gvaPluginUserRouterRollback": "测试 Gva插件UserRouter 回滚",
+        "gvaPluginUserApiRollback": "测试 Gva插件UserApi 回滚",
+        "gvaPluginUserServiceRollback": "测试 Gva插件UserService 回滚",
+
+        "gvaPluginUserInjection": "测试 Gva插件User 注入",
+        "chineseInjection": "测试 中文 注入",
+        "gvaPluginUserRollback": "测试 Gva插件User 回滚"
+
+
     },
     "router": {
 

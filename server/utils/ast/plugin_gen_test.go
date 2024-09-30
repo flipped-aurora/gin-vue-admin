@@ -21,7 +21,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 GvaUser 结构体注入",
+			name: global.Translate("utils.test_gva_user_injection"),
 			fields: fields{
 				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
@@ -32,7 +32,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 GvaUser 结构体注入",
+			name: global.Translate("utils.test_gva_user_injection"),
 			fields: fields{
 				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
@@ -81,7 +81,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 GvaUser 回滚",
+			name: global.Translate("utils.test_gva_user_rollback"),
 			fields: fields{
 				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
@@ -92,7 +92,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 GvaUser 回滚",
+			name: global.Translate("utils.test_gva_user_rollback"),
 			fields: fields{
 				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),

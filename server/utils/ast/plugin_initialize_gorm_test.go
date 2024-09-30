@@ -21,7 +21,7 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 &model.User{} 注入",
+			name: global.Translate("utils.test_user_injection"),
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
@@ -32,7 +32,7 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(model.ExaCustomer) 注入",
+			name: global.Translate("utils.test_exa_customer_injection"),
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
@@ -43,7 +43,7 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(model.SysUsers) 注入",
+			name: global.Translate("utils.test_sys_users_injection"),
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
@@ -92,7 +92,7 @@ func TestPluginInitializeGorm_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 &model.User{} 回滚",
+			name: global.Translate("utils.test_user_rollback"),
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),
@@ -103,7 +103,7 @@ func TestPluginInitializeGorm_Rollback(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(model.ExaCustomer) 回滚",
+			name: global.Translate("utils.test_exa_customer_rollback"),
 			fields: fields{
 				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "gorm.go"),

@@ -161,7 +161,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			if err != nil {
 				return err
 			}
-			fmt.Printf("[filepath:%s]%s\n", key, global.Translate("rollbackInjectionSuccess"))
+			fmt.Printf("[filepath:%s]%s\n", key, global.Translate("service.rollbackInjectionSuccess"))
 		}
 	} // 清除注入代码
 	removeBasePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10))
@@ -172,7 +172,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		removePath := filepath.Join(removeBasePath, strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
 		err = utils.FileMove(value, removePath)
 		if err != nil {
-			return errors.Wrapf(err, "[src:%s][dst:%s]%s", value, removePath, global.Translate("fileMoveFailed"))
+			return errors.Wrapf(err, "[src:%s][dst:%s]%s", value, removePath, global.Translate("service.fileMoveFailed"))
 		}
 	} // 移动文件
 

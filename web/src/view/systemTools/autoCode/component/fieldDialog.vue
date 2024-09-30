@@ -199,6 +199,7 @@
                 v-model="middleDate.dataSource.dbName"
                 placeholder="数据库【不填则为GVA库】"
                 @change="dbNameChange"
+                clearable
             >
               <el-option
                   v-for="item in dbList"

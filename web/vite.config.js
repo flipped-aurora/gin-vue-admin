@@ -1,5 +1,5 @@
 import legacyPlugin from '@vitejs/plugin-legacy'
-import { viteLogo } from './src/core/config'
+import {viteLogo} from './src/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
 import * as dotenv from 'dotenv'
@@ -7,8 +7,8 @@ import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import VueFilePathPlugin from './vitePlugin/componentName/index.js'
-import { svgBuilder } from 'vite-auto-import-svg'
-import { AddSecret } from './vitePlugin/secret'
+import {svgBuilder} from 'vite-auto-import-svg'
+import {AddSecret} from './vitePlugin/secret'
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,
@@ -28,7 +28,8 @@ export default ({
 
   viteLogo(process.env)
 
-  const timestamp = Date.parse(new Date())
+  const now = new Date()
+  const timestamp = now.toLocaleDateString() + ' ' + now.toLocaleTimeString()
 
   const optimizeDeps = {}
 
@@ -38,16 +39,48 @@ export default ({
   }
 
   const esbuild = {}
-
+  const sign = Math.random().toString(36).slice(2)
+  // 驼峰转换
+  const toDash = (name) => {
+    let str = name[0] === "_" || name[0] === "-" ? name.replace('-', '').replace('_', ''): name
+    return str.replace(str[0], str[0].toLowerCase()).replace(/([A-Z])/g, '-$1').replace(/_/g, '-').toLowerCase()
+  }
   const rollupOptions = {
     output: {
-      entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
-      chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
-      assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]',
+      //entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
+      entryFileNames: `assets/js/[name].${sign}.js`,
+      //chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
+      chunkFileNames(assetInfo) {
+        const [name, _] = path.basename(assetInfo.name).split('.')
+        let _name = toDash(name)
+        return `assets/js/${_name}.${sign}.js`
+      },
+      //assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]',
+      // 判断后缀分别放到对应的文件夹中
+      assetFileNames(assetInfo) {
+
+        const [name, ext] = path.basename(assetInfo.name).split('.')
+        let _ext = ext.toLowerCase()
+        let _name = toDash(name)
+
+        if (assetInfo.name.endsWith('.css')) {
+          return `assets/css/${_name}.${sign}.[ext]`
+        }
+
+        if (['png', 'jpg', 'bmp', 'svg', 'gif', 'webp'].some(_ext => assetInfo.name.endsWith(_ext))) {
+          return `assets/img/${_name}.${sign}.${_ext}`
+        }
+
+        if (['ttf', 'ttc', 'eot', 'otf', 'woff', 'woff2'].some(_ext => assetInfo.name.endsWith(_ext))) {
+          return `assets/fonts/${_name}.${sign}.${_ext}`
+        }
+
+        return `assets/${_ext}/${_name}.${sign}.${_ext}`
+      }
     },
   }
 
-  const config = {
+  return {
     base: '/', // 编译后js导入的资源路径
     root: './', // index.html文件所在位置
     publicDir: 'public', // 静态资源文件夹
@@ -76,6 +109,7 @@ export default ({
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
+      assetsInlineLimit: '4096', // 小于此阈值的导入或引用资源将内联为 base64 编码
       terserOptions: {
         compress: {
           //生产环境时移除console
@@ -88,7 +122,7 @@ export default ({
     esbuild,
     optimizeDeps,
     plugins: [
-      process.env.VITE_POSITION === 'open' &&  vueDevTools({launchEditor: process.env.VITE_EDITOR}),
+      process.env.VITE_POSITION === 'open' && vueDevTools({launchEditor: process.env.VITE_EDITOR}),
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
       }),
@@ -98,5 +132,4 @@ export default ({
       VueFilePathPlugin("./src/pathInfo.json")
     ],
   }
-  return config
 }

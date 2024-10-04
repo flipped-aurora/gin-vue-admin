@@ -80,11 +80,6 @@
 		"addFailErr": "添加失败",
 		"addSuccess": "添加成功"
 	},
-	"sys_operation_record": {
-		"batchDeleteFail": "批量删除失败!",
-		"batchDeleteFailErr": "批量删除失败",
-		"batchDeleteSuccess": "批量删除成功"
-	},
 	"system": {
 		"auto_code_package" : {
 			"packageNameInvalid" : "包名不合法"
@@ -120,6 +115,22 @@
 			"refreshFailed" : "刷新失败!",
 			"refreshFailedError" : "刷新失败",
 			"refreshSuccess" : "刷新成功"
+		},
+		"sys_authority_btn" : {
+			"allocationFailed" : "分配失败!",
+			"allocationFailedError" : "分配失败",
+			"allocationSuccess" : "分配成功"
+		},
+		"sys_operation_record": {
+			"batchDeleteFail": "批量删除失败!",
+			"batchDeleteFailErr": "批量删除失败",
+			"batchDeleteSuccess": "批量删除成功"
+		},
+		"sys_export_template" : {
+			"templateIDEmptyError" : "模板ID不能为空",
+			"importFileFailed" : "文件获取失败!",
+			"importFileFailedError" : "文件获取失败",
+			"importSuccess" : "导入成功"
 		},
 		"api" : {
 			"group" : {

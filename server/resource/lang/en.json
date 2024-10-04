@@ -80,11 +80,6 @@
 		"addFailErr": "Adding failed",
 		"addSuccess": "Added successfully"
 	},
-	"sys_operation_record": {
-		"batchDeleteFail": "Batch delete failed!",
-		"batchDeleteFailErr": "Batch delete failed",
-		"batchDeleteSuccess": "Batch delete successfully"
-	},
 	"system": {
 		"auto_code_package" : {
 			"packageNameInvalid" : "The package name is invalid"
@@ -119,6 +114,22 @@
 			"refreshFailed" : "Refresh failed!",
 			"refreshFailedError" : "Refresh failed",
 			"refreshSuccess" : "Refresh success"
+		},
+		"sys_authority_btn" : {
+			"allocationFailed" : "Allocation failed!",
+			"allocationFailedError" : "Allocation failed",
+			"allocationSuccess" : "Allocation success"
+		},
+		"sys_operation_record": {
+			"batchDeleteFail": "Batch delete failed!",
+			"batchDeleteFailErr": "Batch delete failed",
+			"batchDeleteSuccess": "Batch delete successfully"
+		},
+		"sys_export_template" : {
+			"templateIDEmptyError" : "Template ID cannot be empty",
+			"importFileFailed" : "Failed to import this file!",
+			"importFileFailedError" : "Failed to import this file",
+			"importSuccess" : "Import Success"
 		},
 		"api": {
 			"group": {

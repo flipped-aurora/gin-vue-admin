@@ -32,13 +32,6 @@
         "copyFailErr": "فشل النسخ",
         "copySuccess": "تم النسخ بنجاح"
     },
-    "sys_auto_code": {
-        "autoCreateFail": "فشل الإنشاء التلقائي! يرجى مسح البيانات غير المهمة بنفسك!",
-        "previewFail": "فشلت المعاينة!",
-        "previewFailErr": "فشلت المعاينة",
-        "previewSuccess": "تمت المعاينة بنجاح",
-        "queryTablesFail": "فشل الاستعلام عن الجدول"
-    },
     "sys_auto_code_history": {
         "rollbackSuccess": "تمت الاستعادة بنجاح"
     },
@@ -62,11 +55,6 @@
         "addFail": "فشل في الإضافة!",
         "addFailErr": "فشل في الإضافة",
         "addSuccess": "تمت الإضافة بنجاح"
-    },
-    "sys_operation_record": {
-        "batchDeleteFail": "فشل في الحذف المجمع!",
-        "batchDeleteFailErr": "فشل في الحذف المجمع",
-        "batchDeleteSuccess": "تم الحذف المجمع بنجاح"
     },
     "sys_system": {
         "rebootFail": "فشل في إعادة التشغيل!",
@@ -93,6 +81,51 @@
         "vCodeErr": "رمز التحقق غير صحيح"
     },
     "system": {
+        "auto_code_package" : {
+			"packageNameInvalid" : "اسم الحزمة غير صالح"
+		},
+		"auto_code_plugin" : {
+			"webPluginInstalledSuccess" : "تم تثبيت البرنامج الإضافي للويب بنجاح",
+			"serverPluginIstalledSuccess" : "تم تثبيت البرنامج الإضافي للخادم بنجاح",
+			"webPluginInstallFail" : "لم يتم تثبيت البرنامج الإضافي الخاص بالويب بنجاح. يرجى اتباع الوثائق لفك ضغطه وتثبيته بنفسك. إذا كان البرنامج الإضافي خاصًا بالواجهة الخلفية، يرجى تجاهل هذه الرسالة",
+			"serverPluginInstallFail" : "لم يتم تثبيت البرنامج الإضافي الخاص بالخادم بنجاح. يرجى اتباع الوثائق لفك ضغطه وتثبيته بنفسك. إذا كان البرنامج الإضافي خاصًا بالواجهة الأمامية، يرجى تجاهل هذه الرسالة",
+			"packingFailed" : "فشل التجميع!",
+			"packingFailedError" : "فشل التجميع ",
+			"packingSuccess" : "تم التجميع بنجاح، مسار الملف هو:",
+			"initMenuCreationFail" : "فشل في إنشاء القائمة الأولية!",
+			"initMenuCreationFailError" : "فشل في إنشاء القائمة الأولية",
+			"fileChangedSuccessfully" : "تم تغيير الملف بنجاح",
+			"initApiCreationFail" : "فشل في إنشاء واجهة برمجة التطبيقات الأولية!",
+			"initApiCreationFailError" : "فشل في إنشاء واجهة برمجة التطبيقات الأولية"
+		},
+        "auto_code_template": {
+            "previewFail": "فشلت المعاينة!",
+            "previewFailErr": "فشلت المعاينة",
+            "previewSuccess": "تمت المعاينة بنجاح",
+            "injectionFailed" : "فشل الحقن!",
+			"injectionFailedError" : "فشل الحقن",
+			"injectionSuccessfully" : "تم الحقن بنجاح"
+        },
+		"sys_api" : {
+			"syncFailed" : "فشل المزامنة!",
+			"syncFailedError" : "فشل المزامنة",
+			"ignoreFailures" : "تجاهل الفشل!",
+			"ignoreFailuresError" : "تجاهل الفشل!",
+			"refreshFailed" : "فشل التحديث!",
+			"refreshFailedError" : "فشل التحديث",
+			"refreshSuccess" : "تم التحديث بنجاح"
+		},
+        "sys_operation_record": {
+            "batchDeleteFail": "فشل في الحذف المجمع!",
+            "batchDeleteFailErr": "فشل في الحذف المجمع",
+            "batchDeleteSuccess": "تم الحذف المجمع بنجاح"
+        },
+        "sys_export_template" : {
+			"templateIDEmptyError" : "لا يمكن أن يكون معرف القالب فارغًا",
+            "importFileFailed" : "!فشل فى إستيراد الملف",
+            "importFileFailedError" : "فشل فى إستيراد الملف",
+            "importSuccess" : "تم الاستيراد بنجاح"
+		},
         "api": {
             "desc": {
                 "addMenu": "إضافة قائمة",

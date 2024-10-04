@@ -87,11 +87,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
         {{- end }}
 	err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s{{- if .AutoCreateResource }},userID{{- end }})
 	if err != nil {
-        global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFailErr"), c)
+        global.GVA_LOG.Error(global.Translate("system.sys_operation_record.batchDeleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_operation_record.batchDeleteFailErr"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("sys_operation_record.batchDeleteSuccess"), c)
+	response.OkWithMessage(global.Translate("system.sys_operation_record.batchDeleteSuccess"), c)
 }
 
 // Update{{.StructName}} 更新{{.Description}}

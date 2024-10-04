@@ -64,15 +64,6 @@
 	"sys_auto_code_history": {
 		"rollbackSuccess": "Rolledback successfully"
 	},
-	"sys_auto_code": {
-		"previewFail": "Preview failed!",
-		"previewFailErr": "Preview failed",
-		"previewSuccess": "Previewed successfully",
-		"autoCreateFail": "Automatic creation failed! Please clear the junk data yourself!",
-		"queryTablesFail": "Failed to query tables",
-		"largeModelCreationFail" : "Large model generation failed!",
-		"largeModelCreationFailErr" : "Large model generation failed"
-	},
 	"sys_initdb": {
 		"paramVerifyFail": "Parameter verification failed!",
 		"paramVerifyFailErr": "Parameter verification failed",
@@ -103,14 +94,22 @@
 			"serverPluginIstalledSuccess" : "Server plugin installed successfully",
 			"webPluginInstallFail" : "The web-side plug-in was not installed successfully. Please follow the documentation to decompress and install it yourself. If it is a pure backend plug-in, please ignore this prompt",
 			"serverPluginInstallFail" : "The server-side plug-in was not installed successfully. Please follow the documentation to decompress and install it yourself. If it is a pure front-end plug-in, please ignore this prompt",
-			"packingFailed" : "Packing Failed!",
-			"packingFailedError" : "Packing Failed ",
+			"packingFailed" : "Packing failed!",
+			"packingFailedError" : "Packing failed ",
 			"packingSuccess" : "The packaging is successful, the file path is: ",
 			"initMenuCreationFail" : "Failed to create initialization Menu!",
 			"initMenuCreationFailError" : "Failed to create initialization Menu ",
 			"fileChangedSuccessfully" : "File changed successfully",
 			"initApiCreationFail" : "Failed to create initialization API!",
 			"initApiCreationFailError" : "Failed to create initialization API "
+		},
+		"auto_code_template": {
+			"previewFail": "Preview failed!",
+			"previewFailErr": "Preview failed",
+			"previewSuccess": "Previewed successfully",
+			"injectionFailed" : "Injection failed!",
+			"injectionFailedError" : "Injection fail",
+			"injectionSuccessfully" : "Injection Success"
 		},
 		"api": {
 			"group": {

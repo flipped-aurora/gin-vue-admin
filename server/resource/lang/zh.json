@@ -64,15 +64,6 @@
 	"sys_auto_code_history": {
 		"rollbackSuccess": "回滚成功"
 	},
-	"sys_auto_code": {
-		"previewFail": "预览失败!",
-		"previewFailErr": "预览失败",
-		"previewSuccess": "预览成功",
-		"autoCreateFail": "自动化创建失败!请自行清空垃圾数据!",
-		"queryTablesFail": "查询table失败",
-		"largeModelCreationFail" : "大模型生成失败!",
-		"largeModelCreationFailErr" : "大模型生成失败"
-	},
 	"sys_initdb": {
 		"paramVerifyFail": "参数校验不通过!",
 		"paramVerifyFailErr": "参数校验不通过",
@@ -112,6 +103,14 @@
 			"initApiCreationFail" : "创建初始化API失败!",
 			"initApiCreationFailError" : "创建初始化API失败"
 
+		},
+		"auto_code_template": {
+			"previewFail": "预览失败!",
+			"previewFailErr": "预览失败",
+			"previewSuccess": "预览成功",
+			"injectionFailed" : "注入失败!",
+			"injectionFailedError" : "注入失败",
+			"injectionSuccessfully" : "注入成功"
 		},
 		"api" : {
 			"group" : {

@@ -40,10 +40,10 @@ func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	info.PackageT = utils.FirstUpper(info.Package)
 	autoCode, err := autoCodeTemplateService.Preview(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("预览失败!", zap.Error(err))
-		response.FailWithMessage("预览失败", c)
+		global.GVA_LOG.Error(global.Translate("system.auto_code_template.previewFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.auto_code_template.previewFailError"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
+		response.OkWithDetailed(gin.H{"autoCode": autoCode}, global.Translate("system.auto_code_template.previewSuccess"), c)
 	}
 }
 
@@ -75,10 +75,10 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	}
 	err = autoCodeTemplateService.Create(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage(global.Translate("general.createSuccss"), c)
 	}
 }
 
@@ -100,9 +100,9 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 	}
 	err = autoCodeTemplateService.AddFunc(info)
 	if err != nil {
-		global.GVA_LOG.Error("注入失败!", zap.Error(err))
-		response.FailWithMessage("注入失败", c)
+		global.GVA_LOG.Error(global.Translate("system.auto_code_template.injectionFailed"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.auto_code_template.injectionFailedError"), c)
 	} else {
-		response.OkWithMessage("注入成功", c)
+		response.OkWithMessage(global.Translate("system.auto_code_template.injectionSuccessfully"), c)
 	}
 }

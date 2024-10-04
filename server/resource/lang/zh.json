@@ -95,8 +95,26 @@
 		"batchDeleteSuccess": "批量删除成功"
 	},
 	"system": {
-		"api": {
-			"group": {
+		"auto_code_package" : {
+			"packageNameInvalid" : "包名不合法"
+		},
+		"auto_code_plugin" : {
+			"webPluginInstalledSuccess" : "web插件安装成功",
+			"serverPluginIstalledSuccess" : "server插件安装成功",
+			"webPluginInstallFail" : "web端插件未成功安装，请按照文档自行解压安装，如果为纯后端插件请忽略此条提示",
+			"serverPluginInstallFail" : "server端插件未成功安装，请按照文档自行解压安装，如果为纯前端插件请忽略此条提示",
+			"packingFailed" : "打包失败!",
+			"packingFailedError" : "打包失败",
+			"packingSuccess" : "打包成功,文件路径为:",
+			"initMenuCreationFail" : "创建初始化Menu失败!",
+			"initMenuCreationFailError" : "创建初始化Menu失败",
+			"fileChangedSuccessfully" : "文件变更成功",
+			"initApiCreationFail" : "创建初始化API失败!",
+			"initApiCreationFailError" : "创建初始化API失败"
+
+		},
+		"api" : {
+			"group" : {
 				"systemUser": "系统用户",
 				"api":"API",
 				"role": "角色",

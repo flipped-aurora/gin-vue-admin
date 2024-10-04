@@ -95,6 +95,23 @@
 		"batchDeleteSuccess": "Batch delete successfully"
 	},
 	"system": {
+		"auto_code_package" : {
+			"packageNameInvalid" : "The package name is invalid"
+		},
+		"auto_code_plugin" : {
+			"webPluginInstalledSuccess" : "The web plugin was successfully installed",
+			"serverPluginIstalledSuccess" : "Server plugin installed successfully",
+			"webPluginInstallFail" : "The web-side plug-in was not installed successfully. Please follow the documentation to decompress and install it yourself. If it is a pure backend plug-in, please ignore this prompt",
+			"serverPluginInstallFail" : "The server-side plug-in was not installed successfully. Please follow the documentation to decompress and install it yourself. If it is a pure front-end plug-in, please ignore this prompt",
+			"packingFailed" : "Packing Failed!",
+			"packingFailedError" : "Packing Failed ",
+			"packingSuccess" : "The packaging is successful, the file path is: ",
+			"initMenuCreationFail" : "Failed to create initialization Menu!",
+			"initMenuCreationFailError" : "Failed to create initialization Menu ",
+			"fileChangedSuccessfully" : "File changed successfully",
+			"initApiCreationFail" : "Failed to create initialization API!",
+			"initApiCreationFailError" : "Failed to create initialization API "
+		},
 		"api": {
 			"group": {
 				"systemUser": "System User",

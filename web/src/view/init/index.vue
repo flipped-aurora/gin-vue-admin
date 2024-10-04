@@ -203,7 +203,8 @@ const form = reactive({
   password: '',
   dbName: 'gva',
   dbPath: '',
-  language: 'en' // added by mohamed hassan to support multilanguage
+  language: 'en', // added by mohamed hassan to support multilanguage
+  defaultLangauge : 'zh'  // added by mohamed hassan to fix issue in case of no translation found
 })
 
 const changeDB = (val) => {

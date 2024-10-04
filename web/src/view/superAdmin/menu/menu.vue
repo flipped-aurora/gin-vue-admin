@@ -7,7 +7,7 @@
           icon="plus"
           @click="addMenu(0)"
         >
-        {{ t('menu.addRootMenu') }}
+        {{ t('view.superAdmin.menu.addRootMenu') }}
         </el-button>
       </div>
 
@@ -24,8 +24,8 @@
         />
         <el-table-column
           align="left"
-          :label="t('menu.displayName')"
-          min-width="120"
+          :label="t('view.superAdmin.menu.displayName')"
+          min-width="160"
           prop="authorityName"
         >
           <template #default="scope">
@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          :label="t('menu.icon')"
+          :label="t('view.superAdmin.menu.icon')"
           min-width="140"
           prop="authorityName"
         >
@@ -52,43 +52,43 @@
         </el-table-column>
         <el-table-column
           align="left"
-          :label="t('menu.routeName')"
+          :label="t('view.superAdmin.menu.routeName')"
           show-overflow-tooltip
           min-width="160"
           prop="name"
         />
         <el-table-column
           align="left"
-          :label="t('menu.routePath')"
+          :label="t('view.superAdmin.menu.routePath')"
           show-overflow-tooltip
           min-width="160"
           prop="path"
         />
         <el-table-column
           align="left"
-          :label="t('menu.visibility')"
+          :label="t('view.superAdmin.menu.visibility')"
           min-width="100"
           prop="hidden"
         >
           <template #default="scope">
-            <span>{{ scope.row.hidden ? t('menu.hide') : t('menu.show') }}</span>
+            <span>{{ scope.row.hidden ? t('view.superAdmin.menu.hide') : t('view.superAdmin.menu.show') }}</span>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          :label="t('menu.parent')"
+          :label="t('view.superAdmin.menu.parent')"
           min-width="90"
           prop="parentId"
         />
         <el-table-column
           align="left"
-          :label="t('menu.sort')"
+          :label="t('view.superAdmin.menu.sort')"
           min-width="70"
           prop="sort"
         />
         <el-table-column
           align="left"
-          :label="t('menu.filePath')"
+          :label="t('view.superAdmin.menu.filePath')"
           min-width="360"
           prop="component"
         />
@@ -105,7 +105,7 @@
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >
-            {{ t('menu.addSubMenu') }}
+            {{ t('view.superAdmin.menu.addSubMenu') }}
             </el-button>
             <el-button
               type="primary"
@@ -150,7 +150,7 @@
         </div>
       </template>
 
-      <warning-bar :title="t('menu.newMenuNote')" />
+      <warning-bar :title="t('view.superAdmin.menu.newMenuNote')" />
       <el-form
         v-if="dialogFormVisible"
         ref="menuForm"
@@ -162,7 +162,7 @@
         <el-row class="w-full">
           <el-col :span="16">
             <el-form-item
-              :label="t('menu.filePath')"
+              :label="t('view.superAdmin.menu.filePath')"
               prop="component"
             >
               <el-select
@@ -171,7 +171,7 @@
                 allow-create
                 autocomplete="off"
                 style="width: 100%"
-                :placeholder="t('menu.filePathNote')"
+                :placeholder="t('view.superAdmin.menu.filePathNote')"
                 default-first-option
                 @change="fmtComponent"
               >
@@ -182,23 +182,23 @@
                   :value="path"
                 />
               </el-select>
-              <span style="font-size: 12px; margin-right: 12px">{{ t('menu.subMenuNote') }}</span><el-button
+              <span style="font-size: 12px; margin-right: 12px">{{ t('view.superAdmin.menu.subMenuNote') }}</span><el-button
                 style="margin-top: 4px"
                 @click="form.component = 'view/routerHolder.vue'"
               >
-              {{ t('menu.clickMe') }}
+              {{ t('view.superAdmin.menu.clickMe') }}
               </el-button>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item
-              :label="t('menu.displayName')"
+              :label="t('view.superAdmin.menu.displayName')"
               prop="meta.title"
             >
               <el-input
                 v-model="form.meta.title"
                 autocomplete="off"
-                placeholder="示例：system.menu.website"
+                :placeholder="t('view.superAdmin.menu.titleNote')"
               />
             </el-form-item>
           </el-col>
@@ -206,13 +206,13 @@
         <el-row class="w-full">
           <el-col :span="8">
             <el-form-item
-              :label="t('menu.routeName')"
+              :label="t('view.superAdmin.menu.routeName')"
               prop="path"
             >
               <el-input
                 v-model="form.name"
                 autocomplete="off"
-                :placeholder="t('menu.routeNameNote')"
+                :placeholder="t('view.superAdmin.menu.routeNameNote')"
                 @change="changeName"
               />
             </el-form-item>
@@ -223,11 +223,11 @@
             >
               <template #label>
                 <span style="display: inline-flex; align-items: center">
-                  <span>{{ t('menu.routePath') }}</span>
+                  <span>{{ t('view.superAdmin.menu.routePath') }}</span>
                   <el-checkbox
                     v-model="checkFlag"
                     style="margin-left: 12px; height: auto"
-                  >{{ t('menu.addParameter') }}</el-checkbox>
+                  >{{ t('view.superAdmin.menu.addParameter') }}</el-checkbox>
                 </span>
               </template>
 
@@ -235,18 +235,18 @@
                 v-model="form.path"
                 :disabled="!checkFlag"
                 autocomplete="off"
-                :placeholder="t('menu.routePathNote')"
+                :placeholder="t('view.superAdmin.menu.routePathNote')"
               />
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item
-              :label="t('menu.visibility')"
+              :label="t('view.superAdmin.menu.visibility')"
             >
               <el-select
                 v-model="form.hidden"
                 style="width: 100%"
-                :placeholder="t('menu.visibilityNote')"
+                :placeholder="t('view.superAdmin.menu.visibilityNote')"
               >
                 <el-option
                   :value="false"
@@ -263,7 +263,7 @@
         <el-row class="w-full">
           <el-col :span="8">
             <el-form-item
-              :label="t('menu.parentId')"
+              :label="t('view.superAdmin.menu.parentId')"
             >
               <el-cascader
                 v-model="form.parentId"
@@ -284,7 +284,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item
-              :label="t('menu.icon')"
+              :label="t('view.superAdmin.menu.icon')"
               prop="meta.icon"
             >
               <icon
@@ -311,9 +311,9 @@
             >
               <template #label>
                 <div>
-                  <span> {{ t('menu.highlightMenu') }} </span>
+                  <span> {{ t('view.superAdmin.menu.highlightMenu') }} </span>
                   <el-tooltip
-                    :content="t('menu.highlightMenuNote')"
+                    :content="t('view.superAdmin.menu.highlightMenuNote')"
                     placement="top"
                     effect="light"
                   >
@@ -336,7 +336,7 @@
               <el-select
                 v-model="form.meta.keepAlive"
                 style="width: 100%"
-                :placeholder="t('menu.keepAliveNote')"
+                :placeholder="t('view.superAdmin.menu.keepAliveNote')"
               >
                 <el-option
                   :value="false"
@@ -357,7 +357,7 @@
               <el-select
                 v-model="form.meta.closeTab"
                 style="width: 100%"
-                :placeholder="t('menu.closeTabNote')"
+                :placeholder="t('view.superAdmin.menu.closeTabNote')"
               >
                 <el-option
                   :value="false"
@@ -376,9 +376,9 @@
             <el-form-item>
               <template #label>
                 <div>
-                  <span> {{ t('menu.basicPage') }} </span>
+                  <span> {{ t('view.superAdmin.menu.basicPage') }} </span>
                   <el-tooltip
-                    :content="t('menu.basicPageNote')"
+                    :content="t('view.superAdmin.menu.basicPageNote')"
                     placement="top"
                     effect="light"
                   >
@@ -390,7 +390,7 @@
               <el-select
                 v-model="form.meta.defaultMenu"
                 style="width: 100%"
-                :placeholder="t('menu.basicPage')"
+                :placeholder="t('view.superAdmin.menu.basicPage')"
               >
                 <el-option
                   :value="false"
@@ -412,7 +412,7 @@
             icon="edit"
             @click="addParameter(form)"
           >
-          {{ t('menu.addMenuParameters') }}
+          {{ t('view.superAdmin.menu.addMenuParameters') }}
           </el-button>
         </div>
         <el-table
@@ -422,7 +422,7 @@
           <el-table-column
             align="left"
             prop="type"
-            :label="t('menu.parameterType')"
+            :label="t('view.superAdmin.menu.parameterType')"
             width="180"
           >
             <template #default="scope">
@@ -446,7 +446,7 @@
           <el-table-column
             align="left"
             prop="key"
-            :label="t('menu.paremeterKey')"
+            :label="t('view.superAdmin.menu.paremeterKey')"
             width="180"
           >
             <template #default="scope">
@@ -458,7 +458,7 @@
           <el-table-column
             align="left"
             prop="value"
-            :label="t('menu.parameterValue')"
+            :label="t('view.superAdmin.menu.parameterValue')"
           >
             <template #default="scope">
               <div>
@@ -487,7 +487,7 @@
             icon="edit"
             @click="addBtn(form)"
           >
-          {{ t('menu.addButton') }}
+          {{ t('view.superAdmin.menu.addButton') }}
           </el-button>
           <el-icon
             class="cursor-pointer"
@@ -506,7 +506,7 @@
           <el-table-column
             align="left"
             prop="name"
-            :label="t('menu.buttonName')"
+            :label="t('view.superAdmin.menu.buttonName')"
             width="180"
           >
             <template #default="scope">
@@ -518,7 +518,7 @@
           <el-table-column
             align="left"
             prop="name"
-            :label="t('menu.comments')"
+            :label="t('view.superAdmin.menu.comments')"
             width="180"
           >
             <template #default="scope">
@@ -582,10 +582,10 @@ onMounted(()=>{
 })
 
 const rules = reactive({
-  path: [{ required: true, message: t('menu.enterMenuNameNote'), trigger: 'blur' }],
-  component: [{ required: true, message: t('menu.enterFilePathNote'), trigger: 'blur' }],
+  path: [{ required: true, message: t('view.superAdmin.menu.enterMenuNameNote'), trigger: 'blur' }],
+  component: [{ required: true, message: t('view.superAdmin.menu.enterFilePathNote'), trigger: 'blur' }],
   'meta.title': [
-    { required: true, message: t('menu.enterMenuDisplayNameNote'), trigger: 'blur' },
+    { required: true, message: t('view.superAdmin.menu.enterMenuDisplayNameNote'), trigger: 'blur' },
   ],
 })
 
@@ -674,7 +674,7 @@ const handleClose = (done) => {
 }
 // 删除菜单
 const deleteMenu = (ID) => {
-  ElMessageBox.confirm(t('menu.deleteAllRolesConfirm'), t('general.hint'), {
+  ElMessageBox.confirm(t('view.superAdmin.menu.deleteAllRolesConfirm'), t('general.hint'), {
     confirmButtonText: t('general.confirm'),
     cancelButtonText: t('general.cancel'),
     type: 'warning'
@@ -752,14 +752,14 @@ const enterDialog = async() => {
 const menuOption = ref([
   {
     ID: '0',
-    title: t('menu.rootMenu')
+    title: t('view.superAdmin.menu.rootMenu')
   }
 ])
 const setOptions = () => {
   menuOption.value = [
     {
       ID: '0',
-      title: t('menu.rootDirctory')
+      title: t('view.superAdmin.menu.rootDirctory')
     }
   ]
   setMenuOptions(tableData.value, menuOption.value, false)
@@ -793,9 +793,9 @@ const setMenuOptions = (menuData, optionsData, disabled) => {
 
 // 添加菜单方法，id为 0则为添加根菜单
 const isEdit = ref(false)
-const dialogTitle = ref(t('menu.addMenu'))
+const dialogTitle = ref(t('view.superAdmin.menu.addMenu'))
 const addMenu = (id) => {
-  dialogTitle.value = t('menu.addMenu')
+  dialogTitle.value = t('view.superAdmin.menu.addMenu')
   form.value.parentId = id
   isEdit.value = false
   setOptions()
@@ -803,7 +803,7 @@ const addMenu = (id) => {
 }
 // 修改菜单方法
 const editMenu = async(id) => {
-  dialogTitle.value = t('menu.editMenu')
+  dialogTitle.value = t('view.superAdmin.menu.editMenu')
   const res = await getBaseMenuById({ id })
   form.value = res.data.menu
   isEdit.value = true

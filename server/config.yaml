@@ -266,5 +266,6 @@ cors:
       expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
       allow-credentials: true # 布尔值
 language:
-  language: en
-  dir: ./resource/lang/
+    language: en
+    defualt-languge: zh # default language to be used as a fullback in case of translation to current language was not exist.
+    dir: ./resource/lang/

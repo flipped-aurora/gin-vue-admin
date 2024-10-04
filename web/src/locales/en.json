@@ -93,7 +93,8 @@
 		"description" : "Description",
 		"request" : "Request",
 		"order": "Order",
-		"filter": "Filter"
+		"filter": "Filter",
+		"operationSuccess" : "Operation Done Successfully"
 	},
 	"historyComponent": {
 		"closeAll": "Close All",
@@ -186,51 +187,6 @@
 		"language": "Languages",
 		"login": "Login"
 	},
-	"menu": {
-		"addMenu": "Add Menu",
-		"addMenuParameters": "Add menu parameters",
-		"addParameter": "Add parameters",
-		"addRootMenu": "Add Root Menu",
-		"addSubMenu": "Add Submenu",
-		"clickMe": "Click Me To Set",
-		"closeTabNote": "Whether to close the tab automatically",
-		"deleteAllRolesConfirm": "This action will permanently delete all roles under this menu, do you want to continue?",
-		"displayName": "Display Name",
-		"editMenu": "Edit Menu",
-		"enterFilePathNote": "Please enter the file path",
-		"enterMenuDisplayNameNote": "Please enter a menu display name",
-		"enterMenuNameNote": "Please enter menu name",
-		"filePath": "File Path",
-		"hide": "Hide",
-		"icon": "Icon",
-		"keepAliveNote": "Whether keepAlive caches pages",
-		"newMenuNote": "New menu, you need to configure permissions in the role management to use",
-		"filePathNote" : "Page:view/xxx/xx.vue Plugin:plugin/xx/xx.vue",
-		"parameterType": "Parameter Type",
-		"parameterValue": "Parameter Value",
-		"paremeterKey": "Parameter Key",
-		"parent": "Parent",
-		"parentId": "Parent ID",
-		"rootDirctory": "Root Directory",
-		"rootMenu": "Root Menu",
-		"routeName": "Route Name",
-		"routeNameNote": "Unique English string",
-		"routePath": "Route Path",
-		"routePathNote": "It is recommended to only stitch the parameters at the back",
-		"show": "Show",
-		"sort": "Sort",
-		"subMenuNote": "If the menu contains submenus, create a router-view secondary routing page or",
-		"visibility": "Visibility",
-		"visibilityNote": "Whether to hide in the list",
-		"addButton" : "Add a controllable button",
-		"buttonName" : "Button name",
-		"comments" : "Comments",
-		"highlightMenu" : "Highlight Menu",
-		"highlightMenuNote" : "Note: When this route is reached, the specified left menu specifies that name will be active (lit), which can be null, and null is the Name of this route.",
-		"basicPage" : "Is it a basic page?",
-		"basicPageNote" : "If you select Yes for this option, the left menu and top information will not be displayed.",
-		"" : ""
-	},
 	"menus": {
 		"": "",
 		"home": "Homepage",
@@ -250,38 +206,6 @@
 		"ossType": "Oss Type",
 		"portValue": "Port Value",
 		"systemConfig": "System Configuration"
-	},
-	"user": {
-		"addUser": "Add User",
-		"anotherUserEdit": "There is currently a user who is editing",
-		"avatar": "Avatar",
-		"deleteUserConfrim": "Are you sure you want to delete this user",
-		"email": "E-Mail",
-		"mediaLibrary": "Select from media library",
-		"nickName": "Nickname",
-		"nickNameNote": "Please enter nickname",
-		"password": "Password",
-		"passwordLenNote": "Password should be 6 character at least.",
-		"passwordNote": "Please enter password",
-		"phone": "Phone",
-		"resetPassword": "Reset Password",
-		"resetPasswordConfrim": "Do you want to reset current password to: 123456",
-		"roleSetNote": "Role set successfully!!",
-		"userAddedNote": "User added successfully!!",
-		"userEditedNote": "User edited successfully!!",
-		"userName": "Username",
-		"userNameLenNote": "Username should be 5 character at least.",
-		"userNameNote": "Please enter username",
-		"userRole": "User Role",
-		"userRoleNote": "Please select user role",
-		"enable" : "Enable",
-		"disable" : "Disable",
-		"enabledSuccessfully" : "Enabled Successfully",
-		"disabledSuccessfully" : "Disabled Successfully",
-		"user" : "User",
-		"enterPhoneNoNote" : "Please enter a valid mobile phone number?",
-		"enterEmailNote" : "please enter your vaild email?",
-		"" : ""
 	},
 	"view": {
 		"dashboard": {
@@ -333,6 +257,90 @@
 				}
 			}
 		},
+		"about" : {
+			"flippedAuroraTeam" : "Flipped-Aurora Team",
+			"submitRecords" : "Releases History"
+		},
+		"superAdmin" : {
+			"menu": {
+				"addMenu": "Add Menu",
+				"addMenuParameters": "Add menu parameters",
+				"addParameter": "Add parameters",
+				"addRootMenu": "Add Root Menu",
+				"addSubMenu": "Add Submenu",
+				"clickMe": "Click Me To Set",
+				"closeTabNote": "Whether to close the tab automatically",
+				"deleteAllRolesConfirm": "This action will permanently delete all roles under this menu, do you want to continue?",
+				"displayName": "Display Name",
+				"titleNote" : "Example：system.menu.website",
+				"editMenu": "Edit Menu",
+				"enterFilePathNote": "Please enter the file path",
+				"enterMenuDisplayNameNote": "Please enter a menu display name",
+				"enterMenuNameNote": "Please enter menu name",
+				"filePath": "File Path",
+				"hide": "Hide",
+				"icon": "Icon",
+				"keepAliveNote": "Whether keepAlive caches pages",
+				"newMenuNote": "New menu, you need to configure permissions in the role management to use",
+				"filePathNote" : "Page:view/xxx/xx.vue Plugin:plugin/xx/xx.vue",
+				"parameterType": "Parameter Type",
+				"parameterValue": "Parameter Value",
+				"paremeterKey": "Parameter Key",
+				"parent": "Parent",
+				"parentId": "Parent ID",
+				"rootDirctory": "Root Directory",
+				"rootMenu": "Root Menu",
+				"routeName": "Route Name",
+				"routeNameNote": "Unique English string",
+				"routePath": "Route Path",
+				"routePathNote": "It is recommended to only stitch the parameters at the back",
+				"show": "Show",
+				"sort": "Sort",
+				"subMenuNote": "If the menu contains submenus, create a router-view secondary routing page or",
+				"visibility": "Visibility",
+				"visibilityNote": "Whether to hide in the list",
+				"addButton" : "Add a controllable button",
+				"buttonName" : "Button name",
+				"comments" : "Comments",
+				"highlightMenu" : "Highlight Menu",
+				"highlightMenuNote" : "Note: When this route is reached, the specified left menu specifies that name will be active (lit), which can be null, and null is the Name of this route.",
+				"basicPage" : "Is it a basic page?",
+				"basicPageNote" : "If you select Yes for this option, the left menu and top information will not be displayed.",
+				"" : ""
+			},
+			"user": {
+				"addUser": "Add User",
+				"anotherUserEdit": "There is currently a user who is editing",
+				"avatar": "Avatar",
+				"deleteUserConfrim": "Are you sure you want to delete this user",
+				"email": "E-Mail",
+				"mediaLibrary": "Select from media library",
+				"nickName": "Nickname",
+				"nickNameNote": "Please enter nickname",
+				"password": "Password",
+				"passwordLenNote": "Password should be 6 character at least.",
+				"passwordNote": "Please enter password",
+				"phone": "Phone",
+				"resetPassword": "Reset Password",
+				"resetPasswordConfrim": "Do you want to reset current password to: 123456",
+				"roleSetNote": "Role set successfully!!",
+				"userAddedNote": "User added successfully!!",
+				"userEditedNote": "User edited successfully!!",
+				"userName": "Username",
+				"userNameLenNote": "Username should be 5 character at least.",
+				"userNameNote": "Please enter username",
+				"userRole": "User Role",
+				"userRoleNote": "Please select user role",
+				"enable" : "Enable",
+				"disable" : "Disable",
+				"enabledSuccessfully" : "Enabled Successfully",
+				"disabledSuccessfully" : "Disabled Successfully",
+				"user" : "User",
+				"enterPhoneNoNote" : "Please enter a valid mobile phone number?",
+				"enterEmailNote" : "please enter your vaild email?",
+				"" : ""
+			}
+		},
 		"api" : {
 			"path" : "Path",
 			"apiGroup" : "API Group",
@@ -369,13 +377,13 @@
 		},
 		"dictionary" : {
 			"sysDictionary" : {
-				"dictNote" : "Get the dictionary and the cache method has been encapsulated in the front-end utils/dictionary No need to write it yourself Use the method to view the comments in the file.",
-				"dictName" : "Dictionary Name (Medium)",
-				"dictNameEn" : "Dictionary name (English)",
+				"dictNote" : "The method for getting the dictionary and caching it has been encapsulated in the front-end utils/dictionary. You don't have to write it yourself. See the comments in the file for usage.",
+				"dictName" : "Dictionary Name",
+				"dictDataType" : "Dictionary Data Type",
 				"status" : "Status",
 				"details" : "Details",
-				"enterDictName" : "Please enter a dictionary name (Medium)",
-				"enterDictNameEn" : "Please enter a dictionary name (English)",
+				"enterDictName" : "Please enter a dictionary name",
+				"enterDictDataType" : "Please enter a dictionary data type",
 				"enterDescription" : "Please enter a description",
 				"addDictionary" : "Add Dictionary",
 				"editDictionary" : "Edit Dictionary",
@@ -541,12 +549,13 @@
 				"i18n" : "Internationalization",
 				"langFilesPath" : "Language Files Path",
 				"language" : "Language",
+				"defaultLanguage" : "Default Language",
 				"configSetupSuccess" : "The Configuration File Was Setup Successfully",
 				"emailSentSuccess" : "The Email Was Sent Successfully",
 				"emailSentError" : "Failed To Send Email",
 				"defaultEmpty" : "Default is empty",
 				"restartServiceConfirm" : "Are you sure you want to restart the service?",
-				"operationSuccess" : "Operation Success",
+				"operationSuccess" : "Operation Done Successfully",
 				"cancelRestart" : "Cancel Restart"
 			},
 			"autoPkg" : {
@@ -799,6 +808,35 @@
 				"importSuccess" : "Import Success"
 			}
 
+		}
+	},
+	"pinia" : {
+		"modules" : {
+			"router" : {
+				"bottomLayerLayout" : "Bottom layer layout"
+			},
+			"user" : {
+				"loggingIn" : "Logging in, please wait...",
+				"connectAdmin" : "Please contact the administrator for authorization"
+			}
+		}
+	},
+	"utils" : {
+		"request" : {
+			"requestErrorDetected" : "<p>Request error detected</p> ",
+			"requestError" : "Request Error",
+			"tryAgainLater" : "Try again later",
+			"interfaceError" : "Interface Error",
+			"interfaceErrorDetected" : "<p>Interface error detected<p> ",
+			"errorCode" : "Error Code",
+			"interfaceErrorNote" : "This type of error content is common in backend panic. Please check the backend log first. If it affects your normal use, you can force log out to clear the cache.",
+			"clearCache" : "Clear Cache",
+			"interfaceNotRegisteredNote" : "This type of error is mostly caused by the interface not being registered (or not restarted) or the request path (method) not matching the API path (method) - if it is automated code, please check whether there are spaces.",
+			"iGotIt" : "I Got It",
+			"invalidToken" : "<p>Invalid Token</p> ",
+			"errorMessage" : "Error Message",
+			"identityInfo" : "Identity Information",
+			"loginAgain" : "Login Again"
 		}
 	}
 }

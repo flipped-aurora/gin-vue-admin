@@ -6,8 +6,9 @@ import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
 import cookie from 'js-cookie'
-
+import i18n from '@/i18n' // added by mohamed hassan to multilangauge
 import {useAppStore} from "@/pinia";
+
 
 export const useUserStore = defineStore('user', () => {
   const appStore = useAppStore()
@@ -68,7 +69,7 @@ export const useUserStore = defineStore('user', () => {
   const LoginIn = async(loginInfo) => {
     loadingInstance.value = ElLoading.service({
       fullscreen: true,
-      text: '登录中，请稍候...',
+      text: i18n.global.t('pinia.modules.user.loggingIn'),
     })
 
     const res = await login(loginInfo)
@@ -94,7 +95,7 @@ export const useUserStore = defineStore('user', () => {
     })
 
     if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-      ElMessage.error('请联系管理员进行授权')
+      ElMessage.error(i18n.global.t('pinia.modules.user.connectAdmin'))
     } else {
       await router.replace({ name: userInfo.value.authority.defaultRouter })
     }

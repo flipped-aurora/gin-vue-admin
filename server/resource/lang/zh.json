@@ -112,6 +112,15 @@
 			"injectionFailedError" : "注入失败",
 			"injectionSuccessfully" : "注入成功"
 		},
+		"sys_api" : {
+			"syncFailed" : "同步失败!",
+			"syncFailedError" : "同步失败",
+			"ignoreFailures" : "忽略失败!",
+			"ignoreFailuresError" : "忽略失败",
+			"refreshFailed" : "刷新失败!",
+			"refreshFailedError" : "刷新失败",
+			"refreshSuccess" : "刷新成功"
+		},
 		"api" : {
 			"group" : {
 				"systemUser": "系统用户",

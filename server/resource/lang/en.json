@@ -111,6 +111,15 @@
 			"injectionFailedError" : "Injection fail",
 			"injectionSuccessfully" : "Injection Success"
 		},
+		"sys_api" : {
+			"syncFailed" : "Sync failed!",
+			"syncFailedError" : "Sync failed",
+			"ignoreFailures" : "Ignore failures!",
+			"ignoreFailuresError" : "Ignore failures",
+			"refreshFailed" : "Refresh failed!",
+			"refreshFailedError" : "Refresh failed",
+			"refreshSuccess" : "Refresh success"
+		},
 		"api": {
 			"group": {
 				"systemUser": "System User",

@@ -56,8 +56,8 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 func (s *SystemApiApi) SyncApi(c *gin.Context) {
 	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
 	if err != nil {
-		global.GVA_LOG.Error("同步失败!", zap.Error(err))
-		response.FailWithMessage("同步失败", c)
+		global.GVA_LOG.Error(global.Translate("system.sys_api.syncFailed"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_api.syncFailedError"), c)
 		return
 	}
 	response.OkWithData(gin.H{
@@ -78,8 +78,8 @@ func (s *SystemApiApi) SyncApi(c *gin.Context) {
 func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
 	groups, apiGroupMap, err := apiService.GetApiGroups()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailError"), c)
 		return
 	}
 	response.OkWithData(gin.H{
@@ -105,8 +105,8 @@ func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 	}
 	err = apiService.IgnoreApi(ignoreApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
-		response.FailWithMessage("忽略失败", c)
+		global.GVA_LOG.Error(global.Translate("system.sys_api.ignoreFailures"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_api.ignoreFailuresError"), c)
 		return
 	}
 	response.Ok(c)
@@ -129,8 +129,8 @@ func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
 	}
 	err = apiService.EnterSyncApi(syncApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
-		response.FailWithMessage("忽略失败", c)
+		global.GVA_LOG.Error(global.Translate("system.sys_api.ignoreFailures"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_api.ignoreFailuresError"), c)
 		return
 	}
 	response.Ok(c)
@@ -314,9 +314,9 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
 	err := casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("刷新失败!", zap.Error(err))
-		response.FailWithMessage("刷新失败", c)
+		global.GVA_LOG.Error(global.Translate("system.sys_api.refreshFailed"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_api.refreshFailedError"), c)
 		return
 	}
-	response.OkWithMessage("刷新成功", c)
+	response.OkWithMessage(global.Translate("system.sys_api.refreshSuccess"), c)
 }

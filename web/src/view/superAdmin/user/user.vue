@@ -7,7 +7,7 @@
           type="primary"
           icon="plus"
           @click="addUser"
-        >{{ t('user.addUser') }}</el-button>
+        >{{ t('view.superAdmin.user.addUser') }}</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -15,7 +15,7 @@
       >
         <el-table-column
           align="left"
-          :label="t('user.avatar')"
+          :label="t('view.superAdmin.user.avatar')"
           min-width="75"
         >
           <template #default="scope">
@@ -33,31 +33,31 @@
         />
         <el-table-column
           align="left"
-          :label="t('user.userName')"
+          :label="t('view.superAdmin.user.userName')"
           min-width="150"
           prop="userName"
         />
         <el-table-column
           align="left"
-          :label="t('user.nickName')"
+          :label="t('view.superAdmin.user.nickName')"
           min-width="150"
           prop="nickName"
         />
         <el-table-column
           align="left"
-           :label="t('user.phone')"
+           :label="t('view.superAdmin.user.phone')"
           min-width="180"
           prop="phone"
         />
         <el-table-column
           align="left"
-          :label="t('user.email')"
+          :label="t('view.superAdmin.user.email')"
           min-width="180"
           prop="email"
         />
         <el-table-column
           align="left"
-           :label="t('user.userRole')"
+           :label="t('view.superAdmin.user.userRole')"
           min-width="200"
         >
           <template #default="scope">
@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          :label="t('user.enable')"
+          :label="t('view.superAdmin.user.enable')"
           min-width="150"
         >
           <template #default="scope">
@@ -91,7 +91,7 @@
 
         <el-table-column
           :label="t('general.operations')"
-          min-width="250"
+          min-width="260"
           fixed="right"
         >
           <template #default="scope">
@@ -112,7 +112,7 @@
               link
               icon="magic-stick"
               @click="resetPasswordFunc(scope.row)"
-            >{{ t('user.resetPassword') }}</el-button>
+            >{{ t('view.superAdmin.user.resetPassword') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -137,7 +137,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ t('user.user') }}</span>
+          <span class="text-lg">{{ t('view.superAdmin.user.user') }}</span>
           <div>
             <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
             <el-button
@@ -156,38 +156,38 @@
       >
         <el-form-item
           v-if="dialogFlag === 'add'"
-          :label="t('user.userName')"
+          :label="t('view.superAdmin.user.userName')"
           prop="userName"
         >
           <el-input v-model="userInfo.userName" />
         </el-form-item>
         <el-form-item
           v-if="dialogFlag === 'add'"
-          :label="t('user.password')"
+          :label="t('view.superAdmin.user.password')"
           prop="password"
         >
           <el-input v-model="userInfo.password" />
         </el-form-item>
         <el-form-item
-          :label="t('user.nickName')"
+          :label="t('view.superAdmin.user.nickName')"
           prop="nickName"
         >
           <el-input v-model="userInfo.nickName" />
         </el-form-item>
         <el-form-item
-          :label="t('user.phone')"
+          :label="t('view.superAdmin.user.phone')"
           prop="phone"
         >
           <el-input v-model="userInfo.phone" />
         </el-form-item>
         <el-form-item
-          :label="t('user.email')"
+          :label="t('view.superAdmin.user.email')"
           prop="email"
         >
           <el-input v-model="userInfo.email" />
         </el-form-item>
         <el-form-item
-          :label="t('user.userRole')"
+          :label="t('view.superAdmin.user.userRole')"
           prop="authorityId"
         >
           <el-cascader
@@ -200,7 +200,7 @@
           />
         </el-form-item>
         <el-form-item
-          :label="t('user.enable')"
+          :label="t('view.superAdmin.user.enable')"
           prop="disabled"
         >
           <el-switch
@@ -211,7 +211,7 @@
           />
         </el-form-item>
         <el-form-item
-          :label="t('user.avatar')"
+          :label="t('view.superAdmin.user.avatar')"
           label-width="80px"
         >
           <SelectImage
@@ -310,7 +310,7 @@ initPage()
 
 const resetPasswordFunc = (row) => {
   ElMessageBox.confirm(
-    t('user.resetPasswordConfrim'),
+    t('view.superAdmin.user.resetPasswordConfrim'),
     t('general.warning'),
     {
       confirmButtonText: t('general.confirm'),
@@ -356,7 +356,7 @@ const setOptions = (authData) => {
 const backNickName = ref('')
 const openEidt = (row) => {
   if (tableData.value.some(item => item.editFlag)) {
-    ElMessage(t('user.anotherUserEdit'))
+    ElMessage(t('view.superAdmin.user.anotherUserEdit'))
     return
   }
   backNickName.value = row.nickName
@@ -408,24 +408,24 @@ const userInfo = ref({
 
 const rules = ref({
   userName: [
-    { required: true, message: t('user.userNameNote'), trigger: 'blur' },
-    { min: 5, message: t('user.userNameLenNote'), trigger: 'blur' }
+    { required: true, message: t('view.superAdmin.user.userNameNote'), trigger: 'blur' },
+    { min: 5, message: t('view.superAdmin.user.userNameLenNote'), trigger: 'blur' }
   ],
   password: [
-    { required: true, message: t('user.passwordNote'), trigger: 'blur' },
-    { min: 6, message: t('user.passwordLenNote'), trigger: 'blur' }
+    { required: true, message: t('view.superAdmin.user.passwordNote'), trigger: 'blur' },
+    { min: 6, message: t('view.superAdmin.user.passwordLenNote'), trigger: 'blur' }
   ],
   nickName: [
-    { required: true, message: t('user.nickNameNote'), trigger: 'blur' }
+    { required: true, message: t('view.superAdmin.user.nickNameNote'), trigger: 'blur' }
   ],
   phone: [
-    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: t('user.enterPhoneNoNote'), trigger: 'blur' },
+    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: t('view.superAdmin.user.enterPhoneNoNote'), trigger: 'blur' },
   ],
   email: [
-    { pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: t('user.enterEmailNote'), trigger: 'blur' },
+    { pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: t('view.superAdmin.user.enterEmailNote'), trigger: 'blur' },
   ],
   authorityId: [
-    { required: true, message: t('user.userRoleNote'), trigger: 'blur' }
+    { required: true, message: t('view.superAdmin.user.userRoleNote'), trigger: 'blur' }
   ]
 })
 const userForm = ref(null)
@@ -439,7 +439,7 @@ const enterAddUserDialog = async() => {
       if (dialogFlag.value === 'add') {
         const res = await register(req)
         if (res.code === 0) {
-          ElMessage({ type: 'success', message: t('user.userAddedNote') })
+          ElMessage({ type: 'success', message: t('view.superAdmin.user.userAddedNote') })
           await getTableData()
           closeAddUserDialog()
         }
@@ -447,7 +447,7 @@ const enterAddUserDialog = async() => {
       if (dialogFlag.value === 'edit') {
         const res = await setUserInfo(req)
         if (res.code === 0) {
-          ElMessage({ type: 'success', message: t('user.userEditedNote') })
+          ElMessage({ type: 'success', message: t('view.superAdmin.user.userEditedNote') })
           await getTableData()
           closeAddUserDialog()
         }
@@ -485,7 +485,7 @@ const changeAuthority = async(row, flag, removeAuth) => {
     authorityIds: row.authorityIds
   })
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: t('user.roleSetNote') })
+    ElMessage({ type: 'success', message: t('view.superAdmin.user.roleSetNote') })
   } else {
     if (!removeAuth) {
       row.authorityIds = [...tempAuth[row.ID]]
@@ -510,7 +510,7 @@ const switchEnable = async(row) => {
   }
   const res = await setUserInfo(req)
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: `${req.enable === 2 ? t('user.disabledSuccessfully') : t('user.enabledSuccessfully')}` })
+    ElMessage({ type: 'success', message: `${req.enable === 2 ? t('view.superAdmin.user.disabledSuccessfully') : t('view.superAdmin.user.enabledSuccessfully')}` })
     await getTableData()
     userInfo.value.headerImg = ''
     userInfo.value.authorityIds = []

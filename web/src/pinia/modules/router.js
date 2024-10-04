@@ -3,6 +3,7 @@ import { emitter } from '@/utils/bus.js'
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
 import { ref,watchEffect } from 'vue'
+import i18n from '@/i18n' // added by mohamed hassan to multilangauge
 import pathInfo from "@/pathInfo.json";
 
 const notLayoutRouterArr = []
@@ -105,7 +106,7 @@ export const useRouterStore = defineStore('router', () => {
       name: 'layout',
       component: 'view/layout/index.vue',
       meta: {
-        title: '底层layout'
+        title: i18n.global.t('pinia.modules.router.bottomLayerLayout')
       },
       children: []
     }]

@@ -64,6 +64,9 @@ func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 func Translate(msg string) string {
 	if GVA_TRANSLATOR.IsInit {
 		message := GVA_TRANSLATOR.TranslateMessage(msg)
+		if message == "" {
+			return msg
+		}
 		return message
 	}
 

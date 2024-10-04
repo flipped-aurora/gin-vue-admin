@@ -675,6 +675,14 @@
               </el-select>
             <!-- <el-input v-model="config.language.language" /> -->
           </el-form-item>
+          <el-form-item :label="t('view.systemTools.system.defaultLanguage')">
+            <el-select v-model="config.language['defualt-languge']">
+                <el-option value="en" label="English"/>
+                <el-option value="zh" label="中文"/>
+                <el-option value="ar" label="العربية"/>
+              </el-select>
+            <!-- <el-input v-model="config.language.language" /> -->
+          </el-form-item>
       </el-tab-pane>
       </el-tabs>
     </el-form>

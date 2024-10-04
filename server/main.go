@@ -32,7 +32,8 @@ func main() {
 	initialize.DBList()
 	// added by mohamed hassan to support multilanguage
 	global.GVA_TRANSLATOR = translate.Translator{} // create translator inestance  here
-	global.GVA_TRANSLATOR.InitTranslator(global.GVA_CONFIG.Language.Language, global.GVA_CONFIG.Language.Dir)
+	//global.GVA_TRANSLATOR.InitTranslator(global.GVA_CONFIG.Language.Language, global.GVA_CONFIG.Language.Dir)
+	global.GVA_TRANSLATOR.InitTranslatorEx(global.GVA_CONFIG.Language.Language, global.GVA_CONFIG.Language.DefaultLanguage, global.GVA_CONFIG.Language.Dir)
 	// end of adding
 	if global.GVA_DB != nil {
 		initialize.RegisterTables() // Initializing database tables

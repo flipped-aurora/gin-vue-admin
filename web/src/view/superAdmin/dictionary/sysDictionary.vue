@@ -46,23 +46,23 @@
               {{ t('general.cancel') }}
             </el-button>
             <el-button type="primary" @click="enterDrawer">
-              确 定
+              {{ t('general.confirm') }}
             </el-button>
           </div>
         </div>
       </template>
-      <el-form ref="drawerForm" :model="formData" :rules="rules" label-width="110px">
-        <el-form-item label="字典名（中）" prop="name">
-          <el-input v-model="formData.name" placeholder="请输入字典名（中）" clearable :style="{ width: '100%' }" />
+      <el-form ref="drawerForm" :model="formData" :rules="rules" label-width="160px">
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictName')" prop="name">
+          <el-input v-model="formData.name" :placeholder="t('view.dictionary.sysDictionary.enterDictName')" clearable :style="{ width: '100%' }" />
         </el-form-item>
-        <el-form-item label="字典名（英）" prop="type">
-          <el-input v-model="formData.type" placeholder="请输入字典名（英）" clearable :style="{ width: '100%' }" />
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictDataType')" prop="type">
+          <el-input v-model="formData.type" :placeholder="t('view.dictionary.sysDictionary.enterDictDataType')" clearable :style="{ width: '100%' }" />
         </el-form-item>
-        <el-form-item label="状态" prop="status" required>
+        <el-form-item :label="t('view.dictionary.sysDictionary.status')" prop="status" required>
           <el-switch v-model="formData.status" :active-text="t('general.enable')" :inactive-text="t('general.disable')" />
         </el-form-item>
-        <el-form-item label="描述" prop="desc">
-          <el-input v-model="formData.desc" placeholder="请输入描述" clearable :style="{ width: '100%' }" />
+        <el-form-item :label="t('general.description')" prop="desc">
+          <el-input v-model="formData.desc" :placeholder="t('view.dictionary.sysDictionary.enterDescription')" clearable :style="{ width: '100%' }" />
         </el-form-item>
       </el-form>
     </el-drawer>
@@ -110,7 +110,7 @@ const rules = ref({
   type: [
     {
       required: true,
-      message: t('view.dictionary.sysDictionary.enterDictNameEn'),
+      message: t('view.dictionary.sysDictionary.enterDictDataType'),
       trigger: 'blur',
     },
   ],
@@ -193,7 +193,7 @@ const enterDrawer = async () => {
         break
     }
     if (res.code === 0) {
-      ElMessage.success('操作成功')
+      ElMessage.success(t('general.operationSuccess'))
       closeDrawer()
       getTableData()
     }

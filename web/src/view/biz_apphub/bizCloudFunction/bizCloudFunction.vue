@@ -284,38 +284,56 @@
         </el-drawer>
 
 
-    <el-dialog v-model="setParamDialogVisible" title="配置函数参数">
+    <el-dialog width="95%" v-model="setParamDialogVisible" title="配置函数参数">
 
       <h5>输入参数</h5>
      <el-form  :model="formData">
               <el-form-item  v-for="(field,idx) in formData.param" v-show="field.mode==='in'" :key="field.code">
                 <div  style="width: 100%">
                   <el-row style="width: 100%" :gutter="20">
-                    <el-col :span="3">
+                    <el-col :span="2">
                       <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
                     </el-col>
                     <el-col :span="3">
-                      <el-input v-model="field.desc" placeholder="参数描述"></el-input>
+                      <el-input v-model="field.desc" placeholder="参数中文名称"></el-input>
+                    </el-col>
+                    <el-col :span="5">
+                      <el-input v-model="field.note" placeholder="参数注释"></el-input>
                     </el-col>
 
-                    <el-col :span="3">
-                      <el-select v-model="field.type" placeholder="参数类型">
-                        <el-option label="字符串" value="string"></el-option>
-                        <el-option label="数值" value="number"></el-option>
-                        <el-option label="文件" value="file"></el-option>
-                      </el-select>
-                    </el-col>
-
-                    <el-col :span="3">
-                      <el-select v-model="field.input_mode" placeholder="输入框模式">
-                        <el-option label="单行" value="line"></el-option>
-                        <el-option label="文本域" value="text_field"></el-option>
-                      </el-select>
-                    </el-col>
-                    <el-col :span="3">
+                    <el-col v-if="field.type==='string' || field.type==='number'" :span="6">
                       <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col v-if="field.type==='string'" :span="6">
+                      <el-input v-model="field.text_limit" placeholder="限制字符数：例如：120，为空不限制"></el-input>
+                    </el-col>
+                    <el-col v-if="field.type==='number'" :span="6">
+                      <el-input v-model="field.number_limit" placeholder="限制数值范围：例如：1-100，为空不限制"></el-input>
+                    </el-col>
+                    <el-col :span="6" v-if="field.type==='muti_select' || field.type==='sige_select'" >
+                      <el-input v-model="field.options" placeholder="分号分割多个选项，例如：压缩;加水印;加密"></el-input>
+                    </el-col>
+
+                    <el-col :span="6" v-if="field.type==='muti_select'" >
+                      <el-input v-model="field.select_options" placeholder="默认选项;多个请用分号分割;例如：压缩;加水印"></el-input>
+                    </el-col>
+
+                    <el-col :span="6" v-if="field.type==='sige_select'" >
+                      <el-input v-model="field.select_options" placeholder="默认选项，例如：压缩"></el-input>
+                    </el-col>
+
+                    <el-col :span="6" v-if="field.type==='file'" >
+                      <el-input v-model="field.file_type_limit" placeholder="限制文件类型，例如：jpg;png， 为空不限制"></el-input>
+                    </el-col>
+                    <el-col :span="6" v-if="field.type==='file'" >
+                      <el-input v-model="field.file_size_limit" placeholder="限制文件大小(单位kb)，例如：4096，为空不限制"></el-input>
+                    </el-col>
+
+                    <el-col :span="1">
+                      <span>{{getParamType(field)}}</span>
+                    </el-col>
+
+                    <el-col :span="1">
                       <el-button type="primary" @click="removeField(idx)">移除</el-button>
                     </el-col>
                   </el-row>
@@ -330,39 +348,71 @@
         <el-form-item v-for="(field,idx) in formData.param" v-show="field.mode==='out'" :key="field.code">
           <div  style="width: 100%">
             <el-row style="width: 100%" :gutter="20">
-              <el-col :span="3">
+              <el-col :span="2">
                 <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
               </el-col>
               <el-col :span="3">
-                <el-input v-model="field.desc" placeholder="参数描述"></el-input>
+                <el-input v-model="field.desc" placeholder="参数中文"></el-input>
               </el-col>
-              <el-col :span="3">
-                <el-select v-model="field.type" placeholder="参数类型">
-                  <el-option label="字符串" value="string"></el-option>
-                  <el-option label="数值" value="number"></el-option>
-                  <el-option label="文件" value="file"></el-option>
-                </el-select>
+              <el-col :span="5">
+                <el-input v-model="field.note" placeholder="参数注释"></el-input>
               </el-col>
-              <el-col :span="3">
-                <el-select v-model="field.input_mode" placeholder="输入框模式">
-                  <el-option label="单行" value="line"></el-option>
-                  <el-option label="文本域" value="text_field"></el-option>
-                </el-select>
-              </el-col>
-              <el-col :span="3">
+
+              <el-col :span="6" v-if="field.type==='string' || field.type==='number'" >
                 <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
               </el-col>
-              <el-col :span="3">
+
+
+              <el-col v-if="field.type==='string'" :span="6">
+                <el-input v-model="field.text_limit" placeholder="限制字符数：例如：120，为空不限制"></el-input>
+              </el-col>
+
+              <el-col :span="6" v-if="field.type==='muti_select' || field.type==='sige_select'" >
+                <el-input v-model="field.options" placeholder="分号分割多个选项，例如：压缩;加水印;加密"></el-input>
+              </el-col>
+
+
+              <el-col :span="6" v-if="field.type==='muti_select'" >
+                <el-input v-model="field.select_options" placeholder="默认选项;多个请用分号分割;例如：压缩;加水印"></el-input>
+              </el-col>
+
+              <el-col :span="6" v-if="field.type==='sige_select'" >
+                <el-input v-model="field.select_options" placeholder="默认选项，例如：压缩"></el-input>
+              </el-col>
+
+              <el-col :span="1">
+                <span>{{getParamType(field)}}</span>
+              </el-col>
+              <el-col :span="1">
                 <el-button type="primary" @click="removeField(idx)">移除</el-button>
               </el-col>
             </el-row>
           </div>
         </el-form-item>
       </el-form>
+      <div style="margin: 20px 0px">
+        <p style="text-align: center">
+          <el-radio-group v-model="param_type">
+          <el-radio value="string" size="large">文本</el-radio>
+          <el-radio value="number" size="large">数值</el-radio>
+          <el-radio value="file" size="large">文件</el-radio>
+          <el-radio value="muti_select" size="large">多选框</el-radio>
+          <el-radio value="sige_select" size="large">单选框</el-radio>
+        </el-radio-group>
+        </p>
+        <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="addInField">添加输入参数</el-button></p>
+        <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="addOutField">添加输出参数</el-button></p>
+      </div>
 
-        <el-button type="primary" @click="addInField">添加输入参数</el-button>
-        <el-button type="primary" @click="addOutField">添加输出参数</el-button>
-      <el-button type="primary" @click="setParamDialogVisible=false">确认</el-button>
+<!--      <div style="margin: 20px 0px">-->
+<!--        <el-radio-group v-model="out_type">-->
+<!--          <el-radio value="string" size="large">文本</el-radio>-->
+<!--          <el-radio value="number" size="large">数值</el-radio>-->
+<!--          <el-radio value="file" size="large">文件</el-radio>-->
+<!--        </el-radio-group>-->
+
+<!--      </div>-->
+      <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="setParamDialogVisible=false">确认</el-button></p>
     </el-dialog>
 
     <el-dialog v-model="setApiDialogVisible" title="配置函数调用地址">
@@ -405,19 +455,42 @@ defineOptions({
     name: 'BizCloudFunction'
 })
 
-const setParamDialogVisible=ref(false)
-const setApiDialogVisible=ref(false)
-const setParam=function (){
-  setParamDialogVisible.value=true
+
+function getParamType(field) {
+  if (field.type==="string"){
+    return "字符串"
+  }else if(field.type==="number"){
+    return "数值"
+  }else if(field.type==="file"){
+    return "文件"
+  }else if(field.type==="muti_select"){
+    return "多选框"
+  }else if(field.type==="sige_select"){
+    return "单选框"
+  }
+  // <el-option label="字符串" value="string"></el-option>
+  // <el-option label="数值" value="number"></el-option>
+  // <el-option label="文件" value="file"></el-option>
+  // <el-option label="多选框" value="muti_select"></el-option>
+  // <el-option label="单选框" value="sige_select"></el-option>
 }
-const setApiConfig=function (){
-  setApiDialogVisible.value=true
+
+// const in_type=ref("")
+const param_type = ref("string")
+// const out_type=ref("")
+const setParamDialogVisible = ref(false)
+const setApiDialogVisible = ref(false)
+const setParam = function () {
+  setParamDialogVisible.value = true
+}
+const setApiConfig = function () {
+  setApiDialogVisible.value = true
 }
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
 
-function getApiConfig(){
+function getApiConfig() {
   if (!formData.value.api_config.method){
     return "未配置"
   }
@@ -443,19 +516,28 @@ const addInField = () => {
     desc: '',
     mode: 'in',
     mock_data: '',
-    input_mode: 'line',
-    type: 'string',
+    input_mode: 'text_field',
+    select_options:"",
+    file_size_limit:"",
+    file_type_limit:"",
+    number_limit:"",
+    text_limit:"",
+    options:"",
+    type: param_type.value,
     value: ''
   });
 };
 const addOutField = () => {
+
   formData.value.param.push({
     code: '',
     desc: '',
     mode: 'out',
     mock_data: '',
-    input_mode: 'line',
-    type: 'string',
+    select_options:"",
+    input_mode: 'text_field',
+    options:"",
+    type: param_type.value,
     value: ''
   });
 };

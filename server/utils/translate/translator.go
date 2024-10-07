@@ -3,10 +3,9 @@ package translate
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
+	"io/ioutil"
 )
 
 type Translator struct {

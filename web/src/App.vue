@@ -10,8 +10,6 @@
 import zh from 'element-plus/dist/locale/zh-cn.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
 import ar from 'element-plus/dist/locale/ar.mjs'
-// element 2.3.8之前使用下面的语句
-// import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import {useAppStore} from "@/pinia";
 import { useI18n } from 'vue-i18n'
 

@@ -101,7 +101,10 @@ func installation(path string, formPath string, toPath string) error {
 		zap.L().Error("autoPath 已存在同名插件，请自行手动安装", zap.String("to", to))
 		return errors.New(toPath + "已存在同名插件，请自行手动安装")
 	}
-	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+	//return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+	return cp.Copy(form, to, cp.Options{Skip: func(srcinfo os.FileInfo, src, dest string) (bool, error) {
+		return skipMacSpecialDocument(src)
+	}})
 }
 
 func filterFile(paths []string) []string {

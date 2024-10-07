@@ -201,6 +201,9 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) FindBizToolCmdSrvApi(c *gin.Cont
 	if os.Getenv("env") == "local" {
 		host = "http://127.0.0.1:8080/api"
 	}
+	if os.Getenv("ENV_USER") != "" {
+		host = "http://127.0.0.1:8080/api"
+	}
 	rebizToolCmdSrvApi.ApiHost = host
 	response.OkWithData(rebizToolCmdSrvApi, c)
 }

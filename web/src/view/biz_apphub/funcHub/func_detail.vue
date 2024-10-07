@@ -15,104 +15,145 @@ const files=ref("")
 const lookUpValue=ref("")
 const lookUpTitle=ref("")
 const centerDialogVisible=ref(false)
-const funcCall=async ()=>{
+const videoDialogVisible=ref(false)
+const assetsSrc=ref("")
+const assetsType=ref("")
+const funcCall=async ()=> {
 
 
-  console.log("fileList",fileList.value)
-  console.log("files",files.value)
-  console.log("func detail",func.detail.param)
+  console.log("fileList", fileList.value)
+  console.log("files", files.value)
+  console.log("func detail", func.detail.param)
+  console.log("func detail", func.detail)
   // return
-  let bd=reactive({})
+  let bd = reactive({})
   for (let i = 0; i < func.detail.param.length; i++) {
-    if (func.detail.param[i].mode==="in"){
-      if (func.detail.param[i].type==="file"){
+    if (func.detail.param[i].mode === "in") {
+      if (func.detail.param[i].type === "file") {
         // func.detail.param[i].files=
-        bd[func.detail.param[i].code]=func.detail.param[i].files
-      }else {
-        bd[func.detail.param[i].code]= func.detail.param[i].value
+        bd[func.detail.param[i].code] = func.detail.param[i].files
+      } else {
+        bd[func.detail.param[i].code] = func.detail.param[i].value
       }
     }
   }
-  if (func.detail.api_config.method==="post"){
-    let res =await axios.post(func.detail.api_config.path,bd)
-    if(res.data.code===0){
+  if (func.detail.api_config.method === "post") {
+    let res = await axios.post(func.detail.api_config.path, bd)
+    if (res.data.code === 0) {
       for (const key in res.data.data) {
         if (res.data.data.hasOwnProperty(key)) {
           const value = res.data.data[key];
           for (let i = 0; i < func.detail.param.length; i++) {
-            console.log("func.detail.param[i]",func.detail.param[i])
-            if (func.detail.param[i].code===key){
-              func.detail.param[i].value=value
+            console.log("func.detail.param[i]", func.detail.param[i])
+            if (func.detail.param[i].code === key) {
+              func.detail.param[i].value = value
             }
           }
         }
       }
-    }else {
-
     }
+
   }else {
+    console.log("get")
+    // let res =await axios.get(func.detail.api_config.path,bd)
+    let res = await axios.get(func.detail.api_config.path, {
+      params: bd
+    })
 
-  }
-}
 
-onMounted(() => {
+    const contentType = res.headers['content-type'];
+    if (contentType && contentType.includes('image/')) {
+      assetsType.value="image"
+      assetsSrc.value=func.detail.api_config.path+"?"+new URLSearchParams(bd).toString()
+      console.log("image",assetsSrc.value)
+      videoDialogVisible.value=true
+      return
+    }
+    if (contentType && contentType.includes('video/')) {
+      assetsType.value="video"
+      assetsSrc.value=func.detail.api_config.path+"?"+new URLSearchParams(bd).toString()
+      console.log("video",assetsSrc.value)
+      videoDialogVisible.value=true
+      return
+    }
 
-  let fn = async ()=>{
-    const res=await findBizCloudFunction({ID: route.query.id})
-    if (res.code===0){
-      func.detail=res.data
-      for (let i = 0; i < func.detail.param.length; i++) {
-        if (func.detail.param[i].type==="file"){
-          func.detail.param[i].files=[]
+    if (res.data.code === 0) {
+
+        for (const key in res.data.data) {
+        if (res.data.data.hasOwnProperty(key)) {
+          const value = res.data.data[key];
+          for (let i = 0; i < func.detail.param.length; i++) {
+            console.log("func.detail.param[i]", func.detail.param[i])
+            if (func.detail.param[i].code === key) {
+              func.detail.param[i].value = value
+            }
+          }
         }
       }
+  }
+}
+}
+  onMounted(() => {
+
+    let fn = async () => {
+      const res = await findBizCloudFunction({ID: route.query.id})
+      if (res.code === 0) {
+        func.detail = res.data
+        for (let i = 0; i < func.detail.param.length; i++) {
+          if (func.detail.param[i].type === "file") {
+            func.detail.param[i].files = []
+          }
+        }
+      }
+      getFuncInfo()
     }
-    getFuncInfo()
-  }
-  fn()
-})
-function getFuncInfo(){
-  let inp=[]
-  let outp=[]
-  console.log("func.detail:",func.detail)
-  for (let i = 0; i < func.detail.param.length; i++) {
-    let item=func.detail.param[i]
-    if (item.mode==="in"){
-      inp.push(item.desc+" " + item.type)
-    }else{
-      outp.push(item.desc+" " + item.type)
+    fn()
+  })
+
+  function getFuncInfo() {
+    let inp = []
+    let outp = []
+    console.log("func.detail:", func.detail)
+    for (let i = 0; i < func.detail.param.length; i++) {
+      let item = func.detail.param[i]
+      if (item.mode === "in") {
+        inp.push(item.desc + " " + item.type)
+      } else {
+        outp.push(item.desc + " " + item.type)
+      }
     }
+    funcDefine.value = func.detail.code_name + "(" + inp.join(",") + ")" + "->" + "(" + outp.join(",") + ")"
   }
-  funcDefine.value= func.detail.code_name+"("+inp.join(",")+")"+"->"+"("+outp.join(",")+")"
-}
 
-function getTags() {
-  if(func.detail.tags){
-    return func.detail.tags.split(";")
+  function getTags() {
+    if (func.detail.tags) {
+      return func.detail.tags.split(";")
+    }
+    return []
+
   }
-  return []
 
-}
-function lookUp(v) {
-  centerDialogVisible.value=true
-  lookUpTitle.value=v.desc
-  lookUpValue.value=v.value
-}
+  function lookUp(v) {
+    centerDialogVisible.value = true
+    lookUpTitle.value = v.desc
+    lookUpValue.value = v.value
+  }
 
 
-function copy(v) {
-  // centerDialogVisible.value=true
-  // lookUpTitle.value=v.desc
-  // lookUpValue.value=v.value
+  function copy(v) {
+    // centerDialogVisible.value=true
+    // lookUpTitle.value=v.desc
+    // lookUpValue.value=v.value
 
-  navigator.clipboard.writeText(v.value);
-  ElMessage.success("复制成功")
-}
+    navigator.clipboard.writeText(v.value);
+    ElMessage.success("复制成功")
+  }
 
-function getLookUpTitle() {
-  // centerDialogVisible.value=true
-  return lookUpValue.value
-}
+  function getLookUpTitle() {
+    // centerDialogVisible.value=true
+    return lookUpValue.value
+  }
+
 const select = ref('')
 const input3 = ref('')
 </script>
@@ -431,6 +472,13 @@ const input3 = ref('')
 
       </el-scrollbar>
     </el-drawer>
+
+    <el-dialog v-model="videoDialogVisible" title="静态文件" width="80%" center>
+    <video controls width="100%" v-if="assetsType==='video'" :src="assetsSrc">
+
+    </video>
+      <img width="100%" v-else-if="assetsType==='image'"  :src="assetsSrc"/>
+    </el-dialog>
 
       </div>
 </template>

@@ -1,6 +1,7 @@
 package upload
 
 import (
+	"fmt"
 	"mime/multipart"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -38,12 +39,12 @@ func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	var client *obs.ObsClient
 	client, err = NewHuaWeiObsClient()
 	if err != nil {
-		return "", "", errors.Wrap(err, "获取华为对象存储对象失败!")
+		return "", "", errors.Wrap(err, global.Translate("utils.getHuaweiObjectFailed"))
 	}
 
 	_, err = client.PutObject(input)
 	if err != nil {
-		return "", "", errors.Wrap(err, "文件上传失败!")
+		return "", "", errors.Wrap(err, global.Translate("utils.fileUploadFailed"))
 	}
 	filepath := global.GVA_CONFIG.HuaWeiObs.Path + "/" + filename
 	return filepath, filename, err
@@ -52,7 +53,7 @@ func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
 func (o *Obs) DeleteFile(key string) error {
 	client, err := NewHuaWeiObsClient()
 	if err != nil {
-		return errors.Wrap(err, "获取华为对象存储对象失败!")
+		return errors.Wrap(err, global.Translate("utils.getHuaweiObjectFailedDuplicate"))
 	}
 	input := &obs.DeleteObjectInput{
 		Bucket: global.GVA_CONFIG.HuaWeiObs.Bucket,
@@ -61,7 +62,7 @@ func (o *Obs) DeleteFile(key string) error {
 	var output *obs.DeleteObjectOutput
 	output, err = client.DeleteObject(input)
 	if err != nil {
-		return errors.Wrapf(err, "删除对象(%s)失败!, output: %v", key, output)
+		return errors.Wrapf(err, fmt.Sprintf(global.Translate("utils.deleteObjectFailed"), key, output))
 	}
 	return nil
 }

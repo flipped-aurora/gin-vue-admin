@@ -24,7 +24,7 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Gva插件User 注入",
+			name: global.Translate("utils.gvaPluginUserInjection"),
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
 				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
@@ -39,7 +39,7 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试 中文 注入",
+			name: global.Translate("utils.chineseInjection"),
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
 				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
@@ -98,7 +98,7 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Gva插件User 回滚",
+			name: global.Translate("utils.gvaPluginUserRollback"),
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
 				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
@@ -113,7 +113,7 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试 中文 注入",
+			name: global.Translate("utils.chineseInjection"),
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
 				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),

@@ -28,28 +28,28 @@ type autoCodePackage struct{}
 func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodePackageCreate) error {
 	switch {
 	case info.Template == "":
-		return errors.New("模板不能为空!")
+		return errors.New(global.Translate("service.templateCannotBeEmpty"))
 	case info.Template == "page":
-		return errors.New("page为表单生成器!")
+		return errors.New(global.Translate("service.pageIsFormGenerator"))
 	case info.PackageName == "":
-		return errors.New("PackageName不能为空!")
+		return errors.New(global.Translate("service.packageNameCannotBeEmpty"))
 	case token.IsKeyword(info.PackageName):
-		return errors.Errorf("%s为go的关键字!", info.PackageName)
+		return errors.Errorf(global.Translate("sys_auto_code.keywordNotice"), info.PackageName)
 	case info.Template == "package":
 		if info.PackageName == "system" || info.PackageName == "example" {
-			return errors.New("不能使用已保留的package name")
+			return errors.New(global.Translate("service.cannotUseReservedPackageName"))
 		}
 	default:
 		break
 	}
 	if !errors.Is(global.GVA_DB.Where("package_name = ? and template = ?", info.PackageName, info.Template).First(&model.SysAutoCodePackage{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同PackageName")
+		return errors.New(global.Translate("service.duplicatePackageNameExists"))
 	}
 	create := info.Create()
 	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		err := tx.Create(&create).Error
 		if err != nil {
-			return errors.Wrap(err, "创建失败!")
+			return errors.Wrap(err, global.Translate("general.creationFail"))
 		}
 		code := info.AutoCode()
 		_, asts, creates, err := s.templates(ctx, create, code)
@@ -60,23 +60,25 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 			var files *template.Template
 			files, err = template.ParseFiles(key)
 			if err != nil {
-				return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", key)
+				translation := global.Translate("sys_auto_code.templateFileReadFailed")
+				formattedMessage := fmt.Sprintf(translation, key)
+				return errors.Wrap(err, formattedMessage)
 			}
 			err = os.MkdirAll(filepath.Dir(value), os.ModePerm)
 			if err != nil {
-				return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", value)
+				return errors.Wrapf(err, global.Translate("sys_auto_code.directoryCreationFailed"), value)
 			}
 			var file *os.File
 			file, err = os.Create(value)
 			if err != nil {
-				return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", value)
+				return errors.Wrapf(err, global.Translate("sys_auto_code.directoryCreationFailed"), value)
 			}
 			err = files.Execute(file, code)
 			_ = file.Close()
 			if err != nil {
-				return errors.Wrapf(err, "[filepath:%s]生成失败!", value)
+				return errors.Wrapf(err, global.Translate("sys_auto_code.generationFailed"), value)
 			}
-			fmt.Printf("[template:%s][filepath:%s]生成成功!\n", key, value)
+			fmt.Printf(global.Translate("sys_auto_code.generationSuccess"), key, value)
 		}
 		for key, value := range asts {
 			keys := strings.Split(key, "=>")
@@ -94,7 +96,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 							return err
 						}
 					}
-					fmt.Printf("[type:%s]注入成功!\n", key)
+					fmt.Printf(global.Translate("sys_auto_code.injection_success"), key)
 				}
 			}
 		}
@@ -108,7 +110,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error {
 	err := global.GVA_DB.WithContext(ctx).Delete(&model.SysAutoCodePackage{}, info.Uint()).Error
 	if err != nil {
-		return errors.Wrap(err, "删除失败!")
+		return errors.Wrap(err, global.Translate("general.deleteFail"))
 	}
 	return nil
 }
@@ -119,7 +121,7 @@ func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error
 func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCodePackage, err error) {
 	err = global.GVA_DB.WithContext(ctx).Find(&entities).Error
 	if err != nil {
-		return nil, errors.Wrap(err, "获取所有包失败!")
+		return nil, errors.Wrap(err, global.Translate("service.failedToGetAllPackages"))
 	}
 	return entities, nil
 }
@@ -130,7 +132,7 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 	templates := make([]string, 0)
 	entries, err := os.ReadDir("resource")
 	if err != nil {
-		return nil, errors.Wrap(err, "读取模版文件夹失败!")
+		return nil, errors.Wrap(err, global.Translate("sys_auto_code.templateFolderReadFailed"))
 	}
 	for i := 0; i < len(entries); i++ {
 		if entries[i].IsDir() {
@@ -159,7 +161,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 	templateDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.Template)
 	templateDirs, err := os.ReadDir(templateDir)
 	if err != nil {
-		return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", templateDir)
+		return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), templateDir)
 	}
 	for i := 0; i < len(templateDirs); i++ {
 		second := filepath.Join(templateDir, templateDirs[i].Name())
@@ -168,7 +170,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {
-				return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", second)
+				return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), second)
 			}
 			for j := 0; j < len(secondDirs); j++ {
 				if secondDirs[j].Name() == ".DS_Store" {
@@ -178,7 +180,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				if !secondDirs[j].IsDir() {
 					ext := filepath.Ext(secondDirs[j].Name())
 					if ext != ".template" && ext != ".tpl" {
-						return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", three)
+						return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), three)
 					}
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
 					if name == "main.go" || name == "plugin.go" {
@@ -193,14 +195,14 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						creates[three] = pluginInitialize.Path
 						continue
 					}
-					return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", three)
+					return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), three)
 				}
 				switch secondDirs[j].Name() {
 				case "api", "router", "service":
 					var threeDirs []os.DirEntry
 					threeDirs, err = os.ReadDir(three)
 					if err != nil {
-						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
+						return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
 						if threeDirs[k].Name() == ".DS_Store" {
@@ -208,18 +210,18 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), four)
 						}
 						ext := filepath.Ext(four)
 						if ext != ".template" && ext != ".tpl" {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")
 						hasEnter := strings.Index(threeDirs[k].Name(), "enter")
 						router := strings.Index(threeDirs[k].Name(), "router")
 						service := strings.Index(threeDirs[k].Name(), "service")
 						if router == -1 && api == -1 && service == -1 && hasEnter == -1 {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), four)
 						}
 						if entity.Template == "package" {
 							create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
@@ -372,7 +374,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 					var threeDirs []os.DirEntry
 					threeDirs, err = os.ReadDir(three)
 					if err != nil {
-						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
+						return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
 						if threeDirs[k].Name() == ".DS_Store" {
@@ -380,11 +382,11 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), four)
 						}
 						ext := filepath.Ext(four)
 						if ext != ".template" && ext != ".tpl" {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						gen := strings.Index(threeDirs[k].Name(), "gen")
 						api := strings.Index(threeDirs[k].Name(), "api")
@@ -396,7 +398,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						hasGorm := strings.Index(threeDirs[k].Name(), "gorm")
 						response := strings.Index(threeDirs[k].Name(), "response")
 						if gen != -1 && api != -1 && menu != -1 && viper != -1 && plugin != -1 && config != -1 && router != -1 && hasGorm != -1 && response != -1 {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), four)
 						}
 						if api != -1 || menu != -1 || viper != -1 || response != -1 || plugin != -1 || config != -1 {
 							creates[four] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
@@ -445,7 +447,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 					var threeDirs []os.DirEntry
 					threeDirs, err = os.ReadDir(three)
 					if err != nil {
-						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
+						return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
 						if threeDirs[k].Name() == ".DS_Store" {
@@ -456,7 +458,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							var fourDirs []os.DirEntry
 							fourDirs, err = os.ReadDir(four)
 							if err != nil {
-								return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", four)
+								return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), four)
 							}
 							for l := 0; l < len(fourDirs); l++ {
 								if fourDirs[l].Name() == ".DS_Store" {
@@ -464,15 +466,15 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								}
 								five := filepath.Join(four, fourDirs[l].Name())
 								if fourDirs[l].IsDir() {
-									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", five)
+									return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), five)
 								}
 								ext := filepath.Ext(five)
 								if ext != ".template" && ext != ".tpl" {
-									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", five)
+									return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), five)
 								}
 								hasRequest := strings.Index(fourDirs[l].Name(), "request")
 								if hasRequest == -1 {
-									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", five)
+									return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), five)
 								}
 								create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), threeDirs[k].Name(), info.HumpPackageName+".go")
 								if entity.Template == "package" {
@@ -484,11 +486,11 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						}
 						ext := filepath.Ext(threeDirs[k].Name())
 						if ext != ".template" && ext != ".tpl" {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						hasModel := strings.Index(threeDirs[k].Name(), "model")
 						if hasModel == -1 {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), four)
 						}
 						create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), info.HumpPackageName+".go")
 						if entity.Template == "package" {
@@ -508,14 +510,14 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						code[four] = create
 					}
 				default:
-					return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", three)
+					return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), three)
 				}
 			}
 		case "web":
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {
-				return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", second)
+				return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), second)
 			}
 			for j := 0; j < len(secondDirs); j++ {
 				if secondDirs[j].Name() == ".DS_Store" {
@@ -523,14 +525,14 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				}
 				three := filepath.Join(second, secondDirs[j].Name())
 				if !secondDirs[j].IsDir() {
-					return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", three)
+					return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), three)
 				}
 				switch secondDirs[j].Name() {
 				case "api", "form", "view", "table":
 					var threeDirs []os.DirEntry
 					threeDirs, err = os.ReadDir(three)
 					if err != nil {
-						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
+						return nil, nil, nil, errors.Wrapf(err, global.Translate("sys_auto_code.templateFolderReadFailedWithDir"), three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
 						if threeDirs[k].Name() == ".DS_Store" {
@@ -538,18 +540,18 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), four)
 						}
 						ext := filepath.Ext(four)
 						if ext != ".template" && ext != ".tpl" {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")
 						form := strings.Index(threeDirs[k].Name(), "form")
 						view := strings.Index(threeDirs[k].Name(), "view")
 						table := strings.Index(threeDirs[k].Name(), "table")
 						if api == -1 && form == -1 && view == -1 && table == -1 {
-							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
+							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), four)
 						}
 						if entity.Template == "package" {
 							if view != -1 || table != -1 {
@@ -571,7 +573,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						code[four] = create
 					}
 				default:
-					return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", three)
+					return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), three)
 				}
 			}
 		case "readme.txt.tpl", "readme.txt.template":
@@ -580,7 +582,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 			if templateDirs[i].Name() == ".DS_Store" {
 				continue
 			}
-			return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", second)
+			return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateFile"), second)
 		}
 	}
 	return code, asts, creates, nil

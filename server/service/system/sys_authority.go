@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var ErrRoleExistence = errors.New("存在相同角色id")
+var ErrRoleExistence = errors.New(global.Translate("sys_auto_code.duplicateRoleId"))
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateAuthority
@@ -116,7 +116,7 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&oldAuthority).Error
 	if err != nil {
 		global.GVA_LOG.Debug(err.Error())
-		return system.SysAuthority{}, errors.New("查询角色数据失败")
+		return system.SysAuthority{}, errors.New(global.Translate("sys_auto_code.queryRoleDataFailed"))
 	}
 	err = global.GVA_DB.Model(&oldAuthority).Updates(&auth).Error
 	return auth, err
@@ -130,16 +130,16 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 
 func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthority) error {
 	if errors.Is(global.GVA_DB.Debug().Preload("Users").First(&auth).Error, gorm.ErrRecordNotFound) {
-		return errors.New("该角色不存在")
+		return errors.New(global.Translate("sys_auto_code.roleNotExist"))
 	}
 	if len(auth.Users) != 0 {
-		return errors.New("此角色有用户正在使用禁止删除")
+		return errors.New(global.Translate("sys_auto_code.roleInUse"))
 	}
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysUser{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("此角色有用户正在使用禁止删除")
+		return errors.New(global.Translate("sys_auto_code.roleInUse"))
 	}
 	if !errors.Is(global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("此角色存在子角色不允许删除")
+		return errors.New(global.Translate("sys_auto_code."))
 	}
 
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -203,7 +203,7 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint)
 	} else {
 		err = db.Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authorities).Error
 	}
-    for i := range authorities {
+	for i := range authorities {
 		authorities[i].AuthorityName = global.Translate(authorities[i].AuthorityName)
 	}
 	for k := range authorities {
@@ -251,7 +251,7 @@ func (authorityService *AuthorityService) CheckAuthorityIDAuth(authorityID, targ
 		}
 	}
 	if !hasAuth {
-		return errors.New("您提交的角色ID不合法")
+		return errors.New(global.Translate("sys_auto_code.invalidRoleId"))
 	}
 	return nil
 }

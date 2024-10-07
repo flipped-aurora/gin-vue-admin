@@ -27,13 +27,13 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 		return
 	}
 	web, server, err := autoCodePluginService.Install(header)
-	webStr := "web插件安装成功"
-	serverStr := "server插件安装成功"
+	webStr := global.Translate("sys_auto_code.webPluginInstallSuccess")
+	serverStr := global.Translate("sys_auto_code.serverPluginInstallSuccess")
 	if web == -1 {
-		webStr = "web端插件未成功安装，请按照文档自行解压安装，如果为纯后端插件请忽略此条提示"
+		webStr = global.Translate("sys_auto_code.webPluginInstallFail")
 	}
 	if server == -1 {
-		serverStr = "server端插件未成功安装，请按照文档自行解压安装，如果为纯前端插件请忽略此条提示"
+		serverStr = global.Translate("sys_auto_code.serverPluginInstallFail")
 	}
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -63,11 +63,11 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)
 	if err != nil {
-		global.GVA_LOG.Error("打包失败!", zap.Error(err))
-		response.FailWithMessage("打包失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.packagingFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.packagingFail")+err.Error(), c)
 		return
 	}
-	response.OkWithMessage(fmt.Sprintf("打包成功,文件路径为:%s", zipPath), c)
+	response.OkWithMessage(fmt.Sprintf(global.Translate("system.messages.packSuccess"), zipPath), c)
 }
 
 // Packaged
@@ -87,11 +87,11 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 	}
 	err = autoCodePluginService.InitMenu(menuInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化Menu失败!", zap.Error(err))
-		response.FailWithMessage("创建初始化Menu失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.createInitMenuFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.createInitMenuFail")+err.Error(), c)
 		return
 	}
-	response.OkWithMessage("文件变更成功", c)
+	response.OkWithMessage(global.Translate("sys_auto_code.fileChangeSuccess"), c)
 }
 
 // Packaged
@@ -111,9 +111,9 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 	}
 	err = autoCodePluginService.InitAPI(apiInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化API失败!", zap.Error(err))
-		response.FailWithMessage("创建初始化API失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.createInitApiFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.createInitApiFail")+err.Error(), c)
 		return
 	}
-	response.OkWithMessage("文件变更成功", c)
+	response.OkWithMessage(global.Translate("sys_auto_code.fileChangeSuccess"), c)
 }

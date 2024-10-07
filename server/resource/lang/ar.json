@@ -1,4 +1,27 @@
 {
+    "core": {
+        "server": {
+            "currentVersion": "Current version",
+            "welcomeTo": "Welcome to"
+        },
+        "viper": {
+            "modeGinEnvName": "You are using the gin mode with environment name %s, the config path is %s\n",
+            "envVariable": "You are using the %s environment variable, the config path is %s\n",
+            "commandLineParam": "You are using the value passed by the -c command line argument, the config path is %s\n",
+            "viperFunc": "You are using the value passed by the func Viper(), the config path is %s\n"
+        }
+    },
+    "initialize": {
+        "projectNotInitialized": "لم يتم تهيئة المشروع بعد، لا يمكن تثبيت الإضافات. أعد تشغيل المشروع بعد التهيئة لإكمال تثبيت الإضافات.",
+        "registrationStarted": "بدأ التسجيل",
+        "scheduledDatabaseCleanup": "تنظيف قاعدة البيانات المجدول لمحتوى [السجلات ، القائمة السوداء]",
+        "getTableObjectFailed": "فشل في الحصول على كائن الجدول لـ [%s]!",
+        "duplicateIndex": "الفهرس [%s] مكرر!",
+        "createIndexFailed": "فشل في إنشاء الفهرس [%s]!",
+        "getIndexObjectFailed": "فشل في الحصول على كائن الفهرس لـ [%s]!",
+        "getIndexListFailed": "فشل في الحصول على قائمة الفهارس لـ [%s]!",
+        "mongoConnectionFailed": "فشل في الاتصال بقاعدة بيانات MongoDB!"
+    },
     "general": {
         "createSuccss": "تم إنشاؤه بنجاح",
         "creationFail": "فشل في الإنشاء!",
@@ -20,7 +43,11 @@
         "tabelDataInitFail": "فشل تهيئة بيانات الجدول!",
         "updateFail": "فشل التحديث!",
         "updateFailErr": "فشل التحديث",
-        "updateSuccess": "تم التحديث بنجاح"
+        "updateSuccess": "تم التحديث بنجاح",
+        "invalidPackageName": "اسم الحزمة غير صالح",
+        "insufficientPermissions": "صلاحيات غير كافية",
+        "sendFailed": "فشل الإرسال",
+        "sendSuccess": "تم الإرسال بنجاح"
     },
     "init": {
         "dbAlreadyExist": "قاعدة البيانات موجودة بالفعل",
@@ -30,14 +57,65 @@
     "sys_authority": {
         "copyFail": "فشل النسخ!",
         "copyFailErr": "فشل النسخ",
-        "copySuccess": "تم النسخ بنجاح"
+        "copySuccess": "تم النسخ بنجاح",
+        "assignmentFail": "فشل التخصيص",
+        "assignmentSuccess": "تم التخصيص بنجاح"
     },
     "sys_auto_code": {
         "autoCreateFail": "فشل الإنشاء التلقائي! يرجى مسح البيانات غير المهمة بنفسك!",
         "previewFail": "فشلت المعاينة!",
         "previewFailErr": "فشلت المعاينة",
         "previewSuccess": "تمت المعاينة بنجاح",
-        "queryTablesFail": "فشل الاستعلام عن الجدول"
+        "queryTablesFail": "فشل الاستعلام عن الجدول",
+        "webPluginInstallSuccess": "تم تثبيت الإضافة الويب بنجاح",
+        "serverPluginInstallSuccess": "تم تثبيت إضافة الخادم بنجاح",
+        "webPluginInstallFail": "فشل تثبيت الإضافة الويب، يرجى فك الضغط وتثبيتها وفقًا للوثيقة. إذا كانت إضافة خلفية فقط، يرجى تجاهل هذا الرسالة.",
+        "serverPluginInstallFail": "فشل تثبيت إضافة الخادم، يرجى فك الضغط وتثبيتها وفقًا للوثيقة. إذا كانت إضافة واجهة أمامية فقط، يرجى تجاهل هذا الرسالة.",
+        "packagingFail": "فشل التعبئة",
+        "createInitMenuFail": "فشل في إنشاء القائمة الأولية",
+        "fileChangeSuccess": "تم تغيير الملف بنجاح",
+        "createInitApiFail": "فشل في إنشاء API الأولي",
+        "packagingSuccess": "تم التعبئة بنجاح، مسار الملف هو: %s",
+        "injectFail": "فشل الإدخال",
+        "injectSuccess": "إدخال ناجح",
+        "templateFileReadFailed": "[filepath:%s] فشل في قراءة ملف القالب!",
+        "directoryCreationFailed": "[filepath:%s] فشل في إنشاء الدليل!",
+        "generationFailed": "[filepath:%s] فشل في التوليد!",
+        "generationSuccess": "[template:%s][filepath:%s] تم التوليد بنجاح!",
+        "injection_success": "[type:%s] تم الحقن بنجاح!\n",
+        "templateFolderReadFailed": "فشل في قراءة مجلد القالب!",
+        "illegalTemplateFile": "[filepath:%s] ملف قالب غير قانوني!",
+        "illegalTemplateDirectory": "[filepath:%s] مجلد قالب غير قانوني!",
+        "illegalTemplateSuffix": "[filepath:%s] لاحقة قالب غير قانونية!",
+        "templateFolderReadFailedWithDir": "فشل في قراءة مجلد القالب [%s]!",
+        "testPackage": "حزمة اختبار",
+        "testPlugin": "ملحق اختبار",
+        "description": "وصف",
+        "displayName": "اسم العرض",
+        "keywordNotice": "%s هو كلمة رئيسية في Go!",
+
+        "nonStandardPlugin": "إضافة غير قياسية، يرجى ترحيلها تلقائيًا وفقًا للوثائق",
+        "autoPathExists": "autoPath يوجد بالفعل إضافة بنفس الاسم، يرجى تثبيتها يدويًا",
+        "duplicatePlugin": "يوجد بالفعل إضافة بنفس الاسم، يرجى تثبيتها يدويًا",
+        "pluginNameRequired": "لا يمكن أن يكون اسم الإضافة فارغًا",
+        "webPathNotExist": "مسار الويب غير موجود",
+        "serverPathNotExist": "مسار الخادم غير موجود",
+
+        "duplicateRoleId": "يوجد معرف دور مكرر",
+        "queryRoleDataFailed": "فشل في استعلام بيانات الدور",
+        "roleNotExist": "هذا الدور غير موجود",
+        "roleInUse": "هذا الدور قيد الاستخدام من قبل المستخدمين ولا يمكن حذفه",
+        "roleHasSubRoles": "هذا الدور لديه أدوار فرعية ولا يمكن حذفه",
+        "invalidRoleId": "معرف الدور المقدم غير صالح",
+
+        "buttonInUse": "هذا الزر قيد الاستخدام حاليًا ولا يمكن حذفه",
+        "menuHasSubMenu": "هذا القائمة تحتوي على قوائم فرعية ولا يمكن حذفها",
+        "recordNotFound": "السجل غير موجود",
+        "menuUsedAsHome": "هذه القائمة تحتوي على أدوار تستخدم كصفحة رئيسية ولا يمكن حذفها",
+        "duplicateNameUpdateFailed": "فشل التحديث بسبب الاسم المكرر",
+        "adaptDatabaseFailed": "فشل التكيف مع قاعدة البيانات، يرجى التحقق مما إذا كانت جدول casbin هو محرك InnoDB!",
+        "stringLoadModelFailed": "فشل في تحميل نموذج السلسلة",
+        "noAvailableInit": "لا توجد عملية تهيئة متاحة، يرجى التحقق مما إذا كانت التهيئة قد اكتملت."
     },
     "sys_auto_code_history": {
         "rollbackSuccess": "تمت الاستعادة بنجاح"
@@ -90,7 +168,16 @@
         "resetPWFailErr": "فشل في إعادة ضبط كلمة السر",
         "resetPWSuccess": "تم إعادة ضبط كلمة السر بنجاح",
         "userNameOrPasswordError": "اسم المستخدم غير موجود أو كلمة المرور غير صحيحة",
-        "vCodeErr": "رمز التحقق غير صحيح"
+        "vCodeErr": "رمز التحقق غير صحيح",
+        "loginFailUserBanned": "فشل تسجيل الدخول! تم حظر المستخدم من تسجيل الدخول!",
+        "userBanned": "تم حظر المستخدم من تسجيل الدخول",
+        "usernameRegistered": "اسم المستخدم مسجل بالفعل",
+        "passwordError": "كلمة المرور غير صحيحة",
+        "originalPasswordError": "كلمة المرور الأصلية غير صحيحة",
+        "userHasNoRole": "لا يمتلك هذا المستخدم هذه الصلاحية",
+        "defaultRouteNotFound": "تعذر العثور على المسار الافتراضي، لا يمكن التبديل إلى هذا الدور",
+        "queryUserDataFailed": "فشل في استعلام بيانات المستخدم",
+        "userNotExist": "المستخدم غير موجود"
     },
     "system": {
         "api": {
@@ -297,10 +384,40 @@
             "menuID": "معرف القائمة"
         }
     },
+    "announcement": {
+        "publicAnnouncementAPI": "معلومات واجهة الإعلان التي لا تتطلب مصادقة",
+        "initConfigFailed": "فشل في تهيئة ملف التكوين",
+        "announcementManagement": "إدارة الإعلانات",
+        "registryFailed": "فشل التسجيل"
+    },
+    "sys_api": {
+        "syncFail": "فشل في المزامنة",
+        "ignoreFail": "فشل في التجاهل",
+        "refreshFail": "فشل في التحديث",
+        "refreshSuccess": "تم التحديث بنجاح"
+    },
     "api": {
         "example": {
             "exa_breakpoint_continue": {
-                "fileFail": "فشل في تحميل الملف"
+                "fileFail": "فشل في تحميل الملف",
+                "fileReadFail": "فشل في قراءة الملف",
+                "checkMD5Fail": "فشل في التحقق من MD5",
+                "findOrCreateRecordFail": "فشل في العثور على السجل أو إنشائه",
+                "resumeFromBreakpointFail": "فشل استئناف النقل من النقطة المقطعية",
+                "createFileRecordFail": "فشل في إنشاء سجل الملف",
+                "sliceCreationSuccess": "تم إنشاء الشريحة بنجاح",
+                "searchFail": "فشل البحث",
+                "searchSuccess": "بحث ناجح",
+                "fileCreationFail": "فشل في إنشاء الملف",
+                "fileCreationSuccess": "تم إنشاء الملف بنجاح",
+                "cacheSliceDeleteFail": "فشل في حذف شريحة الذاكرة المؤقتة",
+                "cacheSliceDeleteSuccess": "تم حذف شريحة الذاكرة المؤقتة بنجاح",
+                "modifyDatabaseConnectionFail": "فشل في تعديل اتصال قاعدة البيانات",
+                "uploadSuccess": "تم الرفع بنجاح",
+                "editFail": "فشل التعديل",
+                "editSuccess": "تعديل ناجح",
+                "importUrlFail": "فشل في استيراد URL",
+                "importUrlSuccess": "استيراد URL ناجح"
             }
         }
     },
@@ -308,12 +425,85 @@
         "duplicateApi": "يوجد واجهة برمجة تطبيقات مكررة",
         "invalidSortField": "حقل فرز غير صالح",
         "duplicateApiPath": "يوجد مسار واجهة برمجة تطبيقات مكرر",
-        "invalidSortFieldV": "حقل فرز غير صالح: %v"
+        "invalidSortFieldV": "حقل فرز غير صالح: %v",
+        "fileDeleteFailed": "فشل حذف الملف",
+        "menuDeleteFailed": "فشل حذف القائمة",
+        "tableDeleteFailed": "فشل حذف الجدول",
+        "rollbackInjectionSuccess": "نجح استعادة كود الحقن!",
+        "fileMoveFailed": "فشل نقل الملف!",
+        "templateCannotBeEmpty": "لا يمكن أن تكون القالب فارغًا",
+        "pageIsFormGenerator": "الصفحة هي مولد النموذج",
+        "packageNameCannotBeEmpty": "لا يمكن أن يكون اسم الحزمة فارغًا",
+        "cannotUseReservedPackageName": "لا يمكن استخدام اسم الحزمة المحفوظ",
+        "duplicatePackageNameExists": "يوجد اسم حزمة مكرر",
+        "failedToGetAllPackages": "فشل في الحصول على جميع الحزم"
     },
     "utils": {
         "checkFailZeroValue": "فشل التحقق ، لم يتم التقاط قيمة صفرية",
         "checkFailNameEmpty": "فشل التحقق ، لم يتمكن من التحقق بشكل صحيح مما إذا كان الاسم فارغًا",
-        "checkFailPass": "فشل التحقق ، لم يتمكن من اجتياز التحقق"
+        "checkFailPass": "فشل التحقق ، لم يتمكن من اجتياز التحقق",
+        "getHuaweiObjectFailed": "فشل في الحصول على كائن تخزين هواوي!",
+        "fileUploadFailed": "فشل تحميل الملف!",
+        "getHuaweiObjectFailedDuplicate": "فشل في الحصول على كائن تخزين هواوي!",
+        "deleteObjectFailed": "فشل في حذف الكائن (%s)! الناتج: %v",
+
+        "fileOpenParseFailed": "[filepath:%s] فشل في فتح/تحليل الملف!",
+        "fileOpenFailed": "[filepath:%s] فشل في فتح الملف!",
+        "injectionFailed": "[filepath:%s] فشل الحقن!",
+        "test_gva_user_injection": "اختبار حقن هيكل GvaUser",
+        "test_gva_user_rollback": "اختبار استرجاع GvaUser",
+        "test_user_injection": "Testing &model.User{} injection",
+        "test_exa_customer_injection": "Testing new(model.ExaCustomer) injection",
+        "test_sys_users_injection": "Testing new(model.SysUsers) injection",
+        "test_user_rollback": "Testing &model.User{} rollback",
+        "test_exa_customer_rollback": "Testing new(model.ExaCustomer) rollback",
+        "cookieRewriteFailed": "فشل في إعادة كتابة رمز الكوكيز، لم يتمكن من تحليل الرمز بنجاح. يرجى التحقق مما إذا كان رأس الطلب يحتوي على x-token وما إذا كانت المطالبات في الهيكل المطلوب.",
+        "jwtParseFailed": "فشل في استرجاع معلومات تحليل JWT من سياق Gin. يرجى التحقق مما إذا كان رأس الطلب يحتوي على x-token وما إذا كانت المطالبات في الهيكل المطلوب.",
+        "gvaPluginRegister": "اختبار حقن تسجيل مكون Gva",
+        "gvaPluginRollback": "اختبار تراجع مكون Gva",
+        "initCustomerRouterRollback": "اختبار تراجع InitCustomerRouter",
+        "initFileUploadAndDownloadRouterRollback": "اختبار تراجع InitFileUploadAndDownloadRouter",
+        "exaFileUploadAndDownloadInjection": "اختبار حقن &example.ExaFileUploadAndDownload{}",
+        "exaCustomerInjection": "اختبار حقن &example.ExaCustomer{}",
+        "newExaFileUploadAndDownloadInjection": "اختبار حقن new(example.ExaFileUploadAndDownload)",
+        "newExaCustomerInjection": "اختبار حقن new(example.ExaCustomer)",
+        "exaFileUploadAndDownloadRollback": "اختبار تراجع &example.ExaFileUploadAndDownload{}",
+        "exaCustomerRollback": "اختبار تراجع &example.ExaCustomer{}",
+        "newExaFileUploadAndDownloadRollback": "اختبار تراجع new(example.ExaFileUploadAndDownload)",
+        "newExaCustomerRollback": "اختبار تراجع new(example.ExaCustomer)",
+
+        "fileUploadAndDownloadRouterRollback": "اختبار تراجع FileUploadAndDownloadRouter",
+        "fileUploadAndDownloadApiRollback": "اختبار تراجع FileUploadAndDownloadApi",
+        "fileUploadAndDownloadServiceRollback": "اختبار تراجع FileUploadAndDownloadService",
+        "fileUploadAndDownloadRouterInjection": "اختبار حقن FileUploadAndDownloadRouter",
+        "fileUploadAndDownloadApiInjection": "اختبار حقن FileUploadAndDownloadApi",
+        "fileUploadAndDownloadServiceInjection": "اختبار حقن FileUploadAndDownloadService",
+
+        "exampleApiGroupRollback": "اختبار تراجع ExampleApiGroup",
+        "exampleRouterGroupRollback": "اختبار تراجع ExampleRouterGroup",
+        "exampleServiceGroupRollback": "اختبار تراجع ExampleServiceGroup",
+        "exampleApiGroupInjection": "اختبار حقن ExampleApiGroup",
+        "exampleRouterGroupInjection": "اختبار حقن ExampleRouterGroup",
+        "exampleServiceGroupInjection": "اختبار حقن ExampleServiceGroup",
+
+        "gvaPluginUserApiInjection": "اختبار حقن Gva Plugin UserApi",
+        "gvaPluginUserRouterInjection": "اختبار حقن Gva Plugin UserRouter",
+        "gvaPluginUserServiceInjection": "اختبار حقن Gva Plugin UserService",
+        "gvaUserInjection": "اختبار حقن gva User",
+        "gvaPluginUserRouterRollback": "اختبار تراجع Gva Plugin UserRouter",
+        "gvaPluginUserApiRollback": "اختبار تراجع Gva Plugin UserApi",
+        "gvaPluginUserServiceRollback": "اختبار تراجع Gva Plugin UserService",
+
+        "gvaPluginUserInjection": "اختبار حقن Gva Plugin User",
+        "chineseInjection": "اختبار حقن اللغة الصينية",
+        "gvaPluginUserRollback": "اختبار تراجع Gva Plugin User",
+
+        "registrationError": "تم تسجيله بالفعل ولا يمكن تسجيله مرة أخرى",
+        "valueCannotBeEmpty": "لا يمكن أن تكون فارغة",
+        "formatValidationFailed": "فشل التحقق من تنسيق",
+        "lengthOrValueOutOfRange": "طول أو القيمة خارج النطاق القانوني",
+        "sysNoSupport": "النظام غير مدعوم",
+        "fileNameInvalid": "اسم الملف غير صالح"
     },
     "router": {
 

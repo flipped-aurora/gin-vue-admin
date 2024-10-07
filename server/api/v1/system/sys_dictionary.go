@@ -107,6 +107,9 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 		return
 	}
+	for i := range sysDictionary.SysDictionaryDetails {
+		sysDictionary.SysDictionaryDetails[i].Label = global.Translate(sysDictionary.SysDictionaryDetails[i].Label)
+	}
 	response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, global.Translate("general.querySuccess"), c)
 }
 

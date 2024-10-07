@@ -454,7 +454,6 @@
         "cannotUseReservedPackageName": "不能使用已保留的package name",
         "duplicatePackageNameExists": "存在相同PackageName",
         "failedToGetAllPackages": "获取所有包失败"
-
     },
     "utils": {
         "checkFailZeroValue": "校验失败，未能捕捉0值",
@@ -522,7 +521,6 @@
         "lengthOrValueOutOfRange": "长度或值不在合法范围",
         "sysNoSupport": "系统不支持",
         "fileNameInvalid": "文件名不合法"
-
     },
     "router": {
 

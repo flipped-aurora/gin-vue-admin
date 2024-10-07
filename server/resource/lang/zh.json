@@ -27,25 +27,6 @@
 		"initDB": "前往初始化数据库",
 		"dbAlreadyInit": "数据库无需初始化"
 	},
-	"sys_user": {
-		"vCodeErr": "验证码错误",
-		"loginFail": "登陆失败! 用户名不存在或者密码错误!",
-		"userNameOrPasswordError": "用户名不存在或者密码错误",
-		"getTokenFail": "获取token失败!",
-		"getTokenErr": "获取token失败",
-		"loginSuccess": "登录成功",
-		"loginStatusFail": "设置登录状态失败!",
-		"loginStatusFailErr": "设置登录状态失败",
-		"jwtInvalidationFailed": "jwt作废失败",
-		"registrationFail": "注册失败!",
-		"registrationFailErr": "注册失败",
-		"registrationSuccess": "注册成功",
-		"changePWErr": "修改失败，原密码与当前账户不符",
-		"deleteUserFail": "删除失败, 自杀失败",
-		"resetPWFail": "重置失败!",
-		"resetPWFailErr": "重置失败",
-		"resetPWSuccess": "重置成功"
-	},
 	"sys_captcha": {
 		"vCodeFail": "验证码获取失败",
 		"vCodeSuccess": "验证码获取成功",
@@ -131,6 +112,25 @@
 			"importFileFailed" : "文件获取失败!",
 			"importFileFailedError" : "文件获取失败",
 			"importSuccess" : "导入成功"
+		},
+		"sys_user": {
+			"vCodeErr": "验证码错误",
+			"loginFail": "登陆失败! 用户名不存在或者密码错误!",
+			"userNameOrPasswordError": "用户名不存在或者密码错误",
+			"getTokenFail": "获取token失败!",
+			"getTokenErr": "获取token失败",
+			"loginSuccess": "登录成功",
+			"loginFailedUserBanned": "登陆失败! 用户被禁止登录!",
+			"userBanned": "用户被禁止登录",
+			"jwtInvalidationFailed": "jwt作废失败",
+			"registrationFail": "注册失败!",
+			"registrationFailErr": "注册失败",
+			"registrationSuccess": "注册成功",
+			"changePWErr": "修改失败，原密码与当前账户不符",
+			"deleteUserFail": "删除失败, 自杀失败",
+			"resetPWFail": "重置失败!",
+			"resetPWFailErr": "重置失败",
+			"resetPWSuccess": "重置成功"
 		},
 		"api" : {
 			"group" : {

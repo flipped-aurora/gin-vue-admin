@@ -1,9 +1,10 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -54,17 +55,17 @@ func (b *BaseApi) Login(c *gin.Context) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		user, err := userService.Login(u)
 		if err != nil {
-			global.GVA_LOG.Error(global.Translate("sys_user.loginFail"), zap.Error(err))
+			global.GVA_LOG.Error(global.Translate("system.sys_user.loginFail"), zap.Error(err))
 			// 验证码次数+1
 			global.BlackCache.Increment(key, 1)
-			response.FailWithMessage(global.Translate("sys_user.userNameOrPasswordError"), c)
+			response.FailWithMessage(global.Translate("system.sys_user.userNameOrPasswordError"), c)
 			return
 		}
 		if user.Enable != 1 {
-			global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+			global.GVA_LOG.Error(global.Translate("system.sys_user.loginFailedUserBanned"))
 			// 验证码次数+1
 			global.BlackCache.Increment(key, 1)
-			response.FailWithMessage("用户被禁止登录", c)
+			response.FailWithMessage(global.Translate("system.sys_user.userBanned"), c)
 			return
 		}
 		b.TokenNext(c, *user)
@@ -72,15 +73,15 @@ func (b *BaseApi) Login(c *gin.Context) {
 	}
 	// 验证码次数+1
 	global.BlackCache.Increment(key, 1)
-	response.FailWithMessage(global.Translate("sys_user.vCodeErr"), c)
+	response.FailWithMessage(global.Translate("system.sys_user.vCodeErr"), c)
 }
 
 // TokenNext 登录以后签发jwt
 func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	token, claims, err := utils.LoginToken(&user)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("sys_user.getTokenFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("sys_user.getTokenErr"), c)
+		global.GVA_LOG.Error(global.Translate("system.sys_user.getTokenFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_user.getTokenErr"), c)
 		return
 	}
 	if !global.GVA_CONFIG.System.UseMultipoint {
@@ -89,14 +90,14 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			User:      user,
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
-		}, global.Translate("sys_user.loginSuccess"), c)
+		}, global.Translate("system.sys_user.loginSuccess"), c)
 		return
 	}
 
 	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
-			global.GVA_LOG.Error(global.Translate("sys_user.loginStatusFail"), zap.Error(err))
-			response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
+			global.GVA_LOG.Error(global.Translate("system.sys_user.loginStatusFail"), zap.Error(err))
+			response.FailWithMessage(global.Translate("system.sys_user.loginStatusFailErr"), c)
 			return
 		}
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
@@ -104,19 +105,19 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			User:      user,
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
-		}, global.Translate("sys_user.loginSuccess"), c)
+		}, global.Translate("system.sys_user.loginSuccess"), c)
 	} else if err != nil {
-		global.GVA_LOG.Error(global.Translate("sys_user.loginStatusFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
+		global.GVA_LOG.Error(global.Translate("system.sys_user.loginStatusFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_user.loginStatusFailErr"), c)
 	} else {
 		var blackJWT system.JwtBlacklist
 		blackJWT.Jwt = jwtStr
 		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
-			response.FailWithMessage(global.Translate("sys_user.jwtInvalidationFailed"), c)
+			response.FailWithMessage(global.Translate("system.sys_user.jwtInvalidationFailed"), c)
 			return
 		}
 		if err := jwtService.SetRedisJWT(token, user.GetUsername()); err != nil {
-			response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
+			response.FailWithMessage(global.Translate("system.sys_user.loginStatusFailErr"), c)
 			return
 		}
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
@@ -124,7 +125,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			User:      user,
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
-		}, global.Translate("sys_user.loginSuccess"), c)
+		}, global.Translate("system.sys_user.loginSuccess"), c)
 	}
 }
 
@@ -156,11 +157,11 @@ func (b *BaseApi) Register(c *gin.Context) {
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities, Enable: r.Enable, Phone: r.Phone, Email: r.Email}
 	userReturn, err := userService.Register(*user)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("sys_user.registrationFail"), zap.Error(err))
-		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, global.Translate("sys_user.registrationFailErr"), c)
+		global.GVA_LOG.Error(global.Translate("system.sys_user.registrationFail"), zap.Error(err))
+		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, global.Translate("system.sys_user.registrationFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, global.Translate("sys_user.registrationSuccess"), c)
+	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, global.Translate("system.sys_user.registrationSuccess"), c)
 }
 
 // ChangePassword
@@ -319,7 +320,7 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 	}
 	jwtId := utils.GetUserID(c)
 	if jwtId == uint(reqId.ID) {
-		response.FailWithMessage(global.Translate("sys_user.deleteUserFail"), c)
+		response.FailWithMessage(global.Translate("system.sys_user.deleteUserFail"), c)
 		return
 	}
 	err = userService.DeleteUser(reqId.ID)
@@ -433,11 +434,11 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 
 	err = userService.SetSelfSetting(req, utils.GetUserID(c))
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
-		response.FailWithMessage("设置失败", c)
+		global.GVA_LOG.Error(global.Translate("general.setupFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.setupFailErr"), c)
 		return
 	}
-	response.OkWithMessage("设置成功", c)
+	response.OkWithMessage(global.Translate("general.setupSuccess"), c)
 }
 
 // GetUserInfo
@@ -476,9 +477,9 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 	}
 	err = userService.ResetPassword(user.ID)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("sys_user.resetPWFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("sys_user.resetPWFailErr")+" "+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("system.sys_user.resetPWFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("system.sys_user.resetPWFailErr")+" "+err.Error(), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("sys_user.resetPWSuccess"), c)
+	response.OkWithMessage(global.Translate("system.sys_user.resetPWSuccess"), c)
 }

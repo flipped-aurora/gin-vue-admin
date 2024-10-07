@@ -27,25 +27,6 @@
 		"initDB": "Go to initialize the database",
 		"dbAlreadyInit": "Database already initialized!"
 	},
-	"sys_user": {
-		"vCodeErr": "Verification code error",
-		"loginFail": "Login failed! Username does not exist or password is incorrect!",
-		"userNameOrPasswordError": "Username does not exist or password is incorrect",
-		"getTokenFail": "Failed to get token!",
-		"getTokenErr": "Failed to get token",
-		"loginSuccess": "Logged in successfully",
-		"loginStatusFail": "Failed to set the login status!",
-		"loginStatusFailErr": "Failed to set the login status",
-		"jwtInvalidationFailed": "JWT invalidation failed!",
-		"registrationFail": "Registration failed!",
-		"registrationFailErr": "Registration failed",
-		"registrationSuccess": "Registration success",
-		"changePWErr": "The modification failed, the original password does not match the current account",
-		"deleteUserFail": "Delete user failed",
-		"resetPWFail": "Reset password failed!",
-		"resetPWFailErr": "Reset password failed",
-		"resetPWSuccess": "Password reset successfully"
-	},
 	"sys_captcha": {
 		"vCodeFail": "Obtaining verification code failed!",
 		"vCodeFailErr": "Obtaining verification code failed",
@@ -130,6 +111,25 @@
 			"importFileFailed" : "Failed to import this file!",
 			"importFileFailedError" : "Failed to import this file",
 			"importSuccess" : "Import Success"
+		},
+		"sys_user": {
+			"vCodeErr": "Verification code error",
+			"loginFail": "Login failed! Username does not exist or password is incorrect!",
+			"userNameOrPasswordError": "Username does not exist or password is incorrect",
+			"getTokenFail": "Failed to get token!",
+			"getTokenErr": "Failed to get token",
+			"loginSuccess": "Logged in successfully",
+			"loginFailedUserBanned": "Login failed! User is banned!",
+			"userBanned": "User is banned from logging in",
+			"jwtInvalidationFailed": "JWT invalidation failed!",
+			"registrationFail": "Registration failed!",
+			"registrationFailErr": "Registration failed",
+			"registrationSuccess": "Registration success",
+			"changePWErr": "The modification failed, the original password does not match the current account",
+			"deleteUserFail": "Delete user failed",
+			"resetPWFail": "Reset password failed!",
+			"resetPWFailErr": "Reset password failed",
+			"resetPWSuccess": "Password reset successfully"
 		},
 		"api": {
 			"group": {

@@ -61,25 +61,6 @@
         "rebootFailErr": "فشل في إعادة التشغيل",
         "rebootSuccess": "تم إعادة تشغيل النظام بنجاح"
     },
-    "sys_user": {
-        "changePWErr": "فشل التعديل، وكلمة المرور الأصلية لا تتطابق مع الحساب الجاري",
-        "deleteUserFail": "فشل في حذف المستخدم",
-        "getTokenErr": "فشل الحصول على الرمز المميز",
-        "getTokenFail": "فشل في الحصول على الرمز المميز!",
-        "jwtInvalidationFailed": "فشل في إلغاء JWT",
-        "loginFail": "فشل تسجيل الدخول! اسم المستخدم غير موجود أو كلمة المرور غير صحيحة!",
-        "loginStatusFail": "فشل في تعيين حالة تسجيل الدخول!",
-        "loginStatusFailErr": "فشل تعيين حالة تسجيل الدخول",
-        "loginSuccess": "تسجيل الدخول بنجاح",
-        "registrationFail": "فشل التسجيل!",
-        "registrationFailErr": "فشل التسجيل",
-        "registrationSuccess": "نجاح التسجيل",
-        "resetPWFail": "فشلت إعادة الضبط!",
-        "resetPWFailErr": "فشل في إعادة ضبط كلمة السر",
-        "resetPWSuccess": "تم إعادة ضبط كلمة السر بنجاح",
-        "userNameOrPasswordError": "اسم المستخدم غير موجود أو كلمة المرور غير صحيحة",
-        "vCodeErr": "رمز التحقق غير صحيح"
-    },
     "system": {
         "auto_code_package" : {
 			"packageNameInvalid" : "اسم الحزمة غير صالح"
@@ -126,6 +107,25 @@
             "importFileFailedError" : "فشل فى إستيراد الملف",
             "importSuccess" : "تم الاستيراد بنجاح"
 		},
+        "sys_user": {
+            "changePWErr": "فشل التعديل، وكلمة المرور الأصلية لا تتطابق مع الحساب الجاري",
+            "deleteUserFail": "فشل في حذف المستخدم",
+            "getTokenErr": "فشل الحصول على الرمز المميز",
+            "getTokenFail": "فشل في الحصول على الرمز المميز!",
+            "jwtInvalidationFailed": "فشل في إلغاء JWT",
+            "loginFail": "فشل تسجيل الدخول! اسم المستخدم غير موجود أو كلمة المرور غير صحيحة!",
+            "loginFailedUserBanned": "فشل تسجيل الدخول! تم حظر المستخدم!",
+            "userBanned": "تم منع المستخدم من تسجيل الدخول",
+            "loginSuccess": "تسجيل الدخول بنجاح",
+            "registrationFail": "فشل التسجيل!",
+            "registrationFailErr": "فشل التسجيل",
+            "registrationSuccess": "نجاح التسجيل",
+            "resetPWFail": "فشلت إعادة الضبط!",
+            "resetPWFailErr": "فشل في إعادة ضبط كلمة السر",
+            "resetPWSuccess": "تم إعادة ضبط كلمة السر بنجاح",
+            "userNameOrPasswordError": "اسم المستخدم غير موجود أو كلمة المرور غير صحيحة",
+            "vCodeErr": "رمز التحقق غير صحيح"
+        },
         "api": {
             "desc": {
                 "addMenu": "إضافة قائمة",

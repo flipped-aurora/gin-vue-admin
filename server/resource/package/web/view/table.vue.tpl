@@ -443,10 +443,8 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
-
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-const i18n = useI18n() // added by mohamed hassan to support multilanguage
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 {{- if .AutoCreateBtnAuth }}
 // 引入按钮权限标识
@@ -461,11 +459,6 @@ import ImportExcel from '@/components/exportExcel/importExcel.vue'
 // 导出模板组件
 import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
 {{- end}}
-
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-const i18n = useI18n() // added by mohamed hassan to support multilanguage
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
-
 
 defineOptions({
     name: '{{.StructName}}'

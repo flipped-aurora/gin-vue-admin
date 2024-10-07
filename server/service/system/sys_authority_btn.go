@@ -56,5 +56,5 @@ func (a *AuthorityBtnService) CanRemoveAuthorityBtn(ID string) (err error) {
 	if errors.Is(fErr, gorm.ErrRecordNotFound) {
 		return nil
 	}
-	return errors.New("此按钮正在被使用无法删除")
+	return errors.New(global.Translate("sys_auto_code.buttonInUse"))
 }

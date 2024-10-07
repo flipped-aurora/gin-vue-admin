@@ -9,7 +9,7 @@
         <div class="w-8 h-8 rounded bg-gray-200 dark:bg-slate-500 flex items-center justify-center group-hover:bg-blue-400 group-hover:text-white">
           <el-icon><component :is="item.icon" /></el-icon>
         </div>
-        <div class="text-xs mt-2  text-gray-700 dark:text-gray-300">
+        <div class="text-xs mt-2  text-gray-700 dark:text-gray-300 text-center">
           {{ item.title }}
         </div>
       </div>
@@ -19,7 +19,7 @@
         <div class="w-8 h-8 rounded bg-gray-200 dark:bg-slate-500 flex items-center justify-center group-hover:bg-blue-400 group-hover:text-white">
           <el-icon><component :is="item.icon" /></el-icon>
         </div>
-        <div class="text-xs mt-2  text-gray-700 dark:text-gray-300">
+        <div class="text-xs mt-2  text-gray-700 dark:text-gray-300 text-center">
           {{ item.title }}
         </div>
       </div>
@@ -38,35 +38,39 @@ const toPath = (item) => {
 const openLink = (item) => {
   window.open(item.path, '_blank')
 }
-  const shortcuts = [
+
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const shortcuts = [
     {
       icon : Menu,
-      title : "菜单管理",
+      title :t('view.dashboard.grids.menuManage'),
       path : "menu",
     },
     {
       icon : Link,
-      title : "API管理",
+      title : t('view.dashboard.grids.apiManage'),
       path : "api",
     },
     {
       icon : Service,
-      title : "角色管理",
+      title : t('view.dashboard.grids.roleManage'),
       path : "authority",
     },
     {
       icon : User,
-      title : "用户管理",
+      title : t('view.dashboard.grids.userManage'),
       path : "user",
     },
     {
       icon : Files,
-      title : "自动化包",
+      title : t('view.dashboard.grids.automationPackage'),
       path: "autoPkg",
     },
     {
       icon : Memo,
-      title : "自动代码",
+      title : t('view.dashboard.grids.autoCode'),
       path: "autoCode",
     }
   ]
@@ -74,12 +78,12 @@ const openLink = (item) => {
   const recentVisits = [
     {
       icon : Reading,
-      title : "授权购买",
+      title : t('view.dashboard.grids.licensePurchase'),
       path: "https://gin-vue-admin.com/empower/index.html",
     },
     {
       icon : Document,
-      title : "插件市场",
+      title : t('view.dashboard.grids.pluginMarket'),
       path: "https://plugin.gin-vue-admin.com/#/layout/home",
     }
   ]

@@ -26,17 +26,17 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
-		response.FailWithMessage("接收文件失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.fileFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.fileFail"), c)
 		return
 	}
 	file, err = fileUploadAndDownloadService.UploadFile(header, noSave) // 文件上传后拿到文件路径
 	if err != nil {
-		global.GVA_LOG.Error("上传文件失败!", zap.Error(err))
-		response.FailWithMessage("上传文件失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.modifyDatabaseConnectionFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.modifyDatabaseConnectionFail"), c)
 		return
 	}
-	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, "上传成功", c)
+	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, global.Translate("api.example.exa_breakpoint_continue.uploadSuccess"), c)
 }
 
 // EditFileName 编辑文件名或者备注
@@ -49,11 +49,11 @@ func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
 	}
 	err = fileUploadAndDownloadService.EditFileName(file)
 	if err != nil {
-		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
-		response.FailWithMessage("编辑失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.editFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.editFail"), c)
 		return
 	}
-	response.OkWithMessage("编辑成功", c)
+	response.OkWithMessage(global.Translate("api.example.exa_breakpoint_continue.editSuccess"), c)
 }
 
 // DeleteFile
@@ -125,9 +125,9 @@ func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
 		return
 	}
 	if err := fileUploadAndDownloadService.ImportURL(&file); err != nil {
-		global.GVA_LOG.Error("导入URL失败!", zap.Error(err))
-		response.FailWithMessage("导入URL失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.editFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.editFail"), c)
 		return
 	}
-	response.OkWithMessage("导入URL成功", c)
+	response.OkWithMessage(global.Translate("api.example.exa_breakpoint_continue.importUrlSuccess"), c)
 }

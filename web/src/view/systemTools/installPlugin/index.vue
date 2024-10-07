@@ -10,11 +10,11 @@
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">
-        拖拽或<em>点击上传</em>
+        {{ t('view.plugins.dragOrClickUpload') }}
       </div>
       <template #tip>
         <div class="el-upload__tip">
-          请把安装包的zip拖拽至此处上传
+          {{ t('view.plugins.uploadPackage') }}
         </div>
       </template>
     </el-upload>
@@ -24,6 +24,10 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { getBaseUrl } from '@/utils/format'
+
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const handleSuccess = (res) => {
   if (res.code === 0) {

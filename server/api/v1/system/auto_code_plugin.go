@@ -2,7 +2,6 @@ package system
 
 import (
 	"fmt"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -28,13 +27,13 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 		return
 	}
 	web, server, err := autoCodePluginService.Install(header)
-	webStr := global.Translate("system.auto_code_plugin.webPluginInstalledSuccess")
-	serverStr := global.Translate("system.auto_code_plugin.serverPluginInstalledSuccess")
+	webStr := global.Translate("sys_auto_code.webPluginInstallSuccess")
+	serverStr := global.Translate("sys_auto_code.serverPluginInstallSuccess")
 	if web == -1 {
-		webStr = global.Translate("system.auto_code_plugin.webPluginInstallFail")
+		webStr = global.Translate("sys_auto_code.webPluginInstallFail")
 	}
 	if server == -1 {
-		serverStr = global.Translate("system.auto_code_plugin.serverPluginInstallFail")
+		serverStr = global.Translate("sys_auto_code.serverPluginInstallFail")
 	}
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -51,6 +50,7 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 		}}, c)
 }
 
+// Packaged
 // @Tags      AutoCodePlugin
 // @Summary   打包插件
 // @Security  ApiKeyAuth
@@ -63,11 +63,11 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.auto_code_plugin.packingFailed"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.auto_code_plugin.packingFailedError")+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.packagingFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.packagingFail")+err.Error(), c)
 		return
 	}
-	response.OkWithMessage(fmt.Sprintf(global.Translate("system.auto_code_plugin.packingSuccess")+"%s", zipPath), c)
+	response.OkWithMessage(fmt.Sprintf(global.Translate("system.messages.packSuccess"), zipPath), c)
 }
 
 // Packaged
@@ -87,11 +87,11 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 	}
 	err = autoCodePluginService.InitMenu(menuInfo)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.auto_code_plugin.initMenuCreationFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.auto_code_plugin.initMenuCreationFailError")+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.createInitMenuFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.createInitMenuFail")+err.Error(), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("system.auto_code_plugin.fileChangedSuccessfully"), c)
+	response.OkWithMessage(global.Translate("sys_auto_code.fileChangeSuccess"), c)
 }
 
 // Packaged
@@ -111,9 +111,9 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 	}
 	err = autoCodePluginService.InitAPI(apiInfo)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.auto_code_plugin.initApiCreationFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.auto_code_plugin.initApiCreationFailError")+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.createInitApiFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.createInitApiFail")+err.Error(), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("system.auto_code_plugin.fileChangedSuccessfully"), c)
+	response.OkWithMessage(global.Translate("sys_auto_code.fileChangeSuccess"), c)
 }

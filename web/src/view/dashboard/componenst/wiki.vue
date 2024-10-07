@@ -12,27 +12,29 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const wikis = [
+  {
+    title: t('view.dashboard.grids.ginDoc'),
+    url : 'https://gin-gonic.com/'
+  },
+  {
+    title : t('view.dashboard.grids.gvaDoc'),
+    url : 'https://www.gin-vue-admin.com/'
+  },
+  {
+    title : t('view.dashboard.grids.githubRepo'),
+    url : 'https://github.com/flipped-aurora/gin-vue-admin'
+  },{
+    title : t('view.dashboard.grids.pluginMarket'),
+    url : 'https://plugin.gin-vue-admin.com/'
+  },
   {
     title: 'Vue3',
     url : 'https://v3.cn.vuejs.org/guide/introduction.html'
   },
-  {
-    title: 'GIN 文档',
-    url : 'https://gin-gonic.com/'
-  },
-  {
-    title : "GVA 文档",
-    url : 'https://www.gin-vue-admin.com/'
-  },
-  {
-    title : "插件市场",
-    url : 'https://plugin.gin-vue-admin.com/'
-  },
-  {
-    title : "github 仓库",
-    url : 'https://github.com/flipped-aurora/gin-vue-admin'
-  }
 
 ]
 </script>

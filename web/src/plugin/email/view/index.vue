@@ -1,28 +1,28 @@
 <template>
   <div>
-    <warning-bar title="需要提前配置email配置文件，为防止不必要的垃圾邮件，在线体验功能不开放此功能体验。" />
+    <warning-bar :title="t('view.plugins.emailConfigNote')" />
     <div class="gva-form-box">
       <el-form
         ref="emailForm"
         label-position="right"
-        label-width="80px"
+        label-width="140px"
         :model="form"
       >
-        <el-form-item label="目标邮箱">
+        <el-form-item :label="t('view.plugins.targetEmail')">
           <el-input v-model="form.to" />
         </el-form-item>
-        <el-form-item label="邮件">
+        <el-form-item :label="t('view.plugins.email')">
           <el-input v-model="form.subject" />
         </el-form-item>
-        <el-form-item label="邮件内容">
+        <el-form-item :label="t('view.plugins.emailContent')">
           <el-input
             v-model="form.body"
             type="textarea"
           />
         </el-form-item>
         <el-form-item>
-          <el-button @click="sendTestEmail">发送测试邮件</el-button>
-          <el-button @click="sendEmail">发送邮件</el-button>
+          <el-button @click="sendTestEmail">{{ t('view.plugins.sendTestEmail') }}</el-button>
+          <el-button @click="sendEmail">{{ t('view.plugins.sendEmail') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -35,7 +35,9 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { emailTest } from '@/plugin/email/api/email.js'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 defineOptions({
   name: 'Email',
 })

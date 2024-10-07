@@ -31,11 +31,11 @@ func (a *info) CreateInfo(c *gin.Context) {
 	}
 	err = serviceInfo.CreateInfo(&info)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFail"), c)
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithMessage(global.Translate("general.createSuccss"), c)
 }
 
 // DeleteInfo 删除公告
@@ -51,11 +51,11 @@ func (a *info) DeleteInfo(c *gin.Context) {
 	ID := c.Query("ID")
 	err := serviceInfo.DeleteInfo(ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFail"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // DeleteInfoByIds 批量删除公告
@@ -69,11 +69,11 @@ func (a *info) DeleteInfo(c *gin.Context) {
 func (a *info) DeleteInfoByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
 	if err := serviceInfo.DeleteInfoByIds(IDs); err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFail"), c)
 		return
 	}
-	response.OkWithMessage("批量删除成功", c)
+	response.OkWithMessage(global.Translate("sys_operation_record.batchDeleteSuccess"), c)
 }
 
 // UpdateInfo 更新公告
@@ -94,11 +94,11 @@ func (a *info) UpdateInfo(c *gin.Context) {
 	}
 	err = serviceInfo.UpdateInfo(info)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.updateFail"), c)
 		return
 	}
-	response.OkWithMessage("更新成功", c)
+	response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 }
 
 // FindInfo 用id查询公告
@@ -114,8 +114,8 @@ func (a *info) FindInfo(c *gin.Context) {
 	ID := c.Query("ID")
 	reinfo, err := serviceInfo.GetInfo(ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFail"), c)
 		return
 	}
 	response.OkWithData(reinfo, c)
@@ -139,8 +139,8 @@ func (a *info) GetInfoList(c *gin.Context) {
 	}
 	list, total, err := serviceInfo.GetInfoInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFail"), c)
 		return
 	}
 	response.OkWithDetailed(response.PageResult{
@@ -162,8 +162,8 @@ func (a *info) GetInfoDataSource(c *gin.Context) {
 	// 此接口为获取数据源定义的数据
 	dataSource, err := serviceInfo.GetInfoDataSource()
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFail"), c)
 		return
 	}
 	response.OkWithData(dataSource, c)
@@ -179,5 +179,5 @@ func (a *info) GetInfoDataSource(c *gin.Context) {
 // @Router /info/getInfoPublic [get]
 func (a *info) GetInfoPublic(c *gin.Context) {
 	// 此接口不需要鉴权 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	response.OkWithDetailed(gin.H{"info": "不需要鉴权的公告接口信息"}, "获取成功", c)
+	response.OkWithDetailed(gin.H{"info": global.Translate("announcement.publicAnnouncementAPI")}, global.Translate("general.getDataSuccess"), c)
 }

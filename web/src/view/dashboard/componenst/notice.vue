@@ -19,56 +19,59 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
   const notices = [
     {
       type : 'primary',
-      typeTitle : "公告",
-      title : "授权费将在从六月一日起结束第一价格梯度，进入第二价格梯度。",
+      typeTitle : t('view.dashboard.announcement'),
+      title : t('view.dashboard.noticeList.notice1'),
     },
     {
       type : 'success',
-      typeTitle : "通知",
-      title : "授权后将进入专属飞书群，获取官方辅助。",
+      typeTitle : t('view.dashboard.notification'),
+      title : t('view.dashboard.noticeList.notice2'),
     },
     {
       type : 'warning',
-      typeTitle : "警告",
-      title : "授权可获得插件市场极大优惠价格。",
+      typeTitle : t('general.warning'),
+      title : t('view.dashboard.noticeList.notice3'),
     },
     {
       type : 'danger',
-      typeTitle : "违规",
-      title : "未授权商用将有可能被资源采集工具爬取并追责。",
+      typeTitle : t('view.dashboard.violation'),
+      title : t('view.dashboard.noticeList.notice4'),
     },
     {
       type : 'info',
-      typeTitle : "信息",
-      title : "再次感谢您对开源事业的支持",
+      typeTitle : t('view.dashboard.information'),
+      title : t('view.dashboard.noticeList.notice5'),
     },
     {
       type : 'primary',
-      typeTitle : "公告",
-      title : "让创意更有价值。",
+      typeTitle : t('view.dashboard.announcement'),
+      title : t('view.dashboard.noticeList.notice6'),
     },
     {
       type : 'success',
-      typeTitle : "通知",
-      title : "让劳动更有意义。",
+      typeTitle : t('view.dashboard.notification'),
+      title : t('view.dashboard.noticeList.notice7'),
     },
     {
       type : 'warning',
-      typeTitle : "警告",
-      title : "让思维更有深度。",
+      typeTitle : t('general.warning'),
+      title : t('view.dashboard.noticeList.notice8'),
     },
     {
       type : 'danger',
-      typeTitle : "错误",
-      title : "让生活更有趣味。",
+      typeTitle : t('view.dashboard.error'),
+      title : t('view.dashboard.noticeList.notice9'),
     },
     {
       type : 'info',
-      typeTitle : "信息",
-      title : "让公司更有活力。",
+      typeTitle : t('view.dashboard.information'),
+      title : t('view.dashboard.noticeList.notice10'),
     }
   ]
 </script>

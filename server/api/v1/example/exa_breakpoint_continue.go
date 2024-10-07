@@ -33,14 +33,14 @@ func (b *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 	chunkTotal, _ := strconv.Atoi(c.Request.FormValue("chunkTotal"))
 	_, FileHeader, err := c.Request.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
-		response.FailWithMessage("接收文件失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.fileFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.fileFail"), c)
 		return
 	}
 	f, err := FileHeader.Open()
 	if err != nil {
-		global.GVA_LOG.Error("文件读取失败!", zap.Error(err))
-		response.FailWithMessage("文件读取失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.fileReadFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.fileReadFail"), c)
 		return
 	}
 	defer func(f multipart.File) {
@@ -51,29 +51,29 @@ func (b *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 	}(f)
 	cen, _ := io.ReadAll(f)
 	if !utils.CheckMd5(cen, chunkMd5) {
-		global.GVA_LOG.Error("检查md5失败!", zap.Error(err))
-		response.FailWithMessage("检查md5失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.checkMD5Fail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.checkMD5Fail "), c)
 		return
 	}
 	file, err := fileUploadAndDownloadService.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 	if err != nil {
-		global.GVA_LOG.Error("查找或创建记录失败!", zap.Error(err))
-		response.FailWithMessage("查找或创建记录失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.findOrCreateRecordFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.findOrCreateRecordFail"), c)
 		return
 	}
 	pathC, err := utils.BreakPointContinue(cen, fileName, chunkNumber, chunkTotal, fileMd5)
 	if err != nil {
-		global.GVA_LOG.Error("断点续传失败!", zap.Error(err))
-		response.FailWithMessage("断点续传失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.resumeFromBreakpointFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.resumeFromBreakpointFail"), c)
 		return
 	}
 
 	if err = fileUploadAndDownloadService.CreateFileChunk(file.ID, pathC, chunkNumber); err != nil {
-		global.GVA_LOG.Error("创建文件记录失败!", zap.Error(err))
-		response.FailWithMessage("创建文件记录失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.createFileRecordFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.createFileRecordFail"), c)
 		return
 	}
-	response.OkWithMessage("切片创建成功", c)
+	response.OkWithMessage(global.Translate("api.example.exa_breakpoint_continue.sliceCreationSuccess"), c)
 }
 
 // FindFile
@@ -91,10 +91,10 @@ func (b *FileUploadAndDownloadApi) FindFile(c *gin.Context) {
 	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal"))
 	file, err := fileUploadAndDownloadService.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 	if err != nil {
-		global.GVA_LOG.Error("查找失败!", zap.Error(err))
-		response.FailWithMessage("查找失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.searchFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.searchFail"), c)
 	} else {
-		response.OkWithDetailed(exampleRes.FileResponse{File: file}, "查找成功", c)
+		response.OkWithDetailed(exampleRes.FileResponse{File: file}, global.Translate("api.example.exa_breakpoint_continue.searchSuccess"), c)
 	}
 }
 
@@ -112,10 +112,10 @@ func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath, err := utils.MakeFile(fileName, fileMd5)
 	if err != nil {
-		global.GVA_LOG.Error("文件创建失败!", zap.Error(err))
-		response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.fileCreationFail"), zap.Error(err))
+		response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, global.Translate("api.example.exa_breakpoint_continue.fileCreationFail"), c)
 	} else {
-		response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建成功", c)
+		response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, global.Translate("api.example.exa_breakpoint_continue.fileCreationSuccess"), c)
 	}
 }
 
@@ -137,7 +137,7 @@ func (b *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
 	}
 	err = utils.RemoveChunk(file.FileMd5)
 	if err != nil {
-		global.GVA_LOG.Error("缓存切片删除失败!", zap.Error(err))
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.cacheSliceDeleteFail"), zap.Error(err))
 		return
 	}
 	err = fileUploadAndDownloadService.DeleteFileChunk(file.FileMd5, file.FilePath)
@@ -146,5 +146,5 @@ func (b *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	response.OkWithMessage("缓存切片删除成功", c)
+	response.OkWithMessage(global.Translate("api.example.exa_breakpoint_continue.cacheSliceDeleteSuccess"), c)
 }

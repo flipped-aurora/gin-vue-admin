@@ -3,6 +3,7 @@ package utils
 import (
 	"archive/zip"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"io"
 	"os"
 	"path/filepath"
@@ -20,7 +21,7 @@ func Unzip(zipFile string, destDir string) ([]string, error) {
 
 	for _, f := range zipReader.File {
 		if strings.Index(f.Name, "..") > -1 {
-			return []string{}, fmt.Errorf("%s 文件名不合法", f.Name)
+			return []string{}, fmt.Errorf("%s %s", f.Name, global.Translate("utils.fileNameInvalid"))
 		}
 		fpath := filepath.Join(destDir, f.Name)
 		paths = append(paths, fpath)

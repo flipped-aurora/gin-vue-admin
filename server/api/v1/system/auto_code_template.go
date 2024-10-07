@@ -40,10 +40,10 @@ func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	info.PackageT = utils.FirstUpper(info.Package)
 	autoCode, err := autoCodeTemplateService.Preview(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.auto_code_template.previewFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.auto_code_template.previewFailError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.previewFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.previewFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"autoCode": autoCode}, global.Translate("system.auto_code_template.previewSuccess"), c)
+		response.OkWithDetailed(gin.H{"autoCode": autoCode}, global.Translate("sys_auto_code.previewSuccess"), c)
 	}
 }
 
@@ -100,9 +100,9 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 	}
 	err = autoCodeTemplateService.AddFunc(info)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.auto_code_template.injectionFailed"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.auto_code_template.injectionFailedError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.injectFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.injectFail"), c)
 	} else {
-		response.OkWithMessage(global.Translate("system.auto_code_template.injectionSuccessfully"), c)
+		response.OkWithMessage(global.Translate("sys_auto_code.injectSuccess"), c)
 	}
 }

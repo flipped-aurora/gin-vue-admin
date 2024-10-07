@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -58,7 +59,7 @@ func (i *initApiIgnore) InitializeData(ctx context.Context) (context.Context, er
 		{Method: "GET", Path: "/info/getInfoPublic"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
-		return ctx, errors.Wrap(err, sysModel.SysIgnoreApi{}.TableName()+"表数据初始化失败!")
+		return ctx, errors.Wrap(err, sysModel.SysIgnoreApi{}.TableName()+global.Translate("system.api.desc.tableDataInitFail"))
 	}
 	next := context.WithValue(ctx, i.InitializerName(), entities)
 	return next, nil

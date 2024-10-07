@@ -21,7 +21,7 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 &example.ExaFileUploadAndDownload{} 注入",
+			name: global.Translate("utils.exaFileUploadAndDownloadInjection"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -32,7 +32,7 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 &example.ExaCustomer{} 注入",
+			name: global.Translate("utils.exaCustomerInjection"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -43,7 +43,7 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(example.ExaFileUploadAndDownload) 注入",
+			name: global.Translate("utils.newExaFileUploadAndDownloadInjection"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -54,7 +54,7 @@ func TestPackageInitializeGorm_Injection(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(example.ExaCustomer) 注入",
+			name: global.Translate("utils.newExaCustomerInjection"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -103,7 +103,7 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 &example.ExaFileUploadAndDownload{} 回滚",
+			name: global.Translate("utils.exaFileUploadAndDownloadRollback"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -114,7 +114,7 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 &example.ExaCustomer{} 回滚",
+			name: global.Translate("utils.exaCustomerRollback"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -125,7 +125,7 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(example.ExaFileUploadAndDownload) 回滚",
+			name: global.Translate("utils.newExaFileUploadAndDownloadRollback"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
@@ -136,7 +136,7 @@ func TestPackageInitializeGorm_Rollback(t *testing.T) {
 			},
 		},
 		{
-			name: "测试 new(example.ExaCustomer) 回滚",
+			name: global.Translate("utils.newExaCustomerRollback"),
 			fields: fields{
 				Type:        TypePackageInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),

@@ -1,7 +1,7 @@
 <template>
   <div>
     <WarningBar
-      :title="t('view.systemTools.exportTemplate.exportTemplateNote')"
+      :title="t('view.systemTools.syncTableExportFeature')"
       href="https://flipped-aurora.feishu.cn/docx/KwjxdnvatozgwIxGV0rcpkZSn4d"
     />
     <div class="gva-search-box">
@@ -14,13 +14,13 @@
         @keyup.enter="onSubmit"
       >
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.creationDate')"
+          :label="t('general.createDate')"
           prop="createdAt"
         >
           <template #label>
             <span>
-              {{ t('view.systemTools.exportTemplate.creationDate') }}
-              <el-tooltip :content="t('view.systemTools.exportTemplate.searchDateHint')">
+              {{ t('general.createDate') }}
+              <el-tooltip :content="t('general.searchDesc')">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
@@ -28,44 +28,45 @@
           <el-date-picker
             v-model="searchInfo.startCreatedAt"
             type="datetime"
-            :placeholder="t('view.systemTools.exportTemplate.startDate')"
+            :placeholder="t('general.endData')"
             :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"
           />
           —
           <el-date-picker
             v-model="searchInfo.endCreatedAt"
             type="datetime"
-            :placeholder="t('view.systemTools.exportTemplate.endDate')"
+            :placeholder="t('general.startData')"
             :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"
           />
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.templateName')"
+            :label="t('view.systemTools.templateName')"
           prop="name"
         >
+
           <el-input
             v-model="searchInfo.name"
-            :placeholder="t('view.systemTools.exportTemplate.searchCriteria')"
+            :placeholder="t('general.searchCriteria')"
           />
 
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.tableName')"
+          :label="t('view.systemTools.tableName')"
           prop="tableName"
         >
           <el-input
             v-model="searchInfo.tableName"
-            :placeholder="t('view.systemTools.exportTemplate.searchCriteria')"
+            :placeholder="t('general.searchCriteria')"
           />
 
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.templateId')"
+          :label="t('view.systemTools.templateIdentifier')"
           prop="templateID"
         >
           <el-input
             v-model="searchInfo.templateID"
-            :placeholder="t('view.systemTools.exportTemplate.searchCriteria')"
+            :placeholder="t('general.searchCriteria')"
           />
 
         </el-form-item>
@@ -74,11 +75,11 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >{{ t('general.search') }}</el-button>
+          >{{t('general.search')}}</el-button>
           <el-button
             icon="refresh"
             @click="onReset"
-          >{{ t('general.reset') }}</el-button>
+          >{{t('general.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -88,14 +89,14 @@
           type="primary"
           icon="plus"
           @click="openDialog"
-        >{{ t('general.add') }}</el-button>
+        >{{t('general.add')}}</el-button>
 
         <el-button
           icon="delete"
           style="margin-left: 10px;"
           :disabled="!multipleSelection.length"
           @click="onDelete"
-        >{{ t('general.delete') }}</el-button>
+        >{{t('general.delete')}}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -111,39 +112,6 @@
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.exportTemplate.database')"
-          width="120"
-        >
-          <template #default="scope">
-            <span>{{ scope.row.dbName || t('view.systemTools.exportTemplate.gvaLibrary') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-            align="left"
-            :label="t('view.systemTools.exportTemplate.templateId')"
-            prop="templateID"
-            width="140"
-        />
-        <el-table-column
-          align="left"
-          :label="t('view.systemTools.exportTemplate.templateName')"
-          prop="name"
-          width="160"
-        />
-        <el-table-column
-          align="left"
-          :label="t('view.systemTools.exportTemplate.tableName')"
-          prop="tableName"
-          width="120"
-        />
-        <el-table-column
-          align="left"
-          :label="t('view.systemTools.exportTemplate.templateInfo')"
-          prop="templateInfo"
-          min-width="120"
-        />
-        <el-table-column
-          align="left"
           :label="t('general.createdAt')"
           width="180"
         >
@@ -151,7 +119,40 @@
         </el-table-column>
         <el-table-column
           align="left"
-          :label="t('general.operations')"
+          :label="t('view.systemTools.autoCode.dbName')"
+          width="240"
+        >
+          <template #default="scope">
+            <span>{{ scope.row.dbName || t('view.systemTools.gvaDatabase') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+            align="left"
+            :label="t('view.systemTools.templateIdentifier')"
+            prop="templateID"
+            width="140"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.systemTools.templateName')"
+          prop="name"
+          width="260"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.systemTools.tableName')"
+          prop="tableName"
+          width="120"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.systemTools.templateInfo')"
+          prop="templateInfo"
+          min-width="120"
+        />
+        <el-table-column
+          align="left"
+          :label="t('components.commandMenu.operate')"
           min-width="120"
         >
           <template #default="scope">
@@ -187,14 +188,14 @@
       v-model="dialogFormVisible"
       size="60%"
       :before-close="closeDialog"
-      :title="type==='create'? t('view.systemTools.exportTemplate.addTo') : t('general.change')"
+      :title="type==='create'?t('view.systemTools.add'):t('view.systemTools.edit')"
       :show-close="false"
       destroy-on-close
     >
 
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type==='create'? t('view.systemTools.exportTemplate.addTo') : t('general.change') }}</span>
+          <span class="text-lg">{{ type==='create'?t('view.systemTools.add'):t('view.systemTools.edit') }}</span>
           <div>
             <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
             <el-button
@@ -210,16 +211,17 @@
         :model="formData"
         label-position="right"
         :rules="rule"
-        label-width="200px"
+        label-width="100px"
       >
 
         <el-form-item
+            label-width="160px"
           :label="t('view.systemTools.autoCode.businessLibrary')"
           prop="dbName"
         >
           <template #label>
             <el-tooltip
-              :content="t('view.systemTools.exportTemplate.dbListNote')"
+              :content="t('view.systemTools.note')"
               placement="bottom"
               effect="light"
             >
@@ -248,17 +250,19 @@
         </el-form-item>
 
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.templateName2')"
+            label-width="160px"
+            :label="t('view.systemTools.templateName')"
           prop="name"
         >
           <el-input
             v-model="formData.name"
             :clearable="true"
-            :placeholder="t('view.systemTools.exportTemplate.templateNameNote')"
+            :placeholder="t('view.systemTools.enterTemplateName')"
           />
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.tableName2')"
+            label-width="160px"
+          :label="t('view.systemTools.tableName')"
           clearable
           prop="tableName"
         >
@@ -284,23 +288,25 @@
               />
             </el-select>
 
-            <el-button type="primary" @click="getColumnFunc">{{ t('view.systemTools.exportTemplate.autoGenerateTemplate') }}</el-button>
+            <el-button type="primary" @click="getColumnFunc">{{ t('view.systemTools.autoGenerateTemplate') }}</el-button>
           </div>
 
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.templateId2')"
+            label-width="160px"
+          :label="t('view.systemTools.templateIdentifier')"
           prop="templateID"
         >
           <el-input
             v-model="formData.templateID"
             :clearable="true"
-            :placeholder="t('view.systemTools.exportTemplate.templateIdNote')"
+            :placeholder="t('view.systemTools.templateIdentifierInfo')"
           />
         </el-form-item>
 
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.associationConditions')"
+            label-width="160px"
+          :label="t('view.systemTools.associationCondition')"
         >
           <div
             v-for="(join,key) in formData.joinTemplate"
@@ -309,7 +315,7 @@
           >
             <el-select
               v-model="join.joins"
-              :placeholder="t('view.systemTools.exportTemplate.associationConditionsNote')"
+              :placeholder="t('view.systemTools.selectAssociationMethod')"
             >
               <el-option
                 label="LEFT JOIN"
@@ -326,11 +332,11 @@
             </el-select>
             <el-input
                 v-model="join.table"
-                :placeholder="t('view.systemTools.exportTemplate.associationTableNote')"
+                :placeholder="t('view.systemTools.enterAssociationTable')"
             />
             <el-input
               v-model="join.on"
-              :placeholder="t('view.systemTools.exportTemplate.joinConditionNote')"
+              :placeholder="t('view.systemTools.associationCondition')"
             />
             <el-button
               type="danger"
@@ -343,12 +349,13 @@
               type="primary"
               icon="plus"
               @click="addJoin"
-            >{{ t('view.systemTools.exportTemplate.addingCondtion') }}</el-button>
+            >{{ t('view.systemTools.addCondition') }}</el-button>
           </div>
         </el-form-item>
 
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.templateInfo')"
+            label-width="160px"
+            :label="t('view.systemTools.templateInfo')"
           prop="templateInfo"
         >
           <el-input
@@ -356,11 +363,12 @@
             type="textarea"
             :rows="12"
             :clearable="true"
-            :placeholder="templatePlaceholder"
+            placeholder="templatePlaceholder"
           />
         </el-form-item>
         <el-form-item
-         :label="t('view.systemTools.exportTemplate.noOfExportedRecords')"
+            label-width="160px"
+          :label="t('view.systemTools.defaultExportCount')"
         >
           <el-input-number
             v-model="formData.limit"
@@ -370,15 +378,17 @@
           />
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.sortingCriteria')"
+            label-width="160px"
+          :label="t('view.systemTools.defaultSortCondition')"
         >
           <el-input
             v-model="formData.order"
-            :placeholder="t('view.systemTools.exportTemplate.sortingCriteriaNote')"
+            placeholder="例:id desc"
           />
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.exportTemplate.exportCondition')"
+            label-width="160px"
+          :label="t('view.systemTools.exportCondition')"
         >
           <div
             v-for="(condition,key) in formData.conditions"
@@ -387,15 +397,15 @@
           >
             <el-input
               v-model="condition.from"
-              :placeholder="t('view.systemTools.exportTemplate.jsonKeyNote')"
+              :placeholder="t('view.systemTools.jsonKeyFromQuery')"
             />
             <el-input
               v-model="condition.column"
-              :placeholder="t('view.systemTools.exportTemplate.columnNote')"
+              :placeholder="t('view.systemTools.tableColumn')"
             />
             <el-select
               v-model="condition.operator"
-              :placeholder="t('view.systemTools.exportTemplate.queryConditionNote')"
+              :placeholder="t('view.systemTools.selectQueryCondition')"
             >
               <el-option
                 v-for="item in typeSearchOptions"
@@ -415,7 +425,7 @@
               type="primary"
               icon="plus"
               @click="addCondition"
-            >{{ t('view.systemTools.exportTemplate.addingCondtion') }}</el-button>
+            >{{ t('view.systemTools.addCondition') }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -439,23 +449,24 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import {getDB, getTable, getColumn} from '@/api/autoCode'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
-
+const { t } = useI18n()
 defineOptions({
   name: 'ExportTemplate'
 })
 
-const templatePlaceholder = t('view.systemTools.exportTemplate.templatePlaceholder1') + "\r\n" +
-`{
-  "table_column1":"` + t('view.systemTools.exportTemplate.templatePlaceholder2') + `",
-  "table_column3":"` + t('view.systemTools.exportTemplate.templatePlaceholder3') + `",
-  "table_column4":"` + t('view.systemTools.exportTemplate.templatePlaceholder4') + `",
-  "\`rows\`":"` + t('view.systemTools.exportTemplate.templatePlaceholder5') + `,
-}` + "\r\n" + 
-t('view.systemTools.exportTemplate.templatePlaceholder6')
-
+const templatePlaceholder = `模板信息格式：key标识数据库column列名称（在join模式下需要写为 table.column），value标识导出excel列名称，如key为数据库关键字或函数，请按照关键字的处理模式处理，当前以mysql为例，如下：
+{
+  "table_column1":"第一列",
+  "table_column3":"第三列",
+  "table_column4":"第四列",
+  "\`rows\`":"我属于数据库关键字或函数",
+}
+如果增加了JOINS导出key应该列为 {table_name1.table_column1:"第一列",table_name2.table_column2:"第二列"}
+如果有重复的列名导出格式应为 {table_name1.table_column1 as key:"第一列",table_name2.table_column2 as key2:"第二列"}
+JOINS模式下不支持导入
+`
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
@@ -526,7 +537,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message: t('view.systemTools.exportTemplate.noSpaceOnlyNote'),
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -537,7 +548,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message:t('view.systemTools.exportTemplate.noSpaceOnlyNote'),
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -548,7 +559,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message:t('view.systemTools.exportTemplate.noSpaceOnlyNote'),
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -559,7 +570,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message:t('view.systemTools.exportTemplate.noSpaceOnlyNote'),
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -569,11 +580,11 @@ const searchRule = reactive({
   createdAt: [
     { validator: (rule, value, callback) => {
       if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
-        callback(new Error(t('view.systemTools.exportTemplate.enterEndDate')))
+        callback(new Error(t('general.placeInputEndData')))
       } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
-        callback(new Error(t('view.systemTools.exportTemplate.enterStartDate')))
+        callback(new Error(t('general.placeInputStartData')))
       } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
-        callback(new Error(t('view.systemTools.exportTemplate.startDateBeforeEndDate')))
+        callback(new Error(t('general.startDataMustBeforeEndData')))
       } else {
         callback()
       }
@@ -622,7 +633,7 @@ const getColumnFunc = async () => {
   if(!formData.value.tableName) {
     ElMessage({
       type: 'error',
-      message: t('view.systemTools.exportTemplate.selectDBAndTable')
+      message: t('view.systemTools.selectBusinessDbAndTable')
     })
     return
   }
@@ -701,9 +712,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-  ElMessageBox.confirm(t('general.deleteConfirm'),  t('general.hint'), {
-    confirmButtonText:  t('general.confirm'),
-    cancelButtonText:  t('general.cancel'),
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(() => {
     deleteSysExportTemplateFunc(row)
@@ -712,9 +723,9 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm(t('general.deleteConfirm'),  t('general.hint'), {
-    confirmButtonText:  t('general.confirm'),
-    cancelButtonText:  t('general.cancel'),
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
     const ids = []
@@ -808,7 +819,7 @@ const enterDialog = async() => {
   } catch (error) {
     ElMessage({
       type: 'error',
-      message: t('view.systemTools.exportTemplate.templateInfoFormatError')
+      message: t('view.systemTools.templateFormatIncorrect')
     })
     return
   }
@@ -818,7 +829,7 @@ const enterDialog = async() => {
     if (!reqData.conditions[i].from || !reqData.conditions[i].column || !reqData.conditions[i].operator) {
       ElMessage({
         type: 'error',
-        message: t('view.systemTools.exportTemplate.exportConditionError')
+        message: t('view.systemTools.completeExportConditions')
       })
       return
     }
@@ -829,7 +840,7 @@ const enterDialog = async() => {
     if (!reqData.joinTemplate[i].joins || !reqData.joinTemplate[i].on) {
       ElMessage({
         type: 'error',
-        message: t('view.systemTools.exportTemplate.completeAssociationError')
+        message: t('view.systemTools.completeAssociation')
       })
       return
     }

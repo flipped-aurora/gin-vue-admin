@@ -56,8 +56,8 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 func (s *SystemApiApi) SyncApi(c *gin.Context) {
 	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.sys_api.syncFailed"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.sys_api.syncFailedError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_api.syncFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.syncFail"), c)
 		return
 	}
 	response.OkWithData(gin.H{
@@ -79,7 +79,7 @@ func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
 	groups, apiGroupMap, err := apiService.GetApiGroups()
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.getDataFailError"), c)
+		response.FailWithMessage(global.Translate("general.getDataFail"), c)
 		return
 	}
 	response.OkWithData(gin.H{
@@ -105,8 +105,8 @@ func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 	}
 	err = apiService.IgnoreApi(ignoreApi)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.sys_api.ignoreFailures"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.sys_api.ignoreFailuresError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_api.ignoreFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.ignoreFail"), c)
 		return
 	}
 	response.Ok(c)
@@ -129,8 +129,8 @@ func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
 	}
 	err = apiService.EnterSyncApi(syncApi)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.sys_api.ignoreFailures"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.sys_api.ignoreFailuresError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_api.ignoreFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.ignoreFail"), c)
 		return
 	}
 	response.Ok(c)
@@ -314,9 +314,9 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
 	err := casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.sys_api.refreshFailed"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.sys_api.refreshFailedError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_api.refreshFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.refreshFail"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("system.sys_api.refreshSuccess"), c)
+	response.OkWithMessage(global.Translate("sys_api.refreshSuccess"), c)
 }

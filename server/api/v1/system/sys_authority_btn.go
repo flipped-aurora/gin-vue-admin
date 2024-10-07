@@ -28,7 +28,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 	}
 	res, err := authorityBtnService.GetAuthorityBtn(req)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		global.GVA_LOG.Error(global.Translate("general.queryFailErr"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 		return
 	}
@@ -53,11 +53,11 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 	}
 	err = authorityBtnService.SetAuthorityBtn(req)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("system.sys_authority_btn.allocationFailed"), zap.Error(err))
-		response.FailWithMessage(global.Translate("system.sys_authority_btn.allocationFailedError"), c)
+		global.GVA_LOG.Error(global.Translate("sys_authority.assignmentFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_authority.assignmentFail"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("system.sys_authority_btn.allocationSuccess"), c)
+	response.OkWithMessage(global.Translate("sys_authority.assignmentSuccess"), c)
 }
 
 // CanRemoveAuthorityBtn

@@ -104,7 +104,7 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 func (casbinService *CasbinService) GetPolicyPathByAuthorityId(AuthorityID uint) (pathMaps []request.CasbinInfo) {
 	e := casbinService.Casbin()
 	authorityId := strconv.Itoa(int(AuthorityID))
-	list := e.GetFilteredPolicy(0, authorityId)
+	list, _ := e.GetFilteredPolicy(0, authorityId)
 	for _, v := range list {
 		pathMaps = append(pathMaps, request.CasbinInfo{
 			Path:   v[1],

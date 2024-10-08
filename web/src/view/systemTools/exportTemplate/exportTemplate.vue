@@ -40,7 +40,7 @@
           />
         </el-form-item>
         <el-form-item
-            :label="t('view.systemTools.templateName')"
+            :label="t('view.systemTools.exportTemplate.templateName')"
           prop="name"
         >
 
@@ -51,7 +51,7 @@
 
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.tableName')"
+          :label="t('view.systemTools.exportTemplate.tableName')"
           prop="tableName"
         >
           <el-input
@@ -61,7 +61,7 @@
 
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.templateIdentifier')"
+          :label="t('view.systemTools.exportTemplate.templateIdentifier')"
           prop="templateID"
         >
           <el-input
@@ -123,30 +123,30 @@
           width="240"
         >
           <template #default="scope">
-            <span>{{ scope.row.dbName || t('view.systemTools.gvaDatabase') }}</span>
+            <span>{{ scope.row.dbName || t('view.systemTools.exportTemplate.gvaDatabase') }}</span>
           </template>
         </el-table-column>
         <el-table-column
             align="left"
-            :label="t('view.systemTools.templateIdentifier')"
+            :label="t('view.systemTools.exportTemplate.templateIdentifier')"
             prop="templateID"
             width="140"
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.templateName')"
+          :label="t('view.systemTools.exportTemplate.templateName')"
           prop="name"
           width="260"
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.tableName')"
+          :label="t('view.systemTools.exportTemplate.tableName')"
           prop="tableName"
           width="120"
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.templateInfo')"
+          :label="t('view.systemTools.exportTemplate.templateInfo')"
           prop="templateInfo"
           min-width="120"
         />
@@ -188,14 +188,14 @@
       v-model="dialogFormVisible"
       size="60%"
       :before-close="closeDialog"
-      :title="type==='create'?t('view.systemTools.add'):t('view.systemTools.edit')"
+      :title="type==='create'?t('view.systemTools.exportTemplate.add'):t('view.systemTools.exportTemplate.edit')"
       :show-close="false"
       destroy-on-close
     >
 
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type==='create'?t('view.systemTools.add'):t('view.systemTools.edit') }}</span>
+          <span class="text-lg">{{ type==='create'?t('view.systemTools.exportTemplate.add'):t('view.systemTools.exportTemplate.edit') }}</span>
           <div>
             <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
             <el-button
@@ -251,18 +251,18 @@
 
         <el-form-item
             label-width="160px"
-            :label="t('view.systemTools.templateName')"
+            :label="t('view.systemTools.exportTemplate.templateName')"
           prop="name"
         >
           <el-input
             v-model="formData.name"
             :clearable="true"
-            :placeholder="t('view.systemTools.enterTemplateName')"
+            :placeholder="t('view.systemTools.exportTemplate.enterTemplateName')"
           />
         </el-form-item>
         <el-form-item
             label-width="160px"
-          :label="t('view.systemTools.tableName')"
+          :label="t('view.systemTools.exportTemplate.tableName')"
           clearable
           prop="tableName"
         >
@@ -278,7 +278,7 @@
                 v-model="formData.tableName"
                 class="flex-1"
                 filterable
-                :placeholder="t('view.systemTools.autoCode.selectTable')"
+                :placeholder="t('view.systemTools.exportTemplate.selectTable')"
             >
               <el-option
                   v-for="item in tableOptions"
@@ -288,25 +288,25 @@
               />
             </el-select>
 
-            <el-button type="primary" @click="getColumnFunc">{{ t('view.systemTools.autoGenerateTemplate') }}</el-button>
+            <el-button type="primary" @click="getColumnFunc">{{ t('view.systemTools.exportTemplate.autoGenerateTemplate') }}</el-button>
           </div>
 
         </el-form-item>
         <el-form-item
             label-width="160px"
-          :label="t('view.systemTools.templateIdentifier')"
+          :label="t('view.systemTools.exportTemplate.templateIdentifier')"
           prop="templateID"
         >
           <el-input
             v-model="formData.templateID"
             :clearable="true"
-            :placeholder="t('view.systemTools.templateIdentifierInfo')"
+            :placeholder="t('view.systemTools.exportTemplate.templateIdentifierInfo')"
           />
         </el-form-item>
 
         <el-form-item
             label-width="160px"
-          :label="t('view.systemTools.associationCondition')"
+          :label="t('view.systemTools.exportTemplate.associationCondition')"
         >
           <div
             v-for="(join,key) in formData.joinTemplate"
@@ -315,7 +315,7 @@
           >
             <el-select
               v-model="join.joins"
-              :placeholder="t('view.systemTools.selectAssociationMethod')"
+              :placeholder="t('view.systemTools.exportTemplate.selectAssociationMethod')"
             >
               <el-option
                 label="LEFT JOIN"
@@ -332,11 +332,11 @@
             </el-select>
             <el-input
                 v-model="join.table"
-                :placeholder="t('view.systemTools.enterAssociationTable')"
+                :placeholder="t('view.systemTools.exportTemplate.enterAssociationTable')"
             />
             <el-input
               v-model="join.on"
-              :placeholder="t('view.systemTools.associationCondition')"
+              :placeholder="t('view.systemTools.exportTemplate.associationCondition')"
             />
             <el-button
               type="danger"
@@ -349,13 +349,13 @@
               type="primary"
               icon="plus"
               @click="addJoin"
-            >{{ t('view.systemTools.addCondition') }}</el-button>
+            >{{ t('view.systemTools.exportTemplate.addCondition') }}</el-button>
           </div>
         </el-form-item>
 
         <el-form-item
             label-width="160px"
-            :label="t('view.systemTools.templateInfo')"
+            :label="t('view.systemTools.exportTemplate.templateInfo')"
           prop="templateInfo"
         >
           <el-input
@@ -368,7 +368,7 @@
         </el-form-item>
         <el-form-item
             label-width="160px"
-          :label="t('view.systemTools.defaultExportCount')"
+          :label="t('view.systemTools.exportTemplate.defaultExportCount')"
         >
           <el-input-number
             v-model="formData.limit"
@@ -379,7 +379,7 @@
         </el-form-item>
         <el-form-item
             label-width="160px"
-          :label="t('view.systemTools.defaultSortCondition')"
+          :label="t('view.systemTools.exportTemplate.defaultSortCondition')"
         >
           <el-input
             v-model="formData.order"
@@ -388,7 +388,7 @@
         </el-form-item>
         <el-form-item
             label-width="160px"
-          :label="t('view.systemTools.exportCondition')"
+          :label="t('view.systemTools.exportTemplate.exportCondition')"
         >
           <div
             v-for="(condition,key) in formData.conditions"
@@ -397,15 +397,15 @@
           >
             <el-input
               v-model="condition.from"
-              :placeholder="t('view.systemTools.jsonKeyFromQuery')"
+              :placeholder="t('view.systemTools.exportTemplate.jsonKeyFromQuery')"
             />
             <el-input
               v-model="condition.column"
-              :placeholder="t('view.systemTools.tableColumn')"
+              :placeholder="t('view.systemTools.exportTemplate.tableColumn')"
             />
             <el-select
               v-model="condition.operator"
-              :placeholder="t('view.systemTools.selectQueryCondition')"
+              :placeholder="t('view.systemTools.exportTemplate.selectQueryCondition')"
             >
               <el-option
                 v-for="item in typeSearchOptions"
@@ -425,7 +425,7 @@
               type="primary"
               icon="plus"
               @click="addCondition"
-            >{{ t('view.systemTools.addCondition') }}</el-button>
+            >{{ t('view.systemTools.exportTemplate.addCondition') }}</el-button>
           </div>
         </el-form-item>
       </el-form>

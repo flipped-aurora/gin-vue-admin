@@ -548,6 +548,8 @@ import { toDoc } from '@/utils/doc'
 import {toLowerCase} from "@/utils/stringFun";
 import ComponentsCascader from "@/view/superAdmin/menu/components/components-cascader.vue";
 
+import pathInfo from "@/pathInfo.json";
+
 defineOptions({
   name: 'Menus',
 })
@@ -584,8 +586,8 @@ const addParameter = (form) => {
 }
 
 const fmtComponent = (component) => {
-  form.value.component = component
-  form.value.name = toLowerCase(component.split('/').pop())
+  form.value.component = component.replace(/\\/g, '/')
+  form.value.name = toLowerCase(pathInfo["/src/"+component])
   form.value.path = form.value.name
 }
 

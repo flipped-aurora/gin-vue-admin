@@ -535,7 +535,7 @@
           </el-table-column>
           <el-table-column
               align="left"
-              :label="t('menu.sort')"
+              :label="t('view.superAdmin.menu.sort')"
               prop="sort"
           >
             <template #default="{row}">

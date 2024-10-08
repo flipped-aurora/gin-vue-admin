@@ -1,6 +1,23 @@
+<template>
+  <div class="flex justify-between items-center gap-2 w-full">
+    <el-cascader
+        v-if="pathIsSelect"
+        placeholder="请选择文件路径"
+        :options="pathOptions"
+        v-model="activeComponent"
+        filterable
+        class="w-full"
+        clearable
+        @change="emitChange"
+    />
+    <el-input v-else v-model="tempPath" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @change="emitChange" />
+    <el-button @click="togglePathIsSelect">{{ pathIsSelect ? '手动输入' : '快捷选择' }} </el-button>
+  </div>
+</template>
+
+
 <script setup>
 import { onMounted, ref } from "vue";
-import { useToggle } from "@vueuse/core";
 import pathInfo from "@/pathInfo.json";
 
 const props = defineProps({
@@ -18,6 +35,13 @@ const activeComponent = ref('')
 const pathIsSelect = ref(true)
 
 const togglePathIsSelect = () => {
+  if(pathIsSelect.value){
+    tempPath.value = activeComponent.value?.join('/')
+  }else{
+    activeComponent.value = tempPath.value.split('/')
+    console.log(activeComponent.value)
+  }
+
   pathIsSelect.value = !pathIsSelect.value
   emitChange()
 }
@@ -89,22 +113,6 @@ const emitChange = () => {
 }
 </script>
 
-<template>
-  <div class="flex justify-between items-center gap-2 w-full">
-    <el-cascader
-        v-if="pathIsSelect"
-        placeholder="请选择文件路径"
-        :options="pathOptions"
-        v-model="activeComponent"
-        filterable
-        class="w-full"
-        clearable
-        @change="emitChange"
-    />
-    <el-input v-else v-model="tempPath" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @change="emitChange" />
-    <el-button @click="togglePathIsSelect" size="small">{{ pathIsSelect ? '没找到我的菜单' : '切换至菜单选择' }} </el-button>
-  </div>
-</template>
 
 <style scoped lang="scss">
 

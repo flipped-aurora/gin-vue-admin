@@ -1,5 +1,11 @@
 <template>
-  <el-drawer v-model="drawer" title="系统配置" direction="rtl" :size="width">
+  <el-drawer v-model="drawer" title="系统配置" direction="rtl" :size="width" :show-close="false">
+    <template #header>
+      <div class="flex justify-between items-center">
+        <span class="text-lg">系统配置</span>
+        <el-button type="primary" @click="saveConfig">保存配置</el-button>
+      </div>
+    </template>
     <div class="flex flex-col">
       <div class="mb-8">
         <div class="text-gray-800 dark:text-gray-100">默认主题</div>
@@ -116,8 +122,6 @@
         请注意，所有配置请保存到本地文件的
         <el-tag>config.json</el-tag> 文件中，否则刷新页面后会丢失配置
       </el-alert>-->
-
-      <el-button type="primary" class="mt-4" @click="saveConfig">保存配置</el-button>
     </div>
   </el-drawer>
 </template>

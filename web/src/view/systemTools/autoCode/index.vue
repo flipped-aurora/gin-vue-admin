@@ -155,7 +155,7 @@
           :inline="true"
           :model="form"
           :rules="rules"
-          label-width="200px"
+          label-width="170px"
       >
         <el-row class="w-full">
           <el-col :span="6">
@@ -323,7 +323,7 @@
             <el-form-item>
               <template #label>
                 <el-tooltip
-                    :ontent="t('view.systemTools.autoCode.useGvaNote')"
+                    :content="t('view.systemTools.autoCode.useGvaNote')"
                     effect="light"
                     placement="bottom"
                 >

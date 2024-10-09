@@ -163,7 +163,6 @@
           <template #default="scope">
             <el-button
               icon="edit"
-
               type="primary"
               link
               @click="editApiFunc(scope.row)"
@@ -172,7 +171,6 @@
             </el-button>
             <el-button
               icon="delete"
-
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"
@@ -282,7 +280,10 @@
           fixed="right"
         >
           <template #default="{row}">
-            <el-button type="primary" text @click="ignoreApiFunc(row,true)">
+            <el-button icon="plus" type="primary" link @click="addApiFunc(row)">
+              单条新增
+            </el-button>
+            <el-button icon="sunrise" type="primary" link @click="ignoreApiFunc(row,true)">
               {{ t('view.api.ignore') }}
             </el-button>
           </template>
@@ -365,8 +366,8 @@
           fixed="right"
         >
           <template #default="{row}">
-            <el-button type="primary" text @click="ignoreApiFunc(row,false)">
-              {{ t('view.api.cancelIgnore') }}
+            <el-button icon="sunny" type="primary" link @click="ignoreApiFunc(row,false)">
+               {{ t('view.api.cancelIgnore') }}
             </el-button>
           </template>
         </el-table-column>
@@ -571,14 +572,49 @@ const ignoreApiFunc = async (row,flag) =>{
   }
 }
 
+const addApiFunc = async(row)=>{
+  if(!row.apiGroup){
+    ElMessage({
+      type: 'error',
+      message: '请先选择API分组'
+    })
+    return
+  }
+  if(!row.description){
+    ElMessage({
+      type: 'error',
+      message: '请先填写API描述'
+    })
+    return
+  }
+  const res = await createApi(row)
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '添加成功',
+      showClose: true
+    })
+    syncApiData.value.newApis = syncApiData.value.newApis.filter(item => !(item.path === row.path && item.method === row.method))
+  }
+  getTableData()
+  getGroup()
+}
+
 const closeSyncDialog = () => {
   syncApiFlag.value = false
 }
 
 const syncing = ref(false)
 
-
 const enterSyncDialog = async() => {
+ if( syncApiData.value.newApis.some(item => !item.apiGroup || !item.description)){
+   ElMessage({
+     type: 'error',
+     message: '存在API未分组或未填写描述'
+   })
+   return
+ }
+
   syncing.value = true
   const res = await enterSyncApi(syncApiData.value)
   syncing.value = false

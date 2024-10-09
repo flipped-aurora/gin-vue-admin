@@ -1,5 +1,11 @@
 <template>
-  <el-drawer v-model="drawer" :title="t('system.systemConfig')" direction="rtl" :size="width">
+  <el-drawer v-model="drawer" :title="t('system.systemConfig')" direction="rtl" :size="width" :show-close="false">
+    <template #header>
+      <div class="flex justify-between items-center">
+        <span class="text-lg">{{t('system.systemConfig')}}</span>
+        <el-button type="primary" @click="saveConfig">{{ t('layout.setting.copyConfig') }}</el-button>
+      </div>
+    </template>
     <div class="flex flex-col">
       <div class="mb-8">
         <div class="text-gray-800 dark:text-gray-100">{{ t('layout.setting.defaultTheme') }}</div>
@@ -112,10 +118,6 @@
         </div>
       </div>
 
-
-      <el-button type="primary" class="mt-4" @click="copyConfig"
-        >{{ t('layout.setting.copyConfig') }}</el-button
-      >
     </div>
   </el-drawer>
 </template>
@@ -127,11 +129,10 @@ import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import {setSelfSetting} from "@/api/user";
 import { useI18n } from 'vue-i18n'; // added by mohamed hassan to support multilanguage
-
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 const appStore = useAppStore();
 const { config, device } = storeToRefs(appStore);
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
 defineOptions({
   name: "GvaSetting",
 });
@@ -171,20 +172,10 @@ const sideModes = [
 ];
 
 const saveConfig = async () => {
-  /*const input = document.createElement("textarea");
-  input.value = JSON.stringify(config.value);
-  // 添加回车
-  input.value = input.value.replace(/,/g, ",\n");
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("copy");
-  document.body.removeChild(input);
-  ElMessage.success(t('layout.setting.copyConfigSuccess'));
-  ElMessage.success("复制成功, 请自行保存到本地文件中");*/
   const res = await setSelfSetting(config.value)
   if(res.code === 0){
     localStorage.setItem('originSetting', JSON.stringify(config.value))
-    ElMessage.success('保存成功')
+    ElMessage.success(t('layout.setting.copyConfigSuccess'))
     drawer.value = false
   }
 };

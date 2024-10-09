@@ -8,7 +8,7 @@
       :before-upload="beforeImageUpload"
       :multiple="false"
     >
-      <el-button type="primary">压缩上传</el-button>
+      <el-button type="primary">{{ t('components.upload.image.compressedUpload') }}</el-button>
     </el-upload>
   </div>
 </template>
@@ -17,6 +17,9 @@
 import ImageCompress from '@/utils/image'
 import { ElMessage } from 'element-plus'
 import { getBaseUrl } from '@/utils/format'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'UploadImage',
@@ -42,7 +45,7 @@ const beforeImageUpload = (file) => {
   const isJPG = file.type === 'image/jpeg'
   const isPng = file.type === 'image/png'
   if (!isJPG && !isPng) {
-    ElMessage.error('上传头像图片只能是 jpg或png 格式!')
+    ElMessage.error(t('components.upload.image.avatarImageFormatError'))
     return false
   }
 

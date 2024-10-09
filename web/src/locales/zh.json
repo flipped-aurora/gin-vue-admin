@@ -1,4 +1,68 @@
 {
+  "components": {
+    "arrayCtrl" : {
+      "new": "+ 新增"
+    },
+    "bottomInfo" : {
+      "poweredBy": "动力来自",
+      "copyright": "版权",
+      "faTeam": "flipped-aurora团队"
+    },
+    "commandMenu": {
+      "commandMenuNote": "请输入你需要快捷到达的功能",
+      "close": "关闭",
+      "jump": "跳转",
+      "operate": "操作",
+      "lightTheme": "亮色主题",
+      "darkTheme": "暗色主题",
+      "logout": "退出登录"
+    },
+    "exportExcel": {
+      "exportExcel": {
+        "export": "导出",
+        "templateIdErr": "组件未设置模板ID"
+      },
+      "exportTemplate": {
+        "exportTemplate": "下载模板",
+        "templateIdErr": "组件未设置模板ID"
+      },
+      "importExcel": {
+        "import": "导入",
+        "importSuccess": "导入成功"
+      }
+    },
+    "selectFile": {
+      "uploadFiles": "上传文件",
+      "uploadFailed": "上传失败"
+    },
+    "selectImage": {
+      "selectComponent": {
+        "image": "图片",
+        "upload": "上传"
+      },
+      "selectImage": {
+        "mediaLibrary": "媒体库",
+        "editFileNote": "点击“文件名/备注”可以编辑文件名或者备注内容。",
+        "enterFileName": "请输入文件名或备注",
+        "browserNotSupportVideo": "您的浏览器不支持视频播放",
+        "enterFileNameOrComment": "请输入文件名或者备注",
+        "typeNotSupported": "当前类型不支持使用",
+        "delectFileConfirmation": "是否删除该文件"
+      }
+    },
+    "upload": {
+      "common": {
+        "normalUpload": "普通上传",
+        "fileFormatNote": "上传图片只能是 jpg,png,svg,webp 格式, 上传视频只能是 mp4,webm 格式!",
+        "videoSizeError": "上传视频大小不能超过 5MB",
+        "imageSizeError": "未压缩的上传图片大小不能超过 500KB，请使用压缩上传"
+      },
+      "image": {
+        "compressedUpload": "压缩上传",
+        "avatarImageFormatError": "上传头像图片只能是 jpg或png 格式!"
+      }
+    }
+  },
   "api": {
     "group": "组",
     "setupSuccess": "api设置成功"
@@ -108,7 +172,9 @@
     "undeleted": "已取消删除",
     "updateSuccess": "更新成功!",
     "warning": "警告",
-    "yes": "是"
+    "yes": "是",
+    "cannotBeEmpty": "不能为空",
+    "cancelModification": "取消修改"
   },
   "historyComponent": {
     "closeAll": "关闭所有",
@@ -926,31 +992,6 @@
         "templateInfoFormatError": "模板信息格式不正确，请检查",
         "exportConditionError": "请填写完整的导出条件",
         "completeAssociationError": "请填写完整的关联"
-      }
-    }
-  },
-  "components": {
-    "commandMenu": {
-      "commandMenuNote": "请输入你需要快捷到达的功能",
-      "close": "关闭",
-      "jump": "跳转",
-      "operate": "操作",
-      "lightTheme": "亮色主题",
-      "darkTheme": "暗色主题",
-      "logout": "退出登录"
-    },
-    "exportExcel": {
-      "exportExcel": {
-        "export": "导出",
-        "templateIdErr": "组件未设置模板ID"
-      },
-      "exportTemplate": {
-        "exportTemplate": "下载模板",
-        "templateIdErr": "组件未设置模板ID"
-      },
-      "importExcel": {
-        "import": "导入",
-        "importSuccess": "导入成功"
       }
     }
   },

@@ -1,4 +1,68 @@
 {
+  "components": {
+    "arrayCtrl" : {
+      "new": "+ New"
+    },
+    "bottomInfo" : {
+      "poweredBy": "Powered By",
+      "copyright": "Copyright",
+      "faTeam": "flipped-aurora team"
+    },
+    "commandMenu": {
+      "commandMenuNote": "Please enter the function you need to quickly reach",
+      "close": "Close",
+      "jump": "Jump",
+      "operate": "Operate",
+      "lightTheme": "Light Theme",
+      "darkTheme": "Dark Theme",
+      "logout": "Logout"
+    },
+    "exportExcel": {
+      "exportExcel": {
+        "export": "Export",
+        "templateIdErr": "Component does not have a template ID set."
+      },
+      "exportTemplate": {
+        "exportTemplate": "Export Template",
+        "templateIdErr": "Component does not have a template ID set."
+      },
+      "importExcel": {
+        "import": "Import",
+        "importSuccess": "Import Success"
+      }
+    },
+    "selectFile": {
+      "uploadFiles": "Upload Files",
+      "uploadFailed": "Upload Failed "
+    },
+    "selectImage": {
+      "selectComponent": {
+        "image": "Image",
+        "upload": "Upload"
+      },
+      "selectImage": {
+        "mediaLibrary": "Media Library",
+        "editFileNote": "Click \"File Name/Remarks\" to edit the file name or remarks.",
+        "enterFileName": "Please enter a file name or comment",
+        "browserNotSupportVideo": "Your browser does not support video playback",
+        "enterFileNameOrComment": "Please enter a file name or comment",
+        "typeNotSupported": "The current type is not supported.",
+        "delectFileConfirmation": "Do you want to delete the file?"
+      }
+    },
+    "upload": {
+      "common": {
+        "normalUpload": "Normal Upload",
+        "fileFormatNote": "The uploaded images can only be in jpg, png, svg, webp format, and the uploaded videos can only be in mp4, webm format!",
+        "videoSizeError": "Uploaded video size cannot exceed 5MB",
+        "imageSizeError": "The size of uncompressed uploaded images cannot exceed 500KB, please use compressed upload"
+      },
+      "image": {
+        "compressedUpload": "Compressed ‘pload",
+        "avatarImageFormatError": "Uploaded avatar images can only be in jpg or png format!"
+      }
+    }
+  },
   "api": {
     "group": " Group",
     "setupSuccess": "API set up successfully!"
@@ -108,7 +172,9 @@
     "undeleted": "Deletion canceled",
     "updateSuccess": "Updated successfully!",
     "warning": "Warning",
-    "yes": "Yes"
+    "yes": "Yes",
+    "cannotBeEmpty": "Cannot be empty",
+    "cancelModification": "Cancel modification"
   },
   "historyComponent": {
     "closeAll": "Close All",
@@ -882,31 +948,6 @@
         "templateInfoFormatError": "The template information format is incorrect, please check",
         "exportConditionError": "Please fill in the complete export conditions",
         "completeAssociationError": "Please fill in the complete association"
-      }
-    }
-  },
-  "components": {
-    "commandMenu": {
-      "commandMenuNote": "Please enter the function you need to quickly reach",
-      "close": "Close",
-      "jump": "Jump",
-      "operate": "Operate",
-      "lightTheme": "Light Theme",
-      "darkTheme": "Dark Theme",
-      "logout": "Logout"
-    },
-    "exportExcel": {
-      "exportExcel": {
-        "export": "Export",
-        "templateIdErr": "Component does not have a template ID set."
-      },
-      "exportTemplate": {
-        "exportTemplate": "Export Template",
-        "templateIdErr": "Component does not have a template ID set."
-      },
-      "importExcel": {
-        "import": "Import",
-        "importSuccess": "Import Success"
       }
     }
   },

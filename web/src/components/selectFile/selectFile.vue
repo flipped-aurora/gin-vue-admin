@@ -13,7 +13,7 @@
       class="upload-btn"
     >
       <el-button type="primary">
-        上传文件
+        {{ t('components.selectFile.uploadFiles') }}
       </el-button>
     </el-upload>
   </div>
@@ -24,6 +24,9 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getBaseUrl } from '@/utils/format'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'UploadCommon',
@@ -54,7 +57,7 @@ const uploadSuccess = (res) => {
   if(code !== 0){
     ElMessage({
       type: 'error',
-      message: '上传失败'+res.msg
+      message: t('components.selectFile.uploadFailed') + res.msg
     })
     fileList.value.pop()
     return
@@ -77,7 +80,7 @@ const uploadRemove = (file) => {
 const uploadError = (err) => {
   ElMessage({
     type: 'error',
-    message: '上传失败'
+    message: t('components.selectFile.uploadFailed')
   })
   fullscreenLoading.value = false
   emits('on-error',err)

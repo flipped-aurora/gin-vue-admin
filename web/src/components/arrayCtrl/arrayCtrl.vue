@@ -20,7 +20,7 @@
         @blur="handleInputConfirm"
       />
       <el-button v-else class="button-new-tag" size="small" @click="showInput">
-        + 新增
+        {{ t('components.arrayCtrl.new') }}
       </el-button>
     </template>
   </div>
@@ -33,6 +33,9 @@ defineOptions({
 })
 
 import { nextTick, ref } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const inputValue = ref('')
 const inputVisible = ref(false)

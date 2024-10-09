@@ -1,4 +1,68 @@
 {
+  "components": {
+    "arrayCtrl" : {
+      "new": "+ جديد"
+    },
+    "bottomInfo" : {
+      "poweredBy": "مدعوم بواسطة",
+      "copyright": "حقوق الملكية الفكرية",
+      "faTeam": "flipped-aurora فريق"
+    },
+    "commandMenu": {
+      "commandMenuNote": "أدخل الوظيفة التي تريد الوصول إليها بسرعة",
+      "close": "إغلاق",
+      "jump": "انتقال",
+      "operate": "تشغيل",
+      "lightTheme": "موضوع فاتح",
+      "darkTheme": "موضوع داكن",
+      "logout": "تسجيل الخروج"
+    },
+    "exportExcel": {
+      "exportExcel": {
+        "export": "تصدير",
+        "templateIdErr": "لم يتم تعيين معرف القالب للمكون"
+      },
+      "exportTemplate": {
+        "exportTemplate": "تحميل القالب",
+        "templateIdErr": "لم يتم تعيين معرف القالب للمكون"
+      },
+      "importExcel": {
+        "import": "استيراد",
+        "importSuccess": "تم الاستيراد بنجاح"
+      }
+    },
+    "selectFile": {
+      "uploadFiles": "رفع الملفات",
+      "uploadFailed": "فشل رفع الملفات "
+    },
+    "selectImage": {
+      "selectComponent": {
+        "image": "صورة",
+        "upload": "رفع"
+      },
+      "selectImage": {
+        "mediaLibrary": "مكتبة الوسائط",
+        "editFileNote": "انقر فوق \"اسم الملف/الملاحظات\" لتحرير اسم الملف أو محتوى التعليق.",
+        "enterFileName": "الرجاء إدخال اسم الملف أو الملاحظات",
+        "browserNotSupportVideo": "متصفحك لا يدعم تشغيل الفيديو",
+        "enterFileNameOrComment": "الرجاء إدخال اسم الملف أو الملاحظات",
+        "typeNotSupported": "استخدام النوع الحالي غير مدعم",
+        "delectFileConfirmation": "هل تريد حذف الملف؟"
+      }
+    },
+    "upload": {
+      "common": {
+        "normalUpload": "رفع عادي",
+        "fileFormatNote": "يمكن أن تكون الصور التي تم تحميلها بتنسيق jpg وpng وsvg وwebp فقط، كما يمكن أن تكون مقاطع الفيديو المحملة بتنسيق mp4 وwebm فقط!",
+        "videoSizeError": "لا يمكن أن يتجاوز حجم تحميل الفيديو 5 ميجابايت",
+        "imageSizeError": "لا يمكن أن يتجاوز حجم الصورة التي تم تحميلها غير المضغوطة 500 كيلو بايت، يرجى استخدام التحميل المضغوط"
+      },
+      "image": {
+        "compressedUpload": "رفع مضغوط",
+        "avatarImageFormatError": "يمكن رقع الصور الرمزية فقط بتنسيق jpg أو png!"
+      }
+    }
+  },
   "api": {
     "group": "مجموعة",
     "setupSuccess": "تم إعداد api بنجاح!"
@@ -103,7 +167,9 @@
     "undeleted": "تم إلغاء الحذف",
     "updateSuccess": "تم التحديث بنجاح!",
     "warning": "تحذير",
-    "yes": "نعم"
+    "yes": "نعم",
+    "cannotBeEmpty": "لا يمكن ان يكون فارغا",
+    "cancelModification": "إلغاء التعديلات"
   },
   "historyComponent": {
     "closeAll": "إغلاق الكل",
@@ -874,31 +940,6 @@
     "exportConditionError": "يرجى ملء شروط التصدير بالكامل",
     "completeAssociationError": "يرجى ملء شروط الارتباط بالكامل"
   }
-    }
-  },
-  "components": {
-    "commandMenu": {
-      "commandMenuNote": "أدخل الوظيفة التي تريد الوصول إليها بسرعة",
-      "close": "إغلاق",
-      "jump": "انتقال",
-      "operate": "تشغيل",
-      "lightTheme": "موضوع فاتح",
-      "darkTheme": "موضوع داكن",
-      "logout": "تسجيل الخروج"
-    },
-    "exportExcel": {
-      "exportExcel": {
-        "export": "تصدير",
-        "templateIdErr": "لم يتم تعيين معرف القالب للمكون"
-      },
-      "exportTemplate": {
-        "exportTemplate": "تحميل القالب",
-        "templateIdErr": "لم يتم تعيين معرف القالب للمكون"
-      },
-      "importExcel": {
-        "import": "استيراد",
-        "importSuccess": "تم الاستيراد بنجاح"
-      }
     }
   },
   "pinia": {

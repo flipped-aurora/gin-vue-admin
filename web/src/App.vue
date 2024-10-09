@@ -10,6 +10,7 @@
 import zh from 'element-plus/dist/locale/zh-cn.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
 import ar from 'element-plus/dist/locale/ar.mjs'
+import zh_tw from 'element-plus/dist/locale/zh-tw.mjs'
 import {useAppStore} from "@/pinia";
 import { useI18n } from 'vue-i18n'
 
@@ -20,6 +21,7 @@ defineOptions({
 
 const languages = {
   'zh-cn': zh,
+  'zh-TW': zh_tw,
   'en': en,
   'ar': ar
 }

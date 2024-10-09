@@ -24,6 +24,14 @@
         >中文
         </el-dropdown-item>
         <el-dropdown-item
+            :disabled="$i18n.locale==='zh-TW'"
+            command="zh-TW"
+        ><img
+            alt="繁體中文" class="w-8 mr-1"
+            src="@/assets/flags/zh-TW.png"
+        >繁體中文
+        </el-dropdown-item>
+        <el-dropdown-item
             :disabled="$i18n.locale==='ar'"
             command="ar"
         ><img

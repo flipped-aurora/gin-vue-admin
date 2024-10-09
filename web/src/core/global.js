@@ -31,10 +31,12 @@ const registerIcons = async(app) => {
       continue
     }
     const key = `${pluginName}${iconName}`
-    const iconComponent = createIconComponent(iconName)
+    // 开发模式下列出所有 svg 图标，方便开发者直接查找复制使用
+    import.meta.env.MODE == 'development' && console.log(`svg-icon-component: <${key} />`)
+    const iconComponent = createIconComponent(key)
     config.logs.push({
       'key': key,
-      'label': iconName,
+      'label': key,
     })
     app.component(key, iconComponent)
   }

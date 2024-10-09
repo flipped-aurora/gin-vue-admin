@@ -1,7 +1,4 @@
 import legacyPlugin from '@vitejs/plugin-legacy'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteLogo } from './src/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
@@ -9,7 +6,6 @@ import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import fullImportPlugin from './vitePlugin/fullImport/fullImport.js'
 import VueFilePathPlugin from './vitePlugin/componentName/index.js'
 import { svgBuilder } from 'vite-auto-import-svg'
 import { AddSecret } from './vitePlugin/secret'
@@ -98,31 +94,10 @@ export default ({
       }),
       vuePlugin(),
       svgBuilder('./src/assets/icons/'),
+      svgBuilder('./src/plugin/'),
       [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
       VueFilePathPlugin("./src/pathInfo.json")
     ],
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@use "@/style/element/index.scss" as *;`,
-        }
-      }
-    },
-  }
-
-  if (NODE_ENV === 'development') {
-    config.plugins.push(
-      fullImportPlugin()
-    )
-  } else {
-    config.plugins.push(AutoImport({
-        resolvers: [ElementPlusResolver()]
-      }),
-      Components({
-        resolvers: [ElementPlusResolver({
-          importStyle: 'sass'
-        })]
-      }))
   }
   return config
 }

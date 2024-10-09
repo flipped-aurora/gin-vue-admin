@@ -19,7 +19,7 @@
           align="left"
           :label="t('view.systemTools.autoCode.structChineseName')"
           min-width="150"
-          prop="structCNName"
+          prop="description"
         />
         <el-table-column
           align="left"

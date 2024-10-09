@@ -32,7 +32,6 @@ func RunWindowsServer() {
 	}
 
 	Router := initialize.Routers()
-	Router.Static("/form-generator", "./resource/page")
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
 	s := initServer(address, Router)
@@ -41,7 +40,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	%s gin-vue-admin
-	%s:v2.7.4
+	%s:v2.7.5
     加群方式:微信号：shouzi_1994 QQ群：470239250
 	项目地址：https://github.com/flipped-aurora/gin-vue-admin
 	插件市场:https://plugin.gin-vue-admin.com

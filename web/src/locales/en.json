@@ -180,11 +180,11 @@
       "sidebarItemHeight": "Sidebar Item Height",
       "configSaveNote1": "Please note that all configurations should be saved to local file ",
       "configSaveNote2": ", otherwise the configuration will be lost after refreshing the page.",
-      "copyConfig": "Copy json configuration",
+      "copyConfig": "Save",
       "normalMode": "Normal",
       "topMenuBarMode": "Top Menu Bar",
       "combinationMode": "Combination",
-      "copyConfigSuccess": "Copy successfully, please save to local file."
+      "copyConfigSuccess": "Save successfully"
     }
   },
   "login": {
@@ -752,17 +752,17 @@
     "libraryNote": "Note: You need to configure multiple databases in db-list in advance. If this item is empty, the automated code will be created using the gva main library (global.GVA_DB). If filled in, the code will be created for the specified library (global.MustGetGlobalDBByDBName(dbname))",
     "useGvaNote": "Note: The struct global.Model will automatically include primary key and soft delete related operations",
     "groupInfos": {
-      "useGvaStructure": "Use GVA Structure",
+      "useGvaStructure": "GVA Structure",
       "note1": "Note: Register the automatically generated API into the database",
-      "autoCreateApi": "Automatically Create API",
+      "autoCreateApi": "Create API",
       "note2": "Note: Register the automatically generated menu into the database",
-      "autoCreateMenu": "Automatically Create Menu",
+      "autoCreateMenu": "Create Menu",
       "note3": "Note: Automatically synchronize the database table structure, if not needed, you can choose to turn it off.",
-      "syncTableStructure": "Synchronize Table Structure",
+      "syncTableStructure": "Synchronize Table",
       "note4": "Note: Automatically generate button permission configuration within the page. If the button is not assigned in role management, the button will not be visible",
-      "createButtonPermissions": "Create Button Permissions",
+      "createButtonPermissions": "Button Permissions",
       "note5": "Note: Automatically add created_by, updated_by, deleted_by to the struct, making it easier for users to control resource permissions",
-      "createResourceIdentifier": "Create Resource Identifier",
+      "createResourceIdentifier": "Resource Identifier",
       "note6": "Note: Using the basic template will not generate any struct and CURD, only configure enter and other attributes to facilitate the development of non-CURD logic",
       "basicTemplate": "Basic Template"
     },

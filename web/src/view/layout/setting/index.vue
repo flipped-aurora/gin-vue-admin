@@ -172,19 +172,10 @@ const sideModes = [
 ];
 
 const saveConfig = async () => {
-  /*const input = document.createElement("textarea");
-  input.value = JSON.stringify(config.value);
-  // 添加回车
-  input.value = input.value.replace(/,/g, ",\n");
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("copy");
-  document.body.removeChild(input);
-  ElMessage.success(t('layout.setting.copyConfigSuccess'));
   const res = await setSelfSetting(config.value)
   if(res.code === 0){
     localStorage.setItem('originSetting', JSON.stringify(config.value))
-    ElMessage.success('保存成功')
+    ElMessage.success(t('layout.setting.copyConfigSuccess'))
     drawer.value = false
   }
 };

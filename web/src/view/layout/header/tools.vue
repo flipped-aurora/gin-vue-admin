@@ -83,7 +83,7 @@
       :disabled="appStore.theme === 'auto'"
     >
       <SelectLang @success="changeSuccess">
-          <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleLang">
+          <el-icon  class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid" @click="appStore.toggleLang">
             <language />
           </el-icon>
       </SelectLang>

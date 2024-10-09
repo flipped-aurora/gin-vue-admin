@@ -175,11 +175,11 @@
       "sidebarItemHeight": "ارتفاع عنصر الشريط الجانبي",
       "configSaveNote1": "يرجى ملاحظة أن جميع التكوينات يجب حفظها في الملف المحلي",
       "configSaveNote2": "، وإلا ستفقد التكوينات بعد تحديث الصفحة",
-      "copyConfig": "نسخ تكوين json",
+      "copyConfig": "حفظ",
       "normalMode": "الوضع العادي",
       "topMenuBarMode": "وضع شريط القائمة العلوي",
       "combinationMode": "وضع الجمع",
-      "copyConfigSuccess": "تم النسخ بنجاح، يرجى حفظه في الملف المحلي"
+      "copyConfigSuccess": "حفظ بنجاح"
     }
   },
   "login": {

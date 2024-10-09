@@ -181,11 +181,11 @@
       "sidebarItemHeight": "侧边栏子项高度",
       "configSaveNote1": "请注意，所有配置请保存到本地文件的",
       "configSaveNote2": " 文件中，否则刷新页面后会丢失配置",
-      "copyConfig": "复制配置json",
+      "copyConfig": "保存配置",
       "normalMode": "正常模式",
       "topMenuBarMode": "顶部菜单栏模式",
       "combinationMode": "组合模式",
-      "copyConfigSuccess": "复制成功, 请自行保存到本地文件中"
+      "copyConfigSuccess": "保存成功"
     }
   },
   "login": {

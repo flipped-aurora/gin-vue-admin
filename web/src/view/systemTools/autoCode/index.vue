@@ -41,7 +41,7 @@
           ref="getTableForm"
           :inline="true"
           :model="dbform"
-          label-width="120px"
+          label-width="140px"
       >
         <el-row class="w-full">
           <el-col :span="6">
@@ -155,7 +155,7 @@
           :inline="true"
           :model="form"
           :rules="rules"
-          label-width="170px"
+          label-width="200px"
       >
         <el-row class="w-full">
           <el-col :span="6">
@@ -470,7 +470,7 @@
           <el-table-column
               align="left"
               type="index"
-              width="60"
+              width="80"
           >
             <template #default>
               <el-icon class="cursor-grab drag-column">
@@ -482,13 +482,13 @@
               align="left"
               :label="t('view.systemTools.autoCode.fieldIndex')"
               type="index"
-              width="60"
+              width="80"
           />
           <el-table-column
               align="left"
               :label="t('view.systemTools.autoCode.primaryKey')"
               type="index"
-              width="60"
+              width="120"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.primaryKey"/>
@@ -528,6 +528,7 @@
               align="left"
               :label="t('view.systemTools.autoCode.required')"
               prop="require"
+              width="100"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.require"/>
@@ -574,6 +575,7 @@
               align="left"
               :label="t('view.systemTools.autoCode.importExport')"
               prop="excel"
+              width="160"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.excel"/>

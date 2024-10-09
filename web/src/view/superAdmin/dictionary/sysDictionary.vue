@@ -2,7 +2,7 @@
   <div>
     <warning-bar :title="t('view.dictionary.sysDictionary.dictNote')" />
     <div class="flex gap-4 p-2">
-      <div class="flex-none w-52 bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded p-4">
+      <div class="flex-none w-56 bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded p-4">
         <div class="flex justify-between items-center">
           <span class="text font-bold">{{ t('view.dictionary.sysDictionary.listOfDictionaries') }}</span>
           <el-button type="primary" @click="openDrawer">
@@ -34,7 +34,7 @@
     </div>
     <el-drawer
       v-model="drawerFormVisible"
-      size="30%"
+      size="34%"
       :show-close="false"
       :before-close="closeDrawer"
     >
@@ -51,12 +51,12 @@
           </div>
         </div>
       </template>
-      <el-form ref="drawerForm" :model="formData" :rules="rules" label-width="110px">
+      <el-form ref="drawerForm" :model="formData" :rules="rules" label-width="160px">
         <el-form-item :label="t('view.dictionary.sysDictionary.dictName')" prop="name">
           <el-input v-model="formData.name" :placeholder="t('view.dictionary.sysDictionary.enterDictName')" clearable :style="{ width: '100%' }" />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionary.dictNameEn')" prop="type">
-          <el-input v-model="formData.type" :placeholder="t('view.dictionary.sysDictionary.enterDictNameEn')" clearable :style="{ width: '100%' }" />
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictDataType')" prop="type">
+          <el-input v-model="formData.type" :placeholder="t('view.dictionary.sysDictionary.enterDictDataType')" clearable :style="{ width: '100%' }" />
         </el-form-item>
         <el-form-item :label="t('view.dictionary.sysDictionary.status')" prop="status" required>
           <el-switch v-model="formData.status" :active-text="t('general.enable')" :inactive-text="t('general.disable')" />

@@ -77,7 +77,7 @@
         ref="pkgForm"
         :model="form"
         :rules="rules"
-        label-width="80px"
+        label-width="120px"
       >
         <el-form-item
           :label="t('view.systemTools.autoPkg.packageName')"

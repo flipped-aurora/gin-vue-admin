@@ -25,7 +25,7 @@
         <el-table-column
           align="left"
           :label="t('view.superAdmin.menu.displayName')"
-          min-width="120"
+          min-width="160"
           prop="authorityName"
         >
           <template #default="scope">

@@ -136,6 +136,7 @@
     "enterDBUsername": "",
     "initNow": "立即初始化",
     "language": "语",
+    "defaultLanguage": "默认语言",
     "note": "初始化须知",
     "note1": "1.您需有用一定的VUE和GOLANG基础",
     "note2-1": "2.请您确认是否已经阅读过",

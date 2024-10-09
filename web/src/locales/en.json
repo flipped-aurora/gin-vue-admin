@@ -550,6 +550,7 @@
         "ipLimitTime": "IP Limit Time",
         "langFilesPath": "Language Files Address",
         "language": "Language",
+        "defaultLanguage" : "Default Language",
         "level": "Level",
         "localFileConfig": "Local File Configuration",
         "localFilePath": "Local File Path",

@@ -542,6 +542,7 @@
       "ipLimitTime": "وقت الحد من IP",
       "langFilesPath": "مسار ملفات اللغة",
       "language": "اللغة",
+      "defaultLanguage": "اللغة الإفتراضية",
       "level": "المستوى",
       "localFileConfig": "تكوين الملف المحلي",
       "localFilePath": "مسار الملف المحلي",

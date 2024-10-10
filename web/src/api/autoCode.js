@@ -140,20 +140,16 @@ export const pubPlug = (params) => {
 }
 
 
-export const llmAuto = (params) => {
-  let modeName = {
-    "xiaoqi": "小奇",
-    "xiaomiao": "小淼",
-  }
+export const llmAuto = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    params,
+    data,
     timeout: 1000 * 60 * 10,
     loadingOption:{
       lock: true,
       fullscreen:true,
-      text: `${modeName[params.mode]}正在思考，请稍候...`,
+      text: `小淼正在思考，请稍候...`,
     }
   })
 }
@@ -182,6 +178,3 @@ export const initAPI = (data) => {
     data
   })
 }
-
-
-

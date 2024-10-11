@@ -33,8 +33,8 @@
 
 3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)
 
-4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，以及日志和代码中所包含的版权声明信息。所需保留信息均为文案性质，不会影响任何业务内容，如决定商用且必须剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
-
+4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，以及日志和代码中所包含的版权声明信息。所需保留信息均为文案性质，不会影响任何业务内容，如决定商用【产生收益的商业行为均在商用行列】或者必须剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
+\
 <img src="https://qmplusimg.henrongyi.top/openSource/login.jpg" width="1000">
 
 <img src="https://qmplusimg.henrongyi.top/openSource/dashboard.jpg" width="1000">

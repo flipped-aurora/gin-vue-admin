@@ -312,7 +312,6 @@
       "pluginMarket": "سوق المكونات الإضافية",
       "ginDoc": "وثائق GIN",
       "gvaDoc": "وثائق GVA",
-      "pluginMarket": "سوق المكونات الإضافية",
       "githubRepo": "مستودع GitHub"
     },
     "contentData": "بيانات المحتوى",
@@ -552,6 +551,8 @@
       "emailContent": "محتوى البريد الإلكتروني",
       "sendTestEmail": "إرسال بريد إلكتروني تجريبي",
       "sendEmail": "إرسال بريد إلكتروني",
+      "sendSuccess": "تم الإرسال بنجاح",
+      "sentSuccessPleaseCheck": "تم الإرسال بنجاح، يرجى التحقق",
       "checkMessage": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
       "overwriteMessage": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/menu. هل تريد المتابعة؟",
       "overwriteWarning": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/api. هل تريد المتابعة؟",

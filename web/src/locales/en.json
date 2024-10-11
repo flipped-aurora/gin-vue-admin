@@ -320,7 +320,6 @@
       "pluginMarket": "Plugin Market",
       "ginDoc": "GIN Documentation",
       "gvaDoc": "GVA Documentation",
-      "pluginMarket": "Plugin Market",
       "githubRepo": "GitHub Repository"
     },
     "contentData": "Content Data",
@@ -560,6 +559,8 @@
       "emailContent": "Email Content",
       "sendTestEmail": "Send Test Email",
       "sendEmail": "Send Email",
+      "sendSuccess": "Send successfully",
+      "sentSuccessPleaseCheck": "Sent successfully, please check",
       "checkMessage": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
       "overwriteMessage": "Clicking will overwrite `server/plugin/{plugName}/initialize/menu`. Do you want to continue?",
       "overwriteWarning": "Clicking will overwrite `server/plugin/{plugName}/initialize/api`. Do you want to continue?",

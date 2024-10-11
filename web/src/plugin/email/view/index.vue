@@ -51,14 +51,14 @@ const form = reactive({
 const sendTestEmail = async() => {
   const res = await emailTest()
   if (res.code === 0) {
-    ElMessage.success('发送成功')
+    ElMessage.success(t('view.plugins.sendSuccess'))
   }
 }
 
 const sendEmail = async() => {
   const res = await emailTest()
   if (res.code === 0) {
-    ElMessage.success('发送成功,请查收')
+    ElMessage.success(t('view.plugins.sentSuccessPleaseCheck'))
   }
 }
 </script>

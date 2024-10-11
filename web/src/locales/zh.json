@@ -321,7 +321,6 @@
         "pluginMarket": "插件市场",
         "ginDoc": "GIN 文档",
         "gvaDoc": "GVA 文档",
-        "pluginMarket": "插件市场",
         "githubRepo": "github 仓库"
       },
       "contentData": "内容数据",
@@ -561,6 +560,8 @@
       "emailContent": "邮件内容",
       "sendTestEmail": "发送测试邮件",
       "sendEmail": "发送邮件",
+      "sendSuccess": "发送成功",
+      "sentSuccessPleaseCheck": "发送成功,请查收",
       "checkMessage": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
       "overwriteMessage": "点击后将会覆盖server下的/plugin/{plugName}/initialize/menu. 是否继续?",
       "overwriteWarning": "点击后将会覆盖server下的/plugin/{plugName}/initialize/api. 是否继续?",

@@ -144,7 +144,7 @@ export const llmAuto = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data,
+    data:{...data,mode:'ai'},
     timeout: 1000 * 60 * 10,
     loadingOption:{
       lock: true,
@@ -154,6 +154,15 @@ export const llmAuto = (data) => {
   })
 }
 
+
+export const butler = (data) => {
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    data:{...data,mode:'butler'},
+    timeout: 1000 * 60 * 10,
+  })
+}
 
 export const addFunc = (data) => {
   return service({

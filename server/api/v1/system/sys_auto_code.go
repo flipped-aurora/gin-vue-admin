@@ -1,7 +1,8 @@
 package system
 
 import (
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/goccy/go-json"
 	"io"
 	"strings"
@@ -106,7 +107,7 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 }
 
 func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
-	var llm systemReq.LLMAutoCode
+	var llm common.JSONMap
 	err := c.ShouldBindJSON(&llm)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -116,7 +117,8 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 		response.FailWithMessage("请先前往插件市场个人中心获取AiPath并填入config.yaml中", c)
 		return
 	}
-	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", "api/chat/ai")
+
+	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("api/chat/%s", llm["mode"]))
 	res, err := request.HttpRequest(
 		path,
 		"POST",

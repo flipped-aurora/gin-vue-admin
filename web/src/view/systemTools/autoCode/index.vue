@@ -22,7 +22,7 @@
             <template #content>
               <div>【完全免费】前往<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">插件市场个人中心</a>申请AIPath，填入config.yaml的ai-path属性即可使用。</div>
             </template>
-            <el-button type="primary" @click="llmAutoFunc('xiaomiao')">
+            <el-button type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
                 <ai-gva />
               </el-icon> 小淼
@@ -808,7 +808,7 @@ const handleBlur = () => {
 
 const handleKeydown = (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-    llmAutoFunc('xiaomiao');
+    llmAutoFunc();
   }
 };
 
@@ -822,12 +822,12 @@ const getOnlyNumber = () => {
 
 const prompt = ref("")
 
-const llmAutoFunc = async (mode) =>{
+const llmAutoFunc = async () =>{
   if (!prompt.value) {
     ElMessage.error('请输入描述')
     return
   }
-  const res = await llmAuto({prompt:prompt.value,mode:mode})
+  const res = await llmAuto({prompt:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)

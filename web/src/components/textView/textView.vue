@@ -16,7 +16,12 @@ const props = defineProps({
 
 <template>
 <div>
-  {{props.content}}
+  <el-scrollbar height="98%">
+    <div class="code-container">
+      <pre id="code-pre" class="code-pre">{{props.content}}</pre>
+    </div>
+
+  </el-scrollbar>
 </div>
 </template>
 

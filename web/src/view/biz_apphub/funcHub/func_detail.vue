@@ -4,10 +4,14 @@ import { useRoute } from 'vue-router';
 import {findBizCloudFunction} from "@/api/biz_apphub/bizCloudFunction";
 import axios from "axios";
 import UploadQiNiu from "@/components/upload_oss/UploadQiNiu.vue";
-import {Check, Delete, Edit, Search, Star} from "@element-plus/icons-vue";
-import { formatDate  } from '@/utils/format'
 import {ElMessage} from "element-plus";
 import TableData from "@/components/funcViews/tableData.vue";
+import TextView from "@/components/textView/textView.vue";
+import Func_detail_right from "@/view/biz_apphub/funcHub/func_detail_right.vue";
+import Func_info from "@/view/biz_apphub/funcHub/func_info.vue";
+import Func_deader from "@/view/biz_apphub/funcHub/func_deader.vue";
+import Func_param_desc from "@/view/biz_apphub/funcHub/func_param_desc.vue";
+import Func_param_mock_data from "@/view/biz_apphub/funcHub/func_param_mock_data.vue";
 const route=useRoute()
 const func =reactive({detail:{}})
 const funcDefine=ref("")
@@ -15,10 +19,6 @@ const fileList=ref([])
 const files=ref("")
 const lookUpValue=ref("")
 const lookUpTitle=ref("")
-
-
-
-
 const centerDialogVisible=ref(false)
 const videoDialogVisible=ref(false)
 const dialogTableVisible=ref(false)
@@ -129,6 +129,7 @@ const funcCall=async ()=> {
       }
   }
 }
+  out_tab.value="res"
 }
   onMounted(() => {
 
@@ -162,13 +163,7 @@ const funcCall=async ()=> {
     funcDefine.value = func.detail.code_name + "(" + inp.join(",") + ")" + "->" + "(" + outp.join(",") + ")"
   }
 
-  function getTags() {
-    if (func.detail.tags) {
-      return func.detail.tags.split(";")
-    }
-    return []
 
-  }
 
   function lookUp(v) {
     centerDialogVisible.value = true
@@ -182,13 +177,9 @@ const funcCall=async ()=> {
     ElMessage.success("复制成功")
   }
 
-  function getLookUpTitle() {
-    // centerDialogVisible.value=true
-    return lookUpValue.value
-  }
+const out_tab = ref('mock_data')
+const in_tab = ref('run')
 
-const select = ref('')
-const input3 = ref('')
 </script>
 
 <template>
@@ -196,41 +187,7 @@ const input3 = ref('')
   <div class="common-layout">
     <el-container>
       <el-header style="height: 70px">
-
-        <div style="display: flex;justify-content: center;align-items:start" class="mt-4">
-          <div style="flex: 2;display: flex;align-items: start;">
-            <el-text style="font-size: 24px" class="mx-1" type="primary">云函数</el-text>
-
-          </div>
-            <div style="flex: 5">
-              <el-input
-                v-model="input3"
-                style="max-width: 600px"
-                placeholder="请输入要搜索的内容"
-                class="input-with-select"
-            >
-              <template #prepend>
-                <el-select v-model="select" placeholder="云函数" style="width: 115px">
-                  <el-option label="Restaurant" value="1" />
-                  <el-option label="Order No." value="2" />
-                  <el-option label="Tel" value="3" />
-                </el-select>
-              </template>
-              <template #append>
-                <el-button :icon="Search" />
-              </template>
-            </el-input></div>
-          <div style="display: flex;flex: 2;justify-content: end;align-items:start">
-            <div><el-avatar :size="30" src="https://img1.baidu.com/it/u=1090452517,2487311686&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=501" /></div>
-              <div style="display: flex;justify-content: center;align-items: center;margin-left: 10px">
-                <Edit style="width: 30px; height: 30px;" />
-                <span>发布函数</span>
-              </div>
-<!--            </el-icon>-->
-
-          </div>
-        </div>
-
+        <func_deader></func_deader>
       </el-header>
       <el-container>
 
@@ -238,112 +195,97 @@ const input3 = ref('')
           <el-scrollbar>
             <div>
 
-              <el-descriptions
-                  class="margin-top"
-                  title="函数详情"
-                  :column="3"
-                  border
-              >
-                <template #extra>
-                </template>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      中文名
-                    </div>
-                  </template>
-                  {{func.detail.cn_name}}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      函数名称
-                    </div>
-                  </template>
-                  {{func.detail.code_name}}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      函数定义
-                    </div>
-                  </template>
-                  {{funcDefine}}
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      归属
-                    </div>
-                  </template>
-                  <el-tag size="small">{{func.detail.classify}}</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item>
-                  <template #label>
-                    <div class="cell-item">
-                      函数介绍
-                    </div>
-                  </template>
-                  {{func.detail.content}}
-                </el-descriptions-item>
-              </el-descriptions>
-              <h2>
-                <div style="">函数名称：{{func.detail.cn_name}}</div>
-              </h2>
+              <func_info v-show="func.detail.param" :func="func"></func_info>
+
               <el-form ref="form" reset-type="initial" style="max-width: 100%">
-                <el-tabs type="border-card">
-                  <el-tab-pane label="运行">
-                    <span>输入参数</span>
-                    <div style="padding: 24px 24px 24px 0">
-                      <!--            <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc" :label-width="150">-->
-                      <el-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc">
-                        <upload-qi-niu :uploaded-files="v.files" v-if="v.type==='file'" :title="v.desc" oss-dir="cloud_func/param_in"></upload-qi-niu>
-                        <el-input v-model="v.value" v-else-if="v.type!=='file'&& v.input_mode==='text_field'||v.input_mode==='line'" style="width: 80%"
-                                  :autosize="{ minRows: 3, maxRows: 5 }"
-                                  :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
-                                  show-word-limit
-                                  type="textarea"/>
-                        <p style="margin-left: 10px">
+                <h2>输入参数</h2>
+<!--                <el-tabs type="border-card">-->
+                <el-tabs v-model="in_tab" type="card">
+
+                  <el-tab-pane name="info" label="参数介绍">
+                    <func_param_desc :func="func" type="in"></func_param_desc>
+                  </el-tab-pane>
+                  <el-tab-pane name="mock_data" label="输入示例">
+                    <func_param_mock_data :func="func" type="in"></func_param_mock_data>
+                  </el-tab-pane>
+                  <el-tab-pane name="run"  label="运行函数">
+                    <div style="padding: 24px 24px 24px 24px">
+                      <el-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc" :required="v.required==='必填'">
+                        <div v-if="v.type==='file'">
+                          <upload-qi-niu :uploaded-files="v.files"  :title="v.desc" oss-dir="cloud_func/param_in"></upload-qi-niu>
+                        </div>
+
+                        <div style="width: 100%" v-else-if="v.type==='string'">
+                          <p style="margin-left: 10px">
+                          <el-input v-model="v.value"  style="width: 80%"
+                                    :autosize="{ minRows: 1, maxRows: 5 }"
+                                    :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
+                                    show-word-limit
+
+                                    type="textarea"/>
+
                             <el-button type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
-                          <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
-                        </p>
+                            <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
+                          </p>
+                        </div>
+
 
                       </el-form-item>
 
                       <!--todo 上面是输入参数-->
                       <t-button @click="funcCall" style="margin: 10px" block theme="primary" variant="base">运行</t-button>
-                      <span>输出结果</span>
-                      <!--todo 下面是输出参数-->
-                      <!--            <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc" :label-width="150">-->
-                      <el-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc" >
 
-                        <div v-if="v.type==='file'">
-                          <span style="margin: 10px">{{v.value.path}}</span>
-                          <el-link v-if="v.value.path" :href="v.value.path" target="_blank" type="primary">下载</el-link>
-                        </div>
-                        <div v-else-if="v.type==='string'">
-                          <el-input v-model="v.value"  style="width: 80%"
-                                    :autosize="{ minRows: 3, maxRows: 5 }"
-                                    :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
-                                    show-word-limit
-                                    type="textarea"/>
-                        </div>
-
-                        <div v-else-if="v.type==='table'">
-                          <el-button @click="showTable(v)" type="primary">查看表格</el-button>
-                        </div>
-                        <p style="margin-left: 10px">
-                          <el-button v-if="v.type==='string'" type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
-                          <el-button v-if="v.type==='string'" type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
-                        </p>
-
-
-                      </el-form-item>
                     </div>
 
                   </el-tab-pane>
-                  <el-tab-pane label="案例">Config</el-tab-pane>
+
+
                 </el-tabs>
+
+                <h2>输出结果</h2>
+<!--                <el-tabs  v-model="out_tab" type="border-card">-->
+                <el-tabs  v-model="out_tab" type="card">
+
+                <el-tab-pane  label="参数介绍" name="info">
+                  <func_param_desc :func="func" type="out"></func_param_desc>
+                </el-tab-pane>
+                <el-tab-pane label="输出示例" name="mock_data">
+                  <func_param_mock_data :func="func" type="out"></func_param_mock_data>
+                </el-tab-pane>
+                <el-tab-pane label="输出结果" name="res">
+                  <div style="padding: 24px 24px 24px 24px">
+                    <el-form-item  v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc"  >
+                      <div v-if="v.type==='file'">
+                        <span style="margin: 10px">{{v.value.path}}</span>
+                        <el-link v-if="v.value.path" :href="v.value.path" target="_blank" type="primary">下载</el-link>
+                      </div>
+                      <div style="width: 100%;" v-else-if="v.type==='string'">
+                        <p>
+                          <el-input  v-model="v.value"
+                                     style="width: 80%"
+                                     :autosize="{ minRows: 1, maxRows: 5 }"
+                                     :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
+                                     show-word-limit
+                                     type="textarea"/>
+<!--                          <p style="margin-left: 10px;width: 15%">-->
+                            <el-button v-if="v.type==='string'" type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
+                            <el-button v-if="v.type==='string'" type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
+<!--                          </p>-->
+                        </p>
+
+                      </div>
+
+                      <div v-else-if="v.type==='table'">
+                        <el-button @click="showTable(v)" type="primary">查看表格</el-button>
+                      </div>
+
+
+                      <t-button @click="funcCall" style="margin: 10px" block theme="primary" variant="base">运行</t-button>
+                    </el-form-item>
+                  </div>
+                </el-tab-pane>
+                </el-tabs>
+
 
 
               </el-form>
@@ -355,152 +297,16 @@ const input3 = ref('')
         </el-main>
 <!--        右侧-->
         <el-aside width="300px">
-
-          <div style="padding: 20px 5px 5px 0px">
-            <div>
-              <el-row>
-                <el-col :span="6"><div class="grid-content ep-bg-purple" />
-                  <el-avatar :size="50" src="https://img1.baidu.com/it/u=1465664392,2808406094&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=800" />
-                </el-col>
-                <el-col :span="18">
-                  <div>
-                    <span style="font-size: 18px">就爱自娱自乐</span>
-                    <!--                  <p>出生在中国，爱好写代码</p>-->
-                    <p style="margin: 6px 0px">
-                      <el-tooltip
-                          class="box-item"
-                          effect="dark"
-                          content="出生在中国，爱好写代码，一个00后的独立开发者"
-                          placement="top-start"
-                      >
-                        <el-text truncated size="small" class="mx-1">出生在中国，爱好写代码，一个00后的独立开发者</el-text>
-                      </el-tooltip>
-                    </p>
-                  </div>
-                </el-col>
-              </el-row>
-
-              <el-row>
-                <el-col :span="6"><div class="grid-content ep-bg-purple" />
-                </el-col>
-                <el-col :span="9">
-                  <el-button size="small" type="primary">+ 关注 988</el-button>
-                </el-col>
-                <el-col :span="9">
-                  <el-button size="small" type="primary">打赏项目</el-button>
-                </el-col>
-              </el-row>
-            </div>
-
-            <el-divider border-style="double" />
-            <h2>
-              {{func.detail.cn_name}}
-            </h2>
-            <el-row>
-              <el-col :span="6">
-                <div>{{func.detail.classify}}</div>
-              </el-col>
-              <el-col :span="6">
-                <div style="display: flex;align-items: center;">
-                  <View  style="height: 16px"/>
-                  <span style="margin-left: 2px">1200</span>
-                </div>
-              </el-col>
-
-              <el-col :span="12"><div>
-<!--                CreatedAt-->
-                {{ formatDate(func.detail.CreatedAt) }}
-              </div></el-col>
-            </el-row>
-            <h3>函数简介</h3>
-            <el-text size="small" class="mx-1">{{func.detail.content}}</el-text>
-
-<!--            <span>{{func.detail.content}}</span>-->
-            <h3>相关Tag</h3>
-            <div><el-tag effect="plain" style="margin: 3px" :key="i" v-for="(v,i) in getTags()">{{v}}</el-tag></div>
-          </div>
-
-          <el-row style="margin-top: 10px">
-            <el-col :span="6">
-              <div style="display: flex;align-items: center;">
-                <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="300星标"
-                    placement="top-start"
-                >
-                <Star style="height: 30px"/>
-                </el-tooltip>
-                <span style="margin-left: 3px">200</span>
-              </div>
-            </el-col>
-            <el-col :span="6">
-
-              <div style="display: flex;align-items: center;">
-<!--                <Coin style="height: 30px"/><span style="margin-left: 3px">300</span>-->
-                <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="300打赏"
-                    placement="top-start"
-                >
-                  <Coin style="height: 30px"/>
-                </el-tooltip>
-                <span style="margin-left: 3px">200</span>
-              </div>
-
-            </el-col>
-
-            <el-col :span="6"><div>
-
-              <div style="display: flex;align-items: center;">
-<!--                <el-icon><Cpu /></el-icon>-->
-<!--                <CollectionTag style="height: 30px"/><span style="margin-left: 3px">300</span>-->
-
-                <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="300收藏"
-                    placement="top-start"
-                >
-                  <CollectionTag style="height: 30px"/>
-                </el-tooltip>
-                <span style="margin-left: 3px">200</span>
-              </div>
-            </div>
-            </el-col>
-
-            <el-col :span="6"><div>
-
-              <div style="display: flex;align-items: center;">
-<!--                <Cpu style="height: 30px"/><span style="margin-left: 3px">300</span>-->
-
-                <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="300次运行"
-                    placement="top-start"
-                >
-                  <Cpu style="height: 30px"/>
-                </el-tooltip>
-                <span style="margin-left: 3px">200</span>
-              </div>
-            </div>
-            </el-col>
-
-          </el-row>
+          <func_detail_right :func="func"></func_detail_right>
         </el-aside>
       </el-container>
     </el-container>
 
 <!--    预览文本-->
     <el-drawer direction="ltr" v-model="centerDialogVisible" :title="lookUpTitle" size="80%" center>
-      <el-scrollbar height="98%">
-        <div class="code-container">
-          <pre id="code-pre" class="code-pre">{{lookUpValue}}</pre>
-        </div>
-
-      </el-scrollbar>
+      <text-view :content="lookUpValue">
+        {{lookUpValue}}
+      </text-view>
     </el-drawer>
 
     <el-dialog v-model="videoDialogVisible" title="静态文件" width="80%" center>
@@ -510,10 +316,7 @@ const input3 = ref('')
 
 
     <el-dialog v-model="dialogTableVisible" title="111" width="800">
-
-
       <table-data :table-data="getTableData()"></table-data>
-
     </el-dialog>
 
 

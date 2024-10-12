@@ -119,34 +119,39 @@
 
           <el-table-column align="left" label="函数中文名" prop="cn_name" width="120" />
           <el-table-column align="left" label="函数英文标识" prop="code_name" width="120" />
-          <el-table-column align="left" label="函数分类" prop="classify" width="120" />
-        <el-table-column align="left" label="云函数执行方式" prop="exec_mode" width="120">
-            <template #default="scope">
-            {{ filterDict(scope.row.exec_mode,cloud_func_exec_modeOptions) }}
-            </template>
-        </el-table-column>
+
+
           <el-table-column align="left" label="函数标题" prop="title" width="120" />
-          <el-table-column align="left" label="函数详细介绍" prop="content" width="120" />
-        <el-table-column align="left" label="内容类型" prop="content_type" width="120">
-            <template #default="scope">
-            {{ filterDict(scope.row.content_type,ContentTypeOptions) }}
-            </template>
-        </el-table-column>
-          <el-table-column label="函数参数" prop="param" width="200">
-              <template #default="scope">
-                  [JSON]
-              </template>
-          </el-table-column>
+          <el-table-column align="left" show-overflow-tooltip label="函数详细介绍" prop="content" width="200" />
+
+
+          <el-table-column align="left" label="函数分类" prop="classify" width="120" />
         <el-table-column align="left" label="是否公开" prop="is_public" width="120">
             <template #default="scope">
             {{ filterDict(scope.row.is_public,bool_statusOptions) }}
             </template>
         </el-table-column>
+          <el-table-column align="left" label="云函数执行方式" prop="exec_mode" width="120">
+            <template #default="scope">
+              {{ filterDict(scope.row.exec_mode,cloud_func_exec_modeOptions) }}
+            </template>
+          </el-table-column>
+          <el-table-column align="left" label="内容类型" prop="content_type" width="120">
+            <template #default="scope">
+              {{ filterDict(scope.row.content_type,ContentTypeOptions) }}
+            </template>
+          </el-table-column>
+
           <el-table-column align="left" label="标签" prop="tags" width="120" />
           <el-table-column sortable align="left" label="浏览量" prop="views" width="120" />
           <el-table-column align="left" label="执行次数" prop="exec_count" width="120" />
           <el-table-column align="left" label="收藏数量" prop="coll" width="120" />
           <el-table-column align="left" label="点赞量" prop="like" width="120" />
+          <el-table-column label="函数参数" prop="param" width="80">
+            <template #default="scope">
+              [JSON]
+            </template>
+          </el-table-column>
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
             <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
@@ -292,41 +297,47 @@
                 <div  style="width: 100%">
                   <el-row style="width: 100%" :gutter="20">
                     <el-col :span="2">
-                      <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
+                      <el-input v-model="field.code" type="textarea" placeholder="参数英文名称"></el-input>
                     </el-col>
                     <el-col :span="3">
-                      <el-input v-model="field.desc" placeholder="参数中文名称"></el-input>
+                      <el-input v-model="field.desc" type="textarea" placeholder="参数中文名称"></el-input>
                     </el-col>
-                    <el-col :span="5">
-                      <el-input v-model="field.note" placeholder="参数注释"></el-input>
+                    <el-col :span="4">
+                      <el-input v-model="field.note" type="textarea" placeholder="参数注释"></el-input>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-select v-model="field.required" placeholder="是否必填" >
+                        <el-option  label="必填" value="必填" />
+                        <el-option  label="非必填" value="非必填" />
+                      </el-select>
                     </el-col>
 
                     <el-col v-if="field.type==='string' || field.type==='number'" :span="6">
-                      <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
+                      <el-input v-model="field.mock_data" type="textarea" placeholder="示例数据"></el-input>
                     </el-col>
-                    <el-col v-if="field.type==='string'" :span="6">
-                      <el-input v-model="field.text_limit" placeholder="限制字符数：例如：120，为空不限制"></el-input>
+                    <el-col v-if="field.type==='string'" :span="3">
+                      <el-input v-model="field.text_limit" type="textarea" placeholder="限制字符数：例如：120，为空不限制"></el-input>
                     </el-col>
                     <el-col v-if="field.type==='number'" :span="6">
-                      <el-input v-model="field.number_limit" placeholder="限制数值范围：例如：1-100，为空不限制"></el-input>
+                      <el-input v-model="field.number_limit" type="textarea" placeholder="限制数值范围：例如：1-100，为空不限制"></el-input>
                     </el-col>
                     <el-col :span="6" v-if="field.type==='muti_select' || field.type==='sige_select'" >
-                      <el-input v-model="field.options" placeholder="分号分割多个选项，例如：压缩;加水印;加密"></el-input>
+                      <el-input v-model="field.options" type="textarea" placeholder="分号分割多个选项，例如：压缩;加水印;加密"></el-input>
                     </el-col>
 
                     <el-col :span="6" v-if="field.type==='muti_select'" >
-                      <el-input v-model="field.select_options" placeholder="默认选项;多个请用分号分割;例如：压缩;加水印"></el-input>
+                      <el-input v-model="field.select_options" type="textarea" placeholder="默认选项;多个请用分号分割;例如：压缩;加水印"></el-input>
                     </el-col>
 
                     <el-col :span="6" v-if="field.type==='sige_select'" >
-                      <el-input v-model="field.select_options" placeholder="默认选项，例如：压缩"></el-input>
+                      <el-input v-model="field.select_options" type="textarea" placeholder="默认选项，例如：压缩"></el-input>
                     </el-col>
 
                     <el-col :span="6" v-if="field.type==='file'" >
-                      <el-input v-model="field.file_type_limit" placeholder="限制文件类型，例如：jpg;png， 为空不限制"></el-input>
+                      <el-input v-model="field.file_type_limit" type="textarea" placeholder="限制文件类型，例如：jpg;png， 为空不限制"></el-input>
                     </el-col>
                     <el-col :span="6" v-if="field.type==='file'" >
-                      <el-input v-model="field.file_size_limit" placeholder="限制文件大小(单位kb)，例如：4096，为空不限制"></el-input>
+                      <el-input v-model="field.file_size_limit" type="textarea" placeholder="限制文件大小(单位kb)，例如：4096，为空不限制"></el-input>
                     </el-col>
 
                     <el-col :span="1">
@@ -351,35 +362,35 @@
           <div  style="width: 100%">
             <el-row style="width: 100%" :gutter="20">
               <el-col :span="2">
-                <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
+                <el-input v-model="field.code" type="textarea" placeholder="参数英文名称"></el-input>
               </el-col>
               <el-col :span="3">
-                <el-input v-model="field.desc" placeholder="参数中文"></el-input>
+                <el-input v-model="field.desc" type="textarea" placeholder="参数中文"></el-input>
               </el-col>
               <el-col :span="5">
-                <el-input v-model="field.note" placeholder="参数注释"></el-input>
+                <el-input v-model="field.note" type="textarea" placeholder="参数注释"></el-input>
               </el-col>
 
               <el-col :span="6" v-if="field.type==='string' || field.type==='number'" >
-                <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
+                <el-input v-model="field.mock_data" type="textarea" placeholder="示例数据"></el-input>
               </el-col>
 
 
               <el-col v-if="field.type==='string'" :span="6">
-                <el-input v-model="field.text_limit" placeholder="限制字符数：例如：120，为空不限制"></el-input>
+                <el-input v-model="field.text_limit" type="textarea" placeholder="限制字符数：例如：120，为空不限制"></el-input>
               </el-col>
 
               <el-col :span="6" v-if="field.type==='muti_select' || field.type==='sige_select'" >
-                <el-input v-model="field.options" placeholder="分号分割多个选项，例如：压缩;加水印;加密"></el-input>
+                <el-input v-model="field.options" type="textarea" placeholder="分号分割多个选项，例如：压缩;加水印;加密"></el-input>
               </el-col>
 
 
               <el-col :span="6" v-if="field.type==='muti_select'" >
-                <el-input v-model="field.select_options" placeholder="默认选项;多个请用分号分割;例如：压缩;加水印"></el-input>
+                <el-input v-model="field.select_options" type="textarea" placeholder="默认选项;多个请用分号分割;例如：压缩;加水印"></el-input>
               </el-col>
 
               <el-col :span="6" v-if="field.type==='sige_select'" >
-                <el-input v-model="field.select_options" placeholder="默认选项，例如：压缩"></el-input>
+                <el-input v-model="field.select_options" type="textarea" placeholder="默认选项，例如：压缩"></el-input>
               </el-col>
 
               <el-col :span="1">
@@ -538,6 +549,7 @@ const addInField = () => {
     mode: 'in',
     mock_data: '',
     input_mode: 'text_field',
+    required:"必填",
     select_options:"",
     file_size_limit:"",
     file_type_limit:"",
@@ -554,6 +566,7 @@ const addOutField = () => {
     code: '',
     desc: '',
     mode: 'out',
+    required:"必填",
     mock_data: '',
     select_options:"",
     input_mode: 'text_field',

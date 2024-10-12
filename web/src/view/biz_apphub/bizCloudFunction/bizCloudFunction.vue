@@ -286,7 +286,7 @@
 
     <el-dialog width="95%" v-model="setParamDialogVisible" title="配置函数参数">
 
-      <h5>输入参数</h5>
+      <h3>输入参数</h3>
      <el-form  :model="formData">
               <el-form-item  v-for="(field,idx) in formData.param" v-show="field.mode==='in'" :key="field.code">
                 <div  style="width: 100%">
@@ -342,8 +342,10 @@
             </el-form>
 
 
-      <h5>输出参数</h5>
-      <el-form  :model="formData">
+      <h3>输出参数</h3>
+
+      <p v-if="isOutStaticFile" style="text-align: center">输出静态文件</p>
+      <el-form v-else  :model="formData">
 
         <el-form-item v-for="(field,idx) in formData.param" v-show="field.mode==='out'" :key="field.code">
           <div  style="width: 100%">
@@ -390,9 +392,12 @@
           </div>
         </el-form-item>
       </el-form>
+
+
+      <h3>添加参数</h3>
       <div style="margin: 20px 0px">
         <p style="text-align: center">
-          <el-radio-group v-model="param_type">
+          <el-radio-group v-model="param_in_type">
           <el-radio value="string" size="large">文本</el-radio>
           <el-radio value="number" size="large">数值</el-radio>
           <el-radio value="file" size="large">文件</el-radio>
@@ -401,7 +406,18 @@
         </el-radio-group>
         </p>
         <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="addInField">添加输入参数</el-button></p>
-        <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="addOutField">添加输出参数</el-button></p>
+
+        <p style="text-align: center">
+          <el-radio-group v-model="param_out_type">
+            <el-radio value="string" size="large">文本</el-radio>
+            <el-radio value="number" size="large">数值</el-radio>
+            <el-radio value="file" size="large">文件</el-radio>
+            <el-radio value="table" size="large">表格</el-radio>
+          </el-radio-group>
+        </p>
+        <p v-if="isOutStaticFile" style="margin: 10px 10px"><el-button style="width: 100%" type="primary"  disabled  @click="addOutField">添加输出参数</el-button></p>
+        <p v-else style="margin: 10px 10px"><el-button style="width: 100%" type="primary"  @click="addOutField">添加输出参数</el-button></p>
+        <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="addOutStaticFile">{{isOutStaticFile?"取消输出静态文件":"输出静态文件"}}</el-button></p>
       </div>
 
 <!--      <div style="margin: 20px 0px">-->
@@ -467,6 +483,8 @@ function getParamType(field) {
     return "多选框"
   }else if(field.type==="sige_select"){
     return "单选框"
+  }else if(field.type==="table"){
+    return "表格"
   }
   // <el-option label="字符串" value="string"></el-option>
   // <el-option label="数值" value="number"></el-option>
@@ -476,9 +494,11 @@ function getParamType(field) {
 }
 
 // const in_type=ref("")
-const param_type = ref("string")
+const param_in_type = ref("string")
+const param_out_type = ref("string")
 // const out_type=ref("")
 const setParamDialogVisible = ref(false)
+const isOutStaticFile = ref(false)
 const setApiDialogVisible = ref(false)
 const setParam = function () {
   setParamDialogVisible.value = true
@@ -511,6 +531,7 @@ function getParam(){
   return formData.value.code_name+"("+inp.join(",")+")"+"->"+"("+outp.join(",")+")"
 }
 const addInField = () => {
+
   formData.value.param.push({
     code: '',
     desc: '',
@@ -523,7 +544,7 @@ const addInField = () => {
     number_limit:"",
     text_limit:"",
     options:"",
-    type: param_type.value,
+    type: param_in_type.value,
     value: ''
   });
 };
@@ -537,11 +558,37 @@ const addOutField = () => {
     select_options:"",
     input_mode: 'text_field',
     options:"",
-    type: param_type.value,
+    type: param_out_type.value,
     value: ''
   });
 };
+
+const addOutStaticFile = () => {
+  let flag=!isOutStaticFile.value
+  isOutStaticFile.value=flag
+  if (!flag){
+    formData.value.param.filter(param=>{
+      return param.mode!=="out_static_file"
+    })
+  }else {
+    formData.value.param.push({
+      code: '',
+      desc: '',
+      mode: 'out_static_file',
+      mock_data: '',
+      select_options:"",
+      options:"",
+      type: "static_file",
+      value: ''
+    });
+  }
+
+};
+
 const removeField = (index) => {
+  if (formData.value.param[index].type==="static_file"){
+    isOutStaticFile.value=false
+  }
   formData.value.param.splice(index, 1);
 };
 

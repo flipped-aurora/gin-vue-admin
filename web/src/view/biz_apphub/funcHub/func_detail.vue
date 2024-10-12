@@ -7,6 +7,7 @@ import UploadQiNiu from "@/components/upload_oss/UploadQiNiu.vue";
 import {Check, Delete, Edit, Search, Star} from "@element-plus/icons-vue";
 import { formatDate  } from '@/utils/format'
 import {ElMessage} from "element-plus";
+import TableData from "@/components/funcViews/tableData.vue";
 const route=useRoute()
 const func =reactive({detail:{}})
 const funcDefine=ref("")
@@ -14,17 +15,46 @@ const fileList=ref([])
 const files=ref("")
 const lookUpValue=ref("")
 const lookUpTitle=ref("")
+
+
+
+
 const centerDialogVisible=ref(false)
 const videoDialogVisible=ref(false)
+const dialogTableVisible=ref(false)
+const dialogTableDataList=reactive({})
+const viewTableField=ref("")
+const runData=ref({
+  data:{}
+}) //运行后的结果
+
 const assetsSrc=ref("")
 const assetsType=ref("")
+
+function isDisabledShowTable(param){
+  console.log("runData.data:",runData.data)
+  for (let i = 0; i < runData.data; i++) {
+    if (runData.data[param.code]){
+      return false
+    }
+  }
+  return true
+}
+
+function showTable(param){
+  console.log("runData.data[param.code]",runData.data[param.code])
+  viewTableField.value=param.code
+  dialogTableDataList[param.code]=runData.data[param.code]
+  dialogTableVisible.value=true
+}
+
+function getTableData(){
+  return runData.data[viewTableField.value]
+}
+
+
 const funcCall=async ()=> {
 
-
-  console.log("fileList", fileList.value)
-  console.log("files", files.value)
-  console.log("func detail", func.detail.param)
-  console.log("func detail", func.detail)
   // return
   let bd = reactive({})
   for (let i = 0; i < func.detail.param.length; i++) {
@@ -37,8 +67,13 @@ const funcCall=async ()=> {
       }
     }
   }
+
+
   if (func.detail.api_config.method === "post") {
     let res = await axios.post(func.detail.api_config.path, bd)
+    if (res.data.data){
+      runData.data=res.data.data
+    }
     if (res.data.code === 0) {
       for (const key in res.data.data) {
         if (res.data.data.hasOwnProperty(key)) {
@@ -59,7 +94,9 @@ const funcCall=async ()=> {
     let res = await axios.get(func.detail.api_config.path, {
       params: bd
     })
-
+    if (res.data.data){
+      runData.data=res.data.data
+    }
 
     const contentType = res.headers['content-type'];
     if (contentType && contentType.includes('image/')) {
@@ -141,10 +178,6 @@ const funcCall=async ()=> {
 
 
   function copy(v) {
-    // centerDialogVisible.value=true
-    // lookUpTitle.value=v.desc
-    // lookUpValue.value=v.value
-
     navigator.clipboard.writeText(v.value);
     ElMessage.success("复制成功")
   }
@@ -271,8 +304,8 @@ const input3 = ref('')
                                   show-word-limit
                                   type="textarea"/>
                         <p style="margin-left: 10px">
-                            <el-button type="primary" @click="lookUp(v)" key="预览" text >预览</el-button>
-                          <el-button type="success" @click="copy(v)" key="复制" text >复制</el-button>
+                            <el-button type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
+                          <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
                         </p>
 
                       </el-form-item>
@@ -288,23 +321,20 @@ const input3 = ref('')
                           <span style="margin: 10px">{{v.value.path}}</span>
                           <el-link v-if="v.value.path" :href="v.value.path" target="_blank" type="primary">下载</el-link>
                         </div>
-                        <el-input v-model="v.value" v-else-if="v.type!=='file'&& v.input_mode==='text_field'||v.input_mode==='line'" style="width: 80%"
-                                  :autosize="{ minRows: 3, maxRows: 5 }"
-                                  :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
-                                  show-word-limit
-                                  type="textarea"/>
-<!--                        <el-input-->
-<!--                            v-model="v.value"-->
-<!--                            v-else-if="v.type!=='file'&& v.input_mode==='text_field'"-->
-<!--                            style="width: 80%"-->
-<!--                            :autosize="{ minRows: 3, maxRows: 5 }"-->
-<!--                            :placeholder="v.mock_data===''?''+v.desc:v.mock_data"-->
-<!--                            show-word-limit-->
-<!--                            type="textarea"-->
-<!--                        />-->
+                        <div v-else-if="v.type==='string'">
+                          <el-input v-model="v.value"  style="width: 80%"
+                                    :autosize="{ minRows: 3, maxRows: 5 }"
+                                    :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
+                                    show-word-limit
+                                    type="textarea"/>
+                        </div>
+
+                        <div v-else-if="v.type==='table'">
+                          <el-button @click="showTable(v)" type="primary">查看表格</el-button>
+                        </div>
                         <p style="margin-left: 10px">
-                          <el-button type="primary" @click="lookUp(v)" key="预览" text >预览</el-button>
-                          <el-button type="success" @click="copy(v)" key="复制" text >复制</el-button>
+                          <el-button v-if="v.type==='string'" type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
+                          <el-button v-if="v.type==='string'" type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
                         </p>
 
 
@@ -474,11 +504,18 @@ const input3 = ref('')
     </el-drawer>
 
     <el-dialog v-model="videoDialogVisible" title="静态文件" width="80%" center>
-    <video controls width="100%" v-if="assetsType==='video'" :src="assetsSrc">
-
-    </video>
-      <img width="100%" v-else-if="assetsType==='image'"  :src="assetsSrc"/>
+    <video controls width="100%" v-if="assetsType==='video'" :src="assetsSrc"></video>
+      <p v-else-if="assetsType==='image'" style="text-align: center"><img width="50%" :src="assetsSrc"/></p>
     </el-dialog>
+
+
+    <el-dialog v-model="dialogTableVisible" title="111" width="800">
+
+
+      <table-data :table-data="getTableData()"></table-data>
+
+    </el-dialog>
+
 
       </div>
 </template>

@@ -211,6 +211,7 @@
         label-position="right"
         :rules="rule"
         label-width="100px"
+        v-loading="aiLoading"
       >
 
         <el-form-item
@@ -248,25 +249,10 @@
         </el-form-item>
 
         <el-form-item
-          label="模板名称:"
-          prop="name"
+            label="表名称:"
+            clearable
+            prop="tableName"
         >
-          <el-input
-            v-model="formData.name"
-            :clearable="true"
-            placeholder="请输入模板名称"
-          />
-        </el-form-item>
-        <el-form-item
-          label="表名称:"
-          clearable
-          prop="tableName"
-        >
-<!--          <el-input
-            v-model="formData.tableName"
-            :clearable="true"
-            placeholder="请输入要导出的表名称"
-          />-->
           <div
               class="w-full flex gap-4"
           >
@@ -283,11 +269,22 @@
                   :value="item.tableName"
               />
             </el-select>
-
-            <el-button type="primary" @click="getColumnFunc">自动生成模板</el-button>
+            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(true)"><el-icon><ai-gva/></el-icon>自动补全</el-button>
+            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(false)">自动生成模板</el-button>
           </div>
-
         </el-form-item>
+
+        <el-form-item
+          label="模板名称:"
+          prop="name"
+        >
+          <el-input
+            v-model="formData.name"
+            :clearable="true"
+            placeholder="请输入模板名称"
+          />
+        </el-form-item>
+
         <el-form-item
           label="模板标识:"
           prop="templateID"
@@ -438,7 +435,7 @@ import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import {getDB, getTable, getColumn} from '@/api/autoCode'
+import {getDB, getTable, getColumn, butler} from '@/api/autoCode'
 
 defineOptions({
   name: 'ExportTemplate'
@@ -616,8 +613,8 @@ const getTableFunc = async() => {
   formData.value.tableName = ''
 }
 getTableFunc()
-
-const getColumnFunc = async () => {
+const aiLoading = ref(false)
+const getColumnFunc = async (aiFLag) => {
   if(!formData.value.tableName) {
     ElMessage({
       type: 'error',
@@ -626,11 +623,26 @@ const getColumnFunc = async () => {
     return
   }
   formData.value.templateInfo = ""
+  aiLoading.value = true
   const res = await getColumn({
     businessDB: formData.value.dbName,
     tableName: formData.value.tableName
   })
   if(res.code === 0) {
+      if(aiFLag){
+        const aiRes = await butler({data:res.data.columns,command:'exportCompletion'})
+        if (aiRes.code === 0) {
+          const aiData = JSON.parse(aiRes.data)
+          aiLoading.value = false
+          formData.value.templateInfo = JSON.stringify(aiData.templateInfo, null, 2)
+          formData.value.name = aiData.name
+          formData.value.templateID = aiData.templateID
+          return
+        }
+        ElMessage.warning('AI自动补全失败，已调整为逻辑填写')
+      }
+
+
     // 把返回值的data.columns做尊换，制作一组JSON数据，columnName做key，columnComment做value
     const templateInfo = {}
     res.data.columns.forEach(item => {
@@ -638,6 +650,7 @@ const getColumnFunc = async () => {
     })
     formData.value.templateInfo =  JSON.stringify(templateInfo, null, 2)
   }
+  aiLoading.value = false
 
 }
 

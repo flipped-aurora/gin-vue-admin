@@ -27,22 +27,13 @@ const viewTableField=ref("")
 const runData=ref({
   data:{}
 }) //运行后的结果
-
+const rules= reactive({})
 const assetsSrc=ref("")
 const assetsType=ref("")
+const formRef = ref(null)
 
-function isDisabledShowTable(param){
-  console.log("runData.data:",runData.data)
-  for (let i = 0; i < runData.data; i++) {
-    if (runData.data[param.code]){
-      return false
-    }
-  }
-  return true
-}
 
 function showTable(param){
-  console.log("runData.data[param.code]",runData.data[param.code])
   viewTableField.value=param.code
   dialogTableDataList[param.code]=runData.data[param.code]
   dialogTableVisible.value=true
@@ -55,14 +46,25 @@ function getTableData(){
 
 const funcCall=async ()=> {
 
-  // return
+  // let res=await formRef.value.validate()
+  // if (!res){
+  //   ElMessage.error("请输入参数信息")
+  //   return
+  // }
+  console.log("param",func.detail.param)
+  const startTime = performance.now();
   let bd = reactive({})
   for (let i = 0; i < func.detail.param.length; i++) {
     if (func.detail.param[i].mode === "in") {
       if (func.detail.param[i].type === "file") {
-        // func.detail.param[i].files=
         bd[func.detail.param[i].code] = func.detail.param[i].files
       } else {
+        if(func.detail.param[i].required==="必填"){
+          if (func.detail.param[i].value===""){
+            ElMessage.error("请把参数信息输入完整")
+            return
+          }
+        }
         bd[func.detail.param[i].code] = func.detail.param[i].value
       }
     }
@@ -79,7 +81,6 @@ const funcCall=async ()=> {
         if (res.data.data.hasOwnProperty(key)) {
           const value = res.data.data[key];
           for (let i = 0; i < func.detail.param.length; i++) {
-            console.log("func.detail.param[i]", func.detail.param[i])
             if (func.detail.param[i].code === key) {
               func.detail.param[i].value = value
             }
@@ -89,7 +90,6 @@ const funcCall=async ()=> {
     }
 
   }else {
-    console.log("get")
     // let res =await axios.get(func.detail.api_config.path,bd)
     let res = await axios.get(func.detail.api_config.path, {
       params: bd
@@ -102,25 +102,21 @@ const funcCall=async ()=> {
     if (contentType && contentType.includes('image/')) {
       assetsType.value="image"
       assetsSrc.value=func.detail.api_config.path+"?"+new URLSearchParams(bd).toString()
-      console.log("image",assetsSrc.value)
       videoDialogVisible.value=true
       return
     }
     if (contentType && contentType.includes('video/')) {
       assetsType.value="video"
       assetsSrc.value=func.detail.api_config.path+"?"+new URLSearchParams(bd).toString()
-      console.log("video",assetsSrc.value)
       videoDialogVisible.value=true
       return
     }
 
     if (res.data.code === 0) {
-
         for (const key in res.data.data) {
         if (res.data.data.hasOwnProperty(key)) {
           const value = res.data.data[key];
           for (let i = 0; i < func.detail.param.length; i++) {
-            console.log("func.detail.param[i]", func.detail.param[i])
             if (func.detail.param[i].code === key) {
               func.detail.param[i].value = value
             }
@@ -129,15 +125,40 @@ const funcCall=async ()=> {
       }
   }
 }
-  out_tab.value="res"
+  const endTime = performance.now();
+  let cost=endTime - startTime
+  run_info.out_tab="res"
+  run_info.run_status="运行成功"
+  run_info.run_cost=formatTime(cost)
+  ElMessage.success("运行成功")
+
 }
-  onMounted(() => {
+function formatTime(milliseconds) {
+  const seconds = Math.floor(milliseconds / 1000);
+  const remainingMilliseconds = milliseconds % 1000;
+
+
+  if (seconds===0){
+    return `${remainingMilliseconds.toFixed(2)}毫秒`
+  }
+  let s=remainingMilliseconds.toFixed(2)+""
+  return `${seconds}.`+s.split(".")[0]+"秒";
+}
+
+onMounted(() => {
 
     let fn = async () => {
       const res = await findBizCloudFunction({ID: route.query.id})
       if (res.code === 0) {
         func.detail = res.data
         for (let i = 0; i < func.detail.param.length; i++) {
+          if (func.detail.param[i].required==="必填"&&func.detail.param[i].mode==="in"){
+            // func.detail.param[i].rules=[{
+            //   required: true,
+            //   message: '必填',
+            //   trigger: "blur"
+            // }]
+          }
           if (func.detail.param[i].type === "file") {
             func.detail.param[i].files = []
           }
@@ -148,7 +169,7 @@ const funcCall=async ()=> {
     fn()
   })
 
-  function getFuncInfo() {
+function getFuncInfo() {
     let inp = []
     let outp = []
     console.log("func.detail:", func.detail)
@@ -162,23 +183,25 @@ const funcCall=async ()=> {
     }
     funcDefine.value = func.detail.code_name + "(" + inp.join(",") + ")" + "->" + "(" + outp.join(",") + ")"
   }
-
-
-
-  function lookUp(v) {
+function lookUp(v) {
     centerDialogVisible.value = true
     lookUpTitle.value = v.desc
     lookUpValue.value = v.value
   }
 
-
-  function copy(v) {
+function copy(v) {
     navigator.clipboard.writeText(v.value);
     ElMessage.success("复制成功")
   }
-
+const run_info=reactive({
+  out_tab:"mock_data",
+  in_tab:"run",
+  run_status:"未运行",
+  run_cost:""
+})
 const out_tab = ref('mock_data')
 const in_tab = ref('run')
+const run_status=ref("")
 
 </script>
 
@@ -194,13 +217,11 @@ const in_tab = ref('run')
         <el-main>
           <el-scrollbar>
             <div>
-
               <func_info v-show="func.detail.param" :func="func"></func_info>
-
-              <el-form ref="form" reset-type="initial" style="max-width: 100%">
+              <el-form  ref="formRef" reset-type="initial" style="max-width: 100%">
                 <h2>输入参数</h2>
 <!--                <el-tabs type="border-card">-->
-                <el-tabs v-model="in_tab" type="card">
+                <el-tabs v-model="run_info.in_tab" type="card">
 
                   <el-tab-pane name="info" label="参数介绍">
                     <func_param_desc :func="func" type="in"></func_param_desc>
@@ -209,8 +230,8 @@ const in_tab = ref('run')
                     <func_param_mock_data :func="func" type="in"></func_param_mock_data>
                   </el-tab-pane>
                   <el-tab-pane name="run"  label="运行函数">
-                    <div style="padding: 24px 24px 24px 24px">
-                      <el-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc" :required="v.required==='必填'">
+                    <div style="padding: 24px 24px 15px 24px">
+                      <el-form-item v-for="(v,i) in func.detail.param"   v-show="v.mode==='in'" :label="v.desc" :required="v.required==='必填'">
                         <div v-if="v.type==='file'">
                           <upload-qi-niu :uploaded-files="v.files"  :title="v.desc" oss-dir="cloud_func/param_in"></upload-qi-niu>
                         </div>
@@ -218,33 +239,25 @@ const in_tab = ref('run')
                         <div style="width: 100%" v-else-if="v.type==='string'">
                           <p style="margin-left: 10px">
                           <el-input v-model="v.value"  style="width: 80%"
-                                    :autosize="{ minRows: 1, maxRows: 5 }"
+                                    :autosize="{ minRows: 1, maxRows: 3 }"
                                     :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
                                     show-word-limit
-
                                     type="textarea"/>
 
                             <el-button type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
                             <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
                           </p>
                         </div>
-
-
                       </el-form-item>
 
                       <!--todo 上面是输入参数-->
-                      <t-button @click="funcCall" style="margin: 10px" block theme="primary" variant="base">运行</t-button>
-
                     </div>
-
                   </el-tab-pane>
-
-
+                  <el-button @click="funcCall" type="primary" style="width: 100%"  block theme="primary" variant="base">运行</el-button>
                 </el-tabs>
 
                 <h2>输出结果</h2>
-<!--                <el-tabs  v-model="out_tab" type="border-card">-->
-                <el-tabs  v-model="out_tab" type="card">
+                <el-tabs  v-model="run_info.out_tab" type="card">
 
                 <el-tab-pane  label="参数介绍" name="info">
                   <func_param_desc :func="func" type="out"></func_param_desc>
@@ -254,6 +267,7 @@ const in_tab = ref('run')
                 </el-tab-pane>
                 <el-tab-pane label="输出结果" name="res">
                   <div style="padding: 24px 24px 24px 24px">
+                    <p style="padding: 0px 25px 20px 25px">状态：{{run_info.run_status}} <div v-if="run_info.run_cost!==''">耗时：{{run_info.run_cost}}</div></p>
                     <el-form-item  v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc"  >
                       <div v-if="v.type==='file'">
                         <span style="margin: 10px">{{v.value.path}}</span>
@@ -263,34 +277,22 @@ const in_tab = ref('run')
                         <p>
                           <el-input  v-model="v.value"
                                      style="width: 80%"
-                                     :autosize="{ minRows: 1, maxRows: 5 }"
-                                     :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
+                                     :autosize="{ minRows: 1, maxRows: 3 }"
+                                     :placeholder="v.desc"
                                      show-word-limit
                                      type="textarea"/>
-<!--                          <p style="margin-left: 10px;width: 15%">-->
                             <el-button v-if="v.type==='string'" type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
                             <el-button v-if="v.type==='string'" type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
-<!--                          </p>-->
                         </p>
-
                       </div>
-
                       <div v-else-if="v.type==='table'">
                         <el-button @click="showTable(v)" type="primary">查看表格</el-button>
                       </div>
-
-
-                      <t-button @click="funcCall" style="margin: 10px" block theme="primary" variant="base">运行</t-button>
                     </el-form-item>
                   </div>
                 </el-tab-pane>
                 </el-tabs>
-
-
-
               </el-form>
-
-
             </div>
           </el-scrollbar>
 

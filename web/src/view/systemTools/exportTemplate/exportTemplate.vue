@@ -212,6 +212,7 @@
         :rules="rule"
         label-width="100px"
         v-loading="aiLoading"
+        element-loading-text="小淼正在思考..."
       >
 
         <el-form-item

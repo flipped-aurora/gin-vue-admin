@@ -228,6 +228,7 @@
       </h4>
       <el-table
          v-loading="syncing||apiCompletionLoading"
+         element-loading-text="小淼正在思考..."
         :data="syncApiData.newApis"
       >
         <el-table-column

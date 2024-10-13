@@ -249,6 +249,26 @@
         </el-form-item>
 
         <el-form-item
+            label="AI帮写:"
+            prop="ai"
+        >
+          <div class="relative w-full">
+            <el-input
+                type="textarea"
+                v-model="prompt"
+                :clearable="true"
+                :rows="5"
+                placeholder="试试描述你要做的导出功能让AI帮你完成，在此之前请选择你需要导出的表所在的业务库，如不做选择，则默认使用gva库"
+            />
+            <el-button
+                class="absolute bottom-2 right-2"
+                type="primary"
+                @click="autoExport"
+            ><el-icon><ai-gva /></el-icon>帮写</el-button>
+          </div>
+        </el-form-item>
+
+        <el-form-item
             label="表名称:"
             clearable
             prop="tableName"
@@ -466,6 +486,8 @@ const formData = ref({
   joinTemplate: []
 })
 
+const prompt = ref('')
+
 const typeSearchOptions = ref([
   {
     label: '=',
@@ -589,6 +611,24 @@ const searchInfo = ref({})
 
 const dbList = ref([])
 const tableOptions = ref([])
+const aiLoading = ref(false)
+
+
+const autoExport = async () => {
+  aiLoading.value = true
+  const tables = tableOptions.value.map(item => item.tableName)
+  const aiRes = await butler({prompt:prompt.value,businessDB: formData.value.dbName||"",tables:tables,command:'autoExportTemplate'})
+  aiLoading.value = false
+  if (aiRes.code === 0) {
+    const aiData = JSON.parse(aiRes.data)
+     formData.value.name = aiData.name
+     formData.value.tableName = aiData.tableName
+     formData.value.templateID = aiData.templateID
+     formData.value.templateInfo = JSON.stringify(aiData.templateInfo, null, 2)
+     formData.value.joinTemplate = aiData.joinTemplate
+  }
+}
+
 
 const getDbFunc = async() => {
   const res = await getDB()
@@ -613,7 +653,6 @@ const getTableFunc = async() => {
   formData.value.tableName = ''
 }
 getTableFunc()
-const aiLoading = ref(false)
 const getColumnFunc = async (aiFLag) => {
   if(!formData.value.tableName) {
     ElMessage({

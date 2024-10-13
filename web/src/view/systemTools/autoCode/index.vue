@@ -25,7 +25,7 @@
             <el-button type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
                 <ai-gva />
-              </el-icon> 小淼
+              </el-icon> 生成
             </el-button>
           </el-tooltip>
         </div>
@@ -157,10 +157,17 @@
               prop="structName"
               class="w-full"
             >
+              <div class="flex gap-2">
               <el-input
                 v-model="form.structName"
                 placeholder="首字母自动转换大写"
               />
+                <el-button type="primary" @click="llmAutoFunc(true)">
+                  <el-icon size="18">
+                    <ai-gva />
+                  </el-icon> 生成
+              </el-button>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -822,55 +829,21 @@ const getOnlyNumber = () => {
 
 const prompt = ref("")
 
-const llmAutoFunc = async () =>{
-  if (!prompt.value) {
+const llmAutoFunc = async (flag) =>{
+  if (flag&&!form.value.structName) {
+    ElMessage.error('请输入结构体名称')
+    return
+  }
+  if (!flag&&!prompt.value) {
     ElMessage.error('请输入描述')
     return
   }
-  const res = await llmAuto({prompt:prompt.value})
+  const res = await llmAuto({prompt:flag?'结构体名称为'+form.value.structName:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
     for (let key in json){
-      if(key === "fields"){
-        json[key].forEach(item => {
-          if (item.primaryKey) {
-            form.value.gvaModel = false
-          }
-          form.value.fields.push({
-              onlyNumber: getOnlyNumber(),
-              fieldName: toUpperCase(item.fieldName),
-              fieldDesc: item.fieldDesc,
-              fieldType: item.fieldType,
-              dataType: "",
-              fieldJson: item.fieldJson||item.columnName,
-              primaryKey: item.primaryKey,
-              dataTypeLong: item.dataTypeLong,
-              columnName: item.columnName,
-              comment: item.comment || item.fieldDesc,
-              require: false,
-              errorText: '',
-              clearable: true,
-              fieldSearchType: '',
-              fieldIndexType: '',
-              dictType: '',
-              form: true,
-              desc: true,
-              table: true,
-              excel: false,
-              dataSource: {
-                association:1,
-                table: '',
-                label: '',
-                value: ''
-          }
-          })
-        })
-      }else{
-        if(mode === "xiaomiao"){
-          form.value[key] = json[key]
-        }
-      }
+      form.value[key] = json[key]
     }
   }
 }

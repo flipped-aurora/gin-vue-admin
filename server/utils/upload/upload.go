@@ -34,9 +34,9 @@ func NewOss() OSS {
 	case "cloudflare-r2":
 		return &CloudflareR2{}
 	case "minio":
-		minioClient, err := NewMinio(global.GVA_CONFIG.Minio.Endpoint, global.GVA_CONFIG.Minio.AccessKeyId, global.GVA_CONFIG.Minio.AccessKeySecret, global.GVA_CONFIG.Minio.BucketName, global.GVA_CONFIG.Minio.UseSSL)
+		minioClient, err := GetMinio(global.GVA_CONFIG.Minio.Endpoint, global.GVA_CONFIG.Minio.AccessKeyId, global.GVA_CONFIG.Minio.AccessKeySecret, global.GVA_CONFIG.Minio.BucketName, global.GVA_CONFIG.Minio.UseSSL)
 		if err != nil {
-			global.GVA_LOG.Error("你配置了使用minio，但是初始化失败，请检查minio可用性或安全配置: " + err.Error())
+			global.GVA_LOG.Warn("你配置了使用minio，但是初始化失败，请检查minio可用性或安全配置: " + err.Error())
 			panic("minio初始化失败") // 建议这样做，用户自己配置了minio，如果报错了还要把服务开起来，使用起来也很危险
 		}
 		return minioClient

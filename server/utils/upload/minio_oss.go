@@ -15,14 +15,14 @@ import (
 	"go.uber.org/zap"
 )
 
-var MinioClient *Minio // 优化性能，但是不支持动态配置
+var MinioClient *Minio // 优化性能，但是不支持动态配置，如果修改了minio配置，需要重启后端
 
 type Minio struct {
 	client *minio.Client
 	bucket string
 }
 
-func NewMinio(endpoint, accessKeyID, secretAccessKey, bucketName string, useSSL bool) (*Minio, error) {
+func GetMinio(endpoint, accessKeyID, secretAccessKey, bucketName string, useSSL bool) (*Minio, error) {
 	if MinioClient != nil {
 		return MinioClient, nil
 	}

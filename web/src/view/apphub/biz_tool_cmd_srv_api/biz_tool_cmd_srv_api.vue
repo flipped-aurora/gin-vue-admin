@@ -16,7 +16,7 @@
        —
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
-      
+
         <el-form-item label="应用名称（中文）" prop="appName">
          <el-input v-model="searchInfo.appName" placeholder="搜索条件" />
 
@@ -95,11 +95,11 @@
         @sort-change="sortChange"
         >
         <el-table-column type="selection" width="55" />
-        
+
         <el-table-column align="left" label="日期" prop="createdAt" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        
+
           <el-table-column align="left" label="应用名称（中文）" prop="appName" width="120" />
           <el-table-column align="left" label="应用名称（英文标识）" prop="appCode" width="120" />
           <el-table-column align="left" label="工具类型" prop="tool_type" width="120" />
@@ -131,6 +131,7 @@
             <template #default="scope">
             <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
             <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizToolCmdSrvApiFunc(scope.row)">变更</el-button>
+            <el-button  type="primary" link icon="edit" class="table-button" @click="syncCloudFunc(scope.row)">同步云函数</el-button>
             <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizToolCmdSrvApiVersionFunc(scope.row)">变更版本</el-button>
             <el-button  type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
               <el-button  type="primary" link icon="edit" @click="deployRecordFn(scope.row)">发布历史</el-button>
@@ -406,7 +407,7 @@ import {
   deleteBizToolCmdSrvApiByIds,
   updateBizToolCmdSrvApi,
   findBizToolCmdSrvApi,
-  getBizToolCmdSrvApiList
+  getBizToolCmdSrvApiList, syncFunction
 } from '@/api/biz_apphub/biz_tool_cmd_srv_api'
 
 // 全量引入格式化工具 请按需保留
@@ -719,7 +720,13 @@ const updateBizToolCmdSrvApiFunc = async(row) => {
         dialogFormVisible.value = true
     }
 }
+const syncCloudFunc = async(row) => {
+  uploadedFiles.value=[]
+  const res = await syncFunction({ ID: row.ID })
+  // type.value = 'update'
+  syncDialogFormVersionVisible.value=true
 
+}
 
 
 // 更新版本
@@ -753,6 +760,7 @@ const deleteBizToolCmdSrvApiFunc = async (row) => {
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
 const dialogFormVersionVisible = ref(false)
+const syncDialogFormVersionVisible = ref(false)
 
 // 打开弹窗
 const openDialog = () => {

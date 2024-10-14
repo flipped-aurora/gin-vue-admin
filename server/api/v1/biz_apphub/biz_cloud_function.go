@@ -207,7 +207,23 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) GetBizCloudFunctionPublic(c *gin
 	}, "获取成功", c)
 }
 
-func (bizCloudFunctionApi *BizCloudFunctionApi) Sync(c *gin.Context) {
+func (bizCloudFunctionApi *BizCloudFunctionApi) SyncFunction(c *gin.Context) {
+	req := global.GVA_MODEL{}
 
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	function, err := bizCloudFunctionService.SyncFunction(&biz_apphub.BizToolCmdSrvApi{
+		GVA_MODEL: global.GVA_MODEL{
+			ID: req.ID,
+		},
+	})
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithData(function, c)
 	//bizCloudFunctionService.GetBizCloudFunction()
 }

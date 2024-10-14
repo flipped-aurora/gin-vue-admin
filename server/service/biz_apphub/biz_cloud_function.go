@@ -7,6 +7,7 @@ import (
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/dto"
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/httpx"
+	"strings"
 )
 
 type BizCloudFunctionService struct{}
@@ -149,18 +150,21 @@ func (bizCloudFunctionService *BizCloudFunctionService) UnCreateFunc(req *biz_ap
 	var functions []biz_apphub.BizCloudFunction
 	//var apis []string
 	mapAll := make(map[string]bool)
-	for _, v := range api {
-		mapAll[v.Path+"."+v.Method] = true
-	}
+
 	var unCreateFunc []dto.Api
 	global.GVA_DB.Model(&biz_apphub.BizCloudFunction{}).Where("runner_id =?", req.ID).Find(&functions)
-	if len(functions) > 0 {
-		for _, function := range functions {
-			b := mapAll[function.ApiPath+"."+function.ApiMethod]
+
+	for _, v := range functions {
+		mapAll[v.ApiPath+"."+strings.ToUpper(v.ApiMethod)] = true
+	}
+
+	if len(api) > 0 {
+		for _, a := range api {
+			b := mapAll[a.Path+"."+strings.ToUpper(a.Method)]
 			if !b {
 				unCreateFunc = append(unCreateFunc, dto.Api{
-					Path:   function.ApiPath,
-					Method: function.ApiMethod,
+					Path:   a.Path,
+					Method: a.Method,
 				})
 			}
 		}

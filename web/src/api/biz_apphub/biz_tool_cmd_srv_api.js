@@ -80,6 +80,23 @@ export const findBizToolCmdSrvApi = (params) => {
   })
 }
 
+
+// @Tags BizToolCmdSrvApi
+// @Summary 同步云函数
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query model.BizToolCmdSrvApi true "同步云函数"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Router /bizToolCmdSrvApi/syncFunction [get]
+export const syncFunction = (params) => {
+  return service({
+    url: '/bizToolCmdSrvApi/syncFunction',
+    method: 'get',
+    params
+  })
+}
+
 // @Tags BizToolCmdSrvApi
 // @Summary 分页获取后端工具指令api列表
 // @Security ApiKeyAuth

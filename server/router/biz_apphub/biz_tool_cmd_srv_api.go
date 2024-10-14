@@ -17,6 +17,7 @@ func (s *BizToolCmdSrvApiRouter) InitBizToolCmdSrvApiRouter(Router *gin.RouterGr
 		bizToolCmdSrvApiRouter.DELETE("deleteBizToolCmdSrvApi", bizToolCmdSrvApiApi.DeleteBizToolCmdSrvApi)           // 删除后端工具指令api
 		bizToolCmdSrvApiRouter.DELETE("deleteBizToolCmdSrvApiByIds", bizToolCmdSrvApiApi.DeleteBizToolCmdSrvApiByIds) // 批量删除后端工具指令api
 		bizToolCmdSrvApiRouter.PUT("updateBizToolCmdSrvApi", bizToolCmdSrvApiApi.UpdateBizToolCmdSrvApi)              // 更新后端工具指令api
+		bizToolCmdSrvApiRouter.GET("syncFunction", bizCloudFunctionApi.SyncFunction)                                  // 同步云函数
 	}
 	{
 		bizToolCmdSrvApiRouterWithoutRecord.GET("getDeployList", bizToolCmdSrvApiApi.GetDeployList)                     // 获取部署历史

@@ -22,11 +22,31 @@ type BizCloudFunctionApi struct{}
 // @Router /bizCloudFunction/createBizCloudFunction [post]
 func (bizCloudFunctionApi *BizCloudFunctionApi) CreateBizCloudFunction(c *gin.Context) {
 	var bizCloudFunction biz_apphub.BizCloudFunction
+	var runner biz_apphub.BizToolCmdSrvApi
 	err := c.ShouldBindJSON(&bizCloudFunction)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	bizCloudFunction.TenantUser = c.GetString("user")
+	config := bizCloudFunction.GetApiConfig()
+	info, err := config.GetRunnerInfo()
+	if err != nil {
+		err = nil
+	} else {
+		err := global.GVA_DB.Model(&biz_apphub.BizToolCmdSrvApi{}).
+			Where("tenant_user =? AND app_code=?", info.User, info.Code).First(&runner).Error
+		if err != nil {
+			global.GVA_LOG.Error(err.Error())
+			err = nil
+		} else {
+			bizCloudFunction.RunnerID = runner.ID
+			bizCloudFunction.ApiPath = info.Path
+			bizCloudFunction.ApiMethod = config.Method
+			bizCloudFunction.ApiFullPath = config.Path
+		}
+	}
+
 	err = bizCloudFunctionService.CreateBizCloudFunction(&bizCloudFunction)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
@@ -86,11 +106,32 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) DeleteBizCloudFunctionByIds(c *g
 // @Router /bizCloudFunction/updateBizCloudFunction [put]
 func (bizCloudFunctionApi *BizCloudFunctionApi) UpdateBizCloudFunction(c *gin.Context) {
 	var bizCloudFunction biz_apphub.BizCloudFunction
+	var runner biz_apphub.BizToolCmdSrvApi
+
 	err := c.ShouldBindJSON(&bizCloudFunction)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+
+	config := bizCloudFunction.GetApiConfig()
+	info, err := config.GetRunnerInfo()
+	if err != nil {
+		err = nil
+	} else {
+		err := global.GVA_DB.Model(&biz_apphub.BizToolCmdSrvApi{}).
+			Where("tenant_user =? AND app_code=?", info.User, info.Code).First(&runner).Error
+		if err != nil {
+			global.GVA_LOG.Error(err.Error())
+			err = nil
+		} else {
+			bizCloudFunction.RunnerID = runner.ID
+			bizCloudFunction.ApiPath = info.Path
+			bizCloudFunction.ApiMethod = config.Method
+			bizCloudFunction.ApiFullPath = config.Path
+		}
+	}
+
 	err = bizCloudFunctionService.UpdateBizCloudFunction(bizCloudFunction)
 	if err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
@@ -164,4 +205,9 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) GetBizCloudFunctionPublic(c *gin
 	response.OkWithDetailed(gin.H{
 		"info": "不需要鉴权的云函数接口信息",
 	}, "获取成功", c)
+}
+
+func (bizCloudFunctionApi *BizCloudFunctionApi) Sync(c *gin.Context) {
+
+	//bizCloudFunctionService.GetBizCloudFunction()
 }

@@ -158,11 +158,26 @@
         <el-table-column prop="method" label="请求方式" width="180" />
         <el-table-column prop="info.api_desc" label="中文" width="180" />
         <el-table-column prop="info.english_name" label="英文" width="180"/>
+        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+          <template #default="scope">
+            <el-button @click="func_params_edit(scope.row)">配置参数</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-dialog>
 
 
-<!--    更新数据-->
+<!--    <el-dialog append-to-body v-model="showParam" title="配置云函数参数" >-->
+<!--      <func_params_edit  :form-data="current_param.params"></func_params_edit>-->
+<!--    </el-dialog>-->
+    <el-dialog
+        width="80%"
+        v-model="showParam"
+        title="配置云函数"
+        append-to-body
+    >
+        <func_params_edit_view :form-data="current_func_info"></func_params_edit_view>
+    </el-dialog>
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
@@ -431,17 +446,50 @@ import {
   getToolCmdSrvApiUpdateVersionList,
   rollbackVersionToolCmdSrvApiUpdate
 } from "@/api/biz_apphub/biz_apphub";
+import Func_params_edit from "@/components/funcParamsEdit/func_params_edit_view.vue";
+import Func_param_mock_data from "@/view/biz_apphub/funcHub/func_param_mock_data.vue";
+import Func_detail_right from "@/view/biz_apphub/funcHub/func_detail_right.vue";
+import Func_params_edit_view from "@/components/funcParamsEdit/func_params_edit_view.vue";
 // 上传的文件
 const uploadedFiles=ref([])
 defineOptions({
     name: 'BizToolCmdSrvApi'
 })
+
+const current_func_info =ref({})
+const current_runner_info =ref({})
+function func_params_edit(func){
+  current_func_info.value=func
+  let  code=current_runner_info.value.appCode
+  current_runner_info.value["app_code"]=code
+  current_func_info.value["path"]=code+"/"+current_func_info.value.path
+  console.log("current_func_info",current_func_info.value)
+  syncDialogFormVersionVisible.value=false
+  showParam.value=true
+}
+
+const syncCloudFunc = async(row) => {
+  uploadedFiles.value=[]
+  current_runner_info.value=row
+  const res = await syncFunction({ ID: row.ID })
+  console.log("res.data",res.data)
+  // type.value = 'update'
+  if (res.code===0){
+    apis.value=res.data.apis
+  }
+  console.log("apis:",apis.value)
+  syncDialogFormVersionVisible.value=true
+
+}
+
+
 const activeNames = ref(['1'])
 const handleChange = (val) => {
   console.log(val)
 }
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
+const showParam = ref(false)
 
 // 自动化生成的字典（可能为空）以及字段
 const bool_statusOptions = ref([])
@@ -732,19 +780,7 @@ const updateBizToolCmdSrvApiFunc = async(row) => {
         dialogFormVisible.value = true
     }
 }
-const syncCloudFunc = async(row) => {
-  uploadedFiles.value=[]
 
-  const res = await syncFunction({ ID: row.ID })
-  console.log("res.data",res.data)
-  // type.value = 'update'
-  if (res.code===0){
-    apis.value=res.data.apis
-  }
-  console.log("apis:",apis.value)
-  syncDialogFormVersionVisible.value=true
-
-}
 
 
 // 更新版本

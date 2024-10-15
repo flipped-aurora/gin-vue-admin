@@ -497,19 +497,14 @@ function getParamType(field) {
   }else if(field.type==="table"){
     return "表格"
   }
-  // <el-option label="字符串" value="string"></el-option>
-  // <el-option label="数值" value="number"></el-option>
-  // <el-option label="文件" value="file"></el-option>
-  // <el-option label="多选框" value="muti_select"></el-option>
-  // <el-option label="单选框" value="sige_select"></el-option>
 }
 
 // const in_type=ref("")
 const param_in_type = ref("string")
 const param_out_type = ref("string")
 // const out_type=ref("")
-const setParamDialogVisible = ref(false)
 const isOutStaticFile = ref(false)
+const setParamDialogVisible = ref(false)
 const setApiDialogVisible = ref(false)
 const setParam = function () {
   setParamDialogVisible.value = true

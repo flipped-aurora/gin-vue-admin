@@ -28,16 +28,16 @@ function getTags() {
           </el-col>
           <el-col :span="18">
             <div>
-              <span style="font-size: 18px">就爱自娱自乐</span>
+              <span style="font-size: 18px">这个网站的老大</span>
               <!--                  <p>出生在中国，爱好写代码</p>-->
               <p style="margin: 6px 0px">
                 <el-tooltip
                     class="box-item"
                     effect="dark"
-                    content="出生在中国，爱好写代码，一个00后的独立开发者"
+                    content="云函数站点头目，00后独立开发者"
                     placement="top-start"
                 >
-                  <el-text truncated size="small" class="mx-1">出生在中国，爱好写代码，一个00后的独立开发者</el-text>
+                  <el-text truncated size="small" class="mx-1">云函数站点头目，00后独立开发者</el-text>
                 </el-tooltip>
               </p>
             </div>

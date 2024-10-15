@@ -151,6 +151,17 @@
         </div>
     </div>
 
+
+    <el-dialog v-model="syncDialogFormVersionVisible" title="未添加的云函数" >
+      <el-table :data="apis"  style="width: 100%">
+        <el-table-column  prop="path" label="地址" width="180" />
+        <el-table-column prop="method" label="请求方式" width="180" />
+        <el-table-column prop="info.api_desc" label="中文" width="180" />
+        <el-table-column prop="info.english_name" label="英文" width="180"/>
+      </el-table>
+    </el-dialog>
+
+
 <!--    更新数据-->
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
@@ -583,6 +594,7 @@ const elSearchFormRef = ref()
 const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
+const apis = ref([])
 const tableData = ref([])
 const searchInfo = ref({})
 // 排序
@@ -722,8 +734,14 @@ const updateBizToolCmdSrvApiFunc = async(row) => {
 }
 const syncCloudFunc = async(row) => {
   uploadedFiles.value=[]
+
   const res = await syncFunction({ ID: row.ID })
+  console.log("res.data",res.data)
   // type.value = 'update'
+  if (res.code===0){
+    apis.value=res.data.apis
+  }
+  console.log("apis:",apis.value)
   syncDialogFormVersionVisible.value=true
 
 }

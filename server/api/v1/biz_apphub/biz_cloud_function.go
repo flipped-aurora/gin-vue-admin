@@ -216,9 +216,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) SyncFunction(c *gin.Context) {
 		return
 	}
 	function, err := bizCloudFunctionService.SyncFunction(&biz_apphub.BizToolCmdSrvApi{
-		GVA_MODEL: global.GVA_MODEL{
-			ID: req.ID,
-		},
+		GVA_MODEL: global.GVA_MODEL{ID: req.ID},
 	})
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)

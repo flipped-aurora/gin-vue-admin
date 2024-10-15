@@ -1,18 +1,13 @@
 package biz_apphub
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/pkg/jsonx"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/biz_apphub"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"io"
 	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -75,226 +70,227 @@ func (bizAppHubApi *BizAppHubApi) RollbackVersion(c *gin.Context) {
 	response.OkWithMessage("回滚版本成功", c)
 }
 
-// PostCall 后端命令接口
-// @Tags BizAppHub
-// @Summary 后端命令接口
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body biz_apphub.BizAppHub true "后端命令接口"
-// @Success 200 {object} response.Response{msg=string} "更新成功"
-// @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
-func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
-	var (
-		req biz_apphubReq.Call
-		err error
-	)
-	req.Soft = c.Param("soft")
-	req.Command = c.Param("command")
-	req.Method = "POST"
-	req.User = c.Param("user")
-	if req.Soft == "" {
-		response.FailWithMessage("soft不能为空", c)
-		return
-	}
-	if req.Command == "" {
-		response.FailWithMessage("Command不能为空", c)
-		return
-	}
-
-	if req.User == "" {
-		response.FailWithMessage("请登录后访问", c)
-		return
-	}
-	all, err := io.ReadAll(c.Request.Body)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	defer c.Request.Body.Close()
-	err = json.Unmarshal(all, &req.Data)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-
-	//err = c.ShouldBind(&req)
-	//if err != nil {
-	//	response.FailWithMessage(err.Error(), c)
-	//	return
-	//}
-
-	//bizAppHub.OperateUser=c.GetString("user")
-	//bizAppHub.UpdatedBy = utils.GetUserID(c)
-	//bizAppHub.OperateUser = c.GetString("user")
-	//todo 验证用户是否有调用该应用的权限
-	//j, err := req.RequestJSON()
-	//if err != nil {
-	//	response.FailWithMessage(err.Error(), c)
-	//	return
-	//}
-	//req.ReqBody = j
-	caller := biz_apphub.NewCaller("")
-	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
-	if c.Request.Header.Get("content-type") == "multipart/form-data" { //如果上传的有文件，需要下载文件，然后copy到
-		files, err := getFileMap(c, caller.CallerPath())
-		if err != nil {
-			response.FailWithMessage(err.Error(), c)
-			return
-		}
-		req.Files = files
-		value := c.PostForm("jsonData")
-		if value != "" {
-			mp := make(map[string]interface{})
-			err := json.Unmarshal([]byte(value), &mp)
-			if err != nil {
-				response.FailWithMessage(err.Error(), c)
-				return
-			}
-			req.Data = mp
-		}
-	}
-
-	err = jsonx.SaveFile(req.RequestJsonPath, req) //
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	//todo 需要删除请求参数
-	//defer os.Remove(req.RequestJsonPath)
-
-	call, err := caller.Call(req)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	biz_apphub.GetSoftLogs(call)
-	if call.StatusCode != 200 {
-		c.JSON(call.StatusCode, gin.H{"msg": call.Body})
-		return
-	}
-	if call.ContentType == "application/octet-stream" {
-		if call.HasFile {
-			//if call.HasFile
-			fileName := filepath.Base(call.FilePath) // 获取文件名
-			if call.DeleteFile {
-				defer os.Remove(call.FilePath)
-			}
-			// 如果请求中有自定义文件名，则使用自定义文件名
-			if customFileName := c.Query("filename"); customFileName != "" {
-				fileName = customFileName
-			}
-			c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
-			c.File(call.FilePath)
-			return
-		}
-	}
-
-	if call.ContentType == "application/json; charset=utf-8" {
-		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.String(call.Body)))
-	}
-	if call.ContentType == "text/plain; charset=utf-8" {
-		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Body)))
-	}
-}
-
-// GetCall 后端命令接口
-// @Tags BizAppHub
-// @Summary 后端命令接口
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body biz_apphub.BizAppHub true "后端命令接口"
-// @Success 200 {object} response.Response{msg=string} "更新成功"
-// @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
-func (bizAppHubApi *BizAppHubApi) GetCall(c *gin.Context) {
-	var (
-		req biz_apphubReq.Call
-		err error
-	)
-	req.Soft = c.Param("soft")
-	req.Command = c.Param("command")
-	req.User = c.Param("user")
-	req.Method = "GET"
-	if req.Soft == "" {
-		response.FailWithMessage("soft不能为空", c)
-		return
-	}
-	if req.Command == "" {
-		response.FailWithMessage("Command不能为空", c)
-		return
-	}
-
-	if req.User == "" {
-		response.FailWithMessage("user 不能为空", c)
-		return
-	}
-	if req.Data == nil {
-		req.Data = make(map[string]interface{})
-	}
-	queryMap := c.Request.URL.Query()
-	for k, values := range queryMap {
-		if len(values) > 1 {
-			req.Data[k] = values
-		} else {
-			req.Data[k] = values[0]
-		}
-	}
-	//todo 验证用户是否有调用该应用的权限
-	j, err := req.RequestJSON()
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	req.ReqBody = j
-	caller := biz_apphub.NewCaller("")
-	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
-
-	err = jsonx.SaveFile(req.RequestJsonPath, req) //
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	//todo 请求参数需要删除
-	//defer os.Remove(req.RequestJsonPath)
-
-	call, err := caller.Call(req)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	biz_apphub.GetSoftLogs(call)
-	if call.StatusCode != 200 {
-		c.JSON(call.StatusCode, gin.H{
-			"msg": call.Body,
-		})
-		return
-	}
-
-	if call.ContentType == "file" {
-		if call.HasFile {
-			//if call.HasFile
-			fileName := filepath.Base(call.FilePath) // 获取文件名
-			if call.DeleteFile {
-				defer os.Remove(call.FilePath)
-			}
-			// 如果请求中有自定义文件名，则使用自定义文件名
-			if customFileName := c.Query("filename"); customFileName != "" {
-				fileName = customFileName
-			}
-			c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
-			c.File(call.FilePath)
-			return
-		}
-	}
-
-	if call.ContentType == "json" {
-		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.String(call.Body)))
-	}
-	if call.ContentType == "text" {
-		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Body)))
-	}
-}
+//
+//// PostCall 后端命令接口
+//// @Tags BizAppHub
+//// @Summary 后端命令接口
+//// @Security ApiKeyAuth
+//// @accept application/json
+//// @Produce application/json
+//// @Param data body biz_apphub.BizAppHub true "后端命令接口"
+//// @Success 200 {object} response.Response{msg=string} "更新成功"
+//// @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
+//func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
+//	var (
+//		req biz_apphubReq.Call
+//		err error
+//	)
+//	req.Soft = c.Param("soft")
+//	req.Command = c.Param("command")
+//	req.Method = "POST"
+//	req.User = c.Param("user")
+//	if req.Soft == "" {
+//		response.FailWithMessage("soft不能为空", c)
+//		return
+//	}
+//	if req.Command == "" {
+//		response.FailWithMessage("Command不能为空", c)
+//		return
+//	}
+//
+//	if req.User == "" {
+//		response.FailWithMessage("请登录后访问", c)
+//		return
+//	}
+//	all, err := io.ReadAll(c.Request.Body)
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	defer c.Request.Body.Close()
+//	err = json.Unmarshal(all, &req.Data)
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//
+//	//err = c.ShouldBind(&req)
+//	//if err != nil {
+//	//	response.FailWithMessage(err.Error(), c)
+//	//	return
+//	//}
+//
+//	//bizAppHub.OperateUser=c.GetString("user")
+//	//bizAppHub.UpdatedBy = utils.GetUserID(c)
+//	//bizAppHub.OperateUser = c.GetString("user")
+//	//todo 验证用户是否有调用该应用的权限
+//	//j, err := req.RequestJSON()
+//	//if err != nil {
+//	//	response.FailWithMessage(err.Error(), c)
+//	//	return
+//	//}
+//	//req.ReqBody = j
+//	caller := biz_apphub.NewCaller("")
+//	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
+//	if c.Request.Header.Get("content-type") == "multipart/form-data" { //如果上传的有文件，需要下载文件，然后copy到
+//		files, err := getFileMap(c, caller.CallerPath())
+//		if err != nil {
+//			response.FailWithMessage(err.Error(), c)
+//			return
+//		}
+//		req.Files = files
+//		value := c.PostForm("jsonData")
+//		if value != "" {
+//			mp := make(map[string]interface{})
+//			err := json.Unmarshal([]byte(value), &mp)
+//			if err != nil {
+//				response.FailWithMessage(err.Error(), c)
+//				return
+//			}
+//			req.Data = mp
+//		}
+//	}
+//
+//	err = jsonx.SaveFile(req.RequestJsonPath, req) //
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	//todo 需要删除请求参数
+//	//defer os.Remove(req.RequestJsonPath)
+//
+//	call, err := caller.Call(req)
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	biz_apphub.GetSoftLogs(call)
+//	if call.StatusCode != 200 {
+//		c.JSON(call.StatusCode, gin.H{"msg": call.Body})
+//		return
+//	}
+//	if call.ContentType == "application/octet-stream" {
+//		if call.HasFile {
+//			//if call.HasFile
+//			fileName := filepath.Base(call.FilePath) // 获取文件名
+//			if call.DeleteFile {
+//				defer os.Remove(call.FilePath)
+//			}
+//			// 如果请求中有自定义文件名，则使用自定义文件名
+//			if customFileName := c.Query("filename"); customFileName != "" {
+//				fileName = customFileName
+//			}
+//			c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
+//			c.File(call.FilePath)
+//			return
+//		}
+//	}
+//
+//	if call.ContentType == "application/json; charset=utf-8" {
+//		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.String(call.Body)))
+//	}
+//	if call.ContentType == "text/plain; charset=utf-8" {
+//		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Body)))
+//	}
+//}
+//
+//// GetCall 后端命令接口
+//// @Tags BizAppHub
+//// @Summary 后端命令接口
+//// @Security ApiKeyAuth
+//// @accept application/json
+//// @Produce application/json
+//// @Param data body biz_apphub.BizAppHub true "后端命令接口"
+//// @Success 200 {object} response.Response{msg=string} "更新成功"
+//// @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
+//func (bizAppHubApi *BizAppHubApi) GetCall(c *gin.Context) {
+//	var (
+//		req biz_apphubReq.Call
+//		err error
+//	)
+//	req.Soft = c.Param("soft")
+//	req.Command = c.Param("command")
+//	req.User = c.Param("user")
+//	req.Method = "GET"
+//	if req.Soft == "" {
+//		response.FailWithMessage("soft不能为空", c)
+//		return
+//	}
+//	if req.Command == "" {
+//		response.FailWithMessage("Command不能为空", c)
+//		return
+//	}
+//
+//	if req.User == "" {
+//		response.FailWithMessage("user 不能为空", c)
+//		return
+//	}
+//	if req.Data == nil {
+//		req.Data = make(map[string]interface{})
+//	}
+//	queryMap := c.Request.URL.Query()
+//	for k, values := range queryMap {
+//		if len(values) > 1 {
+//			req.Data[k] = values
+//		} else {
+//			req.Data[k] = values[0]
+//		}
+//	}
+//	//todo 验证用户是否有调用该应用的权限
+//	j, err := req.RequestJSON()
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	req.ReqBody = j
+//	caller := biz_apphub.NewCaller("")
+//	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
+//
+//	err = jsonx.SaveFile(req.RequestJsonPath, req) //
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	//todo 请求参数需要删除
+//	//defer os.Remove(req.RequestJsonPath)
+//
+//	call, err := caller.Call(req)
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	biz_apphub.GetSoftLogs(call)
+//	if call.StatusCode != 200 {
+//		c.JSON(call.StatusCode, gin.H{
+//			"msg": call.Body,
+//		})
+//		return
+//	}
+//
+//	if call.ContentType == "file" {
+//		if call.HasFile {
+//			//if call.HasFile
+//			fileName := filepath.Base(call.FilePath) // 获取文件名
+//			if call.DeleteFile {
+//				defer os.Remove(call.FilePath)
+//			}
+//			// 如果请求中有自定义文件名，则使用自定义文件名
+//			if customFileName := c.Query("filename"); customFileName != "" {
+//				fileName = customFileName
+//			}
+//			c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
+//			c.File(call.FilePath)
+//			return
+//		}
+//	}
+//
+//	if call.ContentType == "json" {
+//		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.String(call.Body)))
+//	}
+//	if call.ContentType == "text" {
+//		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Body)))
+//	}
+//}
 
 func getFileMap(c *gin.Context, fileRoot string) (filePath []string, err error) {
 	err = c.Request.ParseMultipartForm(32 << 20) // 32MB

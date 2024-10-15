@@ -165,6 +165,7 @@ func (bizCloudFunctionService *BizCloudFunctionService) UnCreateFunc(req *biz_ap
 				unCreateFunc = append(unCreateFunc, dto.Api{
 					Path:   a.Path,
 					Method: a.Method,
+					Info:   a.Info,
 				})
 			}
 		}

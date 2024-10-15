@@ -21,6 +21,7 @@ type ApiGroup struct {
 	AutoCodePackageApi
 	AutoCodeHistoryApi
 	AutoCodeTemplateApi
+	SysParamsApi
 }
 
 var (
@@ -35,6 +36,7 @@ var (
 	dictionaryService       = service.ServiceGroupApp.SystemServiceGroup.DictionaryService
 	authorityBtnService     = service.ServiceGroupApp.SystemServiceGroup.AuthorityBtnService
 	systemConfigService     = service.ServiceGroupApp.SystemServiceGroup.SystemConfigService
+	sysParamsService        = service.ServiceGroupApp.SystemServiceGroup.SysParamsService
 	operationRecordService  = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 	dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 	autoCodeService         = service.ServiceGroupApp.SystemServiceGroup.AutoCodeService

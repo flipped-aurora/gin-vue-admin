@@ -247,6 +247,7 @@ type AutoFunc struct {
 	HumpPackageName string `json:"humpPackageName"` // go文件名称
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
+	IsAuth          bool   `json:"isAuth"`          // 是否鉴权
 }
 
 type InitMenu struct {
@@ -258,4 +259,9 @@ type InitMenu struct {
 type InitApi struct {
 	PlugName string `json:"plugName"`
 	APIs     []uint `json:"apis"`
+}
+
+type LLMAutoCode struct {
+	Prompt string `json:"prompt" form:"prompt" gorm:"column:prompt;comment:提示语;type:text;"` //提示语
+	Mode   string `json:"mode" form:"mode" gorm:"column:mode;comment:模式;type:text;"`        //模式
 }

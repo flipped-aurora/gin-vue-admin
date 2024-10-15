@@ -351,7 +351,7 @@
             "autoCode": "مولد الأكواد",
             "autoCodeEdit": "أتمتة الكود (إعادة الاستخدام)",
             "autoCodeManage": "إدارة الكود الآلي",
-            "breakPoint": "HTTP",
+            "breakPoint": "رفع الملفات الكبيرة",
             "customerList": "قائمة العملاء (مثال مورد)",
             "dashboard": "لوحة القيادة",
             "dataTableInitFail": "فشل في تهيئة بيانات الجدول",

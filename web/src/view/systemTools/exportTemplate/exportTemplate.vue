@@ -1,7 +1,7 @@
 <template>
   <div>
     <WarningBar
-      :title="t('view.systemTools.syncTableExportFeature')"
+      :title="t('view.systemTools.exportTemplate.syncTableExportFeature')"
       href="https://flipped-aurora.feishu.cn/docx/KwjxdnvatozgwIxGV0rcpkZSn4d"
     />
     <div class="gva-search-box">
@@ -130,7 +130,7 @@
             align="left"
             :label="t('view.systemTools.exportTemplate.templateIdentifier')"
             prop="templateID"
-            width="140"
+            width="180"
         />
         <el-table-column
           align="left"
@@ -186,7 +186,7 @@
     </div>
     <el-drawer
       v-model="dialogFormVisible"
-      size="60%"
+      size="40%"
       :before-close="closeDialog"
       :title="type==='create'?t('view.systemTools.exportTemplate.add'):t('view.systemTools.exportTemplate.edit')"
       :show-close="false"
@@ -221,7 +221,7 @@
         >
           <template #label>
             <el-tooltip
-              :content="t('view.systemTools.note')"
+              :content="t('view.systemTools.exportTemplate.dbListNote')"
               placement="bottom"
               effect="light"
             >
@@ -278,7 +278,7 @@
                 v-model="formData.tableName"
                 class="flex-1"
                 filterable
-                :placeholder="t('view.systemTools.exportTemplate.selectTable')"
+                :placeholder="t('view.systemTools.autoCode.selectTable')"
             >
               <el-option
                   v-for="item in tableOptions"
@@ -367,7 +367,7 @@
           />
         </el-form-item>
         <el-form-item
-            label-width="160px"
+            label-width="240px"
           :label="t('view.systemTools.exportTemplate.defaultExportCount')"
         >
           <el-input-number
@@ -383,7 +383,7 @@
         >
           <el-input
             v-model="formData.order"
-            placeholder="例:id desc"
+            :placeholder="t('view.systemTools.exportTemplate.sortingCriteriaNote')"
           />
         </el-form-item>
         <el-form-item
@@ -456,17 +456,13 @@ defineOptions({
   name: 'ExportTemplate'
 })
 
-const templatePlaceholder = `模板信息格式：key标识数据库column列名称（在join模式下需要写为 table.column），value标识导出excel列名称，如key为数据库关键字或函数，请按照关键字的处理模式处理，当前以mysql为例，如下：
-{
-  "table_column1":"第一列",
-  "table_column3":"第三列",
-  "table_column4":"第四列",
-  "\`rows\`":"我属于数据库关键字或函数",
-}
-如果增加了JOINS导出key应该列为 {table_name1.table_column1:"第一列",table_name2.table_column2:"第二列"}
-如果有重复的列名导出格式应为 {table_name1.table_column1 as key:"第一列",table_name2.table_column2 as key2:"第二列"}
-JOINS模式下不支持导入
-`
+const templatePlaceholder = t('view.systemTools.exportTemplate.templatePlaceholder1') + 
+`{
+  "table_column1":"` + t('view.systemTools.exportTemplate.templatePlaceholder2') + `",
+  "table_column3":"` + t('view.systemTools.exportTemplate.templatePlaceholder3') + `",
+  "table_column4":"` + t('view.systemTools.exportTemplate.templatePlaceholder4') + `",
+  "\`rows\`":"` + t('view.systemTools.exportTemplate.templatePlaceholder5') + `",
+}` + t('view.systemTools.exportTemplate.templatePlaceholder6')
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({

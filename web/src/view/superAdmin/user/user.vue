@@ -7,28 +7,28 @@
           :inline="true"
           :model="searchInfo"
       >
-        <el-form-item label="用户名">
+        <el-form-item :label="t('view.superAdmin.user.userName')">
           <el-input
               v-model="searchInfo.username"
-              placeholder="用户名"
+              :placeholder="t('view.superAdmin.user.addUser')"
           />
         </el-form-item>
-        <el-form-item label="昵称">
+        <el-form-item :label="t('view.superAdmin.user.nickName')">
           <el-input
               v-model="searchInfo.nickname"
-              placeholder="昵称"
+              :placeholder="t('view.superAdmin.user.nickName')"
           />
         </el-form-item>
-        <el-form-item label="手机号">
+        <el-form-item :label="t('view.superAdmin.user.phone')">
           <el-input
               v-model="searchInfo.phone"
-              placeholder="手机号"
+              placeholder="t('view.superAdmin.user.phone')"
           />
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item :label="t('view.superAdmin.user.email')">
           <el-input
               v-model="searchInfo.email"
-              placeholder="邮箱"
+              :placeholder="t('view.superAdmin.user.email')"
           />
         </el-form-item>
         <el-form-item>
@@ -37,13 +37,13 @@
               icon="search"
               @click="onSubmit"
           >
-            查询
+            {{ t('general.search') }}
           </el-button>
           <el-button
               icon="refresh"
               @click="onReset"
           >
-            重置
+            {{ t('general.reset') }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -177,7 +177,7 @@
     </div>
     <el-drawer
       v-model="addUserDialog"
-      size="60%"
+      size="40%"
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"

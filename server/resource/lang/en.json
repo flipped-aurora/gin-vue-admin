@@ -359,7 +359,7 @@
             "autoCode": "Code Generator",
             "autoCodeEdit": "Automate code (reuse)",
             "autoCodeManage": "Automated Code Management",
-            "breakPoint": "HTTP",
+            "breakPoint": "Large Files Upload",
             "customerList": "Customer List (Resource Example)",
             "dashboard": "Dashboard",
             "dataTableInitFail": "Failed to initialize table data",

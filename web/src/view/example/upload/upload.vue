@@ -2,7 +2,7 @@
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="gva-table-box">
       <warning-bar
-        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+        :title="t('view.example.upload.editFileNote')"
       />
       <div class="gva-btn-list gap-3">
         <upload-common
@@ -20,24 +20,24 @@
             icon="upload"
             @click="importUrlFunc"
         >
-          导入URL
+          {{ t('view.example.upload.importURL') }}
         </el-button>
         <el-input
           v-model="search.keyword"
           class="w-72"
-          placeholder="请输入文件名或备注"
+          :placeholder="t('view.example.upload.enterFileName')"
         />
         <el-button
           type="primary"
           icon="search"
           @click="getTableData"
-        >查询</el-button>
+        >{{ t('general.search') }}</el-button>
       </div>
 
       <el-table :data="tableData">
         <el-table-column
           align="left"
-          label="预览"
+          :label="t('view.example.upload.review')"
           width="100"
         >
           <template #default="scope">
@@ -60,7 +60,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="文件名/备注"
+          :label="t('view.example.upload.fileNameComments')"
           prop="name"
           width="180"
         >
@@ -73,13 +73,13 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="链接"
+          :label="t('view.example.upload.link')"
           prop="url"
           min-width="300"
         />
         <el-table-column
           align="left"
-          label="标签"
+          :label="t('view.example.upload.label')"
           prop="tag"
           width="100"
         >
@@ -94,7 +94,7 @@
         <el-table-column
           align="left"
           :label="t('general.operations')"
-          width="160"
+          width="200"
         >
           <template #default="scope">
             <el-button
@@ -102,7 +102,7 @@
               type="primary"
               link
               @click="downloadFile(scope.row)"
-            >下载</el-button>
+            >{{ t('view.example.upload.download') }}</el-button>
             <el-button
               icon="delete"
               type="primary"
@@ -182,7 +182,7 @@ const getTableData = async() => {
 getTableData()
 
 const deleteFileFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久删除文件, 是否继续?', t('general.hint'), {
+  ElMessageBox.confirm(t('view.example.upload.deleteAllFilesNote'), t('general.hint'), {
     confirmButtonText: t('general.confirm'),
     cancelButtonText: t('general.cancel'),
     type: 'warning',
@@ -192,7 +192,7 @@ const deleteFileFunc = async(row) => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!',
+          message: t('general.deleteSuccess'),
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
@@ -203,7 +203,7 @@ const deleteFileFunc = async(row) => {
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: '已取消删除',
+        message: t('general.undeleted'),
       })
     })
 }
@@ -223,11 +223,11 @@ const downloadFile = (row) => {
  * @returns {Promise<void>}
  */
 const editFileNameFunc = async(row) => {
-  ElMessageBox.prompt('请输入文件名或者备注', '编辑', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.prompt(t('view.example.upload.enterFileNameOrComment'), t('general.edit'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.close'),
     inputPattern: /\S/,
-    inputErrorMessage: '不能为空',
+    inputErrorMessage: t('general.cannotBeEmpty'),
     inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
@@ -236,14 +236,14 @@ const editFileNameFunc = async(row) => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '编辑成功!',
+        message: t('general.editSuccess'),
       })
       await getTableData()
     }
   }).catch(() => {
     ElMessage({
       type: 'info',
-      message: '取消修改'
+      message: t('general.cancelModification')
     })
   })
 }
@@ -252,13 +252,13 @@ const editFileNameFunc = async(row) => {
  * 导入URL
  */
 const importUrlFunc = () => {
-  ElMessageBox.prompt('格式：文件名|链接或者仅链接。', '导入', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.prompt(t('view.example.upload.formatNote'), t('general.import'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     inputType: 'textarea',
-    inputPlaceholder: '我的图片|https://my-oss.com/my.png\nhttps://my-oss.com/my_1.png',
+    inputPlaceholder: t('view.example.upload.inputPlaceholder'),
     inputPattern: /\S/,
-    inputErrorMessage: '不能为空',
+    inputErrorMessage: t('general.cannotBeEmpty'),
   }).then(async({ value }) => {
     let data = value.split('\n')
     let importData = []
@@ -287,14 +287,14 @@ const importUrlFunc = () => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '导入成功!',
+        message: t('view.example.upload.importSuccess'),
       })
       await getTableData()
     }
   }).catch(() => {
     ElMessage({
       type: 'info',
-      message: '取消导入',
+      message: t('view.example.upload.cancelImport'),
     })
   })
 }

@@ -1,9 +1,9 @@
 {
   "components": {
-    "arrayCtrl" : {
+    "arrayCtrl": {
       "new": "+ 新增"
     },
-    "bottomInfo" : {
+    "bottomInfo": {
       "poweredBy": "动力来自",
       "copyright": "版权",
       "faTeam": "flipped-aurora团队"
@@ -34,21 +34,6 @@
     "selectFile": {
       "uploadFiles": "上传文件",
       "uploadFailed": "上传失败"
-    },
-    "selectImage": {
-      "selectComponent": {
-        "image": "图片",
-        "upload": "上传"
-      },
-      "selectImage": {
-        "mediaLibrary": "媒体库",
-        "editFileNote": "点击“文件名/备注”可以编辑文件名或者备注内容。",
-        "enterFileName": "请输入文件名或备注",
-        "browserNotSupportVideo": "您的浏览器不支持视频播放",
-        "enterFileNameOrComment": "请输入文件名或者备注",
-        "typeNotSupported": "当前类型不支持使用",
-        "delectFileConfirmation": "是否删除该文件"
-      }
     },
     "upload": {
       "common": {
@@ -122,9 +107,9 @@
     "back": "返回",
     "cancel": "取消",
     "change": "变更",
-    "close": "取 消",
+    "close": "取消",
     "collapse": "收起",
-    "confirm": "确 定",
+    "confirm": "确定",
     "copy": "拷贝",
     "continue": "继续",
     "copySuccess": "复制成功!",
@@ -174,7 +159,8 @@
     "warning": "警告",
     "yes": "是",
     "cannotBeEmpty": "不能为空",
-    "cancelModification": "取消修改"
+    "cancelModification": "取消修改",
+    "import": "导入"
   },
   "historyComponent": {
     "closeAll": "关闭所有",
@@ -289,6 +275,10 @@
     "systemConfig": "系统配置"
   },
   "view": {
+    "about": {
+      "flippedAuroraTeam": "flipped-aurora团队",
+      "submitRecords": "提交记录"
+    },
     "dashboard": {
       "about": "关于我们",
       "announcement": "公告",
@@ -368,9 +358,57 @@
         "notice10": "让公司更有活力。"
       }
     },
-    "about": {
-      "flippedAuroraTeam": "flipped-aurora团队",
-      "submitRecords": "提交记录"
+    "example": {
+      "breakpoint": {
+        "largeFileUpload": "大文件上传",
+        "selectFile": "选择文件",
+        "uploadFiles": "上传文件",
+        "uploadFilesNote": "请上传不超过5MB的文件",
+        "breakpointNote": "此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹",
+        "fileTransferredSec": "文件已秒传"
+      },
+      "upload": {
+        "importURL": "导入URL",
+        "image": "图片",
+        "upload": "上传",
+        "mediaLibrary": "媒体库",
+        "fileNameComments": "文件名/备注",
+        "link": "链接",
+        "label": "标签",
+        "download": "下载",
+        "deleteAllFilesNote": "此操作将永久删除文件, 是否继续?",
+        "formatNote": "格式：文件名|链接或者仅链接。",
+        "editFileNote": "点击“文件名/备注”可以编辑文件名或者备注内容。",
+        "enterFileName": "请输入文件名或备注",
+        "browserNotSupportVideo": "您的浏览器不支持视频播放",
+        "enterFileNameOrComment": "请输入文件名或者备注",
+        "typeNotSupported": "当前类型不支持使用",
+        "delectFileConfirmation": "是否删除该文件",
+        "review": "预览",
+        "inputPlaceholder": "我的图片|https://my-oss.com/my.png\nhttps://my-oss.com/my_1.png",
+        "importSuccess": "导入成功!",
+        "cancelImport": "取消导入"
+      }
+    },
+    "layout": {
+      "header": {
+        "tools": {
+          "video01": "1.clone项目和安装依赖",
+          "video02": "2.初始化项目",
+          "video03": "3.开启调试工具+创建初始化包",
+          "video04": "4.手动使用自动化创建功能",
+          "video05": "5.使用已有表格创建业务",
+          "video06": "6.使用AI创建业务和创建数据源模式的可选项",
+          "video07": "7.创建自己的后端方法",
+          "video08": "8.新增一个前端页面",
+          "video09": "9.配置一个前端二级页面",
+          "video10": "10.配置一个前端菜单参数",
+          "video11": "11.菜单参数实战+动态菜单标题+菜单高亮配置",
+          "video12": "12.增加菜单可控按钮",
+          "video13": "13.新增客户角色和其相关配置教学",
+          "video14": "14.发布项目上线"
+        }
+      }
     },
     "superAdmin": {
       "menu": {
@@ -859,32 +897,32 @@
           "selectDataType": "请选择field数据类型",
           "selectDictionary": "请选择字典",
           "selectSearchType": "请选择Field查询条件",
-          "enumValue" : "枚举值",
-          "typeLength" : "类型长度",
-          "enumExample" : "例:'北京','天津'",
-          "dataTypeLength" : "数据库类型长度",
-          "enterDefaultValueNote" : "请输入默认值",
-          "frontendCreateEdit" :"前端新建/编辑",
-          "frontendTableColmuns" : "前端表格列",
-          "frontendDetails" : "前端详情",
-          "sort" : "是否排序",
-          "required" : "是否必填",
-          "canBeCleared" : "是否可清空",
-          "hideSearch" : "隐藏查询条件",
-          "verificationError" : "校验失败文案",
-          "dataSourceConfigNote" : "数据源配置（此配置为高级配置，如编程基础不牢，可能导致自动化代码不可用）",
-          "associationMode" : "关联模式",
-          "oneToOne" : "一对一",
-          "oneToMany" : "一对多",
-          "selectDataSourceTable" : "请选择数据源表",
-          "selectDataToStore" : "请先选择需要存储的数据",
-          "storage" : "存储: ",
-          "type" : "类型：",
-          "fileDesc" : "，字段说明：",
-          "selectDataToDisplay" : "请先选择需要展示的数据",
-          "display" : "展示: ",
-          "enumValueValidationError" : "枚举值校验错误",
-          "oneToManyNote" : "一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？"
+          "enumValue": "枚举值",
+          "typeLength": "类型长度",
+          "enumExample": "例:'北京','天津'",
+          "dataTypeLength": "数据库类型长度",
+          "enterDefaultValueNote": "请输入默认值",
+          "frontendCreateEdit": "前端新建/编辑",
+          "frontendTableColmuns": "前端表格列",
+          "frontendDetails": "前端详情",
+          "sort": "是否排序",
+          "required": "是否必填",
+          "canBeCleared": "是否可清空",
+          "hideSearch": "隐藏查询条件",
+          "verificationError": "校验失败文案",
+          "dataSourceConfigNote": "数据源配置（此配置为高级配置，如编程基础不牢，可能导致自动化代码不可用）",
+          "associationMode": "关联模式",
+          "oneToOne": "一对一",
+          "oneToMany": "一对多",
+          "selectDataSourceTable": "请选择数据源表",
+          "selectDataToStore": "请先选择需要存储的数据",
+          "storage": "存储: ",
+          "type": "类型：",
+          "fileDesc": "，字段说明：",
+          "selectDataToDisplay": "请先选择需要展示的数据",
+          "display": "展示: ",
+          "enumValueValidationError": "枚举值校验错误",
+          "oneToManyNote": "一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？"
         }
       },
       "autoPkg": {
@@ -929,7 +967,7 @@
         "add": "添加",
         "edit": "修改",
         "gvaDatabase": "GVA库",
-        "note": "注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。",
+        "dbListNote": "注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。",
         "enterTemplateName": "请输入模板名称",
         "templateIdentifierInfo": "模板标识为前端组件需要挂在的标识属性",
         "associationCondition": "关联条件",
@@ -960,7 +998,6 @@
         "gvaLibrary": "GVA库",
         "templateInfo": "模板信息",
         "addTo": "添加",
-        "dbListNote": "注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。",
         "templateName2": "模板名称:",
         "templateNameNote": "请输入模板名称",
         "tableName2": "表名称:",

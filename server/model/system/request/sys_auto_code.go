@@ -247,6 +247,7 @@ type AutoFunc struct {
 	HumpPackageName string `json:"humpPackageName"` // go文件名称
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
+	IsAuth          bool   `json:"isAuth"`          // 是否鉴权
 }
 
 type InitMenu struct {

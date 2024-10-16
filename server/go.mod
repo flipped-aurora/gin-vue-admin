@@ -50,7 +50,6 @@ require (
 	gorm.io/driver/sqlserver v1.5.3
 	gorm.io/gen v0.3.26
 	gorm.io/gorm v1.25.12
-	nhooyr.io/websocket v1.8.17
 )
 
 require (

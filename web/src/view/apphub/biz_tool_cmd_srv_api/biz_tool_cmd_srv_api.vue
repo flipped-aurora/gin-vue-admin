@@ -172,14 +172,14 @@
 <!--    </el-dialog>-->
 
 <!--    配置云函数-->
-    <el-dialog
-        width="80%"
-        v-model="showParam"
-        title="配置云函数"
-        append-to-body
-    >
-        <func_params_edit_view :form-data="current_func_info"></func_params_edit_view>
-    </el-dialog>
+<!--    <el-dialog-->
+<!--        width="80%"-->
+<!--        v-model="showParam"-->
+<!--        title="配置云函数"-->
+<!--        append-to-body-->
+<!--    >-->
+        <func_params_edit_view v-if="showParam" :show-param="showParam" :form-data="current_func_info_form_data"></func_params_edit_view>
+<!--    </el-dialog>-->
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
@@ -483,10 +483,32 @@ const current_func_info_form_data = ref({
 const current_runner_info =ref({})
 function func_params_edit(func){
   current_func_info.value=func
+  console.log("func",func)
+  console.log("func path",func.path)
   // let code=current_runner_info.value.appCode
-  current_func_info_form_data.runner_en_name=current_runner_info.appCode
-  current_func_info_form_data.api_config.path=current_runner_info.appCode+"/"+func.value.path
-  current_func_info_form_data.api_config.method=func.value.method
+  current_func_info_form_data.value.exec_mode="调用后端接口"
+  current_func_info_form_data.value.content_type="text"
+  current_func_info_form_data.value.is_public="是"
+  current_func_info_form_data.value.classify=""
+  current_func_info_form_data.value.api_config.path=current_runner_info.value.appCode+"/"+func.path
+  current_func_info_form_data.value.runner_en_name=current_runner_info.value.appCode
+  if(func.english_name===""){
+    current_func_info_form_data.value.english_name=current_func_info_form_data.value.api_config.path.replaceAll("/",".")
+  }else {
+    current_func_info_form_data.value.english_name=func.english_name
+  }
+  current_func_info_form_data.value.title=func.api_desc
+  if(func.chinese_name===""){
+    current_func_info_form_data.value.chinese_name=func.api_desc
+  }else {
+    current_func_info_form_data.value.chinese_name=func.chinese_name
+  }
+
+  // current_func_info_form_data.value.chinese_name=current_runner_info.value.appCode
+
+  current_func_info_form_data.value.api_config.method=func.method.toUpperCase()
+  current_func_info_form_data.value.param=func.params
+  // current_func_info_form_data.value.cn_name=func.params
   console.log("current_func_info",current_func_info.value)
 
   syncDialogFormVersionVisible.value=false

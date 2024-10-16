@@ -9,7 +9,6 @@ require (
 	github.com/aws/aws-sdk-go v1.55.5
 	github.com/casbin/casbin/v2 v2.100.0
 	github.com/casbin/gorm-adapter/v3 v3.28.0
-	github.com/flipped-aurora/ws v1.0.2
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.10.0

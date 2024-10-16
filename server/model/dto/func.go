@@ -10,7 +10,7 @@ type SyncFunctionReq struct {
 type Api struct {
 	Method string `json:"method"`
 	Path   string `json:"path"`
-	Info   Config `json:"info"`
+	Config
 }
 
 type Config struct {

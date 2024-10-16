@@ -170,6 +170,8 @@
 <!--    <el-dialog append-to-body v-model="showParam" title="配置云函数参数" >-->
 <!--      <func_params_edit  :form-data="current_param.params"></func_params_edit>-->
 <!--    </el-dialog>-->
+
+<!--    配置云函数-->
     <el-dialog
         width="80%"
         v-model="showParam"
@@ -457,13 +459,36 @@ defineOptions({
 })
 
 const current_func_info =ref({})
+
+const current_func_info_form_data = ref({
+  runner_id:0,
+  runner_en_name:"",
+  cn_name: '',
+  code_name: '',
+  classify: '',
+  exec_mode: '',
+  title: '',
+  content: '',
+  content_type: '',
+  param: {},
+  is_public: '',
+  api_config: {
+    path:"",
+    method:""
+  },
+  script_code: '',
+  tags: '',
+})
+
 const current_runner_info =ref({})
 function func_params_edit(func){
   current_func_info.value=func
-  let  code=current_runner_info.value.appCode
-  current_runner_info.value["app_code"]=code
-  current_func_info.value["path"]=code+"/"+current_func_info.value.path
+  // let code=current_runner_info.value.appCode
+  current_func_info_form_data.runner_en_name=current_runner_info.appCode
+  current_func_info_form_data.api_config.path=current_runner_info.appCode+"/"+func.value.path
+  current_func_info_form_data.api_config.method=func.value.method
   console.log("current_func_info",current_func_info.value)
+
   syncDialogFormVersionVisible.value=false
   showParam.value=true
 }

@@ -12,6 +12,9 @@ const props = defineProps({
 });
 
 onMounted(() => {
+  if(props.formData.info.english_name===""){
+    props.formData.info.english_name=props.formData.path.replaceAll("/",".")
+  }
   console.log("props.formData:",props.formData)
 })
 
@@ -111,7 +114,7 @@ const activeNames=ref(["1","2","3"])
     v-model="props.formData.method"
     placeholder="Select"
     size="large"
-    style="width: 240px"
+    style="width: 140px"
 >
   <el-option
       key=GET
@@ -125,6 +128,8 @@ const activeNames=ref(["1","2","3"])
   />
 </el-select>
   <span>调用地址：</span><el-input style="width: 240px" v-model="formData.path"></el-input>
+  <span>函数中文：</span><el-input style="width: 240px" v-model="formData.info.chinese_name"></el-input>
+  <span>函数英文标识：</span><el-input style="width: 240px" v-model="formData.info.english_name"></el-input>
   <h2>参数配置</h2>
   <el-collapse v-model="activeNames" >
     <el-collapse-item title="输入参数" name="1">

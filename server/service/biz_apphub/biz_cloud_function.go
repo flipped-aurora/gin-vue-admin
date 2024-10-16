@@ -132,10 +132,11 @@ func (bizCloudFunctionService *BizCloudFunctionService) SyncFunction(req *biz_ap
 	}
 	path := fmt.Sprintf("http://127.0.0.1:17777/runner/run/%s/%s/_func_all?_type=%s&_version=%s", r.TenantUser, r.AppCode, r.ToolType, r.Version)
 	d := dto.Response[[]dto.Api]{}
-	_, err = httpx.Get(path, &d)
+	httpCtx, err := httpx.Get(path, &d)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(httpCtx)
 	createFunc, err := bizCloudFunctionService.UnCreateFunc(&r, d.Data)
 	if err != nil {
 		return nil, err
@@ -165,7 +166,7 @@ func (bizCloudFunctionService *BizCloudFunctionService) UnCreateFunc(req *biz_ap
 				unCreateFunc = append(unCreateFunc, dto.Api{
 					Path:   a.Path,
 					Method: a.Method,
-					Info:   a.Info,
+					Config: a.Config,
 				})
 			}
 		}

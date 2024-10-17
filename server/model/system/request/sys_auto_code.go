@@ -3,6 +3,7 @@ package request
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
 	"go/token"
@@ -28,6 +29,7 @@ type AutoCode struct {
 	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
 	IsAdd               bool                   `json:"isAdd" example:"false"`               // 是否新增
 	Fields              []*AutoCodeField       `json:"fields"`
+	Module              string                 `json:"-"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`
 	DataSourceMap       map[string]*DataSource `json:"-"`
@@ -111,6 +113,7 @@ func (r *AutoCode) Menu(template string) model.SysBaseMenu {
 // Pretreatment 预处理
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (r *AutoCode) Pretreatment() error {
+	r.Module = global.GVA_CONFIG.AutoCode.Module
 	if token.IsKeyword(r.Abbreviation) {
 		r.Abbreviation = r.Abbreviation + "_"
 	} // go 关键字处理

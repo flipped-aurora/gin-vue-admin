@@ -25,7 +25,7 @@ package request
 
 import (
 {{- if not .OnlyTemplate }}
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"{{.Module}}/model/common/request"
 	{{ if or .HasSearchTimer .GvaModel}}"time"{{ end }}
 {{- end }}
 )

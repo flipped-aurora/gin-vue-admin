@@ -31,7 +31,7 @@ package {{.Package}}
 {{- if not .OnlyTemplate}}
 import (
 	{{- if .GvaModel }}
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"{{.Module}}/global"
 	{{- end }}
 	{{- if or .HasTimer }}
 	"time"

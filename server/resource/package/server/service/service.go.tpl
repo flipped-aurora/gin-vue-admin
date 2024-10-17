@@ -58,9 +58,9 @@ package {{.Package}}
 
 import (
 {{- if not .OnlyTemplate }}
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
+	"{{.Module}}/global"
+	"{{.Module}}/model/{{.Package}}"
+    {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}

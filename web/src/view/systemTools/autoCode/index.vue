@@ -157,7 +157,7 @@
               prop="structName"
               class="w-full"
             >
-              <div class="flex gap-2">
+              <div class="flex gap-2 w-full">
               <el-input
                 v-model="form.structName"
                 placeholder="首字母自动转换大写"

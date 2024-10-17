@@ -693,6 +693,7 @@
       <div class="gva-btn-list justify-end mt-4">
         <el-button
             type="primary"
+            :disabled="isAdd"
             @click="exportJson()"
         >
           导出json
@@ -703,31 +704,34 @@
             show-file-list="false"
             accept=".json"
         >
-          <el-button type="primary" class="mx-2">导入json</el-button>
+          <el-button type="primary" class="mx-2" :disabled="isAdd">导入json</el-button>
         </el-upload>
         <el-button
           type="primary"
+          :disabled="isAdd"
           @click="clearCatch()"
         >
           清除暂存
         </el-button>
         <el-button
           type="primary"
+          :disabled="isAdd"
           @click="catchData()"
         >
           暂存
         </el-button>
         <el-button
           type="primary"
-          @click="enterForm(true)"
-        >
-          预览代码
-        </el-button>
-        <el-button
-          type="primary"
+          :disabled="isAdd"
           @click="enterForm(false)"
         >
           生成代码
+        </el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(true)"
+        >
+          {{isAdd?'查看代码':'预览代码'}}
         </el-button>
       </div>
     </div>
@@ -790,6 +794,7 @@
       </template>
       <PreviewCodeDialog
         v-if="previewFlag"
+        :is-add="isAdd"
         ref="previewNode"
         :preview-code="preViewCode"
       />
@@ -1217,7 +1222,7 @@ const enterForm = async(isPreview) => {
       form.value.humpPackageName = toSQLLine(form.value.packageName)
       delete form.value.primaryField
       if (isPreview) {
-        const data = await preview(form.value)
+        const data = await preview({...form.value,isAdd:!!isAdd.value,fields:form.value.fields.filter(item => !item.disabled)})
         preViewCode.value = data.data.autoCode
         previewFlag.value = true
       } else {

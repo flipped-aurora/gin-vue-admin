@@ -1,6 +1,7 @@
 package biz_apphub
 
 import (
+	"encoding/json"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub"
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
@@ -29,6 +30,25 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) CreateBizCloudFunction(c *gin.Co
 		return
 	}
 	bizCloudFunction.TenantUser = c.GetString("user")
+	//mp:=make(map[string]string)
+	type ApiConfig struct {
+		Path   string `json:"path"` //api/runner/run/beiluo/apphub/array/SplitJoin
+		Method string `json:"method"`
+	}
+	a := ApiConfig{}
+	err = json.Unmarshal(bizCloudFunction.ApiConfig, &a)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	a.Path = "api/runner/run/" + bizCloudFunction.TenantUser + "/" + a.Path
+	marshal, err := json.Marshal(a)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	bizCloudFunction.ApiConfig = marshal
+	//bizCloudFunction.ApiConfig=
 	config := bizCloudFunction.GetApiConfig()
 	info, err := config.GetRunnerInfo()
 	if err != nil {

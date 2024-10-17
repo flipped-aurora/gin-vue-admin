@@ -54,6 +54,7 @@ const funcCall=async ()=> {
   console.log("param",func.detail.param)
   const startTime = performance.now();
   let bd = reactive({})
+  let res;
   for (let i = 0; i < func.detail.param.length; i++) {
     if (func.detail.param[i].mode === "in") {
       if (func.detail.param[i].type === "file") {
@@ -65,14 +66,17 @@ const funcCall=async ()=> {
             return
           }
         }
+        if (func.detail.param[i].type==="muti_select"){
+          func.detail.param[i].value=func.detail.param[i].checkList.join(";")
+        }
         bd[func.detail.param[i].code] = func.detail.param[i].value
       }
     }
   }
 
 
-  if (func.detail.api_config.method === "post") {
-    let res = await axios.post(func.detail.api_config.path, bd)
+  if (func.detail.api_config.method.toLowerCase() === "post") {
+     res = await axios.post(func.detail.api_config.path, bd)
     if (res.data.data){
       runData.data=res.data.data
     }
@@ -91,7 +95,7 @@ const funcCall=async ()=> {
 
   }else {
     // let res =await axios.get(func.detail.api_config.path,bd)
-    let res = await axios.get(func.detail.api_config.path, {
+     res = await axios.get(func.detail.api_config.path, {
       params: bd
     })
     if (res.data.data){
@@ -127,10 +131,20 @@ const funcCall=async ()=> {
 }
   const endTime = performance.now();
   let cost=endTime - startTime
-  run_info.out_tab="res"
-  run_info.run_status="运行成功"
   run_info.run_cost=formatTime(cost)
-  ElMessage.success("运行成功")
+  if (res.data.code===0){
+    run_info.out_tab="res"
+    run_info.run_status="运行成功"
+    ElMessage.success("运行成功")
+  }else {
+    run_info.out_tab="res"
+    run_info.run_status="运行失败，失败原因："+res.data.msg
+    ElMessage.error("运行失败！")
+  }
+
+
+
+
 
 }
 function formatTime(milliseconds) {
@@ -158,6 +172,20 @@ onMounted(() => {
             //   message: '必填',
             //   trigger: "blur"
             // }]
+          }
+          if (func.detail.param[i].type === "sige_select") {
+            if (func.detail.param[i].select_options===""){
+              func.detail.param[i].value=func.detail.param[i].options.split(";")[0]
+            }else {
+              func.detail.param[i].value=func.detail.param[i].select_options
+            }
+          }
+          if (func.detail.param[i].type === "muti_select") {
+            func.detail.param[i].checkList=[]
+            if (func.detail.param[i].select_options!==""){
+              func.detail.param[i].checkList=func.detail.param[i].options.split(";")[0]
+              func.detail.param[i].checkList= func.detail.param[i].select_options.split(";")
+            }
           }
           if (func.detail.param[i].type === "file") {
             func.detail.param[i].files = []
@@ -203,6 +231,12 @@ const out_tab = ref('mock_data')
 const in_tab = ref('run')
 const run_status=ref("")
 
+function getOpts(param){
+  // param.value=param.select_options
+  console.log("getOpts",param.options.split(";"))
+  return param.options.split(";")
+}
+
 </script>
 
 <template>
@@ -247,6 +281,35 @@ const run_status=ref("")
                             <el-button type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
                             <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
                           </p>
+                        </div>
+                        <div style="width: 80%" v-else-if="v.type==='muti_select'">
+                          <el-checkbox-group v-model="v.checkList">
+                            <!-- works when >=2.6.0, recommended ✔️ value not work when <2.6.0 ❌ -->
+                            <el-checkbox v-for="opt in getOpts(v)" :label="opt" :value="opt" />
+                            <!-- works when <2.6.0, deprecated act as value when >=3.0.0 -->
+<!--                            <el-checkbox label="Option 2 & Value 2" />-->
+                          </el-checkbox-group>
+                        </div>
+                        <div style="width: 80%" v-else-if="v.type==='sige_select'">
+                          <el-select
+                              filterable
+                              v-model="v.value"
+                              placeholder="Select"
+                              size="large"
+                              style="width: 100%"
+                          >
+                            <el-option
+                                v-for="item in getOpts(v)"
+                                :key="item"
+                                :label="item"
+                                :value="item"/>
+                          </el-select>
+<!--                          <el-checkbox-group v-model="v.checkList">-->
+<!--                            &lt;!&ndash; works when >=2.6.0, recommended ✔️ value not work when <2.6.0 ❌ &ndash;&gt;-->
+<!--                            <el-checkbox v-for="opt in getOpts(v)" :label="opt" :value="opt" />-->
+<!--                            &lt;!&ndash; works when <2.6.0, deprecated act as value when >=3.0.0 &ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <el-checkbox label="Option 2 & Value 2" />&ndash;&gt;-->
+<!--                          </el-checkbox-group>-->
                         </div>
                       </el-form-item>
 

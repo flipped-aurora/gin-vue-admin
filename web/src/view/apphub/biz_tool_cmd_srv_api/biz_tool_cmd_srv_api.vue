@@ -172,14 +172,14 @@
 <!--    </el-dialog>-->
 
 <!--    配置云函数-->
-<!--    <el-dialog-->
-<!--        width="80%"-->
-<!--        v-model="showParam"-->
-<!--        title="配置云函数"-->
-<!--        append-to-body-->
-<!--    >-->
-        <func_params_edit_view v-if="showParam" :show-param="showParam" :form-data="current_func_info_form_data"></func_params_edit_view>
-<!--    </el-dialog>-->
+    <el-dialog
+        width="80%"
+        v-model="showParam"
+        title="配置云函数"
+        append-to-body
+    >
+        <func_params_edit_view @update-show-param="updateShowParam" :form-data="current_func_info_form_data"></func_params_edit_view>
+    </el-dialog>
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
@@ -457,9 +457,13 @@ const uploadedFiles=ref([])
 defineOptions({
     name: 'BizToolCmdSrvApi'
 })
-
+const showParam=ref(false)
 const current_func_info =ref({})
-
+// 定义一个方法，当需要向父组件发送消息时调用
+const updateShowParam = (updateShowParam) => {
+  // console.log('来自子组件的消息:', message);
+  showParam.value=updateShowParam
+};
 const current_func_info_form_data = ref({
   runner_id:0,
   runner_en_name:"",
@@ -489,19 +493,19 @@ function func_params_edit(func){
   current_func_info_form_data.value.exec_mode="调用后端接口"
   current_func_info_form_data.value.content_type="text"
   current_func_info_form_data.value.is_public="是"
-  current_func_info_form_data.value.classify=""
+  current_func_info_form_data.value.classify=func.classify
   current_func_info_form_data.value.api_config.path=current_runner_info.value.appCode+"/"+func.path
   current_func_info_form_data.value.runner_en_name=current_runner_info.value.appCode
   if(func.english_name===""){
-    current_func_info_form_data.value.english_name=current_func_info_form_data.value.api_config.path.replaceAll("/",".")
+    current_func_info_form_data.value.code_name=current_func_info_form_data.value.api_config.path.replaceAll("/",".")
   }else {
-    current_func_info_form_data.value.english_name=func.english_name
+    current_func_info_form_data.value.code_name=func.english_name
   }
   current_func_info_form_data.value.title=func.api_desc
   if(func.chinese_name===""){
-    current_func_info_form_data.value.chinese_name=func.api_desc
+    current_func_info_form_data.value.cn_name=func.api_desc
   }else {
-    current_func_info_form_data.value.chinese_name=func.chinese_name
+    current_func_info_form_data.value.cn_name=func.chinese_name
   }
 
   // current_func_info_form_data.value.chinese_name=current_runner_info.value.appCode
@@ -511,7 +515,7 @@ function func_params_edit(func){
   // current_func_info_form_data.value.cn_name=func.params
   console.log("current_func_info",current_func_info.value)
 
-  syncDialogFormVersionVisible.value=false
+  // syncDialogFormVersionVisible.value=false
   showParam.value=true
 }
 
@@ -536,7 +540,9 @@ const handleChange = (val) => {
 }
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
-const showParam = ref(false)
+// const showParam = ref({
+//   show:false
+// })
 
 // 自动化生成的字典（可能为空）以及字段
 const bool_statusOptions = ref([])

@@ -117,7 +117,7 @@ func (bizCloudFunctionService *BizCloudFunctionService) GetBizCloudFunctionInfoL
 		db = db.Limit(limit).Offset(offset)
 	}
 
-	err = db.Find(&bizCloudFunctions).Error
+	err = db.Order("created_at desc").Find(&bizCloudFunctions).Error
 	return bizCloudFunctions, total, err
 }
 

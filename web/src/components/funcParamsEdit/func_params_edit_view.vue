@@ -1,6 +1,6 @@
 <script setup>
 
-import {defineProps, onMounted, ref} from "vue";
+import {defineProps,watch, onMounted, ref} from "vue";
 import {createBizCloudFunction, updateBizCloudFunction} from "@/api/biz_apphub/bizCloudFunction";
 import {ElMessage} from "element-plus";
 
@@ -10,7 +10,7 @@ const props = defineProps({
   },
   runner_name:{
     type: String,
-  }
+  },
 });
 
 onMounted(() => {
@@ -23,12 +23,13 @@ onMounted(() => {
 
 const enterDialog = async () => {
 
-  let res = await createBizCloudFunction(formData.value)
+  let res = await createBizCloudFunction(props.formData)
   if (res.code === 0) {
     ElMessage({
       type: 'success',
       message: '创建成功'
     })
+    emit('updateShowParam', false);
   }else {
     ElMessage({
       type: 'error',
@@ -59,7 +60,7 @@ const enterDialog = async () => {
   //   }
   // })
 }
-
+const emit = defineEmits(['updateShowParam']);
 const param_in_type = ref("string")
 const showParam = ref(true)
 const param_out_type = ref("string")
@@ -74,11 +75,18 @@ const removeField = (index) => {
 };
 
 
-function createCloudFunc(){
-  showParam.value=false
+const createCloudFunc =async function() {
+   enterDialog()
+
+  // showParam.value=false
 }
 
-
+// 监听本地响应式数据的变化，发送 update:visible 事件，由于是双向绑定，父组件的值会直接改变。这里传递的 visible 是 ref 对象，
+// 可以直接传递，Vue 自动解包数据，也可使用 () => visible.value
+// watch(showParam, (newVal) => {
+//   // this.emit('update:showParam', newVal)
+//   emit('updateShowParam', newVal);
+// })
 const addInField = () => {
 
   formData.value.param.push({
@@ -155,15 +163,6 @@ const activeNames=ref(["1","2","3"])
 </script>
 
 <template>
-
-
-  <el-dialog
-      width="80%"
-      v-model="showParam"
-      title="配置云函数"
-      append-to-body
-      destroy-on-close="true"
-  >
     <div>
       <p>
         <el-button @click="createCloudFunc()" type="primary" style="width: 100%">提交</el-button>
@@ -188,8 +187,8 @@ const activeNames=ref(["1","2","3"])
     </el-select>
 
       <span>调用地址：</span><el-input style="width: 200px" v-model="formData.api_config.path"></el-input>
-      <span>函数中文：</span><el-input style="width: 200px" v-model="formData.chinese_name"></el-input>
-      <span>函数英文标识：</span><el-input style="width: 200px" v-model="formData.english_name"></el-input>
+      <span>函数中文：</span><el-input style="width: 200px" v-model="formData.cn_name"></el-input>
+      <span>函数英文标识：</span><el-input style="width: 200px" v-model="formData.code_name"></el-input>
       <span>分类：</span><el-input style="width: 200px" v-model="formData.classify"></el-input>
       <h2>参数配置</h2>
       <el-collapse v-model="activeNames" >
@@ -350,8 +349,6 @@ const activeNames=ref(["1","2","3"])
       <!--  <p style="margin: 10px 10px"><el-button style="width: 100%" type="primary" @click="setParamDialogVisible=false">确认</el-button></p>-->
 
     </div>
-  </el-dialog>
-
 </template>
 
 <style scoped lang="scss">

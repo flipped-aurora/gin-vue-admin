@@ -27,12 +27,14 @@ type BizCloudFunction struct {
 	ApiPath     string         `json:"api_path" form:"api_path" gorm:"column:api_path;comment:后端调用的接口地址;"`
 	ApiFullPath string         `json:"api_full_path" form:"api_full_path" gorm:"column:api_full_path;comment:后端调用的接口地址全称;"`
 	ApiMethod   string         `json:"api_method" form:"api_method" gorm:"column:api_method;comment:后端调用的接口方式;"`
-	ScriptCode  string         `json:"script_code" form:"script_code" gorm:"column:script_code;comment:JS代码;"`        //JS代码
-	Tags        string         `json:"tags" form:"tags" gorm:"column:tags;comment:tags;"`                             //标签
-	Views       *int           `json:"views" form:"views" gorm:"default:0;column:views;comment:浏览量;"`                 //浏览量
-	ExecCount   *int           `json:"exec_count" form:"exec_count" gorm:"default:0;column:exec_count;comment:执行次数;"` //执行次数
-	Coll        *int           `json:"coll" form:"coll" gorm:"default:0;column:coll;comment:收藏数量;"`                   //收藏数量
-	Like        *int           `json:"like" form:"like" gorm:"default:0;column:like;comment:点赞量;"`                    //点赞量
+	ScriptCode  string         `json:"script_code" form:"script_code" gorm:"column:script_code;comment:JS代码;"` //JS代码
+	Tags        string         `json:"tags" form:"tags" gorm:"column:tags;comment:tags;"`                      //标签
+
+	Covers    string `json:"covers" form:"covers" gorm:"column:covers;comment:封面分号分割;"`
+	Views     *int   `json:"views" form:"views" gorm:"default:0;column:views;comment:浏览量;"`                 //浏览量
+	ExecCount *int   `json:"exec_count" form:"exec_count" gorm:"default:0;column:exec_count;comment:执行次数;"` //执行次数
+	Coll      *int   `json:"coll" form:"coll" gorm:"default:0;column:coll;comment:收藏数量;"`                   //收藏数量
+	Like      *int   `json:"like" form:"like" gorm:"default:0;column:like;comment:点赞量;"`                    //点赞量
 }
 
 // TableName 云函数 BizCloudFunction自定义表名 biz_cloud_function

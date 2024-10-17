@@ -92,6 +92,7 @@ const formData = ref({
             api_config: {},
             script_code: '',
             tags: '',
+            covers:""
         })
 // 验证规则
 const rule = reactive({

@@ -232,6 +232,9 @@
             <el-form-item label="标签:"  prop="tags" >
               <el-input v-model="formData.tags" :clearable="true"  placeholder="请输入标签" />
             </el-form-item>
+            <el-form-item label="封面:"  prop="tags" >
+              <el-input v-model="formData.covers" :clearable="true"  placeholder="请输入封面，多个用分号分割" />
+            </el-form-item>
           </el-form>
     </el-drawer>
 
@@ -617,6 +620,7 @@ const formData = ref({
             api_config: {},
             script_code: '',
             tags: '',
+            covers:[]
         })
 
 

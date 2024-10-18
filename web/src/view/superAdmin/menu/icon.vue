@@ -35,8 +35,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import config from '@/core/config'
+import { reactive } from 'vue'
 
 defineOptions({
   name: 'Icon',

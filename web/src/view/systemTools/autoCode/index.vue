@@ -158,7 +158,7 @@
               prop="structName"
               class="w-full"
             >
-              <div class="flex gap-2">
+              <div class="flex gap-2 w-full">
               <el-input
                 v-model="form.structName"
                 placeholder="首字母自动转换大写"
@@ -1220,6 +1220,20 @@ const enterForm = async(isPreview) => {
         return false
       }
       form.value.humpPackageName = toSQLLine(form.value.packageName)
+
+      form.value.fields.forEach(item => {
+        if(item.fieldType === 'enum'){
+          // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
+          const arr = item.dataTypeLong.split(',')
+          arr.forEach((ele, index) => {
+            if(ele.indexOf("'") === -1){
+              arr[index] = `'${ele}'`
+            }
+          })
+          item.dataTypeLong = arr.join(',')
+        }
+      })
+
       delete form.value.primaryField
       if (isPreview) {
         const data = await preview({...form.value,isAdd:!!isAdd.value,fields:form.value.fields.filter(item => !item.disabled)})

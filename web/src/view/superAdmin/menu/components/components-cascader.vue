@@ -17,7 +17,7 @@
 
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import pathInfo from "@/pathInfo.json";
 
 const props = defineProps({
@@ -83,6 +83,11 @@ function convertToCascaderOptions(data) {
 
   return result;
 }
+
+
+watch(() => props.component, (value) => {
+  initCascader(value)
+})
 
 onMounted(() => {
   pathOptions.value = convertToCascaderOptions(pathInfo)

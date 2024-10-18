@@ -250,6 +250,25 @@
         </el-form-item>
 
         <el-form-item
+          label="需用到的表"
+          prop="tables"
+        >
+          <el-select
+            multiple
+            v-model="tables"
+            clearable
+            placeholder="使用AI的情况下请选择"
+          >
+              <el-option
+                  v-for="item in tableOptions"
+                  :key="item.tableName"
+                  :label="item.tableName"
+                  :value="item.tableName"
+              />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
             label="AI帮写:"
             prop="ai"
         >
@@ -488,6 +507,7 @@ const formData = ref({
 })
 
 const prompt = ref('')
+const tables = ref([])
 
 const typeSearchOptions = ref([
   {
@@ -614,11 +634,33 @@ const dbList = ref([])
 const tableOptions = ref([])
 const aiLoading = ref(false)
 
+const getTablesCloumn = async() => {
+  const tablesMap = {}
+  const promises = tables.value.map(async item => {
+    const res = await getColumn({
+      businessDB: formData.value.dbName,
+      tableName: item
+    })
+    if(res.code === 0) {
+      tablesMap[item] = res.data.columns
+    }
+  })
+  await Promise.all(promises)
+  return tablesMap
+}
+
 
 const autoExport = async () => {
+ if (tables.value.length === 0) {
+    ElMessage({
+      type: 'error',
+      message: '请先选择需要参与导出的表'
+    })
+    return
+  }
   aiLoading.value = true
-  const tables = tableOptions.value.map(item => item.tableName)
-  const aiRes = await butler({prompt:prompt.value,businessDB: formData.value.dbName||"",tables:tables,command:'autoExportTemplate'})
+  const tableMap = await getTablesCloumn()
+  const aiRes = await butler({prompt:prompt.value,businessDB: formData.value.dbName||"",tableMap:tableMap,command:'autoExportTemplate'})
   aiLoading.value = false
   if (aiRes.code === 0) {
     const aiData = JSON.parse(aiRes.data)
@@ -643,6 +685,7 @@ getDbFunc()
 const dbNameChange = () => {
   formData.value.tableName = ''
   formData.value.templateInfo = ''
+  tables.value = []
   getTableFunc()
 }
 

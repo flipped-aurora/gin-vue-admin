@@ -250,14 +250,14 @@
         </el-form-item>
 
         <el-form-item
-          label="AI用关联表"
+          label="需用到的表"
           prop="tables"
         >
           <el-select
             multiple
             v-model="tables"
             clearable
-            placeholder="关联表使用AI关联的情况下请选择"
+            placeholder="使用AI的情况下请选择"
           >
               <el-option
                   v-for="item in tableOptions"
@@ -651,6 +651,13 @@ const getTablesCloumn = async() => {
 
 
 const autoExport = async () => {
+ if (tables.value.length === 0) {
+    ElMessage({
+      type: 'error',
+      message: '请先选择需要参与导出的表'
+    })
+    return
+  }
   aiLoading.value = true
   const tableMap = await getTablesCloumn()
   const aiRes = await butler({prompt:prompt.value,businessDB: formData.value.dbName||"",tableMap:tableMap,command:'autoExportTemplate'})

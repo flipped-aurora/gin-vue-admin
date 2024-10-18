@@ -31,7 +31,7 @@ const getFuncList = async () => {
   functionsList.value=[]
   funcList.value=bizCloudFunctionList.data.list
   let list=bizCloudFunctionList.data.list
-  functionsList.value=chunkArray(list,8)
+  functionsList.value=chunkArray(list,6)
   // console.log("funcList:",funcList.value)
   console.log("functionsList",functionsList.value)
 }
@@ -128,7 +128,8 @@ function funcDetail(v){
       <el-carousel interval="3000" >
         <el-carousel-item v-if="v.covers!==''" v-for="(img,ii) in getCovers(v)" :key="img">
 <!--          <h3 class="small justify-center" text="2xl">{{ item }}</h3>-->
-          <img :src="img">
+          <img style="height: 300px" :src="img">
+          <
         </el-carousel-item>
         <div v-else>
 <!--          <h3 class="small justify-center" text="2xl">{{ getFuncInfo(v) }}</h3>-->

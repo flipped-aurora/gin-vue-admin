@@ -141,11 +141,6 @@ const funcCall=async ()=> {
     run_info.run_status="运行失败，失败原因："+res.data.msg
     ElMessage.error("运行失败！")
   }
-
-
-
-
-
 }
 function formatTime(milliseconds) {
   const seconds = Math.floor(milliseconds / 1000);

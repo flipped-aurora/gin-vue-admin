@@ -6,12 +6,10 @@
 Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
 End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
         {{- else }}
-            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "richtext") (eq .FieldType "json") }}
+            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "json") }}
 {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- else if ne .FieldType "string" }}
-{{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- else }}
-{{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
+{{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- end }}
         {{- end }}
     {{- end}}
@@ -42,12 +40,10 @@ type {{.StructName}}Search struct{
     Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
     End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
         {{- else }}
-            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "richtext") (eq .FieldType "json") }}
+            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "json") }}
             {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- else if ne .FieldType "string" }}
-    {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- else }}
-    {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
+    {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- end }}
         {{- end }}
     {{- end}}

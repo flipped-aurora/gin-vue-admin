@@ -32,4 +32,8 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	Nats Nats `mapstructure:"nats" json:"nats" yaml:"nats"`
+}
+type Nats struct {
+	Url string `mapstructure:"url" json:"url" yaml:"url"`
 }

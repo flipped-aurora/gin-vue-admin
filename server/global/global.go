@@ -2,6 +2,7 @@ package global
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/nats-io/nats.go"
 	"github.com/qiniu/qmgo"
 	"sync"
 
@@ -33,7 +34,10 @@ var (
 	GVA_ROUTERS             gin.RoutesInfo
 	GVA_ACTIVE_DBNAME       *string
 	BlackCache              local_cache.Cache
-	lock                    sync.RWMutex
+
+	lock sync.RWMutex
+
+	NatsClient *nats.Conn
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db

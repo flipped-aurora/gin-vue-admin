@@ -219,3 +219,5 @@ zap:
     show-line: true
     log-in-console: true
     retention-day: -1
+nats:
+    url: nats://127.0.0.1:4222

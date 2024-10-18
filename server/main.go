@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/logger"
+	"github.com/nats-io/nats.go"
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
 )
@@ -30,6 +31,12 @@ func main() {
 	zap.ReplaceGlobals(global.GVA_LOG)
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	//global.GVA_DB = global.GVA_DB.Debug()
+	connect, err := nats.Connect(global.GVA_CONFIG.Nats.Url)
+	if err != nil {
+		panic(err)
+	}
+	global.NatsClient = connect
+	defer connect.Close()
 	initialize.Timer()
 	initialize.DBList()
 	if global.GVA_DB != nil {

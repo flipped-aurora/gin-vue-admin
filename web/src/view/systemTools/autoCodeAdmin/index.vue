@@ -60,6 +60,9 @@
               >
                 增加方法
               </el-button>
+              <el-button type="primary" link @click="goAutoCode(scope.row,1)">
+                增加字段
+              </el-button>
               <el-button
                 type="primary"
                 link
@@ -193,8 +196,11 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="是否鉴权：">
+            <el-switch v-model="autoFunc.isAuth" active-text="是" inactive-text="否" />
+          </el-form-item>
           <el-form-item label="路由path:">
-            <el-input v-model="autoFunc.router" placeholder="路由path" />
+            <el-input v-model="autoFunc.router" placeholder="路由path" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
             <div>API路径: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
           </el-form-item>
         </el-form>
@@ -241,7 +247,8 @@ const autoFunc = ref({
   humpPackageName:"",
   businessDB:"",
   method:"",
-  funcDesc: ""
+  funcDesc: "",
+  isAuth:false,
 })
 
 const addFuncBtn =  (row) => {
@@ -379,12 +386,15 @@ const enterDialog = async () => {
   }
 };
 
-const goAutoCode = (row) => {
+const goAutoCode = (row,isAdd) => {
   if (row) {
     router.push({
       name: "autoCodeEdit",
       params: {
         id: row.ID,
+      },
+      query: {
+        isAdd: isAdd
       },
     });
   } else {

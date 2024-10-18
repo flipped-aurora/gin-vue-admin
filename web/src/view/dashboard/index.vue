@@ -37,7 +37,10 @@
 </template>
 
 <script setup>
-import { GvaPluginTable,GvaTable, GvaChart, GvaWiki , GvaNotice , GvaQuickLink , GvaCard , GvaBanner } from "./componenst"
+import { GvaPluginTable,GvaTable, GvaChart, GvaWiki , GvaNotice , GvaQuickLink , GvaCard , GvaBanner } from "./components"
+defineOptions({
+  name: 'Dashboard'
+})
 </script>
 
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@ package request
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
 	"go/token"
@@ -26,7 +27,9 @@ type AutoCode struct {
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
 	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
+	IsAdd               bool                   `json:"isAdd" example:"false"`               // 是否新增
 	Fields              []*AutoCodeField       `json:"fields"`
+	Module              string                 `json:"-"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`
 	DataSourceMap       map[string]*DataSource `json:"-"`
@@ -110,6 +113,7 @@ func (r *AutoCode) Menu(template string) model.SysBaseMenu {
 // Pretreatment 预处理
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (r *AutoCode) Pretreatment() error {
+	r.Module = global.GVA_CONFIG.AutoCode.Module
 	if token.IsKeyword(r.Abbreviation) {
 		r.Abbreviation = r.Abbreviation + "_"
 	} // go 关键字处理
@@ -247,6 +251,7 @@ type AutoFunc struct {
 	HumpPackageName string `json:"humpPackageName"` // go文件名称
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
+	IsAuth          bool   `json:"isAuth"`          // 是否鉴权
 }
 
 type InitMenu struct {
@@ -258,4 +263,9 @@ type InitMenu struct {
 type InitApi struct {
 	PlugName string `json:"plugName"`
 	APIs     []uint `json:"apis"`
+}
+
+type LLMAutoCode struct {
+	Prompt string `json:"prompt" form:"prompt" gorm:"column:prompt;comment:提示语;type:text;"` //提示语
+	Mode   string `json:"mode" form:"mode" gorm:"column:mode;comment:模式;type:text;"`        //模式
 }

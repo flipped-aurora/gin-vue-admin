@@ -856,7 +856,7 @@
         "codeGenMoveSuccess": "Automated code creation successful, automatic move successful",
         "codePreview": "Preview Code",
         "columnName": "Database Field",
-        "comment": "Database Field Description",
+        "comment": "Field Description",
         "componentContent": "Component Content",
         "confirmDelete": "Are you sure you want to delete?",
         "copy": "Copy",
@@ -982,7 +982,7 @@
           "canBeCleared": "Can be Cleared",
           "hideSearch": "Hide Search Condition",
           "verificationError": "Verification Error Message",
-          "dataSourceConfigNote": "Data Source Configuration (This is an advanced configuration, if your programming foundation is not strong, it may cause the automated code to be unusable)",
+          "dataSourceConfigNote": "Data Source Configuration (If your programming foundation is not strong, it may cause the automated code to be unusable)",
           "associationMode": "Association Mode",
           "oneToOne": "One-to-One",
           "oneToMany": "One-to-Many",
@@ -994,7 +994,19 @@
           "selectDataToDisplay": "Please select the data to be displayed first",
           "display": "Display: ",
           "enumValueValidationError": "Enum Value Validation Error",
-          "oneToManyNote": "In one-to-many association mode, the data type will change to an array, the backend will be represented as JSON, specifically as an array mode, do you want to continue?"
+          "oneToManyNote": "In one-to-many association mode, the data type will change to an array, the backend will be represented as JSON, specifically as an array mode, do you want to continue?",
+          "string": "String",
+          "richText": "Rich Text",
+          "integer": "Integer",
+          "boolean": "Boolean",
+          "float": "Float",
+          "time": "Time",
+          "enum": "Enum",
+          "singleImage": "Single Image",
+          "multipleImages": "Multiple Images",
+          "video": "Video",
+          "file": "File",
+          "array": "Array"
         }
       },
       "exportTemplate": {

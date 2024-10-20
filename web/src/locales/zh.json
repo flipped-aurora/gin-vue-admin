@@ -979,7 +979,19 @@
           "selectDataToDisplay": "请先选择需要展示的数据",
           "display": "展示: ",
           "enumValueValidationError": "枚举值校验错误",
-          "oneToManyNote": "一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？"
+          "oneToManyNote": "一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？",
+          "string":  "字符串",
+          "richText": "富文本",
+          "integer":  "整数",
+          "boolean": "布尔",
+          "float":  "浮点数",
+          "time": "时间",
+          "enum":  "枚举",
+          "singleImage": "单图",
+          "multipleImages":  "多图",
+          "video": "视频",
+          "file":  "文件",
+          "array": "数组"
         }
       },
       "autoPkg": {

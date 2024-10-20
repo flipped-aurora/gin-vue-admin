@@ -938,47 +938,47 @@ const dataModelList = ['created_by', 'updated_by', 'deleted_by']
 
 const typeOptions = ref([
   {
-    label: t('fieldDialog.string'),
+    label: t('view.systemTools.autoCode.fieldDialog.string'),
     value: 'string'
   },
   {
-    label: t('fieldDialog.richText'),
+    label: t('view.systemTools.autoCode.fieldDialog.richText'),
     value: 'richtext'
   },
   {
-    label: t('fieldDialog.integer'),
+    label: t('view.systemTools.autoCode.fieldDialog.integer'),
     value: 'int'
   },
   {
-    label: t('fieldDialog.boolean'),
+    label: t('view.systemTools.autoCode.fieldDialog.boolean'),
     value: 'bool'
   },
   {
-    label: t('fieldDialog.float'),
+    label: t('view.systemTools.autoCode.fieldDialog.float'),
     value: 'float64'
   },
   {
-    label: t('fieldDialog.time'),
+    label: t('view.systemTools.autoCode.fieldDialog.time'),
     value: 'time.Time'
   },
   {
-    label: t('fieldDialog.enum'),
+    label: t('view.systemTools.autoCode.fieldDialog.enum'),
     value: 'enum'
   },
   {
-    label: t('fieldDialog.singleImage'),
+    label: t('view.systemTools.autoCode.fieldDialog.singleImage'),
     value: 'picture',
   },
   {
-    label: t('fieldDialog.multipleImages'),
+    label: t('view.systemTools.autoCode.fieldDialog.multipleImages'),
     value: 'pictures',
   },
   {
-    label: t('fieldDialog.video'),
+    label: t('view.systemTools.autoCode.fieldDialog.video'),
     value: 'video',
   },
   {
-    label: t('fieldDialog.file'),
+    label: t('view.systemTools.autoCode.fieldDialog.file'),
     value: 'file',
   },
   {
@@ -986,7 +986,7 @@ const typeOptions = ref([
     value: 'json',
   },
   {
-    label: t('fieldDialog.array'),
+    label: t('view.systemTools.autoCode.fieldDialog.array'),
     value: 'array',
   }
 ])
@@ -1120,8 +1120,8 @@ const previewFlag = ref(false)
 const useGva = (e) => {
   if (e && form.value.fields.length) {
     ElMessageBox.confirm(
-        t('view.systemTools.gvaStructureNote'),
-        t('view.systemTools.note'),
+        t('view.systemTools.autoCode.gvaStructureNote'),
+        t('view.systemTools.autoCode.note'),
         {
           confirmButtonText: t('general.continue'),
           cancelButtonText: t('general.cancel'),

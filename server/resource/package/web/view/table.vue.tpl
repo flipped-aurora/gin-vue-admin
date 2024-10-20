@@ -372,7 +372,7 @@
             <el-descriptions :column="1" border>
             {{- range .Fields}}
               {{- if .Desc }}
-                    <el-descriptions-item label="{{ .FieldDesc }}">
+                    <el-descriptions-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')">
                 {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
@@ -723,7 +723,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === {{.PrimaryField.FieldJson}}s.length && page.value > 1) {
           page.value--

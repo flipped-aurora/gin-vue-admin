@@ -6,5 +6,5 @@ import (
 )
 
 var (
-	ProxyCache = ElasticCache.New(time.Second * 5)
+	ProxyCache = ElasticCache.New(time.Second * 20)
 )

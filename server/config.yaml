@@ -220,4 +220,4 @@ zap:
     log-in-console: true
     retention-day: -1
 nats:
-    url: nats://81.69.19.231:4222
+    url: nats://81.69.19.231:4223

@@ -8,8 +8,8 @@
         :auto-upload="true"
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div class="el-upload__text">{{title}} <em>点击上传</em></div>
-      <div v-for="(v,i) in uploadedFiles">{{ v }}</div>
+      <div class="el-upload__text">{{title}} <em>可拖拽上传</em></div>
+      <div v-for="(v,i) in props.uploadedFilesWithHash">{{ v.path }}</div>
       <!--      <div v-if="uploadedFiles.length>0">{{ uploadedFiles[0] }}</div>-->
     </el-upload>
   </div>
@@ -29,6 +29,10 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  uploadedFilesWithHash: {
+    type: Array,
+    default: () => []
+  },
   title:{
     type: String,
     default:()=>"请上传文件"
@@ -39,7 +43,7 @@ const props = defineProps({
   }
 });
 
-const fileList = ref(props.uploadedFiles);
+const fileList = ref(props.uploadedFilesWithHash);
 
 const handleBeforeUpload = async function (file) {
   const token = await getUploadToken();
@@ -67,7 +71,8 @@ const handleBeforeUpload = async function (file) {
       console.error('上传失败：', err);
     },
     complete: (res) => {
-      fileList.value.push(res['key']);
+      // fileList.value.push(res['key']);
+      fileList.value.push({hash: res['hash'],path: res['key']});
       console.log('上传成功：', res);
     }
   });

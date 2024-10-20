@@ -4,4 +4,5 @@ type ServiceGroup struct {
 	BizAppHubService
 	BizToolCmdSrvApiService
 	BizCloudFunctionService
+	BizFuncPackageService
 }

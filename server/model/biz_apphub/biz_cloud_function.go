@@ -30,11 +30,14 @@ type BizCloudFunction struct {
 	ScriptCode  string         `json:"script_code" form:"script_code" gorm:"column:script_code;comment:JS代码;"` //JS代码
 	Tags        string         `json:"tags" form:"tags" gorm:"column:tags;comment:tags;"`                      //标签
 
-	Covers    string `json:"covers" form:"covers" gorm:"column:covers;comment:封面分号分割;"`
-	Views     *int   `json:"views" form:"views" gorm:"default:0;column:views;comment:浏览量;"`                 //浏览量
-	ExecCount *int   `json:"exec_count" form:"exec_count" gorm:"default:0;column:exec_count;comment:执行次数;"` //执行次数
-	Coll      *int   `json:"coll" form:"coll" gorm:"default:0;column:coll;comment:收藏数量;"`                   //收藏数量
-	Like      *int   `json:"like" form:"like" gorm:"default:0;column:like;comment:点赞量;"`                    //点赞量
+	Runner    *BizToolCmdSrvApi `json:"-" gorm:"foreignKey:ID;references:RunnerID"`
+	InFile    string            `json:"in_file" gorm:"column:in_file;comment:输入文件;"`
+	OutFile   string            `json:"out_file" gorm:"column:out_file;comment:输出文件;"`
+	Covers    string            `json:"covers" form:"covers" gorm:"column:covers;comment:封面分号分割;"`
+	Views     *int              `json:"views" form:"views" gorm:"default:0;column:views;comment:浏览量;"`                 //浏览量
+	ExecCount *int              `json:"exec_count" form:"exec_count" gorm:"default:0;column:exec_count;comment:执行次数;"` //执行次数
+	Coll      *int              `json:"coll" form:"coll" gorm:"default:0;column:coll;comment:收藏数量;"`                   //收藏数量
+	Like      *int              `json:"like" form:"like" gorm:"default:0;column:like;comment:点赞量;"`                    //点赞量
 }
 
 // TableName 云函数 BizCloudFunction自定义表名 biz_cloud_function

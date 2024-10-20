@@ -6,10 +6,12 @@ type RouterGroup struct {
 	BizAppHubRouter
 	BizToolCmdSrvApiRouter
 	BizCloudFunctionRouter
+	BizFuncPackageRouter
 }
 
 var (
 	bizAppHubApi        = api.ApiGroupApp.Biz_apphubApiGroup.BizAppHubApi
 	bizToolCmdSrvApiApi = api.ApiGroupApp.Biz_apphubApiGroup.BizToolCmdSrvApiApi
 	bizCloudFunctionApi = api.ApiGroupApp.Biz_apphubApiGroup.BizCloudFunctionApi
+	bizFuncPackageApi   = api.ApiGroupApp.Biz_apphubApiGroup.BizFuncPackageApi
 )

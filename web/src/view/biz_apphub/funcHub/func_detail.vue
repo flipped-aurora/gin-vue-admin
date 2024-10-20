@@ -43,7 +43,36 @@ function getTableData(){
   return runData.data[viewTableField.value]
 }
 
+// 下载文件
+async function downloadFileFromUrl(fileUrl, filename) {
+  console.log("fileUrl",fileUrl)
+  try {
+    // 使用fetch API获取文件
+    const response = await fetch(fileUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const blob = await response.blob();
 
+    // 创建一个指向该Blob的URL
+    const blobUrl = window.URL.createObjectURL(blob); // 修改变量名为blobUrl
+
+    // 创建一个<a>标签用于下载
+    const link = document.createElement('a');
+    link.href = blobUrl; // 使用新的变量名blobUrl
+    link.download = filename; // 设置下载的文件名
+
+    // 模拟点击<a>标签
+    document.body.appendChild(link);
+    link.click();
+
+    // 清理: 移除<a>标签并释放Blob对象的URL
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl); // 使用新的变量名blobUrl
+  } catch (error) {
+    console.error('下载文件时出错:', error);
+  }
+}
 const funcCall=async ()=> {
 
   // let res=await formRef.value.validate()
@@ -80,18 +109,19 @@ const funcCall=async ()=> {
     if (res.data.data){
       runData.data=res.data.data
     }
-    if (res.data.code === 0) {
-      for (const key in res.data.data) {
-        if (res.data.data.hasOwnProperty(key)) {
-          const value = res.data.data[key];
-          for (let i = 0; i < func.detail.param.length; i++) {
-            if (func.detail.param[i].code === key) {
-              func.detail.param[i].value = value
-            }
-          }
-        }
-      }
-    }
+    // if (res.data.code === 0) {
+    //   for (const key in res.data.data) {
+    //     if (res.data.data.hasOwnProperty(key)) {
+    //       const value = res.data.data[key];
+    //       for (let i = 0; i < func.detail.param.length; i++) {
+    //         if (func.detail.param[i].code === key) {
+    //           console.log("key:",key,"value:",value)
+    //           func.detail.param[i].value = value
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
   }else {
     // let res =await axios.get(func.detail.api_config.path,bd)
@@ -116,19 +146,38 @@ const funcCall=async ()=> {
       return
     }
 
-    if (res.data.code === 0) {
-        for (const key in res.data.data) {
-        if (res.data.data.hasOwnProperty(key)) {
-          const value = res.data.data[key];
-          for (let i = 0; i < func.detail.param.length; i++) {
-            if (func.detail.param[i].code === key) {
-              func.detail.param[i].value = value
+  //   if (res.data.code === 0) {
+  //       for (const key in res.data.data) {
+  //       if (res.data.data.hasOwnProperty(key)) {
+  //         const value = res.data.data[key];
+  //         for (let i = 0; i < func.detail.param.length; i++) {
+  //           if (func.detail.param[i].code === key) {
+  //             console.log("key:",key,"value:",value)
+  //             func.detail.param[i].value = value
+  //           }
+  //         }
+  //       }
+  //     }
+  // }
+}
+
+  if (res.data.code === 0) {
+    for (const key in res.data.data) {
+      if (res.data.data.hasOwnProperty(key)) {
+        const value = res.data.data[key];
+        for (let i = 0; i < func.detail.param.length; i++) {
+          if (func.detail.param[i].code === key) {
+            console.log("key:",key,"value:",value)
+            if (func.detail.param[i].type==="file"){
+              func.detail.param[i].activeNames=["files"]
             }
+            func.detail.param[i].value = value
           }
         }
       }
+    }
   }
-}
+  console.log("func.detail.param:",func.detail.param)
   const endTime = performance.now();
   let cost=endTime - startTime
   run_info.run_cost=formatTime(cost)
@@ -232,6 +281,20 @@ function getOpts(param){
   return param.options.split(";")
 }
 
+function get_file_name(file) {
+  let strings = file.filepath.split("/");
+  return strings[strings.length-1]
+}
+function get_file_title(param) {
+  console.log("get_file_title",param)
+  if (!param.value){
+    return "展开下载文件"
+  }
+  if(param.value.title){
+    return param.value.title
+  }
+  return "展开下载文件"
+}
 </script>
 
 <template>
@@ -244,115 +307,138 @@ function getOpts(param){
       <el-container>
 
         <el-main>
-          <el-scrollbar>
+
             <div>
               <func_info v-show="func.detail.param" :func="func"></func_info>
-              <el-form  ref="formRef" reset-type="initial" style="max-width: 100%">
-                <h2>输入参数</h2>
-<!--                <el-tabs type="border-card">-->
-                <el-tabs v-model="run_info.in_tab" type="card">
+              <el-scrollbar max-height="900px">
+              <div style="padding: 20px 20px 260px 20px;">
+                <el-form  ref="formRef" reset-type="initial" style="max-width: 100%">
+                  <h2>输入参数</h2>
+                  <!--                <el-tabs type="border-card">-->
+                  <el-tabs v-model="run_info.in_tab" type="card">
 
-                  <el-tab-pane name="info" label="参数介绍">
-                    <func_param_desc :func="func" type="in"></func_param_desc>
-                  </el-tab-pane>
-                  <el-tab-pane name="mock_data" label="输入示例">
-                    <func_param_mock_data :func="func" type="in"></func_param_mock_data>
-                  </el-tab-pane>
-                  <el-tab-pane name="run"  label="运行函数">
-                    <div style="padding: 24px 24px 15px 24px">
-                      <el-form-item v-for="(v,i) in func.detail.param"   v-show="v.mode==='in'" :label="v.desc" :required="v.required==='必填'">
-                        <div v-if="v.type==='file'">
-                          <upload-qi-niu :uploaded-files="v.files"  :title="v.desc" oss-dir="cloud_func/param_in"></upload-qi-niu>
-                        </div>
+                    <el-tab-pane name="info" label="参数介绍">
+                      <func_param_desc :func="func" type="in"></func_param_desc>
+                    </el-tab-pane>
+                    <el-tab-pane name="mock_data" label="输入示例">
+                      <func_param_mock_data :func="func" type="in"></func_param_mock_data>
+                    </el-tab-pane>
+                    <el-tab-pane name="run"  label="运行函数">
+                      <div style="padding: 24px 24px 15px 24px">
+                        <el-form-item v-for="(v,i) in func.detail.param"   v-show="v.mode==='in'" :label="v.desc" :required="v.required==='必填'">
+                          <div v-if="v.type==='file'">
+                            <upload-qi-niu :uploaded-files-with-hash="v.files"   :title="v.desc" oss-dir="cloud_func/param_in"></upload-qi-niu>
+                          </div>
 
-                        <div style="width: 100%" v-else-if="v.type==='string'">
-                          <p style="margin-left: 10px">
-                          <el-input v-model="v.value"  style="width: 80%"
-                                    :autosize="{ minRows: 1, maxRows: 3 }"
-                                    :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
-                                    show-word-limit
-                                    type="textarea"/>
+                          <div style="width: 100%" v-else-if="v.type==='string'">
+                            <p style="margin-left: 10px">
+                              <el-input v-model="v.value"  style="width: 80%"
+                                        :autosize="{ minRows: 1, maxRows: 3 }"
+                                        :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
+                                        show-word-limit
+                                        type="textarea"/>
 
-                            <el-button type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
-                            <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
-                          </p>
-                        </div>
-                        <div style="width: 80%" v-else-if="v.type==='muti_select'">
-                          <el-checkbox-group v-model="v.checkList">
-                            <!-- works when >=2.6.0, recommended ✔️ value not work when <2.6.0 ❌ -->
-                            <el-checkbox v-for="opt in getOpts(v)" :label="opt" :value="opt" />
-                            <!-- works when <2.6.0, deprecated act as value when >=3.0.0 -->
-<!--                            <el-checkbox label="Option 2 & Value 2" />-->
-                          </el-checkbox-group>
-                        </div>
-                        <div style="width: 80%" v-else-if="v.type==='sige_select'">
-                          <el-select
-                              filterable
-                              v-model="v.value"
-                              placeholder="Select"
-                              size="large"
-                              style="width: 100%"
-                          >
-                            <el-option
-                                v-for="item in getOpts(v)"
-                                :key="item"
-                                :label="item"
-                                :value="item"/>
-                          </el-select>
-<!--                          <el-checkbox-group v-model="v.checkList">-->
-<!--                            &lt;!&ndash; works when >=2.6.0, recommended ✔️ value not work when <2.6.0 ❌ &ndash;&gt;-->
-<!--                            <el-checkbox v-for="opt in getOpts(v)" :label="opt" :value="opt" />-->
-<!--                            &lt;!&ndash; works when <2.6.0, deprecated act as value when >=3.0.0 &ndash;&gt;-->
-<!--                            &lt;!&ndash;                            <el-checkbox label="Option 2 & Value 2" />&ndash;&gt;-->
-<!--                          </el-checkbox-group>-->
-                        </div>
-                      </el-form-item>
+                              <el-button type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
+                              <el-button type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
+                            </p>
+                          </div>
+                          <div style="width: 80%" v-else-if="v.type==='muti_select'">
+                            <el-checkbox-group v-model="v.checkList">
+                              <!-- works when >=2.6.0, recommended ✔️ value not work when <2.6.0 ❌ -->
+                              <el-checkbox v-for="opt in getOpts(v)" :label="opt" :value="opt" />
+                              <!-- works when <2.6.0, deprecated act as value when >=3.0.0 -->
+                              <!--                            <el-checkbox label="Option 2 & Value 2" />-->
+                            </el-checkbox-group>
+                          </div>
+                          <div style="width: 80%" v-else-if="v.type==='sige_select'">
+                            <el-select
+                                filterable
+                                v-model="v.value"
+                                placeholder="Select"
+                                size="large"
+                                style="width: 100%"
+                            >
+                              <el-option
+                                  v-for="item in getOpts(v)"
+                                  :key="item"
+                                  :label="item"
+                                  :value="item"/>
+                            </el-select>
+                            <!--                          <el-checkbox-group v-model="v.checkList">-->
+                            <!--                            &lt;!&ndash; works when >=2.6.0, recommended ✔️ value not work when <2.6.0 ❌ &ndash;&gt;-->
+                            <!--                            <el-checkbox v-for="opt in getOpts(v)" :label="opt" :value="opt" />-->
+                            <!--                            &lt;!&ndash; works when <2.6.0, deprecated act as value when >=3.0.0 &ndash;&gt;-->
+                            <!--                            &lt;!&ndash;                            <el-checkbox label="Option 2 & Value 2" />&ndash;&gt;-->
+                            <!--                          </el-checkbox-group>-->
+                          </div>
+                        </el-form-item>
 
-                      <!--todo 上面是输入参数-->
-                    </div>
-                  </el-tab-pane>
-                  <el-button @click="funcCall" type="primary" style="width: 100%"  block theme="primary" variant="base">运行</el-button>
-                </el-tabs>
-
-                <h2>输出结果</h2>
-                <el-tabs  v-model="run_info.out_tab" type="card">
-
-                <el-tab-pane  label="参数介绍" name="info">
-                  <func_param_desc :func="func" type="out"></func_param_desc>
-                </el-tab-pane>
-                <el-tab-pane label="输出示例" name="mock_data">
-                  <func_param_mock_data :func="func" type="out"></func_param_mock_data>
-                </el-tab-pane>
-                <el-tab-pane label="输出结果" name="res">
-                  <div style="padding: 24px 24px 24px 24px">
-                    <p style="padding: 0px 25px 20px 25px">状态：{{run_info.run_status}} <div v-if="run_info.run_cost!==''">耗时：{{run_info.run_cost}}</div></p>
-                    <el-form-item  v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc"  >
-                      <div v-if="v.type==='file'">
-                        <span style="margin: 10px">{{v.value.path}}</span>
-                        <el-link v-if="v.value.path" :href="v.value.path" target="_blank" type="primary">下载</el-link>
+                        <!--todo 上面是输入参数-->
                       </div>
-                      <div style="width: 100%;" v-else-if="v.type==='string'">
-                        <p>
-                          <el-input  v-model="v.value"
-                                     style="width: 80%"
-                                     :autosize="{ minRows: 1, maxRows: 3 }"
-                                     :placeholder="v.desc"
-                                     show-word-limit
-                                     type="textarea"/>
-                            <el-button v-if="v.type==='string'" type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
-                            <el-button v-if="v.type==='string'" type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
-                        </p>
+                    </el-tab-pane>
+                    <el-button @click="funcCall" type="primary" style="width: 100%"  block theme="primary" variant="base">运行</el-button>
+                  </el-tabs>
+
+                  <h2>输出结果</h2>
+                  <el-tabs  v-model="run_info.out_tab" type="card">
+
+                    <el-tab-pane  label="参数介绍" name="info">
+                      <func_param_desc :func="func" type="out"></func_param_desc>
+                    </el-tab-pane>
+                    <el-tab-pane label="输出示例" name="mock_data">
+                      <func_param_mock_data :func="func" type="out"></func_param_mock_data>
+                    </el-tab-pane>
+                    <el-tab-pane label="输出结果" name="res">
+                      <div style="padding: 24px 24px 24px 24px">
+                        <p style="padding: 0px 25px 20px 25px">状态：{{run_info.run_status}} <div v-if="run_info.run_cost!==''">耗时：{{run_info.run_cost}}</div></p>
+                        <el-form-item  v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc"  >
+                          <div style="width: 100%" v-if="v.type==='file' && v.mode==='out'">
+
+                            <el-collapse style="width: 100%" v-model="v.activeNames">
+                              <el-collapse-item  :title="get_file_title(v)" name="files">
+                                <div v-if="v.value" v-for="file in v.value.files">
+                                  <span style="margin: 10px">{{get_file_name(file)}}</span>
+                                  <el-link v-if="v.value"  @click="downloadFileFromUrl(file.filepath,get_file_name(file))"  type="primary">下载</el-link>
+                                </div>
+
+                                <!--                            <div>-->
+                                <!--                              Consistent with real life: in line with the process and logic of real-->
+                                <!--                              life, and comply with languages and habits that the users are used to;-->
+                                <!--                            </div>-->
+                                <!--                            <div>-->
+                                <!--                              Consistent within interface: all elements should be consistent, such-->
+                                <!--                              as: design style, icons and texts, position of elements, etc.-->
+                                <!--                            </div>-->
+                              </el-collapse-item>
+                            </el-collapse>
+
+
+                            <!--                        <span style="margin: 10px">{{v.value.path}}</span>-->
+                            <!--                        <el-link v-if="v.value.path" :href="v.value.path" target="_blank" type="primary">下载</el-link>-->
+                          </div>
+                          <div style="width: 100%;" v-else-if="v.type==='string'">
+                            <p>
+                              <el-input  v-model="v.value"
+                                         style="width: 80%"
+                                         :autosize="{ minRows: 1, maxRows: 3 }"
+                                         :placeholder="v.desc"
+                                         show-word-limit
+                                         type="textarea"/>
+                              <el-button v-if="v.type==='string'" type="primary" @click="lookUp(v)" key="预览" text >预览文本</el-button>
+                              <el-button v-if="v.type==='string'" type="success" @click="copy(v)" key="复制" text >复制文本</el-button>
+                            </p>
+                          </div>
+                          <div v-else-if="v.type==='table'">
+                            <el-button @click="showTable(v)" type="primary">查看表格</el-button>
+                          </div>
+                        </el-form-item>
                       </div>
-                      <div v-else-if="v.type==='table'">
-                        <el-button @click="showTable(v)" type="primary">查看表格</el-button>
-                      </div>
-                    </el-form-item>
-                  </div>
-                </el-tab-pane>
-                </el-tabs>
-              </el-form>
+                    </el-tab-pane>
+                  </el-tabs>
+                </el-form>
+              </div>
+              </el-scrollbar>
             </div>
-          </el-scrollbar>
 
         </el-main>
 <!--        右侧-->

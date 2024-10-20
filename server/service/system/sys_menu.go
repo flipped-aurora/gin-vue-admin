@@ -76,6 +76,7 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[ui
 //@return: menus []system.SysMenu, err error
 
 func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.SysMenu, err error) {
+
 	menuTree, err := menuService.getMenuTreeMap(authorityId)
 	menus = menuTree[0]
 	for i := 0; i < len(menus); i++ {

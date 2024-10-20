@@ -8,9 +8,19 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"strings"
 )
 
 type BizCloudFunctionApi struct{}
+
+type Param struct {
+	Code     string `json:"code"`
+	Desc     string `json:"desc"`
+	Mode     string `json:"mode"`
+	Type     string `json:"type"`
+	Required string `json:"required,omitempty"`
+	MockData string `json:"mock_data"`
+}
 
 // CreateBizCloudFunction 创建云函数
 // @Tags BizCloudFunction
@@ -36,11 +46,36 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) CreateBizCloudFunction(c *gin.Co
 		Method string `json:"method"`
 	}
 	a := ApiConfig{}
+	var params []Param
 	err = json.Unmarshal(bizCloudFunction.ApiConfig, &a)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	err = json.Unmarshal(bizCloudFunction.Param, &params)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	infiles := []string{}
+	outfiles := []string{}
+	for _, param := range params {
+		if param.Type == "file" {
+			if strings.ToLower(param.Mode) == "in" {
+				infiles = append(infiles, param.Code)
+			} else if strings.ToLower(param.Mode) == "out" {
+				outfiles = append(outfiles, param.Code)
+			}
+		}
+	}
+	if len(infiles) != 0 {
+		bizCloudFunction.InFile = strings.Join(infiles, ";")
+	}
+	if len(outfiles) != 0 {
+		bizCloudFunction.OutFile = strings.Join(outfiles, ";")
+	}
+
 	a.Path = "api/runner/run/" + bizCloudFunction.TenantUser + "/" + a.Path
 	marshal, err := json.Marshal(a)
 	if err != nil {
@@ -133,6 +168,8 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) UpdateBizCloudFunction(c *gin.Co
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	bizCloudFunction.InFile = ""
+	bizCloudFunction.OutFile = ""
 
 	config := bizCloudFunction.GetApiConfig()
 	info, err := config.GetRunnerInfo()
@@ -150,6 +187,31 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) UpdateBizCloudFunction(c *gin.Co
 			bizCloudFunction.ApiMethod = config.Method
 			bizCloudFunction.ApiFullPath = config.Path
 		}
+	}
+
+	var params []Param
+	err = json.Unmarshal(bizCloudFunction.Param, &params)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	infiles := []string{}
+	outfiles := []string{}
+	for _, param := range params {
+		if param.Type == "file" {
+			if strings.ToLower(param.Mode) == "in" {
+				infiles = append(infiles, param.Code)
+			} else if strings.ToLower(param.Mode) == "out" {
+				outfiles = append(outfiles, param.Code)
+			}
+		}
+	}
+	if len(infiles) != 0 {
+		bizCloudFunction.InFile = strings.Join(infiles, ";")
+	}
+	if len(outfiles) != 0 {
+		bizCloudFunction.OutFile = strings.Join(outfiles, ";")
 	}
 
 	err = bizCloudFunctionService.UpdateBizCloudFunction(bizCloudFunction)

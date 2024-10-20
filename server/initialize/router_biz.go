@@ -21,6 +21,7 @@ func initBizRouter(routers ...*gin.RouterGroup) {
 		biz_apphubRouter.InitBizToolCmdSrvApiRouter(privateGroup, publicGroup)
 		biz_apphubRouter.InitBizCloudFunctionRouter(privateGroup, publicGroup)
 		r.InitRunnerRouter(privateGroup, publicGroup)
+		biz_apphubRouter.InitBizFuncPackageRouter(privateGroup, publicGroup)
 	}
 }
 

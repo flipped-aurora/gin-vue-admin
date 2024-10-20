@@ -82,15 +82,16 @@ func Proxy(cache ElasticCache.ElasticCache) gin.HandlerFunc {
 
 func HandMsg(c *gin.Context) {
 	path := c.Param("path")
+	fullpath := "api/runner" + path
 	split := strings.Split(strings.TrimPrefix(path, "/"), "/")
 	user := split[1]
 	soft := split[2]
 	runnerCmd := strings.Join(split[3:], "/")
-	key := fmt.Sprintf("%s:%s", user, soft)
-	data := cache.ProxyCache.GetAndSet(key, time.Second*5, func(key string) (data interface{}, whetherCache bool) {
-		var info biz_apphub.BizToolCmdSrvApi
-		err := global.GVA_DB.Debug().Model(&biz_apphub.BizToolCmdSrvApi{}).
-			Where("app_code = ? and tenant_user = ?", soft, user).First(&info).Error
+	//key := fmt.Sprintf("%s:%s", user, soft)
+	data := cache.ProxyCache.GetAndSet(fullpath, time.Second*5, func(key string) (data interface{}, whetherCache bool) {
+		var info biz_apphub.BizCloudFunction
+		err := global.GVA_DB.Debug().Model(&biz_apphub.BizCloudFunction{}).
+			Where("api_full_path = ?", fullpath).Preload("Runner").First(&info).Error
 		if err != nil {
 			return err, false
 		}
@@ -101,7 +102,7 @@ func HandMsg(c *gin.Context) {
 		response.FailWithMessage(v.Error(), c)
 		return
 	}
-	info, ok := data.(*biz_apphub.BizToolCmdSrvApi)
+	info, ok := data.(*biz_apphub.BizCloudFunction)
 	if !ok || info.ID == 0 {
 		response.FailWithMessage("请输入正确地址", c)
 		return
@@ -120,10 +121,12 @@ func HandMsg(c *gin.Context) {
 	msg.Header.Set("soft", soft)
 	msg.Header.Set("user", user)
 	msg.Header.Set("cmd", runnerCmd)
-	msg.Header.Set("version", info.Version)
+	msg.Header.Set("version", info.Runner.Version)
 	msg.Header.Set("method", c.Request.Method)
-	msg.Header.Set("type", info.ToolType)
-	msg.Header.Set("fs_path", info.OssPath)
+	msg.Header.Set("type", info.Runner.ToolType)
+	msg.Header.Set("fs_path", info.Runner.OssPath)
+	msg.Header.Set("in_files", info.InFile)
+	msg.Header.Set("out_files", info.OutFile)
 	msg.Data = body
 	resp, err := global.NatsClient.RequestMsg(msg, time.Second*200)
 	if err != nil {

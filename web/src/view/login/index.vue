@@ -203,7 +203,7 @@ const loginVerify = async() => {
   rules.captcha.push({
     max: ele.data.captchaLength,
     min: ele.data.captchaLength,
-    message: `t('login.pleaseEnter') ${ele.data.captchaLength} t('login.verificationCode')`,
+    message: `${t('general.pleaseEnter')} ${ele.data.captchaLength} ${t('login.verificationCode')}`,
     trigger: 'blur',
   })
   picPath.value = ele.data.picPath

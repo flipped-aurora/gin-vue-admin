@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar :title="t('view.plugins.emailConfigNote')" />
+    <warning-bar :title="t('plugins.email.emailConfigNote')" />
     <div class="gva-form-box">
       <el-form
         ref="emailForm"
@@ -8,21 +8,21 @@
         label-width="140px"
         :model="form"
       >
-        <el-form-item :label="t('view.plugins.targetEmail')">
+        <el-form-item :label="t('plugins.email.targetEmail')">
           <el-input v-model="form.to" />
         </el-form-item>
-        <el-form-item :label="t('view.plugins.email')">
+        <el-form-item :label="t('plugins.email.email')">
           <el-input v-model="form.subject" />
         </el-form-item>
-        <el-form-item :label="t('view.plugins.emailContent')">
+        <el-form-item :label="t('plugins.email.emailContent')">
           <el-input
             v-model="form.body"
             type="textarea"
           />
         </el-form-item>
         <el-form-item>
-          <el-button @click="sendTestEmail">{{ t('view.plugins.sendTestEmail') }}</el-button>
-          <el-button @click="sendEmail">{{ t('view.plugins.sendEmail') }}</el-button>
+          <el-button @click="sendTestEmail">{{ t('plugins.email.sendTestEmail') }}</el-button>
+          <el-button @click="sendEmail">{{ t('plugins.email.sendEmail') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -51,14 +51,14 @@ const form = reactive({
 const sendTestEmail = async() => {
   const res = await emailTest()
   if (res.code === 0) {
-    ElMessage.success(t('view.plugins.sendSuccess'))
+    ElMessage.success(t('plugins.email.sendSuccess'))
   }
 }
 
 const sendEmail = async() => {
   const res = await emailTest()
   if (res.code === 0) {
-    ElMessage.success(t('view.plugins.sentSuccessPleaseCheck'))
+    ElMessage.success(t('plugins.email.sentSuccessPleaseCheck'))
   }
 }
 </script>

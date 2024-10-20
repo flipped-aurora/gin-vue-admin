@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
+    <warning-bar :title="t('view.example.customer.customerNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button
@@ -22,7 +22,7 @@
         />
         <el-table-column
           align="left"
-          label="接入日期"
+          :label="t('view.example.customer.accessDate')"
           width="180"
         >
           <template #default="scope">
@@ -31,19 +31,19 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="姓名"
+          :label="t('view.example.customer.name')"
           prop="customerName"
           width="120"
         />
         <el-table-column
           align="left"
-          label="电话"
+          :label="t('view.example.customer.phone')"
           prop="customerPhoneData"
           width="120"
         />
         <el-table-column
           align="left"
-          label="接入人ID"
+          :label="t('view.example.customer.accessorId')"
           prop="sysUserId"
           width="120"
         />
@@ -87,13 +87,13 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">客户</span>
+          <span class="text-lg">{{ t('view.example.customer.client') }}</span>
           <div>
-            <el-button @click="closeDrawer">取 消</el-button>
+            <el-button @click="closeDrawer">{{ t('general.cancel') }}</el-button>
             <el-button
               type="primary"
               @click="enterDrawer"
-            >确 定</el-button>
+            >{{ t('general.confirm') }}</el-button>
           </div>
         </div>
       </template>
@@ -102,13 +102,13 @@
         :model="form"
         label-width="80px"
       >
-        <el-form-item label="客户名">
+        <el-form-item :label="t('view.example.customer.customerName')">
           <el-input
             v-model="form.customerName"
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item label="客户电话">
+        <el-form-item :label="t('view.example.customer.customerPhone')">
           <el-input
             v-model="form.customerPhoneData"
             autocomplete="off"

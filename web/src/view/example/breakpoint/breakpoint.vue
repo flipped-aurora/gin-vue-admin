@@ -147,14 +147,14 @@ const choseFile = async(e) => {
     }
   } else {
     limitFileSize.value = true
-    ElMessage('请上传小于5M文件')
+    ElMessage(t('view.example.breakpoint.uploadFileSizeNote'))
   }
 }
 
 const getFile = () => {
   // 确定按钮
   if (file.value === null) {
-    ElMessage('请先上传文件')
+    ElMessage(t('view.example.breakpoint.uploadFileFirst'))
     return
   }
   if (percentage.value === 100) {
@@ -203,7 +203,7 @@ const upLoadFileSlice = async(item) => {
         fileMd5: fileMd5.value,
         filePath: res.data.filePath,
       }
-      ElMessage.success('上传成功')
+      ElMessage.success(t('view.example.breakpoint.uploadSuccessfully'))
       await removeChunk(params)
     }
   }

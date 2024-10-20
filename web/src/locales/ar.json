@@ -98,6 +98,7 @@
   },
   "general": {
     "add": "إضافة",
+    "addTo": "إضافة",
     "addSuccess": "تمت الإضافة بنجاح!",
     "back": "رجوع",
     "cancel": "إلغاء",
@@ -118,6 +119,7 @@
     "description": "الوصف",
     "disable": "تعطيل",
     "edit": "تحرير",
+    "modify": "تعديل",
     "editSuccess": "تم التحرير بنجاح!",
     "enable": "تمكين",
     "endData": "تاريخ الانتهاء",
@@ -265,6 +267,91 @@
     "portValue": "قيمة ال��نفذ",
     "systemConfig": "تكوين النظام"
   },
+  "pinia": {
+    "modules": {
+      "router": {
+        "bottomLayerLayout": "تخطيط الطبقة السفلية"
+      },
+      "user": {
+        "loggingIn": "جارٍ تسجيل الدخول، يرجى الانتظار...",
+        "connectAdmin": "يرجى الاتصال بالمسؤول للحصول على إذن"
+      }
+    }
+  },
+  "plugins": {
+    "pluginSupport": "حاليًا، يتم دعم المكونات الإضافية القياسية فقط (من خلال قالب المكون الإضافي لإنشاء دليل قياسي)، يرجى تجميع المكونات الإضافية غير القياسية بنفسك",
+    "pluginNameInput": "أدخل اسم المكون الإضافي في قالب المكون الإضافي",
+    "menuSelectionNote": "يرجى اختيار القوائم الفرعية فقط في صندوق النقل",
+    "menuGroupNameInput": "يرجى إدخال اسم مجموعة القائمة، مثال: إدارة الإعلانات",
+    "menuNamePathInput": "يرجى إدخال اسم/مسار القائمة",
+    "optionalMenu": "القائمة الاختيارية",
+    "useMenu": "استخدام القائمة",
+    "remove": "إزالة",
+    "selected": "محدد",
+    "defineMenuInstall": "تحديد تثبيت القائمة",
+    "apiDescriptionPathInput": "يرجى إدخال وصف/مسار API",
+    "optionalAPI": "API اختياري",
+    "useAPI": "استخدام API",
+    "defineAPIInstall": "تحديد تثبيت API",
+    "packagePlugin": "تجميع المكون الإضافي",
+    "package": "تجميع",
+    "closePackage": "إغلاق التجميع",
+    "enterMenuGroupName": "يرجى إدخال اسم مجموعة القائمة",
+    "selectAtLeastOneMenu": "يرجى اختيار قائمة واحدة على الأقل",
+    "enterPluginName": "يرجى إدخال اسم المكون الإضافي",
+    "generateInitialMenu": "إنشاء القائمة الأولية",
+    "generate": "إنشاء",
+    "closeGenerateMenu": "إغلاق إنشاء القائمة",
+    "selectAtLeastOneAPI": "يرجى اختيار API واحد على الأقل",
+    "enterPluginNameAgain": "يرجى إدخال اسم المكون الإضافي مرة أخرى",
+    "closeGenerateAPI": "إغلاق إنشاء API",
+    "checkMessage": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
+    "overwriteMessage": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/menu. هل تريد المتابعة؟",
+    "overwriteWarning": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/api. هل تريد المتابعة؟",
+    "generateInitialAPI": "إنشاء API الأولي",
+    "checkMsg": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
+    "dragOrClickUpload": "اسحب أو انقر للتحميل",
+    "uploadPackage": "يرجى سحب حزمة التثبيت zip إلى هنا للتحميل",
+    "announcement": {
+        "info": {
+          "title": "عنوان",
+          "content": "المحتوى",
+          "richTextContent": "[محتوى النص الغني]",
+           "author": "مؤلف",
+           "attachments": "الملحقات",
+           "enterTitleNote": "الرجاء إدخال عنوان",
+           "selectAuthorNote": "الرجاء اختيار المؤلف"
+        }
+      },
+    "email": {
+      "emailConfigNote": "يجب تكوين ملف إعدادات البريد الإلكتروني مسبقًا، لمنع البريد العشوائي غير الضروري، لا يتم فتح هذه الميزة في تجربة الإنترنت.",
+      "targetEmail": "البريد الإلكتروني المستهدف",
+      "email": "البريد الإلكتروني",
+      "emailContent": "محتوى البريد الإلكتروني",
+      "sendTestEmail": "إرسال بريد إلكتروني تجريبي",
+      "sendEmail": "إرسال بريد إلكتروني",
+      "sendSuccess": "تم الإرسال بنجاح",
+      "sentSuccessPleaseCheck": "تم الإرسال بنجاح، يرجى التحقق"
+    }
+  },
+  "utils": {
+    "request": {
+      "requestErrorDetected": "<p>تم اكتشاف خطأ في الطلب</p>",
+      "requestError": "خطأ في الطلب",
+      "tryAgainLater": "حاول مرة أخرى لاحقًا",
+      "interfaceError": "خطأ في الواجهة",
+      "interfaceErrorDetected": "<p>تم اكتشاف خطأ في الواجهة<p>",
+      "errorCode": "رمز الخطأ",
+      "interfaceErrorNote": "تظهر هذه الأخطاء عادةً في الخلفية، يرجى التحقق من سجلات الخلفية. إذا كان يؤثر على استخدامك العادي، يمكنك تسجيل الخروج بالقوة وتنظيف ذاكرة التخزين المؤقت",
+      "clearCache": "تنظيف ذاكرة التخزين المؤقت",
+      "interfaceNotRegisteredNote": "تحدث هذه الأخطاء عادةً عندما لا يتم تسجيل الواجهة (أو لم يتم إعادة التشغيل) أو عندما لا يتطابق مسار الطلب (الطريقة) مع مسار API (الطريقة) - إذا كان الكود تلقائيًا، يرجى التحقق من وجود مسافات",
+      "iGotIt": "فهمت",
+      "invalidToken": "<p>رمز غير صالح</p>",
+      "errorMessage": "رسالة الخطأ",
+      "identityInfo": "معلومات الهوية",
+      "loginAgain": "تسجيل الدخول مرة أخرى"
+    }
+  },
   "view": {
     "about": {
       "flippedAuroraTeam": "فريق flipped-aurora",
@@ -356,7 +443,20 @@
         "upload Files": "رفع الملفات",
         "uploadFilesNote": "يرجى تحميل ملفات لا يزيد حجمها عن 5 ميجابايت",
         "breakpointNote": "هذا الإصدار عبارة عن نسخة تجريبية من وظيفة التجربة المبكرة. ويجري حاليًا تنفيذ عملية تجميل النمط وتحسين الأداء. قم بتحميل الملفات المقطوعة والملفات الكاملة المركبة إلى مجلد BreakpointDir ومجلد fileDir في دليل QMPlus server على التوالي.",
-        "fileTransferredSec": "تم نقل الملف على الفور"
+        "fileTransferredSec": "تم نقل الملف على الفور",
+        "uploadFileSizeNote": "يرجى تحميل ملفات أصغر من 5M",
+        "uploadFileFirst": "يرجى تحميل الملف أولا",
+        "uploadSuccessfully": "تم التحميل بنجاح"
+      },
+      "customer": {
+        "customerNote": "امسح أذونات الموارد لهذا الدور في أذونات الموارد أو استبعد دور المنشئ لمنع عرض موارد هذا العميل.",
+        "accessDate": "تاريخ الوصول",
+        "name": "الإسم",
+        "phone": "هاتف",
+        "accessorId": "معرف الوصول للشخص",
+        "client": "العميل",
+        "customerName": "اسم العميل",
+        "customerPhone": "هاتف العميل"
       },
       "upload": {
         "importURL": "استيراد عنوان URL",
@@ -555,49 +655,6 @@
         "response": "الاستجابة",
         "": ""
       }
-    },
-    "plugins": {
-      "pluginSupport": "حاليًا، يتم دعم المكونات الإضافية القياسية فقط (من خلال قالب المكون الإضافي لإنشاء دليل قياسي)، يرجى تجميع المكونات الإضافية غير القياسية بنفسك",
-      "pluginNameInput": "أدخل اسم المكون الإضافي في قالب المكون الإضافي",
-      "menuSelectionNote": "يرجى اختيار القوائم الفرعية فقط في صندوق النقل",
-      "menuGroupNameInput": "يرجى إدخال اسم مجموعة القائمة، مثال: إدارة الإعلانات",
-      "menuNamePathInput": "يرجى إدخال اسم/مسار القائمة",
-      "optionalMenu": "القائمة الاختيارية",
-      "useMenu": "استخدام القائمة",
-      "remove": "إزالة",
-      "selected": "محدد",
-      "defineMenuInstall": "تحديد تثبيت القائمة",
-      "apiDescriptionPathInput": "يرجى إدخال وصف/مسار API",
-      "optionalAPI": "API اختياري",
-      "useAPI": "استخدام API",
-      "defineAPIInstall": "تحديد تثبيت API",
-      "packagePlugin": "تجميع المكون الإضافي",
-      "package": "تجميع",
-      "closePackage": "إغلاق التجميع",
-      "enterMenuGroupName": "يرجى إدخال اسم مجموعة القائمة",
-      "selectAtLeastOneMenu": "يرجى اختيار قائمة واحدة على الأقل",
-      "enterPluginName": "يرجى إدخال اسم المكون الإضافي",
-      "generateInitialMenu": "إنشاء القائمة الأولية",
-      "generate": "إنشاء",
-      "closeGenerateMenu": "إغلاق إنشاء القائمة",
-      "selectAtLeastOneAPI": "يرجى اختيار API واحد على الأقل",
-      "enterPluginNameAgain": "يرجى إدخال اسم المكون الإضافي مرة أخرى",
-      "closeGenerateAPI": "إغلاق إنشاء API",
-      "emailConfigNote": "يجب تكوين ملف إعدادات البريد الإلكتروني مسبقًا، لمنع البريد العشوائي غير الضروري، لا يتم فتح هذه الميزة في تجربة الإنترنت.",
-      "targetEmail": "البريد الإلكتروني المستهدف",
-      "email": "البريد الإلكتروني",
-      "emailContent": "محتوى البريد الإلكتروني",
-      "sendTestEmail": "إرسال بريد إلكتروني تجريبي",
-      "sendEmail": "إرسال بريد إلكتروني",
-      "sendSuccess": "تم الإرسال بنجاح",
-      "sentSuccessPleaseCheck": "تم الإرسال بنجاح، يرجى التحقق",
-      "checkMessage": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
-      "overwriteMessage": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/menu. هل تريد المتابعة؟",
-      "overwriteWarning": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/api. هل تريد المتابعة؟",
-      "generateInitialAPI": "إنشاء API الأولي",
-      "checkMsg": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
-      "dragOrClickUpload": "اسحب أو انقر للتحميل",
-      "uploadPackage": "يرجى سحب حزمة التثبيت zip إلى هنا للتحميل"
     },
     "systemTools": {
       "system": {
@@ -995,35 +1052,6 @@
         "exportConditionError": "يرجى ملء شروط التصدير بالكامل",
         "completeAssociationError": "يرجى ملء شروط الارتباط بالكامل"
       }
-    }
-  },
-  "pinia": {
-    "modules": {
-      "router": {
-        "bottomLayerLayout": "تخطيط الطبقة السفلية"
-      },
-      "user": {
-        "loggingIn": "جارٍ تسجيل الدخول، يرجى الانتظار...",
-        "connectAdmin": "يرجى الاتصال بالمسؤول للحصول على إذن"
-      }
-    }
-  },
-  "utils": {
-    "request": {
-      "requestErrorDetected": "<p>تم اكتشاف خطأ في الطلب</p>",
-      "requestError": "خطأ في الطلب",
-      "tryAgainLater": "حاول مرة أخرى لاحقًا",
-      "interfaceError": "خطأ في الواجهة",
-      "interfaceErrorDetected": "<p>تم اكتشاف خطأ في الواجهة<p>",
-      "errorCode": "رمز الخطأ",
-      "interfaceErrorNote": "تظهر هذه الأخطاء عادةً في الخلفية، يرجى التحقق من سجلات الخلفية. إذا كان يؤثر على استخدامك العادي، يمكنك تسجيل الخروج بالقوة وتنظيف ذاكرة التخزين المؤقت",
-      "clearCache": "تنظيف ذاكرة التخزين المؤقت",
-      "interfaceNotRegisteredNote": "تحدث هذه الأخطاء عادةً عندما لا يتم تسجيل الواجهة (أو لم يتم إعادة التشغيل) أو عندما لا يتطابق مسار الطلب (الطريقة) مع مسار API (الطريقة) - إذا كان الكود تلقائيًا، يرجى التحقق من وجود مسافات",
-      "iGotIt": "فهمت",
-      "invalidToken": "<p>رمز غير صالح</p>",
-      "errorMessage": "رسالة الخطأ",
-      "identityInfo": "معلومات الهوية",
-      "loginAgain": "تسجيل الدخول مرة أخرى"
     }
   }
 }

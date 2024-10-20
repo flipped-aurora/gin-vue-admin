@@ -103,6 +103,7 @@
   },
   "general": {
     "add": "Add",
+    "addTo": "Add",
     "addSuccess": "Added successfully!",
     "back": "Back",
     "cancel": "Cancel",
@@ -123,6 +124,7 @@
     "description": "Description",
     "disable": "Disable",
     "edit": "Edit",
+    "modify": "Modify",
     "editSuccess": "Edited successfully!",
     "enable": "Enable",
     "endData": "End Date",
@@ -273,6 +275,91 @@
     "portValue": "Port Value",
     "systemConfig": "System Configuration"
   },
+  "pinia": {
+    "modules": {
+      "router": {
+        "bottomLayerLayout": "Bottom layer layout"
+      },
+      "user": {
+        "loggingIn": "Logging in, please wait...",
+        "connectAdmin": "Please contact the administrator for authorization"
+      }
+    }
+  },
+  "plugins": {
+    "pluginSupport": "Currently, only standard plugins (generated through the plugin template to create a standard directory) are supported. Please package non-standard plugins yourself.",
+    "pluginNameInput": "Enter the plugin name in the plugin template",
+    "menuSelectionNote": "Please select only sub-menus in the shuttle box",
+    "menuGroupNameInput": "Please enter the menu group name, e.g., Announcement Management",
+    "menuNamePathInput": "Please enter the menu name/path",
+    "optionalMenu": "Optional Menu",
+    "useMenu": "Use Menu",
+    "remove": "Remove",
+    "selected": "Selected",
+    "defineMenuInstall": "Define Menu Installation",
+    "apiDescriptionPathInput": "Please enter API description/PATH",
+    "optionalAPI": "Optional API",
+    "useAPI": "Use API",
+    "defineAPIInstall": "Define API Installation",
+    "packagePlugin": "Package Plugin",
+    "package": "Package",
+    "closePackage": "Close Package",
+    "enterMenuGroupName": "Please enter the menu group name",
+    "selectAtLeastOneMenu": "Please select at least one menu",
+    "enterPluginName": "Please enter the plugin name",
+    "generateInitialMenu": "Generate Initial Menu",
+    "generate": "Generate",
+    "closeGenerateMenu": "Close Generate Menu",
+    "selectAtLeastOneAPI": "Please select at least one API",
+    "enterPluginNameAgain": "Please enter the plugin name again",
+    "closeGenerateAPI": "Close Generate API",
+    "checkMessage": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
+    "overwriteMessage": "Clicking will overwrite `server/plugin/{plugName}/initialize/menu`. Do you want to continue?",
+    "overwriteWarning": "Clicking will overwrite `server/plugin/{plugName}/initialize/api`. Do you want to continue?",
+    "generateInitialAPI": "Generate Initial API",
+    "checkMsg": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
+    "dragOrClickUpload": "Drag or click to upload",
+    "uploadPackage": "Please drag the installation package zip here to upload",
+    "announcement": {
+        "info": {
+          "title": "Title",
+          "content": "Content",
+          "richTextContent": "[Rich text content]",
+          "author": "Author",
+          "attachments": "Attachments",
+          "enterTitleNote": "Please enter a title",
+          "selectAuthorNote": "Please select author"
+        }
+      },
+    "email": {
+      "emailConfigNote": "You need to configure the email configuration file in advance. To prevent unnecessary spam, this feature is not open for online experience.",
+      "targetEmail": "Target Email",
+      "email": "Email",
+      "emailContent": "Email Content",
+      "sendTestEmail": "Send Test Email",
+      "sendEmail": "Send Email",
+      "sendSuccess": "Send successfully",
+      "sentSuccessPleaseCheck": "Sent successfully, please check"
+    }
+  },
+  "utils": {
+    "request": {
+      "requestErrorDetected": "<p>Request error detected</p> ",
+      "requestError": "Request Error",
+      "tryAgainLater": "Try again later",
+      "interfaceError": "Interface Error",
+      "interfaceErrorDetected": "<p>Interface error detected<p> ",
+      "errorCode": "Error Code",
+      "interfaceErrorNote": "This type of error content is common in backend panic. Please check the backend log first. If it affects your normal use, you can force log out to clear the cache.",
+      "clearCache": "Clear Cache",
+      "interfaceNotRegisteredNote": "This type of error is mostly caused by the interface not being registered (or not restarted) or the request path (method) not matching the API path (method) - if it is automated code, please check whether there are spaces.",
+      "iGotIt": "I Got It",
+      "invalidToken": "<p>Invalid Token</p> ",
+      "errorMessage": "Error Message",
+      "identityInfo": "Identity Information",
+      "loginAgain": "Login Again"
+    }
+  },
   "view": {
     "about": {
       "flippedAuroraTeam": "Flipped-Aurora Team",
@@ -364,7 +451,20 @@
         "uploadFiles": "Upload Files",
         "uploadFilesNote": "Please upload files no larger than 5MB",
         "breakpointNote": "This version is a beta version for early experience. Style beautification and performance optimization are in progress. Upload slice files and synthesized complete files to the breakpointDir folder and fileDir folder of the QMPlus server directory respectively.",
-        "fileTransferredSec": "File has been transferred in seconds"
+        "fileTransferredSec": "File has been transferred in seconds",
+        "uploadFileSizeNote": "Please upload a file smaller than 5M",
+        "uploadFileFirst": "Please upload the file first",
+        "uploadSuccessfully": "Upload Successfully"
+      },
+      "customer": {
+        "customerNote": "Clear the resource permissions of this role in the resource permissions or exclude the role of the creator to block the display of this customer's resources.",
+        "accessDate": "Access Date",
+        "name": "Name",
+        "phone": "Phone",
+        "accessorId": "Accessor ID",
+        "client": "Client",
+        "customerName": "Customer Name",
+        "customerPhone": "Customer Phone"
       },
       "upload": {
         "importURL": "Import URL",
@@ -563,49 +663,6 @@
         "response": "Response",
         "": ""
       }
-    },
-    "plugins": {
-      "pluginSupport": "Currently, only standard plugins (generated through the plugin template to create a standard directory) are supported. Please package non-standard plugins yourself.",
-      "pluginNameInput": "Enter the plugin name in the plugin template",
-      "menuSelectionNote": "Please select only sub-menus in the shuttle box",
-      "menuGroupNameInput": "Please enter the menu group name, e.g., Announcement Management",
-      "menuNamePathInput": "Please enter the menu name/path",
-      "optionalMenu": "Optional Menu",
-      "useMenu": "Use Menu",
-      "remove": "Remove",
-      "selected": "Selected",
-      "defineMenuInstall": "Define Menu Installation",
-      "apiDescriptionPathInput": "Please enter API description/PATH",
-      "optionalAPI": "Optional API",
-      "useAPI": "Use API",
-      "defineAPIInstall": "Define API Installation",
-      "packagePlugin": "Package Plugin",
-      "package": "Package",
-      "closePackage": "Close Package",
-      "enterMenuGroupName": "Please enter the menu group name",
-      "selectAtLeastOneMenu": "Please select at least one menu",
-      "enterPluginName": "Please enter the plugin name",
-      "generateInitialMenu": "Generate Initial Menu",
-      "generate": "Generate",
-      "closeGenerateMenu": "Close Generate Menu",
-      "selectAtLeastOneAPI": "Please select at least one API",
-      "enterPluginNameAgain": "Please enter the plugin name again",
-      "closeGenerateAPI": "Close Generate API",
-      "emailConfigNote": "You need to configure the email configuration file in advance. To prevent unnecessary spam, this feature is not open for online experience.",
-      "targetEmail": "Target Email",
-      "email": "Email",
-      "emailContent": "Email Content",
-      "sendTestEmail": "Send Test Email",
-      "sendEmail": "Send Email",
-      "sendSuccess": "Send successfully",
-      "sentSuccessPleaseCheck": "Sent successfully, please check",
-      "checkMessage": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
-      "overwriteMessage": "Clicking will overwrite `server/plugin/{plugName}/initialize/menu`. Do you want to continue?",
-      "overwriteWarning": "Clicking will overwrite `server/plugin/{plugName}/initialize/api`. Do you want to continue?",
-      "generateInitialAPI": "Generate Initial API",
-      "checkMsg": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
-      "dragOrClickUpload": "Drag or click to upload",
-      "uploadPackage": "Please drag the installation package zip here to upload"
     },
     "systemTools": {
       "system": {
@@ -1004,35 +1061,6 @@
         "exportConditionError": "Please fill in the complete export conditions",
         "completeAssociationError": "Please fill in the complete association"
       }
-    }
-  },
-  "pinia": {
-    "modules": {
-      "router": {
-        "bottomLayerLayout": "Bottom layer layout"
-      },
-      "user": {
-        "loggingIn": "Logging in, please wait...",
-        "connectAdmin": "Please contact the administrator for authorization"
-      }
-    }
-  },
-  "utils": {
-    "request": {
-      "requestErrorDetected": "<p>Request error detected</p> ",
-      "requestError": "Request Error",
-      "tryAgainLater": "Try again later",
-      "interfaceError": "Interface Error",
-      "interfaceErrorDetected": "<p>Interface error detected<p> ",
-      "errorCode": "Error Code",
-      "interfaceErrorNote": "This type of error content is common in backend panic. Please check the backend log first. If it affects your normal use, you can force log out to clear the cache.",
-      "clearCache": "Clear Cache",
-      "interfaceNotRegisteredNote": "This type of error is mostly caused by the interface not being registered (or not restarted) or the request path (method) not matching the API path (method) - if it is automated code, please check whether there are spaces.",
-      "iGotIt": "I Got It",
-      "invalidToken": "<p>Invalid Token</p> ",
-      "errorMessage": "Error Message",
-      "identityInfo": "Identity Information",
-      "loginAgain": "Login Again"
     }
   }
 }

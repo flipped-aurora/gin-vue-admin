@@ -103,6 +103,7 @@
   },
   "general": {
     "add": "新增",
+    "addTo": "添加",
     "addSuccess": "添加成功!",
     "back": "返回",
     "cancel": "取消",
@@ -123,6 +124,7 @@
     "description": "描述",
     "disable": "停用",
     "edit": "编辑",
+    "modify": "修改",
     "editSuccess": "编辑成功!",
     "enable": "开启",
     "endData": "结束日期",
@@ -274,6 +276,91 @@
     "portValue": "端口值",
     "systemConfig": "系统配置"
   },
+  "pinia": {
+    "modules": {
+      "router": {
+        "bottomLayerLayout": "底层layout"
+      },
+      "user": {
+        "loggingIn": "登录中，请稍候...",
+        "connectAdmin": "请联系管理员进行授权"
+      }
+    }
+  },
+  "plugins": {
+      "pluginSupport": "目前只支持标准插件（通过插件模板生成的标准目录插件），非标准插件请自行打包",
+      "pluginNameInput": "插件模板处填写的【插件名】",
+      "menuSelectionNote": "穿梭框请只选择子级菜单即可",
+      "menuGroupNameInput": "请输入菜单组名，例：公告管理",
+      "menuNamePathInput": "请输入菜单名称/路径",
+      "optionalMenu": "可选菜单",
+      "useMenu": "使用菜单",
+      "remove": "移除",
+      "selected": "选中",
+      "defineMenuInstall": "定义安装菜单",
+      "apiDescriptionPathInput": "请输入API描述/PATH",
+      "optionalAPI": "可选API",
+      "useAPI": "使用API",
+      "defineAPIInstall": "定义安装API",
+      "packagePlugin": "打包插件",
+      "package": "打包",
+      "closePackage": "关闭打包",
+      "enterMenuGroupName": "请填写菜单组名",
+      "selectAtLeastOneMenu": "请至少选择一个菜单",
+      "enterPluginName": "请填写插件名",
+      "generateInitialMenu": "生成初始菜单",
+      "generate": "生成",
+      "closeGenerateMenu": "关闭生成菜单",
+      "selectAtLeastOneAPI": "请至少选择一个API",
+      "enterPluginNameAgain": "请填写插件名",
+      "closeGenerateAPI": "关闭生成API",
+      "checkMessage": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
+      "overwriteMessage": "点击后将会覆盖server下的/plugin/{plugName}/initialize/menu. 是否继续?",
+      "overwriteWarning": "点击后将会覆盖server下的/plugin/{plugName}/initialize/api. 是否继续?",
+      "generateInitialAPI": "生成初始API",
+      "checkMsg": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
+      "dragOrClickUpload": "拖拽或点击上传",
+      "uploadPackage": "请把安装包的zip拖拽至此处上传",
+      "announcement": {
+        "info": {
+          "title": "标题",
+          "content": "内容",
+          "richTextContent": "[富文本内容]",
+          "author": "作者",
+          "attachments": "附件",
+          "enterTitleNote": "请输入标题",
+          "selectAuthorNote": "请选择作者"
+        }
+      },
+      "email": {
+        "emailConfigNote": "需要提前配置email配置文件，为防止不必要的垃圾邮件，在线体验功能不开放此功能体验。",
+        "targetEmail": "目标邮箱",
+        "email": "邮件",
+        "emailContent": "邮件内容",
+        "sendTestEmail": "发送测试邮件",
+        "sendEmail": "发送邮件",
+        "sendSuccess": "发送成功",
+        "sentSuccessPleaseCheck": "发送成功,请查收"
+      }
+  },
+  "utils": {
+    "request": {
+      "requestErrorDetected": "<p>检测到请求错误</p>",
+      "requestError": "请求报错",
+      "tryAgainLater": "稍后重试",
+      "interfaceError": "接口报错",
+      "interfaceErrorDetected": "<p>检测到接口错误<p>",
+      "errorCode": "错误码",
+      "interfaceErrorNote": "此类错误内容常见于后台panic，请先查看后台日志，如果影响您正常使用可强制登出清理缓存",
+      "clearCache": "清理缓存",
+      "interfaceNotRegisteredNote": "此类错误多为接口未注册（或未重启）或者请求路径（方法）与api路径（方法）不符--如果为自动化代码请检查是否存在空格",
+      "iGotIt": "我知道了",
+      "invalidToken": "<p>无效的令牌</p>",
+      "errorMessage": "错误信息",
+      "identityInfo": "身份信息",
+      "loginAgain": "重新登录"
+    }
+  },
   "view": {
     "about": {
       "flippedAuroraTeam": "flipped-aurora团队",
@@ -365,7 +452,20 @@
         "uploadFiles": "上传文件",
         "uploadFilesNote": "请上传不超过5MB的文件",
         "breakpointNote": "此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹",
-        "fileTransferredSec": "文件已秒传"
+        "fileTransferredSec": "文件已秒传",
+        "uploadFileSizeNote": "请上传小于5M文件",
+        "uploadFileFirst": "请先上传文件",
+        "uploadSuccessfully": "上传成功"
+      },
+      "customer": {
+        "customerNote": "在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示",
+        "accessDate": "接入日期",
+        "name": "姓名",
+        "phone": "电话",
+        "accessorId": "接入人ID",
+        "client": "客户",
+        "customerName": "客户名",
+        "customerPhone": "客户电话"
       },
       "upload": {
         "importURL": "导入URL",
@@ -564,49 +664,6 @@
         "response": "响应",
         "": ""
       }
-    },
-    "plugins": {
-      "pluginSupport": "目前只支持标准插件（通过插件模板生成的标准目录插件），非标准插件请自行打包",
-      "pluginNameInput": "插件模板处填写的【插件名】",
-      "menuSelectionNote": "穿梭框请只选择子级菜单即可",
-      "menuGroupNameInput": "请输入菜单组名，例：公告管理",
-      "menuNamePathInput": "请输入菜单名称/路径",
-      "optionalMenu": "可选菜单",
-      "useMenu": "使用菜单",
-      "remove": "移除",
-      "selected": "选中",
-      "defineMenuInstall": "定义安装菜单",
-      "apiDescriptionPathInput": "请输入API描述/PATH",
-      "optionalAPI": "可选API",
-      "useAPI": "使用API",
-      "defineAPIInstall": "定义安装API",
-      "packagePlugin": "打包插件",
-      "package": "打包",
-      "closePackage": "关闭打包",
-      "enterMenuGroupName": "请填写菜单组名",
-      "selectAtLeastOneMenu": "请至少选择一个菜单",
-      "enterPluginName": "请填写插件名",
-      "generateInitialMenu": "生成初始菜单",
-      "generate": "生成",
-      "closeGenerateMenu": "关闭生成菜单",
-      "selectAtLeastOneAPI": "请至少选择一个API",
-      "enterPluginNameAgain": "请填写插件名",
-      "closeGenerateAPI": "关闭生成API",
-      "emailConfigNote": "需要提前配置email配置文件，为防止不必要的垃圾邮件，在线体验功能不开放此功能体验。",
-      "targetEmail": "目标邮箱",
-      "email": "邮件",
-      "emailContent": "邮件内容",
-      "sendTestEmail": "发送测试邮件",
-      "sendEmail": "发送邮件",
-      "sendSuccess": "发送成功",
-      "sentSuccessPleaseCheck": "发送成功,请查收",
-      "checkMessage": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
-      "overwriteMessage": "点击后将会覆盖server下的/plugin/{plugName}/initialize/menu. 是否继续?",
-      "overwriteWarning": "点击后将会覆盖server下的/plugin/{plugName}/initialize/api. 是否继续?",
-      "generateInitialAPI": "生成初始API",
-      "checkMsg": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
-      "dragOrClickUpload": "拖拽或点击上传",
-      "uploadPackage": "请把安装包的zip拖拽至此处上传"
     },
     "systemTools": {
       "system": {
@@ -1031,35 +1088,6 @@
         "exportConditionError": "请填写完整的导出条件",
         "completeAssociationError": "请填写完整的关联"
       }
-    }
-  },
-  "pinia": {
-    "modules": {
-      "router": {
-        "bottomLayerLayout": "底层layout"
-      },
-      "user": {
-        "loggingIn": "登录中，请稍候...",
-        "connectAdmin": "请联系管理员进行授权"
-      }
-    }
-  },
-  "utils": {
-    "request": {
-      "requestErrorDetected": "<p>检测到请求错误</p>",
-      "requestError": "请求报错",
-      "tryAgainLater": "稍后重试",
-      "interfaceError": "接口报错",
-      "interfaceErrorDetected": "<p>检测到接口错误<p>",
-      "errorCode": "错误码",
-      "interfaceErrorNote": "此类错误内容常见于后台panic，请先查看后台日志，如果影响您正常使用可强制登出清理缓存",
-      "clearCache": "清理缓存",
-      "interfaceNotRegisteredNote": "此类错误多为接口未注册（或未重启）或者请求路径（方法）与api路径（方法）不符--如果为自动化代码请检查是否存在空格",
-      "iGotIt": "我知道了",
-      "invalidToken": "<p>无效的令牌</p>",
-      "errorMessage": "错误信息",
-      "identityInfo": "身份信息",
-      "loginAgain": "重新登录"
     }
   }
 }

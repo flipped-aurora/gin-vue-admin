@@ -2,18 +2,18 @@
   <div>
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
-        <el-form-item label="创建日期" prop="createdAt">
+        <el-form-item :label="t('general.createDate')" prop="createdAt">
           <template #label>
             <span>
-              创建日期
-              <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+              {{ t('general.createDate') }}
+              <el-tooltip :content="t('general.searchDesc')">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
           </template>
-          <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false" />
+          <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" :placeholder="t('general.startData')" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false" />
           —
-          <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false" />
+          <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" :placeholder="t('general.endData')" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false" />
         </el-form-item>
 
 
@@ -23,16 +23,16 @@
 
         <el-form-item>
           <el-button type="primary" icon="search" @click="onSubmit">
-            查询
+            {{ t('general.search') }}
           </el-button>
           <el-button icon="refresh" @click="onReset">
-            重置
+            {{ t('general.reset') }}
           </el-button>
           <el-button v-if="!showAllQuery" link type="primary" icon="arrow-down" @click="showAllQuery=true">
-            展开
+            {{ t('general.expand') }}
           </el-button>
           <el-button v-else link type="primary" icon="arrow-up" @click="showAllQuery=false">
-            收起
+            {{ t('general.collapse') }}
           </el-button>
         </el-form-item>
       </el-form>
@@ -40,10 +40,10 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button type="primary" icon="plus" @click="openDialog">
-          新增
+          {{ t('general.add') }}
         </el-button>
         <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">
-          删除
+          {{ t('general.delete') }}
         </el-button>
       </div>
       <el-table
@@ -56,24 +56,24 @@
       >
         <el-table-column type="selection" width="55" />
 
-        <el-table-column align="left" label="日期" prop="createdAt" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" prop="createdAt" width="180">
           <template #default="scope">
             {{ formatDate(scope.row.CreatedAt) }}
           </template>
         </el-table-column>
 
-        <el-table-column align="left" label="标题" prop="title" width="120" />
-        <el-table-column label="内容" prop="content" width="200">
+        <el-table-column align="left" :label="t('plugins.announcement.info.title')" prop="title" width="120" />
+        <el-table-column :label="t('plugins.announcement.info.content')" prop="content" width="200">
           <template #default="scope">
-            [富文本内容]
+           {{ t('plugins.announcement.info.richTextContent') }}
           </template>
         </el-table-column>
-        <el-table-column align="left" label="作者" prop="userID" width="120">
+        <el-table-column align="left" :label="t('plugins.announcement.info.author')" prop="userID" width="120">
           <template #default="scope">
             <span>{{ filterDataSource(dataSource.userID,scope.row.userID) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="附件" prop="attachments" width="200">
+        <el-table-column :label="t('plugins.announcement.info.attachments')" prop="attachments" width="200">
           <template #default="scope">
             <div class="file-list">
               <el-tag v-for="file in scope.row.attachments" :key="file.uid" @click="downloadFile(file.url)">
@@ -82,13 +82,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+        <el-table-column align="left" :label="t('general.operations')" fixed="right" min-width="240">
           <template #default="scope">
             <el-button type="primary" link icon="edit" class="table-button" @click="updateInfoFunc(scope.row)">
-              变更
+              {{ t('general.edit') }}
             </el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">
-              删除
+              {{ t('general.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -108,31 +108,31 @@
     <el-drawer v-model="dialogFormVisible" destroy-on-close size="800" :show-close="false" :before-close="closeDialog">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type==='create'?'添加':'修改' }}</span>
+          <span class="text-lg">{{ type==='create'? t('general.addTo') :t('general.modify') }}</span>
           <div>
             <el-button type="primary" @click="enterDialog">
-              确 定
+              {{ t('general.confirm') }}
             </el-button>
             <el-button @click="closeDialog">
-              取 消
+              {{ t('general.cancel') }}
             </el-button>
           </div>
         </div>
       </template>
 
       <el-form ref="elFormRef" :model="formData" label-position="top" :rules="rule" label-width="80px">
-        <el-form-item label="标题:" prop="title">
-          <el-input v-model="formData.title" :clearable="true" placeholder="请输入标题" />
+        <el-form-item :label="t('plugins.announcement.info.title') + ':'" prop="title">
+          <el-input v-model="formData.title" :clearable="true" :placeholder="t('plugins.announcement.info.enterTitleNote')" />
         </el-form-item>
-        <el-form-item label="内容:" prop="content">
+        <el-form-item :label="t('plugins.announcement.info.content') + ':'" prop="content">
           <RichEdit v-model="formData.content" />
         </el-form-item>
-        <el-form-item label="作者:" prop="userID">
-          <el-select v-model="formData.userID" placeholder="请选择作者" style="width:100%" :clearable="true">
+        <el-form-item :label="t('plugins.announcement.info.author') + ':'" prop="userID">
+          <el-select v-model="formData.userID" :placeholder="t('plugins.announcement.info.selectAuthorNote')" style="width:100%" :clearable="true">
             <el-option v-for="(item,key) in dataSource.userID" :key="key" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="附件:" prop="attachments">
+        <el-form-item :label="t('plugins.announcement.info.attachments') + ':'" prop="attachments">
           <SelectFile v-model="formData.attachments" />
         </el-form-item>
       </el-form>
@@ -160,6 +160,9 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 import {  formatDate, filterDataSource } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
     name: 'Info'
@@ -194,11 +197,11 @@ const searchRule = reactive({
   createdAt: [
     { validator: (rule, value, callback) => {
       if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写结束日期'))
+        callback(new Error(t('general.placeInputEndData')))
       } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写开始日期'))
+        callback(new Error(t('general.placeInputStartData')))
       } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
-        callback(new Error('开始日期应当早于结束日期'))
+        callback(new Error(t('general.startDataMustBeforeEndData')))
       } else {
         callback()
       }
@@ -276,9 +279,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
     }).then(() => {
             deleteInfoFunc(row)
@@ -287,16 +290,16 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
       const IDs = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: '请选择要删除的数据'
+          message: t('general.selectDataToDelete')
         })
         return
       }
@@ -308,7 +311,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === IDs.length && page.value > 1) {
           page.value--
@@ -338,7 +341,7 @@ const deleteInfoFunc = async (row) => {
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
-                message: '删除成功'
+                message: t('general.deleteSuccess')
             })
             if (tableData.value.length === 1 && page.value > 1) {
             page.value--
@@ -385,7 +388,7 @@ const enterDialog = async () => {
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: '创建/更改成功'
+                  message: t('general.createUpdateSuccess')
                 })
                 closeDialog()
                 getTableData()

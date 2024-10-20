@@ -160,9 +160,9 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 import {  formatDate, filterDataSource } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
     name: 'Info'

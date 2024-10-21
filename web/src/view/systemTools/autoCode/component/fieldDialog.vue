@@ -456,7 +456,7 @@ const getDBTableList = async () => {
 }
 
 const dbColumnList = ref([])
-const selectDB = async (val) => {
+const selectDB = async (val,isInit) => {
   middleDate.value.dataSource.table = val
   const res = await getColumn({
     businessDB: middleDate.value.dataSource.dbName,
@@ -472,7 +472,7 @@ const selectDB = async (val) => {
       isPrimary: item.primaryKey,
       comment: item.columnComment
     }));
-    if (dbColumnList.value.length > 0) {
+    if (dbColumnList.value.length > 0 && !isInit) {
       middleDate.value.dataSource.label = dbColumnList.value[0].columnName
       middleDate.value.dataSource.value = dbColumnList.value[0].columnName
     }
@@ -486,7 +486,7 @@ defineExpose({ fieldDialogForm })
 onMounted(()=>{
   getDbFunc()
   if(middleDate.value.dataSource.table){
-    selectDB(middleDate.value.dataSource.table)
+    selectDB(middleDate.value.dataSource.table,true)
   }
 })
 </script>

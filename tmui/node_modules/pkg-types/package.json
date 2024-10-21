@@ -1,0 +1,47 @@
+{
+  "name": "pkg-types",
+  "version": "1.2.1",
+  "description": "Node.js utilities and TypeScript definitions for `package.json` and `tsconfig.json`",
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "sideEffects": false,
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
+  },
+  "types": "./dist/index.d.ts",
+  "repository": "unjs/pkg-types",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "prepack": "pnpm build",
+    "dev": "vitest --typecheck",
+    "release": "pnpm test && changelogen --release && npm publish && git push --follow-tags",
+    "lint": "eslint && prettier -c src test",
+    "lint:fix": "automd && eslint --fix . && prettier -w src test",
+    "test": "vitest run --typecheck --coverage"
+  },
+  "dependencies": {
+    "confbox": "^0.1.8",
+    "mlly": "^1.7.2",
+    "pathe": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "@vitest/coverage-v8": "^2.1.2",
+    "automd": "^0.3.10",
+    "changelogen": "^0.5.7",
+    "eslint": "^9.12.0",
+    "eslint-config-unjs": "^0.4.1",
+    "expect-type": "^1.0.0",
+    "jiti": "^2.3.3",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2",
+    "unbuild": "^2.0.0",
+    "vitest": "^2.1.2"
+  },
+  "packageManager": "pnpm@9.12.1"
+}

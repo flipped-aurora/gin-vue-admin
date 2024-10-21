@@ -1,0 +1,102 @@
+{
+    "id": "tm-vuetify-3",
+    "displayName": "tm-vuetify-3",
+    "version": "3.1.1",
+    "description": "tm-vuetify是一个新势力由主题驱动的UI组件库,相比其它优势大,组件全,设计趋势紧跟未来。具有主题生成，主题实时切换，暗黑实时切换,lottie动画,图表等新颖功能,tmui TMUI",
+    "keywords": [
+        "tmUI-vuetify",
+        "UI组件库",
+        "CSS主题库",
+        "UI",
+        "暗黑模式"
+    ],
+    "scripts": {
+        "build": "tsc --build",
+        "clean": "tsc --build --clean",
+        "watchBuild": "tsc --watch",
+        "pm2start": "pm2 start app.js --watch",
+        "start": "node app"
+    },
+    "repository": "https://jx2d.cn/",
+    "engines": {
+        "HBuilderX": "^3.1.0"
+    },
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ],
+        "sale": {
+            "regular": {
+                "price": "0.00"
+            },
+            "sourcecode": {
+                "price": "0.00"
+            }
+        },
+        "contact": {
+            "qq": ""
+        },
+        "declaration": {
+            "ads": "无",
+            "data": "插件不采集任何数据",
+            "permissions": "无"
+        },
+        "npmurl": ""
+    },
+    "uni_modules": {
+        "dependencies": [],
+        "encrypt": [],
+        "platforms": {
+            "cloud": {
+                "tcb": "y",
+                "aliyun": "y"
+            },
+            "client": {
+                "App": {
+                    "app-vue": "y",
+                    "app-nvue": "y"
+                },
+                "H5-mobile": {
+                    "Safari": {
+                        "minVersion": "8"
+                    },
+                    "Android Browser": {
+                        "minVersion": "43"
+                    },
+                    "微信浏览器(Android)": {
+                        "minVersion": "2.7"
+                    },
+                    "QQ浏览器(Android)": "y"
+                },
+                "H5-pc": {
+                    "Chrome": "y",
+                    "IE": {
+                        "minVersion": "11"
+                    },
+                    "Edge": "y",
+                    "Firefox": "y",
+                    "Safari": {
+                        "minVersion": "8"
+                    }
+                },
+                "小程序": {
+                    "微信": "y",
+                    "阿里": "y",
+                    "百度": "y",
+                    "字节跳动": "y",
+                    "QQ": "y"
+                },
+                "快应用": {
+                    "华为": "u",
+                    "联盟": "u"
+                },
+                "Vue": {
+                    "vue2": "y",
+                    "vue3": "y"
+                }
+            }
+        }
+    },
+    "dependencies": {}
+}

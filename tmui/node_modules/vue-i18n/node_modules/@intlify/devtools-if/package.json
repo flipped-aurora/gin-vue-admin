@@ -1,0 +1,62 @@
+{
+  "name": "@intlify/devtools-if",
+  "version": "9.2.2",
+  "description": "@intlify/devtools-if",
+  "keywords": [
+    "devtools",
+    "i18n",
+    "internationalization",
+    "intlify"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
+  "homepage": "https://github.com/intlify/vue-i18n-next/tree/master/packages/devtools-if#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/vue-i18n-next.git",
+    "directory": "packages/devtools-if"
+  },
+  "bugs": {
+    "url": "https://github.com/intlify/vue-i18n-next/issues"
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "dist"
+  ],
+  "main": "index.js",
+  "module": "dist/devtools-if.esm-bundler.js",
+  "types": "dist/devtools-if.d.ts",
+  "dependencies": {
+    "@intlify/shared": "9.2.2"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "buildOptions": {
+    "name": "IntlifyDevToolsIf",
+    "formats": [
+      "esm-bundler",
+      "cjs"
+    ]
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "node": "./index.mjs",
+        "default": "./dist/devtools-if.esm-bundler.js"
+      },
+      "require": "./index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./index.mjs": "./index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}

@@ -1,0 +1,65 @@
+{
+  "name": "jest",
+  "description": "Delightful JavaScript Testing.",
+  "version": "27.0.4",
+  "main": "./build/jest.js",
+  "types": "./build/jest.d.ts",
+  "exports": {
+    ".": "./build/jest.js",
+    "./package.json": "./package.json",
+    "./bin/jest": "./bin/jest.js"
+  },
+  "dependencies": {
+    "@jest/core": "^27.0.4",
+    "import-local": "^3.0.2",
+    "jest-cli": "^27.0.4"
+  },
+  "peerDependencies": {
+    "node-notifier": "^8.0.1 || ^9.0.0"
+  },
+  "peerDependenciesMeta": {
+    "node-notifier": {
+      "optional": true
+    }
+  },
+  "bin": "./bin/jest.js",
+  "engines": {
+    "node": "^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebook/jest"
+  },
+  "homepage": "https://jestjs.io/",
+  "license": "MIT",
+  "keywords": [
+    "ava",
+    "babel",
+    "coverage",
+    "easy",
+    "expect",
+    "facebook",
+    "immersive",
+    "instant",
+    "jasmine",
+    "jest",
+    "jsdom",
+    "mocha",
+    "mocking",
+    "painless",
+    "qunit",
+    "runner",
+    "sandboxed",
+    "snapshot",
+    "tap",
+    "tape",
+    "test",
+    "testing",
+    "typescript",
+    "watch"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "b29acb355ae23ccdb2a6248fbbd933fc93f320b9"
+}

@@ -1,0 +1,82 @@
+{
+  "name": "vue-i18n",
+  "version": "9.2.2",
+  "description": "Internationalization plugin for Vue.js",
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "intlify",
+    "plugin",
+    "vue",
+    "vue.js"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "kazuya kawaguchi",
+    "email": "kawakazu80@gmail.com"
+  },
+  "homepage": "https://github.com/intlify/vue-i18n-next/tree/master/packages/vue-i18n#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intlify/vue-i18n-next.git",
+    "directory": "packages/vue-i18n"
+  },
+  "bugs": {
+    "url": "https://github.com/intlify/vue-i18n-next/issues"
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "dist",
+    "vetur"
+  ],
+  "main": "index.js",
+  "module": "dist/vue-i18n.esm-bundler.js",
+  "unpkg": "dist/vue-i18n.global.js",
+  "jsdelivr": "dist/vue-i18n.global.js",
+  "types": "dist/vue-i18n.d.ts",
+  "dependencies": {
+    "@intlify/core-base": "9.2.2",
+    "@intlify/shared": "9.2.2",
+    "@intlify/vue-devtools": "9.2.2",
+    "@vue/devtools-api": "^6.2.1"
+  },
+  "devDependencies": {
+    "@intlify/devtools-if": "9.2.2"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "buildOptions": {
+    "name": "VueI18n",
+    "formats": [
+      "esm-bundler",
+      "esm-bundler-runtime",
+      "esm-browser",
+      "esm-browser-runtime",
+      "cjs",
+      "global",
+      "global-runtime"
+    ]
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "node": "./index.mjs",
+        "default": "./dist/vue-i18n.esm-bundler.js"
+      },
+      "require": "./index.js"
+    },
+    "./dist/*": "./dist/*",
+    "./index.mjs": "./index.mjs",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "vetur": {
+    "tags": "vetur/tags.json",
+    "attributes": "vetur/attributes.json"
+  }
+}

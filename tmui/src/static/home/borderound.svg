@@ -1,0 +1,18 @@
+<svg width="243" height="243" viewBox="0 0 243 243" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient id="paint0_linear_1395_222" x1="134.777" y1="5.86136" x2="107.04" y2="241.111" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_1395_222" x1="121.18" y1="12.0296" x2="121.18" y2="238.458" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="1" stop-color="white" stop-opacity="0.13"/>
+        </linearGradient>
+    </defs>
+    <circle cx="121.18" cy="121.18" r="109.15" transform="rotate(-6.72429 121.18 121.18)" stroke="url(#paint0_linear_1395_222)" stroke-width="8" stroke-dasharray="1 10" stroke-dashoffset="0">
+        <animate attributeName="stroke-width" values="8;3;8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="121.18" cy="121.18" r="109.15" transform="rotate(1.58104 121.18 121.18)" stroke="url(#paint1_linear_1395_222)" stroke-width="3" stroke-dasharray="1 10" stroke-dashoffset="0">
+        <animate attributeName="stroke-width" values="3;8;3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+</svg>

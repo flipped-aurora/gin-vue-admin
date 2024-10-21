@@ -1,0 +1,40 @@
+{
+  "name": "phin",
+  "version": "3.7.1",
+  "description": "The ultra-lightweight Node.js HTTP client",
+  "main": "lib/phin.js",
+  "types": "types.d.ts",
+  "scripts": {
+    "test": "node ./tests/test.js",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethanent/phin.git"
+  },
+  "keywords": [
+    "http",
+    "https",
+    "request",
+    "fetch",
+    "ajax",
+    "url",
+    "uri"
+  ],
+  "author": "Ethan Davis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ethanent/phin/issues"
+  },
+  "homepage": "https://github.com/ethanent/phin",
+  "files": [
+    "lib/phin.js",
+    "types.d.ts"
+  ],
+  "engines": {
+    "node": ">= 8"
+  },
+  "dependencies": {
+    "centra": "^2.7.0"
+  }
+}

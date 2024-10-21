@@ -1,0 +1,26 @@
+{
+  "name": "xregexp",
+  "version": "3.1.0",
+  "description": "Extended regular expressions",
+  "homepage": "http://xregexp.com/",
+  "author": "Steven Levithan <steves_list@hotmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slevithan/xregexp.git"
+  },
+  "keywords": [
+    "regex",
+    "regexp"
+  ],
+  "main": "./src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "browserify src/index.js --standalone XRegExp > xregexp-all.js"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1"
+  }
+}

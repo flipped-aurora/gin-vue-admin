@@ -1,0 +1,38 @@
+{
+  "name": "@jimp/plugin-fisheye",
+  "version": "0.10.3",
+  "description": "Apply a fisheye effect to an image.",
+  "main": "dist/index.js",
+  "module": "es/index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "cross-env BABEL_ENV=test mocha --require @babel/register",
+    "test:watch": "npm run test -- --reporter min --watch",
+    "test:coverage": "nyc npm run test",
+    "build": "npm run build:node:production && npm run build:module",
+    "build:watch": "npm run build:node:debug -- -- --watch --verbose",
+    "build:debug": "npm run build:node:debug",
+    "build:module": "cross-env BABEL_ENV=module babel src -d es --source-maps --config-file ../../babel.config.js",
+    "build:node": "babel src -d dist --source-maps --config-file ../../babel.config.js",
+    "build:node:debug": "cross-env BABEL_ENV=development npm run build:node",
+    "build:node:production": "cross-env BABEL_ENV=production npm run build:node"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "^7.7.2",
+    "@jimp/utils": "^0.10.3",
+    "core-js": "^3.4.1"
+  },
+  "peerDependencies": {
+    "@jimp/custom": ">=0.3.5"
+  },
+  "devDependencies": {
+    "@jimp/custom": "^0.10.3",
+    "@jimp/test-utils": "^0.10.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "37197106eae5c26231018dfdc0254422f6b43927"
+}

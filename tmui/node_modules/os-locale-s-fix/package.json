@@ -1,0 +1,59 @@
+{
+  "name": "os-locale-s-fix",
+  "version": "1.0.8-fix-1",
+  "description": "Its a light weight version that minimizes the dependency module of `os-locale`",
+  "private": false,
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "sideEffects": false,
+  "types": "./index.d.ts",
+  "author": {
+    "name": "jeffy-g",
+    "email": "hirotom1107@gmail.com"
+  },
+  "engines": {
+    "node": ">=10",
+    "yarn": "^1.22.4"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeffy-g/os-locale-s/issues"
+  },
+  "homepage": "https://github.com/jeffy-g/os-locale-s#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffy-g/os-locale-s.git"
+  },
+  "files": [
+    "package.json",
+    "license",
+    "reamd.md",
+    "cjs",
+    "esm",
+    "*.d.ts"
+  ],
+  "keywords": [
+    "typescript",
+    "javascript",
+    "locale",
+    "lang",
+    "language",
+    "system",
+    "os",
+    "string",
+    "user",
+    "country",
+    "id",
+    "identifier",
+    "region"
+  ],
+  "dependencies": {
+    "lcid": "^3.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2"
+  },
+  "scripts": {
+    "test": "jest --coverage --silent=false --colors -c=jest.configjs.js"
+  }
+}

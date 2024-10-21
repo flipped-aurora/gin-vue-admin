@@ -1,0 +1,22 @@
+{
+  "name": "licia",
+  "version": "1.43.0",
+  "description": "Useful utility collection with zero dependencies",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liriliri/licia.git"
+  },
+  "keywords": [
+    "eustia",
+    "util"
+  ],
+  "author": "redhoodsu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liriliri/licia/issues"
+  },
+  "homepage": "https://github.com/liriliri/licia#readme",
+  "main": "node.js",
+  "browser": "browser.js",
+  "typings": "index.d.ts"
+}

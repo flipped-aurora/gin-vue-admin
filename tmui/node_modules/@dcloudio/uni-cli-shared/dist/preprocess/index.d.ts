@@ -1,0 +1,13 @@
+export { initPreContext } from './context';
+export declare function preJs(jsCode: string): any;
+export declare function preHtml(htmlCode: string): any;
+export declare const preCss: typeof preJs;
+export declare const preJson: typeof preJs;
+export declare function preNVueJs(jsCode: string): any;
+export declare function preNVueHtml(htmlCode: string): any;
+export declare const preNVueCss: typeof preNVueJs;
+export declare const preNVueJson: typeof preNVueJs;
+export declare function preUVueJs(jsCode: string): any;
+export declare function preUVueHtml(htmlCode: string): any;
+export declare const preUVueCss: typeof preUVueJs;
+export declare const preUVueJson: typeof preUVueJs;

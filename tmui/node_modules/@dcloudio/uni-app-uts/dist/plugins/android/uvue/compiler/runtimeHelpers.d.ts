@@ -1,0 +1,17 @@
+export declare const IS_TRUE: unique symbol;
+export declare const V_SHOW: unique symbol;
+export declare const RENDER_LIST: unique symbol;
+export declare const FRAGMENT: unique symbol;
+export declare const OPEN_BLOCK: unique symbol;
+export declare const RESOLVE_COMPONENT: unique symbol;
+export declare const RESOLVE_DIRECTIVE: unique symbol;
+export declare const RESOLVE_EASY_COMPONENT: unique symbol;
+export declare const RENDER_SLOT: unique symbol;
+export declare const TO_HANDLERS: unique symbol;
+export declare const V_ON_WITH_MODIFIERS: unique symbol;
+export declare const WITH_SLOT_CTX: unique symbol;
+export declare const WITH_SCOPED_SLOT_CTX: unique symbol;
+export declare const RESOLVE_CACHE: unique symbol;
+export declare const TRY_SET_REF_VALUE: unique symbol;
+export declare const TRY_UPDATE_REF_NUMBER: unique symbol;
+export declare const LOOSE_TO_NUMBER: unique symbol;

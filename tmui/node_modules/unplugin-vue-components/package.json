@@ -1,0 +1,130 @@
+{
+  "name": "unplugin-vue-components",
+  "type": "module",
+  "version": "0.27.4",
+  "packageManager": "pnpm@9.7.0",
+  "description": "Components auto importing for Vue",
+  "author": "antfu <anthonyfu117@hotmail.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/antfu",
+  "homepage": "https://github.com/unplugin/unplugin-vue-components#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unplugin/unplugin-vue-components.git"
+  },
+  "bugs": "https://github.com/unplugin/unplugin-vue-components/issues",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./nuxt": {
+      "import": "./dist/nuxt.js",
+      "require": "./dist/nuxt.cjs"
+    },
+    "./resolvers": {
+      "import": "./dist/resolvers.js",
+      "require": "./dist/resolvers.cjs"
+    },
+    "./rollup": {
+      "import": "./dist/rollup.js",
+      "require": "./dist/rollup.cjs"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "require": "./dist/types.cjs"
+    },
+    "./vite": {
+      "import": "./dist/vite.js",
+      "require": "./dist/vite.cjs"
+    },
+    "./webpack": {
+      "import": "./dist/webpack.js",
+      "require": "./dist/webpack.cjs"
+    },
+    "./rspack": {
+      "import": "./dist/rspack.js",
+      "require": "./dist/rspack.cjs"
+    },
+    "./esbuild": {
+      "import": "./dist/esbuild.js",
+      "require": "./dist/esbuild.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch src",
+    "example:build": "npm -C examples/vite-vue3 run build",
+    "example:dev": "npm -C examples/vite-vue3 run dev",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint .",
+    "release": "bumpp && npm publish",
+    "test": "vitest",
+    "test:update": "vitest --u"
+  },
+  "peerDependencies": {
+    "@babel/parser": "^7.15.8",
+    "@nuxt/kit": "^3.2.2",
+    "vue": "2 || 3"
+  },
+  "peerDependenciesMeta": {
+    "@babel/parser": {
+      "optional": true
+    },
+    "@nuxt/kit": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@antfu/utils": "^0.7.10",
+    "@rollup/pluginutils": "^5.1.0",
+    "chokidar": "^3.6.0",
+    "debug": "^4.3.6",
+    "fast-glob": "^3.3.2",
+    "local-pkg": "^0.5.0",
+    "magic-string": "^0.30.11",
+    "minimatch": "^9.0.5",
+    "mlly": "^1.7.1",
+    "unplugin": "^1.12.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.25.1",
+    "@babel/parser": "^7.25.3",
+    "@babel/types": "^7.25.2",
+    "@nuxt/kit": "^3.12.4",
+    "@types/debug": "^4.1.12",
+    "@types/minimatch": "^5.1.2",
+    "@types/node": "^20.14.15",
+    "bumpp": "^9.5.1",
+    "compare-versions": "^6.1.1",
+    "element-plus": "^2.8.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-format": "^0.1.2",
+    "esno": "^4.7.0",
+    "estree-walker": "^3.0.3",
+    "pathe": "^1.1.2",
+    "rollup": "^4.20.0",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vitest": "^2.0.5",
+    "vue": "3.2.45"
+  }
+}

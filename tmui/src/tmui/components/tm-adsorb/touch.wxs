@@ -1,0 +1,64 @@
+var state;
+var startX = 0;
+var startY = 0;
+var left = 0;
+var top = 0;
+var prop;
+
+var startDrag = function (event, ownerInstance) {
+	//getState(ownerInstance);
+	//ownerInstance.callMethod('gettest',333)
+	// ownerInstance.selectComponent("#adsorb")
+	prop = event.currentTarget.dataset.prop;
+
+	var touch = event.touches[0] || event.changedTouches[0]
+	var rect = ownerInstance.selectComponent("#adsorb").getBoundingClientRect();
+	left = rect.x;
+	top = rect.y;
+
+	startX = touch.clientX
+	startY = touch.clientY
+};
+var onDrag = function (event, ownerInstance) {
+	if (event.preventDefault) {
+		event.preventDefault()
+	}
+	var touch = event.touches[0] || event.changedTouches[0]
+	ownerInstance.selectComponent("#adsorb").setStyle({
+		left: left + touch.clientX - startX + 'px',
+		top: top + touch.clientY - startY + 'px',
+		'-webkit-transition': 'none',
+	})
+};
+var endDrag = function (event, ownerInstance) {
+	var touch = event.touches[0] || event.changedTouches[0]
+	var rect = ownerInstance.selectComponent("#adsorb").getBoundingClientRect();
+	left = rect.x;
+	top = rect.y;
+	if (prop.adsorb) {
+
+		if (Math.abs((rect.x + rect.width / 2)) <= prop.sys.width / 2) {
+			left = - prop.adsorbX
+		} else {
+			left = prop.sys.width - rect.width + prop.adsorbX
+		}
+		if (top >= prop.sys.height - rect.height) {
+			top = prop.sys.height + prop.sys.top - rect.height
+		}
+		if (top <= 0) {
+			top = 0
+		}
+		ownerInstance.selectComponent("#adsorb").setStyle({
+			left: left + 'px',
+			top: top + 'px',
+			'-webkit-transition': 'all ' + prop.duration + 'ms cubic-bezier(0.18, 0.89, 0.32, 1)',
+		})
+	}
+};
+var change = function (newval, oldval) {
+}
+module.exports = {
+	startDrag: startDrag,
+	onDrag: onDrag,
+	endDrag: endDrag
+};

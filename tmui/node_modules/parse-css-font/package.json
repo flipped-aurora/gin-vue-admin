@@ -1,0 +1,89 @@
+{
+  "name": "parse-css-font",
+  "version": "4.0.0",
+  "description": "Parse the CSS font property value.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf coverage dist *.log* bem-join-*",
+    "codecov": "codecov -f coverage/lcov.info",
+    "lint": "tslint -p tsconfig.test.json",
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "precover": "rimraf coverage",
+    "cover": "jest --coverage",
+    "pretest": "npm run lint",
+    "test": "jest --watch",
+    "prepublishOnly": "npm run lint && npm run cover && npm run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "pre-push": "npm run lint"
+    }
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "verbose": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedmao/parse-css-font.git"
+  },
+  "keywords": [
+    "css",
+    "parse",
+    "font",
+    "shorthand"
+  ],
+  "author": "Jed Mao <jedmao@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedmao/parse-css-font/issues"
+  },
+  "homepage": "https://github.com/jedmao/parse-css-font#readme",
+  "dependencies": {
+    "css-font-size-keywords": "^1.0.0",
+    "css-font-stretch-keywords": "^1.0.1",
+    "css-font-style-keywords": "^1.0.1",
+    "css-font-weight-keywords": "^1.0.0",
+    "css-list-helpers": "^2.0.0",
+    "css-system-font-keywords": "^1.0.0",
+    "unquote": "^1.1.1"
+  },
+  "devDependencies": {
+    "@jedmao/tsconfig": "^0.3.0",
+    "@jedmao/tslint": "^0.4.2",
+    "@types/jest": "^23.3.13",
+    "@types/node": "^10.12.18",
+    "husky": "^1.3.1",
+    "jest": "^23.6.0",
+    "prettier": "^1.16.1",
+    "pretty-quick": "^1.10.0",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.4"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "css-font-style-keywords",
+  "version": "1.0.1",
+  "description": "List of CSS font style keywords.",
+  "main": "index.json",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedmao/css-font-style-keywords.git"
+  },
+  "keywords": [
+    "css",
+    "font",
+    "style",
+    "keywords"
+  ],
+  "author": "Jed Mao <jedmao@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedmao/css-font-style-keywords/issues"
+  },
+  "homepage": "https://github.com/jedmao/css-font-style-keywords#readme"
+}

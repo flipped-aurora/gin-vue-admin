@@ -1,0 +1,65 @@
+{
+  "name": "css-list-helpers",
+  "version": "2.0.0",
+  "description": "Helper methods for splitting CSS lists (e.g., spaces, commas).",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rimraf coverage dist *.log css-list-helpers-*",
+    "codecov": "codecov -f coverage/lcov.info",
+    "prebuild": "npm run clean && npm run lint",
+    "build": "tsc",
+    "prebuild:watch": "npm run prebuild",
+    "build:watch": "tsc --watch",
+    "lint": "tslint --project tsconfig.test.json",
+    "pretest": "npm run build -- --project tsconfig.test.json",
+    "test": "nyc ava --verbose",
+    "watch": "concurrently \"npm run build:watch\" \"npm test -- --watch\"",
+    "prepack": "npm test && npm run build"
+  },
+  "nyc": {
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "include": [
+      "dist/**/*.js"
+    ],
+    "exclude": [
+      "dist/**/*.test.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "cache": true,
+    "all": true,
+    "check-coverage": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedmao/css-list-helpers.git"
+  },
+  "keywords": [
+    "css",
+    "list",
+    "helpers",
+    "split",
+    "space",
+    "comma"
+  ],
+  "author": "Jed Mao <jedmao@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedmao/css-list-helpers/issues"
+  },
+  "homepage": "https://github.com/jedmao/css-list-helpers#readme",
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "concurrently": "^3.5.1",
+    "nyc": "^11.7.1",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "@vue/tsconfig",
+  "version": "0.1.3",
+  "description": "A base TSConfig for working with Vue.js",
+  "main": "tsconfig.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/tsconfig.git"
+  },
+  "keywords": [
+    "vue",
+    "tsconfig"
+  ],
+  "author": "Haoqun Jiang <haoqunjiang+npm@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vuejs/tsconfig/issues"
+  },
+  "homepage": "https://github.com/vuejs/tsconfig#readme",
+  "peerDependencies": {
+    "@types/node": "*"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "readme": "# `@vue/tsconfig`\n\nTSConfigs for Vue projects to extend.\n\nRequires TypeScript >= 4.5.\n\nInstall:\n\n```sh\nnpm add -D @vue/tsconfig\n```\n\nAdd one of the available configurations to your `tsconfig.json`:\n\nThe base configuration (runtime-agnostic):\n\n```json\n\"extends\": \"@vue/tsconfig/tsconfig.json\"\n```\n\nConfiguration for Browser environment:\n\n```json\n\"extends\": \"@vue/tsconfig/tsconfig.web.json\"\n```\n\nConfiguration for Node environment:\n\n```json\n\"extends\": \"@vue/tsconfig/tsconfig.node.json\"\n```\n"
+}

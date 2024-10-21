@@ -1,0 +1,47 @@
+{
+  "name": "@vitejs/plugin-vue-jsx",
+  "version": "3.1.0",
+  "license": "MIT",
+  "author": "Evan You",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitejs/vite-plugin-vue.git",
+    "directory": "packages/plugin-vue-jsx"
+  },
+  "bugs": {
+    "url": "https://github.com/vitejs/vite-plugin-vue/issues"
+  },
+  "homepage": "https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue-jsx#readme",
+  "dependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-typescript": "^7.23.3",
+    "@vue/babel-plugin-jsx": "^1.1.5"
+  },
+  "devDependencies": {
+    "vite": "^4.5.0"
+  },
+  "peerDependencies": {
+    "vite": "^4.0.0 || ^5.0.0",
+    "vue": "^3.0.0"
+  },
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild && pnpm run patch-cjs",
+    "patch-cjs": "tsx ../../scripts/patchCJS.ts"
+  }
+}

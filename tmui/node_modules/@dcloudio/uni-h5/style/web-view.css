@@ -1,0 +1,24 @@
+uni-web-view {
+  display: flex;
+}
+
+/* #ifndef UNI-APP-X */
+uni-web-view.uni-webview--fullscreen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+/* #endif */
+
+/* #ifdef UNI-APP-X */
+uni-web-view.uni-webview {
+  flex: 1;
+}
+uni-web-view.uni-webview > iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+/* #endif */

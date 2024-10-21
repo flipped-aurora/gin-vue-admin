@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      // Should target at least ES2016 in Vue 3
+      // Support for newer versions of language built-ins are
+      // left for the users to include, because that would require:
+      //   - either the project doesn't need to support older versions of browsers;
+      //   - or the project has properly included the necessary polyfills.
+      "ES2016",
+
+      "DOM",
+      "DOM.Iterable"
+
+      // No `ScriptHost` because Vue 3 dropped support for IE
+    ],
+    "types": []
+  }
+}

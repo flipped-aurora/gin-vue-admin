@@ -1,0 +1,35 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^tm-(.*)": "@/tmui/components/tm-$1/tm-$1.vue"
+		}
+	},
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"titlePenetrate": "YES",
+				"transparentTitle": "always"
+			}
+		}
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "TMUI",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF"
+	},
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "",
+				"path": "", 
+				"query": ""
+			}
+		]
+	}
+}

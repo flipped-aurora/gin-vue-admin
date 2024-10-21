@@ -1,0 +1,25 @@
+{
+  "name": "css-system-font-keywords",
+  "version": "1.0.0",
+  "description": "List of CSS system font keywords.",
+  "main": "index.json",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedmao/css-system-font-keywords.git"
+  },
+  "keywords": [
+    "css",
+    "font",
+    "weight",
+    "keywords"
+  ],
+  "author": "Jed Mao <jedmao@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jedmao/css-system-font-keywords/issues"
+  },
+  "homepage": "https://github.com/jedmao/css-system-font-keywords#readme"
+}

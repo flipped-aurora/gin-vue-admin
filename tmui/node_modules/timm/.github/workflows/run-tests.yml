@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+      - development
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out monorepo
+        uses: actions/checkout@v1
+      - name: Install Node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Install project dependencies
+        run: |
+          npm install -g yarn
+          yarn install
+      - name: Compile subpackages
+        run: yarn compile
+      - name: Execute tests
+        run: yarn test

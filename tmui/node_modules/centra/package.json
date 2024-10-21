@@ -1,0 +1,40 @@
+{
+  "name": "centra",
+  "version": "2.7.0",
+  "description": "The core lightweight HTTP client for Node",
+  "main": "createRequest.js",
+  "scripts": {
+    "test": "node test.js --test-force-exit",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethanent/centra.git"
+  },
+  "files": [
+    "model/CentraRequest.js",
+    "model/CentraResponse.js",
+    "createRequest.js"
+  ],
+  "keywords": [
+    "http",
+    "https",
+    "request",
+    "fetch",
+    "url",
+    "lightweight"
+  ],
+  "author": "Ethan Davis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ethanent/centra/issues"
+  },
+  "homepage": "https://github.com/ethanent/centra",
+  "devDependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2"
+  },
+  "dependencies": {
+    "follow-redirects": "^1.15.6"
+  }
+}

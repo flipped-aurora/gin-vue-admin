@@ -1,0 +1,78 @@
+{
+  "name": "unimport",
+  "type": "module",
+  "version": "3.13.1",
+  "packageManager": "pnpm@9.11.0",
+  "description": "Unified utils for auto importing APIs in modules",
+  "license": "MIT",
+  "repository": "unjs/unimport",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./unplugin": {
+      "types": "./dist/unplugin.d.ts",
+      "import": "./dist/unplugin.mjs",
+      "require": "./dist/unplugin.cjs"
+    },
+    "./addons": {
+      "types": "./dist/addons.d.ts",
+      "import": "./dist/addons.mjs",
+      "require": "./dist/addons.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "*.d.ts",
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "vitest dev",
+    "lint": "eslint .",
+    "prepack": "unbuild",
+    "play": "pnpm -C playground run dev",
+    "play:build": "pnpm -C playground run build",
+    "typecheck": "vue-tsc --noEmit",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release": "pnpm run test --run && bumpp -x \"pnpm run changelog\" --all && npm publish",
+    "test": "vitest --coverage"
+  },
+  "dependencies": {
+    "@rollup/pluginutils": "^5.1.2",
+    "acorn": "^8.12.1",
+    "escape-string-regexp": "^5.0.0",
+    "estree-walker": "^3.0.3",
+    "fast-glob": "^3.3.2",
+    "local-pkg": "^0.5.0",
+    "magic-string": "^0.30.11",
+    "mlly": "^1.7.1",
+    "pathe": "^1.1.2",
+    "pkg-types": "^1.2.0",
+    "scule": "^1.3.0",
+    "strip-literal": "^2.1.0",
+    "unplugin": "^1.14.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.7.3",
+    "@types/estree": "^1.0.6",
+    "@types/node": "^22.7.3",
+    "@vitest/coverage-v8": "^2.1.1",
+    "bumpp": "^9.5.2",
+    "conventional-changelog-cli": "^5.0.0",
+    "eslint": "^9.11.1",
+    "h3": "^1.12.0",
+    "jquery": "^3.7.1",
+    "lit": "^3.2.0",
+    "typescript": "^5.6.2",
+    "unbuild": "^2.0.0",
+    "vitest": "^2.1.1",
+    "vue-tsc": "^2.1.6"
+  }
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QR Test</title>
+    <style>
+      #preview img {
+        border: 1px solid black;
+        float: left;
+        margin: 0 1em 1em 0;
+        width: 10em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Simple browser demo using the FileReader API</h1>
+
+    <h2>Upload file</h2>
+    <input type="file" id="upload">
+
+    <h2>Result</h2>
+    <div id="preview"></div>
+
+    <script type="text/javascript" src="../../dist/index.js"></script>
+
+    <script type="text/javascript">
+      (function() {
+        'use strict';
+
+        var upload = document.getElementById('upload');
+        var preview = document.getElementById('preview');
+        var qr = new QrCode();
+
+        qr.callback = function(err, result) {
+          var span = document.querySelector('span') || document.createElement('span');
+          if(result){
+            span.textContent = result;
+          }
+          else{
+            span.textContent = 'Error! See error message in console!';
+            console.error(err);
+          }
+          preview.appendChild(span);
+        }
+
+        upload.addEventListener('change', function() {
+          for (var i = 0; i < this.files.length; i++) {
+            var file = this.files[i];
+            var imageType = /^image\//;
+
+            if (!imageType.test(file.type)) {
+              throw new Error('File type not valid');
+            }
+
+            // Read file
+            var reader = new FileReader();
+            reader.addEventListener('load', function() {
+              // Show as preview image
+              var img = document.querySelector('img') || document.createElement('img');
+              img.src = this.result;
+              preview.appendChild(img);
+
+              // Analyse code
+              qr.decode(this.result);
+            }.bind(reader), false);
+            reader.readAsDataURL(file);
+          }
+        }, false);
+      })();
+    </script>
+  </body>
+</html>

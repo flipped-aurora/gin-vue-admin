@@ -1,0 +1,130 @@
+{
+  "_from": "dayjs",
+  "_id": "dayjs@1.11.1",
+  "_inBundle": false,
+  "_integrity": "sha512-ER7EjqVAMkRRsxNCC5YqJ9d9VQYuWdGt7aiH2qA5R5wt8ZmWaP2dLUSIK6y/kVzLMlmh1Tvu5xUf4M/wdGJ5KA==",
+  "_location": "/dayjs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "dayjs",
+    "name": "dayjs",
+    "escapedName": "dayjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://repo.huaweicloud.com/repository/npm/dayjs/-/dayjs-1.11.1.tgz",
+  "_shasum": "90b33a3dda3417258d48ad2771b415def6545eb0",
+  "_spec": "dayjs",
+  "_where": "C:\\Users\\zsylp\\Desktop\\新建文件夹",
+  "author": {
+    "name": "iamkun"
+  },
+  "bugs": {
+    "url": "https://github.com/iamkun/dayjs/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "2KB immutable date time library alternative to Moment.js with the same modern API ",
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/node": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^22.4.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "cross-env": "^5.1.6",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-jest": "^21.15.0",
+    "gzip-size-cli": "^2.1.0",
+    "jasmine-core": "^2.99.1",
+    "jest": "^22.4.3",
+    "karma": "^2.0.2",
+    "karma-jasmine": "^1.1.2",
+    "karma-sauce-launcher": "^1.1.0",
+    "mockdate": "^2.0.2",
+    "moment": "2.27.0",
+    "moment-timezone": "0.5.31",
+    "ncp": "^2.0.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.16.1",
+    "rollup": "^2.45.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "size-limit": "^0.18.0",
+    "typescript": "^2.8.3"
+  },
+  "homepage": "https://day.js.org",
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "test/(.*?/)?.*test.js$",
+    "testURL": "http://localhost",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*"
+    ]
+  },
+  "keywords": [
+    "dayjs",
+    "date",
+    "time",
+    "immutable",
+    "moment"
+  ],
+  "license": "MIT",
+  "main": "dayjs.min.js",
+  "name": "dayjs",
+  "pre-commit": [
+    "lint"
+  ],
+  "release": {
+    "prepare": [
+      {
+        "path": "@semantic-release/changelog"
+      },
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md"
+          ]
+        }
+      ]
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamkun/dayjs.git"
+  },
+  "scripts": {
+    "babel": "cross-env BABEL_ENV=build babel src --out-dir esm --copy-files && node build/esm",
+    "build": "cross-env BABEL_ENV=build node build && npm run size",
+    "lint": "eslint src/* test/* build/*",
+    "prettier": "prettier --write \"docs/**/*.md\"",
+    "sauce": "npx karma start karma.sauce.conf.js",
+    "size": "size-limit && gzip-size dayjs.min.js",
+    "test": "TZ=Pacific/Auckland npm run test-tz && TZ=Europe/London npm run test-tz && TZ=America/Whitehorse npm run test-tz && npm run test-tz && jest",
+    "test-tz": "date && jest test/timezone.test --coverage=false",
+    "test:sauce": "npm run sauce -- 0 && npm run sauce -- 1 && npm run sauce -- 2  && npm run sauce -- 3"
+  },
+  "size-limit": [
+    {
+      "limit": "2.99 KB",
+      "path": "dayjs.min.js"
+    }
+  ],
+  "types": "index.d.ts",
+  "version": "1.11.1"
+}

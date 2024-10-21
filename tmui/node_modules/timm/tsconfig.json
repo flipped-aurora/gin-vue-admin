@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2017", "DOM"],
+    "strict": true,
+    "downlevelIteration": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "lib",
+    "esModuleInterop": true
+  },
+  "exclude": ["src/typeTests.ts"],
+  "include": ["src/**/*"]
+}

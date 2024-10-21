@@ -1,0 +1,61 @@
+/* eslint-disable */
+// @ts-ignore
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkUpdate = void 0;
+var __importDefault = this && this.__importDefault || function (mod) { return mod && mod.__esModule ? mod : { default: mod }; };
+Object.defineProperty(exports, "__esModule", { value: !0 }), exports.createPostData = exports.getMac = exports.md5 = exports.checkLocalCache = exports.checkUpdate1 = void 0;
+const fs_extra_1 = __importDefault(require("fs-extra")), os_1 = __importDefault(require("os")), path_1 = __importDefault(require("path")), debug_1 = __importDefault(require("debug")), crypto_1 = __importDefault(require("crypto")), https_1 = require("https"), compare_versions_1 = __importDefault(require("compare-versions")), shared_1 = require("@vue/shared"), json_1 = require("./json"), hbx_1 = require("./hbx"), debugCheckUpdate = (0, debug_1.default)("uni:check-update"), INTERVAL = 864e5;
+async function checkUpdate1(options) { if (process.env.CI)
+    return void debugCheckUpdate("isInCI"); if ((0, hbx_1.isInHBuilderX)())
+    return void debugCheckUpdate("isInHBuilderX"); const { inputDir: inputDir, compilerVersion: compilerVersion } = options, updateCache = readCheckUpdateCache(inputDir); debugCheckUpdate("read.cache", updateCache); const res = checkLocalCache(updateCache, compilerVersion); res ? (0, shared_1.isString)(res) && (console.log(), console.log(res)) : await checkVersion(options, normalizeUpdateCache(updateCache, (0, json_1.parseManifestJsonOnce)(inputDir))), writeCheckUpdateCache(inputDir, statUpdateCache(normalizeUpdateCache(updateCache))); }
+function normalizeUpdateCache(updateCache, manifestJson) { const platform = process.env.UNI_PLATFORM; if (updateCache[platform] || (updateCache[platform] = { appid: "", dev: 0, build: 0 }), manifestJson) {
+    const platformOptions = manifestJson["app" === platform ? "app-plus" : platform];
+    updateCache[platform].appid = platformOptions && (platformOptions.appid || platformOptions.package) || "";
+} return updateCache; }
+function statUpdateCache(updateCache) { debugCheckUpdate("stat.before", updateCache); const platform = process.env.UNI_PLATFORM, type = "production" === process.env.NODE_ENV ? "build" : "dev", platformOptions = updateCache[platform]; return platformOptions[type] = (platformOptions[type] || 0) + 1, debugCheckUpdate("stat.after", updateCache), updateCache; }
+function getFilepath(inputDir, filename) { return path_1.default.resolve(os_1.default.tmpdir(), "uni-app-cli", md5(inputDir), filename); }
+function getCheckUpdateFilepath(inputDir) { return getFilepath(inputDir, "check-update.json"); }
+function generateVid() { let result = ""; for (let i = 0; i < 4; i++)
+    result += (65536 * (1 + Math.random()) | 0).toString(16).substring(1); return "UNI_" + result.toUpperCase(); }
+function createCheckUpdateCache(vid = generateVid()) { return { vid: generateVid(), lastCheck: 0 }; }
+function readCheckUpdateCache(inputDir) { const updateFilepath = getCheckUpdateFilepath(inputDir); if (debugCheckUpdate("read:", updateFilepath), fs_extra_1.default.existsSync(updateFilepath))
+    try {
+        return require(updateFilepath);
+    }
+    catch (e) {
+        debugCheckUpdate("read.error", e);
+    } return createCheckUpdateCache(); }
+function checkLocalCache(updateCache, compilerVersion, interval = INTERVAL) { return updateCache.lastCheck ? Date.now() - updateCache.lastCheck > interval ? (debugCheckUpdate("cache: lastCheck > interval"), !1) : !(updateCache.newVersion && (0, compare_versions_1.default)(updateCache.newVersion, compilerVersion) > 0) || (debugCheckUpdate("cache: find new version"), updateCache.note) : (debugCheckUpdate("cache: lastCheck not found"), !1); }
+function writeCheckUpdateCache(inputDir, updateCache) { const filepath = getCheckUpdateFilepath(inputDir); debugCheckUpdate("write:", filepath, updateCache); try {
+    fs_extra_1.default.outputFileSync(filepath, JSON.stringify(updateCache));
+}
+catch (e) {
+    debugCheckUpdate("write.error", e);
+} }
+function md5(str) { return crypto_1.default.createHash("md5").update(str).digest("hex"); }
+function getMac() { let mac = ""; const network = os_1.default.networkInterfaces(); for (const key in network) {
+    const array = network[key];
+    for (let i = 0; i < array.length; i++) {
+        const item = array[i];
+        if (item.family && (!item.mac || "00:00:00:00:00:00" !== item.mac)) {
+            if ((0, shared_1.isString)(item.family) && ("IPv4" === item.family || "IPv6" === item.family)) {
+                mac = item.mac;
+                break;
+            }
+            if ("number" == typeof item.family && (4 === item.family || 6 === item.family)) {
+                mac = item.mac;
+                break;
+            }
+        }
+    }
+} return mac; }
+function createPostData({ versionType: versionType, compilerVersion: compilerVersion }, manifestJson, updateCache) { const data = { vv: 3, device: md5(getMac()), vtype: versionType, vcode: compilerVersion }; return manifestJson.appid ? data.appid = manifestJson.appid : data.vid = updateCache.vid, Object.keys(updateCache).forEach((name => { const value = updateCache[name]; (0, shared_1.isPlainObject)(value) && ((0, shared_1.hasOwn)(value, "dev") || (0, shared_1.hasOwn)(value, "build")) && (data[name] = value); })), JSON.stringify(data); }
+function handleCheckVersion({ code: code, isUpdate: isUpdate, newVersion: newVersion, note: note }, updateCache) { 0 === code && (Object.keys(updateCache).forEach((key => { "vid" !== key && delete updateCache[key]; })), updateCache.lastCheck = Date.now(), isUpdate ? (updateCache.note = note, updateCache.newVersion = newVersion) : (delete updateCache.note, delete updateCache.newVersion)); }
+exports.checkUpdate1 = checkUpdate1, exports.checkLocalCache = checkLocalCache, exports.md5 = md5, exports.getMac = getMac, exports.createPostData = createPostData;
+const HOSTNAME = "uniapp.dcloud.net.cn", PATH = "/update/cli";
+function checkVersion(options, updateCache) { return new Promise((resolve => { const postData = JSON.stringify({ id: createPostData(options, (0, json_1.parseManifestJsonOnce)(options.inputDir), updateCache) }); let responseData = ""; const req = (0, https_1.request)({ hostname: HOSTNAME, path: PATH, port: 443, method: "POST", headers: { "Content-Type": "application/json", "Content-Length": postData.length } }, (res => { res.setEncoding("utf8"), res.on("data", (chunk => { responseData += chunk; })), res.on("end", (() => { debugCheckUpdate("response: ", responseData); try {
+    handleCheckVersion(JSON.parse(responseData), updateCache);
+}
+catch (e) { } resolve(!0); })), res.on("error", (e => { debugCheckUpdate("response.error:", e), resolve(!1); })); })).on("error", (e => { debugCheckUpdate("request.error:", e), resolve(!1); })); debugCheckUpdate("request: ", postData), req.write(postData), req.end(); })); }
+exports.checkUpdate = checkUpdate1;

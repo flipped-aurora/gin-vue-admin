@@ -1,0 +1,37 @@
+{
+  "name": "qrcode-reader",
+  "version": "1.0.4",
+  "description": "fork of lazarsoft's jsqrcode for node",
+  "main": "dist/index.js",
+  "module": "src/index.js",
+  "jsnext:main": "src/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "minify": "uglifyjs dist/index.js -o dist/index.min.js --compress --mangle",
+    "lint": "eslint src test",
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "build-and-test": "npm run build && npm test",
+    "preversion": "npm run lint && npm run build && npm run minify && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edi9999/jsqrcode.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/edi9999/jsqrcode/issues"
+  },
+  "homepage": "https://github.com/edi9999/jsqrcode",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.7.2",
+    "image-parser": "^1.2.5",
+    "jimp": "^0.2.28",
+    "mocha": "^3.5.3",
+    "rollup": "^0.50.0",
+    "uglify-js": "^3.1.2"
+  }
+}

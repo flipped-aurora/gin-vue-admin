@@ -1,0 +1,52 @@
+{
+  "name": "@jimp/plugins",
+  "version": "0.10.3",
+  "description": "Default Jimp plugin.",
+  "main": "dist/index.js",
+  "module": "es/index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "npm run build:node:production && npm run build:module",
+    "build:watch": "npm run build:node:debug -- -- --watch --verbose",
+    "build:debug": "npm run build:node:debug",
+    "build:module": "cross-env BABEL_ENV=module babel src -d es --source-maps --config-file ../../babel.config.js",
+    "build:node": "babel src -d dist --source-maps --config-file ../../babel.config.js",
+    "build:node:debug": "cross-env BABEL_ENV=development npm run build:node",
+    "build:node:production": "cross-env BABEL_ENV=production npm run build:node"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/runtime": "^7.7.2",
+    "@jimp/plugin-blit": "^0.10.3",
+    "@jimp/plugin-blur": "^0.10.3",
+    "@jimp/plugin-circle": "^0.10.3",
+    "@jimp/plugin-color": "^0.10.3",
+    "@jimp/plugin-contain": "^0.10.3",
+    "@jimp/plugin-cover": "^0.10.3",
+    "@jimp/plugin-crop": "^0.10.3",
+    "@jimp/plugin-displace": "^0.10.3",
+    "@jimp/plugin-dither": "^0.10.3",
+    "@jimp/plugin-fisheye": "^0.10.3",
+    "@jimp/plugin-flip": "^0.10.3",
+    "@jimp/plugin-gaussian": "^0.10.3",
+    "@jimp/plugin-invert": "^0.10.3",
+    "@jimp/plugin-mask": "^0.10.3",
+    "@jimp/plugin-normalize": "^0.10.3",
+    "@jimp/plugin-print": "^0.10.3",
+    "@jimp/plugin-resize": "^0.10.3",
+    "@jimp/plugin-rotate": "^0.10.3",
+    "@jimp/plugin-scale": "^0.10.3",
+    "@jimp/plugin-shadow": "^0.10.3",
+    "@jimp/plugin-threshold": "^0.10.3",
+    "core-js": "^3.4.1",
+    "timm": "^1.6.1"
+  },
+  "peerDependencies": {
+    "@jimp/custom": ">=0.3.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "37197106eae5c26231018dfdc0254422f6b43927"
+}

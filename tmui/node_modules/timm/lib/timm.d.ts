@@ -1,0 +1,61 @@
+declare type Key = string | number;
+export declare function clone<T extends object>(obj0: T): T;
+export declare function addLast<T>(array: T[], val: T[] | T): T[];
+export declare function addFirst<T>(array: T[], val: T[] | T): T[];
+export declare function removeLast<T>(array: T[]): T[];
+export declare function removeFirst<T>(array: T[]): T[];
+export declare function insert<T>(array: T[], idx: number, val: T[] | T): T[];
+export declare function removeAt<T>(array: T[], idx: number): T[];
+export declare function replaceAt<T>(array: T[], idx: number, newItem: T): T[];
+export declare function getIn(obj: undefined, path: Key[]): undefined;
+export declare function getIn(obj: null, path: Key[]): null;
+export declare function getIn(obj: object, path: Key[]): unknown;
+export declare function set<K extends string, V>(obj: undefined | null, key: K, val: V): {
+    [P in K]: V;
+};
+export declare function set<V>(obj: undefined | null, key: number, val: V): [V];
+export declare function set<T extends object, K extends string, V>(obj: T, key: K, val: V): Omit<T, keyof {
+    [P in K]: any;
+}> & {
+    [P in K]: V;
+};
+export declare function set<V>(obj: V[], key: number, val: V): V[];
+export declare function setIn(obj: object | null | undefined, path: Key[], val: any): unknown;
+export declare function update(obj: object | null | undefined, key: Key, fnUpdate: (prevValue: any) => any): unknown;
+export declare function updateIn(obj: object | null | undefined, path: Key[], fnUpdate: (prevValue: any) => any): unknown;
+export declare function merge<T extends object>(a: T): T;
+export declare function merge<T extends object>(a: T, b: undefined | null): T;
+export declare function merge<T extends object, U extends object>(a: T, b: U): Omit<T, keyof U> & U;
+export declare function merge<T extends object, V extends object>(a: T, b: undefined | null, c: V): Omit<T, keyof V> & V;
+export declare function merge<T extends object, U extends object>(a: T, b: U, c: undefined | null): Omit<T, keyof U> & U;
+export declare function merge<T extends object>(a: T, b: undefined | null, c: undefined | null): T;
+export declare function merge<T extends object, U extends object, V extends object>(a: T, b: U, c: V): Omit<Omit<T, keyof U> & U, keyof V> & V;
+export declare function merge(a: object, ...rest: Array<object | null>): object;
+export declare function mergeDeep(a: object, b?: object | null, c?: object | null, d?: object | null, e?: object | null, f?: object | null, ...rest: Array<object | null>): object;
+export declare function mergeIn(a: any, path: Key[], b?: object | null, c?: object | null, d?: object | null, e?: object | null, f?: object | null, ...rest: Array<object | null>): unknown;
+export declare function omit<T extends object, K extends string>(obj: T, attrs: K | K[]): Omit<T, keyof {
+    [P in K]: any;
+}>;
+export declare function addDefaults<T extends object, U extends object>(a: T, b: U): Omit<U, keyof T> & T;
+export declare function addDefaults(a: object, b: object, ...rest: Array<object | null>): object;
+declare const timm: {
+    clone: typeof clone;
+    addLast: typeof addLast;
+    addFirst: typeof addFirst;
+    removeLast: typeof removeLast;
+    removeFirst: typeof removeFirst;
+    insert: typeof insert;
+    removeAt: typeof removeAt;
+    replaceAt: typeof replaceAt;
+    getIn: typeof getIn;
+    set: typeof set;
+    setIn: typeof setIn;
+    update: typeof update;
+    updateIn: typeof updateIn;
+    merge: typeof merge;
+    mergeDeep: typeof mergeDeep;
+    mergeIn: typeof mergeIn;
+    omit: typeof omit;
+    addDefaults: typeof addDefaults;
+};
+export default timm;

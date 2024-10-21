@@ -1,0 +1,1050 @@
+{
+    "disabled": {
+        "description": "是否禁用。",
+        "type": "Boolean"
+    },
+    "loop": {
+        "description": "是否循环播放",
+        "type": "Boolean"
+    },
+    "adpid": {
+        "description": "App广告位id，在uni-AD官网申请广告位",
+        "type": "String"
+    },
+    "hover-class": {
+        "description": "指定按下去的样式类。当 hover-class=\"none\" 时，没有点击态效果",
+        "type": "String"
+    },
+    "hover-stop-propagation": {
+        "description": "指定是否阻止本节点的祖先节点出现点击态",
+        "type": "Boolean"
+    },
+    "hover-start-time": {
+        "description": "按住后多久出现点击态，单位毫秒",
+        "type": "Number"
+    },
+    "hover-stay-time": {
+        "description": "手指松开后点击态保留时间，单位毫秒",
+        "type": "Number"
+    },
+    "scroll-x": {
+        "description": "允许横向滚动",
+        "type": "Boolean"
+    },
+    "scroll-y": {
+        "description": "允许纵向滚动",
+        "type": "Boolean"
+    },
+    "upper-threshold": {
+        "description": "距顶部/左边多远时（单位px），触发 scrolltoupper 事件",
+        "type": "Number"
+    },
+    "lower-threshold": {
+        "description": "距底部/右边多远时（单位px），触发 scrolltolower 事件",
+        "type": "Number"
+    },
+    "scroll-top": {
+        "description": "滚动位置，可以使用 px 或者 rpx 为单位，在被设置时，页面会滚动到对应位置",
+        "type": "String"
+    },
+    "scroll-left": {
+        "description": "设置横向滚动条位置",
+        "type": "Number"
+    },
+    "scroll-into-view": {
+        "description": " 值应为某子元素id（id不能以数字开头）。设置哪个方向可滚动，则在哪个方向滚动到该元素",
+        "type": "String"
+    },
+    "scroll-with-animation": {
+        "description": "在设置滚动条位置时使用动画过渡",
+        "type": "Boolean"
+    },
+    "enable-back-to-top": {
+        "description": "iOS点击顶部状态栏、安卓双击标题栏时，滚动条返回顶部，只支持竖向",
+        "type": "Boolean"
+    },
+    "width": {
+        "description": "页面宽度（px 为单位）",
+        "type": "Number"
+    },
+    "min-width": {
+        "description": "页面最小宽度（px 为单位）",
+        "type": "Number"
+    },
+    "max-width": {
+        "description": "页面最大宽度（px 为单位）",
+        "type": "Number"
+    },
+    "height": {
+        "description": "页面高度（px 为单位）",
+        "type": "Number"
+    },
+    "min-height": {
+        "description": "页面最小高度（px 为单位）",
+        "type": "Number"
+    },
+    "max-height": {
+        "description": "页面最大高度（px 为单位）",
+        "type": "Number"
+    },
+    "orientation": {
+        "description": "画面方向，可选值有 vertical，horizontal",
+        "type": "String",
+        "options": [
+            "vertical",
+            "horizontal"
+        ]
+    },
+    "indicator-dots": {
+        "description": "是否显示面板指示点",
+        "type": "Boolean"
+    },
+    "indicator-color": {
+        "description": "指示点颜色",
+        "type": "HexColor"
+    },
+    "indicator-active-color": {
+        "description": "当前选中的指示点颜色",
+        "type": "HexColor"
+    },
+    "active-class": {
+        "description": "swiper-item 可见时的 class",
+        "type": "String"
+    },
+    "changing-class": {
+        "description": "acceleration 设置为 {{true}} 时且处于滑动过程中，中间若干屏处于可见时的class",
+        "type": "Boolean"
+    },
+    "acceleration": {
+        "description": "当开启时，会根据滑动速度，连续滑动多屏",
+        "type": "Boolean"
+    },
+    "disable-programmatic-animation": {
+        "description": "是否禁用代码变动触发 swiper 切换时使用动画。",
+        "type": "Boolean"
+    },
+    "disable-touch": {
+        "description": "是否禁止用户 touch 操作",
+        "type": "Boolean"
+    },
+    "touchable": {
+        "description": "是否监听用户的触摸事件",
+        "type": "Boolean"
+    },
+    "easing-function": {
+        "description": "指定 swiper 切换缓动动画类型，有效值：default、linear、easeInCubic、easeOutCubic、easeInOutCubic",
+        "type": "String"
+    },
+    "autoplay": {
+        "description": "自动播放",
+        "type": "Boolean"
+    },
+    "current": {
+        "description": "当前所在滑块的 index",
+        "type": "Number"
+    },
+    "current-item-id": {
+        "description": "当前所在滑块的 item-id ，不能与 current 被同时指定",
+        "type": "String"
+    },
+    "interval": {
+        "description": "自动切换时间间隔",
+        "type": "Number"
+    },
+    "duration": {
+        "description": "指定视频长度",
+        "type": "Number"
+    },
+    "circular": {
+        "description": "是否采用衔接滑动",
+        "type": "Boolean"
+    },
+    "vertical": {
+        "description": "滑动方向是否为纵向",
+        "type": "Boolean"
+    },
+    "previous-margin": {
+        "description": "前边距，可用于露出前一项的一小部分，接受 px 和 rpx 值",
+        "type": "String"
+    },
+    "next-margin": {
+        "description": "后边距，可用于露出后一项的一小部分，接受 px 和 rpx 值",
+        "type": "String"
+    },
+    "display-multiple-items": {
+        "description": "同时显示的滑块数量",
+        "type": "Number"
+    },
+    "skip-hidden-item-layout": {
+        "description": "是否跳过未显示的滑块布局，设为 true 可优化复杂情况下的滑动性能，但会丢失隐藏状态滑块的布局信息",
+        "type": "Boolean"
+    },
+    "item-id": {
+        "description": "该 swiper-item 的标识符",
+        "type": "String"
+    },
+    "scale-area": {
+        "description": "当里面的movable-view设置为支持双指缩放时，设置此值可将缩放手势生效区域修改为整个movable-area",
+        "type": "Boolean"
+    },
+    "direction": {
+        "description": "movable-view 的移动方向。",
+        "type": "String",
+        "options": [
+            "all",
+            "vertical",
+            "horizontal",
+            "none"
+        ]
+    },
+    "inertia": {
+        "description": "movable-view 是否带有惯性。",
+        "type": "Boolean"
+    },
+    "out-of-bounds": {
+        "description": "超过可移动区域后，movable-view 是否还可以移动。",
+        "type": "Boolean"
+    },
+    "damping": {
+        "description": "阻尼系数，用于控制 x 或 y 改变时的动画和过界回弹的动画，值越大移动越快。",
+        "type": "Number"
+    },
+    "x": {
+        "description": "定义 x 轴方向的偏移，如果 x 的值不在可移动范围内，会自动移动到可移动范围；改变 x 的值会触发动画。",
+        "type": "String|Number"
+    },
+    "y": {
+        "description": "定义 y 轴方向的偏移，如果 y 的值不在可移动范围内，会自动移动到可移动范围；改变 y 的值会触发动画。",
+        "type": "String|Number"
+    },
+    "friction": {
+        "description": "摩擦系数，用于控制惯性滑动的动画，值越大摩擦力越大，滑动越快停止；必须大于0，否则会被设置成默认值 2。",
+        "type": "Number"
+    },
+    "scale": {
+        "description": "是否支持双指缩放，默认缩放手势生效区域是在 movable-view 内。",
+        "type": "Boolean"
+    },
+    "scale-min": {
+        "description": "定义缩放倍数最小值，默认为 0.5。",
+        "type": "Number"
+    },
+    "scale-max": {
+        "description": "定义缩放倍数最大值，默认为 10。",
+        "type": "Number"
+    },
+    "scale-value": {
+        "description": "定义缩放倍数，取值范围为 0.5 - 10",
+        "type": "Number"
+    },
+    "src": {
+        "description": "webview 指向网页的链接",
+        "type": "String|URIString"
+    },
+    "type": {
+        "description": "开放数据类型",
+        "type": "String"
+    },
+    "size": {
+        "description": "按钮的大小",
+        "type": "String",
+        "options": [
+            "default",
+            "mini"
+        ]
+    },
+    "selectable": {
+        "description": "文本是否可选",
+        "type": "Boolean"
+    },
+    "space": {
+        "description": "显示连续空格",
+        "type": "String",
+        "options": [
+            "ensp",
+            "emsp",
+            "nbsp"
+        ]
+    },
+    "decode": {
+        "description": "是否解码",
+        "type": "Boolean"
+    },
+    "nodes": {
+        "description": "节点列表",
+        "type": "Array"
+    },
+    "percent": {
+        "description": "百分比0~100",
+        "type": "Number"
+    },
+    "show-info": {
+        "description": "在进度条右侧显示百分比",
+        "type": "Boolean"
+    },
+    "stroke-width": {
+        "description": "进度条线的宽度，单位px",
+        "type": "Number"
+    },
+    "color": {
+        "description": "switch 的颜色，同 css 的 color",
+        "type": "ColorString"
+    },
+    "activeColor": {
+        "description": "radio已选择的颜色",
+        "type": "ColorString"
+    },
+    "backgroundColor": {
+        "description": "radio背景条的颜色",
+        "type": "ColorString"
+    },
+    "active": {
+        "description": "进度条从左往右的动画",
+        "type": "Boolean"
+    },
+    "active-mode": {
+        "description": "backwards: 动画从头播；forwards：动画从上次结束点接着播",
+        "type": "String"
+    },
+    "plain": {
+        "description": "按钮是否镂空，背景色透明",
+        "type": "Boolean"
+    },
+    "loading": {
+        "description": "是否在导航条显示 loading 加载提示",
+        "type": "Boolean"
+    },
+    "form-type": {
+        "description": "用于 form 组件，点击分别会触发 form 组件的 submit/reset 事件",
+        "type": "String",
+        "options": [
+            "submit",
+            "reset"
+        ]
+    },
+    "open-type": {
+        "description": "跳转方式",
+        "type": "String",
+        "options": [
+            "navigate",
+            "redirect",
+            "switchTab",
+            "reLaunch",
+            "navigateBack"
+        ]
+    },
+    "lang": {
+        "description": "",
+        "type": "String",
+        "options": [
+            "ts"
+        ]
+    },
+    "session-from": {
+        "description": "会话来源",
+        "type": "String"
+    },
+    "send-message-title": {
+        "description": "会话内消息卡片标题",
+        "type": "String"
+    },
+    "send-message-path": {
+        "description": "会话内消息卡片点击跳转应用路径",
+        "type": "String"
+    },
+    "send-message-img": {
+        "description": "会话内消息卡片图片",
+        "type": "String"
+    },
+    "show-message-card": {
+        "description": "显示会话内消息卡片",
+        "type": "Boolean"
+    },
+    "app-parameter": {
+        "description": "打开 APP 时，向 APP 传递的参数",
+        "type": "String"
+    },
+    "value": {
+        "description": "radio当前取值",
+        "type": "Number"
+    },
+    "checked": {
+        "description": "是否选中",
+        "type": "Boolean"
+    },
+    "report-submit": {
+        "description": "是否返回 formId 用于发送模板消息",
+        "type": "Boolean"
+    },
+    "password": {
+        "description": "是否是密码类型",
+        "type": "Boolean"
+    },
+    "placeholder": {
+        "description": "提示信息。",
+        "type": "String"
+    },
+    "placeholder-style": {
+        "description": "指定 placeholder 的样式",
+        "type": "String"
+    },
+    "placeholder-class": {
+        "description": "指定 placeholder 的样式类",
+        "type": "String"
+    },
+    "maxlength": {
+        "description": "最大输入长度，设置为 -1 的时候不限制最大长度",
+        "type": "Number"
+    },
+    "cursor-spacing": {
+        "description": "指定光标与键盘的距离，单位 px 。取 textarea 距离底部的距离和 cursor-spacing 指定的距离的最小值作为光标与键盘的距离",
+        "type": "Number"
+    },
+    "auto-focus": {
+        "description": "获取焦点",
+        "type": "Boolean"
+    },
+    "focus": {
+        "description": "获取焦点",
+        "type": "Boolean"
+    },
+    "confirm-type": {
+        "description": "设置键盘右下角按钮的文字",
+        "type": "String",
+        "options": [
+            "send",
+            "search",
+            "next",
+            "go",
+            "done"
+        ]
+    },
+    "confirm-hold": {
+        "description": "点击键盘右下角按钮时是否保持键盘不收起",
+        "type": "Boolean"
+    },
+    "cursor": {
+        "description": "指定focus时的光标位置",
+        "type": "Number"
+    },
+    "selection-start": {
+        "description": " 光标起始位置，自动聚集时有效，需与selection-end搭配使用",
+        "type": "Number"
+    },
+    "selection-end": {
+        "description": " 光标结束位置，自动聚集时有效，需与selection-satrt搭配使用",
+        "type": "Number"
+    },
+    "adjust-position": {
+        "description": "键盘弹起时，是否自动上推页面",
+        "type": "Boolean"
+    },
+    "for": {
+        "description": "绑定控件的 id",
+        "type": "String"
+    },
+    "mode": {
+        "description": "SD（标清）, HD（高清）, FHD（超清）, RTC（实时通话） ",
+        "type": "String",
+        "options": [
+            "RTC",
+            "SD",
+            "HD",
+            "FHD"
+        ]
+    },
+    "indicator-style": {
+        "description": "设置选择器中间选中框的样式",
+        "type": "String"
+    },
+    "indicator-class": {
+        "description": "设置选择器中间选中框的类名",
+        "type": "String"
+    },
+    "mask-style": {
+        "description": "设置蒙层的样式",
+        "type": "String"
+    },
+    "mask-class": {
+        "description": "设置蒙层的类名",
+        "type": "String"
+    },
+    "range": {
+        "description": "mode为 selector 或 multiSelector 时，range 有效",
+        "type": "Array"
+    },
+    "range-key": {
+        "description": "当 range 是一个 Object Array 时，通过 range-key 来指定 Object 中 key 的值作为选择器显示内容",
+        "type": "String"
+    },
+    "start": {
+        "description": "mode为time：表示有效时间范围的开始，字符串格式为\"hh:mm\"；mode为date：表示有效日期范围的开始，字符串格式为\"YYYY-MM-DD\"",
+        "type": "String"
+    },
+    "end": {
+        "description": "mode为time：表示有效时间范围的结束，字符串格式为\"hh:mm\"；mode为date：表示有效日期范围的结束，字符串格式为\"YYYY-MM-DD\"",
+        "type": "String"
+    },
+    "fields": {
+        "description": "有效值 year,month,day，表示选择器的粒度",
+        "type": "String",
+        "options": [
+            "year",
+            "month",
+            "day"
+        ]
+    },
+    "custom-item": {
+        "description": "可为每一列的顶部添加一个自定义的项",
+        "type": "String"
+    },
+    "min": {
+        "description": " radio 最小值",
+        "type": "Number"
+    },
+    "max": {
+        "description": "radio最大值",
+        "type": "Number"
+    },
+    "step": {
+        "description": "radio步长，取值必须大于 0，并且可被(max - min)整除",
+        "type": "Number"
+    },
+    "select-color": {
+        "description": "radio已选择的颜色",
+        "type": "ColorString"
+    },
+    "block-size": {
+        "description": "radio滑块的大小，取值范围为 12 - 28",
+        "type": "Number"
+    },
+    "block-color": {
+        "description": "滑块颜色",
+        "type": "ColorString"
+    },
+    "show-value": {
+        "description": "是否显示当前 value",
+        "type": "Boolean"
+    },
+    "auto-height": {
+        "description": "是否自动增高，设置auto-height时，style.height不生效",
+        "type": "Boolean"
+    },
+    "fixed": {
+        "description": "如果 textarea 是在一个 position:fixed 的区域，需要显示指定属性 fixed 为 true",
+        "type": "Boolean"
+    },
+    "show-confirm-bar": {
+        "description": "是否显示键盘上方带有”完成“按钮那一栏",
+        "type": "Boolean"
+    },
+    "target": {
+        "description": "在哪个目标上发生跳转，默认当前应用",
+        "type": "String"
+    },
+    "url": {
+        "description": "推流地址。目前仅支持 flv, rtmp 格式",
+        "type": "String"
+    },
+    "delta": {
+        "description": "当 open-type 为 navigateBack 时有效，表示回退的层数",
+        "type": "Number"
+    },
+    "app-id": {
+        "description": "当target=\"miniProgram\"时有效，要打开的小程序 appId",
+        "type": "String"
+    },
+    "path": {
+        "description": "当target=\"miniProgram\"时有效，打开的页面路径，如果为空则打开首页",
+        "type": "String"
+    },
+    "extra-data": {
+        "description": "当target=\"miniProgram\"时有效，需要传递给目标应用的数据，目标应用可在 App.onLaunch()，App.onShow() 中获取到这份数据",
+        "type": "Object"
+    },
+    "version": {
+        "description": "当target=\"miniProgram\"时有效，要打开的小程序版本，有效值 develop（开发版），trial（体验版），release（正式版），仅在当前小程序为开发版或体验版时此参数有效；如果当前小程序是体验版或正式版，则打开的小程序必定是正式版",
+        "type": "String"
+    },
+    "animation-type": {
+        "description": "当 open-type=\"navigateTo\" 或 open-type=\"navigateBack\" 时有效，窗口的显示/关闭的动画类型。",
+        "type": "String",
+        "options": [
+            "auto",
+            "none",
+            "slide-in-right",
+            "slide-in-left",
+            "slide-in-top",
+            "slide-in-bottom",
+            "fade-in",
+            "zoom-out",
+            "zoom-fade-out",
+            "pop-in",
+            "slide-out-right",
+            "slide-out-left",
+            "slide-out-top",
+            "slide-out-bottom",
+            "fade-out",
+            "zoom-in",
+            "zoom-fade-in",
+            "pop-out"
+        ]
+    },
+    "animation-duration": {
+        "description": "当 open-type=\"navigateTo\" 或 open-type=\"navigateBack\" 时有效，窗口的显示/关闭动画的持续时间。",
+        "type": "Number"
+    },
+    "title": {
+        "description": "视频的标题，全屏时在顶部展示",
+        "type": "String"
+    },
+    "title-icon": {
+        "description": "标题icon",
+        "type": "Boolean"
+    },
+    "titleIcon-radius": {
+        "description": "标题icon圆角",
+        "type": "Boolean"
+    },
+    "subtitle-text": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "subtitle-size": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "subtitle-color": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "subtitle-overflow": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "title-align": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "background-image": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "background-repeat": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "blur-effect": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "front-color": {
+        "description": "导航条前景颜色值，包括按钮、标题、状态栏的颜色，仅支持 #ffffff 和 #000000",
+        "type": "Boolean"
+    },
+    "background-color": {
+        "description": "窗口的背景色，必须为十六进制颜色值",
+        "type": "String"
+    },
+    "color-animation-duration": {
+        "description": "改变导航栏颜色时的动画时长，默认为 0 （即没有动画效果）",
+        "type": "Boolean"
+    },
+    "color-animation-timing-func": {
+        "description": "改变导航栏颜色时的动画方式，支持 linear 、 easeIn 、 easeOut 和 easeInOut",
+        "type": "Boolean"
+    },
+    "show-icon": {
+        "description": "是否显示icon",
+        "type": "Boolean"
+    },
+    "selected": {
+        "description": "选中的tabBar选项索引值",
+        "type": "Number"
+    },
+    "poster": {
+        "description": "视频封面的图片网络资源地址，如果 controls 属性值为 false 则设置 poster 无效",
+        "type": "String"
+    },
+    "controls": {
+        "description": "控件",
+        "type": "Array"
+    },
+    "name": {
+        "description": "默认控件上的音频名字，如果 controls 属性值为 false 则设置 name 无效",
+        "type": "String"
+    },
+    "author": {
+        "description": "默认控件上的作者名字，如果 controls 属性值为 false 则设置 author 无效",
+        "type": "String"
+    },
+    "lazy-load": {
+        "description": "图片懒加载。只针对page与scroll-view下的image有效",
+        "type": "Boolean"
+    },
+    "fade-show": {
+        "description": "图片显示动画效果",
+        "type": "Boolean"
+    },
+    "webp": {
+        "description": "默认不解析 webP 格式，只支持网络资源",
+        "type": "Boolean"
+    },
+    "show-menu-by-longpress": {
+        "description": "开启长按图片显示识别小程序码菜单",
+        "type": "Boolean"
+    },
+    "initial-time": {
+        "description": "指定视频初始播放位置",
+        "type": "Number"
+    },
+    "danmu-list": {
+        "description": "弹幕列表",
+        "type": "Array"
+    },
+    "danmu-btn": {
+        "description": "是否显示弹幕按钮，只在初始化时有效，不能动态变更",
+        "type": "Boolean"
+    },
+    "enable-danmu": {
+        "description": " 是否展示弹幕，只在初始化时有效，不能动态变更",
+        "type": "Boolean"
+    },
+    "muted": {
+        "description": "是否静音",
+        "type": "Boolean"
+    },
+    "page-gesture": {
+        "description": "在非全屏模式下，是否开启亮度与音量调节手势",
+        "type": "Boolean"
+    },
+    "show-progress": {
+        "description": " 若不设置，宽度大于240时才会显示",
+        "type": "Boolean"
+    },
+    "show-fullscreen-btn": {
+        "description": "是否显示全屏按钮",
+        "type": "Boolean"
+    },
+    "show-play-btn": {
+        "description": "是否显示视频底部控制栏的播放按钮",
+        "type": "Boolean"
+    },
+    "show-center-play-btn": {
+        "description": "是否显示视频中间的播放按钮",
+        "type": "Boolean"
+    },
+    "enable-progress-gesture": {
+        "description": "是否开启控制进度的手势",
+        "type": "Boolean"
+    },
+    "objectFit": {
+        "description": "当视频大小与 video 容器大小不一致时，视频的表现形式。",
+        "type": "String",
+        "options": [
+            "contain",
+            "fill",
+            "cover"
+        ]
+    },
+    "show-mute-btn": {
+        "description": "是否显示静音按钮",
+        "type": "Boolean"
+    },
+    "play-btn-position": {
+        "description": "播放按钮的位置",
+        "type": "String"
+    },
+    "enable-play-gesture": {
+        "description": "是否开启播放手势，即双击切换播放、暂停",
+        "type": "Boolean"
+    },
+    "auto-pause-if-navigate": {
+        "description": "当跳转到其它小程序页面时，是否自动暂停本页面的视频",
+        "type": "Boolean"
+    },
+    "auto-pause-if-open-native": {
+        "description": "当跳转到其它微信原生页面时，是否自动暂停本页面的视频",
+        "type": "Boolean"
+    },
+    "vslide-gesture": {
+        "description": "在非全屏模式下，是否开启亮度与音量调节手势（同 page-gesture）",
+        "type": "Boolean"
+    },
+    "vslide-gesture-in-fullscreen": {
+        "description": "在全屏模式下，是否开启亮度与音量调节手势",
+        "type": "Boolean"
+    },
+    "ad-unit-id": {
+        "description": "视频前贴广告单元ID",
+        "type": "String"
+    },
+    "poster-for-crawler": {
+        "description": "用于给搜索等场景作为视频封面展示，建议使用无播放 icon 的视频封面图，只支持网络地址",
+        "type": "String"
+    },
+    "codec": {
+        "description": "解码器选择",
+        "type": "String"
+    },
+    "http-cache": {
+        "description": "是否对 http、https 视频源开启本地缓存",
+        "type": "Boolean"
+    },
+    "play-strategy": {
+        "description": "播放策略",
+        "type": "Number"
+    },
+    "flash": {
+        "description": "前置或后置，值为front, back",
+        "type": "String",
+        "options": [
+            "back",
+            "front"
+        ]
+    },
+    "device-position": {
+        "description": "闪光灯，值为auto, on, off",
+        "type": "String"
+    },
+    "object-fit": {
+        "description": "填充模式，可选值有 contain，fillCrop",
+        "type": "String",
+        "options": [
+            "contain",
+            "fillCrop"
+        ]
+    },
+    "background-mute": {
+        "description": "进入后台时是否静音",
+        "type": "Boolean"
+    },
+    "min-cache": {
+        "description": "最小缓冲区，单位s",
+        "type": "String"
+    },
+    "max-cache": {
+        "description": "最大缓冲区，单位s",
+        "type": "String"
+    },
+    "autopush": {
+        "description": "自动推流",
+        "type": "Boolean"
+    },
+    "enable-camera": {
+        "description": "开启摄像头",
+        "type": "Boolean"
+    },
+    "min-bitrate": {
+        "description": "最小码率",
+        "type": "String"
+    },
+    "max-bitrate": {
+        "description": "最大码率",
+        "type": "String"
+    },
+    "beauty": {
+        "description": "美颜",
+        "type": "Number"
+    },
+    "aspect": {
+        "description": "美白",
+        "type": "Number"
+    },
+    "waiting-image": {
+        "description": "进入后台时推流的等待画面",
+        "type": "String"
+    },
+    "waiting-image-md5": {
+        "description": "等待画面资源的MD5值",
+        "type": "String"
+    },
+    "longitude": {
+        "description": "中心经度",
+        "type": "Number"
+    },
+    "latitude": {
+        "description": "中心纬度",
+        "type": "Number"
+    },
+    "markers": {
+        "description": "标记点",
+        "type": "Array"
+    },
+    "covers": {
+        "description": "即将移除，请使用 markers",
+        "type": "Array"
+    },
+    "polyline": {
+        "description": "路线",
+        "type": "Array"
+    },
+    "circles": {
+        "description": "圆",
+        "type": "Array"
+    },
+    "include-points": {
+        "description": "缩放视野以包含所有给定的坐标点",
+        "type": "Array"
+    },
+    "show-location": {
+        "description": "显示带有方向的当前定位点",
+        "type": "Boolean"
+    },
+    "canvas-id": {
+        "description": "canvas 组件的唯一标识符",
+        "type": "String"
+    },
+    "disable-scroll": {
+        "description": "当在 canvas 中移动时且有绑定手势事件时，禁止屏幕滚动以及下拉刷新",
+        "type": "Boolean"
+    },
+    "open-gid": {
+        "description": "当 type=\"groupName\" 时生效, 群id",
+        "type": "String"
+    },
+    "webview-styles": {
+        "description": "webview 的样式",
+        "type": "Object|Boolean"
+    },
+    "unit-id": {
+        "description": "广告单元id，可在小程序管理后台的流量主模块新建",
+        "type": "String"
+    },
+    "scoped": {
+        "description": "",
+        "type": "String"
+    },
+    "background-text-style": {
+        "description": "下拉背景字体、loading 图的样式，仅支持 dark 和 light",
+        "type": "String"
+    },
+    "background-color-top": {
+        "description": "顶部窗口的背景色，必须为十六进制颜色值，仅 iOS 支持",
+        "type": "String"
+    },
+    "background-color-bottom": {
+        "description": "底部窗口的背景色，必须为十六进制颜色值，仅 iOS 支持",
+        "type": "String"
+    },
+    "scroll-duration": {
+        "description": "滚动动画时长",
+        "type": "Number"
+    },
+    "page-style": {
+        "description": "页面根节点样式，页面根节点是所有页面节点的祖先节点，相当于 HTML 中的 body 节点",
+        "type": "String"
+    },
+    "root-font-size": {
+        "description": "页面的根字体大小，页面中的所有 rem 单位，将使用这个字体大小作为参考值，即 1rem 等于这个字体大小",
+        "type": "String"
+    },
+    "enable-pull-down-refresh": {
+        "description": "",
+        "type": "Boolean"
+    },
+    "是否开启下拉刷新": {
+        "description": "",
+        "type": "String"
+    },
+    "": {
+        "description": "",
+        "type": "String"
+    },
+    "animation": {
+        "description": "是否使用动画，默认为 true。",
+        "type": "Boolean"
+    },
+    "read-only": {
+        "description": "设置编辑器为只读。",
+        "type": "Boolean"
+    },
+    "show-img-size": {
+        "description": "点击图片时显示图片大小控件。",
+        "type": "Boolean"
+    },
+    "show-img-toolbar": {
+        "description": "点击图片时显示工具栏控件。",
+        "type": "Boolean"
+    },
+    "show-img-resize": {
+        "description": "点击图片时显示修改尺寸控件。",
+        "type": "String"
+    },
+    "collection": {
+        "description": "表名",
+        "type": "String|URIDBCollectionStringString"
+    },
+    "field": {
+        "description": "查询字段，多个字段用 `,` 分割",
+        "type": "String|DBFieldString"
+    },
+    "where": {
+        "description": "查询条件",
+        "type": "String|JQLString"
+    },
+    "action": {
+        "description": "云端执行数据库查询的前或后，触发某个action函数操作，进行预处理或后处理",
+        "type": "String|ClientDBActionString"
+    },
+    "orderby": {
+        "description": "排序字段及正序倒叙设置",
+        "type": "String"
+    },
+    "groupby": {
+        "description": "对数据进行分组",
+        "type": "String"
+    },
+    "group-field": {
+        "description": "对数据进行分组统计",
+        "type": "String"
+    },
+    "distinct": {
+        "description": "是否对数据查询结果中重复的记录进行去重",
+        "type": "Boolean",
+        "options": [
+            "true",
+            "false"
+        ]
+    },
+    "page-data": {
+        "description": "add 多次查询的集合, replace 当前查询的集合",
+        "type": "String",
+        "options": [
+            "add",
+            "replace"
+        ]
+    },
+    "page-current": {
+        "description": "当前页",
+        "type": "Number"
+    },
+    "page-size": {
+        "description": "每页数据数量",
+        "type": "Number"
+    },
+    "getone": {
+        "description": "指定查询结果是否返回数组第一条数据，默认 false。在false情况下返回的是数组，即便只有一条结果，也需要[0]的方式获取。在true下，直接返回结果数据，少一层数组",
+        "type": "Boolean"
+    },
+    "getcount": {
+        "description": "是否查询总数量",
+        "type": "Boolean"
+    },
+    "gettree": {
+        "description": "是否查询树状结构数据",
+        "type": "Boolean"
+    },
+    "startwith": {
+        "description": "gettree的第一层级条件，此初始条件可以省略，不传startWith时默认从最顶级开始查询",
+        "type": "String"
+    },
+    "limitlevel": {
+        "description": "gettree查询返回的树的最大层级。超过设定层级的节点不会返回。默认10级，最大15，最小1",
+        "type": "Number"
+    },
+    "manual": {
+        "description": "是否手动加载数据，默认为 false，页面onready时自动联网加载数据",
+        "type": "Boolean"
+    }
+}

@@ -1,0 +1,7 @@
+.keywordBoradAni {
+	transition-duration: 0.1s;
+	transition-timing-function: ease-in;
+	transition-delay: 0ms;
+	transition-property: transform;
+	transform: scale(0.95);
+}

@@ -1,0 +1,41 @@
+{
+  "name": "localstorage-polyfill",
+  "version": "1.0.1",
+  "description": "in memory localStorage polyfill for node.js utilizing ES6 proxies",
+  "main": "localStorage.js",
+  "scripts": {
+    "test": "ava",
+    "dev": "ava -w"
+  },
+  "engines" : {
+    "node" : ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capaj/localstorage-polyfill.git"
+  },
+  "keywords": [
+    "html5",
+    "local",
+    "storage",
+    "browser",
+    "testing",
+    "unit",
+    "testing"
+  ],
+  "author": "capajj@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/capaj/localstorage-polyfill/issues"
+  },
+  "homepage": "https://github.com/capaj/localstorage-polyfill#readme",
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "standard": "^8.0.0"
+  },
+  "ava": {
+    "files": [
+      "localStorage.spec.js"
+    ]
+  }
+}

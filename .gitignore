@@ -1,6 +1,8 @@
 .idea/
 /web/node_modules
 /web/dist
+/tmui/node_modules
+/tmui/dist
 
 .DS_Store
 

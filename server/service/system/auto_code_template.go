@@ -453,16 +453,15 @@ func (s *autoCodeTemplate) WriteApiJson(info request.AutoCode) error {
 		JsonMap[fmt.Sprintf("system.api.desc.list%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "list", info.Description)
 		JsonMap[fmt.Sprintf("system.api.group.%s%s", info.Package, info.StructName)] = info.Description
 
-		var modifiedData []byte
 		var je error
 		for key, value := range JsonMap {
-			modifiedData, je = sjson.SetBytes(data, key, value)
+			data, je = sjson.SetBytes(data, key, value)
 			if je != nil {
 				return je
 			}
 		}
 
-		err = os.WriteFile(file, modifiedData, 0666)
+		err = os.WriteFile(file, data, 0666)
 		if err != nil {
 			return err
 		}
@@ -482,16 +481,15 @@ func (s *autoCodeTemplate) WriteWebJson(info request.AutoCode) error {
 			return e
 		}
 
-		var modifiedData []byte
 		var je error
 		for _, field := range info.Fields {
-			modifiedData, je = sjson.SetBytes(data, fmt.Sprintf("%s.%s.%s", info.Package, info.StructName, field.FieldName), field.FieldDesc)
+			data, je = sjson.SetBytes(data, fmt.Sprintf("%s.%s.%s", info.Package, info.StructName, field.FieldName), field.FieldDesc)
 			if je != nil {
 				return je
 			}
 		}
 
-		err = os.WriteFile(file, modifiedData, 0666)
+		err = os.WriteFile(file, data, 0666)
 		if err != nil {
 			return err
 		}

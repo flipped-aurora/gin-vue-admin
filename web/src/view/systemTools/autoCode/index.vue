@@ -5,26 +5,27 @@
       title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。"
     />
     <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">使用AI创建</div>
+      <div class="text-lg mb-2 text-gray-600">使用AI创建<a class="text-blue-600 text-sm ml-4" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">获取AiPath</a></div>
       <div class="relative">
-        <el-input v-model="prompt" type="textarea" :rows="5" :maxlength="100" :placeholder="`【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。`" resize="none" />
+        <el-input v-model="prompt"
+                  type="textarea"
+                  :rows="5"
+                  :maxlength="100"
+                  :placeholder="`现已完全免费\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
+                  resize="none"
+                  @focus="handleFocus"
+                  @blur="handleBlur"/>
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
-            content="小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。"
+            effect="light"
           >
-            <el-button type="primary" @click="llmAutoFunc('xiaoqi')">
+            <template #content>
+              <div>【完全免费】前往<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">插件市场个人中心</a>申请AIPath，填入config.yaml的ai-path属性即可使用。</div>
+            </template>
+            <el-button type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
                 <ai-gva />
-              </el-icon> 小奇
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            content="小淼基本啥也能设计出来，但是需要消耗积分，测试阶段授权用户自动获得基础积分，开源用户需要填表申请。"
-          >
-            <el-button type="primary" @click="llmAutoFunc('xiaomiao')">
-              <el-icon size="18">
-                <ai-gva />
-              </el-icon> 小淼
+              </el-icon> 生成
             </el-button>
           </el-tooltip>
         </div>
@@ -156,10 +157,17 @@
               prop="structName"
               class="w-full"
             >
+              <div class="flex gap-2 w-full">
               <el-input
                 v-model="form.structName"
                 placeholder="首字母自动转换大写"
               />
+                <el-button type="primary" @click="llmAutoFunc(true)">
+                  <el-icon size="18">
+                    <ai-gva />
+                  </el-icon> 生成
+              </el-button>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -420,6 +428,7 @@
           row-key="fieldName"
         >
           <el-table-column
+            fixed="left"
             align="left"
             type="index"
             width="60"
@@ -431,12 +440,14 @@
             </template>
           </el-table-column>
           <el-table-column
+            fixed="left"
             align="left"
             type="index"
             label="序列"
             width="60"
           />
           <el-table-column
+            fixed="left"
             align="left"
             type="index"
             label="主键"
@@ -447,6 +458,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            fixed="left"
             align="left"
             prop="fieldName"
             label="字段名称"
@@ -525,6 +537,7 @@
           <el-table-column
               align="left"
               prop="excel"
+              width="100"
               label="导入/导出"
           >
             <template #default="{row}">
@@ -791,6 +804,21 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import Sortable from 'sortablejs'
 
+const handleFocus = () => {
+  document.addEventListener('keydown', handleKeydown);
+};
+
+const handleBlur = () => {
+  document.removeEventListener('keydown', handleKeydown);
+};
+
+
+const handleKeydown = (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+    llmAutoFunc();
+  }
+};
+
 const getOnlyNumber = () => {
   let randomNumber = '';
   while (randomNumber.length < 16) {
@@ -801,51 +829,21 @@ const getOnlyNumber = () => {
 
 const prompt = ref("")
 
-const llmAutoFunc = async (mode) =>{
-  const res = await llmAuto({prompt:prompt.value,mode:mode})
+const llmAutoFunc = async (flag) =>{
+  if (flag&&!form.value.structName) {
+    ElMessage.error('请输入结构体名称')
+    return
+  }
+  if (!flag&&!prompt.value) {
+    ElMessage.error('请输入描述')
+    return
+  }
+  const res = await llmAuto({prompt:flag?'结构体名称为'+form.value.structName:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
     for (let key in json){
-      if(key === "fields"){
-        json[key].forEach(item => {
-          if (item.primaryKey) {
-            form.value.gvaModel = false
-          }
-          form.value.fields.push({
-              onlyNumber: getOnlyNumber(),
-              fieldName: toUpperCase(item.fieldName),
-              fieldDesc: item.fieldDesc,
-              fieldType: item.fieldType,
-              dataType: "",
-              fieldJson: item.fieldJson||item.columnName,
-              primaryKey: item.primaryKey,
-              dataTypeLong: item.dataTypeLong,
-              columnName: item.columnName,
-              comment: item.comment || item.fieldDesc,
-              require: false,
-              errorText: '',
-              clearable: true,
-              fieldSearchType: '',
-              fieldIndexType: '',
-              dictType: '',
-              form: true,
-              desc: true,
-              table: true,
-              excel: false,
-              dataSource: {
-                association:1,
-                table: '',
-                label: '',
-                value: ''
-          }
-          })
-        })
-      }else{
-        if(mode === "xiaomiao"){
-          form.value[key] = json[key]
-        }
-      }
+      form.value[key] = json[key]
     }
   }
 }

@@ -193,8 +193,11 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="是否鉴权：">
+            <el-switch v-model="autoFunc.isAuth" active-text="是" inactive-text="否" /> 
+          </el-form-item>
           <el-form-item label="路由path:">
-            <el-input v-model="autoFunc.router" placeholder="路由path" />
+            <el-input v-model="autoFunc.router" placeholder="路由path" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
             <div>API路径: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
           </el-form-item>
         </el-form>
@@ -241,7 +244,8 @@ const autoFunc = ref({
   humpPackageName:"",
   businessDB:"",
   method:"",
-  funcDesc: ""
+  funcDesc: "",
+  isAuth:false,
 })
 
 const addFuncBtn =  (row) => {

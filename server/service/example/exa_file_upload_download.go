@@ -17,8 +17,8 @@ import (
 //@param: file model.ExaFileUploadAndDownload
 //@return: error
 
-func (e *FileUploadAndDownloadService) Upload(file example.ExaFileUploadAndDownload) error {
-	return global.GVA_DB.Create(&file).Error
+func (e *FileUploadAndDownloadService) Upload(file *example.ExaFileUploadAndDownload) error {
+	return global.GVA_DB.Create(file).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -102,7 +102,7 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 		Key:  key,
 	}
 	if noSave == "0" {
-		return f, e.Upload(f)
+		return f, e.Upload(&f)
 	}
 	return f, nil
 }

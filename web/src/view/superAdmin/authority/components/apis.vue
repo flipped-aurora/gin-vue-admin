@@ -4,12 +4,12 @@
       <el-input
           v-model="filterTextName"
           class="flex-1"
-          placeholder="筛选名字"
+          :placeholder="t('view.superAdmin.authority.components.apis.filterName')"
       />
       <el-input
           v-model="filterTextPath"
           class="flex-1"
-          placeholder="筛选路径"
+          :placeholder="t('view.superAdmin.authority.components.apis.filterPath')"
       />
       <el-button
         class="float-right"

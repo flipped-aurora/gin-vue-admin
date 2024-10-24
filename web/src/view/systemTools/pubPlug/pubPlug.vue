@@ -1,16 +1,16 @@
 <template>
   <div class="gva-form-box">
     <div class="p-4 bg-white dark:bg-slate-900">
-      <WarningBar :title="t('view.plugins.pluginSupport')" />
+      <WarningBar :title="t('view.systemTools.pubPlug.pluginSupport')" />
       <div class="flex items-center gap-3">
         <el-input
           v-model="plugName"
-          :placeholder="t('view.plugins.pluginNameInput')"
+          :placeholder="t('view.systemTools.pubPlug.pluginNameInput')"
         />
       </div>
       <el-card class="mt-2 text-center">
-        <WarningBar :title="t('view.plugins.menuSelectionNote')" />
-        <el-input v-model="parentMenu" :placeholder="t('view.plugins.menuGroupNameInput')" class="mb-2"></el-input>
+        <WarningBar :title="t('view.systemTools.pubPlug.menuSelectionNote')" />
+        <el-input v-model="parentMenu" :placeholder="t('view.systemTools.pubPlug.menuGroupNameInput')" class="mb-2"></el-input>
         <el-transfer
           v-model="menus"
           :props="{
@@ -20,9 +20,9 @@
           :data="menusData"
           filterable
           :filter-method="filterMenuMethod"
-          :filter-placeholder="t('view.plugins.menuNamePathInput')"
-          :titles="[t('view.plugins.optionalMenu'),t('view.plugins.useMenu')]"
-          :button-texts="[t('view.plugins.remove'), t('view.plugins.selected')]"
+          :filter-placeholder="t('view.systemTools.pubPlug.menuNamePathInput')"
+          :titles="[t('view.systemTools.pubPlug.optionalMenu'),t('view.systemTools.pubPlug.useMenu')]"
+          :button-texts="[t('view.systemTools.pubPlug.remove'), t('view.systemTools.pubPlug.selected')]"
         >
           <template #default="{option}">
             {{ option.meta.title }} {{ option.component }}
@@ -33,7 +33,7 @@
             type="primary"
             @click="fmtInitMenu"
           >
-            {{ t('view.plugins.defineMenuInstall') }}
+            {{ t('view.systemTools.pubPlug.defineMenuInstall') }}
           </el-button>
         </div>
       </el-card>
@@ -47,9 +47,9 @@
           :data="apisData"
           filterable
           :filter-method="filterApiMethod"
-          :filter-placeholder="t('view.plugins.apiDescriptionPathInput')"
-          :titles="[t('view.plugins.optionalAPI'),t('view.plugins.useAPI')]"
-          :button-texts="[t('view.plugins.remove'), t('view.plugins.selected')]"
+          :filter-placeholder="t('view.systemTools.pubPlug.apiDescriptionPathInput')"
+          :titles="[t('view.systemTools.pubPlug.optionalAPI'),t('view.systemTools.pubPlug.useAPI')]"
+          :button-texts="[t('view.systemTools.pubPlug.remove'), t('view.systemTools.pubPlug.selected')]"
         >
           <template #default="{option}">
             {{ option.description }} {{ option.path }}
@@ -60,7 +60,7 @@
             type="primary"
             @click="fmtInitAPI"
           >
-            {{ t('view.plugins.defineAPIInstall') }}
+            {{ t('view.systemTools.pubPlug.defineAPIInstall') }}
           </el-button>
         </div>
       </el-card>
@@ -70,7 +70,7 @@
         type="primary"
         @click="pubPlugin"
       >
-        {{ t('view.plugins.packagePlugin') }}
+        {{ t('view.systemTools.pubPlug.packagePlugin') }}
       </el-button>
     </div>
   </div>
@@ -132,10 +132,10 @@ initData()
 const pubPlugin = async() => {
 
   ElMessageBox.confirm(
-      t('view.plugins.checkMsg'),
-      t('view.plugins.package'),
+      t('view.systemTools.pubPlug.checkMsg'),
+      t('view.systemTools.pubPlug.package'),
       {
-        confirmButtonText: t('view.plugins.package'),
+        confirmButtonText: t('view.systemTools.pubPlug.package'),
         cancelButtonText: t('general.cancel'),
         type: 'warning',
       }
@@ -149,7 +149,7 @@ const pubPlugin = async() => {
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: t('view.plugins.closePackage'),
+          message: t('view.systemTools.pubPlug.closePackage'),
         })
       })
 
@@ -157,20 +157,20 @@ const pubPlugin = async() => {
 
 const fmtInitMenu = () => {
   if (!parentMenu.value) {
-    ElMessage.error(t('view.plugins.enterMenuGroupName'))
+    ElMessage.error(t('view.systemTools.pubPlug.enterMenuGroupName'))
     return
   }
   if (menus.value.length === 0) {
-    ElMessage.error(t('view.plugins.selectAtLeastOneMenu'))
+    ElMessage.error(t('view.systemTools.pubPlug.selectAtLeastOneMenu'))
     return
   }
   if (plugName.value === '') {
-    ElMessage.error(t('view.plugins.enterPluginName'))
+    ElMessage.error(t('view.systemTools.pubPlug.enterPluginName'))
     return
   }
   ElMessageBox.confirm(
-      t('view.plugins.overwriteMessage'),
-      t('view.plugins.generateInitialMenu'),
+      t('view.systemTools.pubPlug.overwriteMessage'),
+      t('view.systemTools.pubPlug.generateInitialMenu'),
       {
         confirmButtonText: t('general.generate'),
         cancelButtonText: t('general.cancel'),
@@ -188,22 +188,22 @@ const fmtInitMenu = () => {
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: t('view.plugins.closeGenerateMenu'),
+          message: t('view.systemTools.pubPlug.closeGenerateMenu'),
         })
       })
 }
 const fmtInitAPI = () => {
   if (apis.value.length === 0) {
-    ElMessage.error(t('view.plugins.selectAtLeastOneAPI'))
+    ElMessage.error(t('view.systemTools.pubPlug.selectAtLeastOneAPI'))
     return
   }
   if (plugName.value === '') {
-    ElMessage.error(t('view.plugins.enterPluginNameAgain'))
+    ElMessage.error(t('view.systemTools.pubPlug.enterPluginNameAgain'))
     return
   }
   ElMessageBox.confirm(
-      t('view.plugins.overwriteWarning'),
-      t('view.plugins.generateInitialAPI'),
+      t('view.systemTools.pubPlug.overwriteWarning'),
+      t('view.systemTools.pubPlug.generateInitialAPI'),
       {
         confirmButtonText: t('general.generate'),
         cancelButtonText: t('general.cancel'),
@@ -221,7 +221,7 @@ const fmtInitAPI = () => {
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: t('view.plugins.closeGenerateAPI'),
+          message: t('view.systemTools.pubPlug.closeGenerateAPI'),
         })
       })
 }

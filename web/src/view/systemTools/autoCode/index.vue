@@ -5,30 +5,27 @@
         href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
     />
     <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdByAI') }}</div>
+      <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdByAI') }}<a class="text-blue-600 text-sm ml-4" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">{{ t('view.systemTools.autoCode.getAiPath') }}</a></div>
       <div class="relative">
-        <el-input v-model="prompt" :maxlength="100" :placeholder="t('view.systemTools.autoCode.aiCodeNote')" :rows="5"
-                  resize="none" type="textarea"
-        />
+        <el-input v-model="prompt"
+                  type="textarea"
+                  :rows="5"
+                  :maxlength="100"
+                  :placeholder="t('view.systemTools.autoCode.aiCodeNote')"
+                  resize="none"
+                  @focus="handleFocus"
+                  @blur="handleBlur"/>
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
-              :content="t('view.systemTools.autoCode.aiContent')"
+            effect="light"
           >
-            <el-button type="primary" @click="llmAutoFunc('xiaoqi')">
+            <template #content>
+              <div>{{ t('view.systemTools.autoCode.aiNote1') }}<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">{{ t('view.systemTools.autoCode.aiNote2') }}</a>{{ t('view.systemTools.autoCode.aiNote3') }}</div>
+            </template>
+            <el-button type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
-                <ai-gva/>
-              </el-icon>
-              <span>{{ t('view.systemTools.autoCode.XiaoQi') }}</span>
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-              :content="t('view.systemTools.autoCode.XiaoMiaoDesc')"
-          >
-            <el-button type="primary" @click="llmAutoFunc('xiaomiao')">
-              <el-icon size="18">
-                <ai-gva/>
-              </el-icon>
-              <span>{{ t('view.systemTools.autoCode.XiaoMiao') }}</span>
+                <ai-gva />
+              </el-icon> {{ t('view.systemTools.autoCode.generate') }}
             </el-button>
           </el-tooltip>
         </div>
@@ -164,10 +161,17 @@
                 class="w-full"
                 prop="structName"
             >
+              <div class="flex gap-2 w-full">
               <el-input
                   v-model="form.structName"
                   :placeholder="t('view.systemTools.autoCode.capitalizeFirstLetterAutomatically')"
               />
+                <el-button type="primary" @click="llmAutoFunc(true)">
+                  <el-icon size="18">
+                    <ai-gva />
+                  </el-icon> {{ t('view.systemTools.autoCode.generate') }}
+              </el-button>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -468,9 +472,10 @@
             row-key="fieldName"
         >
           <el-table-column
-              align="left"
-              type="index"
-              width="80"
+            fixed="left"
+            align="left"
+            type="index"
+            width="60"
           >
             <template #default>
               <el-icon class="cursor-grab drag-column">
@@ -479,19 +484,81 @@
             </template>
           </el-table-column>
           <el-table-column
-              align="left"
-              :label="t('view.systemTools.autoCode.fieldIndex')"
-              type="index"
-              width="80"
+            fixed="left"
+            align="left"
+            type="index"
+            :label="t('view.systemTools.autoCode.fieldIndex')"
+            width="80"
           />
           <el-table-column
-              align="left"
-              :label="t('view.systemTools.autoCode.primaryKey')"
-              type="index"
-              width="120"
+            fixed="left"
+            align="left"
+            type="index"
+            :label="t('view.systemTools.autoCode.primaryKey')"
+            width="120"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.primaryKey"/>
+              <el-checkbox v-model="row.primaryKey" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            fixed="left"
+            align="left"
+            prop="fieldName"
+            :label="t('view.systemTools.autoCode.fieldName')"
+            width="160"
+          >
+            <template #default="{row}">
+              <el-input v-model="row.fieldName" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="fieldDesc"
+            :label="t('view.systemTools.autoCode.chineseName')"
+            width="160"
+          >
+            <template #default="{row}">
+              <el-input v-model="row.fieldDesc" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="defaultValue"
+            :label="t('view.systemTools.autoCode.defaultValue')"
+            width="160"
+          >
+            <template #default="{row}">
+              <el-input v-model="row.defaultValue" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="require"
+            width="100"
+            :label="t('view.systemTools.autoCode.required')"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.require" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="sort"
+            :label="t('view.superAdmin.menu.sort')"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.sort" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="form"
+            width="100"
+            :label="t('view.systemTools.autoCode.createEdit')"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.form" />
             </template>
           </el-table-column>
           <el-table-column
@@ -573,9 +640,9 @@
           </el-table-column>
           <el-table-column
               align="left"
-              :label="t('view.systemTools.autoCode.importExport')"
               prop="excel"
-              width="160"
+              width="120"
+              :label="t('view.systemTools.autoCode.importExport')"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.excel"/>
@@ -850,6 +917,21 @@ import {useI18n} from 'vue-i18n' // added by mohamed hassan to support multilang
 
 const {t} = useI18n() // added by mohamed hassan to support multilanguage
 
+const handleFocus = () => {
+  document.addEventListener('keydown', handleKeydown);
+};
+
+const handleBlur = () => {
+  document.removeEventListener('keydown', handleKeydown);
+};
+
+
+const handleKeydown = (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+    llmAutoFunc();
+  }
+};
+
 const getOnlyNumber = () => {
   let randomNumber = '';
   while (randomNumber.length < 16) {
@@ -860,51 +942,21 @@ const getOnlyNumber = () => {
 
 const prompt = ref("")
 
-const llmAutoFunc = async (mode) => {
-  const res = await llmAuto({prompt: prompt.value, mode: mode})
+const llmAutoFunc = async (flag) =>{
+  if (flag&&!form.value.structName) {
+    ElMessage.error(t('view.systemTools.autoPkg.entStructName'))
+    return
+  }
+  if (!flag&&!prompt.value) {
+    ElMessage.error(t('general.enterDescription'))
+    return
+  }
+  const res = await llmAuto({prompt:flag?t('view.systemTools.autoPkg.structNameIs') + form.value.structName:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
-    for (let key in json) {
-      if (key === "fields") {
-        json[key].forEach(item => {
-          if (item.primaryKey) {
-            form.value.gvaModel = false
-          }
-          form.value.fields.push({
-            onlyNumber: getOnlyNumber(),
-            fieldName: toUpperCase(item.fieldName),
-            fieldDesc: item.fieldDesc,
-            fieldType: item.fieldType,
-            dataType: "",
-            fieldJson: item.fieldJson || item.columnName,
-            primaryKey: item.primaryKey,
-            dataTypeLong: item.dataTypeLong,
-            columnName: item.columnName,
-            comment: item.comment || item.fieldDesc,
-            require: false,
-            errorText: '',
-            clearable: true,
-            fieldSearchType: '',
-            fieldIndexType: '',
-            dictType: '',
-            form: true,
-            desc: true,
-            table: true,
-            excel: false,
-            dataSource: {
-              association: 1,
-              table: '',
-              label: '',
-              value: ''
-            }
-          })
-        })
-      } else {
-        if (mode === "xiaomiao") {
-          form.value[key] = json[key]
-        }
-      }
+    for (let key in json){
+      form.value[key] = json[key]
     }
   }
 }
@@ -1276,6 +1328,20 @@ const enterForm = async (isPreview) => {
         return false
       }
       form.value.humpPackageName = toSQLLine(form.value.packageName)
+
+      form.value.fields.forEach(item => {
+        if(item.fieldType === 'enum'){
+          // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
+          const arr = item.dataTypeLong.split(',')
+          arr.forEach((ele, index) => {
+            if(ele.indexOf("'") === -1){
+              arr[index] = `'${ele}'`
+            }
+          })
+          item.dataTypeLong = arr.join(',')
+        }
+      })
+
       delete form.value.primaryField
       if (isPreview) {
         const data = await preview(form.value)

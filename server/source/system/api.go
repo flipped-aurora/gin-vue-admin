@@ -100,7 +100,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/deleteFile", Description: "system.api.desc.deleteFile"},
 		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/editFileName", Description: "system.api.desc.editFileNameOrRemark"},
 		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/getFileList", Description: "system.api.desc.getUploadFileList"},
-        {ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/importURL", Description: "system.api.desc.importURL"},
+		{ApiGroup: "system.api.group.fileUploadDownload", Method: "POST", Path: "/fileUploadAndDownload/importURL", Description: "system.api.desc.importURL"},
 
 		{ApiGroup: "system.api.group.systemService", Method: "POST", Path: "/system/getServerInfo", Description: "system.api.desc.getServerInfo"},
 		{ApiGroup: "system.api.group.systemService", Method: "POST", Path: "/system/getSystemConfig", Description: "system.api.desc.getConfigFileContent"},
@@ -177,6 +177,14 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.announcement", Method: "PUT", Path: "/info/updateInfo", Description: "system.api.desc.updateAnnouncement"},
 		{ApiGroup: "system.api.group.announcement", Method: "GET", Path: "/info/findInfo", Description: "system.api.desc.getAnnouncementByID"},
 		{ApiGroup: "system.api.group.announcement", Method: "GET", Path: "/info/getInfoList", Description: "system.api.desc.getAnnouncementList"},
+
+		{ApiGroup: "参数管理", Method: "POST", Path: "/sysParams/createSysParams", Description: "新建参数"},
+		{ApiGroup: "参数管理", Method: "DELETE", Path: "/sysParams/deleteSysParams", Description: "删除参数"},
+		{ApiGroup: "参数管理", Method: "DELETE", Path: "/sysParams/deleteSysParamsByIds", Description: "批量删除参数"},
+		{ApiGroup: "参数管理", Method: "PUT", Path: "/sysParams/updateSysParams", Description: "更新参数"},
+		{ApiGroup: "参数管理", Method: "GET", Path: "/sysParams/findSysParams", Description: "根据ID获取参数"},
+		{ApiGroup: "参数管理", Method: "GET", Path: "/sysParams/getSysParamsList", Description: "获取参数列表"},
+		{ApiGroup: "参数管理", Method: "GET", Path: "/sysParams/getSysParam", Description: "获取参数列表"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+" "+global.Translate("general.tabelDataInitFail"))

@@ -35,8 +35,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import config from '@/core/config'
+import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage

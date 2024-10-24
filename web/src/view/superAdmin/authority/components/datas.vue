@@ -1,7 +1,7 @@
 <template>
   <div>
     <warning-bar
-      :title="t('datas.datasNote')"
+      :title="t('view.superAdmin.authority.components.datas.datasNote')"
       href="https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=36"
     />
     <div class="sticky top-0.5 z-10 my-4">
@@ -14,12 +14,12 @@
         class="float-left"
         type="primary"
         @click="self"
-      >{{ t("datas.thisRole") }}</el-button>
+      >{{ t("view.superAdmin.authority.components.datas.thisRole") }}</el-button>
       <el-button
         class="float-left"
         type="primary"
         @click="selfAndChildren"
-      >{{ t("datas.thisRoleAndSubRoles") }}</el-button>
+      >{{ t("view.superAdmin.authority.components.datas.thisRoleAndSubRoles") }}</el-button>
       <el-button
         class="float-right"
         type="primary"
@@ -138,7 +138,7 @@ const getChildrenId = (row, arrBox) => {
 const authDataEnter = async() => {
   const res = await setDataAuthority(props.row)
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: t('datas.resourceSetupSuccess') })
+    ElMessage({ type: 'success', message: t('view.superAdmin.authority.components.datas.resourceSetupSuccess') })
   }
 }
 

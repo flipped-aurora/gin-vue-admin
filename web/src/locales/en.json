@@ -89,12 +89,6 @@
     "rollbackSuccess": "Rollback successfully!",
     "rolledBack": "Rolled back"
   },
-  "datas": {
-    "datasNote": "This function is only used to create a many2many relationship table for roles and roles, and the specific use must also be combined with the table to implement the business, for details, refer to the sample code (customer example), This function is not recommended. It is recommended to use the plug-in market [Organization Management Function (click to go)] to manage resource permissions.",
-    "resourceSetupSuccess": "Resource set up successfully!",
-    "thisRole": "This Role",
-    "thisRoleAndSubRoles": "This role and sub-roles"
-  },
   "error": {
     "message1": "The page has been sucked away by mysterious forces, please contact us to fix it.",
     "message2": "The common problem is that there is no current route for this role, if you are sure you want to use this route, please go to Role Management to assign it.",
@@ -162,7 +156,8 @@
     "yes": "Yes",
     "cannotBeEmpty": "Cannot be empty",
     "cancelModification": "Cancel modification",
-    "import": "Import"
+    "import": "Import",
+    "enterDescription": "Please enter a description"
   },
   "historyComponent": {
     "closeAll": "Close All",
@@ -255,13 +250,6 @@
     "language": "Languages",
     "login": "Login"
   },
-  "menus": {
-    "": "",
-    "home": "Homepage",
-    "menuSetupSuccess": "Menu set successfully!",
-    "setAsHome": "Set as homepage",
-    "assignButton": "Assign button"
-  },
   "setting": {
     "": "",
     "businessBlack": "Dark Mode",
@@ -287,39 +275,11 @@
     }
   },
   "plugins": {
-    "pluginSupport": "Currently, only standard plugins (generated through the plugin template to create a standard directory) are supported. Please package non-standard plugins yourself.",
-    "pluginNameInput": "Enter the plugin name in the plugin template",
-    "menuSelectionNote": "Please select only sub-menus in the shuttle box",
-    "menuGroupNameInput": "Please enter the menu group name, e.g., Announcement Management",
-    "menuNamePathInput": "Please enter the menu name/path",
-    "optionalMenu": "Optional Menu",
-    "useMenu": "Use Menu",
-    "remove": "Remove",
-    "selected": "Selected",
-    "defineMenuInstall": "Define Menu Installation",
-    "apiDescriptionPathInput": "Please enter API description/PATH",
-    "optionalAPI": "Optional API",
-    "useAPI": "Use API",
-    "defineAPIInstall": "Define API Installation",
-    "packagePlugin": "Package Plugin",
-    "package": "Package",
-    "closePackage": "Close Package",
-    "enterMenuGroupName": "Please enter the menu group name",
-    "selectAtLeastOneMenu": "Please select at least one menu",
-    "enterPluginName": "Please enter the plugin name",
-    "generateInitialMenu": "Generate Initial Menu",
-    "generate": "Generate",
-    "closeGenerateMenu": "Close Generate Menu",
-    "selectAtLeastOneAPI": "Please select at least one API",
-    "enterPluginNameAgain": "Please enter the plugin name again",
-    "closeGenerateAPI": "Close Generate API",
     "checkMessage": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
     "overwriteMessage": "Clicking will overwrite `server/plugin/{plugName}/initialize/menu`. Do you want to continue?",
     "overwriteWarning": "Clicking will overwrite `server/plugin/{plugName}/initialize/api`. Do you want to continue?",
     "generateInitialAPI": "Generate Initial API",
     "checkMsg": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
-    "dragOrClickUpload": "Drag or click to upload",
-    "uploadPackage": "Please drag the installation package zip here to upload",
     "announcement": {
         "info": {
           "title": "Title",
@@ -510,7 +470,35 @@
       }
     },
     "superAdmin": {
+      "authority" : {
+        "components": {
+          "apis": {
+            "filterName": "Filter Name",
+            "filterPath": "Filter Path"
+          },
+          "datas": {
+            "datasNote": "This function is only used to create a many2many relationship table for roles and roles, and the specific use must also be combined with the table to implement the business, for details, refer to the sample code (customer example), This function is not recommended. It is recommended to use the plug-in market [Organization Management Function (click to go)] to manage resource permissions.",
+            "resourceSetupSuccess": "Resource set up successfully!",
+            "thisRole": "This Role",
+            "thisRoleAndSubRoles": "This role and sub-roles"
+          },
+          "menus": {
+            "home": "Homepage",
+            "menuSetupSuccess": "Menu set successfully!",
+            "setAsHome": "Set as homepage",
+            "assignButton": "Assign button"
+          }
+        }
+      },
       "menu": {
+        "components": {
+          "componentsCascader": {
+            "selectFilePathNote": "Please select the file path",
+            "filePathNote": "Page:view/xxx/xx.vue Plugin:plugin/xx/xx.vue",
+            "manualInput": "Manual Input",
+            "quickSelection": "Quick Selection"
+          }
+        },
         "addMenu": "Add Menu",
         "addMenuParameters": "Add menu parameters",
         "addParameter": "Add parameters",
@@ -520,7 +508,7 @@
         "closeTabNote": "Whether to close the tab automatically",
         "deleteAllRolesConfirm": "This action will permanently delete all roles under this menu, do you want to continue?",
         "displayName": "Display Name",
-        "titleNote": "Example：system.menu.website",
+        "titleNote": "Example：system.view.superAdmin.menu.website",
         "editMenu": "Edit Menu",
         "enterFilePathNote": "Please enter the file path",
         "enterMenuDisplayNameNote": "Please enter a menu display name",
@@ -530,7 +518,6 @@
         "icon": "Icon",
         "keepAliveNote": "Whether keepAlive caches pages",
         "newMenuNote": "New menu, you need to configure permissions in the role management to use",
-        "filePathNote": "Page:view/xxx/xx.vue Plugin:plugin/xx/xx.vue",
         "parameterType": "Parameter Type",
         "parameterValue": "Parameter Value",
         "paremeterKey": "Parameter Key",
@@ -632,7 +619,6 @@
         "details": "Details",
         "enterDictName": "Please enter a dictionary name",
         "enterDictDataType": "Please enter a dictionary data type",
-        "enterDescription": "Please enter a description",
         "addDictionary": "Add Dictionary",
         "editDictionary": "Edit Dictionary",
         "listOfDictionaries": "List of dictionaries"
@@ -845,8 +831,13 @@
         "": ""
       },
       "autoCode": {
+        "getAiPath": "Get AI Path",
+        "aiCodeNote": "Now it is completely free\nTry to describe your table and let AI help you complete it. \nThis function requires you to go to the personal center of the plug-in market to obtain your own AI-Path, fill in the AI-Path in autocode-->ai-path under config.yaml, and restart the project to use it. \nPress Ctrl+Enter or Cmd+Enter to generate directly.",
+        "generate": "Generate",
+        "aiNote1": "【Completely Free】Go to ",
+        "aiNote2": "Personal Center of Plugin Market ",
+        "aiNote3": "Apply for AIPath and fill in the ai-path property in config.yaml to use it.",
         "actionBar": "Action Bar:",
-        "aiCodeNote": "[Beta] Try describing your table and let AI help you complete it.\nCurrently in testing phase, please provide feedback if you encounter any issues.\nThis feature requires you to get your own AI-Path from the plugin market personal center, fill in the AI-Path in config.yaml under autocode-->ai-path, and restart the project to use it.",
         "autoAPIDBCreate": "Automatically Create API",
         "autoAPIDBTip": "Note: Register the automatically generated API into the database",
         "autoCodeNote": "This feature is for development environment use, not recommended for production. Click me to see the specific usage effect.",
@@ -907,6 +898,7 @@
         "structureSimpleName": "Structure Abbreviation",
         "StructureOverview": "Structure Overview",
         "structNameInput": "Please enter the struct abbreviation",
+        "structNameIs": "The structure name is ",
         "fineNameInput": "Please enter the file name",
         "capitalizeFirstLetterAutomatically": "First letter automatically capitalized",
         "objectNameAndRouteGroup": "Abbreviation used as parameter object name and route group",
@@ -983,6 +975,7 @@
           "hideSearch": "Hide Search Condition",
           "verificationError": "Verification Error Message",
           "dataSourceConfigNote": "Data Source Configuration (If your programming foundation is not strong, it may cause the automated code to be unusable)",
+          "dataSourceNameNote": "Database [GVA database if left blank] ",
           "associationMode": "Association Mode",
           "oneToOne": "One-to-One",
           "oneToMany": "One-to-Many",
@@ -1072,6 +1065,38 @@
         "templateInfoFormatError": "The template information format is incorrect, please check",
         "exportConditionError": "Please fill in the complete export conditions",
         "completeAssociationError": "Please fill in the complete association"
+      },
+      "installPlugin": {
+        "dragOrClickUpload": "Drag or click to upload",
+        "uploadPackage": "Please drag the installation package zip here to upload"
+      },
+      "pubPlug": {
+        "pluginSupport": "Currently, only standard plugins (generated through the plugin template to create a standard directory) are supported. Please package non-standard plugins yourself.",
+        "pluginNameInput": "Enter the plugin name in the plugin template",
+        "menuSelectionNote": "Please select only sub-menus in the shuttle box",
+        "menuGroupNameInput": "Please enter the menu group name, e.g., Announcement Management",
+        "menuNamePathInput": "Please enter the menu name/path",
+        "optionalMenu": "Optional Menu",
+        "useMenu": "Use Menu",
+        "remove": "Remove",
+        "selected": "Selected",
+        "defineMenuInstall": "Define Menu Installation",
+        "apiDescriptionPathInput": "Please enter API description/PATH",
+        "optionalAPI": "Optional API",
+        "useAPI": "Use API",
+        "defineAPIInstall": "Define API Installation",
+        "packagePlugin": "Package Plugin",
+        "package": "Package",
+        "closePackage": "Close Package",
+        "enterMenuGroupName": "Please enter the menu group name",
+        "selectAtLeastOneMenu": "Please select at least one menu",
+        "enterPluginName": "Please enter the plugin name",
+        "generateInitialMenu": "Generate Initial Menu",
+        "generate": "Generate",
+        "closeGenerateMenu": "Close Generate Menu",
+        "selectAtLeastOneAPI": "Please select at least one API",
+        "enterPluginNameAgain": "Please enter the plugin name again",
+        "closeGenerateAPI": "Close Generate API"
       }
     }
   }

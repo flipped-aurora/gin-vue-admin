@@ -84,12 +84,6 @@
     "rollbackSuccess": "نجاح الاستعادة",
     "rolledBack": "التراجع"
   },
-  "datas": {
-    "datasNote": "يتم استخدام هذه الوظيفة فقط لإنشاء جدول علاقات many2many للأدوار والأدوار، ويجب أيضا دمج الاستخدام المحدد مع الجدول لتنفيذ العمل، للحصول على التفاصيل، راجع نموذج التعليمات البرمجية (مثال العميل) لا ينصح باستخدام هذه الوظيفة، يوصى باستخدام سوق المكونات الإضافية [وظيفة إدارة المؤسسة (انقر للانتقال)] لإدارة أذونات الموارد.",
-    "resourceSetupSuccess": "تم إعداد المورد بنجاح",
-    "thisRole": "هذا الدور",
-    "thisRoleAndSubRoles": "هذا الدور و الأدوار الفرعية"
-  },
   "error": {
     "message1": "تم اختطاف الصفحة بواسطة قوى غامضة، يرجى الاتصال بنا للإصلاح",
     "message2": "المشكلة الشائعة هي أن هذا الدور الحالي ليس لديه هذا المسار، إذا كنت متأكدًا من أنك تريد استخدام هذا المسار، يرجى الانتقال إلى إدارة الأدوار لتخصيصه",
@@ -157,7 +151,8 @@
     "yes": "نعم",
     "cannotBeEmpty": "لا يمكن ان يكون فارغا",
     "cancelModification": "إلغاء التعديلات",
-    "import": "إستيراد"
+    "import": "إستيراد",
+    "enterDescription": "يرجى إدخال الوصف"
   },
   "historyComponent": {
     "closeAll": "إغلاق الكل",
@@ -250,12 +245,6 @@
     "language": "اللغات",
     "login": "تسجيل الدخول"
   },
-  "menus": {
-    "home": "الصفحة الرئيسية",
-    "menuSetupSuccess": "تم إعداد القائمة بنجاح!",
-    "setAsHome": "تعيين كصفحة رئيسية",
-    "assignButton": "تعيين زر"
-  },
   "setting": {
     "businessBlack": "أسود الأعمال",
     "simpleWhite": "أبيض بسيط"
@@ -279,39 +268,11 @@
     }
   },
   "plugins": {
-    "pluginSupport": "حاليًا، يتم دعم المكونات الإضافية القياسية فقط (من خلال قالب المكون الإضافي لإنشاء دليل قياسي)، يرجى تجميع المكونات الإضافية غير القياسية بنفسك",
-    "pluginNameInput": "أدخل اسم المكون الإضافي في قالب المكون الإضافي",
-    "menuSelectionNote": "يرجى اختيار القوائم الفرعية فقط في صندوق النقل",
-    "menuGroupNameInput": "يرجى إدخال اسم مجموعة القائمة، مثال: إدارة الإعلانات",
-    "menuNamePathInput": "يرجى إدخال اسم/مسار القائمة",
-    "optionalMenu": "القائمة الاختيارية",
-    "useMenu": "استخدام القائمة",
-    "remove": "إزالة",
-    "selected": "محدد",
-    "defineMenuInstall": "تحديد تثبيت القائمة",
-    "apiDescriptionPathInput": "يرجى إدخال وصف/مسار API",
-    "optionalAPI": "API اختياري",
-    "useAPI": "استخدام API",
-    "defineAPIInstall": "تحديد تثبيت API",
-    "packagePlugin": "تجميع المكون الإضافي",
-    "package": "تجميع",
-    "closePackage": "إغلاق التجميع",
-    "enterMenuGroupName": "يرجى إدخال اسم مجموعة القائمة",
-    "selectAtLeastOneMenu": "يرجى اختيار قائمة واحدة على الأقل",
-    "enterPluginName": "يرجى إدخال اسم المكون الإضافي",
-    "generateInitialMenu": "إنشاء القائمة الأولية",
-    "generate": "إنشاء",
-    "closeGenerateMenu": "إغلاق إنشاء القائمة",
-    "selectAtLeastOneAPI": "يرجى اختيار API واحد على الأقل",
-    "enterPluginNameAgain": "يرجى إدخال اسم المكون الإضافي مرة أخرى",
-    "closeGenerateAPI": "إغلاق إنشاء API",
     "checkMessage": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
     "overwriteMessage": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/menu. هل تريد المتابعة؟",
     "overwriteWarning": "سيؤدي النقر إلى الكتابة فوق server/plugin/{plugName}/initialize/api. هل تريد المتابعة؟",
     "generateInitialAPI": "إنشاء API الأولي",
     "checkMsg": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
-    "dragOrClickUpload": "اسحب أو انقر للتحميل",
-    "uploadPackage": "يرجى سحب حزمة التثبيت zip إلى هنا للتحميل",
     "announcement": {
         "info": {
           "title": "عنوان",
@@ -502,7 +463,35 @@
       }
     },
     "superAdmin": {
+      "authority" : {
+        "components": {
+          "apis": {
+            "filterName": "تصفية بلإسم",
+            "filterPath": "تصفية بالمسار"
+          },
+          "datas": {
+            "datasNote": "يتم استخدام هذه الوظيفة فقط لإنشاء جدول علاقات many2many للأدوار والأدوار، ويجب أيضا دمج الاستخدام المحدد مع الجدول لتنفيذ العمل، للحصول على التفاصيل، راجع نموذج التعليمات البرمجية (مثال العميل) لا ينصح باستخدام هذه الوظيفة، يوصى باستخدام سوق المكونات الإضافية [وظيفة إدارة المؤسسة (انقر للانتقال)] لإدارة أذونات الموارد.",
+            "resourceSetupSuccess": "تم إعداد المورد بنجاح",
+            "thisRole": "هذا الدور",
+            "thisRoleAndSubRoles": "هذا الدور و الأدوار الفرعية"
+          },
+          "menus": {
+            "home": "الصفحة الرئيسية",
+            "menuSetupSuccess": "تم إعداد القائمة بنجاح!",
+            "setAsHome": "تعيين كصفحة رئيسية",
+            "assignButton": "تعيين زر"
+          }
+        }
+      },
       "menu": {
+        "components": {
+          "componentsCascader": {
+            "selectFilePathNote": "الرجاء تحديد مسار الملف",
+            "filePathNote": "الصفحة: view/xxx/xx.vue الإضافة: plugin/xx/xx.vue",
+            "manualInput": "إدخال يدوى",
+            "quickSelection": "إختيار سريع"
+          }
+        },
         "addMenu": "إضافة قائمة",
         "addMenuParameters": "إضافة معلمات القائمة",
         "addParameter": "إضافة معلمة",
@@ -512,7 +501,7 @@
         "closeTabNote": "هل تريد إغلاق التبويب تلقائيًا",
         "deleteAllRolesConfirm": "سيؤدي هذا الإجراء إلى حذف جميع الأدوار تحت هذه القائمة بشكل دائم، هل تريد المتابعة؟",
         "displayName": "اسم العرض",
-        "titleNote": "مثال: system.menu.website",
+        "titleNote": "مثال: system.view.superAdmin.menu.website",
         "editMenu": "تحرير القائمة",
         "enterFilePathNote": "يرجى إدخال مسار الملف",
         "enterMenuDisplayNameNote": "يرجى إدخال اسم عرض القائمة",
@@ -522,7 +511,6 @@
         "icon": "أيقونة",
         "keepAliveNote": "هل تريد الاحتفاظ بصفحة التخزين المؤقت",
         "newMenuNote": "إضافة قائمة جديدة، تحتاج إلى إعداد الأذونات في إدارة الأدوار لاستخدامها",
-        "filePathNote": "الصفحة: view/xxx/xx.vue الإضافة: plugin/xx/xx.vue",
         "parameterType": "نوع المعلمة",
         "parameterValue": "قيمة المعلمة",
         "paremeterKey": "مفتاح المعلمة",
@@ -624,7 +612,6 @@
         "details": "التفاصيل",
         "enterDictName": "يرجى إدخال اسم القاموس (بالصينية)",
         "enterDictDataType": "يرجى إدخال اسم القاموس (بالإنجليزية)",
-        "enterDescription": "يرجى إدخال الوصف",
         "addDictionary": "إضافة قاموس",
         "editDictionary": "تعديل القاموس",
         "listOfDictionaries": "قائمة القواميس"
@@ -836,8 +823,13 @@
         "deletePackageNote": "هذا الإجراء سيحذف فقط تخزين الحزمة في قاعدة البيانات، يرجى حذف الهيكل المقابل في الخلفية يدويًا للحفاظ على التناسق مع قاعدة البيانات"
       },
       "autoCode": {
+        "getAiPath": "الحصول على مسار الذكاء الإصطناعى",
+        "aiCodeNote": "الآن مجانًا تمامًا\nحاول وصف جدولك ودع الذكاء الاصطناعي يساعدك في إكماله. \nتحتاج هذه الوظيفة إلى الانتقال إلى المركز الشخصي لسوق المكونات الإضافية للحصول على مسار الذكاء الاصطناعي الخاص بك، وملء مسار الذكاء الاصطناعي في الكود التلقائي-->مسار ai ضمن config.yaml، وإعادة تشغيل المشروع لاستخدامه . \nاضغط على Ctrl+Enter أو Cmd+Enter للإنشاء مباشرةً",
+        "generate": "إنشاء",
+        "aiNote1": "【مجاني تمامًا】انتقل إلى",
+        "aiNote2": "المركز الشخصي لسوق المكونات الإضافية ",
+        "aiNote3": "قم بتقديم طلب للحصول على AIPath واملأ خاصية ai-path في config.yaml لاستخدامها.",
         "actionBar": "شريط الإجراءات:",
-        "aiCodeNote": "[بيتا] جرب وصف جدولك ودع الذكاء الاصطناعي يساعدك في إكماله.\nحاليًا في مرحلة الاختبار، يرجى تقديم ملاحظات إذا واجهت أي مشاكل.\nتتطلب هذه الميزة الحصول على مسار الذكاء الاصطناعي الخاص بك من مركز السوق الشخصي، وملء مسار الذكاء الاصطناعي في config.yaml تحت autocode-->ai-path، وإعادة تشغيل المشروع لاستخدامه.",
         "autoAPIDBCreate": "إنشاء API تلقائيًا",
         "autoAPIDBTip": "ملاحظة: تسجيل API الذي تم إنشاؤه تلقائيًا في قاعدة البيانات",
         "autoCodeNote": "هذه الميزة للاستخدام في بيئة التطوير، لا يُنصح باستخدامها في الإنتاج. انقر علي لرؤية تأثير الاستخدام المحدد.",
@@ -881,7 +873,7 @@
         "structChineseNameNote": "الوصف المستخدم كوصفي API التلقائي",
         "structName": "اسم الهيكل",
         "structNameNote": "تحويل الحرف الأول تلقائيًا إلى حرف كبير",
-        "table": "جدو��",
+        "table": "الجدول",
         "tableName": "اسم الجدول",
         "tableNameNote": "تحديد اسم الجدول (اختياري)",
         "aiContent": "Xiao Qi لديه احتمال فشل، مفتوح لجميع المستخدمين (إذا فشل، فقط أعد توليده).",
@@ -898,6 +890,7 @@
         "structureSimpleName": "اختصار الهيكل",
         "StructureOverview": "نظرة عامة على الهيكل",
         "structNameInput": "يرجى إدخال اختصار الهيكل",
+        "structNameIs": "اسم الهيكل هو ",
         "fineNameInput": "يرجى إدخال اسم الملف",
         "capitalizeFirstLetterAutomatically": "تحويل الحرف الأول تلقائيًا إلى حرف كبير",
         "objectNameAndRouteGroup": "الاختصار المستخدم كاسم كائن المعلمة ومجموعة المسار",
@@ -974,6 +967,7 @@
           "hideSearch": "إخفاء شرط البحث",
           "verificationError": "رسالة خطأ التحقق",
           "dataSourceConfigNote": "تكوين مصدر البيانات (هذا تكوين متقدم، إذا لم تكن لديك أساسيات برمجة قوية، فقد يتسبب ذلك في عدم قابلية استخدام الكود التلقائي)",
+          "dataSourceNameNote": "قاعدة البيانات [إذا تركت فارغة، ستكون قاعدة بيانات GVA] ",
           "associationMode": "وضع الترابط",
           "oneToOne": "واحد لواحد",
           "oneToMany": "واحد لعدة",
@@ -1063,6 +1057,38 @@
         "templateInfoFormatError": "تنسيق معلومات القالب غير صحيح، يرجى التحقق",
         "exportConditionError": "يرجى ملء شروط التصدير بالكامل",
         "completeAssociationError": "يرجى ملء شروط الارتباط بالكامل"
+      },
+      "installPlugin": {
+        "dragOrClickUpload": "اسحب أو انقر للتحميل",
+        "uploadPackage": "يرجى سحب حزمة التثبيت zip إلى هنا للتحميل"
+      },
+      "pubPlug": {
+        "pluginSupport": "حاليًا، يتم دعم المكونات الإضافية القياسية فقط (من خلال قالب المكون الإضافي لإنشاء دليل قياسي)، يرجى تجميع المكونات الإضافية غير القياسية بنفسك",
+        "pluginNameInput": "أدخل اسم المكون الإضافي في قالب المكون الإضافي",
+        "menuSelectionNote": "يرجى اختيار القوائم الفرعية فقط في صندوق النقل",
+        "menuGroupNameInput": "يرجى إدخال اسم مجموعة القائمة، مثال: إدارة الإعلانات",
+        "menuNamePathInput": "يرجى إدخال اسم/مسار القائمة",
+        "optionalMenu": "القائمة الاختيارية",
+        "useMenu": "استخدام القائمة",
+        "remove": "إزالة",
+        "selected": "محدد",
+        "defineMenuInstall": "تحديد تثبيت القائمة",
+        "apiDescriptionPathInput": "يرجى إدخال وصف/مسار API",
+        "optionalAPI": "API اختياري",
+        "useAPI": "استخدام API",
+        "defineAPIInstall": "تحديد تثبيت API",
+        "packagePlugin": "تجميع المكون الإضافي",
+        "package": "تجميع",
+        "closePackage": "إغلاق التجميع",
+        "enterMenuGroupName": "يرجى إدخال اسم مجموعة القائمة",
+        "selectAtLeastOneMenu": "يرجى اختيار قائمة واحدة على الأقل",
+        "enterPluginName": "يرجى إدخال اسم المكون الإضافي",
+        "generateInitialMenu": "إنشاء القائمة الأولية",
+        "generate": "إنشاء",
+        "closeGenerateMenu": "إغلاق إنشاء القائمة",
+        "selectAtLeastOneAPI": "يرجى اختيار API واحد على الأقل",
+        "enterPluginNameAgain": "يرجى إدخال اسم المكون الإضافي مرة أخرى",
+        "closeGenerateAPI": "إغلاق إنشاء API"
       }
     }
   }

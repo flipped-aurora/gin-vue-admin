@@ -267,5 +267,5 @@ cors:
       allow-credentials: true # 布尔值
 language:
     language: en
-    defualt-languge: zh # default language to be used as a fullback in case of translation to current language was not exist.
+    default-language: zh # default language to be used as a fullback in case of translation to current language was not exist.
     dir: ./resource/lang/

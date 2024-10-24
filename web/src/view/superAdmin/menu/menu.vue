@@ -165,24 +165,9 @@
               :label="t('view.superAdmin.menu.filePath')"
               prop="component"
             >
-              <el-select
-                v-model="form.component"
-                filterable
-                allow-create
-                autocomplete="off"
-                style="width: 100%"
-                :placeholder="t('view.superAdmin.menu.filePathNote')"
-                default-first-option
-                @change="fmtComponent"
-              >
-                <el-option
-                  v-for="(item,path) in pathOptions"
-                  :key="path"
-                  :label="path"
-                  :value="path"
-                />
-              </el-select>
-              <span style="font-size: 12px; margin-right: 12px">{{ t('view.superAdmin.menu.subMenuNote') }}</span><el-button
+              <components-cascader :component="form.component" @change="fmtComponent" />
+              <span style="font-size: 12px; margin-right: 12px">{{ t('view.superAdmin.menu.subMenuNote') }}</span>
+              <el-button
                 style="margin-top: 4px"
                 @click="form.component = 'view/routerHolder.vue'"
               >
@@ -198,7 +183,7 @@
               <el-input
                 v-model="form.meta.title"
                 autocomplete="off"
-                placeholder="示例：system.view.superAdmin.menu.website"
+                :placeholder="t('view.superAdmin.menu.titleNote')"
               />
             </el-form-item>
           </el-col>
@@ -557,28 +542,20 @@ import {
 import icon from '@/view/superAdmin/menu/icon.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
-import { reactive, ref, onMounted } from 'vue'
+import {reactive, ref} from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
-import pathInfo from '@/pathInfo.json'
-
 import { toDoc } from '@/utils/doc'
-import { toLowerCase } from '@/utils/stringFun'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import {toLowerCase} from "@/utils/stringFun";
+import ComponentsCascader from "@/view/superAdmin/menu/components/components-cascader.vue";
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+import pathInfo from "@/pathInfo.json";
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
   name: 'Menus',
-})
-
-const pathOptions = reactive({})
-
-onMounted(()=>{
-  for (let pathInfoKey in pathInfo) {
-    // 取消掉最前面的 /src/
-    pathOptions[pathInfoKey.replace(/^\/src\//, '')] = pathInfo[pathInfoKey]
-  }
 })
 
 const rules = reactive({
@@ -612,9 +589,9 @@ const addParameter = (form) => {
   })
 }
 
-const fmtComponent = () => {
-  form.value.component = form.value.component.replace(/\\/g, '/')
-  form.value.name = toLowerCase(pathOptions[form.value.component])
+const fmtComponent = (component) => {
+  form.value.component = component.replace(/\\/g, '/')
+  form.value.name = toLowerCase(pathInfo["/src/"+component])
   form.value.path = form.value.name
 }
 

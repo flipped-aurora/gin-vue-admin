@@ -36,7 +36,7 @@
                   :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
                   @click="() => setDefault(data)"
                 >
-                  {{ row.defaultRouter === data.name? t('menus.home') : t('menus.setAsHome') }}
+                  {{ row.defaultRouter === data.name? t('view.superAdmin.authority.components.menus.home') : t('view.superAdmin.authority.components.menus.setAsHome') }}
                 </el-button>
               </span>
               <span v-if="data.menuBtn.length">
@@ -45,7 +45,7 @@
                   link
                   @click="() => OpenBtn(data)"
                 >
-                {{ t('menus.assignButton') }}
+                {{ t('view.superAdmin.authority.components.menus.assignButton') }}
                 </el-button>
               </span>
             </span>
@@ -55,7 +55,7 @@
     </div>
     <el-dialog
       v-model="btnVisible"
-      :title="t('menus.assignButton')"
+      :title="t('view.superAdmin.authority.components.menus.assignButton')"
       destroy-on-close
     >
       <el-table
@@ -98,9 +98,9 @@ import {
 import { getAuthorityBtnApi, setAuthorityBtnApi } from '@/api/authorityBtn'
 import { nextTick, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
   name: 'Menus'
@@ -175,7 +175,7 @@ const relation = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: t('menus.menuSetupSuccess')
+      message: t('view.superAdmin.authority.components.menus.menuSetupSuccess')
     })
   }
 }

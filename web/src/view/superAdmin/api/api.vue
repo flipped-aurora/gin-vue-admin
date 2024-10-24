@@ -204,12 +204,12 @@
         <div class="flex justify-between items-center">
           <span class="text-lg"> {{ t('view.api.synchronousRouting') }} </span>
           <div>
-            <el-button @click="closeSyncDialog">
+            <el-button :loading="apiCompletionLoading" @click="closeSyncDialog">
               {{ t('general.close') }}
             </el-button>
             <el-button
               type="primary"
-              :loading="syncing"
+              :loading="syncing||apiCompletionLoading"
               @click="enterSyncDialog"
             >
               {{ t('general.confirm') }}
@@ -218,8 +218,17 @@
         </div>
       </template>
 
-      <h4>{{ t('view.api.newAddedRouteNote1') }} <span class="text-xs text-gray-500 ml-2 font-normal">{{ t('view.api.newAddedRouteNote2') }}</span></h4>
+      <h4>{{ t('view.api.newAddedRouteNote1') }} <span class="text-xs text-gray-500 mx-2 font-normal">{{ t('view.api.newAddedRouteNote2') }}</span>
+        <el-button type="primary" size="small" @click="apiCompletion">
+          <el-icon size="18">
+            <ai-gva />
+          </el-icon>
+          自动填充
+        </el-button>
+      </h4>
       <el-table
+         v-loading="syncing||apiCompletionLoading"
+         element-loading-text="小淼正在思考..."
         :data="syncApiData.newApis"
       >
         <el-table-column
@@ -481,9 +490,11 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import ExportExcel from '@/components/exportExcel/exportExcel.vue'
 import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
 import ImportExcel from '@/components/exportExcel/importExcel.vue'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import {butler} from "@/api/autoCode";
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+const { t } = useI18n() // added by mohamed hassan to support multilingual
+
 
 defineOptions({
   name: 'Api',
@@ -845,6 +856,34 @@ const deleteApiFunc = async(row) => {
         getGroup()
       }
     })
+}
+const apiCompletionLoading = ref(false)
+const apiCompletion = async () =>{
+  apiCompletionLoading.value = true
+  const routerPaths = syncApiData.value.newApis.filter(item => !item.apiGroup || !item.description).map(item => item.path)
+  const res = await butler({data:routerPaths,command:'apiCompletion'})
+  apiCompletionLoading.value = false
+  if (res.code === 0) {
+    try{
+      const data = JSON.parse(res.data)
+      syncApiData.value.newApis.forEach(item => {
+        const target = data.find(d => d.path === item.path)
+        if(target){
+          if(!item.apiGroup){
+            item.apiGroup = target.apiGroup
+          }
+          if (!item.description) {
+            item.description = target.description
+          }
+        }
+      })
+    } catch (e) {
+      ElMessage({
+        type: 'error',
+        message: 'AI自动填充失败,请重新生成'
+      })
+    }
+  }
 }
 
 </script>

@@ -89,12 +89,6 @@
     "rollbackSuccess": "回滚成功",
     "rolledBack": "已回滚"
   },
-  "datas": {
-    "datasNote": "此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。",
-    "resourceSetupSuccess": "资源设置成功",
-    "thisRole": "本角色",
-    "thisRoleAndSubRoles": "本角色及子角色"
-  },
   "error": {
     "message1": "页面被神秘力量吸走了，请联系我们修复",
     "message2": "常见问题为当前此角色无当前路由，如果确定要使用本路由，请到角色管理进行分配",
@@ -162,7 +156,8 @@
     "yes": "是",
     "cannotBeEmpty": "不能为空",
     "cancelModification": "取消修改",
-    "import": "导入"
+    "import": "导入",
+    "enterDescription": "请输入描述"
   },
   "historyComponent": {
     "closeAll": "关闭所有",
@@ -256,13 +251,6 @@
     "language": "Languages",
     "login": "登 录"
   },
-  "menus": {
-    "": "",
-    "home": "首页",
-    "menuSetupSuccess": "菜单设置成功!",
-    "setAsHome": "设为首页",
-    "assignButton": "分配按钮"
-  },
   "setting": {
     "": "",
     "businessBlack": "商务黑",
@@ -288,39 +276,11 @@
     }
   },
   "plugins": {
-      "pluginSupport": "目前只支持标准插件（通过插件模板生成的标准目录插件），非标准插件请自行打包",
-      "pluginNameInput": "插件模板处填写的【插件名】",
-      "menuSelectionNote": "穿梭框请只选择子级菜单即可",
-      "menuGroupNameInput": "请输入菜单组名，例：公告管理",
-      "menuNamePathInput": "请输入菜单名称/路径",
-      "optionalMenu": "可选菜单",
-      "useMenu": "使用菜单",
-      "remove": "移除",
-      "selected": "选中",
-      "defineMenuInstall": "定义安装菜单",
-      "apiDescriptionPathInput": "请输入API描述/PATH",
-      "optionalAPI": "可选API",
-      "useAPI": "使用API",
-      "defineAPIInstall": "定义安装API",
-      "packagePlugin": "打包插件",
-      "package": "打包",
-      "closePackage": "关闭打包",
-      "enterMenuGroupName": "请填写菜单组名",
-      "selectAtLeastOneMenu": "请至少选择一个菜单",
-      "enterPluginName": "请填写插件名",
-      "generateInitialMenu": "生成初始菜单",
-      "generate": "生成",
-      "closeGenerateMenu": "关闭生成菜单",
-      "selectAtLeastOneAPI": "请至少选择一个API",
-      "enterPluginNameAgain": "请填写插件名",
-      "closeGenerateAPI": "关闭生成API",
       "checkMessage": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
       "overwriteMessage": "点击后将会覆盖server下的/plugin/{plugName}/initialize/menu. 是否继续?",
       "overwriteWarning": "点击后将会覆盖server下的/plugin/{plugName}/initialize/api. 是否继续?",
       "generateInitialAPI": "生成初始API",
       "checkMsg": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
-      "dragOrClickUpload": "拖拽或点击上传",
-      "uploadPackage": "请把安装包的zip拖拽至此处上传",
       "announcement": {
         "info": {
           "title": "标题",
@@ -511,7 +471,35 @@
       }
     },
     "superAdmin": {
+      "authority" : {
+        "components": {
+          "apis": {
+            "filterName": "筛选名字",
+            "filterPath": "筛选路径"
+          },
+          "datas": {
+            "datasNote": "此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。",
+            "resourceSetupSuccess": "资源设置成功",
+            "thisRole": "本角色",
+            "thisRoleAndSubRoles": "本角色及子角色"
+          },
+          "menus": {
+            "home": "首页",
+            "menuSetupSuccess": "菜单设置成功!",
+            "setAsHome": "设为首页",
+            "assignButton": "分配按钮"
+          }
+        }
+      },
       "menu": {
+        "components": {
+          "componentsCascader": {
+            "selectFilePathNote": "请选择文件路径",
+            "filePathNote": "页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue",
+            "manualInput": "手动输入",
+            "quickSelection": "快捷选择"
+          }
+        },
         "addMenu": "新增菜单",
         "addMenuParameters": "新增菜单参数",
         "addParameter": "添加参数",
@@ -521,7 +509,7 @@
         "closeTabNote": "是否自动关闭tab",
         "deleteAllRolesConfirm": "此操作将永久删除所有角色下该菜单, 是否继续?",
         "displayName": "展示名称",
-        "titleNote": "示例：system.menu.website",
+        "titleNote": "示例：system.view.superAdmin.menu.website",
         "editMenu": "编辑菜单",
         "enterFilePathNote": "请输入文件路径",
         "enterMenuDisplayNameNote": "请输入菜单展示名称",
@@ -531,7 +519,6 @@
         "icon": "图标",
         "keepAliveNote": "是否keepAlive缓存页面",
         "newMenuNote": "新增菜单，需要在角色管理内配置权限才可使用",
-        "filePathNote": "页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue",
         "parameterType": "参数类型",
         "parameterValue": "参数值",
         "paremeterKey": "参数key",
@@ -633,7 +620,6 @@
         "details": "详情",
         "enterDictName": "请输入字典名（中）",
         "enterDictDataType": "请输入字典名（英)",
-        "enterDescription": "请输入描述",
         "addDictionary": "添加字典",
         "editDictionary": "修改字典",
         "listOfDictionaries": "字典列表"
@@ -830,8 +816,12 @@
         "cancelRestart": "取消重启"
       },
       "autoCode": {
+        "getAiPath": "获取AiPath",
+        "aiCodeNote": "现已完全免费\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成",
+        "aiNote1": "【完全免费】前往",
+        "aiNote2": "插件市场个人中心",
+        "aiNote3": "申请AIPath，填入config.yaml的ai-path属性即可使用。",
         "actionBar": "操作栏:",
-        "aiCodeNote": "【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode--\u003eai-path，重启项目即可使用。",
         "autoAPIDBCreate": "自动创建API",
         "autoAPIDBTip": "注：把自动生成的API注册进数据库",
         "autoCodeNote": "此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。",
@@ -892,6 +882,7 @@
         "structureSimpleName": "结构简称",
         "StructureOverview": "结构简介",
         "structNameInput": "请输入Struct简称",
+        "structNameIs": "结构体名称为",
         "fineNameInput": "请输入文件名称",
         "capitalizeFirstLetterAutomatically": "首字母自动大写",
         "objectNameAndRouteGroup": "简称作为参数对象名和路由组",
@@ -968,6 +959,7 @@
           "hideSearch": "隐藏查询条件",
           "verificationError": "校验失败文案",
           "dataSourceConfigNote": "数据源配置（此配置为高级配置，如编程基础不牢，可能导致自动化代码不可用）",
+          "dataSourceNameNote": "数据库【不填则为GVA库】",
           "associationMode": "关联模式",
           "oneToOne": "一对一",
           "oneToMany": "一对多",
@@ -1099,6 +1091,38 @@
         "templateInfoFormatError": "模板信息格式不正确，请检查",
         "exportConditionError": "请填写完整的导出条件",
         "completeAssociationError": "请填写完整的关联"
+      },
+      "installPlugin": {
+        "dragOrClickUpload": "拖拽或点击上传",
+        "uploadPackage": "请把安装包的zip拖拽至此处上传"
+      },
+      "pubPlug": {
+        "pluginSupport": "目前只支持标准插件（通过插件模板生成的标准目录插件），非标准插件请自行打包",
+        "pluginNameInput": "插件模板处填写的【插件名】",
+        "menuSelectionNote": "穿梭框请只选择子级菜单即可",
+        "menuGroupNameInput": "请输入菜单组名，例：公告管理",
+        "menuNamePathInput": "请输入菜单名称/路径",
+        "optionalMenu": "可选菜单",
+        "useMenu": "使用菜单",
+        "remove": "移除",
+        "selected": "选中",
+        "defineMenuInstall": "定义安装菜单",
+        "apiDescriptionPathInput": "请输入API描述/PATH",
+        "optionalAPI": "可选API",
+        "useAPI": "使用API",
+        "defineAPIInstall": "定义安装API",
+        "packagePlugin": "打包插件",
+        "package": "打包",
+        "closePackage": "关闭打包",
+        "enterMenuGroupName": "请填写菜单组名",
+        "selectAtLeastOneMenu": "请至少选择一个菜单",
+        "enterPluginName": "请填写插件名",
+        "generateInitialMenu": "生成初始菜单",
+        "generate": "生成",
+        "closeGenerateMenu": "关闭生成菜单",
+        "selectAtLeastOneAPI": "请至少选择一个API",
+        "enterPluginNameAgain": "请填写插件名",
+        "closeGenerateAPI": "关闭生成API"
       }
     }
   }

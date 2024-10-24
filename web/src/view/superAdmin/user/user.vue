@@ -22,7 +22,7 @@
         <el-form-item :label="t('view.superAdmin.user.phone')">
           <el-input
               v-model="searchInfo.phone"
-              placeholder="t('view.superAdmin.user.phone')"
+              :placeholder="t('view.superAdmin.user.phone')"
           />
         </el-form-item>
         <el-form-item :label="t('view.superAdmin.user.email')">

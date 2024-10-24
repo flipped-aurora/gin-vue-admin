@@ -9,7 +9,7 @@
       <el-table-column prop="ranking" :label="t('view.dashboard.components.table.ranking')" width="80" align="center" />
       <el-table-column prop="title" :label="t('view.dashboard.components.table.contentTitle')" show-overflow-tooltip />
       <el-table-column prop="click_num" :label="t('view.dashboard.components.table.attention')" width="100" />
-      <el-table-column prop="hot" label="热度值" width="100"  />
+      <el-table-column prop="hot" :label="t('view.dashboard.components.table.heat')" width="100"  />
     </el-table>
   </div>
 </template>

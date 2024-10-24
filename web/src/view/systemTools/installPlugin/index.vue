@@ -10,11 +10,11 @@
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">
-        {{ t('view.plugins.dragOrClickUpload') }}
+        {{ t('view.systemTools.installPlugin.dragOrClickUpload') }}
       </div>
       <template #tip>
         <div class="el-upload__tip">
-          {{ t('view.plugins.uploadPackage') }}
+          {{ t('view.systemTools.installPlugin.uploadPackage') }}
         </div>
       </template>
     </el-upload>

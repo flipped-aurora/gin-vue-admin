@@ -62,7 +62,7 @@
           <el-switch v-model="formData.status" :active-text="t('general.enable')" :inactive-text="t('general.disable')" />
         </el-form-item>
         <el-form-item :label="t('view.systemTools.autoPkg.description')" prop="desc">
-          <el-input v-model="formData.desc" :placeholder="t('view.dictionary.sysDictionary.enterDescription')" clearable :style="{ width: '100%' }" />
+          <el-input v-model="formData.desc" :placeholder="t('general.enterDescription')" clearable :style="{ width: '100%' }" />
         </el-form-item>
       </el-form>
     </el-drawer>
@@ -117,7 +117,7 @@ const rules = ref({
   desc: [
     {
       required: true,
-      message: t('view.dictionary.sysDictionary.enterDescription'),
+      message: t('general.enterDescription'),
       trigger: 'blur',
     },
   ],

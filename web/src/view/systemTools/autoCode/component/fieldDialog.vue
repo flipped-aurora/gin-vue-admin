@@ -197,7 +197,7 @@
           >
             <el-select
                 v-model="middleDate.dataSource.dbName"
-                placeholder="数据库【不填则为GVA库】"
+                :placeholder="t('view.systemTools.autoCode.fieldDialog.dataSourceNameNote')"
                 @change="dbNameChange"
                 clearable
             >

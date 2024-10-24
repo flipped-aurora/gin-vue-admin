@@ -1,9 +1,11 @@
 package system
 
 import (
+	"fmt"
 	"io"
 	"strings"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/goccy/go-json"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -106,18 +108,24 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 }
 
 func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
-	prompt := c.Query("prompt")
-	mode := c.Query("mode")
-	params := make(map[string]string)
-	params["prompt"] = prompt
-	params["mode"] = mode
-	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", "api/chat/ai")
+	var llm common.JSONMap
+	err := c.ShouldBindJSON(&llm)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if global.GVA_CONFIG.AutoCode.AiPath == "" {
+		response.FailWithMessage("请先前往插件市场个人中心获取AiPath并填入config.yaml中", c)
+		return
+	}
+
+	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("api/chat/%s", llm["mode"]))
 	res, err := request.HttpRequest(
 		path,
 		"POST",
 		nil,
-		params,
 		nil,
+		llm,
 	)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_auto_code.largeModelCreationFail"), zap.Error(err))

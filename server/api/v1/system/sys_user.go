@@ -1,9 +1,10 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"

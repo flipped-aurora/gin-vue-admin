@@ -10,6 +10,9 @@
         "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
     },
     "dependencies": {
+        "@codemirror/lang-go": "^6.0.1",
+        "@codemirror/lang-javascript": "^6.2.2",
+        "@codemirror/theme-one-dark": "^6.1.2",
         "@element-plus/icons-vue": "^2.3.1",
         "@form-create/designer": "^3.2.6",
         "@form-create/element-ui": "^3.2.10",
@@ -21,6 +24,7 @@
         "@wangeditor/editor-for-vue": "^5.1.12",
         "axios": "^1.7.7",
         "chokidar": "^4.0.0",
+        "codemirror": "^6.0.1",
         "core-js": "^3.38.1",
         "default-passive-events": "^2.0.0",
         "echarts": "5.5.1",
@@ -41,6 +45,7 @@
         "vform3-builds": "^3.0.10",
         "vite-auto-import-svg": "^1.1.0",
         "vue": "^3.5.7",
+        "vue-codemirror": "^6.1.1",
         "vue-echarts": "^7.0.3",
         "vue-router": "^4.4.3",
         "vuedraggable": "^4.1.0"

@@ -215,22 +215,34 @@
               </div>
             </el-form-item>
             <el-form-item label="Api方法:">
-              <div
-                id="api"
-                class="h-[500px] w-full overflow-y-scroll"
-              ></div>
+              <codemirror
+                v-model="autoFunc.apiFunc"
+                placeholder="Code goes here..."
+                :style="{ height: '300px',width:'100%' }"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions=" [go(), oneDark]"
+              />
             </el-form-item>
             <el-form-item label="Server方法:">
-              <div
-                id="server"
-                class="h-[500px] w-full overflow-y-scroll"
-              ></div>
+              <codemirror
+                v-model="autoFunc.serverFunc"
+                placeholder="Code goes here..."
+                :style="{ height: '300px',width:'100%' }"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions=" [go(), oneDark]"
+              />
             </el-form-item>
             <el-form-item label="前端JSAPI方法:">
-              <div
-                id="js"
-                class="h-[500px] w-full overflow-y-scroll"
-              ></div>
+              <codemirror
+                v-model="autoFunc.jsFunc"
+                placeholder="Code goes here..."
+                :style="{ height: '300px',width:'100%' }"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions=" [javascript(), oneDark]"
+              />
             </el-form-item>
           </template>
         </el-form>
@@ -250,6 +262,13 @@ import  {useAppStore} from "@/pinia";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from 'highlight.js'
+
+import { Codemirror } from 'vue-codemirror'
+  import { javascript } from '@codemirror/lang-javascript'
+  import { go } from '@codemirror/lang-go'
+  import { oneDark } from '@codemirror/theme-one-dark'
+
+
 const appStore = useAppStore()
 
 defineOptions({

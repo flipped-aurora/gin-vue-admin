@@ -140,6 +140,7 @@
       v-model="funcFlag"
       size="60%"
       :show-close="false"
+      :close-on-click-modal="false"
     >
       <template #header>
         <div class="flex justify-between items-center">
@@ -148,12 +149,14 @@
             <el-button
               type="primary"
               @click="runFunc"
+              :loading="aiLoading"
             >
               生成
             </el-button>
             <el-button
               type="primary"
               @click="closeFunc"
+              :loading="aiLoading"
             >
               取消
             </el-button>
@@ -161,7 +164,7 @@
         </div>
       </template>
       <div class="">
-        <el-form label-position="top" :model="autoFunc" label-width="80px">
+        <el-form v-loading="aiLoading" label-position="top" :model="autoFunc" label-width="80px">
           <el-form-item label="包名：">
             <el-input v-model="autoFunc.package" placeholder="请输入包名" disabled />
           </el-form-item>
@@ -184,7 +187,7 @@
             <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
           </el-form-item>
           <el-form-item label="方法名：">
-            <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
+            <el-input @blur="autoFunc.funcName = toUpperCase(autoFunc.funcName)" v-model="autoFunc.funcName" placeholder="请输入方法名" />
           </el-form-item>
           <el-form-item label="方法：">
             <el-select v-model="autoFunc.method" placeholder="请选择方法">
@@ -246,7 +249,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { ref,onMounted } from "vue";
 import { formatDate } from "@/utils/format";
 import { toUpperCase } from "@/utils/stringFun"
-import  {useAppStore} from "@/pinia"; 
+import  {useAppStore} from "@/pinia";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from 'highlight.js'
@@ -255,6 +258,8 @@ const appStore = useAppStore()
 defineOptions({
   name: "AutoCodeAdmin",
 });
+
+const aiLoading = ref(false)
 
 const formData = ref({
   id: undefined,
@@ -305,7 +310,12 @@ const addFuncBtn =  (row) => {
   autoFunc.value.method = ""
   autoFunc.value.funcName = ""
   autoFunc.value.router = ""
-  autoFunc.value.funcDesc = "方法介绍"
+  autoFunc.value.funcDesc = ""
+  autoFunc.value.isAuth = false
+  autoFunc.value.isAi = false
+  autoFunc.value.apiFunc = ""
+  autoFunc.value.serverFunc = ""
+  autoFunc.value.jsFunc = ""
   funcFlag.value = true;
 };
 
@@ -318,6 +328,30 @@ const closeFunc = () => {
 const runFunc = async () =>{
   // 首字母自动转换为大写
   autoFunc.value.funcName = toUpperCase(autoFunc.value.funcName)
+
+  if (!autoFunc.value.funcName) {
+    ElMessage.error("请输入方法名")
+    return
+  }
+  if (!autoFunc.value.method) {
+    ElMessage.error("请选择方法")
+    return
+  }
+  if (!autoFunc.value.router) {
+    ElMessage.error("请输入路由")
+    return
+  }
+  if (!autoFunc.value.funcDesc) {
+    ElMessage.error("请输入方法介绍")
+    return
+  }
+
+  if (autoFunc.value.isAi){
+    if (!autoFunc.value.apiFunc || !autoFunc.value.serverFunc || !autoFunc.value.jsFunc) {
+      ElMessage.error("请先使用AI帮写完成基础代码，如果生成失败请重新调用")
+      return
+    }
+  }
 
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {
@@ -446,13 +480,19 @@ const goAutoCode = (row,isAdd) => {
 
 
 const aiAddFunc = async () =>{
-
+  aiLoading.value = true
   autoFunc.value.apiFunc = ""
   autoFunc.value.serverFunc = ""
   autoFunc.value.jsFunc = ""
 
+  if (!autoFunc.value.prompt) {
+    ElMessage.error("请输入提示信息")
+    return
+  }
+
   const res = await addFunc({...autoFunc.value,isPreview:true})
   if (res.code !== 0) {
+    aiLoading.value = false
     ElMessage.error(res.msg)
     return
   }
@@ -463,6 +503,7 @@ const aiAddFunc = async () =>{
     prompt: autoFunc.value.prompt,
     command: "addFunc"
   })
+  aiLoading.value = false
   if (aiRes.code === 0) {
     const aiData = JSON.parse(aiRes.data)
     autoFunc.value.apiFunc = aiData.api

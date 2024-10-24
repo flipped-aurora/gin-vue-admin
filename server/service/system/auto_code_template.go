@@ -290,6 +290,32 @@ func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
 	return nil
 }
 
+func (s *autoCodeTemplate) GetApiAndServer(info request.AutoFunc) (map[string]string, error) {
+	autoPkg := model.SysAutoCodePackage{}
+	err := global.GVA_DB.First(&autoPkg, "package_name = ?", info.Package).Error
+	if err != nil {
+		return nil, err
+	}
+	if autoPkg.Template != "package" {
+		info.IsPlugin = true
+	}
+
+	apiStr, err := s.getTemplateStr("api.go", info)
+	if err != nil {
+		return nil, err
+	}
+	serverStr, err := s.getTemplateStr("server.go", info)
+	if err != nil {
+		return nil, err
+	}
+	jsStr, err := s.getTemplateStr("api.js", info)
+	if err != nil {
+		return nil, err
+	}
+	return map[string]string{"api": apiStr, "server": serverStr, "js": jsStr}, nil
+
+}
+
 func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (string, error) {
 	tempPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "function", t+".tpl")
 	files, err := template.ParseFiles(tempPath)

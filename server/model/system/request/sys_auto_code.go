@@ -252,6 +252,11 @@ type AutoFunc struct {
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
 	IsAuth          bool   `json:"isAuth"`          // 是否鉴权
+	IsPreview       bool   `json:"isPreview"`       // 是否预览
+	IsAi            bool   `json:"isAi"`            // 是否AI
+	ApiFunc         string `json:"apiFunc"`         // API方法
+	ServeFunc       string `json:"serveFunc"`       // 服务方法
+	JsFunc          string `json:"jsFunc"`          // JS方法
 }
 
 type InitMenu struct {

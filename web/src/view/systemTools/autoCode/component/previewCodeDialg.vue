@@ -9,7 +9,7 @@
       <div
         :id="key"
         class="h-[calc(100vh-110px)] px-5 overflow-y-scroll"
-      />
+      ></div>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -34,7 +34,6 @@ const createKey = [
     "router",
     "initialize",
     "gen.go",
-
 ]
 
 onMounted(() => {

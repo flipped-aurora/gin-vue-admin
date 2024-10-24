@@ -203,6 +203,36 @@
             <el-input v-model="autoFunc.router" placeholder="路由path" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
             <div>API路径: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
           </el-form-item>
+
+          <el-form-item label="是否AI填充：">
+            <el-switch v-model="autoFunc.isAi" /> <span class="text-sm text-red-600 p-2">当前ai帮写存在不稳定因素，生成代码后请注意手动调整部分内容</span>
+          </el-form-item>
+          <template v-if="autoFunc.isAi">
+            <el-form-item label="Ai帮写:">
+              <div class="relative w-full">
+                <el-input type="textarea" placeholder="AI帮写功能，输入提示信息，自动生成代码" v-model="autoFunc.prompt" :rows="5" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
+                <el-button @click="aiAddFunc" type="primary" class="absolute right-2 bottom-2"><gva-ai />帮写</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item label="Api方法:">
+              <div
+                id="api"
+                class="h-[500px] w-full overflow-y-scroll"
+              ></div>
+            </el-form-item>
+            <el-form-item label="Server方法:">
+              <div
+                id="server"
+                class="h-[500px] w-full overflow-y-scroll"
+              ></div>
+            </el-form-item>
+            <el-form-item label="前端JSAPI方法:">
+              <div
+                id="js"
+                class="h-[500px] w-full overflow-y-scroll"
+              ></div>
+            </el-form-item>
+          </template>
         </el-form>
       </div>
     </el-drawer>
@@ -210,12 +240,17 @@
 </template>
 
 <script setup>
-import { getSysHistory, rollback, delSysHistory,addFunc } from "@/api/autoCode.js";
+import { getSysHistory, rollback, delSysHistory,addFunc,butler } from "@/api/autoCode.js";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import { formatDate } from "@/utils/format";
 import { toUpperCase } from "@/utils/stringFun"
+import  {useAppStore} from "@/pinia"; 
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from 'highlight.js'
+const appStore = useAppStore()
 
 defineOptions({
   name: "AutoCodeAdmin",
@@ -237,6 +272,8 @@ const total = ref(0);
 const pageSize = ref(10);
 const tableData = ref([]);
 
+const activeInfo = ref("")
+
 const autoFunc = ref({
   package:"",
   funcName:"",
@@ -249,10 +286,15 @@ const autoFunc = ref({
   method:"",
   funcDesc: "",
   isAuth:false,
+  isAi:false,
+  apiFunc:"",
+  serverFunc:"",
+  jsFunc:"",
 })
 
 const addFuncBtn =  (row) => {
   const req = JSON.parse(row.request)
+  activeInfo.value = row.request
   autoFunc.value.package = req.package
   autoFunc.value.structName = req.structName
   autoFunc.value.packageName = req.packageName
@@ -401,4 +443,62 @@ const goAutoCode = (row,isAdd) => {
     router.push({ name: "autoCode" });
   }
 };
+
+
+const aiAddFunc = async () =>{
+
+  autoFunc.value.apiFunc = ""
+  autoFunc.value.serverFunc = ""
+  autoFunc.value.jsFunc = ""
+
+  const res = await addFunc({...autoFunc.value,isPreview:true})
+  if (res.code !== 0) {
+    ElMessage.error(res.msg)
+    return
+  }
+
+ const aiRes = await butler({
+    structInfo:activeInfo.value,
+    template:JSON.stringify(res.data),
+    prompt: autoFunc.value.prompt,
+    command: "addFunc"
+  })
+  if (aiRes.code === 0) {
+    const aiData = JSON.parse(aiRes.data)
+    autoFunc.value.apiFunc = aiData.api
+    autoFunc.value.serverFunc = aiData.server
+    autoFunc.value.jsFunc = aiData.js
+
+    aiData.api = `\`\`\`go\n${aiData.api}\n\`\`\``
+    aiData.server = `\`\`\`go\n${aiData.server}\n\`\`\``
+    aiData.js = `\`\`\`js\n${aiData.js}\n\`\`\``
+
+    const marked = new Marked(
+      markedHighlight({
+        langPrefix: 'hljs language-',
+        highlight(code, lang, info) {
+          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+          if (lang === 'vue') {
+            return hljs.highlight(code, { language: 'html' }).value;
+          }
+          return hljs.highlight(code, { language }).value;
+        }
+      })
+  );
+  for (const key in aiData) {
+    document.getElementById(key).innerHTML = marked.parse(aiData[key])
+  }
+  }
+}
+
+
+onMounted(() => {
+  const isDarkMode = appStore.config.darkMode === 'dark';
+  if (isDarkMode) {
+    import('highlight.js/styles/atom-one-dark.css');
+  } else {
+    import('highlight.js/styles/atom-one-light.css');
+  }
+});
+
 </script>

@@ -51,7 +51,7 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		response.FailWithMessage(global.Translate("system.authority.permissionRefreshFailed")+" "+err.Error(), c)
 		return
 	}
-	response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, global.Translate("general.createSuccss"), c)
+	response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, global.Translate("general.createSuccess"), c)
 }
 
 // CopyAuthority
@@ -113,7 +113,7 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	// 删除角色之前需要判断是否有用户正在使用此角色
 	if err = authorityService.DeleteAuthority(&authority); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr")+" "+err.Error(), c)
+		response.FailWithMessage(global.Translate("general.deleteFailErr")+" "+err.Error(), c)
 		return
 	}
 	_ = casbinService.FreshCasbin()

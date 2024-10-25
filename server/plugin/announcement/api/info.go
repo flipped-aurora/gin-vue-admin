@@ -35,7 +35,7 @@ func (a *info) CreateInfo(c *gin.Context) {
 		response.FailWithMessage(global.Translate("general.creationFail"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("general.createSuccss"), c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // DeleteInfo 删除公告

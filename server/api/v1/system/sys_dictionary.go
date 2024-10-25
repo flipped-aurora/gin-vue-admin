@@ -32,7 +32,7 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("general.createSuccss"), c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // DeleteSysDictionary
@@ -54,7 +54,7 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 	err = dictionaryService.DeleteSysDictionary(dictionary)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)

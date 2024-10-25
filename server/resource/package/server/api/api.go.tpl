@@ -46,7 +46,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 		return
 	}
-    response.OkWithMessage(global.Translate("general.createSuccss"), c)
+    response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // Delete{{.StructName}} 删除{{.Description}}
@@ -66,7 +66,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 	err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.PrimaryField.FieldJson}} {{- if .AutoCreateResource -}},userID{{- end -}})
 	if err != nil {
         global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)

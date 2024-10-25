@@ -2,7 +2,17 @@
     "core": {
         "server": {
             "currentVersion": "Current version",
-            "welcomeTo": "Welcome to"
+            "welcomeTo": "Welcome to",
+            "joinGroup": "كيفية الانضمام إلى المجموعة: معرف WeChat: shouzi_1994 مجموعة QQ: 470239250",
+            "website": "موقع المشروع",
+            "pluginMarket": "سوق المكونات الإضافية",
+            "community": "مجتمع مناقشة GVA",
+            "swagger": "عنوان وثائق الأتمتة الافتراضي",
+            "frontend": "عنوان تشغيل ملف الواجهة الأمامية الافتراضي",
+            "copyright1": "---------------------------------- بيان حقوق النشر --------------------------------------",
+            "copyright2": "** مالك حقوق الطبع والنشر: فريق Flipped-Aurora مفتوح المصدر **",
+	        "copyright3": "** الشركة القابضة لحقوق الطبع والنشر: شركة Beijing Flip Aurora Technology Co., Ltd. **",
+	        "copyright4": "** لإزالة شعار التفويض، تحتاج إلى شراء ترخيص تجاري: https://gin-vue-admin.com/empower/index.html **"
         },
         "viper": {
             "modeGinEnvName": "You are using the gin mode with environment name %s, the config path is %s\n",
@@ -23,10 +33,10 @@
         "mongoConnectionFailed": "فشل في الاتصال بقاعدة بيانات MongoDB!"
     },
     "general": {
-        "createSuccss": "تم إنشاؤه بنجاح",
+        "createSuccess": "تم إنشاؤه بنجاح",
         "creationFail": "فشل في الإنشاء!",
         "creationFailErr": "فشل في الإنشاء",
-        "deletFailErr": "فشل في الحذف",
+        "deleteFailErr": "فشل في الحذف",
         "deleteFail": "فشل في الحذف!",
         "deleteSuccess": "تم الحذف بنجاح",
         "getDataFail": "فشل في الحصول على البيانات!",

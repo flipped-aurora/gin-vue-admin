@@ -326,7 +326,7 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 	err = userService.DeleteUser(reqId.ID)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)

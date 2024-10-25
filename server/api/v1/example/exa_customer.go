@@ -42,7 +42,7 @@ func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("general.createSuccss"), c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // DeleteExaCustomer
@@ -69,7 +69,7 @@ func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 	err = customerService.DeleteExaCustomer(customer)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)

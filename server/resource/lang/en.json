@@ -2,7 +2,17 @@
     "core": {
         "server": {
             "currentVersion": "Current version",
-            "welcomeTo": "Welcome to"
+            "welcomeTo": "Welcome to",
+            "joinGroup": "How to join the group: WeChat ID: shouzi_1994 QQ group: 470239250",
+            "website": "Project Website",
+            "pluginMarket": "Plugins Market",
+            "community": "GVA Discussion Community",
+            "swagger": "Default Automation Document Address",
+            "frontend": "Default front-end file running address",
+            "copyright1": "--------------------------------------Copyright Statement--------------------------------------",
+            "copyright2": "** Copyright: flipped-aurora open source team **",
+	        "copyright3": "** Copyright holder: Beijing Flip Aurora Technology Co., Ltd. **",
+	        "copyright4": "** To remove the authorization logo, you need to purchase a commercial license: https://gin-vue-admin.com/empower/index.html **"
         },
         "viper": {
             "modeGinEnvName": "You are using the gin mode with environment name %s, the config path is %s\n",
@@ -23,10 +33,10 @@
         "mongoConnectionFailed": "Failed to connect to the MongoDB database!"
     },
     "general": {
-        "createSuccss": "Created successfully",
+        "createSuccess": "Created successfully",
         "creationFail": "Creation failed!",
         "creationFailErr": "Creation failed",
-        "deletFailErr": "Delete failed",
+        "deleteFailErr": "Delete failed",
         "deleteFail": "Deletion failed!",
         "deleteSuccess": "Deleted successfully",
         "getDataFail": "Getting data failed!",

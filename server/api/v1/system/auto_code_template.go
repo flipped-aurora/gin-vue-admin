@@ -78,7 +78,7 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithMessage(global.Translate("general.createSuccss"), c)
+		response.OkWithMessage(global.Translate("general.createSuccess"), c)
 	}
 }
 

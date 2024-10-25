@@ -47,7 +47,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) CreateSysExportTemplate(c *gin
 		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.creationFail"), c)
 	} else {
-		response.OkWithMessage(global.Translate("general.createSuccss"), c)
+		response.OkWithMessage(global.Translate("general.createSuccess"), c)
 	}
 }
 
@@ -68,8 +68,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) DeleteSysExportTemplate(c *gin
 		return
 	}
 	if err := sysExportTemplateService.DeleteSysExportTemplate(sysExportTemplate); err != nil {
-		global.GVA_LOG.Error(global.Translate("general.deletFailErr"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 	} else {
 		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}

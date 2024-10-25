@@ -2,7 +2,17 @@
   "core": {
     "server": {
       "currentVersion": "當前版本",
-      "welcomeTo": "歡迎使用"
+      "welcomeTo": "歡迎使用",
+      "joinGroup": "加群方式:微訊號：shouzi_1994 QQ群：470239250",
+      "website": "項目地址",
+      "pluginMarket": "插件市場",
+      "community": "GVA討論社區",
+      "swagger": "預設自動化文件地址",
+      "frontend": "預設前端檔案運行位址",
+      "copyright1": "--------------------------------------版權聲明--------------------------------------",
+      "copyright2": "** 版權所有方：flipped-aurora開源團隊 **",
+      "copyright3": "** 版權持有公司：北京翻轉極光科技股份有限公司 **",
+      "copyright4": "** 剔除授權識別碼需購買商業授權：https://gin-vue-admin.com/empower/index.html **"
     },
     "viper": {
       "modeGinEnvName": "您正在使用gin模式的%s環境名稱,config的路徑為%s\n",
@@ -23,10 +33,10 @@
     "mongoConnectionFailed": "連結mongodb數據庫失敗!"
   },
   "general": {
-    "createSuccss": "創建成功",
+    "createSuccess": "創建成功",
     "creationFail": "創建失敗!",
     "creationFailErr": "創建失敗",
-    "deletFailErr": "刪除失敗",
+    "deleteFailErr": "刪除失敗",
     "deleteFail": "刪除失敗!",
     "deleteSuccess": "刪除成功",
     "getDataFail": "獲取失敗!",

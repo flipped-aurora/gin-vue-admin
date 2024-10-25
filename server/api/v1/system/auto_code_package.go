@@ -1,6 +1,8 @@
 package system
 
 import (
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -8,7 +10,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"strings"
 )
 
 type AutoCodePackageApi struct{}
@@ -39,7 +40,7 @@ func (a *AutoCodePackageApi) Create(c *gin.Context) {
 		response.FailWithMessage(global.Translate("general.creationFail"), c)
 		return
 	}
-	response.OkWithMessage(global.Translate("general.createSuccss"), c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // Delete
@@ -56,8 +57,8 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&info)
 	err := autoCodePackageService.Delete(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("general.deletFailErr"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)

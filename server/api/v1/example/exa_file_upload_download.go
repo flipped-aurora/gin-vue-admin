@@ -73,7 +73,7 @@ func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 	}
 	if err := fileUploadAndDownloadService.DeleteFile(file); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage("general.deletFailErr", c)
+		response.FailWithMessage("general.deleteFailErr", c)
 		return
 	}
 	response.OkWithMessage("general.deleteSuccess", c)

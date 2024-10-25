@@ -183,33 +183,8 @@
           <el-form-item label="缩写：">
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
-          <el-form-item label="方法介绍：">
-            <div class="flex w-full gap-2">
-              <el-input class="flex-1" v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
-              <el-button type="primary" @click="autoComplete"><ai-gva />补全</el-button>
-            </div>
-          </el-form-item>
-          <el-form-item label="方法名：">
-            <el-input @blur="autoFunc.funcName = toUpperCase(autoFunc.funcName)" v-model="autoFunc.funcName" placeholder="请输入方法名" />
-          </el-form-item>
-          <el-form-item label="方法：">
-            <el-select v-model="autoFunc.method" placeholder="请选择方法">
-              <el-option
-                v-for="item in ['GET', 'POST', 'PUT', 'DELETE']"
-                :key="item"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="是否鉴权：">
-            <el-switch v-model="autoFunc.isAuth" active-text="是" inactive-text="否" />
-          </el-form-item>
-          <el-form-item label="路由path:">
-            <el-input v-model="autoFunc.router" placeholder="路由path" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
-            <div>API路径: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
-          </el-form-item>
 
+          
           <el-form-item label="是否AI填充：">
             <el-switch v-model="autoFunc.isAi" /> <span class="text-sm text-red-600 p-2">当前ai帮写存在不稳定因素，生成代码后请注意手动调整部分内容</span>
           </el-form-item>
@@ -251,6 +226,33 @@
               />
             </el-form-item>
           </template>
+
+          <el-form-item label="方法介绍：">
+            <div class="flex w-full gap-2">
+              <el-input class="flex-1" v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+              <el-button type="primary" @click="autoComplete"><ai-gva />补全</el-button>
+            </div>
+          </el-form-item>
+          <el-form-item label="方法名：">
+            <el-input @blur="autoFunc.funcName = toUpperCase(autoFunc.funcName)" v-model="autoFunc.funcName" placeholder="请输入方法名" />
+          </el-form-item>
+          <el-form-item label="方法：">
+            <el-select v-model="autoFunc.method" placeholder="请选择方法">
+              <el-option
+                v-for="item in ['GET', 'POST', 'PUT', 'DELETE']"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否鉴权：">
+            <el-switch v-model="autoFunc.isAuth" active-text="是" inactive-text="否" />
+          </el-form-item>
+          <el-form-item label="路由path:">
+            <el-input v-model="autoFunc.router" placeholder="路由path" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
+            <div>API路径: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
+          </el-form-item>
         </el-form>
       </div>
     </el-drawer>
@@ -532,6 +534,11 @@ const aiAddFunc = async () =>{
       autoFunc.value.apiFunc = aiData.api
       autoFunc.value.serverFunc = aiData.server
       autoFunc.value.jsFunc = aiData.js
+      autoFunc.value.method = aiData.method
+      autoFunc.value.funcName = aiData.funcName
+      const routerArr = aiData.router.split("/")
+      autoFunc.value.router = routerArr[routerArr.length - 1]
+      autoFunc.value.funcDesc = autoFunc.value.prompt
     } catch (e) {
       ElMessage.error("小淼忙碌，请重新调用")
     }
@@ -551,6 +558,7 @@ const autoComplete = async () =>{
       autoFunc.value.method = aiData.method
       autoFunc.value.funcName = aiData.funcName
       autoFunc.value.router = aiData.router
+      autoFunc.value.prompt = autoFunc.value.funcDesc
     } catch (e) {
       ElMessage.error("小淼开小差了，请重新调用")
     }

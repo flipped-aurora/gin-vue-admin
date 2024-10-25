@@ -164,7 +164,7 @@
         </div>
       </template>
       <div class="">
-        <el-form v-loading="aiLoading" label-position="top" :model="autoFunc" label-width="80px">
+        <el-form v-loading="aiLoading" label-position="top" element-loading-text="小淼正在思考，请稍候..." :model="autoFunc" label-width="80px">
           <el-form-item label="包名：">
             <el-input v-model="autoFunc.package" placeholder="请输入包名" disabled />
           </el-form-item>
@@ -184,7 +184,10 @@
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
           <el-form-item label="方法介绍：">
-            <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+            <div class="flex w-full gap-2">
+              <el-input class="flex-1" v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+              <el-button type="primary" @click="autoComplete"><ai-gva />补全</el-button>
+            </div>
           </el-form-item>
           <el-form-item label="方法名：">
             <el-input @blur="autoFunc.funcName = toUpperCase(autoFunc.funcName)" v-model="autoFunc.funcName" placeholder="请输入方法名" />
@@ -214,7 +217,7 @@
             <el-form-item label="Ai帮写:">
               <div class="relative w-full">
                 <el-input type="textarea" placeholder="AI帮写功能，输入提示信息，自动生成代码" v-model="autoFunc.prompt" :rows="5" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
-                <el-button @click="aiAddFunc" type="primary" class="absolute right-2 bottom-2"><gva-ai />帮写</el-button>
+                <el-button @click="aiAddFunc" type="primary" class="absolute right-2 bottom-2"><ai-gva />帮写</el-button>
               </div>
             </el-form-item>
             <el-form-item label="Api方法:">
@@ -524,41 +527,36 @@ const aiAddFunc = async () =>{
   })
   aiLoading.value = false
   if (aiRes.code === 0) {
-    const aiData = JSON.parse(aiRes.data)
-    autoFunc.value.apiFunc = aiData.api
-    autoFunc.value.serverFunc = aiData.server
-    autoFunc.value.jsFunc = aiData.js
-
-    aiData.api = `\`\`\`go\n${aiData.api}\n\`\`\``
-    aiData.server = `\`\`\`go\n${aiData.server}\n\`\`\``
-    aiData.js = `\`\`\`js\n${aiData.js}\n\`\`\``
-
-    const marked = new Marked(
-      markedHighlight({
-        langPrefix: 'hljs language-',
-        highlight(code, lang, info) {
-          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-          if (lang === 'vue') {
-            return hljs.highlight(code, { language: 'html' }).value;
-          }
-          return hljs.highlight(code, { language }).value;
-        }
-      })
-  );
-  for (const key in aiData) {
-    document.getElementById(key).innerHTML = marked.parse(aiData[key])
+    try{
+      const aiData = JSON.parse(aiRes.data)
+      autoFunc.value.apiFunc = aiData.api
+      autoFunc.value.serverFunc = aiData.server
+      autoFunc.value.jsFunc = aiData.js
+    } catch (e) {
+      ElMessage.error("小淼忙碌，请重新调用")
+    }
   }
+}
+
+const autoComplete = async () =>{
+  aiLoading.value = true
+  const aiRes = await butler({
+    prompt: autoFunc.value.funcDesc,
+    command: "autoCompleteFunc"
+  })
+  aiLoading.value = false
+  if (aiRes.code === 0) {
+    try{
+      const aiData = JSON.parse(aiRes.data)
+      autoFunc.value.method = aiData.method
+      autoFunc.value.funcName = aiData.funcName
+      autoFunc.value.router = aiData.router
+    } catch (e) {
+      ElMessage.error("小淼开小差了，请重新调用")
+    }
   }
 }
 
 
-onMounted(() => {
-  const isDarkMode = appStore.config.darkMode === 'dark';
-  if (isDarkMode) {
-    import('highlight.js/styles/atom-one-dark.css');
-  } else {
-    import('highlight.js/styles/atom-one-light.css');
-  }
-});
 
 </script>

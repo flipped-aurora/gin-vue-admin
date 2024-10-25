@@ -35,10 +35,8 @@ const vueFilePathPlugin = (outputFilePath) => {
         const pathNameMap = vueFiles.reduce((acc, filePath) => {
             const content = fs.readFileSync(filePath, 'utf-8');
             const componentName = extractComponentName(content);
-            if (componentName) {
                 let relativePath ="/" + path.relative(root, filePath).replace(/\\/g, '/');
-                acc[relativePath] = componentName;
-            }
+                acc[relativePath] = componentName || "UnNameComponent";
             return acc;
         }, {});
         const outputContent = JSON.stringify(pathNameMap, null, 2);
@@ -49,7 +47,6 @@ const vueFilePathPlugin = (outputFilePath) => {
         const watchDirectories = [path.join(root, 'src/view'), path.join(root, 'src/plugin')];
         const watcher = chokidar.watch(watchDirectories, { persistent: true, ignoreInitial: true });
         watcher.on('all', (event, path) => {
-            console.log(`File ${path} has been ${event}`);
             generatePathNameMap();
         });
     };
@@ -61,8 +58,10 @@ const vueFilePathPlugin = (outputFilePath) => {
         configResolved(resolvedConfig) {
             root = resolvedConfig.root;
         },
-        buildEnd() {
+        buildStart() {
             generatePathNameMap();
+        },
+        buildEnd() {
             if (process.env.NODE_ENV === 'development') {
                 watchDirectoryChanges();
             }

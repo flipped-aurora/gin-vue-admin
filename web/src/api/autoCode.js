@@ -164,6 +164,15 @@ export const butler = (data) => {
   })
 }
 
+export const painter = (data) => {
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    data:{...data,mode:'painter'},
+    timeout: 1000 * 60 * 10,
+  })
+}
+
 export const addFunc = (data) => {
   return service({
     url: '/autoCode/addFunc',

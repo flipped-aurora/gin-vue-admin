@@ -400,10 +400,19 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 
 	switch t {
 	case "api.go":
+		if info.IsAi && info.ApiFunc != "" {
+			getTemplateStr = info.ApiFunc
+		}
 		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", info.Package, info.HumpPackageName+".go")
 	case "server.go":
+		if info.IsAi && info.ServerFunc != "" {
+			getTemplateStr = info.ServerFunc
+		}
 		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", info.Package, info.HumpPackageName+".go")
 	case "api.js":
+		if info.IsAi && info.JsFunc != "" {
+			getTemplateStr = info.JsFunc
+		}
 		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "api", info.Package, info.PackageName+".js")
 	}
 	if info.IsPlugin {

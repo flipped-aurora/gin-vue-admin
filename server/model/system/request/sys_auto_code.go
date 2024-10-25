@@ -255,7 +255,7 @@ type AutoFunc struct {
 	IsPreview       bool   `json:"isPreview"`       // 是否预览
 	IsAi            bool   `json:"isAi"`            // 是否AI
 	ApiFunc         string `json:"apiFunc"`         // API方法
-	ServeFunc       string `json:"serveFunc"`       // 服务方法
+	ServerFunc      string `json:"serverFunc"`      // 服务方法
 	JsFunc          string `json:"jsFunc"`          // JS方法
 }
 

@@ -805,7 +805,7 @@
 <script setup>
 
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
+import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialog.vue'
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi,llmAuto } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'

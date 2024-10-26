@@ -2,6 +2,14 @@ import fs from 'fs';
 import path from 'path';
 import chokidar from 'chokidar';
 
+const toPascalCase = (str) => {
+    return str.replace(/(^\w|-\w)/g, clearAndUpper);
+};
+
+const clearAndUpper = (text) => {
+    return text.replace(/-/, '').toUpperCase();
+};
+
 // 递归获取目录下所有的 .vue 文件
 const getAllVueFiles = (dir, fileList = []) => {
     const files = fs.readdirSync(dir);
@@ -36,7 +44,7 @@ const vueFilePathPlugin = (outputFilePath) => {
             const content = fs.readFileSync(filePath, 'utf-8');
             const componentName = extractComponentName(content);
                 let relativePath ="/" + path.relative(root, filePath).replace(/\\/g, '/');
-                acc[relativePath] = componentName || "UnNameComponent";
+                acc[relativePath] = componentName  || toPascalCase(path.basename(filePath, '.vue'));
             return acc;
         }, {});
         const outputContent = JSON.stringify(pathNameMap, null, 2);

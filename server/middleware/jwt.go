@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/golang-jwt/jwt/v4"
@@ -34,6 +35,7 @@ func JWTAuth() gin.HandlerFunc {
 		j := utils.NewJWT()
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
+		fmt.Println("claims: ", claims)
 		if err != nil {
 			if errors.Is(err, utils.TokenExpired) {
 				response.NoAuth("授权已过期", c)

@@ -51,7 +51,7 @@
   "/src/view/superAdmin/user/user.vue": "User",
   "/src/view/system/state.vue": "State",
   "/src/view/systemTools/autoCode/component/fieldDialog.vue": "FieldDialog",
-  "/src/view/systemTools/autoCode/component/previewCodeDialg.vue": "PreviewCodeDialg",
+  "/src/view/systemTools/autoCode/component/previewCodeDialog.vue": "PreviewCodeDialog",
   "/src/view/systemTools/autoCode/index.vue": "AutoCode",
   "/src/view/systemTools/autoCodeAdmin/index.vue": "AutoCodeAdmin",
   "/src/view/systemTools/autoPkg/autoPkg.vue": "AutoPkg",

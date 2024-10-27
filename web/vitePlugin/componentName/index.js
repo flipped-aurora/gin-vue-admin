@@ -55,7 +55,6 @@ const vueFilePathPlugin = (outputFilePath) => {
         const watchDirectories = [path.join(root, 'src/view'), path.join(root, 'src/plugin')];
         const watcher = chokidar.watch(watchDirectories, { persistent: true, ignoreInitial: true });
         watcher.on('all', (event, path) => {
-            console.log(`File ${path} has been ${event}`);
             generatePathNameMap();
         });
     };
@@ -67,8 +66,10 @@ const vueFilePathPlugin = (outputFilePath) => {
         configResolved(resolvedConfig) {
             root = resolvedConfig.root;
         },
-        buildEnd() {
+        buildStart() {
             generatePathNameMap();
+        },
+        buildEnd() {
             if (process.env.NODE_ENV === 'development') {
                 watchDirectoryChanges();
             }

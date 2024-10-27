@@ -98,11 +98,20 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodeTemplateService.AddFunc(info)
+	var tempMap map[string]string
+	if info.IsPreview {
+		tempMap, err = autoCodeTemplateService.GetApiAndServer(info)
+	} else {
+		err = autoCodeTemplateService.AddFunc(info)
+	}
 	if err != nil {
 		global.GVA_LOG.Error("注入失败!", zap.Error(err))
 		response.FailWithMessage("注入失败", c)
 	} else {
+		if info.IsPreview {
+			response.OkWithDetailed(tempMap, "注入成功", c)
+			return
+		}
 		response.OkWithMessage("注入成功", c)
 	}
 }

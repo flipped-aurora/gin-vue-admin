@@ -2,8 +2,8 @@ package {{ .Package }}
 
 import (
 	"context"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .Package }}/initialize"
-	interfaces "github.com/flipped-aurora/gin-vue-admin/server/utils/plugin/v2"
+	"{{.Module}}/plugin/{{ .Package }}/initialize"
+	interfaces "{{.Module}}/utils/plugin/v2"
 	"github.com/gin-gonic/gin"
 )
 

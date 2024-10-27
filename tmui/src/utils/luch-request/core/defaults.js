@@ -4,8 +4,8 @@
 
 
 export default {
-  // baseURL: 'https://vitas.land/api',
-  baseURL: 'http://127.0.0.1:8888',
+  baseURL: 'https://osl.fund/api',
+  // baseURL: 'http://127.0.0.1:8888',
   // baseURL: 'http://sazuky.natapp1.cc',
   header: {'Content-Type': 'application/json; charset=utf-8' },
   method: 'GET',

@@ -32,3 +32,11 @@ export async function buyApi(params: any ) {
 
     return http.post('/climainorder/buy', RequestData, config)
 }
+//查询设置信息
+export async function getSettingApi(params: any ) {
+    let RequestData= {
+        // data:params
+        ...params
+    }
+    return http.get('/cliset/getCliSetPublic', RequestData)
+}

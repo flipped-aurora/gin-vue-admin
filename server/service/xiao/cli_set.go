@@ -67,7 +67,10 @@ func (clisetService *CliSetService) GetCliSetInfoList(info xiaoReq.CliSetSearch)
 	err = db.Find(&clisets).Error
 	return clisets, total, err
 }
-func (clisetService *CliSetService) GetCliSetPublic() {
+func (clisetService *CliSetService) GetCliSetPublic() (*xiao.CliSet, error) {
 	// 此方法为获取数据源定义的数据
 	// 请自行实现
+	var setinfo xiao.CliSet
+	err := global.GVA_DB.First(&setinfo, "id = ?", "1").Error
+	return &setinfo, err
 }

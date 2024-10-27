@@ -161,8 +161,12 @@ func (clisetApi *CliSetApi) GetCliSetList(c *gin.Context) {
 func (clisetApi *CliSetApi) GetCliSetPublic(c *gin.Context) {
 	// 此接口不需要鉴权
 	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	clisetService.GetCliSetPublic()
-	response.OkWithDetailed(gin.H{
-		"info": "不需要鉴权的结算设置接口信息",
-	}, "获取成功", c)
+	public, err := clisetService.GetCliSetPublic()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithData(public, c)
+	return
 }

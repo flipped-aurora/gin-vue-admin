@@ -158,6 +158,13 @@ func (cliLoadService *CliLoadService) Login(cliLoad *xiao.CliLoad) (resinfo xiao
 		tx.Rollback()
 		return resinfo, errors.Join(err, errors.New("查询用户信息失败"))
 	}
+	//查询业绩总表
+	resinfo.Mainorder, err = xiao.NewCliMainorder(cliLoad.Address).GetCliMainorder(tx)
+	if err != nil {
+		// 回滚事务
+		tx.Rollback()
+		return resinfo, errors.Join(err, errors.New("查询业绩总表失败"))
+	}
 
 	// 提交事务
 	err = tx.Commit().Error

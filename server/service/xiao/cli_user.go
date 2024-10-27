@@ -173,6 +173,21 @@ func (cliUserService *CliUserService) Rigester(cliUser *xiao.CliUser) (err error
 		tx.Rollback()
 		return errors.Join(err, errors.New("创建用户关系表失败"))
 	}
+	//查询所有上级
+	upnodes, err := xiao.NewCliTree(cliUser.Address, "").GetAllParentNode(tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	for _, upnode := range upnodes {
+		// 更新团队成员
+		userinfo, err := xiao.NewUser(upnode.Address).GetCliUser(tx)
+		if err != nil {
+			return err
+		}
+		*userinfo.Teamnum++
+		tx.Save(&userinfo)
+	}
 
 	return tx.Commit().Error
 }

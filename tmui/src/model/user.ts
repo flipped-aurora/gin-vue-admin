@@ -4,6 +4,7 @@ export interface Userinfo {
     jwtToken: string;
     cliUser?: CliUser;
     cliLoad?: CliLoad;
+    mainorder?:Mainorder;
 }
 
 export interface myWallet {
@@ -44,4 +45,10 @@ interface CliLoad {
     status: string; // 当前状态
     desc: string; // 文本备注
     desnum?: number; // 金额备注
+}
+interface Mainorder {
+    address: string;
+    amount: number;
+    desc: string;
+    descnum: number;
 }

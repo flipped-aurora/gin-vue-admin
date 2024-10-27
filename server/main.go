@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/myutil"
 	"github.com/gin-gonic/gin"
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
@@ -25,16 +23,16 @@ import (
 // @name                        x-token
 // @BasePath                    /
 func main() {
-	var err error
+	//var err error
 	// 启动 Redis 服务器
-	err = myutil.CheckAndStartRedis()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	gin.SetMode(gin.TestMode) //本地运行m
+	//err = myutil.CheckAndStartRedis()
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//gin.SetMode(gin.TestMode) //本地运行m
 
-	//gin.SetMode(gin.DebugMode) //服务器运行
+	gin.SetMode(gin.DebugMode)   //服务器运行
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
 	global.GVA_LOG = core.Zap() // 初始化zap日志库

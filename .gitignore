@@ -35,3 +35,5 @@ server/uploads/
 *.iml
 web/.pnpm-debug.log
 web/pnpm-lock.yaml
+/web/dist.rar
+/server/gva-linux

@@ -1,7 +1,7 @@
 <template>
   <el-menu-item
     :index="routerInfo.name"
-    class="dark:text-slate-300 overflow-x-hidden"
+    class="dark:text-slate-300 overflow-hidden"
     :style="{
       height : sideHeight,
     }"

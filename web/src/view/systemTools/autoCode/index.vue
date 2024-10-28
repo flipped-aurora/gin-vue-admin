@@ -22,7 +22,7 @@
             <template #content>
               <div>【完全免费】前往<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">插件市场个人中心</a>申请AIPath，填入config.yaml的ai-path属性即可使用。</div>
             </template>
-            <el-button type="primary" @click="llmAutoFunc()">
+            <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
                 <ai-gva />
               </el-icon> 生成
@@ -163,7 +163,7 @@
                 v-model="form.structName"
                 placeholder="首字母自动转换大写"
               />
-                <el-button type="primary" @click="llmAutoFunc(true)">
+                <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc(true)">
                   <el-icon size="18">
                     <ai-gva />
                   </el-icon> 生成

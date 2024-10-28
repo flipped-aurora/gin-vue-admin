@@ -1167,6 +1167,7 @@ const enterForm = async(isPreview) => {
 
   if(!form.value.onlyTemplate){
 
+
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
@@ -1183,6 +1184,9 @@ const enterForm = async(isPreview) => {
     return false
   }
 
+
+
+
   if (
     form.value.fields.some(item => item.fieldName === form.value.structName)
   ) {
@@ -1192,6 +1196,16 @@ const enterForm = async(isPreview) => {
     })
     return false
   }
+
+    if (
+        form.value.fields.some(item => item.fieldJson === form.value.package)
+    ) {
+      ElMessage({
+        type: 'error',
+        message: '存在与模板同名的的字段JSON'
+      })
+      return false
+    }
 
 
   if (form.value.fields.some(item => !item.fieldType)) {

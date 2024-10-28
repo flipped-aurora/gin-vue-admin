@@ -1,3 +1,159 @@
+{{- if .IsAdd }}
+// 新增表单中增加如下代码
+{{- range .Fields}}
+          {{- if .Form}}
+<el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+          {{- if .CheckDataSource}}
+    <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+        <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
+    </el-select>
+          {{- else }}
+          {{- if eq .FieldType "bool" }}
+    <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+          {{- end }}
+          {{- if eq .FieldType "string" }}
+          {{- if .DictType}}
+    <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+        <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+    </el-select>
+          {{- else }}
+    <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入{{.FieldDesc}}" />
+          {{- end }}
+          {{- end }}
+          {{- if eq .FieldType "richtext" }}
+    <RichEdit v-model="formData.{{.FieldJson}}"/>
+          {{- end }}
+          {{- if eq .FieldType "json" }}
+    // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
+    {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+          {{- end }}
+           {{- if eq .FieldType "array" }}
+    <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
+           {{- end }}
+          {{- if eq .FieldType "int" }}
+    <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
+          {{- end }}
+          {{- if eq .FieldType "time.Time" }}
+    <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
+          {{- end }}
+          {{- if eq .FieldType "float64" }}
+    <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
+          {{- end }}
+          {{- if eq .FieldType "enum" }}
+    <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+       <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
+    </el-select>
+          {{- end }}
+          {{- if eq .FieldType "picture" }}
+    <SelectImage
+     v-model="formData.{{ .FieldJson }}"
+     file-type="image"
+    />
+          {{- end }}
+          {{- if eq .FieldType "pictures" }}
+    <SelectImage
+     multiple
+     v-model="formData.{{ .FieldJson }}"
+     file-type="image"
+     />
+          {{- end }}
+          {{- if eq .FieldType "video" }}
+    <SelectImage
+    v-model="formData.{{ .FieldJson }}"
+    file-type="video"
+    />
+           {{- end }}
+          {{- if eq .FieldType "file" }}
+    <SelectFile v-model="formData.{{ .FieldJson }}" />
+          {{- end }}
+          {{- end }}
+</el-form-item>
+          {{- end }}
+          {{- end }}
+
+// 字典增加如下代码
+    {{- range $index, $element := .DictTypes}}
+const {{ $element }}Options = ref([])
+    {{- end }}
+
+// 基础formData结构增加如下字段
+{{- range .Fields}}
+          {{- if .Form}}
+            {{- if eq .FieldType "bool" }}
+{{.FieldJson}}: false,
+            {{- end }}
+            {{- if eq .FieldType "string" }}
+{{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "richtext" }}
+{{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "int" }}
+{{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+            {{- end }}
+            {{- if eq .FieldType "time.Time" }}
+{{.FieldJson}}: new Date(),
+            {{- end }}
+            {{- if eq .FieldType "float64" }}
+{{.FieldJson}}: 0,
+            {{- end }}
+            {{- if eq .FieldType "picture" }}
+{{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "video" }}
+{{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "pictures" }}
+{{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "file" }}
+{{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "json" }}
+{{.FieldJson}}: {},
+            {{- end }}
+            {{- if eq .FieldType "array" }}
+{{.FieldJson}}: [],
+            {{- end }}
+          {{- end }}
+        {{- end }}
+// 验证规则中增加如下字段
+
+{{- range .Fields }}
+        {{- if .Form }}
+            {{- if eq .Require true }}
+{{.FieldJson }} : [{
+    required: true,
+    message: '{{ .ErrorText }}',
+    trigger: ['input','blur'],
+},
+               {{- if eq .FieldType "string" }}
+{
+    whitespace: true,
+    message: '不能只输入空格',
+    trigger: ['input', 'blur'],
+}
+              {{- end }}
+],
+            {{- end }}
+        {{- end }}
+    {{- end }}
+
+{{- if .HasDataSource }}
+// 请引用
+get{{.StructName}}DataSource,
+
+//  获取数据源
+const dataSource = ref([])
+const getDataSourceFunc = async()=>{
+  const res = await get{{.StructName}}DataSource()
+  if (res.code === 0) {
+    dataSource.value = res.data
+  }
+}
+getDataSourceFunc()
+{{- end }}
+{{- else }}
 {{- if not .OnlyTemplate }}
 <template>
   <div>
@@ -247,4 +403,5 @@ const back = () => {
 </script>
 <style>
 </style>
+{{- end }}
 {{- end }}

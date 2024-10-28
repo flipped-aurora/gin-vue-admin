@@ -10,6 +10,7 @@ type SysAutoCodePackage struct {
 	Label       string `json:"label" gorm:"comment:展示名"`
 	Template    string `json:"template"  gorm:"comment:模版"`
 	PackageName string `json:"packageName" gorm:"comment:包名"`
+	Module      string `json:"-" example:"模块"`
 }
 
 func (s *SysAutoCodePackage) TableName() string {

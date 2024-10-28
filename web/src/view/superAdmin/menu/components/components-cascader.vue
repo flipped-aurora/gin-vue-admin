@@ -31,15 +31,14 @@ const emits = defineEmits(['change'])
 
 const pathOptions = ref([])
 const tempPath = ref('')
-const activeComponent = ref('')
+const activeComponent = ref([])
 const pathIsSelect = ref(true)
 
 const togglePathIsSelect = () => {
   if(pathIsSelect.value){
-    tempPath.value = activeComponent.value?.join('/')
+    tempPath.value = activeComponent.value?.join('/') || ''
   }else{
-    activeComponent.value = tempPath.value.split('/')
-    console.log(activeComponent.value)
+    activeComponent.value = tempPath.value?.split('/') || []
   }
 
   pathIsSelect.value = !pathIsSelect.value

@@ -23,8 +23,8 @@ import (
 // @name                        x-token
 // @BasePath                    /
 func main() {
-	//var err error
 	// 启动 Redis 服务器
+	//var err error
 	//err = myutil.CheckAndStartRedis()
 	//if err != nil {
 	//	fmt.Println(err)

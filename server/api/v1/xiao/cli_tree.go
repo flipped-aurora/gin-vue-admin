@@ -160,9 +160,18 @@ func (cliTreeApi *CliTreeApi) GetCliTreeList(c *gin.Context) {
 // @Router /cliTree/getCliTreePublic [get]
 func (cliTreeApi *CliTreeApi) GetCliTreePublic(c *gin.Context) {
 	// 此接口不需要鉴权
+	var pageInfo xiaoReq.CliTreeSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	cliTreeService.GetCliTreePublic()
-	response.OkWithDetailed(gin.H{
-		"info": "不需要鉴权的用户关系表接口信息",
-	}, "获取成功", c)
+	public, err := cliTreeService.GetCliTreePublic(&pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(public, "获取成功", c)
 }

@@ -34,3 +34,8 @@ func (cliorder *CliOrder) GetCliOrder(tx *gorm.DB) (info *CliOrder, err error) {
 	err = tx.Model(cliorder).Where("address = ?", cliorder.Address).First(&info).Error
 	return
 }
+
+func (cliorder *CliOrder) GetCliAllOrder(tx *gorm.DB) (info []*CliOrder, err error) {
+	err = tx.Model(cliorder).Where("address = ?", cliorder.Address).Find(&info).Error
+	return
+}

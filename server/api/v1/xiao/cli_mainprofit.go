@@ -155,14 +155,27 @@ func (climainprofitApi *CliMainprofitApi) GetCliMainprofitList(c *gin.Context) {
 // @Summary 不需要鉴权的结算总表接口
 // @accept application/json
 // @Produce application/json
-// @Param data query xiaoReq.CliMainprofitSearch true "分页获取结算总表列表"
+// @Param data query xiaoReq.CliMainprofitSearch true  "分页获取结算总表列表"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /climainprofit/getCliMainprofitPublic [get]
 func (climainprofitApi *CliMainprofitApi) GetCliMainprofitPublic(c *gin.Context) {
 	// 此接口不需要鉴权
-	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	climainprofitService.GetCliMainprofitPublic()
-	response.OkWithDetailed(gin.H{
-		"info": "不需要鉴权的结算总表接口信息",
+	var pageInfo xiaoReq.CliMainprofitSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := climainprofitService.GetCliMainprofitInfoList(pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     list,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }

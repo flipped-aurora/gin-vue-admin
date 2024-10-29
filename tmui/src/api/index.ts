@@ -40,3 +40,44 @@ export async function getSettingApi(params: any ) {
     }
     return http.get('/cliset/getCliSetPublic', RequestData)
 }
+
+//查询结算详情记录
+export async function getProfitListApi(params: any ) {
+    let RequestData= {
+        data:params
+        // ...params
+    }
+    return http.get('/cliprofit/getCliProfitPublic', RequestData)
+}
+//查询结算总表
+export async function getProfitMainApi(params: any ) {
+    let RequestData= {
+        data:params
+        // ...params
+    }
+    return http.get('/climainprofit/getCliMainprofitPublic', RequestData)
+}
+//集合查询订单信息
+export async function getOrderListApi(params: any ) {
+    let RequestData= {
+        data:params
+        // ...params
+    }
+    return http.get('/cliOrder/getCliOrderPublic', RequestData)
+}
+//聚合查询邀请信息
+export async function getInviteListApi(params: any ) {
+    let RequestData= {
+        data:params
+        // ...params
+    }
+    return http.get('/cliTree/getCliTreePublic', RequestData)
+}
+//聚合查询提币信息
+export async function getWithdrawListApi(params: any ) {
+    let RequestData= {
+        data:params
+        // ...params
+    }
+    return http.get('/cliwithdraw/getCliWithdrawPublic', RequestData)
+}

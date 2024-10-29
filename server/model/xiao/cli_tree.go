@@ -89,6 +89,26 @@ func (tree *CliTree) GetAllChilds(tx *gorm.DB) ([]*CliTree, error) {
 	return childs, nil // 成功查询后返回Tree切片和nil错误
 }
 
+// 获取伞下所有节点，除了自己下一层的节点
+func (tree *CliTree) GetPartChilds(tx *gorm.DB, add int) ([]*CliTree, error) {
+	var exists = &CliTree{
+		Address: tree.Address,
+	}
+
+	if err := exists.GetSelfNode(tx); err != nil { // 调用GetSelfNode方法获取自己节点
+		return nil, err // 如果获取自己节点出错，则返回错误
+	}
+
+	if err := exists.GetSelfNode(tx); err != nil { // 调用GetSelfNode方法获取自己节点
+		return nil, err // 如果获取自己节点出错，则返回错误
+	}
+	var childs []*CliTree                                                                                                                                    // 定义一个Tree切片来存储查询结果
+	if err := tx.Where("leftval > ? and rightval < ? and level > ?", *exists.Leftval, *exists.Rightval, *exists.Level+add).Find(&childs).Error; err != nil { // 使用Where方法查询指定条件的记录
+		return nil, err // 如果查询出错，则返回错误
+	}
+	return childs, nil // 成功查询后返回Tree切片和nil错误
+}
+
 // 获取指定层级的节点
 func (tree *CliTree) GetChildByLevel(tx *gorm.DB, add int) ([]*CliTree, error) {
 	var exists = &CliTree{
@@ -97,8 +117,9 @@ func (tree *CliTree) GetChildByLevel(tx *gorm.DB, add int) ([]*CliTree, error) {
 	if err := exists.GetSelfNode(tx); err != nil { // 调用GetSelfNode方法获取自己节点
 		return nil, err // 如果获取自己节点出错，则返回错误
 	}
-	var childs []*CliTree                                                                                                                              // 定义一个Tree切片来存储查询结果
-	if err := tx.Where("leftval > ? and rightval < ? and level = ?", *tree.Leftval, *tree.Rightval, *tree.Level+add).Find(&childs).Error; err != nil { // 使用Where方法查询指定条件的记录
+	//fmt.Printf("leftval:%d,rightval:%d,level:%d\n", *exists.Leftval, *exists.Rightval, *exists.Level+add)
+	var childs []*CliTree                                                                                                                                    // 定义一个Tree切片来存储查询结果
+	if err := tx.Where("leftval > ? and rightval < ? and level = ?", *exists.Leftval, *exists.Rightval, *exists.Level+add).Find(&childs).Error; err != nil { // 使用Where方法查询指定条件的记录
 	}
 	return childs, nil
 }

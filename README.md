@@ -11,6 +11,12 @@
 合约地址：0xd472f346E09Ef13342f39Cc0321D15a7Ecdb9134
 发行地址：0x88EA65Ce12BB49C4385424Eb0324F18AbCbC126F
 
+www.gtcfx.com
+my.gtcup.com
+support@gtcfx.com
+
+
+
 ## 1. 基本介绍
 
 ### 1.1 项目介绍
@@ -19,10 +25,10 @@
 
 [在线预览](http://demo.gin-vue-admin.com): http://demo.gin-vue-admin.com
 
-测试用户名：admin
+测试用户名：tangsong
 
-测试密码：123456
-
+测试密码：tangsong65322
+xiaojingteng 20241028
 ### 1.2 贡献指南
 Hi! 首先感谢你使用 gin-vue-admin。
 

@@ -2,8 +2,10 @@
 package xiao
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/shopspring/decimal"
+	"gorm.io/gorm"
 )
 
 // 提币详情 结构体  CliWithdraw
@@ -20,4 +22,21 @@ type CliWithdraw struct {
 // TableName 提币详情 CliWithdraw自定义表名 cli_withdraw
 func (CliWithdraw) TableName() string {
 	return "cli_withdraw"
+}
+
+// NewCliWithdraw 创建CliWithdraw
+func NewCliWithdraw(address string) *CliWithdraw {
+	return &CliWithdraw{
+		Address: address,
+	}
+}
+
+// 查询提币记录
+func (cliwith *CliWithdraw) GetCliWithdraw(tx *gorm.DB) ([]*CliWithdraw, error) {
+	var cliwithdraw []*CliWithdraw
+	err := tx.Model(&CliWithdraw{}).Where("address = ?", cliwith.Address).Find(&cliwithdraw).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return cliwithdraw, nil
 }

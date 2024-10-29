@@ -14,6 +14,42 @@
 				"titlePenetrate": "YES",
 				"transparentTitle": "always"
 			}
+		},
+		{
+			"path": "pages/datas/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"titlePenetrate": "YES",
+				"transparentTitle": "always"
+			}
+		},
+		{
+			"path": "pages/invite/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"titlePenetrate": "YES",
+				"transparentTitle": "always"
+			}
+		},
+		{
+			"path": "pages/team/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"titlePenetrate": "YES",
+				"transparentTitle": "always"
+			}
+		},
+		{
+			"path": "pages/withdraw/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"titlePenetrate": "YES",
+				"transparentTitle": "always"
+			}
 		}
     ],
 	"globalStyle": {

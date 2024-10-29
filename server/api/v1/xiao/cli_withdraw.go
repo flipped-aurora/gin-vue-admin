@@ -161,8 +161,17 @@ func (cliwithdrawApi *CliWithdrawApi) GetCliWithdrawList(c *gin.Context) {
 func (cliwithdrawApi *CliWithdrawApi) GetCliWithdrawPublic(c *gin.Context) {
 	// 此接口不需要鉴权
 	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	cliwithdrawService.GetCliWithdrawPublic()
-	response.OkWithDetailed(gin.H{
-		"info": "不需要鉴权的提币详情接口信息",
-	}, "获取成功", c)
+	var pageInfo xiaoReq.CliWithdrawSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	public, err := cliwithdrawService.GetCliWithdrawPublic(&pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(public, "获取成功", c)
 }

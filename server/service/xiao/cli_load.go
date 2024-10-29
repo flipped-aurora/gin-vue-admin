@@ -108,9 +108,17 @@ func (cliLoadService *CliLoadService) Login(cliLoad *xiao.CliLoad) (resinfo xiao
 	}
 	// 开启事务
 	tx := global.GVA_DB.Begin()
+	if tx == nil {
+		return resinfo, errors.New("failed to start transaction")
+	}
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
+			err = fmt.Errorf("transaction failed: %v", r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
 		}
 	}()
 	// 检查地址是否已经登录

@@ -49,7 +49,7 @@
         <view class=" flex-row-center-center mt-20">
           <view class=" colorline " ></view>
         </view>
-        <tm-sheet darkBgColor="#391c8c66" style="border-width: 1px;border-color: #fff3;" class="" :round="4" :margin="[20,0]">
+        <tm-sheet darkBgColor="#391c8c66" style="border-width: 1px;border-color: #fff3;" class="" :round="4" :margin="[25,0]">
           <view class="flex-center">
             <view class="inputshadow my-25 pa-20">
               <view class="flex flex-row-center-between mt-20">
@@ -107,7 +107,7 @@
         <view class="flex-center mb--n10" style="">
           <tm-text :fontSize="24" class="round-4 border-a-1-bk px-10 py-5 flex-center" style="width: 160px">个 人 中 心</tm-text>
         </view>
-        <tm-sheet transprent class=" " style="background-image: url('../../static/home/home_bg_2.svg');background-size: cover;background-repeat: no-repeat;"   :margin="[20,20]" >
+        <tm-sheet transprent class=" " style="background-image: url('../../static/home/home_bg_2.svg');background-size: cover;background-repeat: no-repeat;"   :margin="[25,20]" >
           <!--        <image :src="homebg2"  style="width: 100%;height: 590rpx; position: absolute;left: 0;top: 0" ></image>-->
           <view class="flex flex-row-center-between ma-10">
             <view class="flex-start pa-10">
@@ -119,7 +119,7 @@
             </view>
             <view class="relative">
               <image class="loader relative" :src="border1" style="width: 150rpx; height: 150rpx"></image>
-              <tm-text class="text-center " :fontSize="26">1 天</tm-text>
+              <tm-text class="text-center " :fontSize="26">{{ timeday }}天</tm-text>
             </view>
           </view>
           <view  class="  mt-20 mb-18">
@@ -172,7 +172,7 @@
         </tm-sheet>
       </view>
       <tm-text class="text-black text-weight-b my-40 ml-20" _style="font-size: 14px;">丨金融中心</tm-text>
-      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(107deg,#4853ef,#5d7dff);" :round="4" :margin="[20,20]">
+      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(107deg,#4853ef,#5d7dff);" :round="4" :margin="[25,20]">
 
         <!--        <image :src="homebgimg"  style="width: 100%;height: 590rpx; position: absolute;left: 0;top: 0" ></image>-->
         <view class="flex flex-row-center-between  zIndex-1">
@@ -204,7 +204,7 @@
         </view>
         <view class="mt-20">
           <view class="flex flex-between" >
-            <tm-button  @click="buybtn(10)"  style="background-color: rgb(0 0 0 / 40%)">10</tm-button>
+            <tm-button  @click="buybtn(0.1)"  style="background-color: rgb(0 0 0 / 40%)">10</tm-button>
             <tm-button @click="buybtn(100)"  style="background-color: rgb(0 0 0 / 40%);margin-right: 5px;margin-left: 5px">100</tm-button>
             <tm-button @click="buybtn(500)" style="background-color: rgb(0 0 0 / 40%)">500</tm-button>
           </view>
@@ -215,17 +215,17 @@
           </view>
         </view>
         <view class="mt-20">
-          <tm-button @click="throttle(getUpTree,5000)"  block style="background-color: rgb(104,34,227)"> 立 即 认 购</tm-button>
+          <tm-button @click="throttle(getUpTree,10000)"  block style="background-color: rgb(104,34,227)"> 立 即 认 购</tm-button>
         </view>
       </tm-sheet>
-
-      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(to right, rgb(71, 14, 255) 0%, rgba(255,33,219,0.78) 100%);" :round="4" :margin="[20,20]">
+      <tm-text class="text-black text-weight-b my-40 ml-20" _style="font-size: 14px;">丨邀请中心</tm-text>
+      <tm-sheet class="relative " darkBgColor="#4b21e5" style="background: linear-gradient(to right, rgb(71, 14, 255) 0%, rgba(255,33,219,0.78) 100%);" :round="4" :margin="[25,20]">
 <!--        <image :src="homebgimg"  style="width: 100%;height: 590rpx; position: absolute;left: 0;top: 0" ></image>-->
         <view class="flex flex-row-center-between  zIndex-1">
           <view class="topshow mx-30">
             <view class="flex flex-row-center-between ma-10">
               <view class="mt-n10">
-                <tm-text :fontSize="30" color="white">丨邀请链接</tm-text>
+                <tm-text :fontSize="30" color="white">我的邀请链接</tm-text>
 <!--                <tm-text color="grey" class="mt-10 ml-25">我的链接</tm-text>-->
               </view>
               <view class="absolute" style="right:20px;top:20px">
@@ -248,99 +248,101 @@
       </tm-sheet>
 
       <!--平台特色 -->
-      <tm-sheet :margin="[20,25]" :padding="[20,10]"  :text="true"  :round="3"  class="zIndex-1" transprent>
-        <tm-text class="text-black text-weight-b my-40" _style="font-size: 14px;">丨平台特色</tm-text>
-<!--                <img src="https://tool.lu/netcard/" alt="">-->
+<!--      <tm-sheet :margin="[20,25]" :padding="[20,10]"  :text="true"  :round="3"  class="zIndex-1" transprent>-->
+<!--        <tm-text class="text-black text-weight-b my-40" _style="font-size: 14px;">丨平台特色</tm-text>-->
+<!--&lt;!&ndash;                <img src="https://tool.lu/netcard/" alt="">&ndash;&gt;-->
 
 
-                <tm-grid :width="675" :col="2"   transprent>
-                  <tm-grid-item :height="350" >
-                    <tm-image  :width="250" :height="250" src="/static/nft/nft2.webp"> </tm-image>
-                    <tm-text _class="pt-10" :fontSize="30" label="超强算力"></tm-text>
-                  </tm-grid-item>
-                  <tm-grid-item  :height="350" >
-                    <tm-image  :width="250" :height="250" src="/static/nft/nft1.webp"> </tm-image>
-                    <tm-text _class="pt-10" :fontSize="30" label="奖励丰富"></tm-text>
-                  </tm-grid-item>
-                  <tm-grid-item  :height="350" >
-                    <tm-image  :width="250" :height="250" src="/static/nft/nft5.webp"> </tm-image>
-                    <tm-text :fontSize="30" label="安全加密"></tm-text>
-                  </tm-grid-item>
-                  <tm-grid-item  :height="350" >
-                    <tm-image  :width="250" :height="250" src="/static/nft/nft4.webp"> </tm-image>
-                    <tm-text _class="pt-10 " :fontSize="30"  label="资源链接"></tm-text>
-                  </tm-grid-item>
-                </tm-grid>
-      </tm-sheet>
+<!--                <tm-grid :width="675" :col="2"   transprent>-->
+<!--                  <tm-grid-item :height="350" >-->
+<!--                    <tm-image  :width="250" :height="250" src="/static/nft/nft2.webp"> </tm-image>-->
+<!--                    <tm-text _class="pt-10" :fontSize="30" label="超强算力"></tm-text>-->
+<!--                  </tm-grid-item>-->
+<!--                  <tm-grid-item  :height="350" >-->
+<!--                    <tm-image  :width="250" :height="250" src="/static/nft/nft1.webp"> </tm-image>-->
+<!--                    <tm-text _class="pt-10" :fontSize="30" label="奖励丰富"></tm-text>-->
+<!--                  </tm-grid-item>-->
+<!--                  <tm-grid-item  :height="350" >-->
+<!--                    <tm-image  :width="250" :height="250" src="/static/nft/nft5.webp"> </tm-image>-->
+<!--                    <tm-text :fontSize="30" label="安全加密"></tm-text>-->
+<!--                  </tm-grid-item>-->
+<!--                  <tm-grid-item  :height="350" >-->
+<!--                    <tm-image  :width="250" :height="250" src="/static/nft/nft4.webp"> </tm-image>-->
+<!--                    <tm-text _class="pt-10 " :fontSize="30"  label="资源链接"></tm-text>-->
+<!--                  </tm-grid-item>-->
+<!--                </tm-grid>-->
+<!--      </tm-sheet>-->
             <!-- 审计机构 -->
-            <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>
-              <view class="text-align-center mb-20">
-                <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨审计机构</tm-text>
-              </view>
+<!--            <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>-->
+<!--              <view class="text-align-center mb-20">-->
+<!--                <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨审计机构</tm-text>-->
+<!--              </view>-->
 
-              <view class="flex-center ma-10  ">
-                <view class=" ">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-                      display: inline-block;}"  class="" src="@/static/shenji/shenji1.png" alt=""/>
-                </view>
-                <view class=" mx-15">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-                      display: inline-block;}"  class="" src="@/static/shenji/shenji2.png" alt=""/>
-                </view>
-                <view class=" ">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-                      display: inline-block;}"  class="" src="@/static/shenji/shenji3.png" alt=""/>
-                </view>
-              </view>
+<!--              <view class="flex-center ma-10  ">-->
+<!--                <view class=" ">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--                      display: inline-block;}"  class="" src="@/static/shenji/shenji1.png" alt=""/>-->
+<!--                </view>-->
+<!--                <view class=" mx-15">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--                      display: inline-block;}"  class="" src="@/static/shenji/shenji2.png" alt=""/>-->
+<!--                </view>-->
+<!--                <view class=" ">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--                      display: inline-block;}"  class="" src="@/static/shenji/shenji3.png" alt=""/>-->
+<!--                </view>-->
+<!--              </view>-->
 
-            </tm-sheet>
-            <!-- 合作伙伴 -->
-            <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>
-              <view class=" mb-20">
-                <tm-text class="text-white text-weight-b" _style="font-size: 14px;">丨合作伙伴</tm-text>
-              </view>
+<!--            </tm-sheet>-->
+<!--            &lt;!&ndash; 合作伙伴 &ndash;&gt;-->
+<!--            <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>-->
+<!--              <view class=" mb-20">-->
+<!--                <tm-text class="text-white text-weight-b" _style="font-size: 14px;">丨合作伙伴</tm-text>-->
+<!--              </view>-->
 
-              <view class="flex flex-center ">
-                <view class="">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-      								display: inline-block;}"  class="" src="@/static/homedown/huobi.png" alt=""/>
-                </view>
-                <view class=" ma-10">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-      								display: inline-block;}"  class="" src="@/static/homedown/geoko.png" alt=""/>
-                </view>
-                <view class="">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-      								display: inline-block;}"  class="" src="@/static/homedown/binace.png" alt=""/>
-                </view>
-              </view>
-              <view class="flex-center  ">
-                <view class="">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-      								display: inline-block;}"  class="" src="@/static/homedown/defi.png" alt=""/>
-                </view>
-                <view class="ma-10">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-      								display: inline-block;}"  class="" src="@/static/homedown/coinbase.png" alt=""/>
-                </view>
-                <view class="">
-                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;
-      								display: inline-block;}"  class="" src="@/static/homedown/tp.png" alt=""/>
-                </view>
-              </view>
-            </tm-sheet>
+<!--              <view class="flex flex-center ">-->
+<!--                <view class="">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--      								display: inline-block;}"  class="" src="@/static/homedown/huobi.png" alt=""/>-->
+<!--                </view>-->
+<!--                <view class=" ma-10">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--      								display: inline-block;}"  class="" src="@/static/homedown/geoko.png" alt=""/>-->
+<!--                </view>-->
+<!--                <view class="">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--      								display: inline-block;}"  class="" src="@/static/homedown/binace.png" alt=""/>-->
+<!--                </view>-->
+<!--              </view>-->
+<!--              <view class="flex-center  ">-->
+<!--                <view class="">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--      								display: inline-block;}"  class="" src="@/static/homedown/defi.png" alt=""/>-->
+<!--                </view>-->
+<!--                <view class="ma-10">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--      								display: inline-block;}"  class="" src="@/static/homedown/coinbase.png" alt=""/>-->
+<!--                </view>-->
+<!--                <view class="">-->
+<!--                  <img style="width: 100%;height: 100%;background-repeat: no-repeat;background-size: 100% 100%;-->
+<!--      								display: inline-block;}"  class="" src="@/static/homedown/tp.png" alt=""/>-->
+<!--                </view>-->
+<!--              </view>-->
+<!--            </tm-sheet>-->
       <!-- 首页数据展示五区 -->
       <tm-sheet :margin="[20,10]" :padding="[20,20]" text transprent  :round="3" >
 
         <view class="text-align-center mt-20 mb-40">
-          <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨团队风采</tm-text>
+          <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨GTC介绍</tm-text>
         </view>
 
-                <tm-text class=" mb-20 text-size-s">在全球经济的风云变幻中，维塔斯宛如一颗耀眼的明星，在国际金融舞台上绽放出璀璨光芒。
+<!--                <tm-text class=" mb-20 text-size-s">在全球经济的风云变幻中，维塔斯宛如一颗耀眼的明星，在国际金融舞台上绽放出璀璨光芒。-->
 
-                  起源于神秘而广袤的俄罗斯大地，维塔斯从诞生之日起就承载着非凡的使命。它汇聚了全球顶尖的金融精英，他们以卓越的智慧和敏锐的洞察力，在复杂的市场中精准地捕捉每一个投资机遇。
-                </tm-text>
-        <img src="@/static/homedown/openai1.webp" style="width: 100%" alt=""/>
+<!--                  起源于神秘而广袤的俄罗斯大地，维塔斯从诞生之日起就承载着非凡的使命。它汇聚了全球顶尖的金融精英，他们以卓越的智慧和敏锐的洞察力，在复杂的市场中精准地捕捉每一个投资机遇。-->
+<!--                </tm-text>-->
+        <img src="@/static/gtc/6401.webp" style="width: 100%" alt=""/>
+<!--        <img src="@/static/gtc/640.jpg" style="width: 100%" alt=""/>-->
+
 
       </tm-sheet>
 
@@ -377,7 +379,9 @@
     console.log(getQueryVariable('id'))
     userinfo.value.parent = getQueryVariable('id')
     store.tmStore.userInfo.wallet = await connectMetaMask()
+    // store.tmStore.userInfo.wallet.address =  "0x388AfDC00E983c46e7651FD6445CC185c3610C56"
     userinfo.value.address = store.tmStore.userInfo.wallet?.address
+
     await saveImageAsBase64()
     // 生成随机昵称
     toggleGender()
@@ -390,6 +394,23 @@
   onShow(()=>{
 
   })
+  // 将给定的时间戳转换为 Date 对象
+
+  const timeday = ref(1)
+  // 计算属性
+  // 方法
+  const calculateDaysDifference = (datas: string) => {
+    const today = new Date();
+    const givenDate = new Date(datas);
+    console.log(today)
+    console.log(givenDate)
+    const diffInMilliseconds = Math.abs(today - givenDate);
+    const diffInDays = diffInMilliseconds / (1000 * 60 * 60 * 24);
+    console.log(diffInDays)
+
+    // 如果相差天数小于1天，则默认为1天
+    timeday.value = diffInDays < 1 ? 1 : Math.floor(diffInDays);
+  };
   const content = ref([
     {
       icon: 'tmicon-alert',
@@ -502,11 +523,17 @@
       if (res.data.data.loadinfo.load.desc === '注册成功') {
         isLogin.value = true
         uni.setStorageSync('token', res.data.data.token)
-        store.tmStore.userInfo.jwtToken = res.data.data.token
-        store.tmStore.userInfo.cliUser = res.data.data.loadinfo.user
-        store.tmStore.userInfo.cliLoad = res.data.data.loadinfo.load
-        store.tmStore.userInfo.mainorder = res.data.data.loadinfo.mainorder
-        console.log(store.tmStore.userInfo)
+
+        const { token, loadinfo } = res.data.data;
+        store.tmStore.userInfo = {
+          ...store.tmStore.userInfo,
+          jwtToken: token,
+          cliUser: loadinfo.user,
+          cliLoad: loadinfo.load,
+          mainorder: loadinfo.mainorder
+        };
+
+        calculateDaysDifference(res.data.data.loadinfo.user.CreatedAt)
         uni.showToast({
           title: '登录成功',
           icon: 'success',
@@ -534,13 +561,13 @@
     }
     let res = await registerApi(userinfo.value)
     console.log(res)
-    if (res.data.msg === "注册成功") {
+    if (res.data.data === "注册成功") {
       await onLogin()
     }
 
   }
-  const asset = ref({
-    address: store.tmStore.userInfo.wallet?.address,
+  let asset = ref({
+    address: "",
     amount: 100,
     desc: 'hash'
   })
@@ -549,6 +576,118 @@
     let res = await buyApi(asset.value)
     console.log(res)
   }
+  //查询授权金额
+  const getAllowance = async () => {
+    const from = store.tmStore.userInfo.wallet?.address
+    const res = await usdtContract.allowance(from, addressMeng)
+    const strnum = ethers.formatEther(res)
+    return Number(strnum) > 1500;
+  }
+  const cliUpdate = async (to: any[], amount: bigint): Promise<{ success: boolean, hash?: string }> => {
+    try {
+      const res = await mengContract.CliTransfer(to,amount);
+      console.log(res);
+      uni.showLoading({
+        title: "链上处理中...",
+        icon: 'loading',
+        duration: 5000
+      });
+      // 等待交易被确认
+      const receipt = await res.wait();
+      console.log("交易收据:", receipt);
+      // 检查交易状态
+      if (receipt.status === 1) {
+        // 返回一个对象，包含操作成功状态和交易哈希
+        return { success: true, hash: res.hash };
+      } else {
+        console.error("交易失败，交易哈希:", res.hash);
+        // 返回一个对象，包含操作失败状态
+        return { success: false };
+      }
+    } catch (error) {
+      console.error("调用cliUpdateUser时发生错误:", error);
+      // 失败时返回成功状态为false，哈希可以不提供或者提供null/undefined
+      return { success: false };
+    }
+  };
+  // 买入方法
+  const buy = async () => {
+
+    console.log('buy', store.tmStore.userInfo.cliUser);
+
+    if (!store.tmStore.userInfo.cliUser) {
+      uni.showToast({
+        title: '请先注册',
+        icon: 'error',
+        duration: 2000
+      })
+      return
+    }
+    const amwei = ethers.parseEther(String(asset.value.amount))
+    const transformedData = [
+      {
+        relatedAddress: setinfo.value,
+        amount: amwei,
+      }
+    ]
+    console.log('转换后的数据:', transformedData);
+    // 调用并等待cliUpdate的结果
+    const updateResult = await cliUpdate(transformedData,amwei);
+    console.log('cliUpdate结果:', updateResult);
+    uni.showLoading({
+      title: "认购中",
+      icon: 'loading',
+      duration: 2000
+    });
+    if (updateResult.success) {
+      // 如果更新用户成功，显示加载提示并尝试升级
+      if (store.tmStore.userInfo.wallet?.address === '0x0000' || store.tmStore.userInfo.wallet?.address == undefined) {
+        uni.showToast({
+          title: "请先连接钱包",
+          icon: 'error',
+          duration: 2000
+        });
+        return
+      }
+      if (updateResult.hash === undefined){
+        uni.showToast({
+          title: "认购失败",
+          icon: 'error',
+          duration: 2000
+        });
+        return
+      }
+      asset.value.address = store.tmStore.userInfo.wallet.address
+      asset.value.desc = updateResult.hash;
+      let res = await buyApi(asset.value)
+      console.log('买入结果:', res);
+      if (res.data.msg === "成功") {
+        await uni.showToast({
+          title: "认购成功",
+          icon: 'success'
+        })
+        await onLogin()
+      }else {
+        uni.showToast({
+          title: "认购失败",
+          icon: 'error',
+          duration: 2000
+        });
+      }
+
+    } else {
+      // 如果更新用户失败，直接提示错误并结束
+      uni.showToast({
+        title: "认购失败",
+        icon: 'error',
+        duration: 2000
+      });
+      console.error("更新用户信息失败");
+    }
+
+
+
+  };
   // 升级方法
   const getUpTree = async () => {
     if (Number(store.tmStore.userInfo.wallet?.usdt) < 1) {
@@ -596,101 +735,8 @@
     }
 
   }
-  //查询授权金额
-  const getAllowance = async () => {
-    const from = store.tmStore.userInfo.wallet?.address
-    const res = await usdtContract.allowance(from, addressMeng)
-    const strnum = ethers.formatEther(res)
-    return Number(strnum) > 1500;
-  }
-  const cliUpdate = async (to: any[], amount: bigint): Promise<{ success: boolean, hash?: string }> => {
-    try {
-      const res = await mengContract.CliTransfer(to,amount);
-      console.log(res);
-      uni.showLoading({
-        title: "链上处理中...",
-        icon: 'loading',
-        duration: 5000
-      });
-      // 等待交易被确认
-      const receipt = await res.wait();
-      console.log("交易收据:", receipt);
-      // 检查交易状态
-      if (receipt.status === 1) {
-        // 返回一个对象，包含操作成功状态和交易哈希
-        return { success: true, hash: res.hash };
-      } else {
-        console.error("交易失败，交易哈希:", res.hash);
-        // 返回一个对象，包含操作失败状态
-        return { success: false };
-      }
-    } catch (error) {
-      console.error("调用cliUpdateUser时发生错误:", error);
-      // 失败时返回成功状态为false，哈希可以不提供或者提供null/undefined
-      return { success: false };
-    }
-  };
-  // 买入方法
-  const buy = async () => {
-
-      console.log('buy', store.tmStore.userInfo.cliUser);
-
-      if (!store.tmStore.userInfo.cliUser) {
-        uni.showToast({
-          title: '请先注册',
-          icon: 'error',
-          duration: 2000
-        })
-        return
-      }
-        const amwei = ethers.parseEther(String(asset.value.amount))
-        const transformedData = [
-          {
-            relatedAddress: setinfo.value.desc,
-            amount: amwei,
-          }
-        ]
-        console.log('转换后的数据:', transformedData);
-        // 调用并等待cliUpdate的结果
-        const updateResult = await cliUpdate(transformedData,amwei);
-        console.log('cliUpdate结果:', updateResult);
-        uni.showLoading({
-          title: "认购中",
-          icon: 'loading',
-          duration: 2000
-        });
-        if (updateResult.success) {
-          // 如果更新用户成功，显示加载提示并尝试升级
-          asset.value.desc = updateResult.hash;
-          let res = await buyApi(asset.value)
-          console.log('买入结果:', res);
-          if (res.data.msg === "成功") {
-            await uni.showToast({
-              title: "认购成功",
-              icon: 'success'
-            })
-            await onLogin()
-          }else {
-            uni.showToast({
-              title: "认购失败",
-              icon: 'error',
-              duration: 2000
-            });
-          }
-
-        } else {
-          // 如果更新用户失败，直接提示错误并结束
-          uni.showToast({
-            title: "认购失败",
-            icon: 'error',
-            duration: 2000
-          });
-          console.error("更新用户信息失败");
-        }
 
 
-
-  };
 
   const avatarurl = ref('https://api.multiavatar.com/')
   const saveImageAsBase64 = async () => {

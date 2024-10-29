@@ -1,9 +1,13 @@
 package xiao
 
 import (
+	"database/sql"
+	"errors"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao"
 	xiaoReq "github.com/flipped-aurora/gin-vue-admin/server/model/xiao/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao/xiaores"
 )
 
 type CliOrderService struct{}
@@ -90,7 +94,75 @@ func (cliOrderService *CliOrderService) GetCliOrderInfoList(info xiaoReq.CliOrde
 	err = db.Find(&cliOrders).Error
 	return cliOrders, total, err
 }
-func (cliOrderService *CliOrderService) GetCliOrderPublic() {
+func (cliOrderService *CliOrderService) GetCliOrderPublic(pageInfo *xiaoReq.CliOrderSearch) (res xiaores.CliOrderRes, err error) {
 	// 此方法为获取数据源定义的数据
-	// 请自行实现
+	// 查询直推和团队订单
+	tx := global.GVA_DB.Begin() // 开始事务
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			err = fmt.Errorf("transaction failed: %v", r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
+		}
+	}()
+
+	// 获取我的主订单
+	res.MyMainorder, err = xiao.NewCliMainorder(pageInfo.Address).GetCliMainorder(tx)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return res, err
+	}
+
+	// 获取所有子节点
+	childs, err := xiao.NewCliTree(pageInfo.Address, "").GetPartChilds(tx, 1)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return res, err
+	}
+
+	for _, child := range childs {
+		orders, err := xiao.NewOrder(child.Address).GetCliAllOrder(tx)
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			return res, err
+		}
+		if orders != nil {
+			user, err := xiao.NewUser(child.Address).GetCliUser(tx)
+			if err != nil {
+				return xiaores.CliOrderRes{}, err
+			}
+			for _, order := range orders {
+				order.Text = user.Nickname
+				order.Desc = user.Avatarurl
+			}
+			res.CliChildren = append(res.CliChildren, orders...)
+		}
+	}
+
+	// 获取一级子节点
+	pulls, err := xiao.NewCliTree(pageInfo.Address, "").GetChildByLevel(tx, 1)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return res, err
+	}
+
+	for _, pull := range pulls {
+		order2, err := xiao.NewOrder(pull.Address).GetCliAllOrder(tx)
+		if err != nil && !errors.Is(err, sql.ErrNoRows) {
+			return res, err
+		}
+		if order2 != nil {
+			user, err := xiao.NewUser(pull.Address).GetCliUser(tx)
+			if err != nil {
+				return xiaores.CliOrderRes{}, err
+			}
+			for _, order := range order2 {
+				order.Text = user.Nickname
+				order.Desc = user.Avatarurl
+			}
+			res.CliPulls = append(res.CliPulls, order2...)
+		}
+	}
+
+	return res, nil
 }

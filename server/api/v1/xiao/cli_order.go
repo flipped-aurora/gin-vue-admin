@@ -161,8 +161,16 @@ func (cliOrderApi *CliOrderApi) GetCliOrderList(c *gin.Context) {
 func (cliOrderApi *CliOrderApi) GetCliOrderPublic(c *gin.Context) {
 	// 此接口不需要鉴权
 	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	cliOrderService.GetCliOrderPublic()
-	response.OkWithDetailed(gin.H{
-		"info": "不需要鉴权的订单详情接口信息",
-	}, "获取成功", c)
+	var pageInfo xiaoReq.CliOrderSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	resinfo, err := cliOrderService.GetCliOrderPublic(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(resinfo, "获取成功", c)
 }

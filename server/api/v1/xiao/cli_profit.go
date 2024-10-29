@@ -160,9 +160,22 @@ func (cliprofitApi *CliProfitApi) GetCliProfitList(c *gin.Context) {
 // @Router /cliprofit/getCliProfitPublic [get]
 func (cliprofitApi *CliProfitApi) GetCliProfitPublic(c *gin.Context) {
 	// 此接口不需要鉴权
-	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	cliprofitService.GetCliProfitPublic()
-	response.OkWithDetailed(gin.H{
-		"info": "不需要鉴权的结算详情接口信息",
+	var pageInfo xiaoReq.CliProfitSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := cliprofitService.GetCliProfitInfoList(pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     list,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }

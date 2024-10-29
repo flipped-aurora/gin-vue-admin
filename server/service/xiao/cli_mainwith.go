@@ -1,9 +1,11 @@
 package xiao
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao"
 	xiaoReq "github.com/flipped-aurora/gin-vue-admin/server/model/xiao/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao/xiaores"
 )
 
 type CliMainwithService struct{}
@@ -87,7 +89,26 @@ func (climainwithService *CliMainwithService) GetCliMainwithInfoList(info xiaoRe
 	err = db.Find(&climainwiths).Error
 	return climainwiths, total, err
 }
-func (climainwithService *CliMainwithService) GetCliMainwithPublic() {
+func (climainwithService *CliMainwithService) GetCliMainwithPublic(pageInfo *xiaoReq.CliMainwithSearch) (res xiaores.CliWithdrawRes, err error) {
 	// 此方法为获取数据源定义的数据
 	// 请自行实现
+	tx := global.GVA_DB
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			err = fmt.Errorf("transaction failed: %v", r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
+		}
+	}()
+	//查询提币总表
+	res.CliMainwiths, err = xiao.NewCliMainwith(pageInfo.Address).GetCliMainwith(tx)
+	if err != nil {
+		return res, err
+	}
+	//查询提币记录
+
+	return res, nil
 }

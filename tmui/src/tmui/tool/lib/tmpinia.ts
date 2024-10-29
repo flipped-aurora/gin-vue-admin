@@ -8,7 +8,8 @@ let pdefault_cookies_black = u.getCookie('setTmVuetifyBlack')
 let pdefault_cookies_local = u.getCookie('setTmVuetifyLocal')||'zh-Hans';
 
 let pdefault_cookies_colorArrayList = u.getCookie('colorArrayList');
-let dark = typeof pdefault_cookies_black === 'boolean' ? pdefault_cookies_black : false;
+// let dark = typeof pdefault_cookies_black === 'boolean' ? pdefault_cookies_black : false;
+let dark = true
 
 let themeObj = new themeColor.themeColors()
 if(pdefault_cookies_colorArrayList){

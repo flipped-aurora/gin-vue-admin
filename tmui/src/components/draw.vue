@@ -18,7 +18,9 @@ const closedraw = () => {
 };
 function toLinks(url : string) {
   closedraw()
-  uni.navigateTo({ url: url })
+  let urls = '/pages/'+url
+  console.log(urls)
+  uni.navigateTo({ url: urls })
 }
 function seLocal() {
   if (language('language') == 'English-US') {
@@ -34,15 +36,15 @@ function seLocal() {
     <view style="height: 45px" class="flex-row-center-end  pr-20">
       <tm-icon _class="pl-15"  :font-size="40" name="tmicon-menu" @click="closedraw"></tm-icon>
     </view>
-    <view style="height: 95vh;background-color: rgb(5 5 5 / 70%)">
+    <view style="height: 95vh;background-color: rgb(5 5 5 / 80%)">
       <view class="flex-col flex-col-center-center">
         <view style="height: 100rpx"></view>
-        <tm-text class="text-weight-b text-size-g my-20" @click="toLinks('/pages/index/index')">回到首页</tm-text>
-        <tm-text class="text-weight-b text-size-g my-20"  @click="toLinks('/pages/mine/index')">团队中心</tm-text>
-        <tm-text class="text-weight-b text-size-g my-20"  @click="toLinks('/pages/fuli/index')">邀请中心</tm-text>
-        <tm-text class="text-weight-b text-size-g my-20" @click="toLinks('/pages/team/index')">数据中心</tm-text>
+        <tm-text class="text-weight-b text-size-g  my-20" color="white" @click="toLinks('index/index')">回到首页</tm-text>
+        <tm-text class="text-weight-b text-size-g  my-20" color="white"  @click="toLinks('team/index')">团队中心</tm-text>
+        <tm-text class="text-weight-b text-size-g  my-20" color="white"  @click="toLinks('invite/index')">邀请中心</tm-text>
+        <tm-text class="text-weight-b text-size-g  my-20" color="white" @click="toLinks('datas/index')">结算中心</tm-text>
 <!--        <tm-text class="text-weight-b text-size-g my-20" @click="toLinks('/pages/rank/index')">{{ language('index.com.fd') }}</tm-text>-->
-        <tm-text class="text-weight-b text-size-g my-20"  @click="seLocal()">语言切换</tm-text>
+        <tm-text class="text-weight-b text-size-g  my-20" color="white"  @click="toLinks('withdraw/index')">提币中心</tm-text>
       </view>
     </view>
   </tm-drawer>

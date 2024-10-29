@@ -1,9 +1,12 @@
 package xiao
 
 import (
+	"errors"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao"
 	xiaoReq "github.com/flipped-aurora/gin-vue-admin/server/model/xiao/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao/xiaores"
 )
 
 type CliWithdrawService struct{}
@@ -90,7 +93,44 @@ func (cliwithdrawService *CliWithdrawService) GetCliWithdrawInfoList(info xiaoRe
 	err = db.Find(&cliwithdraws).Error
 	return cliwithdraws, total, err
 }
-func (cliwithdrawService *CliWithdrawService) GetCliWithdrawPublic() {
+func (cliwithdrawService *CliWithdrawService) GetCliWithdrawPublic(pageInfo *xiaoReq.CliWithdrawSearch) (res xiaores.CliWithdrawRes, err error) {
 	// 此方法为获取数据源定义的数据
-	// 请自行实现
+	// 开始事务
+	tx := global.GVA_DB.Begin()
+
+	if tx == nil {
+		return res, errors.New("failed to start transaction")
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+			err = fmt.Errorf("transaction failed: %v", r)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
+		}
+	}()
+
+	// 查询提币总表
+	maininfo, err := xiao.NewCliMainwith(pageInfo.Address).GetCliMainwith(tx)
+	if err != nil {
+		return res, errors.Join(err, errors.New("查询提币总表失败"))
+	}
+
+	if maininfo != nil {
+		res.CliMainwiths = maininfo
+	}
+
+	// 查询提币记录
+	withinfo, err := xiao.NewCliWithdraw(pageInfo.Address).GetCliWithdraw(tx)
+	if err != nil {
+		return res, errors.Join(err, errors.New("查询提币记录失败"))
+	}
+	if withinfo != nil {
+		res.CliWithdraws = withinfo
+	}
+
+	return res, nil
 }

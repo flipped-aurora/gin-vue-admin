@@ -2,8 +2,10 @@
 package xiao
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/shopspring/decimal"
+	"gorm.io/gorm"
 )
 
 // 提币总表 结构体  CliMainwith
@@ -26,5 +28,14 @@ func (CliMainwith) TableName() string {
 // NewCliMainwith 创建CliMainwith
 func NewCliMainwith(address string) *CliMainwith {
 	return &CliMainwith{Address: address}
+}
 
+// 查询提币总表
+func (cliMain *CliMainwith) GetCliMainwith(tx *gorm.DB) (*CliMainwith, error) {
+	var climainwith CliMainwith
+	err := tx.Model(&CliMainwith{}).Where("address = ?", cliMain.Address).First(&climainwith).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return &climainwith, nil
 }

@@ -18,6 +18,7 @@ export interface myWallet {
 }
 
 export interface CliUser {
+    CreatedAt: Date;
     address: string; // 用户地址
     nickname: string; // 用户昵称
     avatarurl: string; // 远程头像

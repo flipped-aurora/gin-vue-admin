@@ -111,14 +111,15 @@
       <div class="usage-instructions bg-gray-100 border border-gray-300 rounded-lg p-4 mt-5">
         <h3 class="mb-3 text-lg text-gray-800">使用说明</h3>
         <p class="mb-2 text-sm text-gray-600">
-          前端可以通过引入 <code class="bg-blue-100 px-1 py-0.5 rounded">import { getParams } from '@/utils/dictionary'</code> 然后通过 <code class="bg-blue-100 px-1 py-0.5 rounded">await getParams(key)</code> 来获取对应的参数。
-        </p>
-        <p class="mb-2 text-sm text-gray-600">
-          后端可以调用 <code class="bg-blue-100 px-1 py-0.5 rounded">new(system.SysParamsService).GetSysParam(key)</code> 来获取对应的 value 值。
+          前端可以通过引入 <code class="bg-blue-100 px-1 py-0.5 rounded">import { getParams } from '@/utils/dictionary'</code> 然后通过 <code class="bg-blue-100 px-1 py-0.5 rounded">await getParams("{{formData.key}}")</code> 来获取对应的参数。
         </p>
         <p class="text-sm text-gray-600">
           后端需要提前 <code class="bg-blue-100 px-1 py-0.5 rounded">import "github.com/flipped-aurora/gin-vue-admin/server/service/system"</code>
         </p>
+        <p class="mb-2 text-sm text-gray-600">
+          然后调用 <code class="bg-blue-100 px-1 py-0.5 rounded">new(system.SysParamsService).GetSysParam("{{formData.key}}")</code> 来获取对应的 value 值。
+        </p>
+
       </div>
 
     </el-drawer>

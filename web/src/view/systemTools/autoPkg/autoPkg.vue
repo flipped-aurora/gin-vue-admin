@@ -54,7 +54,6 @@
         >
           <template #default="scope">
             <el-button
-                v-if="scope.row.ID<1000"
               icon="delete"
               type="primary"
               link

@@ -117,7 +117,6 @@ func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error
 // @author: [piexlmax](https://github.com/piexlmax)
 // @author: [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCodePackage, err error) {
-	var step uint = 10000
 	server := make([]model.SysAutoCodePackage, 0)
 	plugin := make([]model.SysAutoCodePackage, 0)
 	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service")
@@ -133,9 +132,7 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 	for i := 0; i < len(serverDir); i++ {
 		if serverDir[i].IsDir() {
 			serverPackage := model.SysAutoCodePackage{PackageName: serverDir[i].Name(), Template: "package", Label: serverDir[i].Name() + "包", Desc: "系统自动读取" + serverDir[i].Name() + "包"}
-			serverPackage.ID = step
 			server = append(server, serverPackage)
-			step++
 		}
 	}
 	for i := 0; i < len(pluginDir); i++ {
@@ -165,9 +162,7 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 				continue
 			}
 			pluginPackage := model.SysAutoCodePackage{PackageName: pluginDir[i].Name(), Template: "plugin", Label: pluginDir[i].Name() + "插件", Desc: "系统自动读取" + pluginDir[i].Name() + "插件，使用前请确认是否为v2版本插件"}
-			pluginPackage.ID = step
 			plugin = append(plugin, pluginPackage)
-			step++
 		}
 	}
 
@@ -179,19 +174,28 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 	for i := 0; i < len(entities); i++ {
 		entitiesMap[entities[i].PackageName] = entities[i]
 	}
+	createEntity := []model.SysAutoCodePackage{}
 	for i := 0; i < len(server); i++ {
 		if _, ok := entitiesMap[server[i].PackageName]; !ok {
 			if server[i].Template == "package" {
-				entities = append(entities, server[i])
+				createEntity = append(createEntity, server[i])
 			}
 		}
 	}
 	for i := 0; i < len(plugin); i++ {
 		if _, ok := entitiesMap[plugin[i].PackageName]; !ok {
 			if plugin[i].Template == "plugin" {
-				entities = append(entities, plugin[i])
+				createEntity = append(createEntity, plugin[i])
 			}
 		}
+	}
+
+	if len(createEntity) > 0 {
+		err = global.GVA_DB.WithContext(ctx).Create(&createEntity).Error
+		if err != nil {
+			return nil, errors.Wrap(err, "同步失败!")
+		}
+		entities = append(entities, createEntity...)
 	}
 
 	return entities, nil

@@ -188,15 +188,7 @@ func (r *AutoCode) Pretreatment() error {
 	} // GvaModel
 	{
 		if r.IsAdd && r.PrimaryField == nil {
-			r.PrimaryField = &AutoCodeField{
-				FieldName:    "",
-				FieldType:    "",
-				FieldDesc:    "",
-				FieldJson:    "",
-				DataTypeLong: "",
-				Comment:      "",
-				ColumnName:   "",
-			}
+			r.PrimaryField = new(AutoCodeField)
 		}
 	} // 新增字段模式下不关注主键
 	if r.Package == "" {

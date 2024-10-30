@@ -19,7 +19,7 @@
         <el-table-column
           align="left"
           label="id"
-          width="60"
+          width="120"
           prop="ID"
         />
         <el-table-column
@@ -54,8 +54,8 @@
         >
           <template #default="scope">
             <el-button
+                v-if="scope.row.ID<1000"
               icon="delete"
-
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"

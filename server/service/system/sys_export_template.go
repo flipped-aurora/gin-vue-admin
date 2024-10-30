@@ -168,7 +168,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	if len(template.JoinTemplate) > 0 {
 		for _, join := range template.JoinTemplate {
-			db = db.Joins(join.JOINS + join.Table + " ON " + join.ON)
+			db = db.Joins(join.JOINS + " " + join.Table + " ON " + join.ON)
 		}
 	}
 

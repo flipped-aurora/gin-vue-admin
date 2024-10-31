@@ -131,7 +131,13 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 	}
 	for i := 0; i < len(serverDir); i++ {
 		if serverDir[i].IsDir() {
-			serverPackage := model.SysAutoCodePackage{PackageName: serverDir[i].Name(), Template: "package", Label: serverDir[i].Name() + "包", Desc: "系统自动读取" + serverDir[i].Name() + "包"}
+			serverPackage := model.SysAutoCodePackage{
+				PackageName: serverDir[i].Name(),
+				Template:    "package",
+				Label:       serverDir[i].Name() + "包",
+				Desc:        "系统自动读取" + serverDir[i].Name() + "包",
+				Module:      global.GVA_CONFIG.AutoCode.Module,
+			}
 			server = append(server, serverPackage)
 		}
 	}
@@ -161,7 +167,13 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 			if len(dirNameMap) != 0 {
 				continue
 			}
-			pluginPackage := model.SysAutoCodePackage{PackageName: pluginDir[i].Name(), Template: "plugin", Label: pluginDir[i].Name() + "插件", Desc: "系统自动读取" + pluginDir[i].Name() + "插件，使用前请确认是否为v2版本插件"}
+			pluginPackage := model.SysAutoCodePackage{
+				PackageName: pluginDir[i].Name(),
+				Template:    "plugin",
+				Label:       pluginDir[i].Name() + "插件",
+				Desc:        "系统自动读取" + pluginDir[i].Name() + "插件，使用前请确认是否为v2版本插件",
+				Module:      global.GVA_CONFIG.AutoCode.Module,
+			}
 			plugin = append(plugin, pluginPackage)
 		}
 	}

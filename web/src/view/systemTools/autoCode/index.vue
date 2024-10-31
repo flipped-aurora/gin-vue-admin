@@ -1020,10 +1020,12 @@ const fieldTemplate = {
   fieldIndexType: '',
   dictType: '',
   dataSource: {
+    dbName: '',
     association:1,
     table: '',
     label: '',
-    value: ''
+    value: '',
+    hasDeletedAt: false
   }
 }
 const route = useRoute()
@@ -1116,10 +1118,12 @@ const editAndAddField = (item) => {
     addFlag.value = 'edit'
     if(!item.dataSource){
       item.dataSource = {
+        dbName: '',
         association:1,
         table: '',
         label: '',
-        value: ''
+        value: '',
+        hasDeletedAt: false
       }
     }
     bk.value = JSON.parse(JSON.stringify(item))
@@ -1344,10 +1348,12 @@ const getColumnFunc = async() => {
                 excel: false,
                 desc: true,
                 dataSource: {
+                  dbName: '',
                   association:1,
                   table: '',
                   label: '',
-                  value: ''
+                  value: '',
+                  hasDeletedAt: false
                 }
               })
             }

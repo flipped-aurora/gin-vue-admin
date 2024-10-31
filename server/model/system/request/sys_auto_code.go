@@ -46,11 +46,12 @@ type AutoCode struct {
 }
 
 type DataSource struct {
-	DBName      string `json:"dbName"`
-	Table       string `json:"table"`
-	Label       string `json:"label"`
-	Value       string `json:"value"`
-	Association int    `json:"association"` // 关联关系 1 一对一 2 一对多
+	DBName       string `json:"dbName"`
+	Table        string `json:"table"`
+	Label        string `json:"label"`
+	Value        string `json:"value"`
+	Association  int    `json:"association"` // 关联关系 1 一对一 2 一对多
+	HasDeletedAt bool   `json:"hasDeletedAt"`
 }
 
 func (r *AutoCode) Apis() []model.SysApi {

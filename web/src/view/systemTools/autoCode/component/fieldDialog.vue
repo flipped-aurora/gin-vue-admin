@@ -457,6 +457,7 @@ const getDBTableList = async () => {
 
 const dbColumnList = ref([])
 const selectDB = async (val,isInit) => {
+  middleDate.value.dataSource.hasDeletedAt = false
   middleDate.value.dataSource.table = val
   const res = await getColumn({
     businessDB: middleDate.value.dataSource.dbName,
@@ -465,13 +466,18 @@ const selectDB = async (val,isInit) => {
 
   if (res.code === 0) {
     let list = res.data.columns; // 确保这里正确获取到 tables 数组
-    dbColumnList.value = list.map(item => ({
-      columnName: item.columnName,
-      value: item.columnName,
-      type: item.dataType,
-      isPrimary: item.primaryKey,
-      comment: item.columnComment
-    }));
+    dbColumnList.value = list.map(item => {
+        if(item.columnName === 'deleted_at'){
+          middleDate.value.dataSource.hasDeletedAt = true
+        }
+        return{
+            columnName: item.columnName,
+            value: item.columnName,
+            type: item.dataType,
+            isPrimary: item.primaryKey,
+            comment: item.columnComment
+        }
+    });
     if (dbColumnList.value.length > 0 && !isInit) {
       middleDate.value.dataSource.label = dbColumnList.value[0].columnName
       middleDate.value.dataSource.value = dbColumnList.value[0].columnName

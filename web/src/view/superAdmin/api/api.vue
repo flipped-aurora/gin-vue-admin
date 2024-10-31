@@ -199,7 +199,7 @@
       :before-close="closeSyncDialog"
       :show-close="false"
     >
-      <warning-bar title="同步API，不输入路由分组将不会被自动同步" />
+      <warning-bar title="同步API，不输入路由分组将不会被自动同步，如果api不需要参与鉴权，可以按忽略按钮进行忽略。" />
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">同步路由</span>

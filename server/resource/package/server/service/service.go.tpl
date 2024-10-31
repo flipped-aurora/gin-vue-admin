@@ -13,7 +13,7 @@
                 {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
 if info.{{.FieldName}} != "" {
         {{- if or (eq .FieldType "enum") }}
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
         {{- else}}
 // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
         {{- end}}
@@ -24,7 +24,7 @@ if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
 }
     {{- else}}
 if info.{{.FieldName}} != nil {
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
 }
             {{- end }}
         {{- end }}
@@ -148,7 +148,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
                 {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
     if info.{{.FieldName}} != "" {
         {{- if or (eq .FieldType "enum")}}
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
         {{- else}}
         // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
         {{- end}}
@@ -159,7 +159,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
         }
     {{- else}}
     if info.{{.FieldName}} != nil {
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
             {{- end }}
         {{- end }}

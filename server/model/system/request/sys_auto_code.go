@@ -186,6 +186,11 @@ func (r *AutoCode) Pretreatment() error {
 			}
 		}
 	} // GvaModel
+	{
+		if r.IsAdd && r.PrimaryField == nil {
+			r.PrimaryField = new(AutoCodeField)
+		}
+	} // 新增字段模式下不关注主键
 	if r.Package == "" {
 		return errors.New("Package为空!")
 	} // 增加判断：Package不为空

@@ -100,6 +100,10 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 	}
 	var tempMap map[string]string
 	if info.IsPreview {
+		info.Router = "填充router"
+		info.FuncName = "填充funcName"
+		info.Method = "填充method"
+		info.Description = "填充description"
 		tempMap, err = autoCodeTemplateService.GetApiAndServer(info)
 	} else {
 		err = autoCodeTemplateService.AddFunc(info)

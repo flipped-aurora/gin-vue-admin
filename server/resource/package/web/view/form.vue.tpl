@@ -76,6 +76,12 @@
 const {{ $element }}Options = ref([])
     {{- end }}
 
+// init方法中增加如下调用
+
+{{- range $index, $element := .DictTypes }}
+    {{ $element }}Options.value = await getDictFunc('{{$element}}')
+{{- end }}
+
 // 基础formData结构增加如下字段
 {{- range .Fields}}
           {{- if .Form}}

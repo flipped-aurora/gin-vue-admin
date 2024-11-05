@@ -36,6 +36,10 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		return
 	}
 
+	if *authority.ParentId == 0 && global.GVA_CONFIG.System.UseStrictAuth {
+		authority.ParentId = utils.Pointer(utils.GetUserAuthorityId(c))
+	}
+
 	if authBack, err = authorityService.CreateAuthority(authority); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败"+err.Error(), c)

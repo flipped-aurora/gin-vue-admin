@@ -92,7 +92,7 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 	oss := upload.NewOss()
 	filePath, key, uploadErr := oss.UploadFile(header)
 	if uploadErr != nil {
-		panic(uploadErr)
+		return file, uploadErr
 	}
 	s := strings.Split(header.Filename, ".")
 	f := example.ExaFileUploadAndDownload{
@@ -105,4 +105,14 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 		return f, e.Upload(f)
 	}
 	return f, nil
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: ImportURL
+//@description: 导入URL
+//@param: file model.ExaFileUploadAndDownload
+//@return: error
+
+func (e *FileUploadAndDownloadService) ImportURL(file *[]example.ExaFileUploadAndDownload) error {
+	return global.GVA_DB.Create(&file).Error
 }

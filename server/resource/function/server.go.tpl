@@ -6,7 +6,7 @@
 {{- end}}
 {{if .IsPlugin}}
 
-// {{.FuncName}} 请实现方法
+// {{.FuncName}} {{.FuncDesc}}
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) {{.FuncName}}() (err error) {
 	db := {{$db}}.Model(&model.{{.StructName}}{})
@@ -15,7 +15,7 @@ func (s *{{.Abbreviation}}) {{.FuncName}}() (err error) {
 
 {{- else -}}
 
-// {{.FuncName}} 请实现方法
+// {{.FuncName}} {{.FuncDesc}}
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service){{.FuncName}}() (err error) {
 	// 请在这里实现自己的业务逻辑

@@ -163,7 +163,6 @@
           <template #default="scope">
             <el-button
               icon="edit"
-
               type="primary"
               link
               @click="editApiFunc(scope.row)"
@@ -172,7 +171,6 @@
             </el-button>
             <el-button
               icon="delete"
-
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"
@@ -201,17 +199,17 @@
       :before-close="closeSyncDialog"
       :show-close="false"
     >
-      <warning-bar title="同步API，不输入路由分组将不会被自动同步" />
+      <warning-bar title="同步API，不输入路由分组将不会被自动同步，如果api不需要参与鉴权，可以按忽略按钮进行忽略。" />
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">同步路由</span>
           <div>
-            <el-button @click="closeSyncDialog">
+            <el-button :loading="apiCompletionLoading" @click="closeSyncDialog">
               取 消
             </el-button>
             <el-button
               type="primary"
-              :loading="syncing"
+              :loading="syncing||apiCompletionLoading"
               @click="enterSyncDialog"
             >
               确 定
@@ -220,8 +218,17 @@
         </div>
       </template>
 
-      <h4>新增路由 <span class="text-xs text-gray-500 ml-2 font-normal">存在于当前路由中，但是不存在于api表</span></h4>
+      <h4>新增路由 <span class="text-xs text-gray-500 mx-2 font-normal">存在于当前路由中，但是不存在于api表</span>
+        <el-button type="primary" size="small" @click="apiCompletion">
+          <el-icon size="18">
+            <ai-gva />
+          </el-icon>
+          自动填充
+        </el-button>
+      </h4>
       <el-table
+         v-loading="syncing||apiCompletionLoading"
+         element-loading-text="小淼正在思考..."
         :data="syncApiData.newApis"
       >
         <el-table-column
@@ -282,7 +289,10 @@
           fixed="right"
         >
           <template #default="{row}">
-            <el-button type="primary" text @click="ignoreApiFunc(row,true)">
+            <el-button icon="plus" type="primary" link @click="addApiFunc(row)">
+              单条新增
+            </el-button>
+            <el-button icon="sunrise" type="primary" link @click="ignoreApiFunc(row,true)">
               忽略
             </el-button>
           </template>
@@ -365,7 +375,7 @@
           fixed="right"
         >
           <template #default="{row}">
-            <el-button type="primary" text @click="ignoreApiFunc(row,false)">
+            <el-button icon="sunny" type="primary" link @click="ignoreApiFunc(row,false)">
               取消忽略
             </el-button>
           </template>
@@ -480,6 +490,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import ExportExcel from '@/components/exportExcel/exportExcel.vue'
 import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
 import ImportExcel from '@/components/exportExcel/importExcel.vue'
+import {butler} from "@/api/autoCode";
 
 defineOptions({
   name: 'Api',
@@ -568,14 +579,49 @@ const ignoreApiFunc = async (row,flag) =>{
   }
 }
 
+const addApiFunc = async(row)=>{
+  if(!row.apiGroup){
+    ElMessage({
+      type: 'error',
+      message: '请先选择API分组'
+    })
+    return
+  }
+  if(!row.description){
+    ElMessage({
+      type: 'error',
+      message: '请先填写API描述'
+    })
+    return
+  }
+  const res = await createApi(row)
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '添加成功',
+      showClose: true
+    })
+    syncApiData.value.newApis = syncApiData.value.newApis.filter(item => !(item.path === row.path && item.method === row.method))
+  }
+  getTableData()
+  getGroup()
+}
+
 const closeSyncDialog = () => {
   syncApiFlag.value = false
 }
 
 const syncing = ref(false)
 
-
 const enterSyncDialog = async() => {
+ if( syncApiData.value.newApis.some(item => !item.apiGroup || !item.description)){
+   ElMessage({
+     type: 'error',
+     message: '存在API未分组或未填写描述'
+   })
+   return
+ }
+
   syncing.value = true
   const res = await enterSyncApi(syncApiData.value)
   syncing.value = false
@@ -591,6 +637,7 @@ const enterSyncDialog = async() => {
 
 const onReset = () => {
   searchInfo.value = {}
+  getTableData()
 }
 // 搜索
 
@@ -690,7 +737,6 @@ const onSync = async() => {
   if (res.code === 0) {
     res.data.newApis.forEach(item => {
       item.apiGroup = apiGroupMap.value[item.path.split('/')[1]]
-      console.log(apiGroupMap.value)
     })
 
     syncApiData.value = res.data
@@ -806,6 +852,34 @@ const deleteApiFunc = async(row) => {
         getGroup()
       }
     })
+}
+const apiCompletionLoading = ref(false)
+const apiCompletion = async () =>{
+  apiCompletionLoading.value = true
+  const routerPaths = syncApiData.value.newApis.filter(item => !item.apiGroup || !item.description).map(item => item.path)
+  const res = await butler({data:routerPaths,command:'apiCompletion'})
+  apiCompletionLoading.value = false
+  if (res.code === 0) {
+    try{
+      const data = JSON.parse(res.data)
+      syncApiData.value.newApis.forEach(item => {
+        const target = data.find(d => d.path === item.path)
+        if(target){
+          if(!item.apiGroup){
+            item.apiGroup = target.apiGroup
+          }
+          if (!item.description) {
+            item.description = target.description
+          }
+        }
+      })
+    } catch (e) {
+      ElMessage({
+        type: 'error',
+        message: 'AI自动填充失败,请重新生成'
+      })
+    }
+  }
 }
 
 </script>

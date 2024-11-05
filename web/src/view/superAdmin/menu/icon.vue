@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <el-select
-      v-model="metaData.icon"
+      v-model="value"
       clearable
       filterable
       placeholder="请选择"
@@ -9,7 +9,7 @@
     >
       <template #prefix>
         <el-icon>
-          <component :is="metaData.icon" />
+          <component :is="value" />
         </el-icon>
       </template>
       <el-option
@@ -35,21 +35,13 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import config from '@/core/config'
+import { reactive } from 'vue'
 
 defineOptions({
   name: 'Icon',
 })
 
-const props = defineProps({
-  meta: {
-    default: function() {
-      return {}
-    },
-    type: Object,
-  },
-})
+const value = defineModel()
 
 const options = reactive([
   {
@@ -1171,15 +1163,9 @@ const options = reactive([
   {
     'key': 'wind-power',
     'label': 'wind-power',
-  },
-  ...config.logs
+  }
 ])
-const metaData = ref(props.meta)
-if (!metaData.value.icon) {
-  // metaData.value.icon = options[0].label
-  // 传参无icon则显示空即可，否则默认会加一个aim的icon
-  metaData.value.icon = ''
-}
+
 
 </script>
 

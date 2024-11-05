@@ -3,6 +3,7 @@ package request
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
 	"go/token"
@@ -25,7 +26,10 @@ type AutoCode struct {
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"false"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
+	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
+	IsAdd               bool                   `json:"isAdd" example:"false"`               // 是否新增
 	Fields              []*AutoCodeField       `json:"fields"`
+	Module              string                 `json:"-"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`
 	DataSourceMap       map[string]*DataSource `json:"-"`
@@ -42,10 +46,12 @@ type AutoCode struct {
 }
 
 type DataSource struct {
-	Table       string `json:"table"`
-	Label       string `json:"label"`
-	Value       string `json:"value"`
-	Association int    `json:"association"` // 关联关系 1 一对一 2 一对多
+	DBName       string `json:"dbName"`
+	Table        string `json:"table"`
+	Label        string `json:"label"`
+	Value        string `json:"value"`
+	Association  int    `json:"association"` // 关联关系 1 一对一 2 一对多
+	HasDeletedAt bool   `json:"hasDeletedAt"`
 }
 
 func (r *AutoCode) Apis() []model.SysApi {
@@ -108,6 +114,7 @@ func (r *AutoCode) Menu(template string) model.SysBaseMenu {
 // Pretreatment 预处理
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (r *AutoCode) Pretreatment() error {
+	r.Module = global.GVA_CONFIG.AutoCode.Module
 	if token.IsKeyword(r.Abbreviation) {
 		r.Abbreviation = r.Abbreviation + "_"
 	} // go 关键字处理
@@ -180,6 +187,11 @@ func (r *AutoCode) Pretreatment() error {
 			}
 		}
 	} // GvaModel
+	{
+		if r.IsAdd && r.PrimaryField == nil {
+			r.PrimaryField = new(AutoCodeField)
+		}
+	} // 新增字段模式下不关注主键
 	if r.Package == "" {
 		return errors.New("Package为空!")
 	} // 增加判断：Package不为空
@@ -236,6 +248,7 @@ type AutoFunc struct {
 	Package         string `json:"package"`
 	FuncName        string `json:"funcName"`        // 方法名称
 	Router          string `json:"router"`          // 路由名称
+	FuncDesc        string `json:"funcDesc"`        // 方法介绍
 	BusinessDB      string `json:"businessDB"`      // 业务库
 	StructName      string `json:"structName"`      // Struct名称
 	PackageName     string `json:"packageName"`     // 文件名称
@@ -244,6 +257,12 @@ type AutoFunc struct {
 	HumpPackageName string `json:"humpPackageName"` // go文件名称
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
+	IsAuth          bool   `json:"isAuth"`          // 是否鉴权
+	IsPreview       bool   `json:"isPreview"`       // 是否预览
+	IsAi            bool   `json:"isAi"`            // 是否AI
+	ApiFunc         string `json:"apiFunc"`         // API方法
+	ServerFunc      string `json:"serverFunc"`      // 服务方法
+	JsFunc          string `json:"jsFunc"`          // JS方法
 }
 
 type InitMenu struct {
@@ -255,4 +274,9 @@ type InitMenu struct {
 type InitApi struct {
 	PlugName string `json:"plugName"`
 	APIs     []uint `json:"apis"`
+}
+
+type LLMAutoCode struct {
+	Prompt string `json:"prompt" form:"prompt" gorm:"column:prompt;comment:提示语;type:text;"` //提示语
+	Mode   string `json:"mode" form:"mode" gorm:"column:mode;comment:模式;type:text;"`        //模式
 }

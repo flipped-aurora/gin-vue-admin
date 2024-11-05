@@ -85,6 +85,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/user/setUserAuthority", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/user/setUserAuthorities", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/user/resetPassword", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/user/setSelfSetting", V2: "PUT"},
 
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/findFile", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/breakpointContinueFinish", V2: "POST"},
@@ -95,6 +96,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/editFileName", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/getFileList", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/importURL", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/casbin/updateCasbin", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/casbin/getPolicyPathByAuthorityId", V2: "POST"},
@@ -176,6 +178,14 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/info/findInfo", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/info/getInfoList", V2: "GET"},
 
+		{Ptype: "p", V0: "888", V1: "/sysParams/createSysParams", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysParams/deleteSysParams", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysParams/deleteSysParamsByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysParams/updateSysParams", V2: "PUT"},
+		{Ptype: "p", V0: "888", V1: "/sysParams/findSysParams", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysParams/getSysParamsList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysParams/getSysParam", V2: "GET"},
+
 		{Ptype: "p", V0: "8881", V1: "/user/admin_register", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/getApiList", V2: "POST"},
@@ -203,6 +213,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/getFileList", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/editFileName", V2: "POST"},
+		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/importURL", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/casbin/updateCasbin", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/casbin/getPolicyPathByAuthorityId", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/jwt/jsonInBlacklist", V2: "POST"},
@@ -244,6 +255,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/getFileList", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/editFileName", V2: "POST"},
+		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/importURL", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/casbin/updateCasbin", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/casbin/getPolicyPathByAuthorityId", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/jwt/jsonInBlacklist", V2: "POST"},

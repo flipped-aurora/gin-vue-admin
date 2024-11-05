@@ -32,8 +32,8 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	}
 	file, err = fileUploadAndDownloadService.UploadFile(header, noSave) // 文件上传后拿到文件路径
 	if err != nil {
-		global.GVA_LOG.Error("修改数据库链接失败!", zap.Error(err))
-		response.FailWithMessage("修改数据库链接失败", c)
+		global.GVA_LOG.Error("上传文件失败!", zap.Error(err))
+		response.FailWithMessage("上传文件失败", c)
 		return
 	}
 	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, "上传成功", c)
@@ -107,4 +107,27 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 		Page:     pageInfo.Page,
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
+}
+
+// ImportURL
+// @Tags      ExaFileUploadAndDownload
+// @Summary   导入URL
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     data  body      example.ExaFileUploadAndDownload  true  "对象"
+// @Success   200   {object}  response.Response{msg=string}     "导入URL"
+// @Router    /fileUploadAndDownload/importURL [post]
+func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
+	var file []example.ExaFileUploadAndDownload
+	err := c.ShouldBindJSON(&file)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := fileUploadAndDownloadService.ImportURL(&file); err != nil {
+		global.GVA_LOG.Error("导入URL失败!", zap.Error(err))
+		response.FailWithMessage("导入URL失败", c)
+		return
+	}
+	response.OkWithMessage("导入URL成功", c)
 }

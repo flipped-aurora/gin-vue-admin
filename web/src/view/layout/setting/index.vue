@@ -1,5 +1,11 @@
 <template>
-  <el-drawer v-model="drawer" title="系统配置" direction="rtl" :size="width">
+  <el-drawer v-model="drawer" title="系统配置" direction="rtl" :size="width" :show-close="false">
+    <template #header>
+      <div class="flex justify-between items-center">
+        <span class="text-lg">系统配置</span>
+        <el-button type="primary" @click="saveConfig">保存配置</el-button>
+      </div>
+    </template>
     <div class="flex flex-col">
       <div class="mb-8">
         <div class="text-gray-800 dark:text-gray-100">默认主题</div>
@@ -112,14 +118,10 @@
         </div>
       </div>
 
-      <el-alert type="warning" :closable="false">
+<!--      <el-alert type="warning" :closable="false">
         请注意，所有配置请保存到本地文件的
         <el-tag>config.json</el-tag> 文件中，否则刷新页面后会丢失配置
-      </el-alert>
-
-      <el-button type="primary" class="mt-4" @click="copyConfig"
-        >复制配置json</el-button
-      >
+      </el-alert>-->
     </div>
   </el-drawer>
 </template>
@@ -129,6 +131,7 @@ import { useAppStore } from "@/pinia";
 import { storeToRefs } from "pinia";
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
+import {setSelfSetting} from "@/api/user";
 const appStore = useAppStore();
 const { config, device } = storeToRefs(appStore);
 defineOptions({
@@ -169,8 +172,8 @@ const sideModes = [
   }
 ];
 
-const copyConfig = () => {
-  const input = document.createElement("textarea");
+const saveConfig = async () => {
+  /*const input = document.createElement("textarea");
   input.value = JSON.stringify(config.value);
   // 添加回车
   input.value = input.value.replace(/,/g, ",\n");
@@ -178,14 +181,16 @@ const copyConfig = () => {
   input.select();
   document.execCommand("copy");
   document.body.removeChild(input);
-  ElMessage.success("复制成功, 请自行保存到本地文件中");
+  ElMessage.success("复制成功, 请自行保存到本地文件中");*/
+  const res = await setSelfSetting(config.value)
+  if(res.code === 0){
+    localStorage.setItem('originSetting', JSON.stringify(config.value))
+    ElMessage.success('保存成功')
+    drawer.value = false
+  }
 };
 
 const customColor = ref("");
-
-const handleSideModelChange = (e) => {
-  console.log(e);
-};
 </script>
 
 <style lang="scss" scoped>

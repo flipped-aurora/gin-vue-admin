@@ -6,6 +6,7 @@
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="false"
+      multiple
       class="upload-btn"
     >
       <el-button type="primary">普通上传</el-button>
@@ -25,7 +26,6 @@ defineOptions({
 })
 
 const emit = defineEmits(['on-success'])
-const path = ref(import.meta.env.VITE_BASE_API)
 
 const fullscreenLoading = ref(false)
 

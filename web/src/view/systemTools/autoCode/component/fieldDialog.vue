@@ -193,7 +193,30 @@
       >
         <el-row :gutter="8">
           <el-col
-            :span="3"
+              :span="4"
+          >
+            <el-select
+                v-model="middleDate.dataSource.dbName"
+                placeholder="数据库【不填则为GVA库】"
+                @change="dbNameChange"
+                clearable
+            >
+              <el-option
+                  v-for="item in dbList"
+                  :key="item.aliasName"
+                  :value="item.aliasName"
+                  :label="item.aliasName"
+                  :disabled="item.disable"
+              >
+                <div>
+                  <span>{{ item.aliasName }}</span>
+                  <span style="float:right;color:#8492a6;font-size:13px">{{ item.dbName }}</span>
+                </div>
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col
+            :span="4"
           >
             <el-select
               v-model="middleDate.dataSource.association"
@@ -210,8 +233,7 @@
               />
             </el-select>
           </el-col>
-
-          <el-col :span="7">
+          <el-col :span="5">
             <el-select
               v-model="middleDate.dataSource.table" placeholder="请选择数据源表"
               filterable allow-create @focus="getDBTableList" @change="selectDB"
@@ -221,9 +243,8 @@
                 :value="item.tableName"
               />
             </el-select>
-            <!-- <el-input v-model="middleDate.dataSource.table" placeholder="数据源表" /> -->
           </el-col>
-          <el-col :span="7">
+          <el-col :span="5">
             <el-select v-model="middleDate.dataSource.value" placeholder="请先选择需要存储的数据">
               <template #label="{ value }">
                 <span>存储: </span>
@@ -245,9 +266,8 @@
                 </span>
               </el-option>
             </el-select>
-            <!-- <el-input v-model="middleDate.dataSource.value" placeholder="存储用字段" /> -->
           </el-col>
-          <el-col :span="7">
+          <el-col :span="5">
             <el-select v-model="middleDate.dataSource.label" placeholder="请先选择需要展示的数据">
               <template #label="{ value }">
                 <span>展示: </span>
@@ -281,9 +301,9 @@
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
-import {getColumn, getTable} from "@/api/autoCode";
+import {getColumn, getDB, getTable} from "@/api/autoCode";
 
 defineOptions({
   name: 'FieldDialog'
@@ -320,6 +340,15 @@ const activeNames = ref([])
 
 const middleDate = ref({})
 const dictOptions = ref([])
+
+const dbList = ref([])
+
+const getDbFunc = async() => {
+  const res = await getDB()
+  if (res.code === 0) {
+    dbList.value = res.data.dbList
+  }
+}
 
 const validateDataTypeLong = (rule, value, callback) => {
   const regex = /^('([^']*)'(?:,'([^']+)'*)*)$/;
@@ -403,11 +432,18 @@ const associationChange = (val) => {
 }
 
 
+const dbNameChange = () => {
+  getDBTableList()
+  middleDate.value.dataSource.table = ''
+  middleDate.value.dataSource.value = ''
+  middleDate.value.dataSource.label = ''
+}
+
+
 const dbTableList = ref([])
 
 const getDBTableList = async () => {
-  const res = await getTable()
-  console.log(res);
+  const res = await getTable({ businessDB: middleDate.value.dataSource.dbName })
   if (res.code === 0) {
     let list = res.data.tables; // 确保这里正确获取到 tables 数组
     dbTableList.value = list.map(item => ({
@@ -415,25 +451,34 @@ const getDBTableList = async () => {
       value: item.tableName // 这里假设 value 也是 tableName，如果不同请调整
     }));
   }
+  middleDate.value.dataSource.value = ''
+  middleDate.value.dataSource.label = ''
 }
 
 const dbColumnList = ref([])
-const selectDB = async (val) => {
+const selectDB = async (val,isInit) => {
+  middleDate.value.dataSource.hasDeletedAt = false
   middleDate.value.dataSource.table = val
   const res = await getColumn({
+    businessDB: middleDate.value.dataSource.dbName,
     tableName: val
   })
-  console.log(res)
+
   if (res.code === 0) {
     let list = res.data.columns; // 确保这里正确获取到 tables 数组
-    dbColumnList.value = list.map(item => ({
-      columnName: item.columnName,
-      value: item.columnName,
-      type: item.dataType,
-      isPrimary: item.primaryKey,
-      comment: item.columnComment
-    }));
-    if (dbColumnList.value.length > 0) {
+    dbColumnList.value = list.map(item => {
+        if(item.columnName === 'deleted_at'){
+          middleDate.value.dataSource.hasDeletedAt = true
+        }
+        return{
+            columnName: item.columnName,
+            value: item.columnName,
+            type: item.dataType,
+            isPrimary: item.primaryKey,
+            comment: item.columnComment
+        }
+    });
+    if (dbColumnList.value.length > 0 && !isInit) {
       middleDate.value.dataSource.label = dbColumnList.value[0].columnName
       middleDate.value.dataSource.value = dbColumnList.value[0].columnName
     }
@@ -443,4 +488,11 @@ const selectDB = async (val) => {
 
 const fieldDialogForm = ref(null)
 defineExpose({ fieldDialogForm })
+
+onMounted(()=>{
+  getDbFunc()
+  if(middleDate.value.dataSource.table){
+    selectDB(middleDate.value.dataSource.table,true)
+  }
+})
 </script>

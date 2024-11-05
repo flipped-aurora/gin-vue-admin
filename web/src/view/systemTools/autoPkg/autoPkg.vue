@@ -19,7 +19,7 @@
         <el-table-column
           align="left"
           label="id"
-          width="60"
+          width="120"
           prop="ID"
         />
         <el-table-column
@@ -55,7 +55,6 @@
           <template #default="scope">
             <el-button
               icon="delete"
-
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"
@@ -170,8 +169,10 @@ const getTemplates = async ()=>{
 
 getTemplates()
 
-const validateNum = (rule, value, callback) => {
-  if ((/^\d+$/.test(value[0]))) {
+const validateData = (rule, value, callback) => {
+  if (/[\u4E00-\u9FA5]/g.test(value)) {
+    callback(new Error('不能为中文'))
+  } else if ((/^\d+$/.test(value[0]))) {
     callback(new Error('不能够以数字开头'))
   } else {
     callback()
@@ -181,11 +182,11 @@ const validateNum = (rule, value, callback) => {
 const rules = ref({
   packageName: [
     { required: true, message: '请输入包名', trigger: 'blur' },
-    { validator: validateNum, trigger: 'blur' }
+    { validator: validateData, trigger: 'blur' }
   ],
   template:[
     { required: true, message: '请选择模板', trigger: 'change' },
-    { validator: validateNum, trigger: 'blur' }
+    { validator: validateData, trigger: 'blur' }
   ]
 })
 

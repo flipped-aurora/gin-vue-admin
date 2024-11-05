@@ -1,16 +1,3 @@
-package {{.Package}}
-
-import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
-    {{- if .AutoCreateResource }}
-    "gorm.io/gorm"
-    {{- end}}
-)
-
-type {{.StructName}}Service struct {}
-
 {{- $db := "" }}
 {{- if eq .BusinessDB "" }}
  {{- $db = "global.GVA_DB" }}
@@ -18,15 +5,80 @@ type {{.StructName}}Service struct {}
  {{- $db =  printf "global.MustGetGlobalDBByDBName(\"%s\")" .BusinessDB   }}
 {{- end}}
 
+{{- if .IsAdd}}
+
+// Get{{.StructName}}InfoList 新增搜索语句
+        {{- range .Fields}}
+            {{- if .FieldSearchType}}
+                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
+if info.{{.FieldName}} != "" {
+        {{- if or (eq .FieldType "enum") }}
+    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+        {{- else}}
+// 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
+        {{- end}}
+}
+    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
+    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
+}
+    {{- else}}
+if info.{{.FieldName}} != nil{{- if eq .FieldType "string" }} && *info.{{.FieldName}} != ""{{- end }} {
+    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+}
+            {{- end }}
+        {{- end }}
+    {{- end }}
+
+
+// Get{{.StructName}}InfoList 新增排序语句 请自行在搜索语句中添加orderMap内容
+       {{- range .Fields}}
+            {{- if .Sort}}
+orderMap["{{.ColumnName}}"] = true
+         	{{- end}}
+       {{- end}}
+
+
+{{- if .HasDataSource }}
+//  Get{{.StructName}}DataSource()方法新增关联语句
+	{{range $key, $value := .DataSourceMap}}
+{{$key}} := make([]map[string]any, 0)
+{{ $dataDB := "" }}
+{{- if eq $value.DBName "" }}
+{{ $dataDB = $db }}
+{{- else}}
+{{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
+{{- end}}
+{{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+res["{{$key}}"] = {{$key}}
+	{{- end }}
+{{- end }}
+{{- else}}
+package {{.Package}}
+
+import (
+{{- if not .OnlyTemplate }}
+	"{{.Module}}/global"
+	"{{.Module}}/model/{{.Package}}"
+    {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
+    {{- if .AutoCreateResource }}
+    "gorm.io/gorm"
+    {{- end}}
+{{- end }}
+)
+
+type {{.StructName}}Service struct {}
+
+{{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
 	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
@@ -45,7 +97,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
@@ -64,21 +116,21 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
 }
 
 // Update{{.StructName}} 更新{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
 	err = {{$db}}.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
 	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
 
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -93,10 +145,10 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 {{- end }}
         {{- range .Fields}}
             {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "string") (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "richtext") (eq .FieldType "json") }}
+                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
     if info.{{.FieldName}} != "" {
-        {{- if or (eq .FieldType "enum") (eq .FieldType "string") }}
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+        {{- if or (eq .FieldType "enum")}}
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
         {{- else}}
         // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
         {{- end}}
@@ -106,8 +158,8 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
             db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
         }
     {{- else}}
-    if info.{{.FieldName}} != nil {
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    if info.{{.FieldName}} != nil{{- if eq .FieldType "string" }} && *info.{{.FieldName}} != ""{{- end }} {
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
             {{- end }}
         {{- end }}
@@ -136,7 +188,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	if limit != 0 {
        db = db.Limit(limit).Offset(offset)
     }
-	
+
 	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }
@@ -146,9 +198,21 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSou
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)
-       {{$db}}.Table("{{$value.Table}}").Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+	   {{ $dataDB := "" }}
+	   {{- if eq $value.DBName "" }}
+       {{ $dataDB = $db }}
+       {{- else}}
+       {{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
+       {{- end}}
+       {{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 	   res["{{$key}}"] = {{$key}}
 	{{- end }}
 	return
+}
+{{- end }}
+{{- end }}
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}Public() {
+    // 此方法为获取数据源定义的数据
+    // 请自行实现
 }
 {{- end }}

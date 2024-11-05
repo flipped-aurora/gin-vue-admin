@@ -4,34 +4,35 @@
       href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
       title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。"
     />
-    <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">使用AI创建</div>
+    <div class="gva-search-box" v-if="!isAdd">
+      <div class="text-lg mb-2 text-gray-600">使用AI创建<a class="text-blue-600 text-sm ml-4" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">获取AiPath</a></div>
       <div class="relative">
-        <el-input v-model="prompt" type="textarea" :rows="5" :maxlength="100" :placeholder="`【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。`" resize="none" />
+        <el-input v-model="prompt"
+                  type="textarea"
+                  :rows="5"
+                  :maxlength="100"
+                  :placeholder="`现已完全免费\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
+                  resize="none"
+                  @focus="handleFocus"
+                  @blur="handleBlur"/>
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
-            content="小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。"
+            effect="light"
           >
-            <el-button type="primary" @click="llmAutoFunc('xiaoqi')">
+            <template #content>
+              <div>【完全免费】前往<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">插件市场个人中心</a>申请AIPath，填入config.yaml的ai-path属性即可使用。</div>
+            </template>
+            <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
                 <ai-gva />
-              </el-icon> 小奇
-            </el-button>
-          </el-tooltip>
-          <el-tooltip
-            content="小淼基本啥也能设计出来，但是需要消耗积分，测试阶段授权用户自动获得基础积分，开源用户需要填表申请。"
-          >
-            <el-button type="primary" @click="llmAutoFunc('xiaomiao')">
-              <el-icon size="18">
-                <ai-gva />
-              </el-icon> 小淼
+              </el-icon> 生成
             </el-button>
           </el-tooltip>
         </div>
       </div>
     </div>
     <!-- 从数据库直接获取字段 -->
-    <div class="gva-search-box">
+    <div class="gva-search-box"  v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">从数据库创建</div>
       <el-form
         ref="getTableForm"
@@ -143,6 +144,7 @@
       <!-- 初始版本自动化代码工具 -->
       <div class="text-lg mb-2 text-gray-600">自动化结构</div>
       <el-form
+          :disabled="isAdd"
         ref="autoCodeForm"
         :rules="rules"
         :model="form"
@@ -156,10 +158,17 @@
               prop="structName"
               class="w-full"
             >
+              <div class="flex gap-2 w-full">
               <el-input
                 v-model="form.structName"
                 placeholder="首字母自动转换大写"
               />
+                <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc(true)">
+                  <el-icon size="18">
+                    <ai-gva />
+                  </el-icon> 生成
+              </el-button>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -386,6 +395,20 @@
               <el-checkbox v-model="form.autoCreateResource" />
             </el-form-item>
           </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
+                    content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> 基础模板 <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.onlyTemplate" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
@@ -395,6 +418,7 @@
         <el-button
           type="primary"
           @click="editAndAddField()"
+          :disabled="form.onlyTemplate"
         >
           新增字段
         </el-button>
@@ -405,6 +429,8 @@
           row-key="fieldName"
         >
           <el-table-column
+              v-if="!isAdd"
+            fixed="left"
             align="left"
             type="index"
             width="60"
@@ -416,29 +442,32 @@
             </template>
           </el-table-column>
           <el-table-column
+            fixed="left"
             align="left"
             type="index"
             label="序列"
             width="60"
           />
           <el-table-column
+            fixed="left"
             align="left"
             type="index"
             label="主键"
             width="60"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.primaryKey" />
+              <el-checkbox :disabled="row.disabled" v-model="row.primaryKey" />
             </template>
           </el-table-column>
           <el-table-column
+            fixed="left"
             align="left"
             prop="fieldName"
             label="字段名称"
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldName" />
+              <el-input :disabled="row.disabled" v-model="row.fieldName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -448,7 +477,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldDesc" />
+              <el-input :disabled="row.disabled" v-model="row.fieldDesc" />
             </template>
           </el-table-column>
           <el-table-column
@@ -458,7 +487,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.defaultValue" />
+              <el-input :disabled="row.disabled" v-model="row.defaultValue" />
             </template>
           </el-table-column>
           <el-table-column
@@ -467,7 +496,7 @@
             label="必填"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.require" />
+              <el-checkbox :disabled="row.disabled" v-model="row.require" />
             </template>
           </el-table-column>
           <el-table-column
@@ -476,7 +505,7 @@
             label="排序"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.sort" />
+              <el-checkbox :disabled="row.disabled" v-model="row.sort" />
             </template>
           </el-table-column>
           <el-table-column
@@ -486,7 +515,7 @@
             label="新建/编辑"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.form" />
+              <el-checkbox :disabled="row.disabled" v-model="row.form" />
             </template>
           </el-table-column>
           <el-table-column
@@ -495,7 +524,7 @@
               label="表格"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.table" />
+              <el-checkbox :disabled="row.disabled" v-model="row.table" />
             </template>
           </el-table-column>
           <el-table-column
@@ -504,13 +533,15 @@
               label="详情"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.desc" />
+              <el-checkbox :disabled="row.disabled" v-model="row.desc" />
             </template>
           </el-table-column>
           <el-table-column
               align="left"
               prop="excel"
+              width="100"
               label="导入/导出"
+              v-if="!isAdd"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.excel" />
@@ -523,7 +554,7 @@
             label="字段Json"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldJson" />
+              <el-input :disabled="row.disabled" v-model="row.fieldJson" />
             </template>
           </el-table-column>
           <el-table-column
@@ -537,6 +568,7 @@
                 v-model="row.fieldType"
                 style="width:100%"
                 placeholder="请选择字段类型"
+                :disabled="row.disabled"
                 clearable
               >
                 <el-option
@@ -559,6 +591,7 @@
                 v-model="row.fieldIndexType"
                 style="width:100%"
                 placeholder="请选择字段索引类型"
+                :disabled="row.disabled"
                 clearable
               >
                 <el-option
@@ -577,7 +610,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.dataTypeLong" />
+              <el-input :disabled="row.disabled" v-model="row.dataTypeLong" />
             </template>
           </el-table-column>
           <el-table-column
@@ -587,7 +620,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.columnName" />
+              <el-input :disabled="row.disabled" v-model="row.columnName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -597,7 +630,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.comment" />
+              <el-input :disabled="row.disabled" v-model="row.comment" />
             </template>
           </el-table-column>
           <el-table-column
@@ -612,7 +645,7 @@
                 style="width:100%"
                 placeholder="请选择字段查询条件"
                 clearable
-                :disabled="row.fieldType!=='json'"
+                :disabled="row.fieldType!=='json' || row.disabled"
               >
                 <el-option
                   v-for="item in typeSearchOptions"
@@ -635,7 +668,7 @@
           >
             <template #default="scope">
               <el-button
-
+                  v-if="!scope.row.disabled"
                 type="primary"
                 link
                 icon="edit"
@@ -644,6 +677,7 @@
                 高级编辑
               </el-button>
               <el-button
+                  v-if="!scope.row.disabled"
                 type="primary"
                 link
                 icon="delete"
@@ -659,6 +693,7 @@
       <div class="gva-btn-list justify-end mt-4">
         <el-button
             type="primary"
+            :disabled="isAdd"
             @click="exportJson()"
         >
           导出json
@@ -669,31 +704,34 @@
             show-file-list="false"
             accept=".json"
         >
-          <el-button type="primary" class="mx-2">导入json</el-button>
+          <el-button type="primary" class="mx-2" :disabled="isAdd">导入json</el-button>
         </el-upload>
         <el-button
           type="primary"
+          :disabled="isAdd"
           @click="clearCatch()"
         >
           清除暂存
         </el-button>
         <el-button
           type="primary"
+          :disabled="isAdd"
           @click="catchData()"
         >
           暂存
         </el-button>
         <el-button
           type="primary"
-          @click="enterForm(true)"
-        >
-          预览代码
-        </el-button>
-        <el-button
-          type="primary"
+          :disabled="isAdd"
           @click="enterForm(false)"
         >
           生成代码
+        </el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(true)"
+        >
+          {{isAdd?'查看代码':'预览代码'}}
         </el-button>
       </div>
     </div>
@@ -756,6 +794,7 @@
       </template>
       <PreviewCodeDialog
         v-if="previewFlag"
+        :is-add="isAdd"
         ref="previewNode"
         :preview-code="preViewCode"
       />
@@ -766,7 +805,7 @@
 <script setup>
 
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
+import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialog.vue'
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi,llmAuto } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
@@ -775,6 +814,21 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import Sortable from 'sortablejs'
+
+const handleFocus = () => {
+  document.addEventListener('keydown', handleKeydown);
+};
+
+const handleBlur = () => {
+  document.removeEventListener('keydown', handleKeydown);
+};
+
+
+const handleKeydown = (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+    llmAutoFunc();
+  }
+};
 
 const getOnlyNumber = () => {
   let randomNumber = '';
@@ -786,54 +840,38 @@ const getOnlyNumber = () => {
 
 const prompt = ref("")
 
-const llmAutoFunc = async (mode) =>{
-  const res = await llmAuto({prompt:prompt.value,mode:mode})
+const llmAutoFunc = async (flag) =>{
+  if (flag&&!form.value.structName) {
+    ElMessage.error('请输入结构体名称')
+    return
+  }
+  if (!flag&&!prompt.value) {
+    ElMessage.error('请输入描述')
+    return
+  }
+
+  if(form.value.fields.length>0){
+    const res = await ElMessageBox.confirm('AI生成会清空当前数据，是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    if (res !== 'confirm') {
+      return
+    }
+  }
+
+  const res = await llmAuto({prompt:flag?'结构体名称为'+form.value.structName:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
     for (let key in json){
-      if(key === "fields"){
-        json[key].forEach(item => {
-          if (item.primaryKey) {
-            form.value.gvaModel = false
-          }
-          form.value.fields.push({
-              onlyNumber: getOnlyNumber(),
-              fieldName: toUpperCase(item.fieldName),
-              fieldDesc: item.fieldDesc,
-              fieldType: item.fieldType,
-              dataType: "",
-              fieldJson: item.fieldJson||item.columnName,
-              primaryKey: item.primaryKey,
-              dataTypeLong: item.dataTypeLong,
-              columnName: item.columnName,
-              comment: item.comment || item.fieldDesc,
-              require: false,
-              errorText: '',
-              clearable: true,
-              fieldSearchType: '',
-              fieldIndexType: '',
-              dictType: '',
-              form: true,
-              desc: true,
-              table: true,
-              excel: false,
-              dataSource: {
-                association:1,
-                table: '',
-                label: '',
-                value: ''
-          }
-          })
-        })
-      }else{
-        if(mode === "xiaomiao"){
-          form.value[key] = json[key]
-        }
-      }
+      form.value[key] = json[key]
     }
   }
 }
+
+const isAdd = ref(false)
 
 // 行拖拽
 const rowDrop = () => {
@@ -982,10 +1020,12 @@ const fieldTemplate = {
   fieldIndexType: '',
   dictType: '',
   dataSource: {
+    dbName: '',
     association:1,
     table: '',
     label: '',
-    value: ''
+    value: '',
+    hasDeletedAt: false
   }
 }
 const route = useRoute()
@@ -1013,6 +1053,7 @@ const form = ref({
   autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
+  onlyTemplate: false,
   fields: []
 })
 const rules = ref({
@@ -1077,10 +1118,12 @@ const editAndAddField = (item) => {
     addFlag.value = 'edit'
     if(!item.dataSource){
       item.dataSource = {
+        dbName: '',
         association:1,
         table: '',
         label: '',
-        value: ''
+        value: '',
+        hasDeletedAt: false
       }
     }
     bk.value = JSON.parse(JSON.stringify(item))
@@ -1125,6 +1168,10 @@ const deleteField = (index) => {
 }
 const autoCodeForm = ref(null)
 const enterForm = async(isPreview) => {
+
+  if(!form.value.onlyTemplate){
+
+
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
@@ -1141,12 +1188,34 @@ const enterForm = async(isPreview) => {
     return false
   }
 
+
+
+
   if (
     form.value.fields.some(item => item.fieldName === form.value.structName)
   ) {
     ElMessage({
       type: 'error',
       message: '存在与结构体同名的字段'
+    })
+    return false
+  }
+
+    if (
+        form.value.fields.some(item => item.fieldJson === form.value.package)
+    ) {
+      ElMessage({
+        type: 'error',
+        message: '存在与模板同名的的字段JSON'
+      })
+      return false
+    }
+
+
+  if (form.value.fields.some(item => !item.fieldType)) {
+    ElMessage({
+      type: 'error',
+      message: '请填写所有字段类型后进行提交'
     })
     return false
   }
@@ -1158,15 +1227,8 @@ const enterForm = async(isPreview) => {
     })
     return false
   }
-
-
-  if (form.value.fields.some(item => !item.fieldType)) {
-    ElMessage({
-      type: 'error',
-      message: '请填写所有字段类型后进行提交'
-    })
-    return false
   }
+
 
   autoCodeForm.value.validate(async valid => {
     if (valid) {
@@ -1188,9 +1250,23 @@ const enterForm = async(isPreview) => {
         return false
       }
       form.value.humpPackageName = toSQLLine(form.value.packageName)
+
+      form.value.fields.forEach(item => {
+        if(item.fieldType === 'enum'){
+          // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
+          const arr = item.dataTypeLong.split(',')
+          arr.forEach((ele, index) => {
+            if(ele.indexOf("'") === -1){
+              arr[index] = `'${ele}'`
+            }
+          })
+          item.dataTypeLong = arr.join(',')
+        }
+      })
+
       delete form.value.primaryField
       if (isPreview) {
-        const data = await preview(form.value)
+        const data = await preview({...form.value,isAdd:!!isAdd.value,fields:form.value.fields.filter(item => !item.disabled)})
         preViewCode.value = data.data.autoCode
         previewFlag.value = true
       } else {
@@ -1272,10 +1348,12 @@ const getColumnFunc = async() => {
                 excel: false,
                 desc: true,
                 dataSource: {
+                  dbName: '',
                   association:1,
                   table: '',
                   label: '',
-                  value: ''
+                  value: '',
+                  hasDeletedAt: false
                 }
               })
             }
@@ -1306,7 +1384,14 @@ const setFdMap = async() => {
 const getAutoCodeJson = async(id) => {
   const res = await getMeta({ id: Number(id) })
   if (res.code === 0) {
+    const add = route.query.isAdd
+    isAdd.value = add
     form.value = JSON.parse(res.data.meta)
+    if (isAdd.value){
+      form.value.fields.forEach(item => {
+        item.disabled = true
+      })
+    }
   }
 }
 
@@ -1366,6 +1451,7 @@ const clearCatch = async () => {
     autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,
+    onlyTemplate: false,
     fields: []
   }
   await nextTick()
@@ -1390,7 +1476,6 @@ const exportJson = () => {
 const importJson = (file) =>{
   const reader = new FileReader()
   reader.onload = (e) => {
-    console.log(e)
     try {
       form.value = JSON.parse(e.target.result)
       ElMessage.success('JSON 文件导入成功')
@@ -1401,5 +1486,21 @@ const importJson = (file) =>{
   reader.readAsText(file)
   return false
 }
+
+watch(()=>form.value.onlyTemplate,(val)=>{
+  if(val){
+    ElMessageBox.confirm('使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑', '注意', {
+      confirmButtonText: '继续',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+      .then(() => {
+        form.value.fields = []
+      })
+      .catch(() => {
+        form.value.onlyTemplate = false
+      })
+  }
+})
 
 </script>

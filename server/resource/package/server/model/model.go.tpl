@@ -1,9 +1,35 @@
+{{- if .IsAdd}}
+// 在结构体中新增如下字段
+{{- range .Fields}}
+{{- if eq .FieldType "enum" }}
+{{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};type:enum({{.DataTypeLong}});comment:{{.Comment}};" {{- if .Require }} binding:"required"{{- end -}}`
+{{- else if eq .FieldType "picture" }}
+{{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
+{{- else if eq .FieldType "video" }}
+{{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
+{{- else if eq .FieldType "file" }}
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+{{- else if eq .FieldType "pictures" }}
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+{{- else if eq .FieldType "richtext" }}
+{{.FieldName}}  *string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}}`
+{{- else if eq .FieldType "json" }}
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"object"`
+{{- else if eq .FieldType "array" }}
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+{{- else }}
+{{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
+{{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }}
+{{- end }}
+
+{{ else }}
 // 自动生成模板{{.StructName}}
 package {{.Package}}
 
+{{- if not .OnlyTemplate}}
 import (
 	{{- if .GvaModel }}
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"{{.Module}}/global"
 	{{- end }}
 	{{- if or .HasTimer }}
 	"time"
@@ -12,9 +38,11 @@ import (
 	"gorm.io/datatypes"
 	{{- end }}
 )
+{{- end }}
 
 // {{.Description}} 结构体  {{.StructName}}
 type {{.StructName}} struct {
+{{- if not .OnlyTemplate}}
 {{- if .GvaModel }}
     global.GVA_MODEL
 {{- end }}
@@ -30,15 +58,13 @@ type {{.StructName}} struct {
     {{- else if eq .FieldType "pictures" }}
     {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
     {{- else if eq .FieldType "richtext" }}
-    {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}}`
+    {{.FieldName}}  *string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}}`
     {{- else if eq .FieldType "json" }}
     {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"object"`
     {{- else if eq .FieldType "array" }}
     {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
-    {{- else if ne .FieldType "string" }}
-    {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
     {{- else }}
-    {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
+    {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
     {{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }}
 {{- end }}
     {{- if .AutoCreateResource }}
@@ -46,6 +72,7 @@ type {{.StructName}} struct {
     UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
     DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
     {{- end }}
+{{- end }}
 }
 
 {{ if .TableName }}
@@ -53,4 +80,7 @@ type {{.StructName}} struct {
 func ({{.StructName}}) TableName() string {
     return "{{.TableName}}"
 }
+{{ end }}
+
+
 {{ end }}

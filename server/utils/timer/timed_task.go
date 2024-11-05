@@ -137,7 +137,7 @@ func (t *timer) AddTaskByJobWithSeconds(cronName string, spec string, job interf
 	return id, err
 }
 
-// FindTask 获取对应cronName的cron 可能会为空
+// FindCron 获取对应cronName的cron 可能会为空
 func (t *timer) FindCron(cronName string) (*taskManager, bool) {
 	t.Lock()
 	defer t.Unlock()

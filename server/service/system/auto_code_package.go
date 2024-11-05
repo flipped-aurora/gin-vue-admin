@@ -117,10 +117,99 @@ func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error
 // @author: [piexlmax](https://github.com/piexlmax)
 // @author: [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCodePackage, err error) {
+	server := make([]model.SysAutoCodePackage, 0)
+	plugin := make([]model.SysAutoCodePackage, 0)
+	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service")
+	pluginPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin")
+	serverDir, err := os.ReadDir(serverPath)
+	if err != nil {
+		return nil, errors.Wrap(err, "读取service文件夹失败!")
+	}
+	pluginDir, err := os.ReadDir(pluginPath)
+	if err != nil {
+		return nil, errors.Wrap(err, "读取plugin文件夹失败!")
+	}
+	for i := 0; i < len(serverDir); i++ {
+		if serverDir[i].IsDir() {
+			serverPackage := model.SysAutoCodePackage{
+				PackageName: serverDir[i].Name(),
+				Template:    "package",
+				Label:       serverDir[i].Name() + "包",
+				Desc:        "系统自动读取" + serverDir[i].Name() + "包",
+				Module:      global.GVA_CONFIG.AutoCode.Module,
+			}
+			server = append(server, serverPackage)
+		}
+	}
+	for i := 0; i < len(pluginDir); i++ {
+		if pluginDir[i].IsDir() {
+			dirNameMap := map[string]bool{
+				"api":        true,
+				"config":     true,
+				"initialize": true,
+				"model":      true,
+				"plugin":     true,
+				"router":     true,
+				"service":    true,
+			}
+			dir, e := os.ReadDir(filepath.Join(pluginPath, pluginDir[i].Name()))
+			if e != nil {
+				return nil, errors.Wrap(err, "读取plugin文件夹失败!")
+			}
+			//dir目录需要包含所有的dirNameMap
+			for k := 0; k < len(dir); k++ {
+				if dir[k].IsDir() {
+					if _, ok := dirNameMap[dir[k].Name()]; ok {
+						delete(dirNameMap, dir[k].Name())
+					}
+				}
+			}
+			if len(dirNameMap) != 0 {
+				continue
+			}
+			pluginPackage := model.SysAutoCodePackage{
+				PackageName: pluginDir[i].Name(),
+				Template:    "plugin",
+				Label:       pluginDir[i].Name() + "插件",
+				Desc:        "系统自动读取" + pluginDir[i].Name() + "插件，使用前请确认是否为v2版本插件",
+				Module:      global.GVA_CONFIG.AutoCode.Module,
+			}
+			plugin = append(plugin, pluginPackage)
+		}
+	}
+
 	err = global.GVA_DB.WithContext(ctx).Find(&entities).Error
 	if err != nil {
 		return nil, errors.Wrap(err, "获取所有包失败!")
 	}
+	entitiesMap := make(map[string]model.SysAutoCodePackage)
+	for i := 0; i < len(entities); i++ {
+		entitiesMap[entities[i].PackageName] = entities[i]
+	}
+	createEntity := []model.SysAutoCodePackage{}
+	for i := 0; i < len(server); i++ {
+		if _, ok := entitiesMap[server[i].PackageName]; !ok {
+			if server[i].Template == "package" {
+				createEntity = append(createEntity, server[i])
+			}
+		}
+	}
+	for i := 0; i < len(plugin); i++ {
+		if _, ok := entitiesMap[plugin[i].PackageName]; !ok {
+			if plugin[i].Template == "plugin" {
+				createEntity = append(createEntity, plugin[i])
+			}
+		}
+	}
+
+	if len(createEntity) > 0 {
+		err = global.GVA_DB.WithContext(ctx).Create(&createEntity).Error
+		if err != nil {
+			return nil, errors.Wrap(err, "同步失败!")
+		}
+		entities = append(entities, createEntity...)
+	}
+
 	return entities, nil
 }
 

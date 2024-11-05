@@ -1,18 +1,25 @@
 package {{.Package}}
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
+	{{if not .OnlyTemplate}}
+	"{{.Module}}/global"
+    "{{.Module}}/model/common/response"
+    "{{.Module}}/model/{{.Package}}"
+    {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
     {{- if .AutoCreateResource}}
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+    "{{.Module}}/utils"
     {{- end }}
+    {{- else}}
+    "{{.Module}}/model/common/response"
+    "github.com/gin-gonic/gin"
+    {{- end}}
 )
 
 type {{.StructName}}Api struct {}
+
+{{if not .OnlyTemplate}}
 
 // Create{{.StructName}} 创建{{.Description}}
 // @Tags {{.StructName}}
@@ -185,6 +192,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}DataSource(c *
 }
 {{- end }}
 
+{{- end }}
+
 // Get{{.StructName}}Public 不需要鉴权的{{.Description}}接口
 // @Tags {{.StructName}}
 // @Summary 不需要鉴权的{{.Description}}接口
@@ -196,6 +205,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}DataSource(c *
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}Public(c *gin.Context) {
     // 此接口不需要鉴权
     // 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
+    {{.Abbreviation}}Service.Get{{.StructName}}Public()
     response.OkWithDetailed(gin.H{
        "info": "不需要鉴权的{{.Description}}接口信息",
     }, "获取成功", c)

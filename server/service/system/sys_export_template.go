@@ -155,7 +155,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	var tableTitle []string
 	var selectKeyFmt []string
 	for _, key := range columns {
-		selectKeyFmt = append(selectKeyFmt, fmt.Sprintf("`%s`", key))
+		selectKeyFmt = append(selectKeyFmt, fmt.Sprintf("%s", key))
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
 
@@ -168,7 +168,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	if len(template.JoinTemplate) > 0 {
 		for _, join := range template.JoinTemplate {
-			db = db.Joins(join.JOINS + "`" + join.Table + "`" + " ON " + join.ON)
+			db = db.Joins(join.JOINS + " " + join.Table + " ON " + join.ON)
 		}
 	}
 

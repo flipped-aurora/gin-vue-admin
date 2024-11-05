@@ -156,6 +156,13 @@
         >
           <template #default="scope">
             <el-button
+                type="primary"
+                link
+                icon="edit-pen"
+                class="table-button"
+                @click="showCode(scope.row)"
+            >代码</el-button>
+            <el-button
               type="primary"
               link
               icon="edit"
@@ -211,6 +218,8 @@
         label-position="right"
         :rules="rule"
         label-width="100px"
+        v-loading="aiLoading"
+        element-loading-text="小淼正在思考..."
       >
 
         <el-form-item
@@ -248,25 +257,49 @@
         </el-form-item>
 
         <el-form-item
-          label="模板名称:"
-          prop="name"
+          label="需用到的表"
+          prop="tables"
         >
-          <el-input
-            v-model="formData.name"
-            :clearable="true"
-            placeholder="请输入模板名称"
-          />
+          <el-select
+            multiple
+            v-model="tables"
+            clearable
+            placeholder="使用AI的情况下请选择"
+          >
+              <el-option
+                  v-for="item in tableOptions"
+                  :key="item.tableName"
+                  :label="item.tableName"
+                  :value="item.tableName"
+              />
+          </el-select>
         </el-form-item>
+
         <el-form-item
-          label="表名称:"
-          clearable
-          prop="tableName"
+            label="AI帮写:"
+            prop="ai"
         >
-<!--          <el-input
-            v-model="formData.tableName"
-            :clearable="true"
-            placeholder="请输入要导出的表名称"
-          />-->
+          <div class="relative w-full">
+            <el-input
+                type="textarea"
+                v-model="prompt"
+                :clearable="true"
+                :rows="5"
+                placeholder="试试描述你要做的导出功能让AI帮你完成，在此之前请选择你需要导出的表所在的业务库，如不做选择，则默认使用gva库"
+            />
+            <el-button
+                class="absolute bottom-2 right-2"
+                type="primary"
+                @click="autoExport"
+            ><el-icon><ai-gva /></el-icon>帮写</el-button>
+          </div>
+        </el-form-item>
+
+        <el-form-item
+            label="表名称:"
+            clearable
+            prop="tableName"
+        >
           <div
               class="w-full flex gap-4"
           >
@@ -283,11 +316,22 @@
                   :value="item.tableName"
               />
             </el-select>
-
-            <el-button type="primary" @click="getColumnFunc">自动生成模板</el-button>
+            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(true)"><el-icon><ai-gva/></el-icon>自动补全</el-button>
+            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(false)">自动生成模板</el-button>
           </div>
-
         </el-form-item>
+
+        <el-form-item
+          label="模板名称:"
+          prop="name"
+        >
+          <el-input
+            v-model="formData.name"
+            :clearable="true"
+            placeholder="请输入模板名称"
+          />
+        </el-form-item>
+
         <el-form-item
           label="模板标识:"
           prop="templateID"
@@ -420,6 +464,36 @@
         </el-form-item>
       </el-form>
     </el-drawer>
+
+    <el-drawer
+        v-model="codeVisible"
+        size="60%"
+        :before-close="closeDialog"
+        :title="type==='create'?'添加':'修改'"
+        :show-close="false"
+        destroy-on-close
+    >
+
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">模板</span>
+          <div>
+            <el-button
+                type="primary"
+                @click="closeDialog"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
+      <codemirror
+          v-model="webCode"
+          placeholder="Code goes here..."
+          :style="{ height: '800px',width:'100%' }"
+          :indent-with-tab="true"
+          :tab-size="2"
+          :extensions=" [vue(), oneDark]"
+      />
+    </el-drawer>
   </div>
 </template>
 
@@ -438,8 +512,11 @@ import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import {getDB, getTable, getColumn} from '@/api/autoCode'
-
+import {getDB, getTable, getColumn, butler} from '@/api/autoCode'
+import {vue} from "@codemirror/lang-vue";
+import {oneDark} from "@codemirror/theme-one-dark";
+import {Codemirror} from "vue-codemirror";
+import {getCode} from './code'
 defineOptions({
   name: 'ExportTemplate'
 })
@@ -468,6 +545,9 @@ const formData = ref({
   conditions: [],
   joinTemplate: []
 })
+
+const prompt = ref('')
+const tables = ref([])
 
 const typeSearchOptions = ref([
   {
@@ -592,6 +672,46 @@ const searchInfo = ref({})
 
 const dbList = ref([])
 const tableOptions = ref([])
+const aiLoading = ref(false)
+
+const getTablesCloumn = async() => {
+  const tablesMap = {}
+  const promises = tables.value.map(async item => {
+    const res = await getColumn({
+      businessDB: formData.value.dbName,
+      tableName: item
+    })
+    if(res.code === 0) {
+      tablesMap[item] = res.data.columns
+    }
+  })
+  await Promise.all(promises)
+  return tablesMap
+}
+
+
+const autoExport = async () => {
+ if (tables.value.length === 0) {
+    ElMessage({
+      type: 'error',
+      message: '请先选择需要参与导出的表'
+    })
+    return
+  }
+  aiLoading.value = true
+  const tableMap = await getTablesCloumn()
+  const aiRes = await butler({prompt:prompt.value,businessDB: formData.value.dbName||"",tableMap:tableMap,command:'autoExportTemplate'})
+  aiLoading.value = false
+  if (aiRes.code === 0) {
+    const aiData = JSON.parse(aiRes.data)
+     formData.value.name = aiData.name
+     formData.value.tableName = aiData.tableName
+     formData.value.templateID = aiData.templateID
+     formData.value.templateInfo = JSON.stringify(aiData.templateInfo, null, 2)
+     formData.value.joinTemplate = aiData.joinTemplate
+  }
+}
+
 
 const getDbFunc = async() => {
   const res = await getDB()
@@ -605,6 +725,7 @@ getDbFunc()
 const dbNameChange = () => {
   formData.value.tableName = ''
   formData.value.templateInfo = ''
+  tables.value = []
   getTableFunc()
 }
 
@@ -616,8 +737,7 @@ const getTableFunc = async() => {
   formData.value.tableName = ''
 }
 getTableFunc()
-
-const getColumnFunc = async () => {
+const getColumnFunc = async (aiFLag) => {
   if(!formData.value.tableName) {
     ElMessage({
       type: 'error',
@@ -626,11 +746,26 @@ const getColumnFunc = async () => {
     return
   }
   formData.value.templateInfo = ""
+  aiLoading.value = true
   const res = await getColumn({
     businessDB: formData.value.dbName,
     tableName: formData.value.tableName
   })
   if(res.code === 0) {
+      if(aiFLag){
+        const aiRes = await butler({data:res.data.columns,command:'exportCompletion'})
+        if (aiRes.code === 0) {
+          const aiData = JSON.parse(aiRes.data)
+          aiLoading.value = false
+          formData.value.templateInfo = JSON.stringify(aiData.templateInfo, null, 2)
+          formData.value.name = aiData.name
+          formData.value.templateID = aiData.templateID
+          return
+        }
+        ElMessage.warning('AI自动补全失败，已调整为逻辑填写')
+      }
+
+
     // 把返回值的data.columns做尊换，制作一组JSON数据，columnName做key，columnComment做value
     const templateInfo = {}
     res.data.columns.forEach(item => {
@@ -638,6 +773,7 @@ const getColumnFunc = async () => {
     })
     formData.value.templateInfo =  JSON.stringify(templateInfo, null, 2)
   }
+  aiLoading.value = false
 
 }
 
@@ -775,9 +911,16 @@ const deleteSysExportTemplateFunc = async(row) => {
     getTableData()
   }
 }
-
+const codeVisible = ref(false)
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
+
+const webCode = ref("")
+
+const showCode = (row) =>{
+  webCode.value = getCode(row.templateID)
+  codeVisible.value = true
+}
 
 // 打开弹窗
 const openDialog = () => {
@@ -787,7 +930,9 @@ const openDialog = () => {
 
 // 关闭弹窗
 const closeDialog = () => {
+  codeVisible.value = false
   dialogFormVisible.value = false
+  activeRow.value = {}
   formData.value = {
     name: '',
     tableName: '',

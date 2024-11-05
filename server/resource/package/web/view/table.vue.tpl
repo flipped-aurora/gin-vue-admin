@@ -642,7 +642,7 @@ getDataSourceFunc()
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
                 <div>
-                  <el-button type="primary" @click="enterDialog">确 定</el-button>
+                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">确 定</el-button>
                   <el-button @click="closeDialog">取 消</el-button>
                 </div>
               </div>
@@ -820,6 +820,9 @@ defineOptions({
 // 按钮权限实例化
     const btnAuth = useBtnAuth()
 {{- end }}
+
+// 提交按钮loading
+const btnLoading = ref(false)
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
@@ -1171,8 +1174,9 @@ const closeDialog = () => {
 }
 // 弹窗确定
 const enterDialog = async () => {
+     btnLoading.value = true
      elFormRef.value?.validate( async (valid) => {
-             if (!valid) return
+             if (!valid) return btnLoading.value = false
               let res
               switch (type.value) {
                 case 'create':
@@ -1185,6 +1189,7 @@ const enterDialog = async () => {
                   res = await create{{.StructName}}(formData.value)
                   break
               }
+              btnLoading.value = false
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',

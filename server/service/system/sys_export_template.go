@@ -256,6 +256,8 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	for _, exTable := range tableMap {
 		var row []string
 		for _, column := range columns {
+			column = strings.ReplaceAll(column, "\"", "")
+			column = strings.ReplaceAll(column, "`", "")
 			if len(template.JoinTemplate) > 0 {
 				columnAs := strings.Split(column, " as ")
 				if len(columnAs) > 1 {

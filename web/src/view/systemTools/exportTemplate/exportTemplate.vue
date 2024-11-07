@@ -485,14 +485,7 @@
           </div>
         </div>
       </template>
-      <codemirror
-          v-model="webCode"
-          placeholder="Code goes here..."
-          :style="{ height: '800px',width:'100%' }"
-          :indent-with-tab="true"
-          :tab-size="2"
-          :extensions=" [vue(), oneDark]"
-      />
+      <v-ace-editor v-model:value="webCode" lang="vue" theme="github_dark" class="h-full" />
     </el-drawer>
   </div>
 </template>
@@ -513,10 +506,13 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import {getDB, getTable, getColumn, butler} from '@/api/autoCode'
-import {vue} from "@codemirror/lang-vue";
-import {oneDark} from "@codemirror/theme-one-dark";
-import {Codemirror} from "vue-codemirror";
 import {getCode} from './code'
+import { VAceEditor } from "vue3-ace-editor"
+
+import 'ace-builds/src-noconflict/mode-vue';
+import 'ace-builds/src-noconflict/theme-github_dark';
+
+
 defineOptions({
   name: 'ExportTemplate'
 })

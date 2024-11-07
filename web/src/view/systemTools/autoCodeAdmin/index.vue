@@ -184,7 +184,7 @@
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
 
-          
+
           <el-form-item label="是否AI填充：">
             <el-switch v-model="autoFunc.isAi" /> <span class="text-sm text-red-600 p-2">当前ai帮写存在不稳定因素，生成代码后请注意手动调整部分内容</span>
           </el-form-item>
@@ -196,34 +196,13 @@
               </div>
             </el-form-item>
             <el-form-item label="Api方法:">
-              <codemirror
-                v-model="autoFunc.apiFunc"
-                placeholder="Code goes here..."
-                :style="{ height: '300px',width:'100%' }"
-                :indent-with-tab="true"
-                :tab-size="2"
-                :extensions=" [go(), oneDark]"
-              />
+              <v-ace-editor v-model:value="autoFunc.apiFunc" lang="golang" theme="github_dark" class="h-80 w-full" />
             </el-form-item>
             <el-form-item label="Server方法:">
-              <codemirror
-                v-model="autoFunc.serverFunc"
-                placeholder="Code goes here..."
-                :style="{ height: '300px',width:'100%' }"
-                :indent-with-tab="true"
-                :tab-size="2"
-                :extensions=" [go(), oneDark]"
-              />
+              <v-ace-editor v-model:value="autoFunc.serverFunc" lang="golang" theme="github_dark" class="h-80 w-full" />
             </el-form-item>
             <el-form-item label="前端JSAPI方法:">
-              <codemirror
-                v-model="autoFunc.jsFunc"
-                placeholder="Code goes here..."
-                :style="{ height: '300px',width:'100%' }"
-                :indent-with-tab="true"
-                :tab-size="2"
-                :extensions=" [javascript(), oneDark]"
-              />
+              <v-ace-editor v-model:value="autoFunc.jsFunc" lang="javascript" theme="github_dark" class="h-80 w-full" />
             </el-form-item>
           </template>
 
@@ -263,18 +242,15 @@
 import { getSysHistory, rollback, delSysHistory,addFunc,butler } from "@/api/autoCode.js";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { ref,onMounted } from "vue";
+import { ref } from "vue";
 import { formatDate } from "@/utils/format";
 import { toUpperCase } from "@/utils/stringFun"
 import  {useAppStore} from "@/pinia";
-import { Marked } from "marked";
-import { markedHighlight } from "marked-highlight";
-import hljs from 'highlight.js'
 
-import { Codemirror } from 'vue-codemirror'
-  import { javascript } from '@codemirror/lang-javascript'
-  import { go } from '@codemirror/lang-go'
-  import { oneDark } from '@codemirror/theme-one-dark'
+import { VAceEditor } from "vue3-ace-editor"
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-golang';
+import 'ace-builds/src-noconflict/theme-github_dark';
 
 
 const appStore = useAppStore()
@@ -343,7 +319,7 @@ const addFuncBtn =  (row) => {
   funcFlag.value = true;
 };
 
-const funcFlag = ref(false);
+const funcFlag = ref(true);
 
 const closeFunc = () => {
   funcFlag.value = false;

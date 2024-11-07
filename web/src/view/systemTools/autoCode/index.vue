@@ -865,6 +865,11 @@ const llmAutoFunc = async (flag) =>{
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
+
+    json.fields?.forEach(item => {
+      item.fieldName = toUpperCase(item.fieldName)
+    })
+
     for (let key in json){
       form.value[key] = json[key]
     }
@@ -1170,8 +1175,6 @@ const autoCodeForm = ref(null)
 const enterForm = async(isPreview) => {
 
   if(!form.value.onlyTemplate){
-
-
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
@@ -1251,9 +1254,11 @@ const enterForm = async(isPreview) => {
       }
       form.value.humpPackageName = toSQLLine(form.value.packageName)
 
-      form.value.fields.forEach(item => {
+      form.value.fields?.forEach(item => {
+        item.fieldName = toUpperCase(item.fieldName)
         if(item.fieldType === 'enum'){
           // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
+          item.dataTypeLong = item.dataTypeLong.replace(/[\[\]{}()]/g, '');
           const arr = item.dataTypeLong.split(',')
           arr.forEach((ele, index) => {
             if(ele.indexOf("'") === -1){

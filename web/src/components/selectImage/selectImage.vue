@@ -212,7 +212,7 @@ const listObj = {
 const chooseImg = (url) => {
   if (props.fileType) {
     const typeSuccess = listObj[props.fileType].some(item => {
-      if (url.includes(item)) {
+      if (url.includes(item.toLowerCase())) {
         return true
       }
     })

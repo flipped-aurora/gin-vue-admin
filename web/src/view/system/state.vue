@@ -1,14 +1,8 @@
 <template>
   <div>
-    <el-row
-      :gutter="15"
-      class="py-1"
-    >
+    <el-row :gutter="15" class="py-1">
       <el-col :span="12">
-        <el-card
-          v-if="state.os"
-          class="card_item"
-        >
+        <el-card v-if="state.os" class="card_item">
           <template #header>
             <div>Runtime</div>
           </template>
@@ -47,10 +41,10 @@
           </template>
           <div>
             <el-row
-                v-for="(item, index) in state.disk"
-                :key="index"
-                :gutter="10"
-                style="margin-bottom: 2rem"
+              v-for="(item, index) in state.disk"
+              :key="index"
+              :gutter="10"
+              style="margin-bottom: 2rem"
             >
               <el-col :span="12">
                 <el-row :gutter="10">
@@ -76,9 +70,9 @@
               </el-col>
               <el-col :span="12">
                 <el-progress
-                    type="dashboard"
-                    :percentage="item.usedPercent"
-                    :color="colors"
+                  type="dashboard"
+                  :percentage="item.usedPercent"
+                  :color="colors"
                 />
               </el-col>
             </el-row>
@@ -86,10 +80,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row
-      :gutter="15"
-      class="py-1"
-    >
+    <el-row :gutter="15" class="py-1">
       <el-col :span="12">
         <el-card
           v-if="state.cpu"
@@ -122,10 +113,7 @@
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card
-          v-if="state.ram"
-          class="card_item"
-        >
+        <el-card v-if="state.ram" class="card_item">
           <template #header>
             <div>Ram</div>
           </template>
@@ -146,7 +134,9 @@
                 </el-row>
                 <el-row :gutter="10">
                   <el-col :span="12">used (GB)</el-col>
-                  <el-col :span="12">{{ (state.ram.usedMb / 1024).toFixed(2) }}</el-col>
+                  <el-col :span="12">{{
+                    (state.ram.usedMb / 1024).toFixed(2)
+                  }}</el-col>
                 </el-row>
               </el-col>
               <el-col :span="12">
@@ -164,41 +154,39 @@
   </div>
 </template>
 <script setup>
-import { getSystemState } from '@/api/system'
-import { onUnmounted, ref } from 'vue'
+  import { getSystemState } from '@/api/system'
+  import { onUnmounted, ref } from 'vue'
 
-defineOptions({
-  name: 'State',
-})
+  defineOptions({
+    name: 'State'
+  })
 
-const timer = ref(null)
-const state = ref({})
-const colors = ref([
-  { color: '#5cb87a', percentage: 20 },
-  { color: '#e6a23c', percentage: 40 },
-  { color: '#f56c6c', percentage: 80 }
-])
+  const timer = ref(null)
+  const state = ref({})
+  const colors = ref([
+    { color: '#5cb87a', percentage: 20 },
+    { color: '#e6a23c', percentage: 40 },
+    { color: '#f56c6c', percentage: 80 }
+  ])
 
-const reload = async() => {
-  const { data } = await getSystemState()
-  state.value = data.server
-}
+  const reload = async () => {
+    const { data } = await getSystemState()
+    state.value = data.server
+  }
 
-reload()
-timer.value = setInterval(() => {
   reload()
-}, 1000 * 10)
+  timer.value = setInterval(() => {
+    reload()
+  }, 1000 * 10)
 
-onUnmounted(() => {
-  clearInterval(timer.value)
-  timer.value = null
-})
-
+  onUnmounted(() => {
+    clearInterval(timer.value)
+    timer.value = null
+  })
 </script>
 
 <style>
-
-.card_item {
-  @apply h-80 text-xl p-6  bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-800 rounded m-2;;
-}
+  .card_item {
+    @apply h-80 text-xl p-6  bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-800 rounded m-2;
+  }
 </style>

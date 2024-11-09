@@ -19,11 +19,5 @@ import 'default-passive-events'
 const app = createApp(App)
 app.config.productionTip = false
 
-app
-    .use(run)
-    .use(ElementPlus)
-    .use(store)
-    .use(auth)
-    .use(router)
-    .mount('#app')
+app.use(run).use(ElementPlus).use(store).use(auth).use(router).mount('#app')
 export default app

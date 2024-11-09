@@ -1,102 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-cn" class="transition-colors">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta content="Gin,Vue,Admin.Gin-Vue-Admin,GVA,gin-vue-admin,后台管理框架,vue后台管理框架,gin-vue-admin文档,gin-vue-admin首页,gin-vue-admin" name="keywords" />
-    <link rel="icon" href="favicon.ico">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta
+      content="Gin,Vue,Admin.Gin-Vue-Admin,GVA,gin-vue-admin,后台管理框架,vue后台管理框架,gin-vue-admin文档,gin-vue-admin首页,gin-vue-admin"
+      name="keywords"
+    />
+    <link rel="icon" href="favicon.ico" />
     <title></title>
     <style>
-      .transition-colors{
-          transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-          transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-          transition-duration: 150ms;
+      .transition-colors {
+        transition-property: color, background-color, border-color,
+          text-decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
       }
-      body{
-          margin: 0;
-          --64f90c3645474bd5: #409eff;
+      body {
+        margin: 0;
+        --64f90c3645474bd5: #409eff;
       }
-       #gva-loading-box{
-           position: relative;
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           height: 100vh;
-           width: 100vw;
-       }
-       #loading-text {
-           position: absolute;
-           bottom: calc(50% - 100px);
-           left: 0;
-           width: 100%;
-           text-align: center;
-           color: #666;
-           font-size: 14px;
-       }
+      #gva-loading-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+      }
+      #loading-text {
+        position: absolute;
+        bottom: calc(50% - 100px);
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: #666;
+        font-size: 14px;
+      }
       #loading {
-          position: absolute;
-          top: calc(50% - 20px);
-          left: calc(50% - 20px);
+        position: absolute;
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
       }
       @keyframes loader {
-          0% { left: -100px }
-          100% { left: 110%; }
+        0% {
+          left: -100px;
+        }
+        100% {
+          left: 110%;
+        }
       }
       #box {
-          width: 50px;
-          height: 50px;
-          background: var(--64f90c3645474bd5);
-          animation: animate .5s linear infinite;
-          position: absolute;
-          top: 0;
-          left: 0;
-          border-radius: 3px;
+        width: 50px;
+        height: 50px;
+        background: var(--64f90c3645474bd5);
+        animation: animate 0.5s linear infinite;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 3px;
       }
       @keyframes animate {
-          17% { border-bottom-right-radius: 3px; }
-          25% { transform: translateY(9px) rotate(22.5deg); }
-          50% {
-              transform: translateY(18px) scale(1,.9) rotate(45deg) ;
-              border-bottom-right-radius: 40px;
-          }
-          75% { transform: translateY(9px) rotate(67.5deg); }
-          100% { transform: translateY(0) rotate(90deg); }
+        17% {
+          border-bottom-right-radius: 3px;
+        }
+        25% {
+          transform: translateY(9px) rotate(22.5deg);
+        }
+        50% {
+          transform: translateY(18px) scale(1, 0.9) rotate(45deg);
+          border-bottom-right-radius: 40px;
+        }
+        75% {
+          transform: translateY(9px) rotate(67.5deg);
+        }
+        100% {
+          transform: translateY(0) rotate(90deg);
+        }
       }
       #shadow {
-          width: 50px;
-          height: 5px;
-          background: #000;
-          opacity: 0.1;
-          position: absolute;
-          top: 59px;
-          left: 0;
-          border-radius: 50%;
-          animation: shadow .5s linear infinite;
+        width: 50px;
+        height: 5px;
+        background: #000;
+        opacity: 0.1;
+        position: absolute;
+        top: 59px;
+        left: 0;
+        border-radius: 50%;
+        animation: shadow 0.5s linear infinite;
       }
-      .dark #shadow{
-          background: #fff;
+      .dark #shadow {
+        background: #fff;
       }
       @keyframes shadow {
-          50% {
-              transform: scale(1.2,1);
-          }
+        50% {
+          transform: scale(1.2, 1);
+        }
       }
-
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="gva-loading-box">
-        <div id="loading">
-          <div id="shadow"></div>
-          <div id="box"></div>
-        </div>
-        <div id="loading-text">系统正在加载中，请稍候...</div>
+      <div id="loading">
+        <div id="shadow"></div>
+        <div id="box"></div>
+      </div>
+      <div id="loading-text">系统正在加载中，请稍候...</div>
     </div>
     <div id="app"></div>
     <script type="module" src="./src/main.js"></script>
-</body>
-
+  </body>
 </html>

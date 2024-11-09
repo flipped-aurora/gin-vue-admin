@@ -5,10 +5,8 @@
 
 <template>
   <div
-    class="bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-400  rounded  shadow" :class="[
-      customClass || '',
-      withoutPadding ? 'p-0' : 'p-4'
-    ]"
+    class="bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-400 rounded shadow"
+    :class="[customClass || '', withoutPadding ? 'p-0' : 'p-4']"
   >
     <div v-if="title" class="flex justify-between items-center">
       <div class="text-base font-bold">
@@ -25,27 +23,24 @@
 </template>
 
 <script setup>
-defineProps({
-  title: {
-    type: String,
-    default: ''
-  },
-  showAction: {
-    type: Boolean,
-    default: false
-  },
-  customClass: {
-    type: String,
-    default: ''
-  },
-  withoutPadding: {
-    type: Boolean,
-    default: false
-  }
-})
-
+  defineProps({
+    title: {
+      type: String,
+      default: ''
+    },
+    showAction: {
+      type: Boolean,
+      default: false
+    },
+    customClass: {
+      type: String,
+      default: ''
+    },
+    withoutPadding: {
+      type: Boolean,
+      default: false
+    }
+  })
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

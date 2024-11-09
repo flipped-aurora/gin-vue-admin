@@ -27,42 +27,41 @@
 </template>
 
 <script setup>
-
-defineOptions({
-  name: 'ArrayCtrl',
-})
-
-import { nextTick, ref } from 'vue'
-
-const inputValue = ref('')
-const inputVisible = ref(false)
-const InputRef = ref(null)
-
-const modelValue = defineModel()
-
-defineProps({
-  editable: {
-    type: Boolean,
-    default: () => false
-  }
-})
-
-const handleClose = (tag) => {
-  modelValue.value.splice(modelValue.value.indexOf(tag), 1)
-}
-
-const showInput = () => {
-  inputVisible.value = true
-  nextTick(() => {
-    InputRef.value?.input?.focus()
+  defineOptions({
+    name: 'ArrayCtrl'
   })
-}
 
-const handleInputConfirm = () => {
-  if (inputValue.value) {
-    modelValue.value.push(inputValue.value)
+  import { nextTick, ref } from 'vue'
+
+  const inputValue = ref('')
+  const inputVisible = ref(false)
+  const InputRef = ref(null)
+
+  const modelValue = defineModel()
+
+  defineProps({
+    editable: {
+      type: Boolean,
+      default: () => false
+    }
+  })
+
+  const handleClose = (tag) => {
+    modelValue.value.splice(modelValue.value.indexOf(tag), 1)
   }
-  inputVisible.value = false
-  inputValue.value = ''
-}
+
+  const showInput = () => {
+    inputVisible.value = true
+    nextTick(() => {
+      InputRef.value?.input?.focus()
+    })
+  }
+
+  const handleInputConfirm = () => {
+    if (inputValue.value) {
+      modelValue.value.push(inputValue.value)
+    }
+    inputVisible.value = false
+    inputValue.value = ''
+  }
 </script>

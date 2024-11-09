@@ -15,10 +15,15 @@
       muted
       preload="metadata"
     >
-      <source :src="getUrl(model) + '#t=1'">
+      <source :src="getUrl(model) + '#t=1'" />
     </video>
 
-    <img v-if="model&&!isVideoExt(model)" class="w-full h-full" :src="getUrl(model)" alt="图片">
+    <img
+      v-if="model && !isVideoExt(model)"
+      class="w-full h-full"
+      :src="getUrl(model)"
+      alt="图片"
+    />
     <div
       v-if="model"
       class="left-0 top-0 hidden text-gray-600 group-hover:bg-gray-600 group-hover:bg-opacity-30 w-full h-full group-hover:flex justify-center items-center absolute z-10"
@@ -42,24 +47,23 @@
   </div>
 </template>
 <script setup>
-import { getUrl, isVideoExt } from '@/utils/image'
-import { Delete, Plus } from '@element-plus/icons-vue'
+  import { getUrl, isVideoExt } from '@/utils/image'
+  import { Delete, Plus } from '@element-plus/icons-vue'
 
-defineProps({
-  model: {
-    default: '',
-    type: String
+  defineProps({
+    model: {
+      default: '',
+      type: String
+    }
+  })
+
+  const emits = defineEmits(['chooseItem', 'deleteItem'])
+
+  const chooseItem = () => {
+    emits('chooseItem')
   }
-})
 
-const emits = defineEmits(['chooseItem', 'deleteItem'])
-
-const chooseItem = () => {
-  emits('chooseItem')
-}
-
-const deleteItem = () => {
-  emits('deleteItem')
-}
-
+  const deleteItem = () => {
+    emits('deleteItem')
+  }
 </script>

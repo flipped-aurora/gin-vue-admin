@@ -1,6 +1,6 @@
 import js from '@eslint/js'
 import pluginVue from 'eslint-plugin-vue'
-import globals from "globals"
+import globals from 'globals'
 
 export default [
   js.configs.recommended,
@@ -10,20 +10,20 @@ export default [
     files: ['**/*.{js,mjs,jsx,vue}'],
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: "module",
+      sourceType: 'module',
       globals: globals.node
     },
     rules: {
-      "vue/max-attributes-per-line" : 0,
-      "vue/no-v-model-argument" : 0,
-      "vue/multi-word-component-names": "off",
+      'vue/max-attributes-per-line': 0,
+      'vue/no-v-model-argument': 0,
+      'vue/multi-word-component-names': 'off',
       'no-lone-blocks': 'off',
       'no-extend-native': 'off',
-      'no-unused-vars': ['error', { "argsIgnorePattern": '^_' }],
-    },
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
+    }
   },
   {
     name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/build/*.js', '**/src/assets/**', '**/public/**'],
-  },
+    ignores: ['**/dist/**', '**/build/*.js', '**/src/assets/**', '**/public/**']
+  }
 ]

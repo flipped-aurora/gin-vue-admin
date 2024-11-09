@@ -1,6 +1,351 @@
 {{- $global := . }}
 {{- $top := . -}}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
+
+{{- if .IsAdd }}
+// 请在搜索条件中增加如下代码
+{{- range .Fields}}  {{- if .FieldSearchType}} {{- if not .FieldSearchHide }} {{- if eq .FieldType "bool" }}
+ <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
+ <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')">
+     <el-option
+         key="true"
+         :label="t('general.yes')"
+         value="true">
+     </el-option>
+     <el-option
+         key="false"
+         label="t('general.no')"
+         value="false">
+     </el-option>
+ </el-select>
+ </el-form-item>
+{{- else if .DictType}}
+<el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
+ <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+   <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+ </el-select>
+ </el-form-item>
+    {{- else}}
+<el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
+{{- if eq .FieldType "float64" "int"}}
+    {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+    <el-input v-model.number="searchInfo.start{{.FieldName}}" :placeholder="t('general.min')" />
+    —
+    <el-input v-model.number="searchInfo.end{{.FieldName}}" :placeholder="t('general.max')" />
+   {{- else}}
+     {{- if .DictType}}
+      <el-select v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.pleaseSelect')" style="width:100%" :clearable="true" >
+       <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+     </el-select>
+            {{- else}}
+     <el-input v-model.number="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
+            {{- end }}
+  {{- end}}
+{{- else if eq .FieldType "time.Time"}}
+    {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+    <template #label>
+    <span>
+      {{"{{"}} t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}') {{"}}"}}
+      <el-tooltip :content="t('general.searchDesc')">
+        <el-icon><QuestionFilled /></el-icon>
+      </el-tooltip>
+    </span>
+  </template>
+    <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" :placeholder="t('general.startData')" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
+    —
+    <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" :placeholder="t('general.endData')" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
+   {{- else}}
+   <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" :placeholder="t('general.searchCriteria')"></el-date-picker>
+  {{- end}}
+{{- else}}
+ <el-input v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
+{{
+</el-form-item>{{ end }}{{ end }}{{ end }}{{ end }}
+
+
+// 表格增加如下列代码
+
+{{- range .Fields}}
+{{- if .Table}}
+{{- if .CheckDataSource }}
+<el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
+  <template #default="scope">
+        {{if eq .DataSource.Association 2}}
+            <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
+                {{ "{{ item }}" }}
+            </el-tag>
+        {{ else }}
+            <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}</span>
+        {{ end }}
+ </template>
+ </el-table-column>
+{{- else if .DictType}}
+<el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
+    <template #default="scope">
+    {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+    </template>
+</el-table-column>
+{{- else if eq .FieldType "bool" }}
+<el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
+    <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
+</el-table-column>
+ {{- else if eq .FieldType "time.Time" }}
+ <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="180">
+    <template #default="scope">{{"{{"}} formatDate(scope.row.{{.FieldJson}}) {{"}}"}}</template>
+ </el-table-column>
+  {{- else if eq .FieldType "picture" }}
+  <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+      <template #default="scope">
+        <el-image preview-teleported style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
+      </template>
+  </el-table-column>
+   {{- else if eq .FieldType "pictures" }}
+   <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+      <template #default="scope">
+         <div class="multiple-img-box">
+            <el-image preview-teleported v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
+        </div>
+      </template>
+   </el-table-column>
+   {{- else if eq .FieldType "video" }}
+   <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+      <template #default="scope">
+       <video
+          style="width: 100px; height: 100px"
+          muted
+          preload="metadata"
+          >
+            <source :src="getUrl(scope.row.{{.FieldJson}}) + '#t=1'">
+          </video>
+      </template>
+   </el-table-column>
+   {{- else if eq .FieldType "richtext" }}
+              <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+                 <template #default="scope">
+                    [RichText]
+                 </template>
+              </el-table-column>
+   {{- else if eq .FieldType "file" }}
+            <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+                <template #default="scope">
+                     <div class="file-list">
+                       <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid" @click="downloadFile(file.url)">{{"{{"}}file.name{{"}}"}}</el-tag>
+                     </div>
+                </template>
+            </el-table-column>
+ {{- else if eq .FieldType "json" }}
+  <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+      <template #default="scope">
+          [JSON]
+      </template>
+  </el-table-column>
+   {{- else if eq .FieldType "array" }}
+   <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
+       <template #default="scope">
+          <ArrayCtrl v-model="scope.row.{{ .FieldJson }}"/>
+       </template>
+   </el-table-column>
+  {{- else }}
+<el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120" />
+  {{- end }}
+{{- end }}
+{{- end }}
+
+// 新增表单中增加如下代码
+{{- range .Fields}}
+{{- if .Form}}
+  <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
+{{- if .CheckDataSource}}
+  <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
+    <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
+  </el-select>
+{{- else }}
+{{- if eq .FieldType "bool" }}
+    <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
+{{- end }}
+{{- if eq .FieldType "string" }}
+{{- if .DictType}}
+    <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
+      <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+    </el-select>
+{{- else }}
+    <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
+{{- end }}
+{{- end }}
+{{- if eq .FieldType "richtext" }}
+    <RichEdit v-model="formData.{{.FieldJson}}"/>
+{{- end }}
+{{- if eq .FieldType "json" }}
+    // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
+    {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+{{- end }}
+ {{- if eq .FieldType "array" }}
+    <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
+ {{- end }}
+{{- if eq .FieldType "int" }}
+    <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
+{{- end }}
+{{- if eq .FieldType "time.Time" }}
+    <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" :placeholder="t('general.selectData')" :clearable="{{.Clearable}}"  />
+{{- end }}
+{{- if eq .FieldType "float64" }}
+    <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
+{{- end }}
+{{- if eq .FieldType "enum" }}
+      <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
+         <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
+      </el-select>
+{{- end }}
+{{- if eq .FieldType "picture" }}
+      <SelectImage
+       v-model="formData.{{ .FieldJson }}"
+       file-type="image"
+      />
+{{- end }}
+{{- if eq .FieldType "pictures" }}
+      <SelectImage
+       multiple
+       v-model="formData.{{ .FieldJson }}"
+       file-type="image"
+       />
+{{- end }}
+{{- if eq .FieldType "video" }}
+      <SelectImage
+      v-model="formData.{{ .FieldJson }}"
+      file-type="video"
+      />
+ {{- end }}
+{{- if eq .FieldType "file" }}
+      <SelectFile v-model="formData.{{ .FieldJson }}" />
+{{- end }}
+{{- end }}
+  </el-form-item>
+{{- end }}
+{{- end }}
+
+// 查看抽屉中增加如下代码
+
+{{- range .Fields}}
+{{- if .Desc }}
+      <el-descriptions-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')">
+  {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
+          {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
+  {{- else }}
+      {{- if eq .FieldType "picture" }}
+              <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :src="getUrl(detailFrom.{{ .FieldJson }})" fit="cover" />
+      {{- end }}
+      {{- if eq .FieldType "array" }}
+              <ArrayCtrl v-model="detailFrom.{{ .FieldJson }}"/>
+      {{- end }}
+      {{- if eq .FieldType "pictures" }}
+              <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
+      {{- end }}
+      {{- if eq .FieldType "file" }}
+              <div class="fileBtn" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index">
+                <el-button type="primary" text bg @click="onDownloadFile(item.url)">
+                  <el-icon style="margin-right: 5px"><Download /></el-icon>
+                  {{"{{"}}item.name{{"}}"}}
+                </el-button>
+              </div>
+      {{- end }}
+  {{- end }}
+      </el-descriptions-item>
+{{- end }}
+{{- end }}
+
+// 字典增加如下代码
+    {{- range $index, $element := .DictTypes}}
+const {{ $element }}Options = ref([])
+    {{- end }}
+
+// setOptions方法中增加如下调用
+
+{{- range $index, $element := .DictTypes }}
+    {{ $element }}Options.value = await getDictFunc('{{$element}}')
+{{- end }}
+
+// 基础formData结构（变量处和关闭表单处）增加如下字段
+{{- range .Fields}}
+          {{- if .Form}}
+            {{- if eq .FieldType "bool" }}
+{{.FieldJson}}: false,
+            {{- end }}
+            {{- if eq .FieldType "string" }}
+{{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "richtext" }}
+{{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "int" }}
+{{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+            {{- end }}
+            {{- if eq .FieldType "time.Time" }}
+{{.FieldJson}}: new Date(),
+            {{- end }}
+            {{- if eq .FieldType "float64" }}
+{{.FieldJson}}: 0,
+            {{- end }}
+            {{- if eq .FieldType "picture" }}
+{{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "video" }}
+{{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "pictures" }}
+{{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "file" }}
+{{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "json" }}
+{{.FieldJson}}: {},
+            {{- end }}
+            {{- if eq .FieldType "array" }}
+{{.FieldJson}}: [],
+            {{- end }}
+          {{- end }}
+        {{- end }}
+// 验证规则中增加如下字段
+
+{{- range .Fields }}
+        {{- if .Form }}
+            {{- if eq .Require true }}
+{{.FieldJson }} : [{
+    required: true,
+    message: '{{ .ErrorText }}',
+    trigger: ['input','blur'],
+},
+               {{- if eq .FieldType "string" }}
+{
+    whitespace: true,
+    message: t('general.noOnlySpace'),
+    trigger: ['input', 'blur'],
+}
+              {{- end }}
+],
+            {{- end }}
+        {{- end }}
+    {{- end }}
+
+
+
+{{- if .HasDataSource }}
+// 请引用
+get{{.StructName}}DataSource,
+
+//  获取数据源
+const dataSource = ref([])
+const getDataSourceFunc = async()=>{
+  const res = await get{{.StructName}}DataSource()
+  if (res.code === 0) {
+    dataSource.value = res.data
+  }
+}
+getDataSourceFunc()
+{{- end }}
+
+{{- else }}
+
 {{- if not .OnlyTemplate}}
 <template>
   <div>
@@ -910,3 +1255,5 @@ defineOptions({
 <style>
 </style>
 {{- end}}
+
+{{- end }}

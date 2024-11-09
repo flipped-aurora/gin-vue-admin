@@ -1,9 +1,9 @@
-import { login, getUserInfo, setSelfInfo } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElLoading, ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouterStore } from './router'
 import cookie from 'js-cookie'
 import i18n from '@/i18n' // added by mohamed hassan to multilangauge

@@ -157,6 +157,13 @@
         >
           <template #default="scope">
             <el-button
+                type="primary"
+                link
+                icon="edit-pen"
+                class="table-button"
+                @click="showCode(scope.row)"
+            >代码</el-button>
+            <el-button
               type="primary"
               link
               icon="edit"
@@ -465,6 +472,29 @@
         </el-form-item>
       </el-form>
     </el-drawer>
+
+    <el-drawer
+        v-model="codeVisible"
+        size="60%"
+        :before-close="closeDialog"
+        :title="type==='create'?'添加':'修改'"
+        :show-close="false"
+        destroy-on-close
+    >
+
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">模板</span>
+          <div>
+            <el-button
+                type="primary"
+                @click="closeDialog"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
+      <v-ace-editor v-model:value="webCode" lang="vue" theme="github_dark" class="h-full" />
+    </el-drawer>
   </div>
 </template>
 
@@ -485,13 +515,19 @@ import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import {getDB, getTable, getColumn, butler} from '@/api/autoCode'
 import { useI18n } from 'vue-i18n'
+import {getCode} from './code'
+import { VAceEditor } from "vue3-ace-editor"
+
+import 'ace-builds/src-noconflict/mode-vue';
+import 'ace-builds/src-noconflict/theme-github_dark';
+
 
 const { t } = useI18n()
 defineOptions({
   name: 'ExportTemplate'
 })
 
-const templatePlaceholder = t('view.systemTools.exportTemplate.templatePlaceholder1') + 
+const templatePlaceholder = t('view.systemTools.exportTemplate.templatePlaceholder1') +
 `{
   "table_column1":"` + t('view.systemTools.exportTemplate.templatePlaceholder2') + `",
   "table_column3":"` + t('view.systemTools.exportTemplate.templatePlaceholder3') + `",
@@ -877,9 +913,16 @@ const deleteSysExportTemplateFunc = async(row) => {
     getTableData()
   }
 }
-
+const codeVisible = ref(false)
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
+
+const webCode = ref("")
+
+const showCode = (row) =>{
+  webCode.value = getCode(row.templateID)
+  codeVisible.value = true
+}
 
 // 打开弹窗
 const openDialog = () => {
@@ -889,6 +932,7 @@ const openDialog = () => {
 
 // 关闭弹窗
 const closeDialog = () => {
+  codeVisible.value = false
   dialogFormVisible.value = false
   formData.value = {
     name: '',
@@ -906,7 +950,7 @@ const enterDialog = async() => {
   // 判断 formData.templateInfo 是否为标准json格式 如果不是标准json 则辅助调整
   try {
     JSON.parse(formData.value.templateInfo)
-  } catch (error) {
+  } catch (_) {
     ElMessage({
       type: 'error',
       message: t('view.systemTools.templateFormatIncorrect')

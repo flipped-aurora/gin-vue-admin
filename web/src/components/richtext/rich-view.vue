@@ -17,10 +17,6 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { Editor } from '@wangeditor/editor-for-vue'
 
-import { useUserStore } from '@/pinia/modules/user'
-
-const userStore = useUserStore()
-
 const emits = defineEmits(['change', 'update:modelValue'])
 const editorConfig = ref({
   readOnly: true

@@ -32,7 +32,7 @@ defineOptions({
   name: 'UploadCommon',
 })
 
-const props = defineProps({
+defineProps({
   limit: {
     type: Number,
     default: 3

@@ -78,7 +78,7 @@ watchEffect(() => {
 
 provide("isCollapse", isCollapse);
 
-const selectMenuItem = (index, _, ele, aaa) => {
+const selectMenuItem = (index) => {
   const query = {};
   const params = {};
   routerStore.routeMap[index]?.parameters &&

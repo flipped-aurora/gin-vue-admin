@@ -63,11 +63,6 @@
         </el-table-column>
 
         <el-table-column align="left" :label="t('plugins.announcement.info.title')" prop="title" width="120" />
-        <el-table-column :label="t('plugins.announcement.info.content')" prop="content" width="200">
-          <template #default="scope">
-           {{ t('plugins.announcement.info.richTextContent') }}
-          </template>
-        </el-table-column>
         <el-table-column align="left" :label="t('plugins.announcement.info.author')" prop="userID" width="120">
           <template #default="scope">
             <span>{{ filterDataSource(dataSource.userID,scope.row.userID) }}</span>

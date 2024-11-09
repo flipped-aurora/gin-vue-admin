@@ -4,7 +4,7 @@
         :title="t('view.systemTools.autoCode.autoCodeNote')"
         href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
     />
-    <div class="gva-search-box">
+    <div class="gva-search-box" v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdByAI') }}<a class="text-blue-600 text-sm ml-4" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">{{ t('view.systemTools.autoCode.getAiPath') }}</a></div>
       <div class="relative">
         <el-input v-model="prompt"
@@ -22,7 +22,7 @@
             <template #content>
               <div>{{ t('view.systemTools.autoCode.aiNote1') }}<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">{{ t('view.systemTools.autoCode.aiNote2') }}</a>{{ t('view.systemTools.autoCode.aiNote3') }}</div>
             </template>
-            <el-button type="primary" @click="llmAutoFunc()">
+            <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc()">
               <el-icon size="18">
                 <ai-gva />
               </el-icon> {{ t('view.systemTools.autoCode.generate') }}
@@ -32,7 +32,7 @@
       </div>
     </div>
     <!-- 从数据库直接获取字段 -->
-    <div class="gva-search-box">
+    <div class="gva-search-box" v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdFromDB') }}</div>
       <el-form
           ref="getTableForm"
@@ -149,6 +149,7 @@
       <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.automationStructure') }}</div>
       <el-form
           ref="autoCodeForm"
+          :disabled="isAdd"
           :inline="true"
           :model="form"
           :rules="rules"
@@ -166,7 +167,7 @@
                   v-model="form.structName"
                   :placeholder="t('view.systemTools.autoCode.capitalizeFirstLetterAutomatically')"
               />
-                <el-button type="primary" @click="llmAutoFunc(true)">
+                <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc(true)">
                   <el-icon size="18">
                     <ai-gva />
                   </el-icon> {{ t('view.systemTools.autoCode.generate') }}
@@ -472,6 +473,7 @@
             row-key="fieldName"
         >
           <el-table-column
+              v-if="!isAdd"
             fixed="left"
             align="left"
             type="index"
@@ -498,7 +500,7 @@
             width="120"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.primaryKey" />
+              <el-checkbox :disabled="row.disabled" v-model="row.primaryKey" />
             </template>
           </el-table-column>
           <el-table-column
@@ -568,7 +570,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldName"/>
+              <el-input :disabled="row.disabled" v-model="row.fieldName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -578,7 +580,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldDesc"/>
+              <el-input :disabled="row.disabled" v-model="row.fieldDesc" />
             </template>
           </el-table-column>
           <el-table-column
@@ -588,7 +590,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.defaultValue"/>
+              <el-input :disabled="row.disabled" v-model="row.defaultValue" />
             </template>
           </el-table-column>
           <el-table-column
@@ -598,7 +600,7 @@
               width="100"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.require"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.require" />
             </template>
           </el-table-column>
           <el-table-column
@@ -607,7 +609,7 @@
               prop="sort"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.sort"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.sort" />
             </template>
           </el-table-column>
           <el-table-column
@@ -617,7 +619,7 @@
               width="100"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.form"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.form" />
             </template>
           </el-table-column>
           <el-table-column
@@ -626,7 +628,7 @@
               prop="table"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.table"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.table" />
             </template>
           </el-table-column>
           <el-table-column
@@ -635,10 +637,11 @@
               prop="desc"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.desc"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.desc" />
             </template>
           </el-table-column>
           <el-table-column
+              v-if="!isAdd"
               align="left"
               prop="excel"
               width="120"
@@ -655,7 +658,7 @@
               width="160px"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldJson"/>
+              <el-input :disabled="row.disabled" v-model="row.fieldJson" />
             </template>
           </el-table-column>
           <el-table-column
@@ -669,6 +672,7 @@
                   v-model="row.fieldType"
                   clearable
                   :placeholder="t('view.systemTools.autoCode.selectFieldType')"
+                  :disabled="row.disabled"
                   style="width:100%"
               >
                 <el-option
@@ -692,6 +696,7 @@
                   clearable
                   :placeholder="t('view.systemTools.autoCode.selectIndexType')"
                   style="width:100%"
+                  :disabled="row.disabled"
               >
                 <el-option
                     v-for="item in typeIndexOptions"
@@ -709,7 +714,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.dataTypeLong"/>
+              <el-input :disabled="row.disabled" v-model="row.dataTypeLong" />
             </template>
           </el-table-column>
           <el-table-column
@@ -719,7 +724,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.columnName"/>
+              <el-input :disabled="row.disabled" v-model="row.columnName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -729,7 +734,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.comment"/>
+              <el-input :disabled="row.disabled" v-model="row.comment" />
             </template>
           </el-table-column>
           <el-table-column
@@ -740,11 +745,11 @@
           >
             <template #default="{row}">
               <el-select
-                  v-model="row.fieldSearchType"
-                  :disabled="row.fieldType!=='json'"
-                  clearable
-                  :placeholder="t('view.systemTools.autoCode.selectSearchCondition')"
-                  style="width:100%"
+                v-model="row.fieldSearchType"
+                style="width:100%"
+                :placeholder="t('view.systemTools.autoCode.selectSearchCondition')"
+                clearable
+                :disabled="row.fieldType!=='json' || row.disabled"
               >
                 <el-option
                     v-for="item in typeSearchOptions"
@@ -767,7 +772,7 @@
           >
             <template #default="scope">
               <el-button
-
+                  v-if="!scope.row.disabled"
                   icon="edit"
                   link
                   type="primary"
@@ -776,6 +781,7 @@
                 {{ t('view.systemTools.autoCode.advancedEdit') }}
               </el-button>
               <el-button
+                  v-if="!scope.row.disabled"
                   icon="delete"
                   link
                   type="primary"
@@ -791,6 +797,7 @@
       <div class="gva-btn-list justify-end mt-4">
         <el-button
             type="primary"
+            :disabled="isAdd"
             @click="exportJson()"
         >
           {{ t('view.systemTools.autoCode.exportJson') }}
@@ -801,31 +808,34 @@
             class="flex items-center"
             show-file-list="false"
         >
-          <el-button class="mx-2" type="primary">{{ t('view.systemTools.autoCode.importJson') }}</el-button>
+          <el-button class="mx-2" type="primary" :disabled="isAdd">{{ t('view.systemTools.autoCode.importJson') }}</el-button>
         </el-upload>
         <el-button
-            type="primary"
-            @click="clearCatch()"
+          type="primary"
+          :disabled="isAdd"
+          @click="clearCatch()"
         >
           {{ t('view.systemTools.autoCode.clearTemp') }}
         </el-button>
         <el-button
-            type="primary"
-            @click="catchData()"
+          type="primary"
+          :disabled="isAdd"
+          @click="catchData()"
         >
           {{ t('view.systemTools.autoCode.temporary') }}
         </el-button>
         <el-button
-            type="primary"
-            @click="enterForm(true)"
-        >
-          {{ t('view.systemTools.autoCode.codePreview') }}
-        </el-button>
-        <el-button
-            type="primary"
-            @click="enterForm(false)"
+          type="primary"
+          :disabled="isAdd"
+          @click="enterForm(false)"
         >
           {{ t('view.systemTools.autoCode.generateCode') }}
+        </el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(true)"
+        >
+          {{ t('view.systemTools.autoCode.codePreview') }}
         </el-button>
       </div>
     </div>
@@ -887,9 +897,10 @@
         </div>
       </template>
       <PreviewCodeDialog
-          v-if="previewFlag"
-          ref="previewNode"
-          :preview-code="preViewCode"
+        v-if="previewFlag"
+        :is-add="isAdd"
+        ref="previewNode"
+        :preview-code="preViewCode"
       />
     </el-drawer>
   </div>
@@ -904,13 +915,13 @@ export default {
 
 <script setup>
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
-import {toUpperCase, toHump, toSQLLine, toLowerCase} from '@/utils/stringFun'
-import {createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi, llmAuto} from '@/api/autoCode'
-import {getDict} from '@/utils/dictionary'
-import {ref, watch, toRaw, onMounted, nextTick} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import {ElMessage, ElMessageBox} from 'element-plus'
+import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialog.vue'
+import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
+import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi,llmAuto } from '@/api/autoCode'
+import { getDict } from '@/utils/dictionary'
+import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import Sortable from 'sortablejs'
 import {useI18n} from 'vue-i18n' // added by mohamed hassan to support multilanguage
@@ -951,15 +962,34 @@ const llmAutoFunc = async (flag) =>{
     ElMessage.error(t('general.enterDescription'))
     return
   }
+
+  if(form.value.fields.length>0){
+    const res = await ElMessageBox.confirm('AI生成会清空当前数据，是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    if (res !== 'confirm') {
+      return
+    }
+  }
+
   const res = await llmAuto({prompt:flag?t('view.systemTools.autoPkg.structNameIs') + form.value.structName:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
+
+    json.fields?.forEach(item => {
+      item.fieldName = toUpperCase(item.fieldName)
+    })
+
     for (let key in json){
       form.value[key] = json[key]
     }
   }
 }
+
+const isAdd = ref(false)
 
 // 行拖拽
 const rowDrop = () => {
@@ -1108,10 +1138,12 @@ const fieldTemplate = {
   fieldIndexType: '',
   dictType: '',
   dataSource: {
-    association: 1,
+    dbName: '',
+    association:1,
     table: '',
     label: '',
-    value: ''
+    value: '',
+    hasDeletedAt: false
   }
 }
 const route = useRoute()
@@ -1209,10 +1241,12 @@ const editAndAddField = (item) => {
     addFlag.value = 'edit'
     if (!item.dataSource) {
       item.dataSource = {
-        association: 1,
+        dbName: '',
+        association:1,
         table: '',
         label: '',
-        value: ''
+        value: '',
+        hasDeletedAt: false
       }
     }
     bk.value = JSON.parse(JSON.stringify(item))
@@ -1289,6 +1323,16 @@ const enterForm = async (isPreview) => {
       return false
     }
 
+    if (
+        form.value.fields.some(item => item.fieldJson === form.value.package)
+    ) {
+      ElMessage({
+        type: 'error',
+        message: '存在与模板同名的的字段JSON'
+      })
+      return false
+    }
+
 
     if (form.value.fields.some(item => !item.fieldType)) {
       ElMessage({
@@ -1329,9 +1373,11 @@ const enterForm = async (isPreview) => {
       }
       form.value.humpPackageName = toSQLLine(form.value.packageName)
 
-      form.value.fields.forEach(item => {
+      form.value.fields?.forEach(item => {
+        item.fieldName = toUpperCase(item.fieldName)
         if(item.fieldType === 'enum'){
           // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
+          item.dataTypeLong = item.dataTypeLong.replace(/[\[\]{}()]/g, '');
           const arr = item.dataTypeLong.split(',')
           arr.forEach((ele, index) => {
             if(ele.indexOf("'") === -1){
@@ -1344,7 +1390,7 @@ const enterForm = async (isPreview) => {
 
       delete form.value.primaryField
       if (isPreview) {
-        const data = await preview(form.value)
+        const data = await preview({...form.value,isAdd:!!isAdd.value,fields:form.value.fields.filter(item => !item.disabled)})
         preViewCode.value = data.data.autoCode
         previewFlag.value = true
       } else {
@@ -1426,10 +1472,12 @@ const getColumnFunc = async () => {
           excel: false,
           desc: true,
           dataSource: {
+            dbName: '',
             association: 1,
             table: '',
             label: '',
-            value: ''
+            value: '',
+            hasDeletedAt: false
           }
         })
       }
@@ -1460,7 +1508,14 @@ const setFdMap = async () => {
 const getAutoCodeJson = async (id) => {
   const res = await getMeta({id: Number(id)})
   if (res.code === 0) {
+    const add = route.query.isAdd
+    isAdd.value = add
     form.value = JSON.parse(res.data.meta)
+    if (isAdd.value){
+      form.value.fields.forEach(item => {
+        item.disabled = true
+      })
+    }
   }
 }
 

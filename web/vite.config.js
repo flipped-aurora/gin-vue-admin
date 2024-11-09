@@ -11,7 +11,6 @@ import { svgBuilder } from 'vite-auto-import-svg'
 import { AddSecret } from './vitePlugin/secret'
 // @see https://cn.vitejs.dev/config/
 export default ({
-  command,
   mode
 }) => {
   AddSecret("")
@@ -56,6 +55,13 @@ export default ({
     },
     define: {
       'process.env': {}
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // or "modern"
+        }
+      }
     },
     server: {
       // 如果使用docker-compose开发模式，设置为false

@@ -253,7 +253,7 @@ watch(() => contextMenuVisible.value, () => {
   }
 })
 
-watch(() => route, (to, now) => {
+watch(() => route, (to) => {
   if (to.name === 'Login' || to.name === 'Reload') {
     return
   }

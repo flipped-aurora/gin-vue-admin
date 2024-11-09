@@ -21,13 +21,13 @@
 
 <script setup>
 import AsideComponent from "@/view/layout/aside/asideComponent/index.vue";
-import { ref, provide, watchEffect, computed } from "vue";
+import { ref, provide, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useRouterStore } from "@/pinia/modules/router";
 import { useAppStore } from "@/pinia";
 import { storeToRefs } from "pinia";
 const appStore = useAppStore();
-const { device, config } = storeToRefs(appStore);
+const { device } = storeToRefs(appStore);
 
 defineOptions({
   name: "GvaAside",
@@ -51,7 +51,7 @@ watchEffect(() => {
 
 provide("isCollapse", isCollapse);
 
-const selectMenuItem = (index, _, ele, aaa) => {
+const selectMenuItem = (index) => {
   const query = {};
   const params = {};
   routerStore.routeMap[index]?.parameters &&

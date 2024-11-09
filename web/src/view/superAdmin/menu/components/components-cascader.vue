@@ -34,15 +34,14 @@ const emits = defineEmits(['change'])
 
 const pathOptions = ref([])
 const tempPath = ref('')
-const activeComponent = ref('')
+const activeComponent = ref([])
 const pathIsSelect = ref(true)
 
 const togglePathIsSelect = () => {
   if(pathIsSelect.value){
-    tempPath.value = activeComponent.value?.join('/')
+    tempPath.value = activeComponent.value?.join('/') || ''
   }else{
-    activeComponent.value = tempPath.value.split('/')
-    console.log(activeComponent.value)
+    activeComponent.value = tempPath.value?.split('/') || []
   }
 
   pathIsSelect.value = !pathIsSelect.value
@@ -105,7 +104,7 @@ const initCascader = (value) => {
   }
 
   // 编辑的时候，根据路径判断是选择框还是输入框
-  if (pathInfo[`/src/${value}` || pathInfo[value]]) {
+  if (pathInfo[`/src/${value}`]) {
     activeComponent.value = value.split('/').filter(Boolean);
     tempPath.value = ''
     pathIsSelect.value = true

@@ -822,7 +822,6 @@ const enterDialog = async() => {
           }
           break
         default:
-          // eslint-disable-next-line no-lone-blocks
           {
             ElMessage({
               type: 'error',
@@ -877,7 +876,7 @@ const apiCompletion = async () =>{
           }
         }
       })
-    } catch (e) {
+    } catch (_) {
       ElMessage({
         type: 'error',
         message: 'AI自动填充失败,请重新生成'

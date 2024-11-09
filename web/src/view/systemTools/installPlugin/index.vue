@@ -1,5 +1,5 @@
 <template>
-    <div class="gva-form-box">
+  <div class="gva-form-box">
     <el-upload
       drag
       :action="`${getBaseUrl()}/autoCode/installPlugin`"
@@ -22,22 +22,23 @@
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
-import { getBaseUrl } from '@/utils/format'
+  import { ElMessage } from 'element-plus'
+  import { getBaseUrl } from '@/utils/format'
 
-import { useI18n } from 'vue-i18n'
+  import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+  const { t } = useI18n()
 
-const handleSuccess = (res) => {
-  if (res.code === 0) {
-    let msg = ``
-    res.data && res.data.forEach((item, index) => {
-      msg += `${index + 1}.${item.msg}\n`
-    })
-    alert(msg)
-  } else {
-    ElMessage.error(res.msg)
+  const handleSuccess = (res) => {
+    if (res.code === 0) {
+      let msg = ``
+      res.data &&
+        res.data.forEach((item, index) => {
+          msg += `${index + 1}.${item.msg}\n`
+        })
+      alert(msg)
+    } else {
+      ElMessage.error(res.msg)
+    }
   }
-}
 </script>

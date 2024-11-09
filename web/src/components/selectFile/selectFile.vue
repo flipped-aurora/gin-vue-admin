@@ -20,71 +20,67 @@
 </template>
 
 <script setup>
+  import { ref } from 'vue'
+  import { ElMessage } from 'element-plus'
+  import { getBaseUrl } from '@/utils/format'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
-import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import { getBaseUrl } from '@/utils/format'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  defineOptions({
+    name: 'UploadCommon'
+  })
 
-defineOptions({
-  name: 'UploadCommon',
-})
+  defineProps({
+    limit: {
+      type: Number,
+      default: 3
+    },
+    accept: {
+      type: String,
+      default: ''
+    }
+  })
 
-defineProps({
-  limit: {
-    type: Number,
-    default: 3
-  },
-  accept: {
-    type: String,
-    default: ''
-  },
-})
+  const fullscreenLoading = ref(false)
 
+  const model = defineModel({ type: Array })
 
-const fullscreenLoading = ref(false)
+  const fileList = ref(model.value)
 
-const model = defineModel({ type: Array })
+  const emits = defineEmits(['on-success', 'on-error'])
 
-const fileList = ref(model.value)
+  const uploadSuccess = (res) => {
+    const { data, code } = res
+    if (code !== 0) {
+      ElMessage({
+        type: 'error',
+        message: t('components.selectFile.uploadFailed') + res.msg
+      })
+      fileList.value.pop()
+      return
+    }
+    model.value.push({
+      name: data.file.name,
+      url: data.file.url
+    })
+    emits('on-success', res)
+  }
 
-const emits = defineEmits(['on-success', 'on-error'])
+  const uploadRemove = (file) => {
+    const index = model.value.indexOf(file)
+    if (index > -1) {
+      model.value.splice(index, 1)
+      fileList.value = model.value
+    }
+  }
 
-const uploadSuccess = (res) => {
-  const { data,code } = res
-  if(code !== 0){
+  const uploadError = (err) => {
     ElMessage({
       type: 'error',
-      message: t('components.selectFile.uploadFailed') + res.msg
+      message: t('components.selectFile.uploadFailed')
     })
-    fileList.value.pop()
-    return
+    fullscreenLoading.value = false
+    emits('on-error', err)
   }
-  model.value.push({
-    name: data.file.name,
-    url: data.file.url
-  })
-  emits('on-success', res)
-}
-
-const uploadRemove = (file) => {
-  const index = model.value.indexOf(file)
-  if (index > -1) {
-    model.value.splice(index, 1)
-    fileList.value = model.value
-  }
-}
-
-const uploadError = (err) => {
-  ElMessage({
-    type: 'error',
-    message: t('components.selectFile.uploadFailed')
-  })
-  fullscreenLoading.value = false
-  emits('on-error',err)
-}
-
 </script>
-

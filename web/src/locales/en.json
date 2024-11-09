@@ -281,16 +281,16 @@
     "generateInitialAPI": "Generate Initial API",
     "checkMsg": "Please check if initialize.Api(ctx) and initialize.Menu(ctx) are opened in `server/plugin/{plugName}/plugin.go`?",
     "announcement": {
-        "info": {
-          "title": "Title",
-          "content": "Content",
-          "richTextContent": "[Rich text content]",
-          "author": "Author",
-          "attachments": "Attachments",
-          "enterTitleNote": "Please enter a title",
-          "selectAuthorNote": "Please select author"
-        }
-      },
+      "info": {
+        "title": "Title",
+        "content": "Content",
+        "richTextContent": "[Rich text content]",
+        "author": "Author",
+        "attachments": "Attachments",
+        "enterTitleNote": "Please enter a title",
+        "selectAuthorNote": "Please select author"
+      }
+    },
     "email": {
       "emailConfigNote": "You need to configure the email configuration file in advance. To prevent unnecessary spam, this feature is not open for online experience.",
       "targetEmail": "Target Email",
@@ -470,7 +470,7 @@
       }
     },
     "superAdmin": {
-      "authority" : {
+      "authority": {
         "components": {
           "apis": {
             "filterName": "Filter Name",

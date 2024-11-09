@@ -276,32 +276,32 @@
     }
   },
   "plugins": {
-      "checkMessage": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
-      "overwriteMessage": "点击后将会覆盖server下的/plugin/{plugName}/initialize/menu. 是否继续?",
-      "overwriteWarning": "点击后将会覆盖server下的/plugin/{plugName}/initialize/api. 是否继续?",
-      "generateInitialAPI": "生成初始API",
-      "checkMsg": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
-      "announcement": {
-        "info": {
-          "title": "标题",
-          "content": "内容",
-          "richTextContent": "[富文本内容]",
-          "author": "作者",
-          "attachments": "附件",
-          "enterTitleNote": "请输入标题",
-          "selectAuthorNote": "请选择作者"
-        }
-      },
-      "email": {
-        "emailConfigNote": "需要提前配置email配置文件，为防止不必要的垃圾邮件，在线体验功能不开放此功能体验。",
-        "targetEmail": "目标邮箱",
-        "email": "邮件",
-        "emailContent": "邮件内容",
-        "sendTestEmail": "发送测试邮件",
-        "sendEmail": "发送邮件",
-        "sendSuccess": "发送成功",
-        "sentSuccessPleaseCheck": "发送成功,请查收"
+    "checkMessage": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
+    "overwriteMessage": "点击后将会覆盖server下的/plugin/{plugName}/initialize/menu. 是否继续?",
+    "overwriteWarning": "点击后将会覆盖server下的/plugin/{plugName}/initialize/api. 是否继续?",
+    "generateInitialAPI": "生成初始API",
+    "checkMsg": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
+    "announcement": {
+      "info": {
+        "title": "标题",
+        "content": "内容",
+        "richTextContent": "[富文本内容]",
+        "author": "作者",
+        "attachments": "附件",
+        "enterTitleNote": "请输入标题",
+        "selectAuthorNote": "请选择作者"
       }
+    },
+    "email": {
+      "emailConfigNote": "需要提前配置email配置文件，为防止不必要的垃圾邮件，在线体验功能不开放此功能体验。",
+      "targetEmail": "目标邮箱",
+      "email": "邮件",
+      "emailContent": "邮件内容",
+      "sendTestEmail": "发送测试邮件",
+      "sendEmail": "发送邮件",
+      "sendSuccess": "发送成功",
+      "sentSuccessPleaseCheck": "发送成功,请查收"
+    }
   },
   "utils": {
     "request": {
@@ -471,7 +471,7 @@
       }
     },
     "superAdmin": {
-      "authority" : {
+      "authority": {
         "components": {
           "apis": {
             "filterName": "筛选名字",
@@ -972,17 +972,17 @@
           "display": "展示: ",
           "enumValueValidationError": "枚举值校验错误",
           "oneToManyNote": "一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？",
-          "string":  "字符串",
+          "string": "字符串",
           "richText": "富文本",
-          "integer":  "整数",
+          "integer": "整数",
           "boolean": "布尔",
-          "float":  "浮点数",
+          "float": "浮点数",
           "time": "时间",
-          "enum":  "枚举",
+          "enum": "枚举",
           "singleImage": "单图",
-          "multipleImages":  "多图",
+          "multipleImages": "多图",
           "video": "视频",
-          "file":  "文件",
+          "file": "文件",
           "array": "数组"
         }
       },

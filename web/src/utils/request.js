@@ -12,9 +12,11 @@ const service = axios.create({
 let activeAxios = 0
 let timer
 let loadingInstance
-const showLoading = (option = {
-  target: null,
-}) => {
+const showLoading = (
+  option = {
+    target: null
+  }
+) => {
   const loadDom = document.getElementById('gva-base-load-dom')
   activeAxios++
   if (timer) {
@@ -37,7 +39,7 @@ const closeLoading = () => {
 }
 // http request 拦截器
 service.interceptors.request.use(
-  config => {
+  (config) => {
     if (!config.donNotShowLoading) {
       showLoading(config.loadingOption)
     }
@@ -51,7 +53,7 @@ service.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     if (!error.config.donNotShowLoading) {
       closeLoading()
     }
@@ -66,7 +68,7 @@ service.interceptors.request.use(
 
 // http response 拦截器
 service.interceptors.response.use(
-  response => {
+  (response) => {
     const userStore = useUserStore()
     if (!response.config.donNotShowLoading) {
       closeLoading()
@@ -88,68 +90,87 @@ service.interceptors.response.use(
       return response.data.msg ? response.data : response
     }
   },
-  error => {
+  (error) => {
     if (!error.config.donNotShowLoading) {
       closeLoading()
     }
 
     if (!error.response) {
       ElMessageBox.confirm(
-        i18n.global.t('utils.request.requestErrorDetected') + 
-        `<p>${error}</p>
-        `, i18n.global.t('utils.request.requestError'), {
-        dangerouslyUseHTMLString: true,
-        distinguishCancelAndClose: true,
-        confirmButtonText: i18n.global.t('utils.request.tryAgainLater'),
-        cancelButtonText: i18n.global.t('general.cancel')
-      })
+        i18n.global.t('utils.request.requestErrorDetected') +
+          `<p>${error}</p>
+        `,
+        i18n.global.t('utils.request.requestError'),
+        {
+          dangerouslyUseHTMLString: true,
+          distinguishCancelAndClose: true,
+          confirmButtonText: i18n.global.t('utils.request.tryAgainLater'),
+          cancelButtonText: i18n.global.t('general.cancel')
+        }
+      )
       return
     }
     switch (error.response.status) {
       case 500:
         ElMessageBox.confirm(
-          i18n.global.t('utils.request.interfaceErrorDetected') +   
-          `<p>${error}</p>` + 
-          `<p>` + i18n.global.t('utils.request.errorCode') + `<span style="color:red"> 500 </span>：` + i18n.global.t('utils.request.interfaceErrorNote') + `</p>`, 
-          i18n.global.t('utils.request.interfaceError'), {
-          dangerouslyUseHTMLString: true,
-          distinguishCancelAndClose: true,
-          confirmButtonText: i18n.global.t('utils.request.clearCache'),
-          cancelButtonText: i18n.global.t('general.cancel')
+          i18n.global.t('utils.request.interfaceErrorDetected') +
+            `<p>${error}</p>` +
+            `<p>` +
+            i18n.global.t('utils.request.errorCode') +
+            `<span style="color:red"> 500 </span>：` +
+            i18n.global.t('utils.request.interfaceErrorNote') +
+            `</p>`,
+          i18n.global.t('utils.request.interfaceError'),
+          {
+            dangerouslyUseHTMLString: true,
+            distinguishCancelAndClose: true,
+            confirmButtonText: i18n.global.t('utils.request.clearCache'),
+            cancelButtonText: i18n.global.t('general.cancel')
+          }
+        ).then(() => {
+          const userStore = useUserStore()
+          userStore.ClearStorage()
+          router.push({ name: 'Login', replace: true })
         })
-          .then(() => {
-            const userStore = useUserStore()
-            userStore.ClearStorage()
-            router.push({ name: 'Login', replace: true })
-          })
         break
       case 404:
-        ElMessageBox.confirm( 
-          i18n.global.t('utils.request.interfaceErrorDetected') +   
-          `<p>${error}</p>` + 
-          `<p>` + i18n.global.t('utils.request.errorCode') + `<span style="color:red"> 404 </span>：` + i18n.global.t('utils.request.interfaceNotRegisteredNote') + `</p>`, 
-          i18n.global.t('utils.request.interfaceError'), {
-          dangerouslyUseHTMLString: true,
-          distinguishCancelAndClose: true,
-          confirmButtonText: i18n.global.t('utils.request.iGotIt'),
-          cancelButtonText: i18n.global.t('general.cancel')
-        })
+        ElMessageBox.confirm(
+          i18n.global.t('utils.request.interfaceErrorDetected') +
+            `<p>${error}</p>` +
+            `<p>` +
+            i18n.global.t('utils.request.errorCode') +
+            `<span style="color:red"> 404 </span>：` +
+            i18n.global.t('utils.request.interfaceNotRegisteredNote') +
+            `</p>`,
+          i18n.global.t('utils.request.interfaceError'),
+          {
+            dangerouslyUseHTMLString: true,
+            distinguishCancelAndClose: true,
+            confirmButtonText: i18n.global.t('utils.request.iGotIt'),
+            cancelButtonText: i18n.global.t('general.cancel')
+          }
+        )
         break
       case 401:
         ElMessageBox.confirm(
-          i18n.global.t('utils.request.invalidToken') +   
-          `<p>` + i18n.global.t('utils.request.errorCode') + `<span style="color:red"> 401 </span>` + i18n.global.t('utils.request.errorMessage') + `: ${error}</p>`, 
-          i18n.global.t('utils.request.identityInfo'), {
-          dangerouslyUseHTMLString: true,
-          distinguishCancelAndClose: true,
-          confirmButtonText: i18n.global.t('utils.request.loginAgain'),
-          cancelButtonText: i18n.global.t('general.cancel')
+          i18n.global.t('utils.request.invalidToken') +
+            `<p>` +
+            i18n.global.t('utils.request.errorCode') +
+            `<span style="color:red"> 401 </span>` +
+            i18n.global.t('utils.request.errorMessage') +
+            `: ${error}</p>`,
+          i18n.global.t('utils.request.identityInfo'),
+          {
+            dangerouslyUseHTMLString: true,
+            distinguishCancelAndClose: true,
+            confirmButtonText: i18n.global.t('utils.request.loginAgain'),
+            cancelButtonText: i18n.global.t('general.cancel')
+          }
+        ).then(() => {
+          const userStore = useUserStore()
+          userStore.ClearStorage()
+          router.push({ name: 'Login', replace: true })
         })
-          .then(() => {
-            const userStore = useUserStore()
-            userStore.ClearStorage()
-            router.push({ name: 'Login', replace: true })
-          })
         break
     }
 

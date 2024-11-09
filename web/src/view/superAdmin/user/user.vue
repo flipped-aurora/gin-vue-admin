@@ -2,47 +2,36 @@
   <div>
     <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-search-box">
-      <el-form
-          ref="searchForm"
-          :inline="true"
-          :model="searchInfo"
-      >
+      <el-form ref="searchForm" :inline="true" :model="searchInfo">
         <el-form-item :label="t('view.superAdmin.user.userName')">
           <el-input
-              v-model="searchInfo.username"
-              :placeholder="t('view.superAdmin.user.addUser')"
+            v-model="searchInfo.username"
+            :placeholder="t('view.superAdmin.user.addUser')"
           />
         </el-form-item>
         <el-form-item :label="t('view.superAdmin.user.nickName')">
           <el-input
-              v-model="searchInfo.nickname"
-              :placeholder="t('view.superAdmin.user.nickName')"
+            v-model="searchInfo.nickname"
+            :placeholder="t('view.superAdmin.user.nickName')"
           />
         </el-form-item>
         <el-form-item :label="t('view.superAdmin.user.phone')">
           <el-input
-              v-model="searchInfo.phone"
-              :placeholder="t('view.superAdmin.user.phone')"
+            v-model="searchInfo.phone"
+            :placeholder="t('view.superAdmin.user.phone')"
           />
         </el-form-item>
         <el-form-item :label="t('view.superAdmin.user.email')">
           <el-input
-              v-model="searchInfo.email"
-              :placeholder="t('view.superAdmin.user.email')"
+            v-model="searchInfo.email"
+            :placeholder="t('view.superAdmin.user.email')"
           />
         </el-form-item>
         <el-form-item>
-          <el-button
-              type="primary"
-              icon="search"
-              @click="onSubmit"
-          >
+          <el-button type="primary" icon="search" @click="onSubmit">
             {{ t('general.search') }}
           </el-button>
-          <el-button
-              icon="refresh"
-              @click="onReset"
-          >
+          <el-button icon="refresh" @click="onReset">
             {{ t('general.reset') }}
           </el-button>
         </el-form-item>
@@ -50,34 +39,21 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button
-          type="primary"
-          icon="plus"
-          @click="addUser"
-        >{{ t('view.superAdmin.user.addUser') }}</el-button>
+        <el-button type="primary" icon="plus" @click="addUser">{{
+          t('view.superAdmin.user.addUser')
+        }}</el-button>
       </div>
-      <el-table
-        :data="tableData"
-        row-key="ID"
-      >
+      <el-table :data="tableData" row-key="ID">
         <el-table-column
           align="left"
           :label="t('view.superAdmin.user.avatar')"
           min-width="75"
         >
           <template #default="scope">
-            <CustomPic
-              style="margin-top:8px"
-              :pic-src="scope.row.headerImg"
-            />
+            <CustomPic style="margin-top: 8px" :pic-src="scope.row.headerImg" />
           </template>
         </el-table-column>
-        <el-table-column
-          align="left"
-          label="ID"
-          min-width="50"
-          prop="ID"
-        />
+        <el-table-column align="left" label="ID" min-width="50" prop="ID" />
         <el-table-column
           align="left"
           :label="t('view.superAdmin.user.userName')"
@@ -92,7 +68,7 @@
         />
         <el-table-column
           align="left"
-           :label="t('view.superAdmin.user.phone')"
+          :label="t('view.superAdmin.user.phone')"
           min-width="180"
           prop="phone"
         />
@@ -104,7 +80,7 @@
         />
         <el-table-column
           align="left"
-           :label="t('view.superAdmin.user.userRole')"
+          :label="t('view.superAdmin.user.userRole')"
           min-width="200"
         >
           <template #default="scope">
@@ -113,10 +89,25 @@
               :options="authOptions"
               :show-all-levels="false"
               collapse-tags
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              :props="{
+                multiple: true,
+                checkStrictly: true,
+                label: 'authorityName',
+                value: 'authorityId',
+                disabled: 'disabled',
+                emitPath: false
+              }"
               :clearable="false"
-              @visible-change="(flag)=>{changeAuthority(scope.row,flag,0)}"
-              @remove-tag="(removeAuth)=>{changeAuthority(scope.row,false,removeAuth)}"
+              @visible-change="
+                (flag) => {
+                  changeAuthority(scope.row, flag, 0)
+                }
+              "
+              @remove-tag="
+                (removeAuth) => {
+                  changeAuthority(scope.row, false, removeAuth)
+                }
+              "
             />
           </template>
         </el-table-column>
@@ -131,7 +122,11 @@
               inline-prompt
               :active-value="1"
               :inactive-value="2"
-              @change="()=>{switchEnable(scope.row)}"
+              @change="
+                () => {
+                  switchEnable(scope.row)
+                }
+              "
             />
           </template>
         </el-table-column>
@@ -147,19 +142,22 @@
               link
               icon="delete"
               @click="deleteUserFunc(scope.row)"
-            >{{ t('general.delete') }}</el-button>
+              >{{ t('general.delete') }}</el-button
+            >
             <el-button
               type="primary"
               link
               icon="edit"
               @click="openEdit(scope.row)"
-            >{{ t('general.edit') }}</el-button>
+              >{{ t('general.edit') }}</el-button
+            >
             <el-button
               type="primary"
               link
               icon="magic-stick"
               @click="resetPasswordFunc(scope.row)"
-            >{{ t('view.superAdmin.user.resetPassword') }}</el-button>
+              >{{ t('view.superAdmin.user.resetPassword') }}</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -186,11 +184,12 @@
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ t('view.superAdmin.user.user') }}</span>
           <div>
-            <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
-            <el-button
-              type="primary"
-              @click="enterAddUserDialog"
-            >{{ t('general.confirm') }}</el-button>
+            <el-button @click="closeAddUserDialog">{{
+              t('general.close')
+            }}</el-button>
+            <el-button type="primary" @click="enterAddUserDialog">{{
+              t('general.confirm')
+            }}</el-button>
           </div>
         </div>
       </template>
@@ -221,16 +220,10 @@
         >
           <el-input v-model="userInfo.nickName" />
         </el-form-item>
-        <el-form-item
-          :label="t('view.superAdmin.user.phone')"
-          prop="phone"
-        >
+        <el-form-item :label="t('view.superAdmin.user.phone')" prop="phone">
           <el-input v-model="userInfo.phone" />
         </el-form-item>
-        <el-form-item
-          :label="t('view.superAdmin.user.email')"
-          prop="email"
-        >
+        <el-form-item :label="t('view.superAdmin.user.email')" prop="email">
           <el-input v-model="userInfo.email" />
         </el-form-item>
         <el-form-item
@@ -239,17 +232,21 @@
         >
           <el-cascader
             v-model="userInfo.authorityIds"
-            style="width:100%"
+            style="width: 100%"
             :options="authOptions"
             :show-all-levels="false"
-            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :props="{
+              multiple: true,
+              checkStrictly: true,
+              label: 'authorityName',
+              value: 'authorityId',
+              disabled: 'disabled',
+              emitPath: false
+            }"
             :clearable="false"
           />
         </el-form-item>
-        <el-form-item
-          :label="t('view.superAdmin.user.enable')"
-          prop="disabled"
-        >
+        <el-form-item :label="t('view.superAdmin.user.enable')" prop="disabled">
           <el-switch
             v-model="userInfo.enable"
             inline-prompt
@@ -261,9 +258,7 @@
           :label="t('view.superAdmin.user.avatar')"
           label-width="80px"
         >
-          <SelectImage
-            v-model="userInfo.headerImg"
-          />
+          <SelectImage v-model="userInfo.headerImg" />
         </el-form-item>
       </el-form>
     </el-drawer>
@@ -271,318 +266,343 @@
 </template>
 
 <script setup>
-import {
-  getUserList,
-  setUserAuthorities,
-  register,
-  deleteUser
-} from '@/api/user'
+  import {
+    getUserList,
+    setUserAuthorities,
+    register,
+    deleteUser
+  } from '@/api/user'
 
-import { getAuthorityList } from '@/api/authority'
-import CustomPic from '@/components/customPic/index.vue'
-import WarningBar from '@/components/warningBar/warningBar.vue'
-import { setUserInfo, resetPassword } from '@/api/user.js'
+  import { getAuthorityList } from '@/api/authority'
+  import CustomPic from '@/components/customPic/index.vue'
+  import WarningBar from '@/components/warningBar/warningBar.vue'
+  import { setUserInfo, resetPassword } from '@/api/user.js'
 
-import { nextTick, ref, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import SelectImage from '@/components/selectImage/selectImage.vue'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { nextTick, ref, watch } from 'vue'
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import SelectImage from '@/components/selectImage/selectImage.vue'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-defineOptions({
-  name: 'User',
-})
+  defineOptions({
+    name: 'User'
+  })
 
-const searchInfo = ref({
-  username: '',
-  nickname: '',
-  phone: '',
-  email: ''
-})
-
-const onSubmit = () => {
-  page.value = 1
-  getTableData()
-}
-
-const onReset = () => {
-  searchInfo.value = {
+  const searchInfo = ref({
     username: '',
     nickname: '',
     phone: '',
     email: ''
+  })
+
+  const onSubmit = () => {
+    page.value = 1
+    getTableData()
   }
-  getTableData()
-}
-// 初始化相关
-const setAuthorityOptions = (AuthorityData, optionsData) => {
-  AuthorityData &&
-        AuthorityData.forEach(item => {
-          if (item.children && item.children.length) {
-            const option = {
-              authorityId: item.authorityId,
-              authorityName: item.authorityName,
-              children: []
-            }
-            setAuthorityOptions(item.children, option.children)
-            optionsData.push(option)
-          } else {
-            const option = {
-              authorityId: item.authorityId,
-              authorityName: item.authorityName
-            }
-            optionsData.push(option)
+
+  const onReset = () => {
+    searchInfo.value = {
+      username: '',
+      nickname: '',
+      phone: '',
+      email: ''
+    }
+    getTableData()
+  }
+  // 初始化相关
+  const setAuthorityOptions = (AuthorityData, optionsData) => {
+    AuthorityData &&
+      AuthorityData.forEach((item) => {
+        if (item.children && item.children.length) {
+          const option = {
+            authorityId: item.authorityId,
+            authorityName: item.authorityName,
+            children: []
           }
-        })
-}
-
-const page = ref(1)
-const total = ref(0)
-const pageSize = ref(10)
-const tableData = ref([])
-// 分页
-const handleSizeChange = (val) => {
-  pageSize.value = val
-  getTableData()
-}
-
-const handleCurrentChange = (val) => {
-  page.value = val
-  getTableData()
-}
-
-// 查询
-const getTableData = async() => {
-  const table = await getUserList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
-  if (table.code === 0) {
-    tableData.value = table.data.list
-    total.value = table.data.total
-    page.value = table.data.page
-    pageSize.value = table.data.pageSize
+          setAuthorityOptions(item.children, option.children)
+          optionsData.push(option)
+        } else {
+          const option = {
+            authorityId: item.authorityId,
+            authorityName: item.authorityName
+          }
+          optionsData.push(option)
+        }
+      })
   }
-}
 
-watch(() => tableData.value, () => {
-  setAuthorityIds()
-})
+  const page = ref(1)
+  const total = ref(0)
+  const pageSize = ref(10)
+  const tableData = ref([])
+  // 分页
+  const handleSizeChange = (val) => {
+    pageSize.value = val
+    getTableData()
+  }
 
-const initPage = async() => {
-  getTableData()
-  const res = await getAuthorityList()
-  setOptions(res.data)
-}
+  const handleCurrentChange = (val) => {
+    page.value = val
+    getTableData()
+  }
 
-initPage()
+  // 查询
+  const getTableData = async () => {
+    const table = await getUserList({
+      page: page.value,
+      pageSize: pageSize.value,
+      ...searchInfo.value
+    })
+    if (table.code === 0) {
+      tableData.value = table.data.list
+      total.value = table.data.total
+      page.value = table.data.page
+      pageSize.value = table.data.pageSize
+    }
+  }
 
-const resetPasswordFunc = (row) => {
-  ElMessageBox.confirm(
-    t('view.superAdmin.user.resetPasswordConfrim'),
-    t('general.warning'),
-    {
+  watch(
+    () => tableData.value,
+    () => {
+      setAuthorityIds()
+    }
+  )
+
+  const initPage = async () => {
+    getTableData()
+    const res = await getAuthorityList()
+    setOptions(res.data)
+  }
+
+  initPage()
+
+  const resetPasswordFunc = (row) => {
+    ElMessageBox.confirm(
+      t('view.superAdmin.user.resetPasswordConfrim'),
+      t('general.warning'),
+      {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
+        type: 'warning'
+      }
+    ).then(async () => {
+      const res = await resetPassword({
+        ID: row.ID
+      })
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: res.msg
+        })
+      } else {
+        ElMessage({
+          type: 'error',
+          message: res.msg
+        })
+      }
+    })
+  }
+  const setAuthorityIds = () => {
+    tableData.value &&
+      tableData.value.forEach((user) => {
+        user.authorityIds =
+          user.authorities &&
+          user.authorities.map((i) => {
+            return i.authorityId
+          })
+      })
+  }
+
+  const authOptions = ref([])
+  const setOptions = (authData) => {
+    authOptions.value = []
+    setAuthorityOptions(authData, authOptions.value)
+  }
+
+  const deleteUserFunc = async (row) => {
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
       confirmButtonText: t('general.confirm'),
       cancelButtonText: t('general.cancel'),
-      type: 'warning',
+      type: 'warning'
+    }).then(async () => {
+      const res = await deleteUser({ id: row.ID })
+      if (res.code === 0) {
+        ElMessage.success(t('general.deleteSuccess'))
+        await getTableData()
+      }
+    })
+  }
+
+  // 弹窗相关
+  const userInfo = ref({
+    userName: '',
+    password: '',
+    nickName: '',
+    headerImg: '',
+    authorityId: '',
+    authorityIds: [],
+    enable: 1
+  })
+
+  const rules = ref({
+    userName: [
+      {
+        required: true,
+        message: t('view.superAdmin.user.userNameNote'),
+        trigger: 'blur'
+      },
+      {
+        min: 5,
+        message: t('view.superAdmin.user.userNameLenNote'),
+        trigger: 'blur'
+      }
+    ],
+    password: [
+      {
+        required: true,
+        message: t('view.superAdmin.user.passwordNote'),
+        trigger: 'blur'
+      },
+      {
+        min: 6,
+        message: t('view.superAdmin.user.passwordLenNote'),
+        trigger: 'blur'
+      }
+    ],
+    nickName: [
+      {
+        required: true,
+        message: t('view.superAdmin.user.nickNameNote'),
+        trigger: 'blur'
+      }
+    ],
+    phone: [
+      {
+        pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/,
+        message: t('view.superAdmin.user.enterPhoneNoNote'),
+        trigger: 'blur'
+      }
+    ],
+    email: [
+      {
+        pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g,
+        message: t('view.superAdmin.user.enterEmailNote'),
+        trigger: 'blur'
+      }
+    ],
+    authorityId: [
+      {
+        required: true,
+        message: t('view.superAdmin.user.userRoleNote'),
+        trigger: 'blur'
+      }
+    ]
+  })
+  const userForm = ref(null)
+  const enterAddUserDialog = async () => {
+    userInfo.value.authorityId = userInfo.value.authorityIds[0]
+    userForm.value.validate(async (valid) => {
+      if (valid) {
+        const req = {
+          ...userInfo.value
+        }
+        if (dialogFlag.value === 'add') {
+          const res = await register(req)
+          if (res.code === 0) {
+            ElMessage({
+              type: 'success',
+              message: t('view.superAdmin.user.userAddedNote')
+            })
+            await getTableData()
+            closeAddUserDialog()
+          }
+        }
+        if (dialogFlag.value === 'edit') {
+          const res = await setUserInfo(req)
+          if (res.code === 0) {
+            ElMessage({
+              type: 'success',
+              message: t('view.superAdmin.user.userEditedNote')
+            })
+            await getTableData()
+            closeAddUserDialog()
+          }
+        }
+      }
+    })
+  }
+
+  const addUserDialog = ref(false)
+  const closeAddUserDialog = () => {
+    userForm.value.resetFields()
+    userInfo.value.headerImg = ''
+    userInfo.value.authorityIds = []
+    addUserDialog.value = false
+  }
+
+  const dialogFlag = ref('add')
+
+  const addUser = () => {
+    addUserDialog.value = true
+    dialogFlag.value = 'add'
+  }
+
+  const tempAuth = {}
+  const changeAuthority = async (row, flag, removeAuth) => {
+    if (flag) {
+      if (!removeAuth) {
+        tempAuth[row.ID] = [...row.authorityIds]
+      }
+      return
     }
-  ).then(async() => {
-    const res = await resetPassword({
+    await nextTick()
+    const res = await setUserAuthorities({
       ID: row.ID,
+      authorityIds: row.authorityIds
     })
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: res.msg,
+        message: t('view.superAdmin.user.roleSetNote')
       })
     } else {
-      ElMessage({
-        type: 'error',
-        message: res.msg,
-      })
+      if (!removeAuth) {
+        row.authorityIds = [...tempAuth[row.ID]]
+        delete tempAuth[row.ID]
+      } else {
+        row.authorityIds = [removeAuth, ...row.authorityIds]
+      }
     }
-  })
-}
-const setAuthorityIds = () => {
-  tableData.value && tableData.value.forEach((user) => {
-    user.authorityIds = user.authorities && user.authorities.map(i => {
-      return i.authorityId
-    })
-  })
-}
-
-const authOptions = ref([])
-const setOptions = (authData) => {
-  authOptions.value = []
-  setAuthorityOptions(authData, authOptions.value)
-}
-
-const backNickName = ref('')
-const openEidt = (row) => {
-  if (tableData.value.some(item => item.editFlag)) {
-    ElMessage(t('view.superAdmin.user.anotherUserEdit'))
-    return
   }
-  backNickName.value = row.nickName
-  row.editFlag = true
-}
 
-const enterEdit = async(row) => {
-  const res = await setUserInfo({ nickName: row.nickName, ID: row.ID })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: t('general.setupSuccess')
-    })
+  const openEdit = (row) => {
+    dialogFlag.value = 'edit'
+    userInfo.value = JSON.parse(JSON.stringify(row))
+    addUserDialog.value = true
   }
-  backNickName.value = ref('')
-  row.editFlag = false
-}
 
-const closeEdit = (row) => {
-  row.nickName = backNickName.value
-  backNickName.value = ''
-  row.editFlag = false
-}
-
-const deleteUserFunc = async(row) => {
-  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
-    confirmButtonText: t('general.confirm'),
-    cancelButtonText: t('general.cancel'),
-    type: 'warning'
-  }).then(async() => {
-    const res = await deleteUser({ id: row.ID })
+  const switchEnable = async (row) => {
+    userInfo.value = JSON.parse(JSON.stringify(row))
+    await nextTick()
+    const req = {
+      ...userInfo.value
+    }
+    const res = await setUserInfo(req)
     if (res.code === 0) {
-      ElMessage.success(t('general.deleteSuccess'))
+      ElMessage({
+        type: 'success',
+        message: `${req.enable === 2 ? t('view.superAdmin.user.disabledSuccessfully') : t('view.superAdmin.user.enabledSuccessfully')}`
+      })
       await getTableData()
-    }
-  })
-}
-
-// 弹窗相关
-const userInfo = ref({
-  userName: '',
-  password: '',
-  nickName: '',
-  headerImg: '',
-  authorityId: '',
-  authorityIds: [],
-  enable: 1,
-})
-
-const rules = ref({
-  userName: [
-    { required: true, message: t('view.superAdmin.user.userNameNote'), trigger: 'blur' },
-    { min: 5, message: t('view.superAdmin.user.userNameLenNote'), trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: t('view.superAdmin.user.passwordNote'), trigger: 'blur' },
-    { min: 6, message: t('view.superAdmin.user.passwordLenNote'), trigger: 'blur' }
-  ],
-  nickName: [
-    { required: true, message: t('view.superAdmin.user.nickNameNote'), trigger: 'blur' }
-  ],
-  phone: [
-    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: t('view.superAdmin.user.enterPhoneNoNote'), trigger: 'blur' },
-  ],
-  email: [
-    { pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: t('view.superAdmin.user.enterEmailNote'), trigger: 'blur' },
-  ],
-  authorityId: [
-    { required: true, message: t('view.superAdmin.user.userRoleNote'), trigger: 'blur' }
-  ]
-})
-const userForm = ref(null)
-const enterAddUserDialog = async() => {
-  userInfo.value.authorityId = userInfo.value.authorityIds[0]
-  userForm.value.validate(async valid => {
-    if (valid) {
-      const req = {
-        ...userInfo.value
-      }
-      if (dialogFlag.value === 'add') {
-        const res = await register(req)
-        if (res.code === 0) {
-          ElMessage({ type: 'success', message: t('view.superAdmin.user.userAddedNote') })
-          await getTableData()
-          closeAddUserDialog()
-        }
-      }
-      if (dialogFlag.value === 'edit') {
-        const res = await setUserInfo(req)
-        if (res.code === 0) {
-          ElMessage({ type: 'success', message: t('view.superAdmin.user.userEditedNote') })
-          await getTableData()
-          closeAddUserDialog()
-        }
-      }
-    }
-  })
-}
-
-const addUserDialog = ref(false)
-const closeAddUserDialog = () => {
-  userForm.value.resetFields()
-  userInfo.value.headerImg = ''
-  userInfo.value.authorityIds = []
-  addUserDialog.value = false
-}
-
-const dialogFlag = ref('add')
-
-const addUser = () => {
-  addUserDialog.value = true
-  dialogFlag.value = 'add'
-}
-
-const tempAuth = {}
-const changeAuthority = async(row, flag, removeAuth) => {
-  if (flag) {
-    if (!removeAuth) {
-      tempAuth[row.ID] = [...row.authorityIds]
-    }
-    return
-  }
-  await nextTick()
-  const res = await setUserAuthorities({
-    ID: row.ID,
-    authorityIds: row.authorityIds
-  })
-  if (res.code === 0) {
-    ElMessage({ type: 'success', message: t('view.superAdmin.user.roleSetNote') })
-  } else {
-    if (!removeAuth) {
-      row.authorityIds = [...tempAuth[row.ID]]
-      delete tempAuth[row.ID]
-    } else {
-      row.authorityIds = [removeAuth, ...row.authorityIds]
+      userInfo.value.headerImg = ''
+      userInfo.value.authorityIds = []
     }
   }
-}
-
-const openEdit = (row) => {
-  dialogFlag.value = 'edit'
-  userInfo.value = JSON.parse(JSON.stringify(row))
-  addUserDialog.value = true
-}
-
-const switchEnable = async(row) => {
-  userInfo.value = JSON.parse(JSON.stringify(row))
-  await nextTick()
-  const req = {
-    ...userInfo.value
-  }
-  const res = await setUserInfo(req)
-  if (res.code === 0) {
-    ElMessage({ type: 'success', message: `${req.enable === 2 ? t('view.superAdmin.user.disabledSuccessfully') : t('view.superAdmin.user.enabledSuccessfully')}` })
-    await getTableData()
-    userInfo.value.headerImg = ''
-    userInfo.value.authorityIds = []
-  }
-}
-
 </script>
 
 <style lang="scss">
   .header-img-box {
     @apply w-52 h-52 border border-solid border-gray-300 rounded-xl flex justify-center items-center cursor-pointer;
- }
+  }
 </style>

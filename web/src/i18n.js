@@ -7,16 +7,16 @@ import Cookies from 'js-cookie'
 
 const messages = {
   en: {
-    ...enLocale,
+    ...enLocale
   },
   zh: {
-    ...zhLocale,
+    ...zhLocale
   },
   'zh-TW': {
-    ...zhtwLocale,
+    ...zhtwLocale
   },
   ar: {
-    ...arLocale,
+    ...arLocale
   }
 }
 

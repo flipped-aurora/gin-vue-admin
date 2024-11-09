@@ -6,11 +6,9 @@
         class="w-3/5"
         :placeholder="t('general.filter')"
       />
-      <el-button
-        class="float-right"
-        type="primary"
-        @click="relation"
-      >{{ t('general.confirm') }}</el-button>
+      <el-button class="float-right" type="primary" @click="relation">{{
+        t('general.confirm')
+      }}</el-button>
     </div>
     <div class="tree-content clear-both">
       <el-scrollbar>
@@ -26,26 +24,33 @@
           :filter-node-method="filterNode"
           @check="nodeChange"
         >
-          <template #default="{ node , data }">
+          <template #default="{ node, data }">
             <span class="custom-tree-node">
               <span>{{ node.label }}</span>
               <span v-if="node.checked">
                 <el-button
                   type="primary"
                   link
-                  :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
+                  :style="{
+                    color:
+                      row.defaultRouter === data.name ? '#E6A23C' : '#85ce61'
+                  }"
                   @click="() => setDefault(data)"
                 >
-                  {{ row.defaultRouter === data.name? t('view.superAdmin.authority.components.menus.home') : t('view.superAdmin.authority.components.menus.setAsHome') }}
+                  {{
+                    row.defaultRouter === data.name
+                      ? t('view.superAdmin.authority.components.menus.home')
+                      : t(
+                          'view.superAdmin.authority.components.menus.setAsHome'
+                        )
+                  }}
                 </el-button>
               </span>
               <span v-if="data.menuBtn.length">
-                <el-button
-                  type="primary"
-                  link
-                  @click="() => OpenBtn(data)"
-                >
-                {{ t('view.superAdmin.authority.components.menus.assignButton') }}
+                <el-button type="primary" link @click="() => OpenBtn(data)">
+                  {{
+                    t('view.superAdmin.authority.components.menus.assignButton')
+                  }}
                 </el-button>
               </span>
             </span>
@@ -64,26 +69,16 @@
         row-key="ID"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
-        <el-table-column
-          label="按钮名称"
-          prop="name"
-        />
-        <el-table-column
-          label="按钮备注"
-          prop="desc"
-        />
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="按钮名称" prop="name" />
+        <el-table-column label="按钮备注" prop="desc" />
       </el-table>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >{{ t('general.confirm') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{
+            t('general.confirm')
+          }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -91,162 +86,172 @@
 </template>
 
 <script setup>
-import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
-import {
-  updateAuthority
-} from '@/api/authority'
-import { getAuthorityBtnApi, setAuthorityBtnApi } from '@/api/authorityBtn'
-import { nextTick, ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+  import {
+    getBaseMenuTree,
+    getMenuAuthority,
+    addMenuAuthority
+  } from '@/api/menu'
+  import { updateAuthority } from '@/api/authority'
+  import { getAuthorityBtnApi, setAuthorityBtnApi } from '@/api/authorityBtn'
+  import { nextTick, ref, watch } from 'vue'
+  import { ElMessage } from 'element-plus'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilingual
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
-defineOptions({
-  name: 'Menus'
-})
+  defineOptions({
+    name: 'Menus'
+  })
 
-const props = defineProps({
-  row: {
-    default: function() {
-      return {}
-    },
-    type: Object
-  }
-})
-
-const emit = defineEmits(['changeRow'])
-const filterText = ref('')
-const menuTreeData = ref([])
-const menuTreeIds = ref([])
-const needConfirm = ref(false)
-
-const menuDefaultProps = ref({
-  children: 'children',
-  label: function(data) {
-    return data.meta.title
-  },
-  disabled: function(data) {
-    return props.row.defaultRouter === data.name
-  }
-})
-
-const init = async() => {
-  // 获取所有菜单树
-  const res = await getBaseMenuTree()
-  menuTreeData.value = res.data.menus
-  const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
-  const menus = res1.data.menus
-  const arr = []
-  menus.forEach(item => {
-    // 防止直接选中父级造成全选
-    if (!menus.some(same => same.parentId === item.menuId)) {
-      arr.push(Number(item.menuId))
+  const props = defineProps({
+    row: {
+      default: function () {
+        return {}
+      },
+      type: Object
     }
   })
-  menuTreeIds.value = arr
 
-}
+  const emit = defineEmits(['changeRow'])
+  const filterText = ref('')
+  const menuTreeData = ref([])
+  const menuTreeIds = ref([])
+  const needConfirm = ref(false)
 
-init()
-
-const setDefault = async(data) => {
-  const res = await updateAuthority({ authorityId: props.row.authorityId, AuthorityName: props.row.authorityName, parentId: props.row.parentId, defaultRouter: data.name })
-  if (res.code === 0) {
-    ElMessage({ type: 'success', message: t('general.setupSuccess') })
-    emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
-  }
-}
-const nodeChange = () => {
-  needConfirm.value = true
-}
-// 暴露给外层使用的切换拦截统一方法
-const enterAndNext = () => {
-  relation()
-}
-// 关联树 确认方法
-const menuTree = ref(null)
-const relation = async() => {
-  const checkArr = menuTree.value.getCheckedNodes(false, true)
-  const res = await addMenuAuthority({
-    menus: checkArr,
-    authorityId: props.row.authorityId
+  const menuDefaultProps = ref({
+    children: 'children',
+    label: function (data) {
+      return data.meta.title
+    },
+    disabled: function (data) {
+      return props.row.defaultRouter === data.name
+    }
   })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: t('view.superAdmin.authority.components.menus.menuSetupSuccess')
+
+  const init = async () => {
+    // 获取所有菜单树
+    const res = await getBaseMenuTree()
+    menuTreeData.value = res.data.menus
+    const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
+    const menus = res1.data.menus
+    const arr = []
+    menus.forEach((item) => {
+      // 防止直接选中父级造成全选
+      if (!menus.some((same) => same.parentId === item.menuId)) {
+        arr.push(Number(item.menuId))
+      }
     })
+    menuTreeIds.value = arr
   }
-}
 
-defineExpose({ enterAndNext, needConfirm })
+  init()
 
-const btnVisible = ref(false)
-
-const btnData = ref([])
-const multipleSelection = ref([])
-const btnTableRef = ref()
-let menuID = ''
-const OpenBtn = async(data) => {
-  menuID = data.ID
-  const res = await getAuthorityBtnApi({ menuID: menuID, authorityId: props.row.authorityId })
-  if (res.code === 0) {
-    openDialog(data)
-    await nextTick()
-    if (res.data.selected) {
-      res.data.selected.forEach(id => {
-        btnData.value.some(item => {
-          if (item.ID === id) {
-            btnTableRef.value.toggleRowSelection(item, true)
-          }
-        })
+  const setDefault = async (data) => {
+    const res = await updateAuthority({
+      authorityId: props.row.authorityId,
+      AuthorityName: props.row.authorityName,
+      parentId: props.row.parentId,
+      defaultRouter: data.name
+    })
+    if (res.code === 0) {
+      ElMessage({ type: 'success', message: t('general.setupSuccess') })
+      emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
+    }
+  }
+  const nodeChange = () => {
+    needConfirm.value = true
+  }
+  // 暴露给外层使用的切换拦截统一方法
+  const enterAndNext = () => {
+    relation()
+  }
+  // 关联树 确认方法
+  const menuTree = ref(null)
+  const relation = async () => {
+    const checkArr = menuTree.value.getCheckedNodes(false, true)
+    const res = await addMenuAuthority({
+      menus: checkArr,
+      authorityId: props.row.authorityId
+    })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: t(
+          'view.superAdmin.authority.components.menus.menuSetupSuccess'
+        )
       })
     }
   }
-}
 
-const handleSelectionChange = (val) => {
-  multipleSelection.value = val
-}
+  defineExpose({ enterAndNext, needConfirm })
 
-const openDialog = (data) => {
-  btnVisible.value = true
-  btnData.value = data.menuBtn
-}
+  const btnVisible = ref(false)
 
-const closeDialog = () => {
-  btnVisible.value = false
-}
-const enterDialog = async() => {
-  const selected = multipleSelection.value.map(item => item.ID)
-  const res = await setAuthorityBtnApi({
-    menuID,
-    selected,
-    authorityId: props.row.authorityId
-  })
-  if (res.code === 0) {
-    ElMessage({ type: 'success', message: t('general.setupSuccess') })
+  const btnData = ref([])
+  const multipleSelection = ref([])
+  const btnTableRef = ref()
+  let menuID = ''
+  const OpenBtn = async (data) => {
+    menuID = data.ID
+    const res = await getAuthorityBtnApi({
+      menuID: menuID,
+      authorityId: props.row.authorityId
+    })
+    if (res.code === 0) {
+      openDialog(data)
+      await nextTick()
+      if (res.data.selected) {
+        res.data.selected.forEach((id) => {
+          btnData.value.some((item) => {
+            if (item.ID === id) {
+              btnTableRef.value.toggleRowSelection(item, true)
+            }
+          })
+        })
+      }
+    }
+  }
+
+  const handleSelectionChange = (val) => {
+    multipleSelection.value = val
+  }
+
+  const openDialog = (data) => {
+    btnVisible.value = true
+    btnData.value = data.menuBtn
+  }
+
+  const closeDialog = () => {
     btnVisible.value = false
   }
-}
+  const enterDialog = async () => {
+    const selected = multipleSelection.value.map((item) => item.ID)
+    const res = await setAuthorityBtnApi({
+      menuID,
+      selected,
+      authorityId: props.row.authorityId
+    })
+    if (res.code === 0) {
+      ElMessage({ type: 'success', message: t('general.setupSuccess') })
+      btnVisible.value = false
+    }
+  }
 
-const filterNode = (value, data) => {
-  if (!value) return true
-  // console.log(data.mate.title)
-  return data.meta.title.indexOf(value) !== -1
-}
+  const filterNode = (value, data) => {
+    if (!value) return true
+    // console.log(data.mate.title)
+    return data.meta.title.indexOf(value) !== -1
+  }
 
-watch(filterText, (val) => {
-  menuTree.value.filter(val)
-})
-
+  watch(filterText, (val) => {
+    menuTree.value.filter(val)
+  })
 </script>
 
 <style lang="scss" scoped>
-.custom-tree-node{
-  span+span{
-    @apply ml-3;
+  .custom-tree-node {
+    span + span {
+      @apply ml-3;
+    }
   }
-}
 </style>

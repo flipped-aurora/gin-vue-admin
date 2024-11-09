@@ -701,6 +701,7 @@
         "fileName": "文件名稱",
         "fileNameNote": "生成文件的默認名稱(建議為駝峰格式,首字母小寫,如sysXxxXxxx)",
         "generateCode": "生成代碼",
+        "generate": "生成",
         "moveDown": "下移",
         "moveUp": "上移",
         "selectDB": "請選擇數據庫",

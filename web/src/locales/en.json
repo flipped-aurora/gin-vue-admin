@@ -871,6 +871,7 @@
         "fileName": "File Name",
         "fileNameNote": "Default name of the generated file (recommended to be in camel case, starting with a lowercase letter, such as sysXxxXxxx)",
         "generateCode": "Generate Code",
+        "generate": "Generate",
         "moveDown": "Move Down",
         "moveUp": "Move Up",
         "selectDB": "Please select a database",

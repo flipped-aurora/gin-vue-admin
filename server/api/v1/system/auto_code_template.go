@@ -113,7 +113,7 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 		response.FailWithMessage(global.Translate("sys_auto_code.injectFail"), c)
 	} else {
 		if info.IsPreview {
-		    response.OkWithMessage(global.Translate("sys_auto_code.injectSuccess"), c)
+			response.OkWithDetailed(tempMap, global.Translate("sys_auto_code.injectSuccess"), c)
 			return
 		}
 		response.OkWithMessage("注入成功", c)

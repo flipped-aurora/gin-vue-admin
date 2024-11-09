@@ -123,7 +123,7 @@
       {
         name: defaultRouter.value,
         meta: {
-          title: t('menus.home')
+          title: t('view.superAdmin.authority.components.menus.home')
         },
         query: {},
         params: {}
@@ -346,7 +346,7 @@
       {
         name: defaultRouter.value,
         meta: {
-          title: t('menus.home')
+          title: t('view.superAdmin.authority.components.menus.home')
         },
         query: {},
         params: {}

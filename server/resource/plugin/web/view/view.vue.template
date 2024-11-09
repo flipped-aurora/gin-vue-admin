@@ -59,7 +59,7 @@
   {{- end}}
 {{- else}}
  <el-input v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
-{{
+{{- end}}
 </el-form-item>{{ end }}{{ end }}{{ end }}{{ end }}
 
 

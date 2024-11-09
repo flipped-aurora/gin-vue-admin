@@ -565,66 +565,6 @@
             </template>
           </el-table-column>
           <el-table-column
-            fixed="left"
-            align="left"
-            prop="fieldName"
-            :label="t('view.systemTools.autoCode.fieldName')"
-            width="160"
-          >
-            <template #default="{ row }">
-              <el-input v-model="row.fieldName" />
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="left"
-            prop="fieldDesc"
-            :label="t('view.systemTools.autoCode.chineseName')"
-            width="160"
-          >
-            <template #default="{ row }">
-              <el-input v-model="row.fieldDesc" />
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="left"
-            prop="defaultValue"
-            :label="t('view.systemTools.autoCode.defaultValue')"
-            width="160"
-          >
-            <template #default="{ row }">
-              <el-input v-model="row.defaultValue" />
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="left"
-            prop="require"
-            width="100"
-            :label="t('view.systemTools.autoCode.required')"
-          >
-            <template #default="{ row }">
-              <el-checkbox v-model="row.require" />
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="left"
-            prop="sort"
-            :label="t('view.superAdmin.menu.sort')"
-          >
-            <template #default="{ row }">
-              <el-checkbox v-model="row.sort" />
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="left"
-            prop="form"
-            width="100"
-            :label="t('view.systemTools.autoCode.createEdit')"
-          >
-            <template #default="{ row }">
-              <el-checkbox v-model="row.form" />
-            </template>
-          </el-table-column>
-          <el-table-column
             align="left"
             :label="t('view.systemTools.autoCode.fieldName')"
             prop="fieldName"
@@ -1608,6 +1548,7 @@
     const res = await getMeta({ id: Number(id) })
     if (res.code === 0) {
       const add = route.query.isAdd
+      console.log(add)
       isAdd.value = add
       form.value = JSON.parse(res.data.meta)
       if (isAdd.value) {
@@ -1615,6 +1556,8 @@
           item.disabled = true
         })
       }
+
+      console.log(form.value.fields)
     }
   }
 

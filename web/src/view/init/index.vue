@@ -303,7 +303,7 @@ const onSubmit = async() => {
       router.push({ name: 'Login' })
     }
     loading.close()
-  } catch (err) {
+  } catch (_) {
     loading.close()
   }
 }

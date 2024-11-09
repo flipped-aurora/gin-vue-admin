@@ -38,7 +38,6 @@ defineOptions({
 })
 
 // 自动获取字典
-import { getDictFunc } from '@/utils/format'
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'

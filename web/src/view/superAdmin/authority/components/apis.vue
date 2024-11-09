@@ -31,7 +31,7 @@
             :filter-node-method="filterNode"
             @check="nodeChange"
         >
-          <template #default="{ node, data }">
+          <template #default="{ _, data }">
             <div class="flex items-center justify-between w-full pr-1">
               <span>{{ data.description }} </span>
               <el-tooltip

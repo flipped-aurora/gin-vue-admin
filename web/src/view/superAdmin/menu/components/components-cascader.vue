@@ -101,7 +101,7 @@ const initCascader = (value) => {
   }
 
   // 编辑的时候，根据路径判断是选择框还是输入框
-  if (pathInfo[`/src/${value}` || pathInfo[value]]) {
+  if (pathInfo[`/src/${value}`]) {
     activeComponent.value = value.split('/').filter(Boolean);
     tempPath.value = ''
     pathIsSelect.value = true

@@ -15,7 +15,11 @@ export default [
     },
     rules: {
       "vue/max-attributes-per-line" : 0,
-      "vue/no-v-model-argument" : 0
+      "vue/no-v-model-argument" : 0,
+      "vue/multi-word-component-names": "off",
+      'no-lone-blocks': 'off',
+      'no-extend-native': 'off',
+      'no-unused-vars': ['error', { "argsIgnorePattern": '^_' }],
     },
   },
   {

@@ -245,15 +245,12 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
 import { formatDate } from "@/utils/format";
 import { toUpperCase } from "@/utils/stringFun"
-import  {useAppStore} from "@/pinia";
 
 import { VAceEditor } from "vue3-ace-editor"
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-golang';
 import 'ace-builds/src-noconflict/theme-github_dark';
 
-
-const appStore = useAppStore()
 
 defineOptions({
   name: "AutoCodeAdmin",
@@ -515,7 +512,7 @@ const aiAddFunc = async () =>{
       const routerArr = aiData.router.split("/")
       autoFunc.value.router = routerArr[routerArr.length - 1]
       autoFunc.value.funcDesc = autoFunc.value.prompt
-    } catch (e) {
+    } catch (_) {
       ElMessage.error("小淼忙碌，请重新调用")
     }
   }
@@ -535,7 +532,7 @@ const autoComplete = async () =>{
       autoFunc.value.funcName = aiData.funcName
       autoFunc.value.router = aiData.router
       autoFunc.value.prompt = autoFunc.value.funcDesc
-    } catch (e) {
+    } catch (_) {
       ElMessage.error("小淼开小差了，请重新调用")
     }
   }

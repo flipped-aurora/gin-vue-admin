@@ -1484,7 +1484,7 @@ const importJson = (file) =>{
     try {
       form.value = JSON.parse(e.target.result)
       ElMessage.success('JSON 文件导入成功')
-    } catch (error) {
+    } catch (_) {
       ElMessage.error('无效的 JSON 文件')
     }
   }

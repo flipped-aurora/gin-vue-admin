@@ -291,7 +291,7 @@ const deleteSysOperationRecordFunc = async(row) => {
 const fmtBody = (value) => {
   try {
     return JSON.parse(value)
-  } catch (err) {
+  } catch (_) {
     return value
   }
 }

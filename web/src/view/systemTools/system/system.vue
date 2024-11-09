@@ -220,8 +220,7 @@
           <el-form-item label="是否开启zap日志">
             <el-switch v-model="config.mongo['is-zap']"/>
           </el-form-item>
-          <template v-for="(item,k) in config.mongo.hosts">
-            <el-form-item :label="`节点 ${k+1}`">
+            <el-form-item v-for="(item,k) in config.mongo.hosts" :key="k" :label="`节点 ${k+1}`">
               <div v-for="(_,k2) in item" :key="k2">
                 <el-form-item :key="k+k2" :label="k2" label-width="60">
                   <el-input v-model.trim="item[k2]" :placeholder="k2 === 'host' ? '请输入地址' : '请输入端口'"/>
@@ -231,7 +230,6 @@
                 <el-button type="danger" size="small" plain :icon="Minus" @click="removeNode(k)" class="ml-3"/>
               </el-form-item>
             </el-form-item>
-          </template>
           <el-form-item>
             <el-button type="primary" size="small" plain :icon="Plus" @click="addNode"/>
           </el-form-item>

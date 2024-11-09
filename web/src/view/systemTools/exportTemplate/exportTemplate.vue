@@ -928,7 +928,6 @@ const openDialog = () => {
 const closeDialog = () => {
   codeVisible.value = false
   dialogFormVisible.value = false
-  activeRow.value = {}
   formData.value = {
     name: '',
     tableName: '',
@@ -945,7 +944,7 @@ const enterDialog = async() => {
   // 判断 formData.templateInfo 是否为标准json格式 如果不是标准json 则辅助调整
   try {
     JSON.parse(formData.value.templateInfo)
-  } catch (error) {
+  } catch (_) {
     ElMessage({
       type: 'error',
       message: '模板信息格式不正确，请检查'

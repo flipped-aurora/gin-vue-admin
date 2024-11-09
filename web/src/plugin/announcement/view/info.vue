@@ -63,11 +63,6 @@
         </el-table-column>
 
         <el-table-column align="left" label="标题" prop="title" width="120" />
-        <el-table-column label="内容" prop="content" width="200">
-          <template #default="scope">
-            [富文本内容]
-          </template>
-        </el-table-column>
         <el-table-column align="left" label="作者" prop="userID" width="120">
           <template #default="scope">
             <span>{{ filterDataSource(dataSource.userID,scope.row.userID) }}</span>

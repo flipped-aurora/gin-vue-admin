@@ -106,17 +106,21 @@ export const getUrl = (url) => {
   }
 }
 
-export const isVideoExt = (url) =>
-  url.endsWith('.mp4') ||
-  url.endsWith('.mov') ||
-  url.endsWith('.webm') ||
-  url.endsWith('.ogg')
+const VIDEO_EXTENSIONS = ['.mp4', '.mov', '.webm', '.ogg']
+const VIDEO_MIME_TYPES = ['video/mp4', 'video/webm', 'video/ogg']
+const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
 
-export const isVideoMime = (type) =>
-  type == 'video/mp4' || type == 'video/webm' || type == 'video/ogg'
+export const isVideoExt = (url) => {
+  const urlLower = url?.toLowerCase() || ''
+  return urlLower !== '' && VIDEO_EXTENSIONS.some(ext => urlLower.endsWith(ext))
+}
 
-export const isImageMime = (type) =>
-  type == 'image/jpeg' ||
-  type == 'image/png' ||
-  type == 'image/webp' ||
-  type == 'image/svg+xml'
+export const isVideoMime = (type) => {
+  const typeLower = type?.toLowerCase() || ''
+  return typeLower !== '' && VIDEO_MIME_TYPES.includes(typeLower)
+}
+
+export const isImageMime = (type) => {
+  const typeLower = type?.toLowerCase() || ''
+  return typeLower !== '' && IMAGE_MIME_TYPES.includes(typeLower)
+}

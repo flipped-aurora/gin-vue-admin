@@ -1,53 +1,50 @@
-
 @use '@/style/iconfont.css';
 
-.html-grey{
-    filter: grayscale(100%);
+.html-grey {
+  filter: grayscale(100%);
 }
 
-.html-weakenss{
-    filter: invert(80%);
+.html-weakenss {
+  filter: invert(80%);
 }
 
 .gva-table-box {
-    @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
-    .el-table{
-        @apply border-x border-t border-b-0 rounded border-table-border border-solid -mx-[1px];
-    }
+  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  .el-table {
+    @apply border-x border-t border-b-0 rounded border-table-border border-solid -mx-[1px];
+  }
 }
 
 .gva-btn-list {
-    @apply mb-3 flex items-center;
+  @apply mb-3 flex items-center;
 }
-
 
 #nprogress .bar {
-    background: #29d !important;
+  background: #29d !important;
 }
-.gva-customer-icon{
-    @apply w-4 h-4;
+.gva-customer-icon {
+  @apply w-4 h-4;
 }
 
 ::-webkit-scrollbar {
-    @apply hidden;
+  @apply hidden;
 }
 
-
 .gva-search-box {
-    @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
 }
 
 .gva-form-box {
-    @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
 }
 
-.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content{
-    background: var(--el-color-primary-bg) !important;
+.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background: var(--el-color-primary-bg) !important;
 }
 
-.el-dropdown{
+.el-dropdown {
+  outline: none;
+  * {
     outline: none;
-    *{
-        outline: none;
-    }
+  }
 }

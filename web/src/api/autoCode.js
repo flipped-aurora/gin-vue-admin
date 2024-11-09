@@ -139,28 +139,26 @@ export const pubPlug = (params) => {
   })
 }
 
-
 export const llmAuto = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data:{...data,mode:'ai'},
+    data: { ...data, mode: 'ai' },
     timeout: 1000 * 60 * 10,
-    loadingOption:{
+    loadingOption: {
       lock: true,
-      fullscreen:true,
-      text: `小淼正在思考，请稍候...`,
+      fullscreen: true,
+      text: `小淼正在思考，请稍候...`
     }
   })
 }
-
 
 export const butler = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data:{...data,mode:'butler'},
-    timeout: 1000 * 60 * 10,
+    data: { ...data, mode: 'butler' },
+    timeout: 1000 * 60 * 10
   })
 }
 

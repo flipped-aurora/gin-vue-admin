@@ -1,33 +1,38 @@
-# gin-vue-admin web 
+# gin-vue-admin web
 
 ## Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
 
 ### Run your tests
+
 ```
 npm run test
 ```
 
 ### Lints and fixes files
+
 ```
 npm run lint
 ```
 
-
 整理代码结构
-``` lua
+
+```lua
 web
  ├── babel.config.js
  ├── Dockerfile
@@ -67,7 +72,7 @@ web
  │   │   ├── asyncRouter.js     -- 动态路由相关
  │   │   ├── bus.js             -- 全局mitt声明文件
  │   │   ├── date.js            -- 日期相关
- │   │   ├── dictionary.js      -- 获取字典方法 
+ │   │   ├── dictionary.js      -- 获取字典方法
  │   │   ├── downloadImg.js     -- 下载图片方法
  │   │   ├── format.js          -- 格式整理相关
  │   │   ├── image.js           -- 图片相关方法
@@ -80,21 +85,21 @@ web
  |   |   ├── error -- 错误
  |   |   ├── example --上传案例
  |   |   ├── iconList -- icon列表
- |   |   ├── init -- 初始化数据  
+ |   |   ├── init -- 初始化数据
  |   |   |   ├── index -- 新版本
  |   |   |   ├── init -- 旧版本
- |   |   ├── layout  --  layout约束页面 
- |   |   |   ├── aside 
+ |   |   ├── layout  --  layout约束页面
+ |   |   |   ├── aside
  |   |   |   ├── bottomInfo     -- bottomInfo
  |   |   |   ├── screenfull     -- 全屏设置
  |   |   |   ├── setting        -- 系统设置
  |   |   |   └── index.vue      -- base 约束
- |   |   ├── login              --登录 
- |   |   ├── person             --个人中心 
+ |   |   ├── login              --登录
+ |   |   ├── person             --个人中心
  |   |   ├── superAdmin         -- 超级管理员操作
  |   |   ├── system             -- 系统检测页面
  |   |   ├── systemTools        -- 系统配置相关页面
- |   |   └── routerHolder.vue   -- page 入口页面 
+ |   |   └── routerHolder.vue   -- page 入口页面
  ├── vite.config.js             -- vite 配置文件
  └── yarn.lock
 

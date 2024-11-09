@@ -319,7 +319,7 @@ const addFuncBtn =  (row) => {
   funcFlag.value = true;
 };
 
-const funcFlag = ref(true);
+const funcFlag = ref(false);
 
 const closeFunc = () => {
   funcFlag.value = false;

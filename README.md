@@ -12,6 +12,25 @@
 
 [English](./README-en.md) | 简体中文
 
+## ✨一分钟生成前后端基础代码
+
+<table>
+  <tr>
+    <td width="200">
+      <p>📄 创建基础模板</p>
+      <p>🤖 AI生成结构</p>
+      <p>⏰ 生成代码</p>
+      <p>🏷️ 分配权限</p>
+      <p>🎉 基础CURD生成完成</p>   
+    </td>
+    <td>
+      <video src="https://private-user-images.githubusercontent.com/165128580/384700666-4d039215-af29-4f86-bb4f-60dbab38f58e.mp4?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzEyNTIxNDYsIm5iZiI6MTczMTI1MTg0NiwicGF0aCI6Ii8xNjUxMjg1ODAvMzg0NzAwNjY2LTRkMDM5MjE1LWFmMjktNGY4Ni1iYjRmLTYwZGJhYjM4ZjU4ZS5tcDQ_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMTEwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTExMFQxNTE3MjZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00NjJkMDcwZjJkMjAyMmU1N2I2MzQxY2RhODFlNzgzNGRiMDFhMmY2NTYyM2ZmODdhNDVmMWE1NzlhMDdlOTI5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.ZJbswpLzF2RHjemcGirKOP0L1fvpl3FUqIiQ_-yjeUo" data-canonical-src="https://private-user-images.githubusercontent.com/165128580/384700666-4d039215-af29-4f86-bb4f-60dbab38f58e.mp4?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzEyNTIxNDYsIm5iZiI6MTczMTI1MTg0NiwicGF0aCI6Ii8xNjUxMjg1ODAvMzg0NzAwNjY2LTRkMDM5MjE1LWFmMjktNGY4Ni1iYjRmLTYwZGJhYjM4ZjU4ZS5tcDQ_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMTEwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTExMFQxNTE3MjZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00NjJkMDcwZjJkMjAyMmU1N2I2MzQxY2RhODFlNzgzNGRiMDFhMmY2NTYyM2ZmODdhNDVmMWE1NzlhMDdlOTI5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.ZJbswpLzF2RHjemcGirKOP0L1fvpl3FUqIiQ_-yjeUo" controls="controls" muted="muted" class="d-block rounded-bottom-2 border-top width-fit" style="max-height:640px; min-height: 200px">
+</video>
+    </td>
+  </tr>
+</table>
+
+
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 

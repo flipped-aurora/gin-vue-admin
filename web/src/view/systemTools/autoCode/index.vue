@@ -1234,12 +1234,15 @@
 
         delete form.value.primaryField
         if (isPreview) {
-          const data = await preview({
+          const res = await preview({
             ...form.value,
             isAdd: !!isAdd.value,
             fields: form.value.fields.filter((item) => !item.disabled)
           })
-          preViewCode.value = data.data.autoCode
+          if(res.code !== 0){
+            return
+          }
+          preViewCode.value = res.data.autoCode
           previewFlag.value = true
         } else {
           const res = await createTemp(form.value)

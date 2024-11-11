@@ -40,8 +40,8 @@ func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	info.PackageT = utils.FirstUpper(info.Package)
 	autoCode, err := autoCodeTemplateService.Preview(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("预览失败!", zap.Error(err))
-		response.FailWithMessage("预览失败", c)
+		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		response.FailWithMessage("预览失败:"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
 	}

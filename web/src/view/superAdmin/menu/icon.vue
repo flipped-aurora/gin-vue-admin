@@ -13,7 +13,7 @@
         </el-icon>
       </template>
       <el-option
-        v-for="item in options"
+        v-for="item in options.concat(config.logs)"
         :key="item.key"
         class="select__option_item"
         :label="item.key"
@@ -32,6 +32,7 @@
 
 <script setup>
   import { reactive } from 'vue'
+  import config from "@/core/config";
 
   defineOptions({
     name: 'Icon'

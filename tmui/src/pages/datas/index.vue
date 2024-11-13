@@ -24,13 +24,28 @@
       </template>
     </tm-navbar>
     <view class="flex-center pa-20 mt-20 mx-30 round-4" style="background: linear-gradient(107deg,#6a39f2,#7e67ff);">
-      <view style="width: 50%" class="flex-center">
-        <tm-text>累计收益</tm-text>
+      <view class="">
+        <view style="" class="">
+          <tm-text>累计投入</tm-text>
+        </view>
+        <view style="" class="flex-center">
+          <tm-text>{{ store.tmStore.userInfo.mainorder?.descnum }}</tm-text>
+        </view>
       </view>
-      <view style="width: 50%" class="flex-center">
-        <tm-text>{{ mainpro.amount }}</tm-text>
+      <tm-divider vertical :height="80" class="mx-n20"></tm-divider>
+      <view>
+        <view style="" class="">
+          <tm-text>累计收益</tm-text>
+        </view>
+        <view style="" class="flex-center">
+          <tm-text>{{ mainpro.amount }}</tm-text>
+        </view>
       </view>
+
     </view>
+    <tm-sheet transprent :margin="[10, 10]">
+      <tm-input disabled :searchWidth="120" :placeholder="shuhuinum" @search="search" prefix="tmicon-meiyuan" searchLabel="赎回"></tm-input>
+    </tm-sheet>
     <tm-sheet style="background: linear-gradient(107deg,#6a39f2,#7e67ff);" class="round-4">
       <view class="flex flex-center ">
         <view>
@@ -87,6 +102,8 @@
           </view>
         </view>
       </view>
+      <tm-divider  :height="1" color="#6A39F2"></tm-divider>
+        <tm-pagination simple :total="totalpage" btnColor="white"  @change="changepage"></tm-pagination>
     </tm-sheet>
   </tm-app>
   <draw :showleft="showdraw"  @closedraw="handleClosedraw"></draw>
@@ -97,7 +114,8 @@ import {useTmpiniaStore} from "@/tmui/tool/lib/tmpinia";
 import {ref} from "vue";
 import Draw from "@/components/draw.vue";
 import {onShow} from "@dcloudio/uni-app";
-import {getProfitListApi, getProfitMainApi} from "@/api";
+import {getProfitListApi, getProfitMainApi, withdrawApi} from "@/api";
+import {throttle, toast} from "@/tmui/tool/function/util";
 const store = useTmpiniaStore()
 
 onShow(()=>{
@@ -137,6 +155,49 @@ const mainpro = ref(
       "descnum": "0"
   }
 )
+const shuhuinum = ref("当前可赎回：")
+const tiqunum = ref(0)
+const fnshuhui= ()=>{
+  if (store.tmStore.userInfo.mainorder?.descnum != undefined) {
+    tiqunum.value = store.tmStore.userInfo.mainorder?.descnum*0.8 - Number(mainpro.value.amount)
+    if(tiqunum.value<10){
+      shuhuinum.value = "当前不可赎回"
+    }else {
+      shuhuinum.value = "当前可赎回："+ String(tiqunum.value)
+    }
+
+  }
+
+}
+async function search(val: string) {
+  console.log(Number(val))
+  // var withnum = Number(val)
+  if (tiqunum.value < 1) {
+    toast('当前已无赎回', true, 'error')
+    return
+  }
+  if (store.tmStore.userInfo.mainorder?.descnum != undefined && tiqunum.value > store.tmStore.userInfo.mainorder?.descnum*0.8 - Number(mainpro.value.amount) ) {
+    toast('可提币余额不足', true, 'error')
+    return
+  }
+  if (tiqunum.value > 0 ) {
+    const params = {
+      address: store.tmStore.userInfo.cliUser?.address,
+      amount: tiqunum.value,
+      desc: '赎回',
+    }
+    toast('正在处理中...', true, 'loading')
+    const res = await withdrawApi(params)
+    console.log(res)
+    if (res.data.code === 0) {
+      toast('提币成功', true, 'success')
+      store.tmStore.userInfo.mainorder.descnum = 0
+    }else {
+      toast(res.data.msg, true, 'error')
+    }
+
+  }
+}
 //查询用户结算总表
 const getProfitMain = async () => {
   let params = {
@@ -149,8 +210,10 @@ const getProfitMain = async () => {
   console.log(res)
   if (res.data.code === 0) {
     mainpro.value = res.data.data.list[0]
+    fnshuhui()
   }
 }
+const totalpage = ref(0)
 //查询结算详情
 const getProfitList = async (page:number) => {
   let params = {
@@ -162,10 +225,14 @@ const getProfitList = async (page:number) => {
   const res = await getProfitListApi(params)
   console.log(res)
   if (res.data.code === 0) {
+    totalpage.value = res.data.data.total
     items.value = res.data.data.list
   }
 }
-
+const changepage= (e:any)=>{
+  console.log(e)
+  getProfitList(e)
+}
 
 const showdraw = ref(false)
 const toggleDrawer = () => {

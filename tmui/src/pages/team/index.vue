@@ -158,6 +158,7 @@ const getOrderList =async (page: number) => {
     items.value = res.data.data.clichildren
     pulls.value = res.data.data.clipulls
     mymain.value = res.data.data.mymainorder
+    store.tmStore.userInfo.mainorder = res.data.data.mymainorder
   }
 }
 

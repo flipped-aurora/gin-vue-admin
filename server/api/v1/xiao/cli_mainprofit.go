@@ -179,3 +179,41 @@ func (climainprofitApi *CliMainprofitApi) GetCliMainprofitPublic(c *gin.Context)
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }
+
+// PullProfit 推荐结算
+// @Tags CliMainprofit
+// @Summary 推荐结算
+// @accept application/json
+// @Produce application/json
+// @Param data query xiaoReq.CliMainprofitSearch true "成功"
+// @Success 200 {object} response.Response{data=object,msg=string} "成功"
+// @Router /climainprofit/pullprofit [GET]
+func (climainprofitApi *CliMainprofitApi) PullProfit(c *gin.Context) {
+	// 请添加自己的业务逻辑
+	err := climainprofitService.PullProfit()
+	if err != nil {
+		global.GVA_LOG.Error("失败!", zap.Error(err))
+		response.FailWithMessage("失败", c)
+		return
+	}
+	response.OkWithData("直推结算成功", c)
+}
+
+// TeamProfit 团队结算
+// @Tags CliMainprofit
+// @Summary 团队结算
+// @accept application/json
+// @Produce application/json
+// @Param data query xiaoReq.CliMainprofitSearch true "成功"
+// @Success 200 {object} response.Response{data=object,msg=string} "成功"
+// @Router /climainprofit/teamprofit [GET]
+func (climainprofitApi *CliMainprofitApi) TeamProfit(c *gin.Context) {
+	// 请添加自己的业务逻辑
+	err := climainprofitService.TeamProfit()
+	if err != nil {
+		global.GVA_LOG.Error("失败!", zap.Error(err))
+		response.FailWithMessage("失败", c)
+		return
+	}
+	response.OkWithData("团队结算成功", c)
+}

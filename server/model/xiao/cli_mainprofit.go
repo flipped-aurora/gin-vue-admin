@@ -2,8 +2,10 @@
 package xiao
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/shopspring/decimal"
+	"gorm.io/gorm"
 )
 
 // 结算总表 结构体  CliMainprofit
@@ -28,4 +30,22 @@ func (CliMainprofit) TableName() string {
 // NewCliMainprofit 实例化CliMainprofit
 func NewCliMainprofit(address string) *CliMainprofit {
 	return &CliMainprofit{Address: address}
+}
+
+// GetCliMainprofitAddress 根据地址获取结算总表
+func (cliMainprofit *CliMainprofit) GetCliMainprofitAddress(tx *gorm.DB) (*CliMainprofit, error) {
+	var info CliMainprofit
+
+	// 查询地址匹配的记录
+	err := tx.Where("address = ?", cliMainprofit.Address).First(&info).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 记录未找到，可以返回一个特定的错误或 nil
+			return nil, nil
+		}
+		// 其他错误，返回错误
+		return nil, err
+	}
+
+	return &info, nil
 }

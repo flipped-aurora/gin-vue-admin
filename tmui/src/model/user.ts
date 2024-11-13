@@ -4,7 +4,7 @@ export interface Userinfo {
     jwtToken: string;
     cliUser?: CliUser;
     cliLoad?: CliLoad;
-    mainorder?:Mainorder;
+    mainorder:Mainorder;
 }
 
 export interface myWallet {

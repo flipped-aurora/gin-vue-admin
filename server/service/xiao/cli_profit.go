@@ -88,6 +88,15 @@ func (cliprofitService *CliProfitService) GetCliProfitInfoList(info xiaoReq.CliP
 	return cliprofits, total, err
 }
 func (cliprofitService *CliProfitService) GetCliProfitPublic() {
+
 	// 此方法为获取数据源定义的数据
 	// 请自行实现
+}
+
+func (cliprofitService *CliProfitService) WithAsset(profit *xiao.CliProfit) (err error) {
+
+	//tx := global.GVA_DB.Begin()
+	//1.查询投入了多少资产 2.查询提取了多少资产 3.查询剩余多少资产可提
+	return nil
+
 }

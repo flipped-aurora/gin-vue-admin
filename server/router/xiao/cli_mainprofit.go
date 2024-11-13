@@ -7,22 +7,23 @@ import (
 
 type CliMainprofitRouter struct{}
 
-// InitCliMainprofitRouter 初始化 结算总表 路由信息
 func (s *CliMainprofitRouter) InitCliMainprofitRouter(Router *gin.RouterGroup, PublicRouter *gin.RouterGroup) {
 	climainprofitRouter := Router.Group("climainprofit").Use(middleware.OperationRecord())
 	climainprofitRouterWithoutRecord := Router.Group("climainprofit")
 	climainprofitRouterWithoutAuth := PublicRouter.Group("climainprofit")
 	{
-		climainprofitRouter.POST("createCliMainprofit", climainprofitApi.CreateCliMainprofit)             // 新建结算总表
-		climainprofitRouter.DELETE("deleteCliMainprofit", climainprofitApi.DeleteCliMainprofit)           // 删除结算总表
-		climainprofitRouter.DELETE("deleteCliMainprofitByIds", climainprofitApi.DeleteCliMainprofitByIds) // 批量删除结算总表
-		climainprofitRouter.PUT("updateCliMainprofit", climainprofitApi.UpdateCliMainprofit)              // 更新结算总表
+		climainprofitRouter.POST("createCliMainprofit", climainprofitApi.CreateCliMainprofit)
+		climainprofitRouter.DELETE("deleteCliMainprofit", climainprofitApi.DeleteCliMainprofit)
+		climainprofitRouter.DELETE("deleteCliMainprofitByIds", climainprofitApi.DeleteCliMainprofitByIds)
+		climainprofitRouter.PUT("updateCliMainprofit", climainprofitApi.UpdateCliMainprofit)
 	}
 	{
-		climainprofitRouterWithoutRecord.GET("findCliMainprofit", climainprofitApi.FindCliMainprofit)       // 根据ID获取结算总表
-		climainprofitRouterWithoutRecord.GET("getCliMainprofitList", climainprofitApi.GetCliMainprofitList) // 获取结算总表列表
+		climainprofitRouterWithoutRecord.GET("findCliMainprofit", climainprofitApi.FindCliMainprofit)
+		climainprofitRouterWithoutRecord.GET("getCliMainprofitList", climainprofitApi.GetCliMainprofitList)
 	}
 	{
-		climainprofitRouterWithoutAuth.GET("getCliMainprofitPublic", climainprofitApi.GetCliMainprofitPublic) // 结算总表开放接口
+		climainprofitRouterWithoutAuth.GET("getCliMainprofitPublic", climainprofitApi.GetCliMainprofitPublic)
+		climainprofitRouterWithoutAuth.GET("pullprofit", climainprofitApi.PullProfit)
+		climainprofitRouterWithoutAuth.GET("teamprofit", climainprofitApi.TeamProfit)
 	}
 }

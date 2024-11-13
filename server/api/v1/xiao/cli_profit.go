@@ -179,3 +179,18 @@ func (cliprofitApi *CliProfitApi) GetCliProfitPublic(c *gin.Context) {
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }
+func (cliprofitApi *CliProfitApi) WithAsset(c *gin.Context) {
+	var cliprofit xiao.CliProfit
+	err := c.ShouldBindJSON(&cliprofit)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = cliprofitService.WithAsset(&cliprofit)
+	if err != nil {
+		global.GVA_LOG.Error("提取本金失败!", zap.Error(err))
+		response.FailWithMessage("提取本金失败:"+err.Error(), c)
+	}
+	response.OkWithMessage("提取本金成功", c)
+
+}

@@ -161,15 +161,11 @@ func (climainwithApi *CliMainwithApi) GetCliMainwithList(c *gin.Context) {
 func (climainwithApi *CliMainwithApi) GetCliMainwithPublic(c *gin.Context) {
 	// 此接口不需要鉴权
 	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	var pageInfo xiaoReq.CliMainwithSearch
-	err := c.ShouldBindQuery(&pageInfo)
+	err := climainwithService.GetCliMainwithPublic()
 	if err != nil {
+
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	public, err := climainwithService.GetCliMainwithPublic(&pageInfo)
-	if err != nil {
-		return
-	}
-	response.OkWithDetailed(public, "获取成功", c)
+	response.OkWithMessage("静态结算成功", c)
 }

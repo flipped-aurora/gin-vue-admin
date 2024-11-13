@@ -139,17 +139,23 @@ func (tree *CliTree) GetMyInviteNode(tx *gorm.DB) (*CliTree, error) {
 
 // 获取所有上级节点
 func (tree *CliTree) GetAllParentNode(tx *gorm.DB) ([]*CliTree, error) {
+	// 获取当前节点
 	exists := &CliTree{
 		Address: tree.Address,
 	}
-	if err := exists.GetSelfNode(tx); err != nil { // 调用GetSelfNode方法获取自己节点
-		return nil, err // 如果获取自己节点出错，则返回错误
-	}
-	var childs []*CliTree // 定义一个Tree切片来存储查询结
-	if err := tx.Where("leftval < ? and rightval > ?", *exists.Leftval, *exists.Rightval).Order("id DESC").Find(&childs).Error; err != nil {
+	if err := exists.GetSelfNode(tx); err != nil {
 		return nil, err
 	}
-	return childs, nil
+
+	// 查询所有上级节点
+	var parents []*CliTree
+	if err := tx.Where("leftval < ? AND rightval > ?", *exists.Leftval, *exists.Rightval).
+		Order("id DESC").
+		Find(&parents).Error; err != nil {
+		return nil, err
+	}
+
+	return parents, nil
 }
 
 // 创建节点

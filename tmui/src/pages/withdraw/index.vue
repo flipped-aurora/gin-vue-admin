@@ -44,22 +44,32 @@
         </view>
       </view>
     </tm-sheet>
+    <tm-sheet transprent :margin="[10, 10]">
+      <tm-input :searchWidth="120" :placeholder="'50起提'"  @search="search" prefix="tmicon-meiyuan" searchLabel="提币"></tm-input>
+    </tm-sheet>
+
     <tm-sheet transprent :margin="[30, 20]" :padding="[10, 10]" class="  round-4" style="border: #6A39F2 1px solid;">
-      <view class=""  v-for="(item,index) in items" :key="index">
-        <view class="items itemround ">
-          <view class="pa-20 flex flex-row-top-start">
-<!--            <image :src="item.avatarurl"  style="width: 150rpx;height: 150rpx;border-radius: 50%" />-->
-            <view class="ml-15 mt-5">
-<!--              <tm-text class="mt-5" :fontSize="24">地址： {{item.address.substring(0, 8)+'***'+item.address.slice(-8)}}</tm-text>-->
-              <tm-text class="mt-5" :fontSize="24">时间： {{item.CreatedAt.substring(0, 16)}}</tm-text>
-              <tm-text class="mt-5" :fontSize="24">状态： {{item.status}}</tm-text>
-              <tm-text class="mt-5" :fontSize="24">金额： {{ item.amount }}</tm-text>
+
+      <view v-if ="items.length">
+        <view class=""  v-for="(item,index) in items" :key="index" >
+          <view class="items itemround ">
+            <view class="pa-20 flex flex-row-top-start">
+  <!--            <image :src="item.avatarurl"  style="width: 150rpx;height: 150rpx;border-radius: 50%" />-->
+              <view class="ml-15 mt-5">
+  <!--              <tm-text class="mt-5" :fontSize="24">地址： {{item.address.substring(0, 8)+'***'+item.address.slice(-8)}}</tm-text>-->
+                <tm-text class="mt-5" :fontSize="24">时间： {{item.CreatedAt.substring(0, 16)}}</tm-text>
+                <tm-text class="mt-5" :fontSize="24">状态： {{item.status}}</tm-text>
+                <tm-text class="mt-5" :fontSize="24">金额： {{ item.amount }}</tm-text>
+              </view>
+            </view>
+            <view v-show ="index<items.length-1">
+              <tm-divider  :height="1" color="#6A39F2"></tm-divider>
             </view>
           </view>
-          <view v-show ="index<items.length-1">
-            <tm-divider  :height="1" color="#6A39F2"></tm-divider>
-          </view>
         </view>
+      </view>
+      <view v-else>
+        <tm-result subTitle="暂无提币数据" :showBtn="false"></tm-result>
       </view>
     </tm-sheet>
   </tm-app>
@@ -70,8 +80,9 @@ import bgimg from "@/static/home/home-bg.png";
 import {useTmpiniaStore} from "@/tmui/tool/lib/tmpinia";
 import {ref} from "vue";
 import Draw from "@/components/draw.vue";
-import {getWithdrawListApi} from "@/api";
+import {getWithdrawListApi, withdrawApi} from "@/api";
 import {onShow} from "@dcloudio/uni-app";
+import {toast} from "@/tmui/tool/function/util";
 const store = useTmpiniaStore()
 
 onShow(()=>{
@@ -86,7 +97,7 @@ const items = ref(
         "address": "0x154b8BB871b72C501aE45765d945A16b8659F417",
         "amount": "10",
         "text": "",
-        "status": "自动通过",
+        status: "自动通过",
         "desc": "备注",
         "descnum": "0"
       }
@@ -99,14 +110,42 @@ const mainwith = ref(
       "UpdatedAt": "2024-10-27T10:35:03.944+08:00",
       "address": "0x154b8BB871b72C501aE45765d945A16b8659F417",
       "num": 0,
-      "withable": "0",
-      "withed": "0",
-      "total": "0",
+      "withable": 0,
+      "withed": 0,
+      "total": 0,
       "desc": "备注",
-      "descnum": "0"
+      "descnum": 0
     }
 )
+async function search(val: string) {
+  if (mainwith.value.withable<1){
+    toast('可提币余额不足', true, 'error')
+    return
+  }
+  console.log(Number(val))
+  var withnum = Number(val)
+  if (withnum < 50) {
+    toast('50起提', true, 'error')
+    return
+  }
+  if (withnum > 0 && withnum <= mainwith.value.withable) {
+    const params = {
+      address: store.tmStore.userInfo.cliUser?.address,
+      amount: withnum,
+      desc: '提币',
+    }
+    toast('正在处理中...', true, 'loading')
+    const res = await withdrawApi(params)
+    console.log(res)
+    if (res.data.code === 0) {
+      toast('提币成功', true, 'success')
+      await getWithlist()
+    }else {
+      toast(res.data.msg, true, 'error')
+    }
 
+  }
+}
 //查询提币订单列表
 const getWithlist = async () => {
   const params = {

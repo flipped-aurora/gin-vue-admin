@@ -81,3 +81,17 @@ export async function getWithdrawListApi(params: any ) {
     }
     return http.get('/cliwithdraw/getCliWithdrawPublic', RequestData)
 }
+
+//提币方法
+export async function withdrawApi(params: any ) {
+    let RequestData= {
+        // data:params
+        ...params
+    }
+    let config:HttpRequestConfig = {
+        header:{'x-token':uni.getStorageSync('token')}
+    }
+
+
+    return http.post('/cliwithdraw/dowithdraw', RequestData, config)
+}

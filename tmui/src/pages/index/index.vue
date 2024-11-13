@@ -113,7 +113,11 @@
             <view class="flex-start pa-10">
               <image :src="store.tmStore.userInfo.cliUser?.avatarurl" style="border-radius: 50%;width: 120rpx;height: 120rpx"></image>
               <view class="mt-10 ml-20" >
-                <tm-text class="mr-20 text-size-l ">{{store.tmStore.userInfo.cliUser?.nickname}}</tm-text>
+                <view class="flex ">
+                  <tm-text class="mr-20 text-size-l ">{{store.tmStore.userInfo.cliUser?.nickname}}</tm-text>
+                  <tm-text class="mr-20 text-size-s ">V-{{store.tmStore.userInfo.mainorder?.desc == '备注'?0:store.tmStore.userInfo.mainorder?.desc}}</tm-text>
+                </view>
+
                 <tm-text :fontSize="26" class="mr-20 mt-15  ">{{ store.tmStore.userInfo.wallet?.usdt }} U</tm-text>
               </view>
             </view>
@@ -204,7 +208,7 @@
         </view>
         <view class="mt-20">
           <view class="flex flex-between" >
-            <tm-button  @click="buybtn(0.1)"  style="background-color: rgb(0 0 0 / 40%)">10</tm-button>
+            <tm-button  @click="buybtn(10)"  style="background-color: rgb(0 0 0 / 40%)">10</tm-button>
             <tm-button @click="buybtn(100)"  style="background-color: rgb(0 0 0 / 40%);margin-right: 5px;margin-left: 5px">100</tm-button>
             <tm-button @click="buybtn(500)" style="background-color: rgb(0 0 0 / 40%)">500</tm-button>
           </view>
@@ -379,7 +383,7 @@
     console.log(getQueryVariable('id'))
     userinfo.value.parent = getQueryVariable('id')
     store.tmStore.userInfo.wallet = await connectMetaMask()
-    // store.tmStore.userInfo.wallet.address =  "0x388AfDC00E983c46e7651FD6445CC185c3610C56"
+    // store.tmStore.userInfo.wallet.address =  "0xC83b182d8e6087acDa36282B4701fD6A516C25bF"
     userinfo.value.address = store.tmStore.userInfo.wallet?.address
 
     await saveImageAsBase64()

@@ -108,3 +108,29 @@ export const getCliMainprofitPublic = () => {
     method: 'get',
   })
 }
+// PullProfit 推荐结算
+// @Tags CliMainprofit
+// @Summary 推荐结算
+// @accept application/json
+// @Produce application/json
+// @Success 200 {object} response.Response{data=object,msg=string} "成功"
+// @Router /climainprofit/pullprofit [GET]
+export const pullprofit = () => {
+  return service({
+    url: '/climainprofit/pullprofit',
+    method: 'GET'
+  })
+}
+// TeamProfit 团队结算
+// @Tags CliMainprofit
+// @Summary 团队结算
+// @accept application/json
+// @Produce application/json
+// @Success 200 {object} response.Response{data=object,msg=string} "成功"
+// @Router /climainprofit/teamprofit [GET]
+export const teamprofit = () => {
+  return service({
+    url: '/climainprofit/teamprofit',
+    method: 'GET'
+  })
+}

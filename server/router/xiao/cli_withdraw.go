@@ -12,6 +12,7 @@ func (s *CliWithdrawRouter) InitCliWithdrawRouter(Router *gin.RouterGroup, Publi
 	cliwithdrawRouter := Router.Group("cliwithdraw").Use(middleware.OperationRecord())
 	cliwithdrawRouterWithoutRecord := Router.Group("cliwithdraw")
 	cliwithdrawRouterWithoutAuth := PublicRouter.Group("cliwithdraw")
+	myjwtRouter := PublicRouter.Group("cliwithdraw").Use(middleware.JWTAuth())
 	{
 		cliwithdrawRouter.POST("createCliWithdraw", cliwithdrawApi.CreateCliWithdraw)             // 新建提币详情
 		cliwithdrawRouter.DELETE("deleteCliWithdraw", cliwithdrawApi.DeleteCliWithdraw)           // 删除提币详情
@@ -24,5 +25,8 @@ func (s *CliWithdrawRouter) InitCliWithdrawRouter(Router *gin.RouterGroup, Publi
 	}
 	{
 		cliwithdrawRouterWithoutAuth.GET("getCliWithdrawPublic", cliwithdrawApi.GetCliWithdrawPublic) // 提币详情开放接口
+	}
+	{
+		myjwtRouter.POST("dowithdraw", cliwithdrawApi.CliDoWithdraw)
 	}
 }

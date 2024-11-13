@@ -175,3 +175,29 @@ func (cliwithdrawApi *CliWithdrawApi) GetCliWithdrawPublic(c *gin.Context) {
 	}
 	response.OkWithDetailed(public, "获取成功", c)
 }
+
+// CliDoWithdraw 更新提币详情
+// @Tags CliWithdraw
+// @Summary 更新提币详情
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body xiao.CliWithdraw true "更新提币详情"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
+// @Router /cliwithdraw/clidowithdraw [post]
+func (cliwithdrawApi *CliWithdrawApi) CliDoWithdraw(c *gin.Context) {
+	var cliwithdraw xiao.CliWithdraw
+	err := c.ShouldBindJSON(&cliwithdraw)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = cliwithdrawService.CliWithdraw(&cliwithdraw)
+	if err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("提币失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("提币成功", c)
+
+}

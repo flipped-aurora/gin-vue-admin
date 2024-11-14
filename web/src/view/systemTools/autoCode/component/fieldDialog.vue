@@ -198,8 +198,10 @@
               placeholder="请选择数据源表"
               filterable
               allow-create
+              clearable
               @focus="getDBTableList"
               @change="selectDB"
+              @clear="clearAccress"
             >
               <el-option
                 v-for="item in dbTableList"
@@ -425,11 +427,19 @@
     }
   }
 
-  const dbNameChange = () => {
-    getDBTableList()
-    middleDate.value.dataSource.table = ''
+  const clearAccress = () => {
     middleDate.value.dataSource.value = ''
     middleDate.value.dataSource.label = ''
+  }
+
+  const clearDataSourceTable = () => {
+    middleDate.value.dataSource.table = ''
+  }
+
+  const dbNameChange = () => {
+    getDBTableList()
+    clearDataSourceTable()
+    clearAccress()
   }
 
   const dbTableList = ref([])
@@ -445,8 +455,7 @@
         value: item.tableName // 这里假设 value 也是 tableName，如果不同请调整
       }))
     }
-    middleDate.value.dataSource.value = ''
-    middleDate.value.dataSource.label = ''
+    clearAccress()
   }
 
   const dbColumnList = ref([])

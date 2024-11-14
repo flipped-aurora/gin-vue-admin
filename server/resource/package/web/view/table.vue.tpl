@@ -74,13 +74,13 @@
         {{- if .CheckDataSource }}
 <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
     <template #default="scope">
-        {{if eq .DataSource.Association 2}}
+        {{- if eq .DataSource.Association 2}}
         <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
              {{ "{{ item }}" }}
         </el-tag>
-        {{ else }}
+        {{- else }}
         <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}</span>
-        {{ end }}
+        {{- end }}
     </template>
 </el-table-column>
         {{- else if .DictType}}
@@ -232,7 +232,17 @@
 {{- range .Fields}}
               {{- if .Desc }}
 <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
+{{- if .CheckDataSource }}
+    <template #default="scope">
+        {{- if eq .DataSource.Association 2}}
+        <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}})" :key="key">
+             {{ "{{ item }}" }}
+        </el-tag>
+        {{- else }}
+        <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}}) {{"}}"}}</span>
+        {{- end }}
+    </template>
+                {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
     {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
                     {{- if eq .FieldType "picture" }}
@@ -338,7 +348,7 @@ const {{ $element }}Options = ref([])
 get{{.StructName}}DataSource,
 
 //  获取数据源
-const dataSource = ref([])
+const dataSource = ref({})
 const getDataSourceFunc = async()=>{
   const res = await get{{.StructName}}DataSource()
   if (res.code === 0) {
@@ -537,13 +547,13 @@ getDataSourceFunc()
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
-                {{if eq .DataSource.Association 2}}
+                {{- if eq .DataSource.Association 2}}
                     <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
                         {{ "{{ item }}" }}
                     </el-tag>
-                {{ else }}
+                {{- else }}
                     <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}</span>
-                {{ end }}
+                {{- end }}
          </template>
          </el-table-column>
         {{- else if .DictType}}
@@ -727,7 +737,17 @@ getDataSourceFunc()
             {{- range .Fields}}
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
+                    {{- if .CheckDataSource }}
+                   <template #default="scope">
+                       {{- if eq .DataSource.Association 2}}
+                       <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}})" :key="key">
+                            {{ "{{ item }}" }}
+                       </el-tag>
+                       {{- else }}
+                       <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}}) {{"}}"}}</span>
+                       {{- end }}
+                   </template>
+                {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
                     {{- if eq .FieldType "picture" }}

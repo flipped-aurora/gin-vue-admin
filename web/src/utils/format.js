@@ -54,7 +54,7 @@ export const ReturnArrImg = (arr) => {
     }
   } else {
     // 如果不是数组类型
-    if (arr.slice(0, 4) !== 'http') {
+    if (arr?.slice(0, 4) !== 'http') {
       imgArr.push(path + arr)
     } else {
       imgArr.push(arr)

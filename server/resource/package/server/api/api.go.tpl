@@ -5,7 +5,9 @@ import (
 	"{{.Module}}/global"
     "{{.Module}}/model/common/response"
     "{{.Module}}/model/{{.Package}}"
+    {{- if not .IsTree}}
     {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
+    {{- end }}
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
     {{- if .AutoCreateResource}}
@@ -142,6 +144,25 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 	response.OkWithData(re{{.Abbreviation}}, c)
 }
 
+{{- if .IsTree }}
+// Get{{.StructName}}List 分页获取{{.Description}}列表,Tree模式下不接受参数
+// @Tags {{.StructName}}
+// @Summary 分页获取{{.Description}}列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
+// @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
+func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
+	list, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList()
+	if err != nil {
+	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
+        response.FailWithMessage("获取失败:" + err.Error(), c)
+        return
+    }
+    response.OkWithDetailed(list, "获取成功", c)
+}
+{{- else }}
 // Get{{.StructName}}List 分页获取{{.Description}}列表
 // @Tags {{.StructName}}
 // @Summary 分页获取{{.Description}}列表
@@ -171,6 +192,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
         PageSize: pageInfo.PageSize,
     }, "获取成功", c)
 }
+{{- end }}
 
 {{- if .HasDataSource }}
 // Get{{.StructName}}DataSource 获取{{.StructName}}的数据源
@@ -199,7 +221,6 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}DataSource(c *
 // @Summary 不需要鉴权的{{.Description}}接口
 // @accept application/json
 // @Produce application/json
-// @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.Description}}列表"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}Public [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}Public(c *gin.Context) {

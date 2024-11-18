@@ -404,6 +404,22 @@
             <el-form-item>
               <template #label>
                 <el-tooltip
+                    content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div>
+                    树型结构 <el-icon><QuestionFilled /></el-icon>
+                  </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.isTree" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
                   content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
                   placement="bottom"
                   effect="light"
@@ -1024,6 +1040,7 @@
     gvaModel: true,
     autoCreateResource: false,
     onlyTemplate: false,
+    isTree: false,
     fields: []
   })
   const rules = ref({
@@ -1445,6 +1462,7 @@
       gvaModel: true,
       autoCreateResource: false,
       onlyTemplate: false,
+      isTree: false,
       fields: []
     }
     await nextTick()

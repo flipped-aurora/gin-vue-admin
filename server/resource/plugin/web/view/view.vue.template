@@ -352,7 +352,7 @@ const dataSource = ref({})
 const getDataSourceFunc = async()=>{
   const res = await get{{.StructName}}DataSource()
   if (res.code === 0) {
-    dataSource.value = res.data
+    dataSource.value = res.data || []
   }
 }
 getDataSourceFunc()

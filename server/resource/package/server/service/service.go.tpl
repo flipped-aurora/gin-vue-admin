@@ -60,7 +60,9 @@ import (
 {{- if not .OnlyTemplate }}
 	"{{.Module}}/global"
 	"{{.Module}}/model/{{.Package}}"
+	{{- if not .IsTree}}
     {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
+    {{- end }}
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}

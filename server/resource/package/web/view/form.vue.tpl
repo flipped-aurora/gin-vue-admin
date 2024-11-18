@@ -172,9 +172,10 @@ getDataSourceFunc()
                   :data="tableData"
                   check-strictly
                   :render-after-expand="false"
-                  show-checkbox
+                  :props="defaultProps"
+                  clearable
                   style="width: 240px"
-                  placeholder="为空默认为根节点"
+                  placeholder="根节点"
               />
           </el-form-item>
         {{- end }}
@@ -293,6 +294,12 @@ const router = useRouter()
 {{- if .IsTree }}
 const tableData = ref([])
 
+const defaultProps = {
+  children: "children",
+  label: "{{ .TreeJson }}",
+  value: "{{ .PrimaryField.FieldJson }}"
+}
+
 const getTableData = async() => {
   const table = await get{{.StructName}}List()
   if (table.code === 0) {
@@ -313,7 +320,7 @@ const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- if .IsTree }}
-            parentID:0,
+            parentID: undefined,
         {{- end }}
         {{- range .Fields}}
           {{- if .Form }}

@@ -671,8 +671,10 @@ getDataSourceFunc()
                     :data="tableData"
                     check-strictly
                     :render-after-expand="false"
-                    show-checkbox
+                    :props="defaultProps"
+                    clearable
                     style="width: 240px"
+                    placeholder="根节点"
                 />
             </el-form-item>
           {{- end }}
@@ -759,9 +761,10 @@ getDataSourceFunc()
                   check-strictly
                   disabled
                   :render-after-expand="false"
-                  show-checkbox
+                  :props="defaultProps"
+                  clearable
                   style="width: 240px"
-                  placeholder="为空默认为根节点"
+                  placeholder="根节点"
                 />
             </el-descriptions-item>
             {{- end }}
@@ -884,7 +887,7 @@ const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- if .IsTree }}
-            parentID:0,
+            parentID:undefined,
         {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
@@ -1076,6 +1079,13 @@ const getTableData = async() => {
   }
 }
 {{- else }}
+// 树选择器配置
+const defaultProps = {
+  children: "children",
+  label: "{{ .TreeJson }}",
+  value: "{{ .PrimaryField.FieldJson }}"
+}
+
 // 查询
 const getTableData = async() => {
   const table = await get{{.StructName}}List()
@@ -1187,7 +1197,7 @@ const dialogFormVisible = ref(false)
 const openDialog = ({{- if .IsTree -}}row{{- end -}}) => {
     type.value = 'create'
     {{- if .IsTree }}
-    formData.value.parentID = row ? row.{{.PrimaryField.FieldJson}} : 0
+    formData.value.parentID = row ? row.{{.PrimaryField.FieldJson}} : undefined
     {{- end }}
     dialogFormVisible.value = true
 }

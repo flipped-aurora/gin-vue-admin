@@ -65,6 +65,9 @@ import (
     "gorm.io/gorm"
     {{- end}}
 {{- end }}
+{{- if .IsTree }}
+    "{{.Module}}/utils"
+{{- end }}
 )
 
 type {{.StructName}}Service struct {}
@@ -129,6 +132,38 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.Pri
 	return
 }
 
+
+{{- if .IsTree }}
+// Get{{.StructName}}InfoList 分页获取{{.Description}}记录,Tree模式下不添加分页和搜索
+// Author [yourname](https://github.com/yourname)
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList() (list []{{.Package}}.{{.StructName}} err error) {
+    // 创建db
+	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
+    var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
+
+    // 排序条件
+    {{- if .NeedSort}}
+        var OrderStr string
+        orderMap := make(map[string]bool)
+       {{- range .Fields}}
+            {{- if .Sort}}
+         	orderMap["{{.ColumnName}}"] = true
+         	{{- end}}
+       {{- end}}
+       if orderMap[info.Sort] {
+          OrderStr = info.Sort
+          if info.Order == "descending" {
+             OrderStr = OrderStr + " desc"
+          }
+          db = db.Order(OrderStr)
+       }
+    {{- end}}
+
+	err = db.Find(&{{.Abbreviation}}s).Error
+
+	return utils.BuildTree(&{{.Abbreviation}}s), total, err
+}
+{{- else }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
@@ -192,6 +227,8 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }
+
+{{- end }}
 
 {{- if .HasDataSource }}
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {

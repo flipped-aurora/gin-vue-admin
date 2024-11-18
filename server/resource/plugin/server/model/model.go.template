@@ -71,6 +71,10 @@ type {{.StructName}} struct {
     UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
     DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
     {{- end }}
+    {{- if .IsTree }}
+    Children   []{{.StructName}} `json:"children"`
+    ParentId   int             `json:"parentId" gorm:"column:parent_id;comment:父节点ID"`
+    {{- end }}
     {{- end }}
 }
 
@@ -80,4 +84,29 @@ func ({{.StructName}}) TableName() string {
     return "{{.TableName}}"
 }
 {{ end }}
+
+
+{{ if .IsTree }}
+// GetChildren 实现TreeNode接口
+func ({{.StructName}}) GetChildren() []{{.StructName}} {
+    return {{.StructName}}.Children
+}
+
+// SetChildren 实现TreeNode接口
+func ({{.StructName}}) SetChildren(children []{{.StructName}}) {
+    {{.StructName}}.Children = children
+}
+
+// GetID 实现TreeNode接口
+func ({{.StructName}}) GetID() int {
+    return {{.StructName}}.ID
+}
+
+// GetParentID 实现TreeNode接口
+func ({{.StructName}}) GetParentID() int {
+    return {{.StructName}}.ParentId
+}
+{{ end }}
+
+
 {{ end }}

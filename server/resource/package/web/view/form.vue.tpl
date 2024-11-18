@@ -165,6 +165,19 @@ getDataSourceFunc()
   <div>
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
+        {{- if .IsTree }}
+          <el-form-item label="父节点:" prop="parentID" >
+              <el-tree-select
+                  v-model="formData.parentID"
+                  :data="tableData"
+                  check-strictly
+                  :render-after-expand="false"
+                  show-checkbox
+                  style="width: 240px"
+                  placeholder="为空默认为根节点"
+              />
+          </el-form-item>
+        {{- end }}
       {{- range .Fields}}
       {{- if .Form }}
         <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
@@ -277,6 +290,20 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 const route = useRoute()
 const router = useRouter()
 
+{{- if .IsTree }}
+const tableData = ref([])
+
+const getTableData = async() => {
+  const table = await get{{.StructName}}List()
+  if (table.code === 0) {
+    tableData.value = table.data
+  }
+}
+
+getTableData()
+
+{{- end }}
+
 // 提交按钮loading
 const btnLoading = ref(false)
 
@@ -285,6 +312,9 @@ const type = ref('')
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
+        {{- if .IsTree }}
+            parentID:0,
+        {{- end }}
         {{- range .Fields}}
           {{- if .Form }}
             {{- if eq .FieldType "bool" }}

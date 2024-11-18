@@ -363,6 +363,7 @@ getDataSourceFunc()
 {{- if not .OnlyTemplate}}
 <template>
   <div>
+  {{- if not .IsTree }}
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
@@ -515,9 +516,10 @@ getDataSourceFunc()
         </el-form-item>
       </el-form>
     </div>
+  {{- end }}
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog()">新增</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
             {{ if .HasExcel -}}
             <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
@@ -629,6 +631,9 @@ getDataSourceFunc()
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
+            {{- if .IsTree }}
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>新增子节点</el-button>
+            {{- end }}
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
@@ -659,6 +664,18 @@ getDataSourceFunc()
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
+          {{- if .IsTree }}
+            <el-form-item label="父节点:" prop="parentID" >
+                <el-tree-select
+                    v-model="formData.parentID"
+                    :data="tableData"
+                    check-strictly
+                    :render-after-expand="false"
+                    show-checkbox
+                    style="width: 240px"
+                />
+            </el-form-item>
+          {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
@@ -734,6 +751,20 @@ getDataSourceFunc()
 
     <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
             <el-descriptions :column="1" border>
+            {{- if .IsTree }}
+            <el-descriptions-item label="父节点">
+                <el-tree-select
+                  v-model="detailFrom.parentID"
+                  :data="tableData"
+                  check-strictly
+                  disabled
+                  :render-after-expand="false"
+                  show-checkbox
+                  style="width: 240px"
+                  placeholder="为空默认为根节点"
+                />
+            </el-descriptions-item>
+            {{- end }}
             {{- range .Fields}}
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">
@@ -852,6 +883,9 @@ const showAllQuery = ref(false)
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
+        {{- if .IsTree }}
+            parentID:0,
+        {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
             {{- if eq .FieldType "bool" }}
@@ -999,6 +1033,7 @@ const sortChange = ({ prop, order }) => {
 }
 {{- end}}
 
+{{- if not .IsTree }}
 // 重置
 const onReset = () => {
   searchInfo.value = {}
@@ -1041,6 +1076,15 @@ const getTableData = async() => {
     pageSize.value = table.data.pageSize
   }
 }
+{{- else }}
+// 查询
+const getTableData = async() => {
+  const table = await get{{.StructName}}List()
+  if (table.code === 0) {
+    tableData.value = table.data
+  }
+}
+{{- end }}
 
 getTableData()
 
@@ -1141,8 +1185,11 @@ const delete{{.StructName}}Func = async (row) => {
 const dialogFormVisible = ref(false)
 
 // 打开弹窗
-const openDialog = () => {
+const openDialog = ({{- if .Tree -}}row{{- end -}}) => {
     type.value = 'create'
+    {{- if .Tree }}
+    formData.value.parentID = row ? row.{{.PrimaryField.FieldJson}} : 0
+    {{- end }}
     dialogFormVisible.value = true
 }
 

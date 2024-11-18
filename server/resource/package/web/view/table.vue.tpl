@@ -1010,7 +1010,6 @@ const onSubmit = () => {
   elSearchFormRef.value?.validate(async(valid) => {
     if (!valid) return
     page.value = 1
-    pageSize.value = 10
     {{- range .Fields}}{{- if eq .FieldType "bool" }}
     if (searchInfo.value.{{.FieldJson}} === ""){
         searchInfo.value.{{.FieldJson}}=null

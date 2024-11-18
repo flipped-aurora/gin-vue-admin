@@ -540,7 +540,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" {{- if .IsTree }}min-{{- end }}width="180">
+        <el-table-column align="left" label="日期" prop="createdAt" {{- if .IsTree }} min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -668,7 +668,7 @@ getDataSourceFunc()
             <el-form-item label="父节点:" prop="parentID" >
                 <el-tree-select
                     v-model="formData.parentID"
-                    :data="tableData"
+                    :data="[rootNode,...tableData]"
                     check-strictly
                     :render-after-expand="false"
                     :props="defaultProps"
@@ -757,7 +757,7 @@ getDataSourceFunc()
             <el-descriptions-item label="父节点">
                 <el-tree-select
                   v-model="detailFrom.parentID"
-                  :data="tableData"
+                  :data="[rootNode,...tableData]"
                   check-strictly
                   disabled
                   :render-after-expand="false"
@@ -1084,6 +1084,12 @@ const defaultProps = {
   children: "children",
   label: "{{ .TreeJson }}",
   value: "{{ .PrimaryField.FieldJson }}"
+}
+
+const rootNode = {
+  {{ .PrimaryField.FieldJson }}: 0,
+  {{ .TreeJson }}: '根节点',
+  children: []
 }
 
 // 查询

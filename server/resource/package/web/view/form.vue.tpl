@@ -169,7 +169,7 @@ getDataSourceFunc()
           <el-form-item label="父节点:" prop="parentID" >
               <el-tree-select
                   v-model="formData.parentID"
-                  :data="tableData"
+                  :data="[rootNode,...tableData]"
                   check-strictly
                   :render-after-expand="false"
                   :props="defaultProps"
@@ -253,6 +253,9 @@ import {
   {{- if .HasDataSource }}
     get{{.StructName}}DataSource,
   {{- end }}
+  {{- if .IsTree }}
+    get{{.StructName}}List,
+  {{- end }}
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
@@ -298,6 +301,12 @@ const defaultProps = {
   children: "children",
   label: "{{ .TreeJson }}",
   value: "{{ .PrimaryField.FieldJson }}"
+}
+
+const rootNode = {
+  {{ .PrimaryField.FieldJson }}: 0,
+  {{ .TreeJson }}: '根节点',
+  children: []
 }
 
 const getTableData = async() => {

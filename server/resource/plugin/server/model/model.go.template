@@ -72,8 +72,8 @@ type {{.StructName}} struct {
     DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
     {{- end }}
     {{- if .IsTree }}
-    Children   []{{.StructName}} `json:"children"`
-    ParentId   int             `json:"parentId" gorm:"column:parent_id;comment:父节点ID"`
+    Children   []{{.StructName}} `json:"children" gorm:"-"`     //子节点
+    ParentID   int             `json:"parentID" gorm:"column:parent_id;comment:父节点"`
     {{- end }}
     {{- end }}
 }
@@ -88,23 +88,23 @@ func ({{.StructName}}) TableName() string {
 
 {{ if .IsTree }}
 // GetChildren 实现TreeNode接口
-func ({{.StructName}}) GetChildren() []{{.StructName}} {
-    return {{.StructName}}.Children
+func (s {{.StructName}}) GetChildren() []{{.StructName}} {
+    return s.Children
 }
 
 // SetChildren 实现TreeNode接口
-func ({{.StructName}}) SetChildren(children []{{.StructName}}) {
-    {{.StructName}}.Children = children
+func (s {{.StructName}}) SetChildren(in *{{.StructName}},children {{.StructName}}) {
+	in.Children = append(in.Children, children)
 }
 
 // GetID 实现TreeNode接口
-func ({{.StructName}}) GetID() int {
-    return {{.StructName}}.ID
+func (s {{.StructName}}) GetID() int {
+    return int({{if not .GvaModel}}*{{- end }}s.{{.PrimaryField.FieldName}})
 }
 
 // GetParentID 实现TreeNode接口
-func ({{.StructName}}) GetParentID() int {
-    return {{.StructName}}.ParentId
+func (s {{.StructName}}) GetParentID() int {
+    return s.ParentID
 }
 {{ end }}
 

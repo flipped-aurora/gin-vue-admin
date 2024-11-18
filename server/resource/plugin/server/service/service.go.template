@@ -60,10 +60,15 @@ import (
 {{- if not .OnlyTemplate }}
 	"{{.Module}}/global"
 	"{{.Module}}/plugin/{{.Package}}/model"
+	{{- if not .IsTree }}
     "{{.Module}}/plugin/{{.Package}}/model/request"
+    {{- end }}
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}
+{{- if .IsTree }}
+    "{{.Module}}/utils"
+{{- end }}
 {{- end }}
 )
 
@@ -137,6 +142,20 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}({{.PrimaryField.FieldJson}} strin
 	return
 }
 
+
+{{- if .IsTree }}
+// Get{{.StructName}}InfoList 分页获取{{.Description}}记录,Tree模式下不添加分页和搜索
+// Author [yourname](https://github.com/yourname)
+func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList() (list []model.{{.StructName}},err error) {
+    // 创建db
+	db := {{$db}}.Model(&model.{{.StructName}}{})
+    var {{.Abbreviation}}s []model.{{.StructName}}
+
+	err = db.Find(&{{.Abbreviation}}s).Error
+
+	return utils.BuildTree({{.Abbreviation}}s), err
+}
+{{- else }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (list []model.{{.StructName}}, total int64, err error) {
@@ -199,7 +218,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructNam
 	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }
-
+{{- end }}
 {{- if .HasDataSource }}
 func (s *{{.Abbreviation}})Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
 	res = make(map[string][]map[string]any)

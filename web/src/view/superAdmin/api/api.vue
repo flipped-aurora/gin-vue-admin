@@ -579,7 +579,6 @@
 
   const onSubmit = () => {
     page.value = 1
-    pageSize.value = 10
     getTableData()
   }
 

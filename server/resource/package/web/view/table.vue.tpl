@@ -540,7 +540,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" width="180">
+        <el-table-column align="left" label="日期" prop="createdAt" {{- if .IsTree }}min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -1184,9 +1184,9 @@ const delete{{.StructName}}Func = async (row) => {
 const dialogFormVisible = ref(false)
 
 // 打开弹窗
-const openDialog = ({{- if .Tree -}}row{{- end -}}) => {
+const openDialog = ({{- if .IsTree -}}row{{- end -}}) => {
     type.value = 'create'
-    {{- if .Tree }}
+    {{- if .IsTree }}
     formData.value.parentID = row ? row.{{.PrimaryField.FieldJson}} : 0
     {{- end }}
     dialogFormVisible.value = true

@@ -85,25 +85,25 @@ func RandomInt(min, max int) int {
 // BuildTree 用于构建一个树形结构
 func BuildTree[T common.TreeNode[T]](nodes []T) []T {
 	nodeMap := make(map[int]T)
-	var roots []T
-
 	// 创建一个基本map
-	for _, node := range nodes {
-		nodeMap[node.GetID()] = node
+	for i := range nodes {
+		nodeMap[nodes[i].GetID()] = nodes[i]
 	}
 
-	// 递归node给map增加children
-	for _, node := range nodes {
-		if node.GetParentID() == 0 {
-			// 捕获根节点
-			roots = append(roots, node)
-		} else {
-			parent := nodeMap[node.GetParentID()]
-			children := parent.GetChildren()
-			children = append(children, node)
-			parent.SetChildren(children)
-			nodeMap[parent.GetID()] = parent
+	for i := range nodes {
+		if nodes[i].GetParentID() != 0 {
+			parent := nodeMap[nodes[i].GetParentID()]
+			parent.SetChildren(&parent, nodes[i])
+			nodeMap[nodes[i].GetParentID()] = parent
 		}
 	}
-	return roots
+
+	var rootNodes []T
+
+	for i := range nodeMap {
+		if nodeMap[i].GetParentID() == 0 {
+			rootNodes = append(rootNodes, nodeMap[i])
+		}
+	}
+	return rootNodes
 }

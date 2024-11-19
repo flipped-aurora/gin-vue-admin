@@ -63,14 +63,12 @@ import (
 	{{- if not .IsTree}}
     {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
     {{- else }}
+    "{{.Module}}/utils"
     "errors"
     {{- end }}
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}
-{{- end }}
-{{- if .IsTree }}
-    "{{.Module}}/utils"
 {{- end }}
 )
 
@@ -151,10 +149,10 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.Pri
 {{- if .IsTree }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录,Tree模式下不添加分页和搜索
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList() (list []{{.Package}}.{{.StructName}},err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList() (list []*{{.Package}}.{{.StructName}},err error) {
     // 创建db
 	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
-    var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
+    var {{.Abbreviation}}s []*{{.Package}}.{{.StructName}}
 
 	err = db.Find(&{{.Abbreviation}}s).Error
 

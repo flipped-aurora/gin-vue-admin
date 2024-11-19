@@ -93,8 +93,7 @@ func BuildTree[T common.TreeNode[T]](nodes []T) []T {
 	for i := range nodes {
 		if nodes[i].GetParentID() != 0 {
 			parent := nodeMap[nodes[i].GetParentID()]
-			parent.SetChildren(&parent, nodes[i])
-			nodeMap[nodes[i].GetParentID()] = parent
+			parent.SetChildren(nodes[i])
 		}
 	}
 

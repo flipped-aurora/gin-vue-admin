@@ -160,10 +160,10 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}({{.PrimaryField.FieldJson}} strin
 {{- if .IsTree }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录,Tree模式下不添加分页和搜索
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList() (list []model.{{.StructName}},err error) {
+func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList() (list []*model.{{.StructName}},err error) {
     // 创建db
 	db := {{$db}}.Model(&model.{{.StructName}}{})
-    var {{.Abbreviation}}s []model.{{.StructName}}
+    var {{.Abbreviation}}s []*model.{{.StructName}}
 
 	err = db.Find(&{{.Abbreviation}}s).Error
 

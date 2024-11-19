@@ -37,7 +37,7 @@ func (m *JSONMap) Scan(value interface{}) error {
 
 type TreeNode[T any] interface {
 	GetChildren() []T
-	SetChildren(in *T, children T)
+	SetChildren(children T)
 	GetID() int
 	GetParentID() int
 }

@@ -62,6 +62,7 @@ import (
 	"{{.Module}}/model/{{.Package}}"
 	{{- if not .IsTree}}
     {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
+    "errors"
     {{- end }}
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
@@ -85,6 +86,17 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{
 // Delete{{.StructName}} 删除{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
+	{{- if .IsTree }}
+       var count int64
+	   err = {{$db}}.Find(&{{.Package}}.{{.StructName}}{},"parent_id = ?",{{.PrimaryField.FieldJson}}).Count(&count).Error
+	   if count > 0 {
+           return errors.New("此节点存在子节点不允许删除")
+       }
+       if err != nil {
+           return err
+       }
+	{{- end }}
+
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).Update("deleted_by", userID).Error; err != nil {

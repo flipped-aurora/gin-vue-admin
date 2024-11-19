@@ -62,6 +62,7 @@ import (
 	"{{.Module}}/plugin/{{.Package}}/model"
 	{{- if not .IsTree }}
     "{{.Module}}/plugin/{{.Package}}/model/request"
+    {{- else }}
     "errors"
     {{- end }}
     {{- if .AutoCreateResource }}

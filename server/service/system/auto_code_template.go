@@ -191,7 +191,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 		return nil, errors.Wrap(err, "查询包失败!")
 	}
 	// 增加判断: 重复创建struct 或者重复的简称
-	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Abbreviation, info.Package) {
+	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Abbreviation, info.Package) && !info.IsAdd  {
 		return nil, errors.New("已经创建过此数据结构或重复简称,请勿重复创建!")
 	}
 

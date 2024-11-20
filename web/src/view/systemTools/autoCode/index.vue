@@ -416,6 +416,26 @@
               <el-checkbox v-model="form.onlyTemplate" />
             </el-form-item>
           </el-col>
+          <el-col :span="9">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
+                    content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div>
+                    树型结构 <el-icon><QuestionFilled /></el-icon>
+                  </div>
+                </el-tooltip>
+              </template>
+              <div class="flex gap-2 items-center">
+                <el-checkbox v-model="form.isTree" />
+                <el-input v-model="form.treeJson" :disabled="!form.isTree" placeholder="前端展示json属性"></el-input>
+              </div>
+            </el-form-item>
+          </el-col>
+
         </el-row>
       </el-form>
     </div>
@@ -1024,6 +1044,8 @@
     gvaModel: true,
     autoCreateResource: false,
     onlyTemplate: false,
+    isTree: false,
+    treeJson: "",
     fields: []
   })
   const rules = ref({
@@ -1137,6 +1159,13 @@
   }
   const autoCodeForm = ref(null)
   const enterForm = async (isPreview) => {
+    if (form.value.isTree && !form.value.treeJson){
+      ElMessage({
+        type: 'error',
+        message: '请填写树型结构的前端展示json属性'
+      })
+      return false
+    }
     if (!form.value.onlyTemplate) {
       if (form.value.fields.length <= 0) {
         ElMessage({
@@ -1445,6 +1474,8 @@
       gvaModel: true,
       autoCreateResource: false,
       onlyTemplate: false,
+      isTree: false,
+      treeJson: "",
       fields: []
     }
     await nextTick()

@@ -363,6 +363,7 @@ getDataSourceFunc()
 {{- if not .OnlyTemplate}}
 <template>
   <div>
+  {{- if not .IsTree }}
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
@@ -515,9 +516,10 @@ getDataSourceFunc()
         </el-form-item>
       </el-form>
     </div>
+  {{- end }}
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog()">新增</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
             {{ if .HasExcel -}}
             <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
@@ -538,7 +540,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" width="180">
+        <el-table-column align="left" label="日期" prop="createdAt" {{- if .IsTree }} min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -629,9 +631,12 @@ getDataSourceFunc()
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
+            {{- if .IsTree }}
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>新增子节点</el-button>
+            {{- end }}
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length" {{ end }} {{if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -659,6 +664,20 @@ getDataSourceFunc()
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
+          {{- if .IsTree }}
+            <el-form-item label="父节点:" prop="parentID" >
+                <el-tree-select
+                    v-model="formData.parentID"
+                    :data="[rootNode,...tableData]"
+                    check-strictly
+                    :render-after-expand="false"
+                    :props="defaultProps"
+                    clearable
+                    style="width: 240px"
+                    placeholder="根节点"
+                />
+            </el-form-item>
+          {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
@@ -734,6 +753,21 @@ getDataSourceFunc()
 
     <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
             <el-descriptions :column="1" border>
+            {{- if .IsTree }}
+            <el-descriptions-item label="父节点">
+                <el-tree-select
+                  v-model="detailFrom.parentID"
+                  :data="[rootNode,...tableData]"
+                  check-strictly
+                  disabled
+                  :render-after-expand="false"
+                  :props="defaultProps"
+                  clearable
+                  style="width: 240px"
+                  placeholder="根节点"
+                />
+            </el-descriptions-item>
+            {{- end }}
             {{- range .Fields}}
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">
@@ -852,6 +886,9 @@ const showAllQuery = ref(false)
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
+        {{- if .IsTree }}
+            parentID:undefined,
+        {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
             {{- if eq .FieldType "bool" }}
@@ -999,6 +1036,7 @@ const sortChange = ({ prop, order }) => {
 }
 {{- end}}
 
+{{- if not .IsTree }}
 // 重置
 const onReset = () => {
   searchInfo.value = {}
@@ -1040,6 +1078,28 @@ const getTableData = async() => {
     pageSize.value = table.data.pageSize
   }
 }
+{{- else }}
+// 树选择器配置
+const defaultProps = {
+  children: "children",
+  label: "{{ .TreeJson }}",
+  value: "{{ .PrimaryField.FieldJson }}"
+}
+
+const rootNode = {
+  {{ .PrimaryField.FieldJson }}: 0,
+  {{ .TreeJson }}: '根节点',
+  children: []
+}
+
+// 查询
+const getTableData = async() => {
+  const table = await get{{.StructName}}List()
+  if (table.code === 0) {
+    tableData.value = table.data || []
+  }
+}
+{{- end }}
 
 getTableData()
 
@@ -1140,8 +1200,11 @@ const delete{{.StructName}}Func = async (row) => {
 const dialogFormVisible = ref(false)
 
 // 打开弹窗
-const openDialog = () => {
+const openDialog = ({{- if .IsTree -}}row{{- end -}}) => {
     type.value = 'create'
+    {{- if .IsTree }}
+    formData.value.parentID = row ? row.{{.PrimaryField.FieldJson}} : undefined
+    {{- end }}
     dialogFormVisible.value = true
 }
 

@@ -165,6 +165,20 @@ getDataSourceFunc()
   <div>
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
+        {{- if .IsTree }}
+          <el-form-item label="父节点:" prop="parentID" >
+              <el-tree-select
+                  v-model="formData.parentID"
+                  :data="[rootNode,...tableData]"
+                  check-strictly
+                  :render-after-expand="false"
+                  :props="defaultProps"
+                  clearable
+                  style="width: 240px"
+                  placeholder="根节点"
+              />
+          </el-form-item>
+        {{- end }}
       {{- range .Fields}}
       {{- if .Form }}
         <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
@@ -239,6 +253,9 @@ import {
   {{- if .HasDataSource }}
     get{{.StructName}}DataSource,
   {{- end }}
+  {{- if .IsTree }}
+    get{{.StructName}}List,
+  {{- end }}
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
@@ -277,6 +294,32 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 const route = useRoute()
 const router = useRouter()
 
+{{- if .IsTree }}
+const tableData = ref([])
+
+const defaultProps = {
+  children: "children",
+  label: "{{ .TreeJson }}",
+  value: "{{ .PrimaryField.FieldJson }}"
+}
+
+const rootNode = {
+  {{ .PrimaryField.FieldJson }}: 0,
+  {{ .TreeJson }}: '根节点',
+  children: []
+}
+
+const getTableData = async() => {
+  const table = await get{{.StructName}}List()
+  if (table.code === 0) {
+    tableData.value = table.data || []
+  }
+}
+
+getTableData()
+
+{{- end }}
+
 // 提交按钮loading
 const btnLoading = ref(false)
 
@@ -285,6 +328,9 @@ const type = ref('')
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
+        {{- if .IsTree }}
+            parentID: undefined,
+        {{- end }}
         {{- range .Fields}}
           {{- if .Form }}
             {{- if eq .FieldType "bool" }}

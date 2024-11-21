@@ -5,6 +5,8 @@
 </template>
 
 <script setup>
+  import {getUrl} from "@/utils/image";
+
   const props = defineProps({
     templateId: {
       type: String,
@@ -35,7 +37,10 @@
       ElMessage.error('组件未设置模板ID')
       return
     }
-    const baseUrl = import.meta.env.VITE_BASE_API
+    let baseUrl = import.meta.env.VITE_BASE_API
+    if (baseUrl === "/"){
+      baseUrl = ""
+    }
     const paramsCopy = JSON.parse(JSON.stringify(props.condition))
     if (props.limit) {
       paramsCopy.limit = props.limit
@@ -52,6 +57,7 @@
           `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
       )
       .join('&')
+
     const url = `${baseUrl}/sysExportTemplate/exportExcel?templateID=${props.templateId}${params ? '&' + params : ''}`
 
     window.open(url, '_blank')

@@ -12,7 +12,10 @@
 <script setup>
   import { ElMessage } from 'element-plus'
 
-  const baseUrl = import.meta.env.VITE_BASE_API
+  let baseUrl = import.meta.env.VITE_BASE_API
+  if (baseUrl === "/"){
+    baseUrl = ""
+  }
 
   const props = defineProps({
     templateId: {

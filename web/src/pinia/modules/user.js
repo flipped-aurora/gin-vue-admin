@@ -40,7 +40,6 @@ export const useUserStore = defineStore('user', () => {
 
   const NeedInit = async () => {
     await ClearStorage()
-    console.log('token',token)
     await router.push({ name: 'Init', replace: true })
   }
 

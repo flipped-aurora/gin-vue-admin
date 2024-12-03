@@ -140,6 +140,9 @@ func (cliwithdrawService *CliWithdrawService) GetCliWithdrawPublic(pageInfo *xia
 
 // CliWithdraw
 func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliWithdraw) (err error) {
+	if cliwithdraw.Amount.Cmp(decimal.NewFromInt(50)) < 0 {
+		return errors.New("提币金额必须大于50")
+	}
 	//开启事务
 	tx := global.GVA_DB.Begin()
 	defer func() {
@@ -147,6 +150,7 @@ func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliW
 			tx.Rollback()
 		}
 	}()
+
 	//计算手续费
 	var setinfo *xiao.CliSet
 	err = tx.First(&setinfo).Error
@@ -187,6 +191,21 @@ func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliW
 			tx.Rollback()
 			return errors.Join(err, errors.New("更新个人收益失败"))
 		}
+		//更新团队业绩
+		//查找上级的团队业绩减去赎回业绩
+
+		//将订单转为赎回
+		orders, err := xiao.NewOrder(cliwithdraw.Address).GetCliAllOrder(tx)
+		if err != nil {
+			return err
+		}
+		for _, order := range orders {
+			order.Status = "赎回"
+			if err := tx.Save(&order).Error; err != nil {
+				tx.Rollback()
+				return errors.Join(err, errors.New("更新订单状态失败"))
+			}
+		}
 		//提币方法
 		truenum := nowtiqu.Sub(fee)
 		clienteth, err := online.NewClient()
@@ -226,6 +245,7 @@ func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliW
 	// 查询提币总表并加锁
 	var maininfo xiao.CliMainwith
 	if err := tx.Raw(`SELECT * FROM cli_mainwith WHERE address = ? FOR UPDATE`, cliwithdraw.Address).Scan(&maininfo).Error; err != nil {
+		tx.Rollback()
 		return errors.Join(err, errors.New("查询提币总表失败"))
 	}
 	//查询提币总表
@@ -234,11 +254,13 @@ func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliW
 	//	return errors.Join(err, errors.New("查询提币总表失败"))
 	//}
 	if maininfo.Withable.Cmp(*cliwithdraw.Amount) < 0 {
+		tx.Rollback()
 		return errors.New("提币金额大于可提金额")
 	}
 	*maininfo.Withable = maininfo.Withable.Sub(*cliwithdraw.Amount)
 	*maininfo.Withed = maininfo.Withed.Add(*cliwithdraw.Amount)
 	if err := tx.Save(maininfo).Error; err != nil {
+		tx.Rollback()
 		return errors.Join(err, errors.New("更新提币总表失败"))
 	}
 
@@ -247,15 +269,18 @@ func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliW
 	//提币方法
 	clienteth, err := online.NewClient()
 	if err != nil {
+		tx.Rollback()
 		return errors.Join(err, errors.New("连接以太坊节点失败"))
 	}
 	//0x79D954564b77C9550327B3e11cFe31472bc1e0d0
 	store, err := wallet.ImportKeyStore("0xa4416da064bbee02d0f71130cf1414279a32280a")
 	if err != nil {
+		tx.Rollback()
 		return errors.Join(err, errors.New("导入私钥失败"))
 	}
 	transfer, err := online.Bsc20Transfer(clienteth, store, "0x55d398326f99059fF775485246999027B3197955", cliwithdraw.Address, &truenum)
 	if err != nil {
+		tx.Rollback()
 		return errors.Join(err, errors.New("转账失败"))
 	}
 	//创建提币记录
@@ -264,11 +289,13 @@ func (cliwithdrawService *CliWithdrawService) CliWithdraw(cliwithdraw *xiao.CliW
 	cliwithdraw.Descnum = &fee
 	err = tx.Create(&cliwithdraw).Error
 	if err != nil {
+		tx.Rollback()
 		// 回滚事务
 		return errors.Join(err, errors.New("创建提币记录失败"))
 	}
 	err = tx.Commit().Error
 	if err != nil {
+		tx.Rollback()
 		return errors.Join(err, errors.New("提交事务失败"))
 	}
 	return nil

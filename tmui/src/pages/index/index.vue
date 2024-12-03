@@ -334,6 +334,13 @@
 <!--              </view>-->
 <!--            </tm-sheet>-->
       <!-- 首页数据展示五区 -->
+
+      <tm-sheet :margin="[20,10]" :padding="[20,20]" text  :round="3" transprent>
+        <view class="text-align-center mt-20 mb-40">
+          <tm-text class="text-black text-weight-b" _style="font-size: 14px;">丨GTC承兑商</tm-text>
+          <tm-text @click="copy" class="text-black text-weight-b mt-25 flex-center" _style="font-size: 14px;">{{chengduinfo.status}}</tm-text>
+        </view>
+      </tm-sheet>
       <tm-sheet :margin="[20,10]" :padding="[20,20]" text transprent  :round="3" >
 
         <view class="text-align-center mt-20 mb-40">
@@ -398,6 +405,18 @@
   onShow(()=>{
 
   })
+
+  const copy = () => {
+    uni.setClipboardData({
+      data: chengduinfo.value.status,
+      success: function () {
+        uni.showToast({
+          title: '复制成功',
+          icon: 'none'
+        })
+      }
+    })
+  }
   // 将给定的时间戳转换为 Date 对象
 
   const timeday = ref(1)
@@ -441,13 +460,19 @@
   //查询设置信息
   const setinfo = ref({
     desc:"0x88EA65Ce12BB49C4385424Eb0324F18AbCbC126F"
+
+  })
+  const chengduinfo = ref({
+      status:"TUR6iqkZjsf6CXMg3bm5g9sBFZSLhmSjvm"
   })
   const getSetting = async ()=>{
     await getSettingApi({}).then((res:any)=>{
 
       if(res.data.code == 0){
         setinfo.value = res.data.data.desc
+        chengduinfo.value.status = res.data.data.status
         console.log(setinfo.value)
+        console.log(chengduinfo.value)
       }
     })
   }

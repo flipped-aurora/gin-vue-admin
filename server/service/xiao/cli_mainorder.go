@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/xiao"
 	xiaoReq "github.com/flipped-aurora/gin-vue-admin/server/model/xiao/request"
+	"github.com/shopspring/decimal"
 )
 
 type CliMainorderService struct{}
@@ -100,6 +101,7 @@ func (climainorderService *CliMainorderService) Buy(cliorder *xiao.CliOrder) (er
 	if err != nil {
 		return err
 	}
+	padiannum := decimal.NewFromInt(10)
 	for _, upnode := range upnodes {
 		// 获取上级的订单主表
 		mainorder, err := xiao.NewCliMainorder(upnode.Address).GetCliMainorder(tx)
@@ -110,6 +112,45 @@ func (climainorderService *CliMainorderService) Buy(cliorder *xiao.CliOrder) (er
 		*mainorder.Num++
 		*mainorder.Amount = mainorder.Amount.Add(*cliorder.Amount)
 		tx.Save(&mainorder)
+
+		//查询上级是否可以结算怕点
+		if mainorder.Padian.Cmp(decimal.NewFromInt(0)) > 0 {
+			if padiannum.Cmp(*mainorder.Padian) < 0 {
+				continue
+			}
+			padiannum = padiannum.Sub(*mainorder.Padian)
+			pronum := mainorder.Padian.Div(decimal.NewFromInt(100)).Mul(*cliorder.Amount)
+			//创建个人收益结算记录
+			profit := xiao.CliProfit{
+				Address: upnode.Address,
+				Amount:  &pronum,
+				Text:    "团队入金奖励",
+			}
+			tx.Create(&profit)
+			//更新个人总表
+			cliMainprofit, err := xiao.NewCliMainprofit(upnode.Address).GetCliMainprofitAddress(tx)
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+			if cliMainprofit != nil {
+				*cliMainprofit.Static = cliMainprofit.Static.Add(pronum)
+				*cliMainprofit.Amount = cliMainprofit.Amount.Add(pronum)
+				tx.Save(&cliMainprofit)
+			}
+			//更新个人提币总表
+			cliMainwith, err := xiao.NewCliMainwith(upnode.Address).GetCliMainwith(tx)
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+			if cliMainwith != nil {
+				*cliMainwith.Withable = cliMainwith.Withable.Add(pronum)
+				tx.Save(&cliMainwith)
+			}
+
+		}
+
 	}
 	//更新个人订单总表
 	mymainorder, err := xiao.NewCliMainorder(cliorder.Address).GetCliMainorder(tx)

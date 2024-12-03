@@ -8,6 +8,7 @@ import (
 	xiaoReq "github.com/flipped-aurora/gin-vue-admin/server/model/xiao/request"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
+	"log"
 	"strconv"
 )
 
@@ -262,106 +263,122 @@ func updateMainwith(tx *gorm.DB, address string, amount decimal.Decimal) error {
 // TeamProfit 团队结算
 // Author [yourname](https://github.com/yourname)
 func (climainprofitService *CliMainprofitService) TeamProfit() (err error) {
-	// 请在这里实现自己的业务逻辑
 	tx := global.GVA_DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			tx.Rollback()
 			err = fmt.Errorf("transaction failed: %v", r)
+			log.Println("Transaction failed:", r) // 记录日志
 		} else if err != nil {
 			tx.Rollback()
 		}
 	}()
-	//查询设置信息
+
+	// 查询设置信息
 	var clisetting []xiao.CliSetvip
 	if err = tx.Find(&clisetting).Error; err != nil {
-		return errors.Join(err, errors.New("查询设置失败"))
+		return errors.New("查询设置失败: " + err.Error())
 	}
-	//查询订单表
+
+	// 查询订单表
 	var orders []*xiao.CliOrder
 	if err = tx.Where("status = ?", "正常").Find(&orders).Error; err != nil {
-		return errors.Join(err, errors.New("查询订单失败"))
+		return errors.New("查询订单失败: " + err.Error())
 	}
+
 	for _, order := range orders {
 		if order.Address == "" || order.Address == "root" {
 			continue
 		}
-		//查询所有上级
+
+		// 查询所有上级
 		uptrees, err := xiao.NewCliTree(order.Address, "").GetAllParentNode(tx)
 		if err != nil {
+			log.Println("查询上级节点失败:", err) // 记录日志
 			continue
 		}
+
 		for _, uptree := range uptrees {
 			mainorder, err := xiao.NewCliMainorder(uptree.Address).GetCliMainorder(tx)
 			if err != nil {
-				tx.Rollback()
-				return err
+				return errors.New("获取主订单失败: " + err.Error())
 			}
+
 			var rates decimal.Decimal
-			var ratestr int
+			var rateIndex int
 			if mainorder.Desc != "备注" {
-				ratestr, err = strconv.Atoi(mainorder.Desc)
+				rateIndex, err = strconv.Atoi(mainorder.Desc)
+				if err != nil {
+					log.Println("转换备注为整数失败:", err) // 记录日志
+					continue
+				}
 			}
 
 			for i := 0; i < len(clisetting)-1; i++ {
-				if mainorder.Amount.Cmp(*clisetting[i].Come) >= 0 && mainorder.Amount.Cmp(*clisetting[i+1].Come) < 0 {
-					// 这里可以添加你的业务逻辑
+				if mainorder.Amount.Cmp(*clisetting[i].Come) >= 0 && mainorder.Amount.Cmp(*clisetting[i+1].Come) < 0 && mainorder.Descnum.Cmp(decimal.NewFromInt(1000)) >= 0 && rates.IsZero() {
 					fmt.Printf("订单ID: %d, 金额: %s, 符合设置项 %d 的条件\n", mainorder.ID, mainorder.Amount.String(), i+1)
 					rates = *clisetting[i].Rate
-					//计算团队收益
+					break
 				}
-
 			}
+
 			// 检查最后一个设置项
 			if mainorder.Amount.Cmp(*clisetting[len(clisetting)-1].Come) >= 0 {
 				fmt.Printf("订单ID: %d, 金额: %s, 符合设置项 %d 的条件\n", mainorder.ID, mainorder.Amount.String(), len(clisetting))
 				rates = *clisetting[len(clisetting)-1].Rate
 			}
 
-			if ratestr > 0 {
-				rates = *clisetting[ratestr-1].Rate
+			if rateIndex > 0 {
+				rates = *clisetting[rateIndex-1].Rate
 			}
+
 			if rates.IsZero() {
 				continue
 			}
+
 			teamprofit := order.Todaynum.Mul(rates).Div(decimal.NewFromInt(100))
-			//成交收益详情
+
+			// 成交收益详情
 			profit := xiao.CliProfit{
 				Address: uptree.Address,
 				Amount:  &teamprofit,
 				Text:    "团队收益",
 			}
-			tx.Create(&profit)
-			//更新收益总表
+			if err := tx.Create(&profit).Error; err != nil {
+				return errors.New("创建收益记录失败: " + err.Error())
+			}
+
+			// 更新收益总表
 			cliMainprofit, err := xiao.NewCliMainprofit(uptree.Address).GetCliMainprofitAddress(tx)
 			if err != nil {
-				tx.Rollback()
-				return errors.Join(err, errors.New("查询收益总表失败"))
+				return errors.New("查询收益总表失败: " + err.Error())
 			}
 
 			*cliMainprofit.Team = cliMainprofit.Team.Add(teamprofit)
 			*cliMainprofit.Amount = cliMainprofit.Amount.Add(teamprofit)
-			tx.Save(&cliMainprofit)
+			if err := tx.Save(&cliMainprofit).Error; err != nil {
+				return errors.New("更新收益总表失败: " + err.Error())
+			}
 
-			//更新提币总表
+			// 更新提币总表
 			cliMainwith, err := xiao.NewCliMainwith(uptree.Address).GetCliMainwith(tx)
 			if err != nil {
-				tx.Rollback()
-				return errors.Join(err, errors.New("查询提币总表失败"))
+				return errors.New("查询提币总表失败: " + err.Error())
 			}
 			if cliMainwith != nil {
 				*cliMainwith.Withable = cliMainwith.Withable.Add(teamprofit)
-				tx.Save(&cliMainwith)
+				if err := tx.Save(&cliMainwith).Error; err != nil {
+					return errors.New("更新提币总表失败: " + err.Error())
+				}
 			}
 		}
+	}
 
+	if err := tx.Commit().Error; err != nil {
+		return errors.New("提交事务失败: " + err.Error())
 	}
-	err = tx.Commit().Error
-	if err != nil {
-		tx.Rollback()
-		return errors.Join(err, errors.New("提交事务失败"))
-	}
-	return err
+
+	return nil
 }
 
 // 假设的计算团队收益的函数

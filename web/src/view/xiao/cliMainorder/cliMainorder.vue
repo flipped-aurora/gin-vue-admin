@@ -65,6 +65,7 @@
           <el-table-column sortable align="left" label="团队订单" prop="num" width="120" />
           <el-table-column sortable align="left" label="团队业绩" prop="amount" width="120" />
           <el-table-column align="left" label="文本备注" prop="desc" width="120" />
+          <el-table-column sortable align="left" label="啪点设置" prop="padian" width="120" />
           <el-table-column align="left" label="个人业绩" prop="descnum" width="120" />
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
@@ -110,6 +111,9 @@
             <el-form-item label="文本备注:"  prop="desc" >
               <el-input v-model="formData.desc" :clearable="true"  placeholder="请输入文本备注" />
             </el-form-item>
+            <el-form-item label="啪点设置:"  prop="padian" >
+              <el-input v-model="formData.padian" :clearable="true"  placeholder="请输入啪点设置" />
+            </el-form-item>
             <el-form-item label="个人业绩:"  prop="descnum" >
               <el-input-number v-model="formData.descnum"  style="width:100%" :precision="2" :clearable="true"  />
             </el-form-item>
@@ -129,6 +133,9 @@
                     </el-descriptions-item>
                     <el-descriptions-item label="文本备注">
                         {{ detailFrom.desc }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="啪点设置">
+                        {{ detailFrom.padian }}
                     </el-descriptions-item>
                     <el-descriptions-item label="个人业绩">
                         {{ detailFrom.descnum }}
@@ -175,6 +182,7 @@ const formData = ref({
             num: undefined,
             amount: 0,
             desc: '',
+            padian: 0,
             descnum: 0,
         })
 

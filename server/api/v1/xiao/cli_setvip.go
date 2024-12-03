@@ -161,7 +161,11 @@ func (clisetvipApi *CliSetvipApi) GetCliSetvipList(c *gin.Context) {
 func (clisetvipApi *CliSetvipApi) GetCliSetvipPublic(c *gin.Context) {
 	// 此接口不需要鉴权
 	// 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-	clisetvipService.GetCliSetvipPublic()
+	err := clisetvipService.GetCliSetvipPublic()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		return
+	}
 	response.OkWithDetailed(gin.H{
 		"info": "不需要鉴权的团队设置接口信息",
 	}, "获取成功", c)

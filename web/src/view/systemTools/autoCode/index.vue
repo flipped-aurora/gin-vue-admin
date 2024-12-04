@@ -684,7 +684,7 @@
         <el-upload
           class="flex items-center"
           :before-upload="importJson"
-          show-file-list="false"
+          :show-file-list="false"
           accept=".json"
         >
           <el-button type="primary" class="mx-2" :disabled="isAdd"

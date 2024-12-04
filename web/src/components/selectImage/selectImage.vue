@@ -23,7 +23,7 @@
       />
     </div>
 
-    <el-drawer v-model="drawer" title="媒体库" size="650px">
+    <el-drawer v-model="drawer" title="媒体库" :size="appStore.drawerSize">
       <warning-bar title="点击“文件名/备注”可以编辑文件名或者备注内容。" />
       <div class="gva-btn-list gap-2">
         <upload-common :image-common="imageCommon" @on-success="getImageList" />
@@ -124,6 +124,9 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { Picture as IconPicture } from '@element-plus/icons-vue'
   import selectComponent from '@/components/selectImage/selectComponent.vue'
+  import { useAppStore } from "@/pinia";
+
+  const appStore = useAppStore()
 
   const imageUrl = ref('')
   const imageCommon = ref('')

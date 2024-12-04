@@ -105,7 +105,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" min-width="250" fixed="right">
+        <el-table-column label="操作" :min-width="appStore.operateMinWith" fixed="right">
           <template #default="scope">
             <el-button
               type="primary"
@@ -145,7 +145,7 @@
     </div>
     <el-drawer
       v-model="addUserDialog"
-      size="60%"
+      :size="appStore.drawerSize"
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
@@ -236,10 +236,13 @@
   import { nextTick, ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import SelectImage from '@/components/selectImage/selectImage.vue'
+  import { useAppStore } from "@/pinia";
 
   defineOptions({
     name: 'User'
   })
+
+  const appStore = useAppStore()
 
   const searchInfo = ref({
     username: '',

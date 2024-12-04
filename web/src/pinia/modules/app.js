@@ -3,6 +3,8 @@ import { ref, watchEffect, reactive } from 'vue'
 import { setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
   const device = ref('')
+  const drawerSize = ref('')
+  const operateMinWith = ref('240')
   const config = reactive({
     weakness: false,
     grey: false,
@@ -43,6 +45,13 @@ export const useAppStore = defineStore('app', () => {
   }
 
   const toggleDevice = (e) => {
+    if(e === 'mobile'){
+      drawerSize.value = '100%'
+      operateMinWith.value = '80'
+    }else {
+      drawerSize.value = '800'
+      operateMinWith.value = '240'
+    }
     device.value = e
   }
 
@@ -125,6 +134,8 @@ export const useAppStore = defineStore('app', () => {
   return {
     theme,
     device,
+    drawerSize,
+    operateMinWith,
     config,
     toggleTheme,
     toggleDevice,

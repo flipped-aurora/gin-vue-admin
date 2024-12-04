@@ -627,7 +627,7 @@ getDataSourceFunc()
           {{- end }}
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+        <el-table-column align="left" label="操作" fixed="right" :min-width="appStore.operateMinWith">
             <template #default="scope">
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
@@ -647,7 +647,7 @@ getDataSourceFunc()
             />
         </div>
     </div>
-    <el-drawer destroy-on-close :size="drawerWith" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
+    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
@@ -732,7 +732,7 @@ getDataSourceFunc()
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close :size="drawerWith" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
+    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
             <el-descriptions :column="1" border>
             {{- range .Fields}}
               {{- if .Desc }}
@@ -845,9 +845,6 @@ defineOptions({
 // 提交按钮loading
 const btnLoading = ref(false)
 const appStore = useAppStore()
-const drawerWith = computed(() => {
-  return appStore.device === 'mobile' ? '100%' : '800px'
-})
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)

@@ -62,7 +62,7 @@
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()
-  const { config, theme, device } = storeToRefs(appStore)
+  const { config, isDark, device } = storeToRefs(appStore)
 
   defineOptions({
     name: 'GvaLayout'
@@ -75,7 +75,7 @@
 
   watchEffect(() => {
     font.color =
-      theme.value === 'dark' ? 'rgba(255,255,255, .15)' : 'rgba(0, 0, 0, .15)'
+      isDark.value ? 'rgba(255,255,255, .15)' : 'rgba(0, 0, 0, .15)'
   })
 
   const router = useRouter()

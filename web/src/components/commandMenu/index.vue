@@ -90,11 +90,11 @@
     const quickArr = [
       {
         label: '亮色主题',
-        func: () => changeMode('light')
+        func: () => changeMode(false)
       },
       {
         label: '暗色主题',
-        func: () => changeMode('dark')
+        func: () => changeMode(true)
       },
       {
         label: '退出登录',
@@ -135,12 +135,8 @@
     dialogVisible.value = false
   }
 
-  const changeMode = (e) => {
-    if (e === null) {
-      appStore.toggleTheme(false)
-      return
-    }
-    appStore.toggleTheme(true)
+  const changeMode = (darkMode) => {
+    appStore.toggleTheme(darkMode)
   }
 
   const close = () => {

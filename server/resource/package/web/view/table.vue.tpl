@@ -647,7 +647,7 @@ getDataSourceFunc()
             />
         </div>
     </div>
-    <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
+    <el-drawer destroy-on-close :size="drawerWith" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
@@ -732,7 +732,7 @@ getDataSourceFunc()
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
+    <el-drawer destroy-on-close :size="drawerWith" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
             <el-descriptions :column="1" border>
             {{- range .Fields}}
               {{- if .Desc }}
@@ -821,6 +821,7 @@ import { ref, reactive } from 'vue'
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
 {{- end }}
+import { useAppStore } from "@/pinia"
 
 {{if .HasExcel -}}
 // 导出组件
@@ -843,6 +844,10 @@ defineOptions({
 
 // 提交按钮loading
 const btnLoading = ref(false)
+const appStore = useAppStore()
+const drawerWith = computed(() => {
+  return appStore.device === 'mobile' ? '100%' : '800px'
+})
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)

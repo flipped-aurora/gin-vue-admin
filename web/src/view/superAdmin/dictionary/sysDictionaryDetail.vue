@@ -45,7 +45,7 @@
           width="120"
         />
 
-        <el-table-column align="left" label="操作" width="180">
+        <el-table-column align="left" label="操作" :min-width="appStore.operateMinWith">
           <template #default="scope">
             <el-button
               type="primary"
@@ -82,7 +82,7 @@
 
     <el-drawer
       v-model="drawerFormVisible"
-      size="30%"
+      :size="appStore.drawerSize"
       :show-close="false"
       :before-close="closeDrawer"
     >
@@ -156,10 +156,13 @@
   import { ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { formatBoolean, formatDate } from '@/utils/format'
+  import { useAppStore } from "@/pinia";
 
   defineOptions({
     name: 'SysDictionaryDetail'
   })
+
+  const appStore = useAppStore()
 
   const props = defineProps({
     sysDictionaryID: {

@@ -25,6 +25,7 @@ func (r *SysAutoHistoryCreate) Create() model.SysAutoCodeHistory {
 		Request:          r.Request,
 		Table:            r.Table,
 		StructName:       r.StructName,
+		Abbreviation:     r.StructName,
 		BusinessDB:       r.BusinessDB,
 		Description:      r.Description,
 		Injections:       r.Injections,

@@ -74,13 +74,13 @@
         {{- if .CheckDataSource }}
 <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
     <template #default="scope">
-        {{if eq .DataSource.Association 2}}
+        {{- if eq .DataSource.Association 2}}
         <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
              {{ "{{ item }}" }}
         </el-tag>
-        {{ else }}
+        {{- else }}
         <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}</span>
-        {{ end }}
+        {{- end }}
     </template>
 </el-table-column>
         {{- else if .DictType}}
@@ -232,7 +232,17 @@
 {{- range .Fields}}
               {{- if .Desc }}
 <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
+{{- if .CheckDataSource }}
+    <template #default="scope">
+        {{- if eq .DataSource.Association 2}}
+        <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}})" :key="key">
+             {{ "{{ item }}" }}
+        </el-tag>
+        {{- else }}
+        <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}}) {{"}}"}}</span>
+        {{- end }}
+    </template>
+                {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
     {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
                     {{- if eq .FieldType "picture" }}
@@ -338,7 +348,7 @@ const {{ $element }}Options = ref([])
 get{{.StructName}}DataSource,
 
 //  获取数据源
-const dataSource = ref([])
+const dataSource = ref({})
 const getDataSourceFunc = async()=>{
   const res = await get{{.StructName}}DataSource()
   if (res.code === 0) {
@@ -537,13 +547,13 @@ getDataSourceFunc()
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
-                {{if eq .DataSource.Association 2}}
+                {{- if eq .DataSource.Association 2}}
                     <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
                         {{ "{{ item }}" }}
                     </el-tag>
-                {{ else }}
+                {{- else }}
                     <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}</span>
-                {{ end }}
+                {{- end }}
          </template>
          </el-table-column>
         {{- else if .DictType}}
@@ -642,7 +652,7 @@ getDataSourceFunc()
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
                 <div>
-                  <el-button type="primary" @click="enterDialog">确 定</el-button>
+                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">确 定</el-button>
                   <el-button @click="closeDialog">取 消</el-button>
                 </div>
               </div>
@@ -727,7 +737,17 @@ getDataSourceFunc()
             {{- range .Fields}}
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
+                    {{- if .CheckDataSource }}
+                   <template #default="scope">
+                       {{- if eq .DataSource.Association 2}}
+                       <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}})" :key="key">
+                            {{ "{{ item }}" }}
+                       </el-tag>
+                       {{- else }}
+                       <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}}) {{"}}"}}</span>
+                       {{- end }}
+                   </template>
+                {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
                     {{- if eq .FieldType "picture" }}
@@ -820,6 +840,9 @@ defineOptions({
 // 按钮权限实例化
     const btnAuth = useBtnAuth()
 {{- end }}
+
+// 提交按钮loading
+const btnLoading = ref(false)
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
@@ -987,7 +1010,6 @@ const onSubmit = () => {
   elSearchFormRef.value?.validate(async(valid) => {
     if (!valid) return
     page.value = 1
-    pageSize.value = 10
     {{- range .Fields}}{{- if eq .FieldType "bool" }}
     if (searchInfo.value.{{.FieldJson}} === ""){
         searchInfo.value.{{.FieldJson}}=null
@@ -1171,8 +1193,9 @@ const closeDialog = () => {
 }
 // 弹窗确定
 const enterDialog = async () => {
+     btnLoading.value = true
      elFormRef.value?.validate( async (valid) => {
-             if (!valid) return
+             if (!valid) return btnLoading.value = false
               let res
               switch (type.value) {
                 case 'create':
@@ -1185,6 +1208,7 @@ const enterDialog = async () => {
                   res = await create{{.StructName}}(formData.value)
                   break
               }
+              btnLoading.value = false
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',

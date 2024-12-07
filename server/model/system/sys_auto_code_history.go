@@ -16,6 +16,7 @@ type SysAutoCodeHistory struct {
 	Package          string             `json:"package" gorm:"column:package;comment:模块名/插件名"`
 	Request          string             `json:"request" gorm:"type:text;column:request;comment:前端传入的结构化信息"`
 	StructName       string             `json:"structName" gorm:"column:struct_name;comment:结构体名称"`
+	Abbreviation     string             `json:"abbreviation" gorm:"column:abbreviation;comment:结构体名称缩写"`
 	BusinessDB       string             `json:"businessDb" gorm:"column:business_db;comment:业务库"`
 	Description      string             `json:"description" gorm:"column:description;comment:Struct中文名称"`
 	Templates        map[string]string  `json:"template" gorm:"serializer:json;type:text;column:templates;comment:模板信息"`

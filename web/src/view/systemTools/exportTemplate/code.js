@@ -1,5 +1,5 @@
 export const getCode = (templateID) => {
-    return `<template>
+  return `<template>
   <!-- 导出组件 -->
   <ExportExcel templateId="${templateID}" :condition="condition" :limit="limit" :offset="offset" :order="order" />
 

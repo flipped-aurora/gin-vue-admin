@@ -226,7 +226,7 @@ getDataSourceFunc()
       {{- end }}
       {{- end }}
         <el-form-item>
-          <el-button type="primary" @click="save">保存</el-button>
+          <el-button :loading="btnLoading" type="primary" @click="save">保存</el-button>
           <el-button type="primary" @click="back">返回</el-button>
         </el-form-item>
       </el-form>
@@ -276,6 +276,9 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 
 const route = useRoute()
 const router = useRouter()
+
+// 提交按钮loading
+const btnLoading = ref(false)
 
 const type = ref('')
     {{- range $index, $element := .DictTypes}}
@@ -369,8 +372,9 @@ const init = async () => {
 init()
 // 保存按钮
 const save = async() => {
+      btnLoading.value = true
       elFormRef.value?.validate( async (valid) => {
-         if (!valid) return
+         if (!valid) return btnLoading.value = false
             let res
            switch (type.value) {
              case 'create':
@@ -383,6 +387,7 @@ const save = async() => {
                res = await create{{.StructName}}(formData.value)
                break
            }
+           btnLoading.value = false
            if (res.code === 0) {
              ElMessage({
                type: 'success',

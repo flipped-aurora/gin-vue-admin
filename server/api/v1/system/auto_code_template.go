@@ -82,7 +82,7 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	}
 }
 
-// Create
+// AddFunc
 // @Tags      AddFunc
 // @Summary   增加方法
 // @Security  ApiKeyAuth

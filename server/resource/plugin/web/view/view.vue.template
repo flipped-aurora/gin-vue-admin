@@ -19,7 +19,7 @@
 </el-form-item>
            {{- else if .DictType}}
 <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-    <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+    <el-select {{if eq .FieldType "array"}}multiple {{end}}v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
     </el-select>
 </el-form-item>
@@ -37,13 +37,7 @@
 —
 <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
            {{- else}}
-             {{- if .DictType}}
-<el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
-    <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-</el-select>
-                    {{- else}}
 <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
-                    {{- end }}
           {{- end}}
         {{- else if eq .FieldType "time.Time"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
@@ -86,7 +80,11 @@
         {{- else if .DictType}}
 <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
     <template #default="scope">
+    {{if eq .FieldType "array"}}
+    <el-tag class="mr-1" v-for="item in scope.row.{{.FieldJson}}" :key="item"> {{"{{"}} filterDict(item,{{.DictType}}Options) {{"}}"}}</el-tag>
+    {{- else }}
     {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+    {{end}}
     </template>
 </el-table-column>
         {{- else if eq .FieldType "bool" }}
@@ -184,7 +182,13 @@
     {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
           {{- end }}
            {{- if eq .FieldType "array" }}
+             {{- if .DictType}}
+               <el-select multiple v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+                   <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+               </el-select>
+            {{- else }}
     <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
+           {{- end }}
            {{- end }}
           {{- if eq .FieldType "int" }}
     <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
@@ -291,7 +295,7 @@ const {{ $element }}Options = ref([])
 {{.FieldJson}}: '',
             {{- end }}
             {{- if eq .FieldType "int" }}
-{{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+{{.FieldJson}}: {{- if .DataSource}} undefined{{ else }} 0{{- end }},
             {{- end }}
             {{- if eq .FieldType "time.Time" }}
 {{.FieldJson}}: new Date(),
@@ -398,7 +402,7 @@ getDataSourceFunc()
             </el-form-item>
            {{- else if .DictType}}
            <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+            <el-select {{if eq .FieldType "array"}} multiple {{end}}v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
             </el-select>
             </el-form-item>
@@ -416,13 +420,7 @@ getDataSourceFunc()
             —
             <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
            {{- else}}
-             {{- if .DictType}}
-              <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
-               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-             </el-select>
-                    {{- else}}
              <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
-                    {{- end }}
           {{- end}}
         {{- else if eq .FieldType "time.Time"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
@@ -464,7 +462,7 @@ getDataSourceFunc()
                       </el-form-item>
                      {{- else if .DictType}}
                      <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+                      <el-select {{if eq .FieldType "array"}}multiple {{end}}v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
                         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
                       </el-select>
                       </el-form-item>
@@ -476,13 +474,7 @@ getDataSourceFunc()
                       —
                       <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
                      {{- else}}
-                       {{- if .DictType}}
-                        <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
-                         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-                       </el-select>
-                              {{- else}}
                        <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
-                              {{- end }}
                     {{- end}}
                   {{- else if eq .FieldType "time.Time"}}
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
@@ -561,7 +553,11 @@ getDataSourceFunc()
         {{- else if .DictType}}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
-            {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+                {{if eq .FieldType "array"}}
+                <el-tag class="mr-1" v-for="item in scope.row.{{.FieldJson}}" :key="item"> {{"{{"}} filterDict(item,{{.DictType}}Options) {{"}}"}}</el-tag>
+                {{- else }}
+                {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+                {{end}}
             </template>
         </el-table-column>
         {{- else if eq .FieldType "bool" }}
@@ -706,7 +702,13 @@ getDataSourceFunc()
               {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
           {{- end }}
            {{- if eq .FieldType "array" }}
+             {{- if .DictType}}
+               <el-select multiple v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+                 <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+               </el-select>
+             {{- else }}
               <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
+              {{- end }}
            {{- end }}
           {{- if eq .FieldType "int" }}
               <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
@@ -781,6 +783,14 @@ getDataSourceFunc()
                        <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}}) {{"}}"}}</span>
                        {{- end }}
                    </template>
+                 {{- else if .DictType}}
+                    <template #default="scope">
+                        {{if eq .FieldType "array"}}
+                        <el-tag class="mr-1" v-for="item in detailFrom.{{.FieldJson}}" :key="item"> {{"{{"}} filterDict(item,{{.DictType}}Options) {{"}}"}}</el-tag>
+                        {{- else }}
+                        {{"{{"}} filterDict(detailFrom.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+                        {{end}}
+                    </template>
                 {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
@@ -901,7 +911,7 @@ const formData = ref({
             {{.FieldJson}}: '',
             {{- end }}
             {{- if eq .FieldType "int" }}
-            {{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+            {{.FieldJson}}: {{- if .DataSource}} undefined{{ else }} 0{{- end }},
             {{- end }}
             {{- if eq .FieldType "time.Time" }}
             {{.FieldJson}}: new Date(),
@@ -1224,7 +1234,7 @@ const closeDialog = () => {
         {{.FieldJson}}: '',
         {{- end }}
         {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if or .DictType .DataSource }} undefined{{ else }} 0{{- end }},
+        {{.FieldJson}}: {{- if .DataSource }} undefined{{ else }} 0{{- end }},
         {{- end }}
         {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),

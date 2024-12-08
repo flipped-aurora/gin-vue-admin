@@ -13,7 +13,7 @@
           {{- end }}
           {{- if eq .FieldType "string" }}
           {{- if .DictType}}
-    <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+    <el-select {{if eq .FieldType "array"}}multiple {{end}}v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
     </el-select>
           {{- else }}
@@ -95,7 +95,7 @@ const {{ $element }}Options = ref([])
 {{.FieldJson}}: '',
             {{- end }}
             {{- if eq .FieldType "int" }}
-{{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+{{.FieldJson}}: {{- if or .DataSource}} undefined{{ else }} 0{{- end }},
             {{- end }}
             {{- if eq .FieldType "time.Time" }}
 {{.FieldJson}}: new Date(),
@@ -192,7 +192,7 @@ getDataSourceFunc()
       {{- end }}
       {{- if eq .FieldType "string" }}
       {{- if .DictType}}
-           <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+           <el-select {{if eq .FieldType "array"}}multiple {{end}}v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
            </el-select>
       {{- else }}
@@ -343,7 +343,7 @@ const formData = ref({
             {{.FieldJson}}: '',
             {{- end }}
             {{- if eq .FieldType "int" }}
-            {{.FieldJson}}: {{- if or .DictType .DataSource }} undefined{{ else }} 0{{- end }},
+            {{.FieldJson}}: {{- if or .DataSource }} undefined{{ else }} 0{{- end }},
             {{- end }}
             {{- if eq .FieldType "time.Time" }}
             {{.FieldJson}}: new Date(),

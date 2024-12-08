@@ -15,6 +15,7 @@ type InitDB struct {
 	Password      string `json:"password"`                  // 数据库密码
 	DBName        string `json:"dbName" binding:"required"` // 数据库名
 	DBPath        string `json:"dbPath"`                    // sqlite数据库文件路径
+	Template      string `json:"template"`                  // postgresql指定template
 }
 
 // MysqlEmptyDsn msyql 空数据库 建库链接

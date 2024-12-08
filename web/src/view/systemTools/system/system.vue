@@ -310,8 +310,8 @@
           <el-form-item label="字符长度">
             <el-input-number
               v-model="config.captcha['key-long']"
-              min="4"
-              max="6"
+              :min="4"
+              :max="6"
             />
           </el-form-item>
           <el-form-item label="图片宽度">

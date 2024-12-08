@@ -72,7 +72,7 @@
           min-width="360"
           prop="component"
         />
-        <el-table-column align="left" fixed="right" label="操作" width="300">
+        <el-table-column align="left" fixed="right" label="操作" :min-width="appStore.operateMinWith">
           <template #default="scope">
             <el-button
               type="primary"
@@ -104,7 +104,7 @@
     </div>
     <el-drawer
       v-model="dialogFormVisible"
-      size="60%"
+      :size="appStore.drawerSize"
       :before-close="handleClose"
       :show-close="false"
     >
@@ -423,10 +423,13 @@
   import ComponentsCascader from '@/view/superAdmin/menu/components/components-cascader.vue'
 
   import pathInfo from '@/pathInfo.json'
+  import { useAppStore } from "@/pinia";
 
   defineOptions({
     name: 'Menus'
   })
+
+  const appStore = useAppStore()
 
   const rules = reactive({
     path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],

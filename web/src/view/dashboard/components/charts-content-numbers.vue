@@ -25,8 +25,7 @@
     }
   })
   const dotColor = computed(() => {
-    console.log(appStore.theme)
-    return appStore.theme === 'dark' ? '#333' : '#E5E8EF'
+    return appStore.isDark ? '#333' : '#E5E8EF'
   })
   const graphicFactory = (side) => {
     return {

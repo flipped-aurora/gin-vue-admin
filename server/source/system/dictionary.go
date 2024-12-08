@@ -33,7 +33,7 @@ func (i *initDict) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&sysModel.SysDictionary{})
 }
 
-func (i initDict) InitializerName() string {
+func (i *initDict) InitializerName() string {
 	return sysModel.SysDictionary{}.TableName()
 }
 

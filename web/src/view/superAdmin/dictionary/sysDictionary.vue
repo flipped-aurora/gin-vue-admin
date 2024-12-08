@@ -49,7 +49,7 @@
     </div>
     <el-drawer
       v-model="drawerFormVisible"
-      size="30%"
+      :size="appStore.drawerSize"
       :show-close="false"
       :before-close="closeDrawer"
     >
@@ -120,10 +120,13 @@
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
   import { Edit } from '@element-plus/icons-vue'
+  import { useAppStore } from "@/pinia";
 
   defineOptions({
     name: 'SysDictionary'
   })
+
+  const appStore = useAppStore()
 
   const selectID = ref(0)
 

@@ -17,7 +17,7 @@ func init() {
 	system.RegisterInit(initOrderApi, &initApi{})
 }
 
-func (i initApi) InitializerName() string {
+func (i *initApi) InitializerName() string {
 	return sysModel.SysApi{}.TableName()
 }
 

@@ -68,7 +68,7 @@ func MaheHump(s string) string {
 	return strings.Join(words, "")
 }
 
-// 随机字符串
+// RandomString 随机字符串
 func RandomString(n int) string {
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	b := make([]rune, n)

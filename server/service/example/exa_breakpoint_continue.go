@@ -58,7 +58,7 @@ func (e *FileUploadAndDownloadService) CreateFileChunk(id uint, fileChunkPath st
 func (e *FileUploadAndDownloadService) DeleteFileChunk(fileMd5 string, filePath string) error {
 	var chunks []example.ExaFileChunk
 	var file example.ExaFile
-	err := global.GVA_DB.Where("file_md5 = ? ", fileMd5).First(&file).
+	err := global.GVA_DB.Where("file_md5 = ?", fileMd5).First(&file).
 		Updates(map[string]interface{}{
 			"IsFinish":  true,
 			"file_path": filePath,

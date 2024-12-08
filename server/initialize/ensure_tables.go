@@ -18,7 +18,7 @@ func init() {
 	system.RegisterInit(initOrderEnsureTables, &ensureTables{})
 }
 
-func (ensureTables) InitializerName() string {
+func (e *ensureTables) InitializerName() string {
 	return "ensure_tables_created"
 }
 func (e *ensureTables) InitializeData(ctx context.Context) (next context.Context, err error) {

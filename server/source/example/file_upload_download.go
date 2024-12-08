@@ -33,7 +33,7 @@ func (i *initExaFileMysql) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&example.ExaFileUploadAndDownload{})
 }
 
-func (i initExaFileMysql) InitializerName() string {
+func (i *initExaFileMysql) InitializerName() string {
 	return example.ExaFileUploadAndDownload{}.TableName()
 }
 

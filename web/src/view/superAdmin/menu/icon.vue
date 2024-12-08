@@ -9,7 +9,7 @@
     >
       <template #prefix>
         <el-icon>
-          <component :is="value" />
+          <component v-if="value" :is="value" />
         </el-icon>
       </template>
       <el-option
@@ -21,7 +21,7 @@
       >
         <span class="gva-icon" style="padding: 3px 0 0" :class="item.label">
           <el-icon>
-            <component :is="item.label" />
+            <component v-if="item.label" :is="item.label" />
           </el-icon>
         </span>
         <span style="text-align: left">{{ item.key }}</span>

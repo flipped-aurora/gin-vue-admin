@@ -102,7 +102,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="left" fixed="right" label="操作" width="200">
+        <el-table-column align="left" fixed="right" label="操作" :min-width="appStore.operateMinWith">
           <template #default="scope">
             <el-button
               icon="edit"
@@ -138,7 +138,7 @@
 
     <el-drawer
       v-model="syncApiFlag"
-      size="80%"
+      :size="appStore.drawerSize"
       :before-close="closeSyncDialog"
       :show-close="false"
     >
@@ -341,7 +341,7 @@
 
     <el-drawer
       v-model="dialogFormVisible"
-      size="60%"
+      :size="appStore.drawerSize"
       :before-close="closeDialog"
       :show-close="false"
     >
@@ -420,10 +420,13 @@
   import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
   import ImportExcel from '@/components/exportExcel/importExcel.vue'
   import { butler } from '@/api/autoCode'
+  import { useAppStore } from "@/pinia";
 
   defineOptions({
     name: 'Api'
   })
+
+  const appStore = useAppStore()
 
   const methodFilter = (value) => {
     const target = methodOptions.value.filter((item) => item.value === value)[0]

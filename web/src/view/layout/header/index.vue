@@ -9,7 +9,8 @@
   >
     <div class="flex items-center cursor-pointer flex-1">
       <div
-        class="flex items-center cursor-pointer min-w-48"
+        class="flex items-center cursor-pointer"
+        :class="isMobile ? '' : 'min-w-48'"
         @click="router.push({ path: '/' })"
       >
         <img

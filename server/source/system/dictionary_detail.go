@@ -43,9 +43,7 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	dictKey := (&initDict{}).InitializerName()
-	dicts, ok := ctx.Value(dictKey).([]sysModel.SysDictionary)
-	//dicts, ok := ctx.Value(initDict{}.InitializerName()).([]sysModel.SysDictionary)
+	dicts, ok := ctx.Value(new(initDict).InitializerName()).([]sysModel.SysDictionary)
 	if !ok {
 		return ctx, errors.Wrap(system.ErrMissingDependentContext,
 			fmt.Sprintf("未找到 %s 表初始化数据", sysModel.SysDictionary{}.TableName()))

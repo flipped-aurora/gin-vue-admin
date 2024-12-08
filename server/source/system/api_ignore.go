@@ -17,7 +17,7 @@ func init() {
 	system.RegisterInit(initOrderApiIgnore, &initApiIgnore{})
 }
 
-func (i initApiIgnore) InitializerName() string {
+func (i *initApiIgnore) InitializerName() string {
 	return sysModel.SysIgnoreApi{}.TableName()
 }
 

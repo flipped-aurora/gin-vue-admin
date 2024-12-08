@@ -169,8 +169,8 @@ func (casbinService *CasbinService) AddPolicies(db *gorm.DB, rules [][]string) e
 	return db.Create(&casbinRules).Error
 }
 
-func (CasbinService *CasbinService) FreshCasbin() (err error) {
-	e := CasbinService.Casbin()
+func (casbinService *CasbinService) FreshCasbin() (err error) {
+	e := casbinService.Casbin()
 	err = e.LoadPolicy()
 	return err
 }

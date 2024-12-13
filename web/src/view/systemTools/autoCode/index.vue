@@ -1326,8 +1326,8 @@
       const tbHump = toHump(dbform.value.tableName)
       form.value.structName = toUpperCase(tbHump)
       form.value.tableName = dbform.value.tableName
-      form.value.packageName = tbHump
-      form.value.abbreviation = tbHump
+      form.value.packageName = toLowerCase(tbHump)
+      form.value.abbreviation = toLowerCase(tbHump)
       form.value.description = tbHump + '表'
       form.value.autoCreateApiToSql = true
       form.value.fields = []

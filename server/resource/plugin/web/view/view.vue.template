@@ -258,6 +258,9 @@
                     {{- if eq .FieldType "pictures" }}
     <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
                     {{- end }}
+                    {{- if eq .FieldType "richtext" }}
+    <RichView v-model="detailFrom.{{.FieldJson}}" />
+                     {{- end }}
                     {{- if eq .FieldType "file" }}
     <div class="fileBtn" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index">
         <el-button type="primary" text bg @click="onDownloadFile(item.url)">
@@ -774,7 +777,6 @@ getDataSourceFunc()
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">
                     {{- if .CheckDataSource }}
-                   <template #default="scope">
                        {{- if eq .DataSource.Association 2}}
                        <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}})" :key="key">
                             {{ "{{ item }}" }}
@@ -782,15 +784,12 @@ getDataSourceFunc()
                        {{- else }}
                        <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},detailFrom.{{.FieldJson}}) {{"}}"}}</span>
                        {{- end }}
-                   </template>
                  {{- else if .DictType}}
-                    <template #default="scope">
                         {{if eq .FieldType "array"}}
                         <el-tag class="mr-1" v-for="item in detailFrom.{{.FieldJson}}" :key="item"> {{"{{"}} filterDict(item,{{.DictType}}Options) {{"}}"}}</el-tag>
                         {{- else }}
                         {{"{{"}} filterDict(detailFrom.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
                         {{end}}
-                    </template>
                 {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
@@ -799,6 +798,9 @@ getDataSourceFunc()
                     {{- end }}
                     {{- if eq .FieldType "array" }}
                             <ArrayCtrl v-model="detailFrom.{{ .FieldJson }}"/>
+                    {{- end }}
+                    {{- if eq .FieldType "richtext" }}
+                            <RichView v-model="detailFrom.{{.FieldJson}}" />
                     {{- end }}
                     {{- if eq .FieldType "pictures" }}
                             <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
@@ -845,6 +847,7 @@ import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- if .HasRichText }}
 // 富文本组件
 import RichEdit from '@/components/richtext/rich-edit.vue'
+import RichView from '@/components/richtext/rich-view.vue'
 {{- end }}
 
 {{- if .HasFile }}

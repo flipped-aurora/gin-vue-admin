@@ -790,7 +790,7 @@ getDataSourceFunc()
                         {{- else }}
                         {{"{{"}} filterDict(detailFrom.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
                         {{end}}
-                {{- else if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
+                {{- else if and (ne .FieldType "picture" ) (ne .FieldType "richtext" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
                     {{- if eq .FieldType "picture" }}

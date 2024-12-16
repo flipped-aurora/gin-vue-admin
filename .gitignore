@@ -1,4 +1,3 @@
-.idea/
 /web/node_modules
 /web/dist
 
@@ -33,3 +32,11 @@ server/uploads/
 *.iml
 web/.pnpm-debug.log
 web/pnpm-lock.yaml
+
+# binary files
+*.exe
+
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3

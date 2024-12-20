@@ -19,7 +19,7 @@
 {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
 {{- else }}
 {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
-{{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }}
+{{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}}{{ end }}
 {{- end }}
 
 {{ else }}

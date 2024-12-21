@@ -13,16 +13,9 @@ CONFIG_FILE         = config.yaml
 IMAGE_NAME          = gva
 #镜像地址
 REPOSITORY          = registry.cn-hangzhou.aliyuncs.com/${IMAGE_NAME}
-
-ifeq ($(TAGS_OPT),)
-TAGS_OPT            = latest
-else
-endif
-
-ifeq ($(PLUGIN),)
-PLUGIN            = email
-else
-endif
+#镜像版本
+TAGS_OPT           ?= latest
+PLUGIN             ?= email
 
 #容器环境前后端共同打包
 build: build-web build-server

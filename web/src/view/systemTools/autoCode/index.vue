@@ -18,12 +18,38 @@
           v-model="prompt"
           type="textarea"
           :rows="5"
-          :maxlength="100"
+          :maxlength="2000"
           :placeholder="`现已完全免费\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
           resize="none"
           @focus="handleFocus"
           @blur="handleBlur"
         />
+
+        <div class="flex absolute right-28 bottom-2">
+          <el-tooltip effect="light">
+            <template #content>
+              <div>
+                【完全免费】前往<a
+                  class="text-blue-600"
+                  href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
+                  target="_blank"
+              >插件市场个人中心</a
+              >申请AIPath，填入config.yaml的ai-path属性即可使用。
+              </div>
+            </template>
+            <el-button
+                :disabled="form.onlyTemplate"
+                type="primary"
+                @click="eyeFunc()"
+            >
+              <el-icon size="18">
+                <ai-gva />
+              </el-icon>
+              图片
+            </el-button>
+          </el-tooltip>
+        </div>
+
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip effect="light">
             <template #content>
@@ -784,7 +810,7 @@
     preview,
     getMeta,
     getPackageApi,
-    llmAuto
+    llmAuto, butler, eye
   } from '@/api/autoCode'
   import { getDict } from '@/utils/dictionary'
   import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
@@ -816,6 +842,32 @@
   }
 
   const prompt = ref('')
+
+  const eyeFunc = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64String = e.target.result;
+
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    input.click();
+  }
+
 
   const llmAutoFunc = async (flag) => {
     if (flag && !form.value.structName) {

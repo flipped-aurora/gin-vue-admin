@@ -162,6 +162,17 @@ export const butler = (data) => {
   })
 }
 
+
+export const eye = (data) => {
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    data: { ...data, mode: 'eye' },
+    timeout: 1000 * 60 * 10
+  })
+}
+
+
 export const addFunc = (data) => {
   return service({
     url: '/autoCode/addFunc',

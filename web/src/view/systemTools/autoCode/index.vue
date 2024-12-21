@@ -19,7 +19,7 @@
           type="textarea"
           :rows="5"
           :maxlength="2000"
-          :placeholder="`现已完全免费\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
+          :placeholder="`现已完全免费\n试试复制一张图片然后按下ctrl+v或者commend+v\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
           resize="none"
           @focus="handleFocus"
           @blur="handleBlur"
@@ -45,7 +45,7 @@
               <el-icon size="18">
                 <ai-gva />
               </el-icon>
-              图片
+              识图
             </el-button>
           </el-tooltip>
         </div>
@@ -820,11 +820,13 @@
   import Sortable from 'sortablejs'
 
   const handleFocus = () => {
-    document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('paste', handlePaste);
   }
 
   const handleBlur = () => {
-    document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('paste', handlePaste);
   }
 
   const handleKeydown = (event) => {
@@ -832,6 +834,25 @@
       llmAutoFunc()
     }
   }
+
+  const handlePaste = (event) => {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload =async (e) => {
+          const base64String = e.target.result;
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
   const getOnlyNumber = () => {
     let randomNumber = ''

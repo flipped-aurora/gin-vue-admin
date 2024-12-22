@@ -315,7 +315,13 @@
                 "updateRole": "Update Role",
                 "userLoginRequired": "User login (required)",
                 "userRegistration": "User registration",
-                "tableDataInitFail": "Table data initialization failed"
+                "tableDataInitFail": "Table data initialization failed",
+                "newParameter": "New Parameter",
+                "deleteParameter": "Delete Parameter",
+                "batchDeleteParameters": "Batch Delete Parameters",
+                "updateParameters": "Update Parameters",
+                "getParametersById": "Get Parameters By ID",
+                "getParametersList": "Get Parameters List"
             },
             "group": {
                 "announcement": "Announcement",
@@ -337,7 +343,8 @@
                 "systemService": "System Service",
                 "systemUser": "System User",
                 "tableTemplate": "Table Templates",
-                "templateConfiguration": "Template Configuration"
+                "templateConfiguration": "Template Configuration",
+                "parameterManagement": "Parameter Management"
             }
         },
         "authority": {
@@ -399,7 +406,8 @@
             "website": "Official Website",
             "buttonKey": "Button Key",
             "buttonComment": "Button Comment",
-            "menuID": "Menu ID"
+            "menuID": "Menu ID",
+            "parameterManagement" : "Parameter Management"
         }
     },
     "announcement": {

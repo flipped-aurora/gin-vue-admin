@@ -3,42 +3,42 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button type="primary" icon="plus" @click="goAutoCode(null)">
-          {{ t("general.add") }}
+          {{ t('general.add') }}
         </el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="id" width="60" prop="ID" />
+        <el-table-column align="left" label="ID" width="60" prop="ID" />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.autoCode.structName')"
+          :label="t('view.systemTools.autoCodeAdmin.structName')"
           min-width="150"
           prop="structName"
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.autoCode.structChineseName')"
+          :label="t('view.systemTools.autoCodeAdmin.structDesc')"
           min-width="150"
           prop="description"
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.autoCode.tableName')"
+          :label="t('view.systemTools.exportTemplate.tableName')"
           min-width="150"
           prop="tableName"
         />
         <el-table-column
           align="left"
-          :label="t('autoCodeAdmin.rollBackMark')"
+          :label="t('view.systemTools.autoCodeAdmin.rollBackMark')"
           min-width="150"
           prop="flag"
         >
           <template #default="scope">
             <el-tag v-if="scope.row.flag" type="danger" effect="dark">
-              {{ t("autoCodeAdmin.rolledBack") }}
+              {{ t("view.systemTools.autoCodeAdmin.rolledBack") }}
             </el-tag>
             <el-tag v-else type="success" effect="dark">
-              {{ t("autoCodeAdmin.notRolledBack") }}
+              {{ t("view.systemTools.autoCodeAdmin.notRolledBack") }}
             </el-tag>
           </template>
         </el-table-column>
@@ -49,7 +49,7 @@
             }}
           </template>
         </el-table-column>
-        <el-table-column align="left" :lable="t('general.operations')" min-width="240">
+        <el-table-column align="left" :label="t('general.operations')" min-width="240">
           <template #default="scope">
             <div>
               <el-button
@@ -58,7 +58,10 @@
                 :disabled="scope.row.flag === 1"
                 @click="addFuncBtn(scope.row)"
               >
-                {{ t('view.systemTools.autoPkg.addMethod') }}
+              {{ t('view.systemTools.autoPkg.addMethod') }}
+              </el-button>
+              <el-button type="primary" link @click="goAutoCode(scope.row,1)">
+                {{ t('view.systemTools.autoCodeAdmin.addField') }}
               </el-button>
               <el-button
                 type="primary"
@@ -66,10 +69,10 @@
                 :disabled="scope.row.flag === 1"
                 @click="openDialog(scope.row)"
               >
-              {{ t("autoCodeAdmin.rollBack") }}
+              {{ t("view.systemTools.autoCodeAdmin.rollBack") }}
               </el-button>
               <el-button type="primary" link @click="goAutoCode(scope.row)">
-                {{ t("autoCodeAdmin.reuse") }}
+                {{ t("view.systemTools.autoCodeAdmin.reuse") }}
               </el-button>
               <el-button type="primary" link @click="deleteRow(scope.row)">
                 {{ t("general.delete") }}
@@ -137,6 +140,7 @@
       v-model="funcFlag"
       size="60%"
       :show-close="false"
+      :close-on-click-modal="false"
     >
       <template #header>
         <div class="flex justify-between items-center">
@@ -145,20 +149,22 @@
             <el-button
               type="primary"
               @click="runFunc"
+              :loading="aiLoading"
             >
-              {{ t('view.systemTools.autoPkg.generate') }}
+            {{ t('view.systemTools.autoPkg.generate') }}
             </el-button>
             <el-button
               type="primary"
               @click="closeFunc"
+              :loading="aiLoading"
             >
-              {{ t('general.cancel') }}
+            {{ t('general.cancel') }}
             </el-button>
           </div>
         </div>
       </template>
       <div class="">
-        <el-form label-position="top" :model="autoFunc" label-width="80px">
+        <el-form v-loading="aiLoading" label-position="top" :element-loading-text="t('view.systemTools.autoCodeAdmin.xiaoMiaoIsThinking')" :model="autoFunc" label-width="80px">
           <el-form-item :label="t('view.systemTools.autoPkg.packageName')">
             <el-input v-model="autoFunc.package" :placeholder="t('view.systemTools.autoPkg.enterPackageNameNote')" disabled />
           </el-form-item>
@@ -177,11 +183,58 @@
           <el-form-item :label="t('view.systemTools.abbreviation')">
             <el-input v-model="autoFunc.abbreviation" :placeholder="t('view.systemTools.enterAbbreviation')" disabled />
           </el-form-item>
-          <el-form-item :label="t('view.systemTools.methodDescription')">
-            <el-input v-model="autoFunc.funcDesc" :placeholder="t('view.systemTools.enterMethodDescription')" />
+
+          
+          <el-form-item label="是否AI填充：">
+            <el-switch v-model="autoFunc.isAi" /> <span class="text-sm text-red-600 p-2">{{ t('view.systemTools.autoCodeAdmin.aiWritingNote') }}</span>
           </el-form-item>
-          <el-form-item :label="t('view.systemTools.methodName')">
-            <el-input v-model="autoFunc.funcName" :placeholder="t('view.systemTools.enterMethodName')" />
+          <template v-if="autoFunc.isAi">
+            <el-form-item label="Ai帮写:">
+              <div class="relative w-full">
+                <el-input type="textarea" placeholder="AI帮写功能，输入提示信息，自动生成代码" v-model="autoFunc.prompt" :rows="5" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
+                <el-button @click="aiAddFunc" type="primary" class="absolute right-2 bottom-2"><ai-gva />帮写</el-button>
+              </div>
+            </el-form-item>
+            <el-form-item label="Api方法:">
+              <codemirror
+                v-model="autoFunc.apiFunc"
+                placeholder="Code goes here..."
+                :style="{ height: '300px',width:'100%' }"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions=" [go(), oneDark]"
+              />
+            </el-form-item>
+            <el-form-item label="Server方法:">
+              <codemirror
+                v-model="autoFunc.serverFunc"
+                placeholder="Code goes here..."
+                :style="{ height: '300px',width:'100%' }"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions=" [go(), oneDark]"
+              />
+            </el-form-item>
+            <el-form-item label="前端JSAPI方法:">
+              <codemirror
+                v-model="autoFunc.jsFunc"
+                placeholder="Code goes here..."
+                :style="{ height: '300px',width:'100%' }"
+                :indent-with-tab="true"
+                :tab-size="2"
+                :extensions=" [javascript(), oneDark]"
+              />
+            </el-form-item>
+          </template>
+
+          <el-form-item label="方法介绍：">
+            <div class="flex w-full gap-2">
+              <el-input class="flex-1" v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+              <el-button type="primary" @click="autoComplete"><ai-gva />补全</el-button>
+            </div>
+          </el-form-item>
+          <el-form-item label="方法名：">
+            <el-input @blur="autoFunc.funcName = toUpperCase(autoFunc.funcName)" v-model="autoFunc.funcName" placeholder="请输入方法名" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.method')">
             <el-select v-model="autoFunc.method" :placeholder="t('view.systemTools.selectMethod')">
@@ -194,7 +247,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="是否鉴权：">
-            <el-switch v-model="autoFunc.isAuth" active-text="是" inactive-text="否" /> 
+            <el-switch v-model="autoFunc.isAuth" active-text="是" inactive-text="否" />
           </el-form-item>
           <el-form-item :label="t('menu.routePath')">
             <el-input v-model="autoFunc.router" :placeholder="t('menu.routePath')" @input="autoFunc.router = autoFunc.router.replace(/\//g, '')" />
@@ -207,19 +260,33 @@
 </template>
 
 <script setup>
-import { getSysHistory, rollback, delSysHistory,addFunc } from "@/api/autoCode.js";
+import { getSysHistory, rollback, delSysHistory,addFunc,butler } from "@/api/autoCode.js";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import { formatDate } from "@/utils/format";
-import { useI18n } from 'vue-i18n'; // added by mohamed hassan to support multilanguage
-
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
 import { toUpperCase } from "@/utils/stringFun"
+import  {useAppStore} from "@/pinia";
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from 'highlight.js'
+
+import { Codemirror } from 'vue-codemirror'
+  import { javascript } from '@codemirror/lang-javascript'
+  import { go } from '@codemirror/lang-go'
+  import { oneDark } from '@codemirror/theme-one-dark'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+const { t } = useI18n() // added by mohamed hassan to support multilingual
+
+
+const appStore = useAppStore()
 
 defineOptions({
   name: "AutoCodeAdmin",
 });
+
+const aiLoading = ref(false)
 
 const formData = ref({
   id: undefined,
@@ -237,6 +304,8 @@ const total = ref(0);
 const pageSize = ref(10);
 const tableData = ref([]);
 
+const activeInfo = ref("")
+
 const autoFunc = ref({
   package:"",
   funcName:"",
@@ -249,10 +318,15 @@ const autoFunc = ref({
   method:"",
   funcDesc: "",
   isAuth:false,
+  isAi:false,
+  apiFunc:"",
+  serverFunc:"",
+  jsFunc:"",
 })
 
 const addFuncBtn =  (row) => {
   const req = JSON.parse(row.request)
+  activeInfo.value = row.request
   autoFunc.value.package = req.package
   autoFunc.value.structName = req.structName
   autoFunc.value.packageName = req.packageName
@@ -263,7 +337,12 @@ const addFuncBtn =  (row) => {
   autoFunc.value.method = ""
   autoFunc.value.funcName = ""
   autoFunc.value.router = ""
-  autoFunc.value.funcDesc = t('view.systemTools.enterMethodDescription')
+  autoFunc.value.funcDesc = ""
+  autoFunc.value.isAuth = false
+  autoFunc.value.isAi = false
+  autoFunc.value.apiFunc = ""
+  autoFunc.value.serverFunc = ""
+  autoFunc.value.jsFunc = ""
   funcFlag.value = true;
 };
 
@@ -276,6 +355,30 @@ const closeFunc = () => {
 const runFunc = async () =>{
   // 首字母自动转换为大写
   autoFunc.value.funcName = toUpperCase(autoFunc.value.funcName)
+
+  if (!autoFunc.value.funcName) {
+    ElMessage.error("请输入方法名")
+    return
+  }
+  if (!autoFunc.value.method) {
+    ElMessage.error("请选择方法")
+    return
+  }
+  if (!autoFunc.value.router) {
+    ElMessage.error("请输入路由")
+    return
+  }
+  if (!autoFunc.value.funcDesc) {
+    ElMessage.error("请输入方法介绍")
+    return
+  }
+
+  if (autoFunc.value.isAi){
+    if (!autoFunc.value.apiFunc || !autoFunc.value.serverFunc || !autoFunc.value.jsFunc) {
+      ElMessage.error("请先使用AI帮写完成基础代码，如果生成失败请重新调用")
+      return
+    }
+  }
 
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {
@@ -327,7 +430,7 @@ const deleteRow = async(row) => {
 
 // 打开弹窗
 const openDialog = (row) => {
-  dialogFormTitle.value = t('autoCodeAdmin.rollBack') + row.structName;
+  dialogFormTitle.value = t('autoCodeAdmin.rollBack') + ' ' + row.structName;
   formData.value.id = row.ID;
   dialogFormVisible.value = true;
 };
@@ -353,14 +456,14 @@ const deleteTableCheck = (flag) => {
         closeOnClickModal: false,
         distinguishCancelAndClose: true,
         confirmButtonText: t('general.confirm'),
-      cancelButtonText: t('general.cancel'),
+        cancelButtonText: t('general.cancel'),
         type: "warning",
       }
     )
       .then(() => {
         ElMessageBox.confirm(
           t('view.systemTools.autoPkg.deleteFilesConfirmation'),
-            t('view.systemTools.autoPkg.willDeleteTable'),
+          t('view.systemTools.autoPkg.willDeleteTable'),
           {
             closeOnClickModal: false,
             distinguishCancelAndClose: true,
@@ -386,16 +489,85 @@ const enterDialog = async () => {
   }
 };
 
-const goAutoCode = (row) => {
+const goAutoCode = (row,isAdd) => {
   if (row) {
     router.push({
       name: "autoCodeEdit",
       params: {
         id: row.ID,
       },
+      query: {
+        isAdd: isAdd
+      },
     });
   } else {
     router.push({ name: "autoCode" });
   }
 };
+
+
+const aiAddFunc = async () =>{
+  aiLoading.value = true
+  autoFunc.value.apiFunc = ""
+  autoFunc.value.serverFunc = ""
+  autoFunc.value.jsFunc = ""
+
+  if (!autoFunc.value.prompt) {
+    ElMessage.error("请输入提示信息")
+    return
+  }
+
+  const res = await addFunc({...autoFunc.value,isPreview:true})
+  if (res.code !== 0) {
+    aiLoading.value = false
+    ElMessage.error(res.msg)
+    return
+  }
+
+ const aiRes = await butler({
+    structInfo:activeInfo.value,
+    template:JSON.stringify(res.data),
+    prompt: autoFunc.value.prompt,
+    command: "addFunc"
+  })
+  aiLoading.value = false
+  if (aiRes.code === 0) {
+    try{
+      const aiData = JSON.parse(aiRes.data)
+      autoFunc.value.apiFunc = aiData.api
+      autoFunc.value.serverFunc = aiData.server
+      autoFunc.value.jsFunc = aiData.js
+      autoFunc.value.method = aiData.method
+      autoFunc.value.funcName = aiData.funcName
+      const routerArr = aiData.router.split("/")
+      autoFunc.value.router = routerArr[routerArr.length - 1]
+      autoFunc.value.funcDesc = autoFunc.value.prompt
+    } catch (e) {
+      ElMessage.error("小淼忙碌，请重新调用")
+    }
+  }
+}
+
+const autoComplete = async () =>{
+  aiLoading.value = true
+  const aiRes = await butler({
+    prompt: autoFunc.value.funcDesc,
+    command: "autoCompleteFunc"
+  })
+  aiLoading.value = false
+  if (aiRes.code === 0) {
+    try{
+      const aiData = JSON.parse(aiRes.data)
+      autoFunc.value.method = aiData.method
+      autoFunc.value.funcName = aiData.funcName
+      autoFunc.value.router = aiData.router
+      autoFunc.value.prompt = autoFunc.value.funcDesc
+    } catch (e) {
+      ElMessage.error("小淼开小差了，请重新调用")
+    }
+  }
+}
+
+
+
 </script>

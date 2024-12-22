@@ -339,7 +339,14 @@
         "systemService": "系統服務",
         "systemUser": "系統用戶",
         "tableTemplate": "表格模板",
-        "templateConfiguration": "模板配置"
+        "templateConfiguration": "模板配置",
+        "parameterManagement": "參數管理",
+        "newParameter": "新參數",
+        "deleteParameter": "刪除參數",
+        "batchDeleteParameters": "批量刪除參數",
+        "updateParameters": "更新參數",
+        "getParametersById": "根據ID獲取參數",
+        "getParametersList": "取得參數列表"
       }
     },
     "authority": {
@@ -401,7 +408,8 @@
       "website": "官方網站",
       "buttonKey": "按鈕關鍵key",
       "buttonComment": "按鈕備註",
-      "menuID": "菜單ID"
+      "menuID": "菜單ID",
+      "parameterManagement" : "參數管理"
     }
   },
   "announcement": {

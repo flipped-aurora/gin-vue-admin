@@ -98,11 +98,24 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodeTemplateService.AddFunc(info)
+	var tempMap map[string]string
+	if info.IsPreview {
+		info.Router = "填充router"
+		info.FuncName = "填充funcName"
+		info.Method = "填充method"
+		info.Description = "填充description"
+		tempMap, err = autoCodeTemplateService.GetApiAndServer(info)
+	} else {
+		err = autoCodeTemplateService.AddFunc(info)
+	}
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_auto_code.injectFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("sys_auto_code.injectFail"), c)
 	} else {
+		if info.IsPreview {
+			response.OkWithDetailed(tempMap, global.Translate("sys_auto_code.injectSuccess"), c)
+			return
+		}
 		response.OkWithMessage(global.Translate("sys_auto_code.injectSuccess"), c)
 	}
 }

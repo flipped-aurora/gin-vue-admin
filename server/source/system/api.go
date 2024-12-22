@@ -178,13 +178,13 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.announcement", Method: "GET", Path: "/info/findInfo", Description: "system.api.desc.getAnnouncementByID"},
 		{ApiGroup: "system.api.group.announcement", Method: "GET", Path: "/info/getInfoList", Description: "system.api.desc.getAnnouncementList"},
 
-		{ApiGroup: "参数管理", Method: "POST", Path: "/sysParams/createSysParams", Description: "新建参数"},
-		{ApiGroup: "参数管理", Method: "DELETE", Path: "/sysParams/deleteSysParams", Description: "删除参数"},
-		{ApiGroup: "参数管理", Method: "DELETE", Path: "/sysParams/deleteSysParamsByIds", Description: "批量删除参数"},
-		{ApiGroup: "参数管理", Method: "PUT", Path: "/sysParams/updateSysParams", Description: "更新参数"},
-		{ApiGroup: "参数管理", Method: "GET", Path: "/sysParams/findSysParams", Description: "根据ID获取参数"},
-		{ApiGroup: "参数管理", Method: "GET", Path: "/sysParams/getSysParamsList", Description: "获取参数列表"},
-		{ApiGroup: "参数管理", Method: "GET", Path: "/sysParams/getSysParam", Description: "获取参数列表"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "POST", Path: "/sysParams/createSysParams", Description: "system.api.desc.newParameter"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "DELETE", Path: "/sysParams/deleteSysParams", Description: "system.api.desc.deleteParameter"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "DELETE", Path: "/sysParams/deleteSysParamsByIds", Description: "system.api.desc.batchDeleteParameters"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "PUT", Path: "/sysParams/updateSysParams", Description: "system.api.desc.updateParameters"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "GET", Path: "/sysParams/findSysParams", Description: "system.api.desc.getParametersById"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "GET", Path: "/sysParams/getSysParamsList", Description: "system.api.desc.getParametersList"},
+		{ApiGroup: "system.api.group.parameterManagement", Method: "GET", Path: "/sysParams/getSysParam", Description: "system.api.desc.getParametersList"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+" "+global.Translate("general.tabelDataInitFail"))

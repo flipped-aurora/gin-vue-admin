@@ -1,7 +1,7 @@
 package {{.Package}}
 
 import (
-	{{if .OnlyTemplate}}// {{ end}}"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	{{if .OnlyTemplate}}// {{ end}}"{{.Module}}/middleware"
 	"github.com/gin-gonic/gin"
 )
 

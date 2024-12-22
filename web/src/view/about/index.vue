@@ -82,10 +82,10 @@
                     class="w-8 h-8 rounded-full"
                     :src="item.avatar_url"
                   >
-                  <a
+                  <el-link
                     class=" text-blue-700 ml-2 text-xl  font-bold  font-sans  "
                     style=""
-                  >{{ item.login }}</a>
+                  >{{ item.login }}</el-link>
                 </a>
               </div>
             </div>

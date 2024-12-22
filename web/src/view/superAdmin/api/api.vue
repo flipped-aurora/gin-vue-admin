@@ -114,7 +114,7 @@
         />
         <el-table-column
           align="left"
-          label="id"
+          label="ID"
           min-width="60"
           prop="ID"
           sortable="custom"

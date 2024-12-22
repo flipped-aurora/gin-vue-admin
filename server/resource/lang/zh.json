@@ -319,7 +319,13 @@
                 "updateRole": "更新角色信息",
                 "userLoginRequired": "用户登录(必选)",
                 "userRegistration": "用户注册",
-                "tableDataInitFail": "表数据初始化失败"
+                "tableDataInitFail": "表数据初始化失败",
+                "newParameter": "新建参数",
+                "deleteParameter": "删除参数",
+                "batchDeleteParameters": "批量删除参数",
+                "updateParameters": "更新参数",
+                "getParametersById": "根据ID获取参数",
+                "getParametersList": "获取参数列表"
             },
             "group": {
                 "announcement": "公告",
@@ -341,7 +347,8 @@
                 "systemService": "系统服务",
                 "systemUser": "系统用户",
                 "tableTemplate": "表格模板",
-                "templateConfiguration": "模板配置"
+                "templateConfiguration": "模板配置",
+                "parameterManagement": "参数管理"
             }
         },
         "authority": {
@@ -403,7 +410,8 @@
             "website": "官方网站",
             "buttonKey": "按钮关键key",
             "buttonComment": "按钮备注",
-            "menuID": "菜单ID"
+            "menuID": "菜单ID",
+            "parameterManagement" : "参数管理"
         }
     },
     "announcement": {

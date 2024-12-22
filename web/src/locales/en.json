@@ -75,20 +75,6 @@
     "roleIdError": "Must be a positive integer",
     "": ""
   },
-  "autoCodeAdmin": {
-    "deleteHistoryConfirm": "This operation will delete this history, do you want to continue?",
-    "notRolledBack": "Not Rolled Back",
-    "reuse": "Reuse",
-    "rollBack": "Rollback",
-    "rollBackDeleteTable": "Rollback (Delete Table)",
-    "rollBackWithoutDeleteTable": "Rollback (Without Delete Table)",
-    "rollBackMark": "Rollback mark",
-    "rollbackConfirm": "This operation will delete the automatically created files and api, do you want to continue?",
-    "includeDBTables": " (including database tables!), ",
-    "rollBackContinue": " do you want to continue?",
-    "rollbackSuccess": "Rollback successfully!",
-    "rolledBack": "Rolled back"
-  },
   "error": {
     "message1": "The page has been sucked away by mysterious forces, please contact us to fix it.",
     "message2": "The common problem is that there is no current route for this role, if you are sure you want to use this route, please go to Role Management to assign it.",
@@ -121,7 +107,7 @@
     "modify": "Modify",
     "editSuccess": "Edited successfully!",
     "enable": "Enable",
-    "endData": "End Date",
+    "endDate": "End Date",
     "expand": "Expand",
     "filter": "Filter",
     "hint": "Hint",
@@ -256,7 +242,6 @@
     "simpleWhite": "Light Mode"
   },
   "system": {
-    "": "",
     "envValues": "Environment values",
     "multiLogin": "Multi-login interception",
     "ossType": "Oss Type",
@@ -543,6 +528,23 @@
         "basicPageNote": "If you select Yes for this option, the left menu and top information will not be displayed.",
         "": ""
       },
+      "params": {
+        "paramName": "Parameter Name",
+        "paramKey": "Parameter Key",
+        "paramValue": "Parameter Value",
+        "paramDesc": "Parameter Description",
+        "enterParamName": "Enter Parameter Name",
+        "enterParamKey": "Enter Parameter Key",
+        "enterParamValue": "Enter Parameter Value",
+        "enterParamDesc": "Enter Parameter Description",
+        "instruction": "Instructions",
+        "instructionNote1": "The frontend can ",
+        "instructionNote2": " and then call ",
+        "instructionNote3": " to get the corresponding parameters.",
+        "instructionNote4": "The backend needs to ",
+        "instructionNote5": " then call ",
+        "instructionNote6": " to get the corresponding value."
+      },
       "user": {
         "addUser": "Add User",
         "anotherUserEdit": "There is currently a user who is editing",
@@ -828,7 +830,8 @@
         "cannotStartWithNumberNote": "Cannot start with a number",
         "addSuccess": "Added successfully",
         "deletePackageNote": "This operation only deletes the pkg storage in the database. Please delete the corresponding directory structure of the backend by yourself to keep it consistent with the database!",
-        "": ""
+        "cannotBeChinese": "Input cannot be Chinese.",
+        "cannotStartWithNumber": "Input cannot start with numbers."
       },
       "autoCode": {
         "getAiPath": "Get AI Path",
@@ -837,6 +840,7 @@
         "aiNote1": "【Completely Free】Go to ",
         "aiNote2": "Personal Center of Plugin Market ",
         "aiNote3": "Apply for AIPath and fill in the ai-path property in config.yaml to use it.",
+        "imageRecognition": "Image recognition",
         "actionBar": "Action Bar:",
         "autoAPIDBCreate": "Automatically Create API",
         "autoAPIDBTip": "Note: Register the automatically generated API into the database",
@@ -860,7 +864,8 @@
         "entStructDesc": "Please enter the struct description",
         "entStructName": "Please enter the struct name",
         "errNoFields": "Please fill in at least one field",
-        "errSameFiledName": "There is a field with the same name as the struct",
+        "errSameFieldName": "There is a field with the same name as the struct",
+        "errJsonFieldNameAsTemplate": "There is a field JSON with the same name as the template",
         "errSameStructDescAbbr": "structName and struct abbreviation cannot be the same",
         "existDB": "Click here to create code from an existing database",
         "field": "Field",
@@ -871,6 +876,8 @@
         "fileName": "File Name",
         "fileNameNote": "Default name of the generated file (recommended to be in camel case, starting with a lowercase letter, such as sysXxxXxxx)",
         "generateCode": "Generate Code",
+        "viewCode": "View Code",
+        "previewCode": "Preview Code",
         "moveDown": "Move Down",
         "moveUp": "Move Up",
         "selectDB": "Please select a database",
@@ -879,15 +886,10 @@
         "structAbbreviationNote": "The abbreviation will be used as the parameter object name and route group",
         "structChineseName": "Struct Name",
         "structChineseNameNote": "Description used as automatic API description",
-        "structName": "Struct Name",
         "structNameNote": "First letter automatically converted to uppercase",
         "table": "Table",
         "tableName": "Table Name",
         "tableNameNote": "Specify table name (optional)",
-        "aiContent": "Xiao Qi has a failure probability, open to all users (if it fails, just regenerate it).",
-        "XiaoMiaoDesc": "Xiao Miao can design almost anything, but it requires points. Authorized users automatically get basic points during the testing phase, open source users need to fill out a form to apply.",
-        "XiaoQi": "Xiao Qi",
-        "XiaoMiao": "Xiao Miao",
         "createdFromDB": "Created from Database",
         "businessLibrary": "Business Library",
         "businessLibraryNotice": "Note: You need to configure multiple databases in db-list in advance. If not configured, you need to configure and restart the service before using it. (You can select the corresponding library table here, which can be understood as selecting the table from which library)",
@@ -905,6 +907,8 @@
         "templateChoose": "Choose Template",
         "libraryNote": "Note: You need to configure multiple databases in db-list in advance. If this item is empty, the automated code will be created using the gva main library (global.GVA_DB). If filled in, the code will be created for the specified library (global.MustGetGlobalDBByDBName(dbname))",
         "useGvaNote": "Note: The struct global.Model will automatically include primary key and soft delete related operations",
+        "aiClearDataNote": "AI generation will clear the current data, do you want to continue?",
+        "fillJsonDataNote": "Please fill in the front-end display json properties of the tree structure",
         "groupInfos": {
           "useGvaStructure": "GVA Structure",
           "note1": "Note: Register the automatically generated API into the database",
@@ -1002,6 +1006,25 @@
           "array": "Array"
         }
       },
+      "autoCodeAdmin": {
+        "structName": "Struct Name",
+        "structDesc" : "Structure Description",
+        "deleteHistoryConfirm": "This operation will delete this history, do you want to continue?",
+        "notRolledBack": "Not Rolled Back",
+        "reuse": "Reuse",
+        "rollBack": "Rollback",
+        "rollBackDeleteTable": "Rollback (Delete Table)",
+        "rollBackWithoutDeleteTable": "Rollback (Without Delete Table)",
+        "rollBackMark": "Rollback mark",
+        "rollbackConfirm": "This operation will delete the automatically created files and api, do you want to continue?",
+        "includeDBTables": " (including database tables!), ",
+        "rollBackContinue": " do you want to continue?",
+        "rollbackSuccess": "Rollback successfully!",
+        "rolledBack": "Rolled back",
+        "addField": "Add Field",
+        "xiaoMiaoIsThinking": "Xiao Miao is thinking, please wait...",
+        "aiWritingNote": "Currently, AI writing is unstable. Please pay attention to manually adjust some content after generating the code."
+      },
       "exportTemplate": {
         "syncTableExportFeature": "This function provides synchronous table export function and asynchronous table export function for large data volume. You can choose to customize it.",
         "templateIdentifier": "Template Identifier",
@@ -1032,6 +1055,7 @@
         "database": "Database",
         "gvaLibrary": "GVA Library",
         "templateInfo": "Template Information",
+        "code": "Code",
         "addTo": "Add To",
         "templateName2": "Template Name:",
         "templateNameNote": "Please enter a template name",
@@ -1064,7 +1088,17 @@
         "selectDBAndTable": "Please select the business library and selection table before operating",
         "templateInfoFormatError": "The template information format is incorrect, please check",
         "exportConditionError": "Please fill in the complete export conditions",
-        "completeAssociationError": "Please fill in the complete association"
+        "completeAssociationError": "Please fill in the complete association",
+        "xiaoMiaoIsThinking": "Xiao Miao Is Thinking...",
+        "tableToBeUsed": "Table To Be Used",
+        "selectWhenUSingAi": "Please select when using AI",
+        "aiHelpWriting": "AI Help Writing",
+        "aiNote": "Try to describe the export function you want to do and let AI help you complete it. Before that, please select the business library where the table you want to export is located. If you do not make a selection, the gva library will be used by default.",
+        "helpWrite": "Help Write",
+        "autoComplete": "Autocomplete",
+        "autoGenerateTemplates": "Automatically Generate Templates",
+        "selectTableToExport": "Please select the table you want to export.",
+        "aiAutoCompleteFail": "AI auto-completion failed, and has been adjusted to logical completion"
       },
       "installPlugin": {
         "dragOrClickUpload": "Drag or click to upload",

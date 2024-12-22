@@ -18,8 +18,8 @@
       <el-table :data="tableData">
         <el-table-column
           align="left"
-          label="ID"
-          width="60"
+          label="id"
+          width="120"
           prop="ID"
         />
         <el-table-column
@@ -42,7 +42,7 @@
         />
         <el-table-column
           align="left"
-          :label="t('view.systemTools.autoPkg.description')"
+          :label="t('general.description')"
           min-width="150"
           prop="desc"
         />
@@ -55,7 +55,6 @@
           <template #default="scope">
             <el-button
               icon="delete"
-
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"
@@ -109,7 +108,7 @@
           />
         </el-form-item>
         <el-form-item
-          :label="t('view.systemTools.autoPkg.description')"
+          :label="t('general.description')"
           prop="desc"
         >
           <el-input
@@ -123,7 +122,7 @@
           <span class="text-lg">{{ t('view.systemTools.autoPkg.creatingPackage') }}</span>
           <div>
             <el-button @click="closeDialog">
-              {{ t('general.close') }}
+              {{ t('general.cancel') }}
             </el-button>
             <el-button
               type="primary"
@@ -148,9 +147,9 @@ import {
 import { ref } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
   name: 'AutoPkg',
@@ -173,11 +172,11 @@ const getTemplates = async ()=>{
 
 getTemplates()
 
-const validateNum = (rule, value, callback) => {
+const validateData = (rule, value, callback) => {
   if (/[\u4E00-\u9FA5]/g.test(value)) {
-    callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote')))
+    callback(new Error(t('view.systemTools.autoPkg.cannotBeChinese')))
   } else if ((/^\d+$/.test(value[0]))) {
-    callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote')))
+    callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumber')))
   } else {
     callback()
   }
@@ -186,11 +185,11 @@ const validateNum = (rule, value, callback) => {
 const rules = ref({
   packageName: [
     { required: true, message: t('view.systemTools.autoPkg.enterPackageNameNote'), trigger: 'blur' },
-    { validator: validateNum, trigger: 'blur' }
+    { validator: validateData, trigger: 'blur' }
   ],
   template:[
     { required: true, message: t('view.systemTools.autoPkg.selectTemplateNote'), trigger: 'change' },
-    { validator: validateNum, trigger: 'blur' }
+    { validator: validateData, trigger: 'blur' }
   ]
 })
 

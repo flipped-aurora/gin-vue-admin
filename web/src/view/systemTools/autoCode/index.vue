@@ -1,99 +1,135 @@
 <template>
   <div>
     <warning-bar
-        :title="t('view.systemTools.autoCode.autoCodeNote')"
         href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+        :title="t('view.systemTools.autoCode.autoCodeNote')"
     />
-    <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdByAI') }}<a class="text-blue-600 text-sm ml-4" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">{{ t('view.systemTools.autoCode.getAiPath') }}</a></div>
+    <div class="gva-search-box" v-if="!isAdd">
+      <div class="text-lg mb-2 text-gray-600">
+        {{ t('view.systemTools.autoCode.createdByAI') }}<a 
+          class="text-blue-600 text-sm ml-4" 
+          href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" 
+          target="_blank">{{ t('view.systemTools.autoCode.getAiPath') }}</a
+        >
+      </div>
       <div class="relative">
-        <el-input v-model="prompt"
-                  type="textarea"
-                  :rows="5"
-                  :maxlength="100"
-                  :placeholder="t('view.systemTools.autoCode.aiCodeNote')"
-                  resize="none"
-                  @focus="handleFocus"
-                  @blur="handleBlur"/>
-        <div class="flex absolute right-2 bottom-2">
-          <el-tooltip
-            effect="light"
-          >
+        <el-input 
+          v-model="prompt"
+          type="textarea"
+          :rows="5"
+          :maxlength="100"
+          :placeholder="t('view.systemTools.autoCode.aiCodeNote')"
+          resize="none"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+
+        <div class="flex absolute right-28 bottom-2" style="right: 9rem !important">
+          <el-tooltip effect="light">
             <template #content>
-              <div>{{ t('view.systemTools.autoCode.aiNote1') }}<a class="text-blue-600" href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" target="_blank">{{ t('view.systemTools.autoCode.aiNote2') }}</a>{{ t('view.systemTools.autoCode.aiNote3') }}</div>
+              <div>
+                {{ t('view.systemTools.autoCode.aiNote1') }}<a
+                  class="text-blue-600"
+                  href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
+                  target="_blank"
+              >{{ t('view.systemTools.autoCode.aiNote2') }}</a
+              >{{ t('view.systemTools.autoCode.aiNote3') }}
+              </div>
             </template>
-            <el-button type="primary" @click="llmAutoFunc()">
+            <el-button
+                :disabled="form.onlyTemplate"
+                type="primary"
+                @click="eyeFunc()"
+            >
               <el-icon size="18">
                 <ai-gva />
-              </el-icon> {{ t('view.systemTools.autoCode.generate') }}
+              </el-icon>
+              {{ t('view.systemTools.autoCode.imageRecognition') }}
+            </el-button>
+          </el-tooltip>
+        </div>
+
+        <div class="flex absolute right-2 bottom-2">
+          <el-tooltip effect="light">
+            <template #content>
+              <div>
+                {{ t('view.systemTools.autoCode.aiNote1') }}<a 
+                  class="text-blue-600" 
+                  href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center" 
+                  target="_blank"
+              >{{ t('view.systemTools.autoCode.aiNote2') }}</a
+              >{{ t('view.systemTools.autoCode.aiNote3') }}
+              </div>
+            </template>
+            <el-button 
+              :disabled="form.onlyTemplate" 
+              type="primary" 
+              @click="llmAutoFunc()"
+            >
+              <el-icon size="18">
+                <ai-gva />
+              </el-icon> 
+              {{ t('view.systemTools.autoCode.generate') }}
             </el-button>
           </el-tooltip>
         </div>
       </div>
-    </div>
+    </div>   
     <!-- 从数据库直接获取字段 -->
-    <div class="gva-search-box">
+    <div class="gva-search-box"  v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdFromDB') }}</div>
       <el-form
           ref="getTableForm"
           :inline="true"
           :model="dbform"
-          label-width="140px"
+          label-width="160px"
       >
         <el-row class="w-full">
           <el-col :span="6">
-            <el-form-item
-                :label="t('view.systemTools.autoCode.businessLibrary')"
-                class="w-full"
-                prop="selectDBtype"
-            >
+            <el-form-item :label="t('view.systemTools.autoCode.businessLibrary')" prop="selectDBtype" class="w-full">
               <template #label>
                 <el-tooltip
                     :content="t('view.systemTools.autoCode.businessLibraryNotice')"
-                    effect="light"
                     placement="bottom"
+                    effect="light"
                 >
-                  <div> {{ t('view.systemTools.autoCode.businessLibrary') }}
-                    <el-icon>
-                      <QuestionFilled/>
-                    </el-icon>
+                  <div> 
+                    {{ t('view.systemTools.autoCode.businessLibrary') }}<el-icon><QuestionFilled /></el-icon>
                   </div>
                 </el-tooltip>
               </template>
               <el-select
                   v-model="dbform.businessDB"
-                  :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
-                  class="w-full"
                   clearable
+                  :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
                   @change="getDbFunc"
+                  class="w-full"
               >
                 <el-option
                     v-for="item in dbList"
                     :key="item.aliasName"
-                    :disabled="item.disable"
-                    :label="item.aliasName"
                     :value="item.aliasName"
+                    :label="item.aliasName"
+                    :disabled="item.disable"
                 >
                   <div>
                     <span>{{ item.aliasName }}</span>
-                    <span style="float:right;color:#8492a6;font-size:13px">{{ item.dbName }}</span>
+                    <span 
+                      style="float:right;color:#8492a6;font-size:13px"
+                      >{{ item.dbName }}</span>
                   </div>
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item
-                :label="t('view.systemTools.autoCode.dbName')"
-                class="w-full"
-                prop="structName"
-            >
+            <el-form-item :label="t('view.systemTools.autoCode.dbName')" prop="structName"  class="w-full">
               <el-select
                   v-model="dbform.dbName"
-                  :placeholder="t('view.systemTools.autoCode.selectDB')"
-                  class="w-full"
                   clearable
                   filterable
+                  :placeholder="t('view.systemTools.autoCode.selectDB')"
+                  class="w-full"
                   @change="getTableFunc"
               >
                 <el-option
@@ -106,17 +142,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item
-                :label="t('view.systemTools.autoCode.tableName')"
-                class="w-full"
-                prop="structName"
-            >
+            <el-form-item :label="t('view.systemTools.autoCode.tableName')" prop="structName" class="w-full">
               <el-select
                   v-model="dbform.tableName"
-                  :disabled="!dbform.dbName"
-                  :placeholder="t('view.systemTools.autoCode.selectTable')"
+                  :disabled="!dbform.dbName" 
                   class="w-full"
                   filterable
+                  :placeholder="t('view.systemTools.autoCode.selectTable')"
               >
                 <el-option
                     v-for="item in tableOptions"
@@ -128,14 +160,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item
-                class="w-full"
-            >
+            <el-form-item class="w-full">
               <div class="flex justify-end w-full">
-                <el-button
-                    type="primary"
-                    @click="getColumnFunc"
-                >
+                <el-button type="primary" @click="getColumnFunc">
                   {{ t('view.systemTools.autoCode.selectTableBtn') }}
                 </el-button>
               </div>
@@ -148,14 +175,15 @@
       <!-- 初始版本自动化代码工具 -->
       <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.automationStructure') }}</div>
       <el-form
-          ref="autoCodeForm"
-          :inline="true"
-          :model="form"
-          :rules="rules"
-          label-width="170px"
+          :disabled="isAdd"
+        ref="autoCodeForm"
+        :rules="rules"
+        :model="form"
+        label-width="180px"
+        :inline="true"
       >
         <el-row class="w-full">
-          <el-col :span="6">
+          <el-col :span="7">
             <el-form-item
                 :label="t('view.systemTools.autoCode.structureName')"
                 class="w-full"
@@ -166,7 +194,7 @@
                   v-model="form.structName"
                   :placeholder="t('view.systemTools.autoCode.capitalizeFirstLetterAutomatically')"
               />
-                <el-button type="primary" @click="llmAutoFunc(true)">
+                <el-button :disabled="form.onlyTemplate" type="primary" @click="llmAutoFunc(true)">
                   <el-icon size="18">
                     <ai-gva />
                   </el-icon> {{ t('view.systemTools.autoCode.generate') }}
@@ -210,7 +238,7 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-form-item
                 :label=" t('view.systemTools.autoCode.tableName')"
                 class="w-full"
@@ -224,7 +252,7 @@
           </el-col>
         </el-row>
         <el-row class="w-full">
-          <el-col :span="6">
+          <el-col :span="7">
             <el-form-item
                 class="w-full"
                 prop="packageName"
@@ -472,6 +500,7 @@
             row-key="fieldName"
         >
           <el-table-column
+              v-if="!isAdd"
             fixed="left"
             align="left"
             type="index"
@@ -498,7 +527,7 @@
             width="120"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.primaryKey" />
+              <el-checkbox :disabled="row.disabled" v-model="row.primaryKey" />
             </template>
           </el-table-column>
           <el-table-column
@@ -509,7 +538,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldName" />
+              <el-input :disabled="row.disabled" v-model="row.fieldName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -519,7 +548,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldDesc" />
+              <el-input :disabled="row.disabled" v-model="row.fieldDesc" />
             </template>
           </el-table-column>
           <el-table-column
@@ -529,7 +558,7 @@
             width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.defaultValue" />
+              <el-input :disabled="row.disabled" v-model="row.defaultValue" />
             </template>
           </el-table-column>
           <el-table-column
@@ -539,7 +568,7 @@
             :label="t('view.systemTools.autoCode.required')"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.require" />
+              <el-checkbox :disabled="row.disabled" v-model="row.require" />
             </template>
           </el-table-column>
           <el-table-column
@@ -548,7 +577,7 @@
             :label="t('view.superAdmin.menu.sort')"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.sort" />
+              <el-checkbox :disabled="row.disabled" v-model="row.sort" />
             </template>
           </el-table-column>
           <el-table-column
@@ -558,7 +587,7 @@
             :label="t('view.systemTools.autoCode.createEdit')"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.form" />
+              <el-checkbox :disabled="row.disabled" v-model="row.form" />
             </template>
           </el-table-column>
           <el-table-column
@@ -568,7 +597,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldName"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.table" />
             </template>
           </el-table-column>
           <el-table-column
@@ -578,64 +607,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldDesc"/>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="left"
-              :label="t('view.systemTools.autoCode.defaultValue')"
-              prop="defaultValue"
-              width="160"
-          >
-            <template #default="{row}">
-              <el-input v-model="row.defaultValue"/>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="left"
-              :label="t('view.systemTools.autoCode.required')"
-              prop="require"
-              width="100"
-          >
-            <template #default="{row}">
-              <el-checkbox v-model="row.require"/>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="left"
-              :label="t('view.superAdmin.menu.sort')"
-              prop="sort"
-          >
-            <template #default="{row}">
-              <el-checkbox v-model="row.sort"/>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="left"
-              :label="t('view.systemTools.autoCode.createEdit')"
-              prop="form"
-              width="100"
-          >
-            <template #default="{row}">
-              <el-checkbox v-model="row.form"/>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="left"
-              :label="t('view.systemTools.autoCode.table')"
-              prop="table"
-          >
-            <template #default="{row}">
-              <el-checkbox v-model="row.table"/>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="left"
-              :label="t('view.dictionary.sysDictionary.details')"
-              prop="desc"
-          >
-            <template #default="{row}">
-              <el-checkbox v-model="row.desc"/>
+              <el-checkbox :disabled="row.disabled" v-model="row.desc" />
             </template>
           </el-table-column>
           <el-table-column
@@ -643,6 +615,7 @@
               prop="excel"
               width="120"
               :label="t('view.systemTools.autoCode.importExport')"
+              v-if="!isAdd"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.excel"/>
@@ -655,7 +628,7 @@
               width="160px"
           >
             <template #default="{row}">
-              <el-input v-model="row.fieldJson"/>
+              <el-input :disabled="row.disabled" v-model="row.fieldJson" />
             </template>
           </el-table-column>
           <el-table-column
@@ -666,10 +639,11 @@
           >
             <template #default="{row}">
               <el-select
-                  v-model="row.fieldType"
-                  clearable
-                  :placeholder="t('view.systemTools.autoCode.selectFieldType')"
-                  style="width:100%"
+                v-model="row.fieldType"
+                style="width:100%"
+                :placeholder="t('view.systemTools.autoCode.selectFieldType')"
+                :disabled="row.disabled"
+                clearable
               >
                 <el-option
                     v-for="item in typeOptions"
@@ -688,10 +662,11 @@
           >
             <template #default="{row}">
               <el-select
-                  v-model="row.fieldIndexType"
-                  clearable
-                  :placeholder="t('view.systemTools.autoCode.selectIndexType')"
-                  style="width:100%"
+                v-model="row.fieldIndexType"
+                style="width:100%"
+                :placeholder="t('view.systemTools.autoCode.selectIndexType')"
+                :disabled="row.disabled"
+                clearable
               >
                 <el-option
                     v-for="item in typeIndexOptions"
@@ -709,7 +684,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.dataTypeLong"/>
+              <el-input :disabled="row.disabled" v-model="row.dataTypeLong" />
             </template>
           </el-table-column>
           <el-table-column
@@ -719,7 +694,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.columnName"/>
+              <el-input :disabled="row.disabled" v-model="row.columnName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -729,7 +704,7 @@
               width="160"
           >
             <template #default="{row}">
-              <el-input v-model="row.comment"/>
+              <el-input :disabled="row.disabled" v-model="row.comment" />
             </template>
           </el-table-column>
           <el-table-column
@@ -740,11 +715,11 @@
           >
             <template #default="{row}">
               <el-select
-                  v-model="row.fieldSearchType"
-                  :disabled="row.fieldType!=='json'"
-                  clearable
-                  :placeholder="t('view.systemTools.autoCode.selectSearchCondition')"
-                  style="width:100%"
+                v-model="row.fieldSearchType"
+                style="width:100%"
+                :placeholder="t('view.systemTools.autoCode.selectSearchCondition')"
+                clearable
+                :disabled="row.fieldType!=='json' || row.disabled"
               >
                 <el-option
                     v-for="item in typeSearchOptions"
@@ -767,19 +742,20 @@
           >
             <template #default="scope">
               <el-button
-
-                  icon="edit"
-                  link
-                  type="primary"
-                  @click="editAndAddField(scope.row)"
+                  v-if="!scope.row.disabled"
+                type="primary"
+                link
+                icon="edit"
+                @click="editAndAddField(scope.row)"
               >
                 {{ t('view.systemTools.autoCode.advancedEdit') }}
               </el-button>
               <el-button
-                  icon="delete"
-                  link
-                  type="primary"
-                  @click="deleteField(scope.$index)"
+                  v-if="!scope.row.disabled"
+                type="primary"
+                link
+                icon="delete"
+                @click="deleteField(scope.$index)"
               >
                 {{t('general.delete')}}
               </el-button>
@@ -791,6 +767,7 @@
       <div class="gva-btn-list justify-end mt-4">
         <el-button
             type="primary"
+            :disabled="isAdd"
             @click="exportJson()"
         >
           {{ t('view.systemTools.autoCode.exportJson') }}
@@ -801,31 +778,34 @@
             class="flex items-center"
             show-file-list="false"
         >
-          <el-button class="mx-2" type="primary">{{ t('view.systemTools.autoCode.importJson') }}</el-button>
+          <el-button type="primary" class="mx-2" :disabled="isAdd">{{ t('view.systemTools.autoCode.importJson') }}</el-button>
         </el-upload>
         <el-button
-            type="primary"
-            @click="clearCatch()"
+          type="primary"
+          :disabled="isAdd"
+          @click="clearCatch()"
         >
           {{ t('view.systemTools.autoCode.clearTemp') }}
         </el-button>
         <el-button
-            type="primary"
-            @click="catchData()"
+          type="primary"
+          :disabled="isAdd"
+          @click="catchData()"
         >
           {{ t('view.systemTools.autoCode.temporary') }}
         </el-button>
         <el-button
-            type="primary"
-            @click="enterForm(true)"
-        >
-          {{ t('view.systemTools.autoCode.codePreview') }}
-        </el-button>
-        <el-button
-            type="primary"
-            @click="enterForm(false)"
+          type="primary"
+          :disabled="isAdd"
+          @click="enterForm(false)"
         >
           {{ t('view.systemTools.autoCode.generateCode') }}
+        </el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(true)"
+        >
+          {{isAdd? t('view.systemTools.autoCode.viewCode')  : t('view.systemTools.autoCode.previewCode') }}
         </el-button>
       </div>
     </div>
@@ -887,50 +867,78 @@
         </div>
       </template>
       <PreviewCodeDialog
-          v-if="previewFlag"
-          ref="previewNode"
-          :preview-code="preViewCode"
+        v-if="previewFlag"
+        :is-add="isAdd"
+        ref="previewNode"
+        :preview-code="preViewCode"
       />
     </el-drawer>
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'AutoCode'
-}
-</script>
-
 <script setup>
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
-import {toUpperCase, toHump, toSQLLine, toLowerCase} from '@/utils/stringFun'
-import {createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi, llmAuto} from '@/api/autoCode'
-import {getDict} from '@/utils/dictionary'
-import {ref, watch, toRaw, onMounted, nextTick} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import {ElMessage, ElMessageBox} from 'element-plus'
-import WarningBar from '@/components/warningBar/warningBar.vue'
-import Sortable from 'sortablejs'
-import {useI18n} from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialog.vue'
+  import {
+    toUpperCase,
+    toHump,
+    toSQLLine,
+    toLowerCase
+  } from '@/utils/stringFun'
+  import {
+    createTemp,
+    getDB,
+    getTable,
+    getColumn,
+    preview,
+    getMeta,
+    getPackageApi,
+    llmAuto, butler, eye
+  } from '@/api/autoCode'
+  import { getDict } from '@/utils/dictionary'
+  import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import WarningBar from '@/components/warningBar/warningBar.vue'
+  import Sortable from 'sortablejs'
+import {useI18n} from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const {t} = useI18n() // added by mohamed hassan to support multilanguage
+const {t} = useI18n() // added by mohamed hassan to support multilingual
 
 const handleFocus = () => {
-  document.addEventListener('keydown', handleKeydown);
-};
-
-const handleBlur = () => {
-  document.removeEventListener('keydown', handleKeydown);
-};
-
-
-const handleKeydown = (event) => {
-  if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-    llmAutoFunc();
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('paste', handlePaste);
   }
-};
+
+  const handleBlur = () => {
+    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('paste', handlePaste);
+  }
+
+  const handleKeydown = (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      llmAutoFunc()
+    }
+  }
+
+  const handlePaste = (event) => {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload =async (e) => {
+          const base64String = e.target.result;
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
 const getOnlyNumber = () => {
   let randomNumber = '';
@@ -942,6 +950,31 @@ const getOnlyNumber = () => {
 
 const prompt = ref("")
 
+const eyeFunc = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64String = e.target.result;
+
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    input.click();
+  }
+
 const llmAutoFunc = async (flag) =>{
   if (flag&&!form.value.structName) {
     ElMessage.error(t('view.systemTools.autoPkg.entStructName'))
@@ -951,7 +984,19 @@ const llmAutoFunc = async (flag) =>{
     ElMessage.error(t('general.enterDescription'))
     return
   }
-  const res = await llmAuto({prompt:flag?t('view.systemTools.autoPkg.structNameIs') + form.value.structName:prompt.value})
+
+  if(form.value.fields.length>0){
+    const res = await ElMessageBox.confirm(t('view.systemTools.autoCode.aiClearDataNote'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
+      type: 'warning'
+    })
+    if (res !== 'confirm') {
+      return
+    }
+  }
+
+  const res = await llmAuto({prompt:flag?t('view.systemTools.autoPkg.structNameIs')+form.value.structName:prompt.value})
   if (res.code === 0) {
     form.value.fields = []
     const json = JSON.parse(res.data)
@@ -960,6 +1005,8 @@ const llmAutoFunc = async (flag) =>{
     }
   }
 }
+
+const isAdd = ref(false)
 
 // 行拖拽
 const rowDrop = () => {
@@ -1108,10 +1155,12 @@ const fieldTemplate = {
   fieldIndexType: '',
   dictType: '',
   dataSource: {
-    association: 1,
+    dbName: '',
+    association:1,
     table: '',
     label: '',
-    value: ''
+    value: '',
+    hasDeletedAt: false
   }
 }
 const route = useRoute()
@@ -1140,6 +1189,8 @@ const form = ref({
   gvaModel: true,
   autoCreateResource: false,
   onlyTemplate: false,
+  isTree: false,
+  treeJson: "",
   fields: []
 })
 const rules = ref({
@@ -1209,10 +1260,12 @@ const editAndAddField = (item) => {
     addFlag.value = 'edit'
     if (!item.dataSource) {
       item.dataSource = {
-        association: 1,
+        dbName: '',
+        association:1,
         table: '',
         label: '',
-        value: ''
+        value: '',
+        hasDeletedAt: false
       }
     }
     bk.value = JSON.parse(JSON.stringify(item))
@@ -1258,318 +1311,379 @@ const deleteField = (index) => {
 }
 
 const autoCodeForm = ref(null)
-
-const enterForm = async (isPreview) => {
-
-  if (!form.value.onlyTemplate) {
-
-    if (form.value.fields.length <= 0) {
+  const enterForm = async (isPreview) => {
+    if (form.value.isTree && !form.value.treeJson){
       ElMessage({
         type: 'error',
-        message: t('view.systemTools.autoCode.errNoFields')
+        message: t('view.systemTools.autoCode.fillJsonDataNote')
       })
       return false
     }
-
-    if (!form.value.gvaModel && form.value.fields.every(item => !item.primaryKey)) {
-      ElMessage({
-        type: 'error',
-        message:  t('view.systemTools.autoCode.primaryKeyRequirement')
-      })
-      return false
-    }
-
-    if (
-        form.value.fields.some(item => item.fieldName === form.value.structName)
-    ) {
-      ElMessage({
-        type: 'error',
-        message: t('view.systemTools.autoCode.errSameFiledName')
-      })
-      return false
-    }
-
-
-    if (form.value.fields.some(item => !item.fieldType)) {
-      ElMessage({
-        type: 'error',
-        message: t('view.systemTools.autoCode.fillFieldTypes')
-      })
-      return false
-    }
-
-    if (form.value.package === form.value.abbreviation) {
-      ElMessage({
-        type: 'error',
-        message: t('view.systemTools.autoCode.packageNameConflict')
-      })
-      return false
-    }
-  }
-
-
-  autoCodeForm.value.validate(async valid => {
-    if (valid) {
-      for (const key in form.value) {
-        if (typeof form.value[key] === 'string') {
-          form.value[key] = form.value[key].trim()
-        }
-      }
-      form.value.structName = toUpperCase(form.value.structName)
-      form.value.tableName = form.value.tableName.replace(' ', '')
-      if (!form.value.tableName) {
-        form.value.tableName = toSQLLine(toLowerCase(form.value.structName))
-      }
-      if (form.value.structName === form.value.abbreviation) {
+    if (!form.value.onlyTemplate) {
+      if (form.value.fields.length <= 0) {
         ElMessage({
           type: 'error',
-          message: t('view.systemTools.autoCode.errSameStructDescAbbr')
+          message: t('view.systemTools.autoCode.errNoFields')
         })
         return false
       }
-      form.value.humpPackageName = toSQLLine(form.value.packageName)
 
-      form.value.fields.forEach(item => {
-        if(item.fieldType === 'enum'){
-          // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
-          const arr = item.dataTypeLong.split(',')
-          arr.forEach((ele, index) => {
-            if(ele.indexOf("'") === -1){
-              arr[index] = `'${ele}'`
-            }
-          })
-          item.dataTypeLong = arr.join(',')
-        }
-      })
-
-      delete form.value.primaryField
-      if (isPreview) {
-        const data = await preview(form.value)
-        preViewCode.value = data.data.autoCode
-        previewFlag.value = true
-      } else {
-        const res = await createTemp(form.value)
-        if (res.code !== 0) {
-          return
-        }
+      if (
+        !form.value.gvaModel &&
+        form.value.fields.every((item) => !item.primaryKey)
+      ) {
         ElMessage({
-          type: 'success',
-          message: t('view.systemTools.autoCode.codeGenMoveSuccess')
+          type: 'error',
+          message: t('view.systemTools.autoCode.primaryKeyRequirement')
         })
-        clearCatch()
+        return false
+      }
+
+      if (
+        form.value.fields.some(
+          (item) => item.fieldName === form.value.structName
+        )
+      ) {
+        ElMessage({
+          type: 'error',
+          message: t('view.systemTools.autoCode.errSameFieldName')
+        })
+        return false
+      }
+
+      if (
+        form.value.fields.some((item) => item.fieldJson === form.value.package)
+      ) {
+        ElMessage({
+          type: 'error',
+          message: t('view.systemTools.autoCode.errJsonFieldNameAsTemplate')
+        })
+        return false
+      }
+
+      if (form.value.fields.some((item) => !item.fieldType)) {
+        ElMessage({
+          type: 'error',
+          message: t('view.systemTools.autoCode.fillFieldTypes')
+        })
+        return false
+      }
+
+      if (form.value.package === form.value.abbreviation) {
+        ElMessage({
+          type: 'error',
+          message: t('view.systemTools.autoCode.packageNameConflict')
+        })
+        return false
       }
     }
-  })
-}
 
-const dbList = ref([])
-const dbOptions = ref([])
+    autoCodeForm.value.validate(async (valid) => {
+      if (valid) {
+        for (const key in form.value) {
+          if (typeof form.value[key] === 'string') {
+            form.value[key] = form.value[key].trim()
+          }
+        }
+        form.value.structName = toUpperCase(form.value.structName)
+        form.value.tableName = form.value.tableName.replace(' ', '')
+        if (!form.value.tableName) {
+          form.value.tableName = toSQLLine(toLowerCase(form.value.structName))
+        }
+        if (form.value.structName === form.value.abbreviation) {
+          ElMessage({
+            type: 'error',
+            message: t('view.systemTools.autoCode.errSameStructDescAbbr')
+          })
+          return false
+        }
+        form.value.humpPackageName = toSQLLine(form.value.packageName)
 
-const getDbFunc = async () => {
-  dbform.value.dbName = ''
-  dbform.value.tableName = ''
-  const res = await getDB({businessDB: dbform.value.businessDB})
-  if (res.code === 0) {
-    dbOptions.value = res.data.dbs
-    dbList.value = res.data.dbList
-  }
-}
-const getTableFunc = async () => {
-  const res = await getTable({businessDB: dbform.value.businessDB, dbName: dbform.value.dbName})
-  if (res.code === 0) {
-    tableOptions.value = res.data.tables
-  }
-  dbform.value.tableName = ''
-}
-
-const getColumnFunc = async () => {
-  const res = await getColumn(dbform.value)
-  if (res.code === 0) {
-    let dbtype = ''
-    if (dbform.value.businessDB !== '') {
-      const dbtmp = dbList.value.find(item => item.aliasName === dbform.value.businessDB)
-      const dbraw = toRaw(dbtmp)
-      dbtype = dbraw.dbtype
-    }
-    form.value.gvaModel = false
-    const tbHump = toHump(dbform.value.tableName)
-    form.value.structName = toUpperCase(tbHump)
-    form.value.tableName = dbform.value.tableName
-    form.value.packageName = tbHump
-    form.value.abbreviation = tbHump
-    form.value.description = tbHump + t('view.systemTools.autoCode.table')
-    form.value.autoCreateApiToSql = true
-    form.value.fields = []
-    res.data.columns &&
-    res.data.columns.forEach(item => {
-      if (needAppend(item)) {
-        const fbHump = toHump(item.columnName)
-        form.value.fields.push({
-          onlyNumber: getOnlyNumber(),
-          fieldName: toUpperCase(fbHump),
-          fieldDesc: item.columnComment || fbHump + t('view.systemTools.autoCode.field'),
-          fieldType: fdMap.value[item.dataType],
-          dataType: item.dataType,
-          fieldJson: fbHump,
-          primaryKey: item.primaryKey,
-          dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
-          columnName: dbtype === 'oracle' ? item.columnName.toUpperCase() : item.columnName,
-          comment: item.columnComment,
-          require: false,
-          errorText: '',
-          clearable: true,
-          fieldSearchType: '',
-          fieldIndexType: '',
-          dictType: '',
-          form: true,
-          table: true,
-          excel: false,
-          desc: true,
-          dataSource: {
-            association: 1,
-            table: '',
-            label: '',
-            value: ''
+        form.value.fields?.forEach((item) => {
+          item.fieldName = toUpperCase(item.fieldName)
+          if (item.fieldType === 'enum') {
+            // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
+            item.dataTypeLong = item.dataTypeLong.replace(/[\[\]{}()]/g, '')
+            const arr = item.dataTypeLong.split(',')
+            arr.forEach((ele, index) => {
+              if (ele.indexOf("'") === -1) {
+                arr[index] = `'${ele}'`
+              }
+            })
+            item.dataTypeLong = arr.join(',')
           }
         })
+
+        delete form.value.primaryField
+        if (isPreview) {
+          const res = await preview({
+            ...form.value,
+            isAdd: !!isAdd.value,
+            fields: form.value.fields.filter((item) => !item.disabled)
+          })
+          if(res.code !== 0){
+            return
+          }
+          preViewCode.value = res.data.autoCode
+          previewFlag.value = true
+        } else {
+          const res = await createTemp(form.value)
+          if (res.code !== 0) {
+            return
+          }
+          ElMessage({
+            type: 'success',
+            message: t('view.systemTools.autoCode.codeGenMoveSuccess')
+          })
+          clearCatch()
+        }
       }
     })
   }
-}
 
-const needAppend = (item) => {
-  let isAppend = true
-  if (form.value.gvaModel && gormModelList.some(gormfd => gormfd === item.columnName)) {
-    isAppend = false
-  }
-  if (form.value.autoCreateResource && dataModelList.some(datafd => datafd === item.columnName)) {
-    isAppend = false
-  }
-  return isAppend
-}
+  const dbList = ref([])
+  const dbOptions = ref([])
 
-const setFdMap = async () => {
-  const fdTypes = ['string', 'int', 'bool', 'float64', 'time.Time']
-  fdTypes.forEach(async fdtype => {
-    const res = await getDict(fdtype)
-    res && res.forEach(item => {
-      fdMap.value[item.label] = fdtype
-    })
-  })
-}
-const getAutoCodeJson = async (id) => {
-  const res = await getMeta({id: Number(id)})
-  if (res.code === 0) {
-    form.value = JSON.parse(res.data.meta)
-  }
-}
-
-const pkgs = ref([])
-const getPkgs = async () => {
-  const res = await getPackageApi()
-  if (res.code === 0) {
-    pkgs.value = res.data.pkgs
-  }
-}
-
-const goPkgs = () => {
-  router.push({name: 'autoPkg'})
-}
-
-const init = () => {
-  getDbFunc()
-  setFdMap()
-  getPkgs()
-  const id = route.params.id
-  if (id) {
-    getAutoCodeJson(id)
-  }
-}
-init()
-
-watch(() => route.params.id, () => {
-  if (route.name === 'autoCodeEdit') {
-    init()
-  }
-})
-
-
-const catchData = () => {
-  window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
-}
-
-const getCatch = () => {
-  const data = window.sessionStorage.getItem('autoCode')
-  if (data) {
-    form.value = JSON.parse(data)
-  }
-}
-
-const clearCatch = async () => {
-  form.value = {
-    structName: '',
-    tableName: '',
-    packageName: '',
-    package: '',
-    abbreviation: '',
-    description: '',
-    businessDB: '',
-    autoCreateApiToSql: true,
-    autoCreateMenuToSql: true,
-    autoCreateBtnAuth: false,
-    autoMigrate: true,
-    gvaModel: true,
-    autoCreateResource: false,
-    onlyTemplate: false,
-    fields: []
-  }
-  await nextTick()
-  window.sessionStorage.removeItem('autoCode')
-}
-
-getCatch()
-
-const exportJson = () => {
-  const dataStr = JSON.stringify(form.value, null, 2)
-  const blob = new Blob([dataStr], {type: 'application/json'})
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'form_data.json'
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
-
-const importJson = (file) => {
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    try {
-      form.value = JSON.parse(e.target.result)
-      ElMessage.success(t('view.systemTools.autoCode.jsonImportSuccess'))
-    } catch (error) {
-      ElMessage.error(t('view.systemTools.autoCode.invalidJsonFile'))
+  const getDbFunc = async () => {
+    dbform.value.dbName = ''
+    dbform.value.tableName = ''
+    const res = await getDB({ businessDB: dbform.value.businessDB })
+    if (res.code === 0) {
+      dbOptions.value = res.data.dbs
+      dbList.value = res.data.dbList
     }
   }
-  reader.readAsText(file)
-  return false
-}
-
-watch(() => form.value.onlyTemplate, (val) => {
-  if (val) {
-    ElMessageBox.confirm(t('view.systemTools.autoCode.basicTemplateNote'), t('view.systemTools.autoCode.note'), {
-      confirmButtonText: t('general.continue'),
-      cancelButtonText: t('general.cancel'),
-      type: 'warning',
+  const getTableFunc = async () => {
+    const res = await getTable({
+      businessDB: dbform.value.businessDB,
+      dbName: dbform.value.dbName
     })
-        .then(() => {
-          form.value.fields = []
-        })
-        .catch(() => {
-          form.value.onlyTemplate = false
-        })
+    if (res.code === 0) {
+      tableOptions.value = res.data.tables
+    }
+    dbform.value.tableName = ''
   }
-})
 
+  const getColumnFunc = async () => {
+    const res = await getColumn(dbform.value)
+    if (res.code === 0) {
+      let dbtype = ''
+      if (dbform.value.businessDB !== '') {
+        const dbtmp = dbList.value.find(
+          (item) => item.aliasName === dbform.value.businessDB
+        )
+        const dbraw = toRaw(dbtmp)
+        dbtype = dbraw.dbtype
+      }
+      form.value.gvaModel = false
+      const tbHump = toHump(dbform.value.tableName)
+      form.value.structName = toUpperCase(tbHump)
+      form.value.tableName = dbform.value.tableName
+      form.value.packageName = toLowerCase(tbHump)
+      form.value.abbreviation = toLowerCase(tbHump)
+      form.value.description = tbHump + '表'
+      form.value.autoCreateApiToSql = true
+      form.value.fields = []
+      res.data.columns &&
+        res.data.columns.forEach((item) => {
+          if (needAppend(item)) {
+            const fbHump = toHump(item.columnName)
+            form.value.fields.push({
+              onlyNumber: getOnlyNumber(),
+              fieldName: toUpperCase(fbHump),
+              fieldDesc: item.columnComment || fbHump + ' ' + t('view.systemTools.autoCode.field'),
+              fieldType: fdMap.value[item.dataType],
+              dataType: item.dataType,
+              fieldJson: fbHump,
+              primaryKey: item.primaryKey,
+              dataTypeLong:
+                item.dataTypeLong && item.dataTypeLong.split(',')[0],
+              columnName:
+                dbtype === 'oracle'
+                  ? item.columnName.toUpperCase()
+                  : item.columnName,
+              comment: item.columnComment,
+              require: false,
+              errorText: '',
+              clearable: true,
+              fieldSearchType: '',
+              fieldIndexType: '',
+              dictType: '',
+              form: true,
+              table: true,
+              excel: false,
+              desc: true,
+              dataSource: {
+                dbName: '',
+                association: 1,
+                table: '',
+                label: '',
+                value: '',
+                hasDeletedAt: false
+              }
+            })
+          }
+        })
+    }
+  }
+
+  const needAppend = (item) => {
+    let isAppend = true
+    if (
+      form.value.gvaModel &&
+      gormModelList.some((gormfd) => gormfd === item.columnName)
+    ) {
+      isAppend = false
+    }
+    if (
+      form.value.autoCreateResource &&
+      dataModelList.some((datafd) => datafd === item.columnName)
+    ) {
+      isAppend = false
+    }
+    return isAppend
+  }
+
+  const setFdMap = async () => {
+    const fdTypes = ['string', 'int', 'bool', 'float64', 'time.Time']
+    fdTypes.forEach(async (fdtype) => {
+      const res = await getDict(fdtype)
+      res &&
+        res.forEach((item) => {
+          fdMap.value[item.label] = fdtype
+        })
+    })
+  }
+  const getAutoCodeJson = async (id) => {
+    const res = await getMeta({ id: Number(id) })
+    if (res.code === 0) {
+      const add = route.query.isAdd
+      isAdd.value = add
+      form.value = JSON.parse(res.data.meta)
+      if (isAdd.value) {
+        form.value.fields.forEach((item) => {
+          item.disabled = true
+        })
+      }
+    }
+  }
+
+  const pkgs = ref([])
+  const getPkgs = async () => {
+    const res = await getPackageApi()
+    if (res.code === 0) {
+      pkgs.value = res.data.pkgs
+    }
+  }
+
+  const goPkgs = () => {
+    router.push({ name: 'autoPkg' })
+  }
+
+  const init = () => {
+    getDbFunc()
+    setFdMap()
+    getPkgs()
+    const id = route.params.id
+    if (id) {
+      getAutoCodeJson(id)
+    }
+  }
+  init()
+
+  watch(
+    () => route.params.id,
+    () => {
+      if (route.name === 'autoCodeEdit') {
+        init()
+      }
+    }
+  )
+
+  const catchData = () => {
+    window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
+  }
+
+  const getCatch = () => {
+    const data = window.sessionStorage.getItem('autoCode')
+    if (data) {
+      form.value = JSON.parse(data)
+    }
+  }
+
+  const clearCatch = async () => {
+    form.value = {
+      structName: '',
+      tableName: '',
+      packageName: '',
+      package: '',
+      abbreviation: '',
+      description: '',
+      businessDB: '',
+      autoCreateApiToSql: true,
+      autoCreateMenuToSql: true,
+      autoCreateBtnAuth: false,
+      autoMigrate: true,
+      gvaModel: true,
+      autoCreateResource: false,
+      onlyTemplate: false,
+      isTree: false,
+      treeJson: "",
+      fields: []
+    }
+    await nextTick()
+    window.sessionStorage.removeItem('autoCode')
+  }
+
+  getCatch()
+
+  const exportJson = () => {
+    const dataStr = JSON.stringify(form.value, null, 2)
+    const blob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'form_data.json'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const importJson = (file) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        form.value = JSON.parse(e.target.result)
+        ElMessage.success(t('view.systemTools.autoCode.jsonImportSuccess'))
+      } catch (_) {
+        ElMessage.error(t('view.systemTools.autoCode.invalidJsonFile'))
+      }
+    }
+    reader.readAsText(file)
+    return false
+  }
+
+  watch(
+    () => form.value.onlyTemplate,
+    (val) => {
+      if (val) {
+        ElMessageBox.confirm(
+          t('view.systemTools.autoCode.groupInfos.note6'),
+          t('general.note'),
+          {
+            confirmButtonText: t('general.continue'),
+            cancelButtonText: t('general.cancel'),
+            type: 'warning'
+          }
+        )
+          .then(() => {
+            form.value.fields = []
+          })
+          .catch(() => {
+            form.value.onlyTemplate = false
+          })
+      }
+    }
+  )
 </script>

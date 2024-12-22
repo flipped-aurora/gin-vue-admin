@@ -40,7 +40,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	%s gin-vue-admin
-	%s: v2.7.6
+	%s: v2.7.7
 	%s
 	%s: https://github.com/flipped-aurora/gin-vue-admin
 	%s: https://plugin.gin-vue-admin.com

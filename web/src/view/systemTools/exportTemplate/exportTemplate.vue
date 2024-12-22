@@ -28,7 +28,7 @@
           <el-date-picker
             v-model="searchInfo.startCreatedAt"
             type="datetime"
-            :placeholder="t('general.endData')"
+            :placeholder="t('general.endDate')"
             :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"
           />
           —
@@ -157,6 +157,13 @@
         >
           <template #default="scope">
             <el-button
+                type="primary"
+                link
+                icon="edit-pen"
+                class="table-button"
+                @click="showCode(scope.row)"
+            >{{ t('view.systemTools.exportTemplate.code') }}</el-button>
+            <el-button
               type="primary"
               link
               icon="edit"
@@ -211,9 +218,9 @@
         :model="formData"
         label-position="right"
         :rules="rule"
-        label-width="100px"
+        label-width="160px"
         v-loading="aiLoading"
-        element-loading-text="小淼正在思考..."
+        :element-loading-text="t('view.systemTools.exportTemplate.xiaoMiaoIsThinking')"
       >
 
         <el-form-item
@@ -252,14 +259,14 @@
         </el-form-item>
 
         <el-form-item
-          label="需用到的表"
+          :label="t('view.systemTools.exportTemplate.tableToBeUsed')"
           prop="tables"
         >
           <el-select
             multiple
             v-model="tables"
             clearable
-            placeholder="使用AI的情况下请选择"
+            :placeholder="t('view.systemTools.exportTemplate.selectWhenUSingAi')"
           >
               <el-option
                   v-for="item in tableOptions"
@@ -271,7 +278,7 @@
         </el-form-item>
 
         <el-form-item
-            label="AI帮写:"
+            :label="t('view.systemTools.exportTemplate.aiHelpWriting')"
             prop="ai"
         >
           <div class="relative w-full">
@@ -280,13 +287,13 @@
                 v-model="prompt"
                 :clearable="true"
                 :rows="5"
-                placeholder="试试描述你要做的导出功能让AI帮你完成，在此之前请选择你需要导出的表所在的业务库，如不做选择，则默认使用gva库"
+                :placeholder="t('view.systemTools.exportTemplate.aiNote')"
             />
             <el-button
                 class="absolute bottom-2 right-2"
                 type="primary"
                 @click="autoExport"
-            ><el-icon><ai-gva /></el-icon>帮写</el-button>
+            ><el-icon><ai-gva /></el-icon>{{ t('view.systemTools.exportTemplate.helpWrite') }}</el-button>
           </div>
         </el-form-item>
 
@@ -311,19 +318,19 @@
                   :value="item.tableName"
               />
             </el-select>
-            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(true)"><el-icon><ai-gva/></el-icon>自动补全</el-button>
-            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(false)">自动生成模板</el-button>
+            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(true)"><el-icon><ai-gva/></el-icon>{{ t('view.systemTools.exportTemplate.autoComplete') }}</el-button>
+            <el-button :disabled="!formData.tableName" type="primary" @click="getColumnFunc(false)">{{ t('view.systemTools.exportTemplate.autoGenerateTemplates') }}</el-button>
           </div>
         </el-form-item>
 
         <el-form-item
-          label="模板名称:"
+          :label="t('view.systemTools.exportTemplate.templateName2')"
           prop="name"
         >
           <el-input
             v-model="formData.name"
             :clearable="true"
-            placeholder="请输入模板名称"
+            :placeholder="t('view.systemTools.exportTemplate.templateNameNote')"
           />
         </el-form-item>
 
@@ -465,6 +472,36 @@
         </el-form-item>
       </el-form>
     </el-drawer>
+
+    <el-drawer
+        v-model="codeVisible"
+        size="60%"
+        :before-close="closeDialog"
+        :title="type==='create'? t('general.addTo') : t('general.modify')"
+        :show-close="false"
+        destroy-on-close
+    >
+
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ t('view.systemTools.autoPkg.template') }}</span>
+          <div>
+            <el-button
+                type="primary"
+                @click="closeDialog"
+            >{{ t('general.confirm') }}</el-button>
+          </div>
+        </div>
+      </template>
+      <codemirror
+          v-model="webCode"
+          placeholder="Code goes here..."
+          :style="{ height: '800px',width:'100%' }"
+          :indent-with-tab="true"
+          :tab-size="2"
+          :extensions=" [vue(), oneDark]"
+      />
+    </el-drawer>
   </div>
 </template>
 
@@ -484,6 +521,10 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import {getDB, getTable, getColumn, butler} from '@/api/autoCode'
+import {vue} from "@codemirror/lang-vue";
+import {oneDark} from "@codemirror/theme-one-dark";
+import {Codemirror} from "vue-codemirror";
+import {getCode} from './code'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -660,7 +701,7 @@ const autoExport = async () => {
  if (tables.value.length === 0) {
     ElMessage({
       type: 'error',
-      message: '请先选择需要参与导出的表'
+      message: t('view.systemTools.exportTemplate.selectTableToExport')
     })
     return
   }
@@ -707,7 +748,7 @@ const getColumnFunc = async (aiFLag) => {
   if(!formData.value.tableName) {
     ElMessage({
       type: 'error',
-      message: t('view.systemTools.selectBusinessDbAndTable')
+      message: t('view.systemTools.exportTemplate.selectBusinessDbAndTable')
     })
     return
   }
@@ -728,7 +769,7 @@ const getColumnFunc = async (aiFLag) => {
           formData.value.templateID = aiData.templateID
           return
         }
-        ElMessage.warning('AI自动补全失败，已调整为逻辑填写')
+        ElMessage.warning(t('view.systemTools.exportTemplate.aiAutoCompleteFail'))
       }
 
 
@@ -877,9 +918,16 @@ const deleteSysExportTemplateFunc = async(row) => {
     getTableData()
   }
 }
-
+const codeVisible = ref(false)
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
+
+const webCode = ref("")
+
+const showCode = (row) =>{
+  webCode.value = getCode(row.templateID)
+  codeVisible.value = true
+}
 
 // 打开弹窗
 const openDialog = () => {
@@ -889,7 +937,9 @@ const openDialog = () => {
 
 // 关闭弹窗
 const closeDialog = () => {
+  codeVisible.value = false
   dialogFormVisible.value = false
+  activeRow.value = {}
   formData.value = {
     name: '',
     tableName: '',
@@ -909,7 +959,7 @@ const enterDialog = async() => {
   } catch (error) {
     ElMessage({
       type: 'error',
-      message: t('view.systemTools.templateFormatIncorrect')
+      message: t('view.systemTools.exportTemplate.templateFormatIncorrect')
     })
     return
   }
@@ -919,7 +969,7 @@ const enterDialog = async() => {
     if (!reqData.conditions[i].from || !reqData.conditions[i].column || !reqData.conditions[i].operator) {
       ElMessage({
         type: 'error',
-        message: t('view.systemTools.completeExportConditions')
+        message: t('view.systemTools.exportTemplate.completeExportConditions')
       })
       return
     }
@@ -930,7 +980,7 @@ const enterDialog = async() => {
     if (!reqData.joinTemplate[i].joins || !reqData.joinTemplate[i].on) {
       ElMessage({
         type: 'error',
-        message: t('view.systemTools.completeAssociation')
+        message: t('view.systemTools.exportTemplate.completeAssociation')
       })
       return
     }

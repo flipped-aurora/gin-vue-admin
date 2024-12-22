@@ -3,26 +3,26 @@
   <div>
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
-      <el-form-item label="创建日期" prop="createdAt">
+      <el-form-item :label="t('general.createDate')" prop="createdAt">
       <template #label>
         <span>
-          创建日期
-          <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+          {{ t('general.createDate') }}
+          <el-tooltip :content="t('general.searchDesc')">
             <el-icon><QuestionFilled /></el-icon>
           </el-tooltip>
         </span>
       </template>
-      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"></el-date-picker>
+      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" :placeholder="t('general.startData')" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"></el-date-picker>
        —
-      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
+      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" :placeholder="t('general.endDate')" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
 
-        <el-form-item label="参数名称" prop="name">
-         <el-input v-model="searchInfo.name" placeholder="搜索条件" />
+        <el-form-item :label="t('view.superAdmin.params.paramName')" prop="name">
+         <el-input v-model="searchInfo.name" :placeholder="t('general.searchCriteria')" />
 
         </el-form-item>
-        <el-form-item label="参数键" prop="key">
-         <el-input v-model="searchInfo.key" placeholder="搜索条件" />
+        <el-form-item :label="t('view.superAdmin.params.paramKey')" prop="key">
+         <el-input v-model="searchInfo.key" :placeholder="t('general.searchCriteria')" />
 
         </el-form-item>
 
@@ -31,17 +31,17 @@
         </template>
 
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button icon="refresh" @click="onReset">重置</el-button>
-          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
-          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
+          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">{{ t('general.expand') }}</el-button>
+          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>{{ t('general.collapse') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button  type="primary" icon="plus" @click="openDialog">新增</el-button>
-            <el-button  icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            <el-button  type="primary" icon="plus" @click="openDialog">{{ t('general.add') }}</el-button>
+            <el-button  icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">{{ t('general.delete') }}</el-button>
 
         </div>
         <el-table
@@ -54,19 +54,19 @@
         >
         <el-table-column type="selection" width="55" />
 
-        <el-table-column align="left" label="日期" prop="createdAt" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" prop="createdAt" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-          <el-table-column align="left" label="参数名称" prop="name" width="120" />
-          <el-table-column align="left" label="参数键" prop="key" width="120" />
-          <el-table-column align="left" label="参数值" prop="value" width="120" />
-          <el-table-column align="left" label="参数说明" prop="desc" width="120" />
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+          <el-table-column align="left" :label="t('view.superAdmin.params.paramName')" prop="name" width="160" />
+          <el-table-column align="left" :label="t('view.superAdmin.params.paramKey')" prop="key" width="160" />
+          <el-table-column align="left" :label="t('view.superAdmin.params.paramValue')" prop="value" width="160" />
+          <el-table-column align="left" :label="t('view.superAdmin.params.paramDesc')" prop="desc" width="240" />
+        <el-table-column align="left" :label="t('general.operations')" fixed="right" min-width="240">
             <template #default="scope">
-            <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
-            <el-button  type="primary" link icon="edit" class="table-button" @click="updateSysParamsFunc(scope.row)">变更</el-button>
-            <el-button  type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{ t('general.desc') }}</el-button>
+            <el-button  type="primary" link icon="edit" class="table-button" @click="updateSysParamsFunc(scope.row)">{{ t('general.change') }}</el-button>
+            <el-button  type="primary" link icon="delete" @click="deleteRow(scope.row)">{{ t('general.delete') }}</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -85,56 +85,57 @@
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
-                <span class="text-lg">{{type==='create'?'添加':'修改'}}</span>
+                <span class="text-lg">{{type==='create'? t('general.addTo'):t('general.modify')}}</span>
                 <div>
-                  <el-button type="primary" @click="enterDialog">确 定</el-button>
-                  <el-button @click="closeDialog">取 消</el-button>
+                  <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+                  <el-button @click="closeDialog">{{ t('general.cancel') }}</el-button>
                 </div>
               </div>
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
-            <el-form-item label="参数名称:"  prop="name" >
-              <el-input v-model="formData.name" :clearable="true"  placeholder="请输入参数名称" />
+            <el-form-item :label="t('view.superAdmin.params.paramName') + ':'"  prop="name" >
+              <el-input v-model="formData.name" :clearable="true"  :placeholder="t('view.superAdmin.params.enterParamName')" />
             </el-form-item>
-            <el-form-item label="参数键:"  prop="key" >
-              <el-input v-model="formData.key" :clearable="true"  placeholder="请输入参数键" />
+            <el-form-item :label="t('view.superAdmin.params.paramKey') + ':'"  prop="key" >
+              <el-input v-model="formData.key" :clearable="true"  :placeholder="t('view.superAdmin.params.enterParamKey')" />
             </el-form-item>
-            <el-form-item label="参数值:"  prop="value" >
-              <el-input type="textarea" :rows="5" v-model="formData.value" :clearable="true"  placeholder="请输入参数值" />
+            <el-form-item :label="t('view.superAdmin.params.paramValue') + ':'"  prop="value" >
+              <el-input type="textarea" :rows="5" v-model="formData.value" :clearable="true"  :placeholder="t('view.superAdmin.params.enterParamValue')" />
             </el-form-item>
-            <el-form-item label="参数说明:"  prop="desc" >
-              <el-input v-model="formData.desc" :clearable="true"  placeholder="请输入参数说明" />
+            <el-form-item :label="t('view.superAdmin.params.paramDesc') + ':'"  prop="desc" >
+              <el-input v-model="formData.desc" :clearable="true"  :placeholder="t('view.superAdmin.params.enterParamDesc')" />
             </el-form-item>
           </el-form>
 
       <div class="usage-instructions bg-gray-100 border border-gray-300 rounded-lg p-4 mt-5">
-        <h3 class="mb-3 text-lg text-gray-800">使用说明</h3>
+        <h3 class="mb-3 text-lg text-gray-800">{{ t('view.superAdmin.params.instruction') }}</h3>
         <p class="mb-2 text-sm text-gray-600">
-          前端可以通过引入 <code class="bg-blue-100 px-1 py-0.5 rounded">import { getParams } from '@/utils/dictionary'</code> 然后通过 <code class="bg-blue-100 px-1 py-0.5 rounded">await getParams(key)</code> 来获取对应的参数。
-        </p>
-        <p class="mb-2 text-sm text-gray-600">
-          后端可以调用 <code class="bg-blue-100 px-1 py-0.5 rounded">new(system.SysParamsService).GetSysParam(key)</code> 来获取对应的 value 值。
+          {{ t('view.superAdmin.params.instructionNote1') }} <code class="bg-blue-100 px-1 py-0.5 rounded">import { getParams } from '@/utils/dictionary'</code> {{ t('view.superAdmin.params.instructionNote2') }} <code class="bg-blue-100 px-1 py-0.5 rounded">await getParams("{{formData.key}}")</code> {{ t('view.superAdmin.params.instructionNote3') }}
         </p>
         <p class="text-sm text-gray-600">
-          后端需要提前 <code class="bg-blue-100 px-1 py-0.5 rounded">import "github.com/flipped-aurora/gin-vue-admin/server/service/system"</code>
+          {{ t('view.superAdmin.params.instructionNote4') }} <code class="bg-blue-100 px-1 py-0.5 rounded">import "github.com/flipped-aurora/gin-vue-admin/server/service/system"</code>
         </p>
+        <p class="mb-2 text-sm text-gray-600">
+          {{ t('view.superAdmin.params.instructionNote5') }} <code class="bg-blue-100 px-1 py-0.5 rounded">new(system.SysParamsService).GetSysParam("{{formData.key}}")</code> {{ t('view.superAdmin.params.instructionNote6') }} 
+        </p>
+
       </div>
 
     </el-drawer>
 
     <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow">
             <el-descriptions :column="1" border>
-                    <el-descriptions-item label="参数名称">
+                    <el-descriptions-item :label="t('view.superAdmin.params.paramName')">
                         {{ detailFrom.name }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="参数键">
+                    <el-descriptions-item :label="t('view.superAdmin.params.paramKey')">
                         {{ detailFrom.key }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="参数值">
+                    <el-descriptions-item :label="t('view.superAdmin.params.paramValue')">
                         {{ detailFrom.value }}
                     </el-descriptions-item>
-                    <el-descriptions-item label="参数说明">
+                    <el-descriptions-item :label="t('view.superAdmin.params.paramDesc')">
                         {{ detailFrom.desc }}
                     </el-descriptions-item>
             </el-descriptions>
@@ -157,6 +158,9 @@ import {
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
     name: 'SysParams'
@@ -184,7 +188,7 @@ const rule = reactive({
                },
                {
                    whitespace: true,
-                   message: '不能只输入空格',
+                   message: t('general.noOnlySpace'),
                    trigger: ['input', 'blur'],
               }
               ],
@@ -195,7 +199,7 @@ const rule = reactive({
                },
                {
                    whitespace: true,
-                   message: '不能只输入空格',
+                   message: t('general.noOnlySpace'),
                    trigger: ['input', 'blur'],
               }
               ],
@@ -206,7 +210,7 @@ const rule = reactive({
                },
                {
                    whitespace: true,
-                   message: '不能只输入空格',
+                   message: t('general.noOnlySpace'),
                    trigger: ['input', 'blur'],
               }
               ],
@@ -216,11 +220,11 @@ const searchRule = reactive({
   createdAt: [
     { validator: (rule, value, callback) => {
       if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写结束日期'))
+        callback(new Error(t('general.placeInputEndData')))
       } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写开始日期'))
+        callback(new Error(t('general.placeInputStartData')))
       } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
-        callback(new Error('开始日期应当早于结束日期'))
+        callback(new Error(t('general.startDataMustBeforeEndData')))
       } else {
         callback()
       }
@@ -298,9 +302,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
     }).then(() => {
             deleteSysParamsFunc(row)
@@ -309,16 +313,16 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
       const IDs = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: '请选择要删除的数据'
+          message: t('general.selectDataToDelete')
         })
         return
       }
@@ -330,7 +334,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === IDs.length && page.value > 1) {
           page.value--

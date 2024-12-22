@@ -116,7 +116,7 @@ const closeAll = () => {
     {
       name: defaultRouter.value,
       meta: {
-        title: t('menus.home'),
+        title: t('view.superAdmin.authority.components.menus.home'),
       },
       query: {},
       params: {},
@@ -323,7 +323,7 @@ const initPage = () => {
     {
       name: defaultRouter.value,
       meta: {
-        title: t('menus.home'),
+        title: t('view.superAdmin.authority.components.menus.home'),
       },
       query: {},
       params: {},

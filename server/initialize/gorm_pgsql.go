@@ -76,7 +76,8 @@ type SqlLogWriter struct{}
 
 func (w *SqlLogWriter) Write(p []byte) (n int, err error) {
 	if strings.Contains(string(p), "SLOW SQL") {
-		global.GVA_LOG.Error("SLOW-SQL", zap.String("sql", string(p)))
+		global.GVA_LOG.Warn("SLOW-SQL", zap.String("sql", string(p)))
+
 	} else {
 		global.GVA_LOG.Info("NORMAL-SQL", zap.String("sql", string(p)))
 	}

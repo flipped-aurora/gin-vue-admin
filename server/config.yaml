@@ -123,6 +123,7 @@ pgsql:
     max-open-conns: 100
     log-mode: ""
     log-zap: false
+    slow-threshold: 100    # 慢查询阈值 /ms, 0为关闭
 oracle:
     path: ""
     port: ""

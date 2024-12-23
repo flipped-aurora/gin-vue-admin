@@ -2,6 +2,7 @@ package config
 
 type Pgsql struct {
 	GeneralDB `yaml:",inline" mapstructure:",squash"`
+	SlowThreshold int    `mapstructure:"slow-threshold" json:"slow-threshold" yaml:"slow-threshold"` // 慢查询阈值，单位毫秒
 }
 
 // Dsn 基于配置文件获取 dsn

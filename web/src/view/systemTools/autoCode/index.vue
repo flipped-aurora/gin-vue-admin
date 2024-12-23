@@ -853,13 +853,9 @@
         </el-button>
         <el-upload
           :before-upload="importJson"
-<<<<<<< HEAD
-=======
           :show-file-list="false"
->>>>>>> main
           accept=".json"
           class="flex items-center"
-          show-file-list="false"
         >
           <el-button class="mx-2" type="primary" :disabled="isAdd">{{
             t('view.systemTools.autoCode.importJson')

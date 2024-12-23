@@ -1,12 +1,10 @@
 package initialize
 
 import (
-	"io"
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
 	"log"
-	"os"
 	"strings"
 	"time"
 
@@ -35,9 +33,8 @@ func GormPgSql() *gorm.DB {
 		slowThreshold := time.Duration(global.GVA_CONFIG.Pgsql.SlowThreshold) * time.Millisecond
 
 		// 配置自定义日志器
-		writer := io.MultiWriter(&SqlLogWriter{}, os.Stdout)
 		newLogger := logger.New(
-			log.New(writer, "", log.LstdFlags), // 标准日志输出
+			log.New(&SqlLogWriter{}, "", log.LstdFlags), // 标准日志输出
 			logger.Config{
 				SlowThreshold: slowThreshold, // 慢 SQL 阈值
 				LogLevel:      logger.Warn,   // 日志级别：Warn 或 Info

@@ -26,16 +26,16 @@
           @blur="handleBlur"
         />
 
-        <div class="flex absolute right-28 bottom-2">
+        <div class="flex absolute bottom-2" style="right:9rem !important;">
           <el-tooltip effect="light">
             <template #content>
               <div>
-                【完全免费】前往<a
+                {{ t('view.systemTools.autoCode.aiNote1') }}<a
                   class="text-blue-600"
                   href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
                   target="_blank"
-              >插件市场个人中心</a
-              >申请AIPath，填入config.yaml的ai-path属性即可使用。
+              >{{ t('view.systemTools.autoCode.aiNote2') }}</a
+              >{{ t('view.systemTools.autoCode.aiNote3') }}
               </div>
             </template>
             <el-button
@@ -46,7 +46,7 @@
               <el-icon size="18">
                 <ai-gva />
               </el-icon>
-              识图
+              {{ t('view.systemTools.autoCode.imageRecognition') }}
             </el-button>
           </el-tooltip>
         </div>
@@ -547,18 +547,18 @@
             <el-form-item>
               <template #label>
                 <el-tooltip
-                    content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                    :content="t('view.systemTools.autoCode.groupInfos.parentIdNote')"
                     placement="bottom"
                     effect="light"
                 >
                   <div>
-                    树型结构 <el-icon><QuestionFilled /></el-icon>
+                    {{ t('view.systemTools.autoCode.groupInfos.treeStructure') }} <el-icon><QuestionFilled /></el-icon>
                   </div>
                 </el-tooltip>
               </template>
               <div class="flex gap-2 items-center">
                 <el-checkbox v-model="form.isTree" />
-                <el-input v-model="form.treeJson" :disabled="!form.isTree" placeholder="前端展示json属性"></el-input>
+                <el-input v-model="form.treeJson" :disabled="!form.isTree" :placeholder="t('view.systemTools.autoCode.groupInfos.frontendJsonAttr')"></el-input>
               </div>
             </el-form-item>
           </el-col>
@@ -758,7 +758,7 @@
             align="left"
             :label="t('view.systemTools.autoCode.fieldLen')"
             prop="dataTypeLong"
-            width="160"
+            width="180"
           >
             <template #default="{ row }">
               <el-input :disabled="row.disabled" v-model="row.dataTypeLong" />
@@ -1047,11 +1047,11 @@
 
     if (form.value.fields.length > 0) {
       const res = await ElMessageBox.confirm(
-        'AI生成会清空当前数据，是否继续?',
-        '提示',
+        t('view.systemTools.autoCode.aiClearDataNote'),
+        t('general.hint'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('general.confirm'),
+          cancelButtonText: t('general.cancel'),
           type: 'warning'
         }
       )
@@ -1408,7 +1408,7 @@
     if (form.value.isTree && !form.value.treeJson){
       ElMessage({
         type: 'error',
-        message: '请填写树型结构的前端展示json属性'
+        message: t('view.systemTools.autoCode.fillJsonDataNote')
       })
       return false
     }
@@ -1449,7 +1449,7 @@
       ) {
         ElMessage({
           type: 'error',
-          message: '存在与模板同名的的字段JSON'
+          message: t('view.systemTools.autoCode.errJsonFieldNameAsTemplate')
         })
         return false
       }

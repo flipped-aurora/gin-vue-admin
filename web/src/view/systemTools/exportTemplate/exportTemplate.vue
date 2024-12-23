@@ -160,7 +160,7 @@
                 icon="documentCopy"
                 class="table-button"
                 @click="copyFunc(scope.row)"
-            >复制</el-button
+            >{{ t('view.systemTools.autoCode.copy') }}</el-button
             >
             <el-button
               type="primary"

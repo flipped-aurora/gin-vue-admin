@@ -908,7 +908,10 @@
           "note5": "注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制",
           "createResourceIdentifier": "创建资源标识",
           "note6": "注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑",
-          "basicTemplate": "基础模板"
+          "basicTemplate": "基础模板",
+          "parentIdNote": "注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型",
+          "treeStructure": "树型结构",
+          "frontendJsonAttr": "前端展示json属性"
         },
         "addField": "新增字段",
         "primaryKey": "主键",

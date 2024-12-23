@@ -923,7 +923,10 @@
           "note5": "Note: Automatically add created_by, updated_by, deleted_by to the struct, making it easier for users to control resource permissions",
           "createResourceIdentifier": "Resource Identifier",
           "note6": "Note: Using the basic template will not generate any struct and CURD, only configure enter and other attributes to facilitate the development of non-CURD logic",
-          "basicTemplate": "Basic Template"
+          "basicTemplate": "Basic Template",
+          "parentIdNote": "Note: ParentID will be automatically created to associate the parent-child relationship. Only int type is supported for the primary key",
+          "treeStructure": "Tree structure",
+          "frontendJsonAttr": "Front-end display json attributes"
         },
         "addField": "Add Field",
         "primaryKey": "Primary Key",

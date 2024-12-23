@@ -264,16 +264,16 @@
     "generateInitialAPI": "إنشاء API الأولي",
     "checkMsg": "يرجى التحقق مما إذا كان قد تم فتح initialize.Api(ctx) و initialize.Menu(ctx) في server/plugin/{plugName}/plugin.go؟",
     "announcement": {
-        "info": {
-          "title": "عنوان",
-          "content": "المحتوى",
-          "richTextContent": "[محتوى النص الغني]",
-           "author": "مؤلف",
-           "attachments": "الملحقات",
-           "enterTitleNote": "الرجاء إدخال عنوان",
-           "selectAuthorNote": "الرجاء اختيار المؤلف"
-        }
-      },
+      "info": {
+        "title": "عنوان",
+        "content": "المحتوى",
+        "richTextContent": "[محتوى النص الغني]",
+        "author": "مؤلف",
+        "attachments": "الملحقات",
+        "enterTitleNote": "الرجاء إدخال عنوان",
+        "selectAuthorNote": "الرجاء اختيار المؤلف"
+      }
+    },
     "email": {
       "emailConfigNote": "يجب تكوين ملف إعدادات البريد الإلكتروني مسبقًا، لمنع البريد العشوائي غير الضروري، لا يتم فتح هذه الميزة في تجربة الإنترنت.",
       "targetEmail": "البريد الإلكتروني المستهدف",
@@ -453,7 +453,7 @@
       }
     },
     "superAdmin": {
-      "authority" : {
+      "authority": {
         "components": {
           "apis": {
             "filterName": "تصفية بلإسم",

@@ -15,10 +15,15 @@
       muted
       preload="metadata"
     >
-      <source :src="getUrl(model) + '#t=1'">
+      <source :src="getUrl(model) + '#t=1'" />
     </video>
 
-    <img v-if="model&&!isVideoExt(model)" class="w-full h-full" :src="getUrl(model)" :alt="t('components.selectImage.selectComponent.image')">
+    <img
+      v-if="model && !isVideoExt(model)"
+      class="w-full h-full"
+      :src="getUrl(model)"
+      :alt="t('components.selectImage.selectComponent.image')"
+    />
     <div
       v-if="model"
       class="left-0 top-0 hidden text-gray-600 group-hover:bg-gray-600 group-hover:bg-opacity-30 w-full h-full group-hover:flex justify-center items-center absolute z-10"
@@ -42,27 +47,26 @@
   </div>
 </template>
 <script setup>
-import { getUrl, isVideoExt } from '@/utils/image'
-import { Delete, Plus } from '@element-plus/icons-vue'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { getUrl, isVideoExt } from '@/utils/image'
+  import { Delete, Plus } from '@element-plus/icons-vue'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-defineProps({
-  model: {
-    default: '',
-    type: String
+  defineProps({
+    model: {
+      default: '',
+      type: String
+    }
+  })
+
+  const emits = defineEmits(['chooseItem', 'deleteItem'])
+
+  const chooseItem = () => {
+    emits('chooseItem')
   }
-})
 
-const emits = defineEmits(['chooseItem', 'deleteItem'])
-
-const chooseItem = () => {
-  emits('chooseItem')
-}
-
-const deleteItem = () => {
-  emits('deleteItem')
-}
-
+  const deleteItem = () => {
+    emits('deleteItem')
+  }
 </script>

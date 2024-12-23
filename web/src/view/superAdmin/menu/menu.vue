@@ -2,26 +2,14 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button
-          type="primary"
-          icon="plus"
-          @click="addMenu(0)"
-        >
-        {{ t('view.superAdmin.menu.addRootMenu') }}
+        <el-button type="primary" icon="plus" @click="addMenu(0)">
+          {{ t('view.superAdmin.menu.addRootMenu') }}
         </el-button>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
-      <el-table
-        :data="tableData"
-        row-key="ID"
-      >
-        <el-table-column
-          align="left"
-          label="ID"
-          min-width="100"
-          prop="ID"
-        />
+      <el-table :data="tableData" row-key="ID">
+        <el-table-column align="left" label="ID" min-width="100" prop="ID" />
         <el-table-column
           align="left"
           :label="t('view.superAdmin.menu.displayName')"
@@ -39,10 +27,7 @@
           prop="authorityName"
         >
           <template #default="scope">
-            <div
-              v-if="scope.row.meta.icon"
-              class="icon-column"
-            >
+            <div v-if="scope.row.meta.icon" class="icon-column">
               <el-icon>
                 <component :is="scope.row.meta.icon" />
               </el-icon>
@@ -71,7 +56,11 @@
           prop="hidden"
         >
           <template #default="scope">
-            <span>{{ scope.row.hidden ? t('view.superAdmin.menu.hide') : t('view.superAdmin.menu.show') }}</span>
+            <span>{{
+              scope.row.hidden
+                ? t('view.superAdmin.menu.hide')
+                : t('view.superAdmin.menu.show')
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -105,7 +94,7 @@
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >
-            {{ t('view.superAdmin.menu.addSubMenu') }}
+              {{ t('view.superAdmin.menu.addSubMenu') }}
             </el-button>
             <el-button
               type="primary"
@@ -113,7 +102,7 @@
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >
-            {{ t('general.edit') }}
+              {{ t('general.edit') }}
             </el-button>
             <el-button
               type="primary"
@@ -121,7 +110,7 @@
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >
-            {{ t('general.delete') }}
+              {{ t('general.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -140,10 +129,7 @@
             <el-button @click="closeDialog">
               {{ t('general.close') }}
             </el-button>
-            <el-button
-              type="primary"
-              @click="enterDialog"
-            >
+            <el-button type="primary" @click="enterDialog">
               {{ t('general.confirm') }}
             </el-button>
           </div>
@@ -165,13 +151,18 @@
               :label="t('view.superAdmin.menu.filePath')"
               prop="component"
             >
-              <components-cascader :component="form.component" @change="fmtComponent" />
-              <span style="font-size: 12px; margin-right: 12px">{{ t('view.superAdmin.menu.subMenuNote') }}</span>
+              <components-cascader
+                :component="form.component"
+                @change="fmtComponent"
+              />
+              <span style="font-size: 12px; margin-right: 12px">{{
+                t('view.superAdmin.menu.subMenuNote')
+              }}</span>
               <el-button
                 style="margin-top: 4px"
                 @click="form.component = 'view/routerHolder.vue'"
               >
-              {{ t('view.superAdmin.menu.clickMe') }}
+                {{ t('view.superAdmin.menu.clickMe') }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -203,16 +194,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              prop="path"
-            >
+            <el-form-item prop="path">
               <template #label>
                 <span style="display: inline-flex; align-items: center">
                   <span>{{ t('view.superAdmin.menu.routePath') }}</span>
                   <el-checkbox
                     v-model="checkFlag"
                     style="margin-left: 12px; height: auto"
-                  >{{ t('view.superAdmin.menu.addParameter') }}</el-checkbox>
+                    >{{ t('view.superAdmin.menu.addParameter') }}</el-checkbox
+                  >
                 </span>
               </template>
 
@@ -225,31 +215,21 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              :label="t('view.superAdmin.menu.visibility')"
-            >
+            <el-form-item :label="t('view.superAdmin.menu.visibility')">
               <el-select
                 v-model="form.hidden"
                 style="width: 100%"
                 :placeholder="t('view.superAdmin.menu.visibilityNote')"
               >
-                <el-option
-                  :value="false"
-                  :label="t('general.no')"
-                />
-                <el-option
-                  :value="true"
-                  :label="t('general.yes')"
-                />
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row class="w-full">
           <el-col :span="8">
-            <el-form-item
-              :label="t('view.superAdmin.menu.parentId')"
-            >
+            <el-form-item :label="t('view.superAdmin.menu.parentId')">
               <el-cascader
                 v-model="form.parentId"
                 style="width: 100%"
@@ -260,7 +240,7 @@
                   label: 'title',
                   value: 'ID',
                   disabled: 'disabled',
-                  emitPath: false,
+                  emitPath: false
                 }"
                 :show-all-levels="false"
                 filterable
@@ -272,28 +252,18 @@
               :label="t('view.superAdmin.menu.icon')"
               prop="meta.icon"
             >
-              <icon
-                v-model="form.meta.icon"
-              />
+              <icon v-model="form.meta.icon" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              :label="t('general.order')"
-              prop="sort"
-            >
-              <el-input
-                v-model.number="form.sort"
-                autocomplete="off"
-              />
+            <el-form-item :label="t('general.order')" prop="sort">
+              <el-input v-model.number="form.sort" autocomplete="off" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row class="w-full">
           <el-col :span="8">
-            <el-form-item
-              prop="meta.activeName"
-            >
+            <el-form-item prop="meta.activeName">
               <template #label>
                 <div>
                   <span> {{ t('view.superAdmin.menu.highlightMenu') }} </span>
@@ -314,44 +284,26 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              label="KeepAlive"
-              prop="meta.keepAlive"
-            >
+            <el-form-item label="KeepAlive" prop="meta.keepAlive">
               <el-select
                 v-model="form.meta.keepAlive"
                 style="width: 100%"
                 :placeholder="t('view.superAdmin.menu.keepAliveNote')"
               >
-                <el-option
-                  :value="false"
-                  :label="t('general.no')"
-                />
-                <el-option
-                  :value="true"
-                  :label="t('general.yes')"
-                />
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item
-              label="CloseTab"
-              prop="meta.closeTab"
-            >
+            <el-form-item label="CloseTab" prop="meta.closeTab">
               <el-select
                 v-model="form.meta.closeTab"
                 style="width: 100%"
                 :placeholder="t('view.superAdmin.menu.closeTabNote')"
               >
-                <el-option
-                  :value="false"
-                  :label="t('general.no')"
-                />
-                <el-option
-                  :value="true"
-                 :label="t('general.yes')"
-                />
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -377,14 +329,8 @@
                 style="width: 100%"
                 :placeholder="t('view.superAdmin.menu.basicPage')"
               >
-                <el-option
-                  :value="false"
-                  :label="t('general.no')"
-                />
-                <el-option
-                  :value="true"
-                  :label="t('general.yes')"
-                />
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -392,18 +338,11 @@
       </el-form>
       <div>
         <div class="flex items-center gap-2">
-          <el-button
-            type="primary"
-            icon="edit"
-            @click="addParameter(form)"
-          >
-          {{ t('view.superAdmin.menu.addMenuParameters') }}
+          <el-button type="primary" icon="edit" @click="addParameter(form)">
+            {{ t('view.superAdmin.menu.addMenuParameters') }}
           </el-button>
         </div>
-        <el-table
-          :data="form.parameters"
-          style="width: 100%; margin-top: 12px"
-        >
+        <el-table :data="form.parameters" style="width: 100%; margin-top: 12px">
           <el-table-column
             align="left"
             prop="type"
@@ -415,16 +354,8 @@
                 v-model="scope.row.type"
                 :placeholder="t('general.pleaseSelect')"
               >
-                <el-option
-                  key="query"
-                  value="query"
-                  label="query"
-                />
-                <el-option
-                  key="params"
-                  value="params"
-                  label="params"
-                />
+                <el-option key="query" value="query" label="query" />
+                <el-option key="params" value="params" label="params" />
               </el-select>
             </template>
           </el-table-column>
@@ -459,7 +390,7 @@
                   icon="delete"
                   @click="deleteParameter(form.parameters, scope.$index)"
                 >
-                {{ t('general.delete') }}
+                  {{ t('general.delete') }}
                 </el-button>
               </div>
             </template>
@@ -467,12 +398,8 @@
         </el-table>
 
         <div class="flex items-center gap-2 mt-3">
-          <el-button
-            type="primary"
-            icon="edit"
-            @click="addBtn(form)"
-          >
-          {{ t('view.superAdmin.menu.addButton') }}
+          <el-button type="primary" icon="edit" @click="addBtn(form)">
+            {{ t('view.superAdmin.menu.addButton') }}
           </el-button>
           <el-icon
             class="cursor-pointer"
@@ -484,10 +411,7 @@
           </el-icon>
         </div>
 
-        <el-table
-          :data="form.menuBtn"
-          style="width: 100%; margin-top: 12px"
-        >
+        <el-table :data="form.menuBtn" style="width: 100%; margin-top: 12px">
           <el-table-column
             align="left"
             prop="name"
@@ -520,7 +444,7 @@
                   icon="delete"
                   @click="deleteBtn(form.menuBtn, scope.$index)"
                 >
-                {{ t('general.delete') }}
+                  {{ t('general.delete') }}
                 </el-button>
               </div>
             </template>
@@ -532,155 +456,114 @@
 </template>
 
 <script setup>
-import {
-  updateBaseMenu,
-  getMenuList,
-  addBaseMenu,
-  deleteBaseMenu,
-  getBaseMenuById,
-} from '@/api/menu'
-import icon from '@/view/superAdmin/menu/icon.vue'
-import WarningBar from '@/components/warningBar/warningBar.vue'
-import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
-import {reactive, ref} from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { QuestionFilled } from '@element-plus/icons-vue'
-import { toDoc } from '@/utils/doc'
-import {toLowerCase} from "@/utils/stringFun";
-import ComponentsCascader from "@/view/superAdmin/menu/components/components-cascader.vue";
+  import {
+    updateBaseMenu,
+    getMenuList,
+    addBaseMenu,
+    deleteBaseMenu,
+    getBaseMenuById
+  } from '@/api/menu'
+  import icon from '@/view/superAdmin/menu/icon.vue'
+  import WarningBar from '@/components/warningBar/warningBar.vue'
+  import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
+  import { reactive, ref } from 'vue'
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { QuestionFilled } from '@element-plus/icons-vue'
+  import { toDoc } from '@/utils/doc'
+  import { toLowerCase } from '@/utils/stringFun'
+  import ComponentsCascader from '@/view/superAdmin/menu/components/components-cascader.vue'
 
-import pathInfo from "@/pathInfo.json";
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+  import pathInfo from '@/pathInfo.json'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilingual
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
-defineOptions({
-  name: 'Menus',
-})
-
-const rules = reactive({
-  path: [{ required: true, message: t('view.superAdmin.menu.enterMenuNameNote'), trigger: 'blur' }],
-  component: [{ required: true, message: t('view.superAdmin.menu.enterFilePathNote'), trigger: 'blur' }],
-  'meta.title': [
-    { required: true, message: t('view.superAdmin.menu.enterMenuDisplayNameNote'), trigger: 'blur' },
-  ],
-})
-
-const tableData = ref([])
-// 查询
-const getTableData = async() => {
-  const table = await getMenuList()
-  if (table.code === 0) {
-    tableData.value = table.data
-  }
-}
-
-getTableData()
-
-// 新增参数
-const addParameter = (form) => {
-  if (!form.parameters) {
-    form.parameters = []
-  }
-  form.parameters.push({
-    type: 'query',
-    key: '',
-    value: '',
+  defineOptions({
+    name: 'Menus'
   })
-}
 
-const fmtComponent = (component) => {
-  form.value.component = component.replace(/\\/g, '/')
-  form.value.name = toLowerCase(pathInfo["/src/"+component])
-  form.value.path = form.value.name
-}
-
-// 删除参数
-const deleteParameter = (parameters, index) => {
-  parameters.splice(index, 1)
-}
-
-// 新增可控按钮
-const addBtn = (form) => {
-  if (!form.menuBtn) {
-    form.menuBtn = []
-  }
-  form.menuBtn.push({
-    name: '',
-    desc: '',
-  })
-}
-// 删除可控按钮
-const deleteBtn = async(btns, index) => {
-  const btn = btns[index]
-  if (btn.ID === 0) {
-    btns.splice(index, 1)
-    return
-  }
-  const res = await canRemoveAuthorityBtnApi({ id: btn.ID })
-  if (res.code === 0) {
-    btns.splice(index, 1)
-  }
-}
-
-const form = ref({
-  ID: 0,
-  path: '',
-  name: '',
-  hidden: false,
-  parentId: 0,
-  component: '',
-  meta: {
-    activeName: '',
-    title: '',
-    icon: '',
-    defaultMenu: false,
-    closeTab: false,
-    keepAlive: false,
-  },
-  parameters: [],
-  menuBtn: [],
-})
-const changeName = () => {
-  form.value.path = form.value.name
-}
-
-const handleClose = (done) => {
-  initForm()
-  done()
-}
-// 删除菜单
-const deleteMenu = (ID) => {
-  ElMessageBox.confirm(t('view.superAdmin.menu.deleteAllRolesConfirm'), t('general.hint'), {
-    confirmButtonText: t('general.confirm'),
-    cancelButtonText: t('general.cancel'),
-    type: 'warning'
-  })
-    .then(async() => {
-      const res = await deleteBaseMenu({ ID })
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: t('general.deleteSuccess')
-        })
-
-        getTableData()
+  const rules = reactive({
+    path: [
+      {
+        required: true,
+        message: t('view.superAdmin.menu.enterMenuNameNote'),
+        trigger: 'blur'
       }
+    ],
+    component: [
+      {
+        required: true,
+        message: t('view.superAdmin.menu.enterFilePathNote'),
+        trigger: 'blur'
+      }
+    ],
+    'meta.title': [
+      {
+        required: true,
+        message: t('view.superAdmin.menu.enterMenuDisplayNameNote'),
+        trigger: 'blur'
+      }
+    ]
+  })
+
+  const tableData = ref([])
+  // 查询
+  const getTableData = async () => {
+    const table = await getMenuList()
+    if (table.code === 0) {
+      tableData.value = table.data
+    }
+  }
+
+  getTableData()
+
+  // 新增参数
+  const addParameter = (form) => {
+    if (!form.parameters) {
+      form.parameters = []
+    }
+    form.parameters.push({
+      type: 'query',
+      key: '',
+      value: ''
     })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: t('general.undeleted')
-      })
+  }
+
+  const fmtComponent = (component) => {
+    form.value.component = component.replace(/\\/g, '/')
+    form.value.name = toLowerCase(pathInfo['/src/' + component])
+    form.value.path = form.value.name
+  }
+
+  // 删除参数
+  const deleteParameter = (parameters, index) => {
+    parameters.splice(index, 1)
+  }
+
+  // 新增可控按钮
+  const addBtn = (form) => {
+    if (!form.menuBtn) {
+      form.menuBtn = []
+    }
+    form.menuBtn.push({
+      name: '',
+      desc: ''
     })
-}
-// 初始化弹窗内表格方法
-const menuForm = ref(null)
-const checkFlag = ref(false)
-const initForm = () => {
-  checkFlag.value = false
-  menuForm.value.resetFields()
-  form.value = {
+  }
+  // 删除可控按钮
+  const deleteBtn = async (btns, index) => {
+    const btn = btns[index]
+    if (btn.ID === 0) {
+      btns.splice(index, 1)
+      return
+    }
+    const res = await canRemoveAuthorityBtnApi({ id: btn.ID })
+    if (res.code === 0) {
+      btns.splice(index, 1)
+    }
+  }
+
+  const form = ref({
     ID: 0,
     path: '',
     name: '',
@@ -688,116 +571,179 @@ const initForm = () => {
     parentId: 0,
     component: '',
     meta: {
+      activeName: '',
       title: '',
       icon: '',
       defaultMenu: false,
       closeTab: false,
-      keepAlive: false,
+      keepAlive: false
     },
-  }
-}
-// 关闭弹窗
-
-const dialogFormVisible = ref(false)
-const closeDialog = () => {
-  initForm()
-  dialogFormVisible.value = false
-}
-// 添加menu
-const enterDialog = async() => {
-  menuForm.value.validate(async(valid) => {
-    if (valid) {
-      let res
-      if (isEdit.value) {
-        res = await updateBaseMenu(form.value)
-      } else {
-        res = await addBaseMenu(form.value)
-      }
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: isEdit.value ? t('general.editSuccess') : t('general.addSuccess')
-        })
-        getTableData()
-      }
-      initForm()
-      dialogFormVisible.value = false
-    }
+    parameters: [],
+    menuBtn: []
   })
-}
-
-const menuOption = ref([
-  {
-    ID: '0',
-    title: t('view.superAdmin.menu.rootMenu')
+  const changeName = () => {
+    form.value.path = form.value.name
   }
-])
-const setOptions = () => {
-  menuOption.value = [
-    {
-      ID: '0',
-      title: t('view.superAdmin.menu.rootDirctory')
+
+  const handleClose = (done) => {
+    initForm()
+    done()
+  }
+  // 删除菜单
+  const deleteMenu = (ID) => {
+    ElMessageBox.confirm(
+      t('view.superAdmin.menu.deleteAllRolesConfirm'),
+      t('general.hint'),
+      {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
+        type: 'warning'
+      }
+    )
+      .then(async () => {
+        const res = await deleteBaseMenu({ ID })
+        if (res.code === 0) {
+          ElMessage({
+            type: 'success',
+            message: t('general.deleteSuccess')
+          })
+
+          getTableData()
+        }
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: t('general.undeleted')
+        })
+      })
+  }
+  // 初始化弹窗内表格方法
+  const menuForm = ref(null)
+  const checkFlag = ref(false)
+  const initForm = () => {
+    checkFlag.value = false
+    menuForm.value.resetFields()
+    form.value = {
+      ID: 0,
+      path: '',
+      name: '',
+      hidden: false,
+      parentId: 0,
+      component: '',
+      meta: {
+        title: '',
+        icon: '',
+        defaultMenu: false,
+        closeTab: false,
+        keepAlive: false
+      }
     }
-  ]
-  setMenuOptions(tableData.value, menuOption.value, false)
-}
-const setMenuOptions = (menuData, optionsData, disabled) => {
-  menuData &&
-    menuData.forEach((item) => {
-      if (item.children && item.children.length) {
-        const option = {
-          title: item.meta.title,
-          ID: item.ID,
-          disabled: disabled || item.ID === form.value.ID,
-          children: [],
+  }
+  // 关闭弹窗
+
+  const dialogFormVisible = ref(false)
+  const closeDialog = () => {
+    initForm()
+    dialogFormVisible.value = false
+  }
+  // 添加menu
+  const enterDialog = async () => {
+    menuForm.value.validate(async (valid) => {
+      if (valid) {
+        let res
+        if (isEdit.value) {
+          res = await updateBaseMenu(form.value)
+        } else {
+          res = await addBaseMenu(form.value)
         }
-        setMenuOptions(
-          item.children,
-          option.children,
-          disabled || item.ID === form.value.ID
-        )
-        optionsData.push(option)
-      } else {
-        const option = {
-          title: item.meta.title,
-          ID: item.ID,
-          disabled: disabled || item.ID === form.value.ID,
+        if (res.code === 0) {
+          ElMessage({
+            type: 'success',
+            message: isEdit.value
+              ? t('general.editSuccess')
+              : t('general.addSuccess')
+          })
+          getTableData()
         }
-        optionsData.push(option)
+        initForm()
+        dialogFormVisible.value = false
       }
     })
-}
+  }
 
-// 添加菜单方法，id为 0则为添加根菜单
-const isEdit = ref(false)
-const dialogTitle = ref(t('view.superAdmin.menu.addMenu'))
-const addMenu = (id) => {
-  dialogTitle.value = t('view.superAdmin.menu.addMenu')
-  form.value.parentId = id
-  isEdit.value = false
-  setOptions()
-  dialogFormVisible.value = true
-}
-// 修改菜单方法
-const editMenu = async(id) => {
-  dialogTitle.value = t('view.superAdmin.menu.editMenu')
-  const res = await getBaseMenuById({ id })
-  form.value = res.data.menu
-  isEdit.value = true
-  setOptions()
-  dialogFormVisible.value = true
-}
+  const menuOption = ref([
+    {
+      ID: '0',
+      title: t('view.superAdmin.menu.rootMenu')
+    }
+  ])
+  const setOptions = () => {
+    menuOption.value = [
+      {
+        ID: '0',
+        title: t('view.superAdmin.menu.rootDirctory')
+      }
+    ]
+    setMenuOptions(tableData.value, menuOption.value, false)
+  }
+  const setMenuOptions = (menuData, optionsData, disabled) => {
+    menuData &&
+      menuData.forEach((item) => {
+        if (item.children && item.children.length) {
+          const option = {
+            title: item.meta.title,
+            ID: item.ID,
+            disabled: disabled || item.ID === form.value.ID,
+            children: []
+          }
+          setMenuOptions(
+            item.children,
+            option.children,
+            disabled || item.ID === form.value.ID
+          )
+          optionsData.push(option)
+        } else {
+          const option = {
+            title: item.meta.title,
+            ID: item.ID,
+            disabled: disabled || item.ID === form.value.ID
+          }
+          optionsData.push(option)
+        }
+      })
+  }
+
+  // 添加菜单方法，id为 0则为添加根菜单
+  const isEdit = ref(false)
+  const dialogTitle = ref(t('view.superAdmin.menu.addMenu'))
+  const addMenu = (id) => {
+    dialogTitle.value = t('view.superAdmin.menu.addMenu')
+    form.value.parentId = id
+    isEdit.value = false
+    setOptions()
+    dialogFormVisible.value = true
+  }
+  // 修改菜单方法
+  const editMenu = async (id) => {
+    dialogTitle.value = t('view.superAdmin.menu.editMenu')
+    const res = await getBaseMenuById({ id })
+    form.value = res.data.menu
+    isEdit.value = true
+    setOptions()
+    dialogFormVisible.value = true
+  }
 </script>
 
 <style scoped lang="scss">
-.warning {
-  color: #dc143c;
-}
-.icon-column {
-  display: flex;
-  align-items: center;
-  .el-icon {
-    margin-right: 8px;
+  .warning {
+    color: #dc143c;
   }
-}
+  .icon-column {
+    display: flex;
+    align-items: center;
+    .el-icon {
+      margin-right: 8px;
+    }
+  }
 </style>

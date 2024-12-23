@@ -21,11 +21,11 @@ const app = createApp(App)
 app.config.productionTip = false
 
 app
-    .use(run)
-    .use(ElementPlus)
-    .use(store)
-    .use(auth)
-    .use(router)
-    .use(i18n)
-    .mount('#app')
+  .use(run)
+  .use(ElementPlus)
+  .use(store)
+  .use(auth)
+  .use(router)
+  .use(i18n)
+  .mount('#app')
 export default app

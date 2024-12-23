@@ -14,43 +14,41 @@
   />
 </template>
 
-<script  setup>
-import { ref, nextTick } from 'vue';
-import VCharts from 'vue-echarts';
-import { useWindowResize } from '@/hooks/use-windows-resize'
+<script setup>
+  import { ref, nextTick } from 'vue'
+  import VCharts from 'vue-echarts'
+  import { useWindowResize } from '@/hooks/use-windows-resize'
 
-defineProps({
-  options: {
-    type: Object,
-    default() {
-      return {};
+  defineProps({
+    options: {
+      type: Object,
+      default() {
+        return {}
+      }
     },
-  },
-  autoResize: {
-    type: Boolean,
-    default: true,
-  },
-  width: {
-    type: String,
-    default: '100%',
-  },
-  height: {
-    type: String,
-    default: '100%',
-  },
-});
-const renderChart = ref(false);
-nextTick(() => {
-  renderChart.value = true;
-});
-useWindowResize(()=>{
-  renderChart.value = false;
+    autoResize: {
+      type: Boolean,
+      default: true
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    height: {
+      type: String,
+      default: '100%'
+    }
+  })
+  const renderChart = ref(false)
   nextTick(() => {
-    renderChart.value = true;
-  });
-
-})
-
+    renderChart.value = true
+  })
+  useWindowResize(() => {
+    renderChart.value = false
+    nextTick(() => {
+      renderChart.value = true
+    })
+  })
 </script>
 
 <style scoped lang="less"></style>

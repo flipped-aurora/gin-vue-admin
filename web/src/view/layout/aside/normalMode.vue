@@ -3,7 +3,7 @@
     class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700"
     :class="isCollapse ? '' : '  px-2'"
     :style="{
-      width: layoutSideWidth + 'px',
+      width: layoutSideWidth + 'px'
     }"
   >
     <el-scrollbar>
@@ -39,67 +39,67 @@
   </div>
 </template>
 
-  <script setup>
-import AsideComponent from "@/view/layout/aside/asideComponent/index.vue";
-import { ref, provide, watchEffect, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { useRouterStore } from "@/pinia/modules/router";
-import { useAppStore } from "@/pinia";
-import { storeToRefs } from "pinia";
-const appStore = useAppStore();
-const { device, config } = storeToRefs(appStore);
+<script setup>
+  import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
+  import { ref, provide, watchEffect, computed } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import { useRouterStore } from '@/pinia/modules/router'
+  import { useAppStore } from '@/pinia'
+  import { storeToRefs } from 'pinia'
+  const appStore = useAppStore()
+  const { device, config } = storeToRefs(appStore)
 
-defineOptions({
-  name: "GvaAside",
-});
-const route = useRoute();
-const router = useRouter();
-const routerStore = useRouterStore();
-const isCollapse = ref(false);
-const active = ref("");
-const layoutSideWidth = computed(() => {
-  if (!isCollapse.value) {
-    return config.value.layout_side_width;
-  } else {
-    return config.value.layout_side_collapsed_width;
+  defineOptions({
+    name: 'GvaAside'
+  })
+  const route = useRoute()
+  const router = useRouter()
+  const routerStore = useRouterStore()
+  const isCollapse = ref(false)
+  const active = ref('')
+  const layoutSideWidth = computed(() => {
+    if (!isCollapse.value) {
+      return config.value.layout_side_width
+    } else {
+      return config.value.layout_side_collapsed_width
+    }
+  })
+  watchEffect(() => {
+    active.value = route.meta.activeName || route.name
+  })
+
+  watchEffect(() => {
+    if (device.value === 'mobile') {
+      isCollapse.value = true
+    } else {
+      isCollapse.value = false
+    }
+  })
+
+  provide('isCollapse', isCollapse)
+
+  const selectMenuItem = (index) => {
+    const query = {}
+    const params = {}
+    routerStore.routeMap[index]?.parameters &&
+      routerStore.routeMap[index]?.parameters.forEach((item) => {
+        if (item.type === 'query') {
+          query[item.key] = item.value
+        } else {
+          params[item.key] = item.value
+        }
+      })
+    if (index === route.name) return
+    if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
+      window.open(index)
+    } else {
+      router.push({ name: index, query, params })
+    }
   }
-});
-watchEffect(() => {
-  active.value = route.meta.activeName || route.name;
-});
 
-watchEffect(() => {
-  if (device.value === "mobile") {
-    isCollapse.value = true;
-  } else {
-    isCollapse.value = false;
+  const toggleCollapse = () => {
+    isCollapse.value = !isCollapse.value
   }
-});
-
-provide("isCollapse", isCollapse);
-
-const selectMenuItem = (index, _, ele, aaa) => {
-  const query = {};
-  const params = {};
-  routerStore.routeMap[index]?.parameters &&
-    routerStore.routeMap[index]?.parameters.forEach((item) => {
-      if (item.type === "query") {
-        query[item.key] = item.value;
-      } else {
-        params[item.key] = item.value;
-      }
-    });
-  if (index === route.name) return;
-  if (index.indexOf("http://") > -1 || index.indexOf("https://") > -1) {
-    window.open(index);
-  } else {
-    router.push({ name: index, query, params });
-  }
-};
-
-const toggleCollapse = () => {
-  isCollapse.value = !isCollapse.value;
-};
 </script>
 
-  <style lang="scss"></style>
+<style lang="scss"></style>

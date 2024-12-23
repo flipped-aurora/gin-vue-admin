@@ -19,12 +19,38 @@
           v-model="prompt"
           type="textarea"
           :rows="5"
-          :maxlength="100"
+          :maxlength="2000"
           :placeholder="t('view.systemTools.autoCode.aiCodeNote')"
           resize="none"
           @focus="handleFocus"
           @blur="handleBlur"
         />
+
+        <div class="flex absolute right-28 bottom-2">
+          <el-tooltip effect="light">
+            <template #content>
+              <div>
+                【完全免费】前往<a
+                  class="text-blue-600"
+                  href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
+                  target="_blank"
+              >插件市场个人中心</a
+              >申请AIPath，填入config.yaml的ai-path属性即可使用。
+              </div>
+            </template>
+            <el-button
+                :disabled="form.onlyTemplate"
+                type="primary"
+                @click="eyeFunc()"
+            >
+              <el-icon size="18">
+                <ai-gva />
+              </el-icon>
+              识图
+            </el-button>
+          </el-tooltip>
+        </div>
+
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip effect="light">
             <template #content>
@@ -517,6 +543,26 @@
               <el-checkbox v-model="form.onlyTemplate" />
             </el-form-item>
           </el-col>
+          <el-col :span="9">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
+                    content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div>
+                    树型结构 <el-icon><QuestionFilled /></el-icon>
+                  </div>
+                </el-tooltip>
+              </template>
+              <div class="flex gap-2 items-center">
+                <el-checkbox v-model="form.isTree" />
+                <el-input v-model="form.treeJson" :disabled="!form.isTree" placeholder="前端展示json属性"></el-input>
+              </div>
+            </el-form-item>
+          </el-col>
+
         </el-row>
       </el-form>
     </div>
@@ -807,6 +853,10 @@
         </el-button>
         <el-upload
           :before-upload="importJson"
+<<<<<<< HEAD
+=======
+          :show-file-list="false"
+>>>>>>> main
           accept=".json"
           class="flex items-center"
           show-file-list="false"
@@ -906,7 +956,7 @@
     preview,
     getMeta,
     getPackageApi,
-    llmAuto
+    llmAuto, butler, eye
   } from '@/api/autoCode'
   import { getDict } from '@/utils/dictionary'
   import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
@@ -919,11 +969,13 @@
   const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
   const handleFocus = () => {
-    document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('paste', handlePaste);
   }
 
   const handleBlur = () => {
-    document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('paste', handlePaste);
   }
 
   const handleKeydown = (event) => {
@@ -931,6 +983,25 @@
       llmAutoFunc()
     }
   }
+
+  const handlePaste = (event) => {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload =async (e) => {
+          const base64String = e.target.result;
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
   const getOnlyNumber = () => {
     let randomNumber = ''
@@ -941,6 +1012,32 @@
   }
 
   const prompt = ref('')
+
+  const eyeFunc = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64String = e.target.result;
+
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    input.click();
+  }
+
 
   const llmAutoFunc = async (flag) => {
     if (flag && !form.value.structName) {
@@ -1171,6 +1268,8 @@
     gvaModel: true,
     autoCreateResource: false,
     onlyTemplate: false,
+    isTree: false,
+    treeJson: "",
     fields: []
   })
   const rules = ref({
@@ -1310,6 +1409,13 @@
   const autoCodeForm = ref(null)
 
   const enterForm = async (isPreview) => {
+    if (form.value.isTree && !form.value.treeJson){
+      ElMessage({
+        type: 'error',
+        message: '请填写树型结构的前端展示json属性'
+      })
+      return false
+    }
     if (!form.value.onlyTemplate) {
       if (form.value.fields.length <= 0) {
         ElMessage({
@@ -1407,12 +1513,15 @@
 
         delete form.value.primaryField
         if (isPreview) {
-          const data = await preview({
+          const res = await preview({
             ...form.value,
             isAdd: !!isAdd.value,
             fields: form.value.fields.filter((item) => !item.disabled)
           })
-          preViewCode.value = data.data.autoCode
+          if(res.code !== 0){
+            return
+          }
+          preViewCode.value = res.data.autoCode
           previewFlag.value = true
         } else {
           const res = await createTemp(form.value)
@@ -1467,9 +1576,9 @@
       const tbHump = toHump(dbform.value.tableName)
       form.value.structName = toUpperCase(tbHump)
       form.value.tableName = dbform.value.tableName
-      form.value.packageName = tbHump
-      form.value.abbreviation = tbHump
-      form.value.description = tbHump + t('view.systemTools.autoCode.table')
+      form.value.packageName = toLowerCase(tbHump)
+      form.value.abbreviation = toLowerCase(tbHump)
+      form.value.description = tbHump + ' ' + t('view.systemTools.autoCode.table')
       form.value.autoCreateApiToSql = true
       form.value.fields = []
       res.data.columns &&
@@ -1620,6 +1729,8 @@
       gvaModel: true,
       autoCreateResource: false,
       onlyTemplate: false,
+      isTree: false,
+      treeJson: "",
       fields: []
     }
     await nextTick()

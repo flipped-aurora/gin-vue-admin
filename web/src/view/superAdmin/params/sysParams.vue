@@ -409,7 +409,6 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
     elSearchFormRef.value?.validate(async (valid) => {
       if (!valid) return
       page.value = 1
-      pageSize.value = 10
       getTableData()
     })
   }

@@ -78,10 +78,9 @@
       effect="dark"
       :content="t('layout.tools.switchTheme')"
       placement="bottom"
-      :disabled="appStore.theme === 'auto'"
     >
       <el-icon
-        v-if="appStore.theme === 'dark'"
+        v-if="appStore.isDark"
         class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer border-solid"
         @click="appStore.toggleTheme(false)"
       >

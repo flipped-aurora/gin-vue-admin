@@ -87,12 +87,12 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
-	e := casbinService.Casbin()
-	err = e.LoadPolicy()
 	if err != nil {
 		return err
 	}
-	return err
+
+	e := casbinService.Casbin()
+	return e.LoadPolicy()
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -169,8 +169,8 @@ func (casbinService *CasbinService) AddPolicies(db *gorm.DB, rules [][]string) e
 	return db.Create(&casbinRules).Error
 }
 
-func (CasbinService *CasbinService) FreshCasbin() (err error) {
-	e := CasbinService.Casbin()
+func (casbinService *CasbinService) FreshCasbin() (err error) {
+	e := casbinService.Casbin()
 	err = e.LoadPolicy()
 	return err
 }

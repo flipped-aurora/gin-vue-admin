@@ -70,7 +70,7 @@
       </el-table>
     </div>
     <!-- 新增角色弹窗 -->
-    <el-drawer v-model="authorityFormVisible" :show-close="false">
+    <el-drawer v-model="authorityFormVisible" :size="appStore.drawerSize" :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ authorityTitleForm }}</span>
@@ -124,8 +124,7 @@
     <el-drawer
       v-if="drawer"
       v-model="drawer"
-      :with-header="false"
-      size="40%"
+      :size="appStore.drawerSize"
       :title="t('authority.roleConfig')"
     >
       <el-tabs :before-leave="autoEnter" type="border-card">
@@ -164,8 +163,9 @@
 
   import { ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  import { useAppStore } from "@/pinia"
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'Authority'
@@ -187,6 +187,7 @@
   const drawer = ref(false)
   const dialogType = ref('add')
   const activeRow = ref({})
+  const appStore = useAppStore()
 
   const authorityTitleForm = ref(t('authority.addRole'))
   const authorityFormVisible = ref(false)

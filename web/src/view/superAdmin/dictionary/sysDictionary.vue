@@ -51,7 +51,7 @@
     </div>
     <el-drawer
       v-model="drawerFormVisible"
-      size="34%"
+      :size="appStore.drawerSize"
       :show-close="false"
       :before-close="closeDrawer"
     >
@@ -141,13 +141,16 @@
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
   import { Edit } from '@element-plus/icons-vue'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { useAppStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'SysDictionary'
   })
+
+  const appStore = useAppStore()
 
   const selectID = ref(0)
 

@@ -4,7 +4,7 @@ import service from '@/utils/request'
 // @Tags {{.StructName}}
 // @Summary 创建{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "创建{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
@@ -20,7 +20,7 @@ export const create{{.StructName}} = (data) => {
 // @Tags {{.StructName}}
 // @Summary 删除{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "删除{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
@@ -36,7 +36,7 @@ export const delete{{.StructName}} = (params) => {
 // @Tags {{.StructName}}
 // @Summary 批量删除{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
@@ -52,7 +52,7 @@ export const delete{{.StructName}}ByIds = (params) => {
 // @Tags {{.StructName}}
 // @Summary 更新{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "更新{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
@@ -68,7 +68,7 @@ export const update{{.StructName}} = (data) => {
 // @Tags {{.StructName}}
 // @Summary 用id查询{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data query model.{{.StructName}} true "用id查询{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
@@ -84,7 +84,7 @@ export const find{{.StructName}} = (params) => {
 // @Tags {{.StructName}}
 // @Summary 分页获取{{.Description}}列表
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data query request.PageInfo true "分页获取{{.Description}}列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
@@ -101,7 +101,7 @@ export const get{{.StructName}}List = (params) => {
 // @Tags {{.StructName}}
 // @Summary 获取数据源
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}}DataSource [get]
@@ -117,7 +117,7 @@ export const get{{.StructName}}DataSource = () => {
 
 // @Tags {{.StructName}}
 // @Summary 不需要鉴权的{{.Description}}接口
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.Description}}列表"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"

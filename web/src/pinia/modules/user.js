@@ -3,11 +3,13 @@ import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElLoading, ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouterStore } from './router'
-import cookie from 'js-cookie'
-import i18n from '@/i18n' // added by mohamed hassan to multilangauge
+import { useCookies } from '@vueuse/integrations/useCookies'
+import { useStorage } from '@vueuse/core'
 import { useAppStore } from '@/pinia'
+import cookie from 'js-cookie'
+import i18n from '@/i18n' // added by mohamed hassan to multi languages
 
 export const useUserStore = defineStore('user', () => {
   const appStore = useAppStore()
@@ -19,12 +21,13 @@ export const useUserStore = defineStore('user', () => {
     headerImg: '',
     authority: {}
   })
-  const token = ref(
-    window.localStorage.getItem('token') || cookie.get('x-token') || ''
-  )
-  const language = ref(
-    window.localStorage.getItem('language') || cookie.get('language') || 'en'
-  ) // added by mohamed hassan to allow store selected language for multilanguage support.
+  const token = useStorage('token', '')
+  const xToken = useCookies('x-token')
+  const currentToken = computed(() => token.value || xToken.value || '')
+
+  const language = useStorage('language', '')
+  const xLanguage = useCookies('language')
+  const currentLanguage = computed(() => language.value || xLanguage.value || 'en')
   const setUserInfo = (val) => {
     userInfo.value = val
     if (val.originSetting) {
@@ -36,6 +39,7 @@ export const useUserStore = defineStore('user', () => {
 
   const setToken = (val) => {
     token.value = val
+    xToken.value = val
   }
 
   // added by mohame hassan to allow store selected language for multilanguage support.
@@ -49,8 +53,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const NeedInit = async () => {
-    token.value = ''
-    window.localStorage.removeItem('token')
+    await ClearStorage()
     await router.push({ name: 'Init', replace: true })
   }
 
@@ -70,49 +73,49 @@ export const useUserStore = defineStore('user', () => {
   }
   /* 登录*/
   const LoginIn = async (loginInfo) => {
-    loadingInstance.value = ElLoading.service({
-      fullscreen: true,
-      text: i18n.global.t('pinia.modules.user.loggingIn')
-    })
+    try {
+      loadingInstance.value = ElLoading.service({
+        fullscreen: true,
+        text: i18n.global.t('pinia.modules.user.loggingIn')
+      })
 
-    const res = await login(loginInfo)
+      const res = await login(loginInfo)
+      
+      if (res.code !== 0) {
+        ElMessage.error(res.message || '登录失败')
+        return false
+      }
+      // 登陆成功，设置用户信息和权限相关信息
+      setUserInfo(res.data.user)
+      setToken(res.data.token)
 
-    // 登陆失败，直接返回
-    if (res.code !== 0) {
-      loadingInstance.value.close()
+      // 初始化路由信息
+      const routerStore = useRouterStore()
+      await routerStore.SetAsyncRouter()
+      const asyncRouters = routerStore.asyncRouters
+
+      // 注册到路由表里
+      asyncRouters.forEach((asyncRouter) => {
+        router.addRoute(asyncRouter)
+      })
+
+      if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
+        ElMessage.error('请联系管理员进行授权')
+      } else {
+        await router.replace({ name: userInfo.value.authority.defaultRouter })
+      }
+
+      const isWindows = /windows/i.test(navigator.userAgent)
+      window.localStorage.setItem('osType', isWindows ? 'WIN' : 'MAC')
+
+      // 全部操作均结束，关闭loading并返回
+      return true
+    } catch (error) {
+      console.error('LoginIn error:', error)
       return false
+    } finally {
+      loadingInstance.value?.close()
     }
-
-    // 登陆成功，设置用户信息和权限相关信息
-    setUserInfo(res.data.user)
-    setToken(res.data.token)
-
-    // 初始化路由信息
-    const routerStore = useRouterStore()
-    await routerStore.SetAsyncRouter()
-    const asyncRouters = routerStore.asyncRouters
-
-    // 注册到路由表里
-    asyncRouters.forEach((asyncRouter) => {
-      router.addRoute(asyncRouter)
-    })
-
-    if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-      ElMessage.error(i18n.global.t('pinia.modules.user.connectAdmin'))
-    } else {
-      await router.replace({ name: userInfo.value.authority.defaultRouter })
-    }
-
-    const isWin = ref(/windows/i.test(navigator.userAgent))
-    if (isWin.value) {
-      window.localStorage.setItem('osType', 'WIN')
-    } else {
-      window.localStorage.setItem('osType', 'MAC')
-    }
-
-    // 全部操作均结束，关闭loading并返回
-    loadingInstance.value.close()
-    return true
   }
   /* 登出*/
   const LoginOut = async () => {
@@ -132,30 +135,22 @@ export const useUserStore = defineStore('user', () => {
   /* 清理数据 */
   const ClearStorage = async () => {
     token.value = ''
+    xToken.value = ''
     sessionStorage.clear()
-    window.localStorage.removeItem('token')
-    cookie.remove('x-token')
     localStorage.removeItem('originSetting')
   }
 
-  watch(
-    () => token.value,
-    () => {
-      window.localStorage.setItem('token', token.value)
-    }
-  )
-
   return {
     userInfo,
-    token,
-    language, // added by mohame hassan to allow store selected language for multilanguage support.
+    token: currentToken,
+    language: currentLanguage,
     NeedInit,
     ResetUserInfo,
     GetUserInfo,
     LoginIn,
     LoginOut,
-    setLanguage, // added by mohame hassan to allow store selected language for multilanguage support.
-    getLanguage, // added by mohame hassan to allow store selected language for multilanguage support.
+    setLanguage, // added by mohamed hassan to allow store selected language for multilingual support.
+    getLanguage, // added by mohamed hassan to allow store selected language for multilingual support.
     setToken,
     loadingInstance,
     ClearStorage

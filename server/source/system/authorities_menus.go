@@ -26,7 +26,7 @@ func (i *initMenuAuthority) TableCreated(ctx context.Context) bool {
 	return false // always replace
 }
 
-func (i initMenuAuthority) InitializerName() string {
+func (i *initMenuAuthority) InitializerName() string {
 	return "sys_menu_authorities"
 }
 
@@ -35,11 +35,12 @@ func (i *initMenuAuthority) InitializeData(ctx context.Context) (next context.Co
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	authorities, ok := ctx.Value(initAuthority{}.InitializerName()).([]sysModel.SysAuthority)
+	initAuth := &initAuthority{}
+	authorities, ok := ctx.Value(initAuth.InitializerName()).([]sysModel.SysAuthority)
 	if !ok {
 		return ctx, errors.Wrap(system.ErrMissingDependentContext, "创建 [菜单-权限] 关联失败, 未找到权限表初始化数据")
 	}
-	menus, ok := ctx.Value(initMenu{}.InitializerName()).([]sysModel.SysBaseMenu)
+	menus, ok := ctx.Value(new(initMenu).InitializerName()).([]sysModel.SysBaseMenu)
 	if !ok {
 		return next, errors.Wrap(errors.New(""), "创建 [菜单-权限] 关联失败, 未找到菜单表初始化数据")
 	}

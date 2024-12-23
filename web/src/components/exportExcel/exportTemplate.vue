@@ -22,7 +22,10 @@
       ElMessage.error(t('components.exportExcel.exportTemplate.templateIdErr'))
       return
     }
-    const baseUrl = import.meta.env.VITE_BASE_API
+    let baseUrl = import.meta.env.VITE_BASE_API
+    if (baseUrl === "/"){
+      baseUrl = ""
+    }
     const url = `${baseUrl}/sysExportTemplate/exportTemplate?templateID=${props.templateId}`
     window.open(url, '_blank')
   }

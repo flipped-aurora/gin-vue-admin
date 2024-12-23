@@ -170,51 +170,64 @@
           :model="autoFunc"
           label-width="80px"
         >
-          <el-form-item :label="t('view.systemTools.autoPkg.packageName')">
-            <el-input
-              v-model="autoFunc.package"
-              :placeholder="t('view.systemTools.autoPkg.enterPackageNameNote')"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item :label="t('view.systemTools.structName')">
-            <el-input
-              v-model="autoFunc.structName"
-              :placeholder="t('view.systemTools.autoCode.entStructName')"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item :label="t('view.systemTools.frontendFileName')">
-            <el-input
-              v-model="autoFunc.packageName"
-              :placeholder="t('view.systemTools.autoCode.fineNameInput')"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item :label="t('view.systemTools.backendFileName')">
-            <el-input
-              v-model="autoFunc.humpPackageName"
-              :placeholder="t('view.systemTools.autoCode.fineNameInput')"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item :label="t('general.description')">
-            <el-input
-              v-model="autoFunc.description"
-              :placeholder="
-                t('view.systemTools.dictionary.sysDictionary.enterDescription')
-              "
-              disabled
-            />
-          </el-form-item>
-          <el-form-item :label="t('view.systemTools.abbreviation')">
-            <el-input
-              v-model="autoFunc.abbreviation"
-              :placeholder="t('view.systemTools.enterAbbreviation')"
-              disabled
-            />
-          </el-form-item>
-
+          <el-row :gutter="12">
+            <el-col :span="8">
+              <el-form-item :label="t('view.systemTools.autoPkg.packageName')">
+                <el-input
+                    v-model="autoFunc.package"
+                    :placeholder="t('view.systemTools.autoPkg.enterPackageNameNote')"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item :label="t('view.systemTools.structName')">
+                <el-input
+                    v-model="autoFunc.structName"
+                    :placeholder="t('view.systemTools.autoCode.entStructName')"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item :label="t('view.systemTools.frontendFileName')">
+                <el-input
+                    v-model="autoFunc.packageName"
+                    :placeholder="t('view.systemTools.autoCode.fineNameInput')"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="12">
+            <el-col :span="8">
+              <el-form-item :label="t('view.systemTools.backendFileName')">
+                <el-input
+                    v-model="autoFunc.humpPackageName"
+                    :placeholder="t('view.systemTools.autoCode.fineNameInput')"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item :label="t('general.description')">
+                <el-input
+                    v-model="autoFunc.description"
+                    :placeholder="t('view.systemTools.dictionary.sysDictionary.enterDescription')"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item :label="t('view.systemTools.abbreviation')">
+                <el-input
+                    v-model="autoFunc.abbreviation"
+                    :placeholder="t('view.systemTools.enterAbbreviation')"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item label="是否AI填充：">
             <el-switch v-model="autoFunc.isAi" />
             <span class="text-sm text-red-600 p-2"

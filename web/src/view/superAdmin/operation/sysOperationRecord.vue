@@ -215,7 +215,6 @@
   // 条件搜索前端看此方法
   const onSubmit = () => {
     page.value = 1
-    pageSize.value = 10
     if (searchInfo.value.status === '') {
       searchInfo.value.status = null
     }

@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
@@ -39,7 +40,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	%s gin-vue-admin
-	%s: v2.7.7
+	%s: v2.7.8-beta1
 	%s
 	%s: https://github.com/flipped-aurora/gin-vue-admin
 	%s: https://plugin.gin-vue-admin.com

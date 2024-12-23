@@ -79,7 +79,7 @@
               v-model="config.side_mode"
               :options="sideModes"
               size="default"
-              @change="appStore.toggleSideModel"
+              @change="appStore.toggleSideMode"
             />
             <!-- <el-select
               v-model="config.side_mode"

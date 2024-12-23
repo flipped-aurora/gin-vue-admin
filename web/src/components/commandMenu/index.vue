@@ -96,11 +96,11 @@
     const quickArr = [
       {
         label: t('components.commandMenu.lightTheme'),
-        func: () => changeMode('light')
+        func: () => changeMode(false)
       },
       {
         label: t('components.commandMenu.darkTheme'),
-        func: () => changeMode('dark')
+        func: () => changeMode(true)
       },
       {
         label: t('components.commandMenu.logout'),
@@ -141,12 +141,8 @@
     dialogVisible.value = false
   }
 
-  const changeMode = (e) => {
-    if (e === null) {
-      appStore.toggleTheme(false)
-      return
-    }
-    appStore.toggleTheme(true)
+  const changeMode = (darkMode) => {
+    appStore.toggleTheme(darkMode)
   }
 
   const close = () => {

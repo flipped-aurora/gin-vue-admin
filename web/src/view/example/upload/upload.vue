@@ -69,7 +69,7 @@
         >
           <template #default="scope">
             <el-tag
-              :type="scope.row.tag === 'jpg' ? 'info' : 'success'"
+              :type="scope.row.tag?.toLowerCase() === 'jpg' ? 'info' : 'success'"
               disable-transitions
               >{{ scope.row.tag }}
             </el-tag>

@@ -115,10 +115,8 @@
         <el-select
           v-model="middleDate.dictType"
           style="width: 100%"
-          :disabled="middleDate.fieldType !== 'string'"
-          :placeholder="
-            t('view.systemTools.autoCode.fieldDialog.selectDictionary')
-          "
+          :disabled="middleDate.fieldType !== 'string' && middleDate.fieldType !== 'array'"
+          :placeholder="t('view.systemTools.autoCode.fieldDialog.selectDictionary')"
           clearable
         >
           <el-option
@@ -262,8 +260,10 @@
               "
               filterable
               allow-create
+              clearable
               @focus="getDBTableList"
               @change="selectDB"
+              @clear="clearAccress"
             >
               <el-option
                 v-for="item in dbTableList"
@@ -537,11 +537,19 @@
     }
   }
 
-  const dbNameChange = () => {
-    getDBTableList()
-    middleDate.value.dataSource.table = ''
+  const clearAccress = () => {
     middleDate.value.dataSource.value = ''
     middleDate.value.dataSource.label = ''
+  }
+
+  const clearDataSourceTable = () => {
+    middleDate.value.dataSource.table = ''
+  }
+
+  const dbNameChange = () => {
+    getDBTableList()
+    clearDataSourceTable()
+    clearAccress()
   }
 
   const dbTableList = ref([])
@@ -557,8 +565,7 @@
         value: item.tableName // 这里假设 value 也是 tableName，如果不同请调整
       }))
     }
-    middleDate.value.dataSource.value = ''
-    middleDate.value.dataSource.label = ''
+    clearAccress()
   }
 
   const dbColumnList = ref([])

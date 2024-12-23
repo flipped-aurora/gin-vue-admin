@@ -43,8 +43,8 @@
   })
 
   const beforeImageUpload = (file) => {
-    const isJPG = file.type === 'image/jpeg'
-    const isPng = file.type === 'image/png'
+    const isJPG = file.type?.toLowerCase() === 'image/jpeg'
+    const isPng = file.type?.toLowerCase() === 'image/png'
     if (!isJPG && !isPng) {
       ElMessage.error(t('components.upload.image.avatarImageFormatError'))
       return false

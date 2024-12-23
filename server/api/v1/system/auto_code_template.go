@@ -40,8 +40,8 @@ func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	info.PackageT = utils.FirstUpper(info.Package)
 	autoCode, err := autoCodeTemplateService.Preview(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error(global.Translate("sys_auto_code.previewFailErr"), zap.Error(err))
-		response.FailWithMessage(global.Translate("sys_auto_code.previewFailErr"), c)
+		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.previewFailErr")+": "+err.Error(), c)
 	} else {
 		response.OkWithDetailed(gin.H{"autoCode": autoCode}, global.Translate("sys_auto_code.previewSuccess"), c)
 	}
@@ -82,7 +82,7 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	}
 }
 
-// Create
+// AddFunc
 // @Tags      AddFunc
 // @Summary   增加方法
 // @Security  ApiKeyAuth

@@ -4,6 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"mime/multipart"
+	"net/url"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -11,11 +17,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
-	"mime/multipart"
-	"net/url"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type SysExportTemplateService struct {
@@ -155,7 +156,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	var tableTitle []string
 	var selectKeyFmt []string
 	for _, key := range columns {
-		selectKeyFmt = append(selectKeyFmt, fmt.Sprintf("%s", key))
+		selectKeyFmt = append(selectKeyFmt, key)
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
 

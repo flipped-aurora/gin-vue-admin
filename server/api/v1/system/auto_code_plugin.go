@@ -70,7 +70,7 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	response.OkWithMessage(fmt.Sprintf(global.Translate("system.messages.packSuccess"), zipPath), c)
 }
 
-// Packaged
+// InitMenu
 // @Tags      AutoCodePlugin
 // @Summary   打包插件
 // @Security  ApiKeyAuth
@@ -94,7 +94,7 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 	response.OkWithMessage(global.Translate("sys_auto_code.fileChangeSuccess"), c)
 }
 
-// Packaged
+// InitAPI
 // @Tags      AutoCodePlugin
 // @Summary   打包插件
 // @Security  ApiKeyAuth

@@ -54,21 +54,7 @@
           width="120"
         />
 
-        <el-table-column
-          align="left"
-          :label="t('general.createdAt')"
-          width="180"
-        >
-          <template #default="scope">
-            {{ formatDate(scope.row.CreatedAt) }}
-          </template>
-        </el-table-column>
-
-        <el-table-column
-          align="left"
-          :label="t('general.operations')"
-          width="180"
-        >
+        <el-table-column align="left" :label="t('general.operations')" :min-width="appStore.operateMinWith">
           <template #default="scope">
             <el-button
               type="primary"
@@ -105,7 +91,7 @@
 
     <el-drawer
       v-model="drawerFormVisible"
-      size="30%"
+      :size="appStore.drawerSize"
       :show-close="false"
       :before-close="closeDrawer"
     >
@@ -206,13 +192,16 @@
   import { ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { formatBoolean, formatDate } from '@/utils/format'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { useAppStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'SysDictionaryDetail'
   })
+
+  const appStore = useAppStore()
 
   const props = defineProps({
     sysDictionaryID: {

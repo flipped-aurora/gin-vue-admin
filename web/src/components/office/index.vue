@@ -39,7 +39,7 @@
       fileUrl.value = val
       const fileExt = val.split('.')[1] || ''
       const image = ['png', 'jpg', 'jpeg', 'gif']
-      ext.value = image.includes(fileExt) ? 'image' : fileExt
+      ext.value = image.includes(fileExt?.toLowerCase()) ? 'image' : fileExt
     },
     { immediate: true }
   )

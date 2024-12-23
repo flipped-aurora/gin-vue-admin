@@ -27,6 +27,8 @@ type AutoCode struct {
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
 	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
+	IsTree              bool                   `json:"isTree" example:"false"`              // 是否树形结构
+	TreeJson            string                 `json:"treeJson" example:"展示的树json字段"`       // 展示的树json字段
 	IsAdd               bool                   `json:"isAdd" example:"false"`               // 是否新增
 	Fields              []*AutoCodeField       `json:"fields"`
 	Module              string                 `json:"-"`

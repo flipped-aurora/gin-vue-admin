@@ -369,8 +369,8 @@
           <el-form-item :label="t('view.systemTools.system.charLength')">
             <el-input-number
               v-model="config.captcha['key-long']"
-              min="4"
-              max="6"
+              :min="4"
+              :max="6"
             />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.imageWidth')">

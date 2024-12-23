@@ -9,11 +9,11 @@
     >
       <template #prefix>
         <el-icon>
-          <component :is="value" />
+          <component v-if="value" :is="value" />
         </el-icon>
       </template>
       <el-option
-        v-for="item in options"
+        v-for="item in options.concat(config.logs)"
         :key="item.key"
         class="select__option_item"
         :label="item.key"
@@ -21,7 +21,7 @@
       >
         <span class="gva-icon" style="padding: 3px 0 0" :class="item.label">
           <el-icon>
-            <component :is="item.label" />
+            <component v-if="item.label" :is="item.label" />
           </el-icon>
         </span>
         <span style="text-align: left">{{ item.key }}</span>
@@ -32,9 +32,10 @@
 
 <script setup>
   import { reactive } from 'vue'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import config from "@/core/config";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'Icon'

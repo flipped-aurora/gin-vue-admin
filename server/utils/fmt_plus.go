@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -67,7 +68,7 @@ func MaheHump(s string) string {
 	return strings.Join(words, "")
 }
 
-// 随机字符串
+// RandomString 随机字符串
 func RandomString(n int) string {
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 	b := make([]rune, n)
@@ -79,4 +80,29 @@ func RandomString(n int) string {
 
 func RandomInt(min, max int) int {
 	return min + rand.Intn(max-min)
+}
+
+// BuildTree 用于构建一个树形结构
+func BuildTree[T common.TreeNode[T]](nodes []T) []T {
+	nodeMap := make(map[int]T)
+	// 创建一个基本map
+	for i := range nodes {
+		nodeMap[nodes[i].GetID()] = nodes[i]
+	}
+
+	for i := range nodes {
+		if nodes[i].GetParentID() != 0 {
+			parent := nodeMap[nodes[i].GetParentID()]
+			parent.SetChildren(nodes[i])
+		}
+	}
+
+	var rootNodes []T
+
+	for i := range nodeMap {
+		if nodeMap[i].GetParentID() == 0 {
+			rootNodes = append(rootNodes, nodeMap[i])
+		}
+	}
+	return rootNodes
 }

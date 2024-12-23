@@ -136,7 +136,7 @@ func (apiService *ApiService) IgnoreApi(ignoreApi system.SysIgnoreApi) (err erro
 func (apiService *ApiService) EnterSyncApi(syncApis systemRes.SysSyncApis) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var txErr error
-		if syncApis.NewApis != nil && len(syncApis.NewApis) > 0 {
+		if len(syncApis.NewApis) > 0 {
 			txErr = tx.Create(&syncApis.NewApis).Error
 			if txErr != nil {
 				return txErr

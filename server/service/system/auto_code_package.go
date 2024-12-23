@@ -3,6 +3,12 @@ package system
 import (
 	"context"
 	"fmt"
+	"go/token"
+	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -10,12 +16,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
-	"go/token"
 	"gorm.io/gorm"
-	"os"
-	"path/filepath"
-	"strings"
-	"text/template"
 )
 
 var AutoCodePackage = new(autoCodePackage)
@@ -161,7 +162,7 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 			//dir目录需要包含所有的dirNameMap
 			for k := 0; k < len(dir); k++ {
 				if dir[k].IsDir() {
-					if _, ok := dirNameMap[dir[k].Name()]; ok {
+					if ok := dirNameMap[dir[k].Name()]; ok {
 						delete(dirNameMap, dir[k].Name())
 					}
 				}

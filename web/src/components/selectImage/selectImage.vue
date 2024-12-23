@@ -23,14 +23,8 @@
       />
     </div>
 
-    <el-drawer
-      v-model="drawer"
-      :title="t('components.selectImage.selectImage.mediaLibrary')"
-      size="650px"
-    >
-      <warning-bar
-        :title="t('components.selectImage.selectImage.editFileNote')"
-      />
+    <el-drawer v-model="drawer" :title="t('components.selectImage.selectImage.mediaLibrary')" :size="appStore.drawerSize">
+      <warning-bar :title="t('components.selectImage.selectImage.editFileNote')" />
       <div class="gva-btn-list gap-2">
         <upload-common :image-common="imageCommon" @on-success="getImageList" />
         <upload-image
@@ -134,9 +128,12 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { Picture as IconPicture } from '@element-plus/icons-vue'
   import selectComponent from '@/components/selectImage/selectComponent.vue'
+  import { useAppStore } from "@/pinia";
   import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
   const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+  const appStore = useAppStore()
 
   const imageUrl = ref('')
   const imageCommon = ref('')
@@ -235,7 +232,7 @@
   const chooseImg = (url) => {
     if (props.fileType) {
       const typeSuccess = listObj[props.fileType].some((item) => {
-        if (url.includes(item)) {
+        if (url?.toLowerCase().includes(item)) {
           return true
         }
       })

@@ -7,7 +7,7 @@ import { useAppStore } from '@/pinia'
 export default function useChartOption(sourceOption) {
   const appStore = useAppStore()
   const isDark = computed(() => {
-    return appStore.theme === 'dark'
+    return appStore.isDark
   })
   const chartOption = computed(() => {
     return sourceOption(isDark.value)

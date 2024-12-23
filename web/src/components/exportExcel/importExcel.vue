@@ -17,7 +17,10 @@
 
   const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-  const baseUrl = import.meta.env.VITE_BASE_API
+  let baseUrl = import.meta.env.VITE_BASE_API
+  if (baseUrl === "/"){
+    baseUrl = ""
+  }
 
   const props = defineProps({
     templateId: {

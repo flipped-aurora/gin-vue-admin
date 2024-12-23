@@ -34,7 +34,7 @@ func (i *initCasbin) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&adapter.CasbinRule{})
 }
 
-func (i initCasbin) InitializerName() string {
+func (i *initCasbin) InitializerName() string {
 	var entity adapter.CasbinRule
 	return entity.TableName()
 }

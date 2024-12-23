@@ -5,7 +5,9 @@ import (
 	"{{.Module}}/global"
     "{{.Module}}/model/common/response"
     "{{.Module}}/model/{{.Package}}"
+    {{- if not .IsTree}}
     {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
+    {{- end }}
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
     {{- if .AutoCreateResource}}
@@ -25,7 +27,7 @@ type {{.StructName}}Api struct {}
 // @Tags {{.StructName}}
 // @Summary 创建{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body {{.Package}}.{{.StructName}} true "创建{{.Description}}"
 // @Success 200 {object} response.Response{msg=string} "创建成功"
@@ -53,7 +55,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 // @Tags {{.StructName}}
 // @Summary 删除{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body {{.Package}}.{{.StructName}} true "删除{{.Description}}"
 // @Success 200 {object} response.Response{msg=string} "删除成功"
@@ -76,7 +78,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 // @Tags {{.StructName}}
 // @Summary 批量删除{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{msg=string} "批量删除成功"
 // @Router /{{.Abbreviation}}/delete{{.StructName}}ByIds [delete]
@@ -98,7 +100,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 // @Tags {{.StructName}}
 // @Summary 更新{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data body {{.Package}}.{{.StructName}} true "更新{{.Description}}"
 // @Success 200 {object} response.Response{msg=string} "更新成功"
@@ -126,9 +128,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @Tags {{.StructName}}
 // @Summary 用id查询{{.Description}}
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
-// @Param data query {{.Package}}.{{.StructName}} true "用id查询{{.Description}}"
+// @Param data query {{.PrimaryField.FieldType}} true "用id查询{{.Description}}"
 // @Success 200 {object} response.Response{data={{.Package}}.{{.StructName}},msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
@@ -142,11 +144,30 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 	response.OkWithData(re{{.Abbreviation}}, c)
 }
 
+{{- if .IsTree }}
+// Get{{.StructName}}List 分页获取{{.Description}}列表,Tree模式下不接受参数
+// @Tags {{.StructName}}
+// @Summary 分页获取{{.Description}}列表
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
+// @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
+func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
+	list, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList()
+	if err != nil {
+	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
+        response.FailWithMessage("获取失败:" + err.Error(), c)
+        return
+    }
+    response.OkWithDetailed(list, "获取成功", c)
+}
+{{- else }}
 // Get{{.StructName}}List 分页获取{{.Description}}列表
 // @Tags {{.StructName}}
 // @Summary 分页获取{{.Description}}列表
 // @Security ApiKeyAuth
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.Description}}列表"
 // @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
@@ -171,12 +192,13 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
         PageSize: pageInfo.PageSize,
     }, global.Translate("general.getDataSuccess"), c)
 }
+{{- end }}
 
 {{- if .HasDataSource }}
 // Get{{.StructName}}DataSource 获取{{.StructName}}的数据源
 // @Tags {{.StructName}}
 // @Summary 获取{{.StructName}}的数据源
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{data=object,msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}DataSource [get]
@@ -197,9 +219,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}DataSource(c *
 // Get{{.StructName}}Public 不需要鉴权的{{.Description}}接口
 // @Tags {{.StructName}}
 // @Summary 不需要鉴权的{{.Description}}接口
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
-// @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.Description}}列表"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}Public [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}Public(c *gin.Context) {

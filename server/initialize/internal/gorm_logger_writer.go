@@ -33,5 +33,4 @@ func (c *Writer) Printf(message string, data ...any) {
 		}
 		return
 	}
-	c.writer.Printf(message, data...)
 }

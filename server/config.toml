@@ -1,0 +1,264 @@
+[aliyun-oss]
+Endpoint = 'yourEndpoint'
+AccessKeyId = 'yourAccessKeyId'
+AccessKeySecret = 'yourAccessKeySecret'
+BucketName = 'yourBucketName'
+BucketUrl = 'yourBucketUrl'
+BasePath = 'yourBasePath'
+
+[autocode]
+Web = 'web/src'
+Root = ''
+Server = 'server'
+Module = 'github.com/flipped-aurora/gin-vue-admin/server'
+AiPath = ''
+
+[aws-s3]
+Bucket = 'xxxxx-10005608'
+Region = 'ap-shanghai'
+Endpoint = ''
+SecretID = 'your-secret-id'
+SecretKey = 'your-secret-key'
+BaseURL = 'https://gin.vue.admin'
+PathPrefix = 'github.com/flipped-aurora/gin-vue-admin/server'
+S3ForcePathStyle = false
+DisableSSL = false
+
+[captcha]
+KeyLong = 6
+ImgWidth = 240
+ImgHeight = 80
+OpenCaptcha = 0
+OpenCaptchaTimeOut = 3600
+
+[cloudflare-r2]
+Bucket = 'xxxx0bucket'
+BaseURL = 'https://gin.vue.admin.com'
+Path = 'uploads'
+AccountID = 'xxx_account_id'
+AccessKeyID = 'xxx_key_id'
+SecretAccessKey = 'xxx_secret_key'
+
+[cors]
+Mode = 'strict-whitelist'
+
+[[cors.Whitelist]]
+AllowOrigin = 'example1.com'
+AllowMethods = 'POST, GET'
+AllowHeaders = 'Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id'
+ExposeHeaders = 'Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type'
+AllowCredentials = true
+
+[[cors.Whitelist]]
+AllowOrigin = 'example2.com'
+AllowMethods = 'GET, POST'
+AllowHeaders = 'content-type'
+ExposeHeaders = 'Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type'
+AllowCredentials = true
+
+[[db-list]]
+Type = ''
+AliasName = ''
+Prefix = ''
+Port = ''
+Config = ''
+Dbname = ''
+Username = ''
+Password = ''
+Path = ''
+Engine = ''
+LogMode = ''
+MaxIdleConns = 10
+MaxOpenConns = 100
+Singular = false
+LogZap = false
+Disable = true
+
+[[disk-list]]
+MountPoint = '/'
+
+[email]
+To = 'xxx@qq.com'
+From = 'xxx@163.com'
+Host = 'smtp.163.com'
+Secret = 'xxx'
+Nickname = 'test'
+Port = 465
+IsSSL = true
+
+[excel]
+Dir = './resource/excel/'
+
+[hua-wei-obs]
+Path = 'you-path'
+Bucket = 'you-bucket'
+Endpoint = 'you-endpoint'
+AccessKey = 'you-access-key'
+SecretKey = 'you-secret-key'
+
+[jwt]
+SigningKey = 'qmPlus'
+ExpiresTime = '7d'
+BufferTime = '1d'
+Issuer = 'qmPlus'
+
+[local]
+Path = 'uploads/file'
+StorePath = 'uploads/file'
+
+[minio]
+Endpoint = 'yourEndpoint'
+AccessKeyId = 'yourAccessKeyId'
+AccessKeySecret = 'yourAccessKeySecret'
+BucketName = 'yourBucketName'
+UseSSL = false
+BasePath = ''
+BucketUrl = 'http://host:9000/yourBucketName'
+
+[mongo]
+Coll = ''
+Options = ''
+Database = ''
+Username = ''
+Password = ''
+AuthSource = ''
+MinPoolSize = 0
+MaxPoolSize = 100
+SocketTimeoutMs = 0
+ConnectTimeoutMs = 0
+IsZap = false
+
+[[mongo.Hosts]]
+Host = ''
+Port = ''
+
+[mssql]
+Prefix = ''
+Port = ''
+Config = ''
+Dbname = ''
+Username = ''
+Password = ''
+Path = ''
+Engine = ''
+LogMode = ''
+MaxIdleConns = 10
+MaxOpenConns = 100
+Singular = false
+LogZap = false
+
+[mysql]
+Prefix = ''
+Port = ''
+Config = ''
+Dbname = ''
+Username = ''
+Password = ''
+Path = ''
+Engine = ''
+LogMode = ''
+MaxIdleConns = 10
+MaxOpenConns = 100
+Singular = false
+LogZap = false
+
+[oracle]
+Prefix = ''
+Port = ''
+Config = ''
+Dbname = ''
+Username = ''
+Password = ''
+Path = ''
+Engine = ''
+LogMode = ''
+MaxIdleConns = 10
+MaxOpenConns = 100
+Singular = false
+LogZap = false
+
+[pgsql]
+Prefix = ''
+Port = ''
+Config = ''
+Dbname = ''
+Username = ''
+Password = ''
+Path = ''
+Engine = ''
+LogMode = ''
+MaxIdleConns = 10
+MaxOpenConns = 100
+Singular = false
+LogZap = false
+
+[qiniu]
+Zone = 'ZoneHuaDong'
+Bucket = ''
+ImgPath = ''
+AccessKey = ''
+SecretKey = ''
+UseHTTPS = false
+UseCdnDomains = false
+
+[redis]
+Name = ''
+Addr = '127.0.0.1:6379'
+Password = ''
+DB = 0
+UseCluster = false
+ClusterAddrs = ['172.21.0.3:7000', '172.21.0.4:7001', '172.21.0.2:7002']
+
+[[redis-list]]
+Name = 'cache'
+Addr = '127.0.0.1:6379'
+Password = ''
+DB = 0
+UseCluster = false
+ClusterAddrs = ['172.21.0.3:7000', '172.21.0.4:7001', '172.21.0.2:7002']
+
+[sqlite]
+Prefix = ''
+Port = ''
+Config = ''
+Dbname = ''
+Username = ''
+Password = ''
+Path = ''
+Engine = ''
+LogMode = ''
+MaxIdleConns = 10
+MaxOpenConns = 100
+Singular = false
+LogZap = false
+
+[system]
+DbType = 'pgsql'
+OssType = 'local'
+RouterPrefix = ''
+Addr = 8888
+LimitCountIP = 15000
+LimitTimeIP = 3600
+UseMultipoint = false
+UseRedis = false
+UseMongo = false
+UseStrictAuth = false
+
+[tencent-cos]
+Bucket = 'xxxxx-10005608'
+Region = 'ap-shanghai'
+SecretID = 'your-secret-id'
+SecretKey = 'your-secret-key'
+BaseURL = 'https://gin.vue.admin'
+PathPrefix = 'github.com/flipped-aurora/gin-vue-admin/server'
+
+[zap]
+Level = 'info'
+Prefix = '[github.com/flipped-aurora/gin-vue-admin/server]'
+Format = 'console'
+Director = 'log'
+EncodeLevel = 'LowercaseColorLevelEncoder'
+StacktraceKey = 'stacktrace'
+ShowLine = true
+LogInConsole = true
+RetentionDay = -1

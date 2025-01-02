@@ -213,7 +213,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Router /sysExportTemplate/exportExcel [get]
+// @Router /sysExportTemplate/ExportTemplate [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context) {
 	templateID := c.Query("templateID")
 	if templateID == "" {

@@ -2,7 +2,7 @@
 // {{.FuncName}} {{.FuncDesc}}
 // @Tags {{.StructName}}
 // @Summary {{.FuncDesc}}
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/{{.Router}} [{{.Method}}]
@@ -22,7 +22,7 @@ func (a *{{.Abbreviation}}) {{.FuncName}}(c *gin.Context) {
 // {{.FuncName}} {{.FuncDesc}}
 // @Tags {{.StructName}}
 // @Summary {{.FuncDesc}}
-// @accept application/json
+// @Accept application/json
 // @Produce application/json
 // @Param data query {{.Package}}Req.{{.StructName}}Search true "成功"
 // @Success 200 {object} response.Response{data=object,msg=string} "成功"

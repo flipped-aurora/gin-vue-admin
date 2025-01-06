@@ -9,9 +9,9 @@
 
       <!-- 个人信息区 -->
       <div class="px-8 -mt-20 pb-8">
-        <div class="flex items-start gap-8">
+        <div class="flex flex-col lg:flex-row items-start gap-8">
           <!-- 左侧头像 -->
-          <div class="profile-avatar-wrapper flex-shrink-0">
+          <div class="profile-avatar-wrapper flex-shrink-0 mx-auto lg:mx-0">
             <ProfileAvatar
               v-model="userStore.userInfo.headerImg"
               @update:modelValue="handleAvatarChange"
@@ -19,11 +19,11 @@
           </div>
 
           <!-- 右侧信息 -->
-          <div class="flex-1 pt-20">
-            <div class="flex items-center justify-between">
-              <div class="flex flex-col pt-2">
+          <div class="flex-1 pt-20 w-full">
+            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div>
                 <div class="flex items-center gap-4 mb-4">
-                  <div v-if="!editFlag" class="text-xl font-medium flex items-center gap-3 text-gray-800 dark:text-gray-100">
+                  <div v-if="!editFlag" class="text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-gray-100">
                     {{ userStore.userInfo.nickName }}
                     <el-icon
                       class="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
@@ -35,7 +35,7 @@
                   <div v-else class="flex items-center gap-3">
                     <el-input
                       v-model="nickName"
-                      class="w-48 mt-2"
+                      class="w-48"
                       size="large"
                     />
                     <el-button type="success" circle @click="enterEdit">
@@ -47,7 +47,7 @@
                   </div>
                 </div>
 
-                <div class="flex items-center gap-8 text-gray-500 dark:text-gray-400">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 text-gray-500 dark:text-gray-400">
                   <div class="flex items-center gap-2">
                     <el-icon><location /></el-icon>
                     <span>中国·北京市·朝阳区</span>
@@ -63,7 +63,7 @@
                 </div>
               </div>
 
-              <div class="flex gap-4 self-end mb-1">
+              <div class="flex gap-4 mt-4 lg:mt-0">
                 <el-button type="primary" plain>
                   <el-icon><message /></el-icon>
                   发送消息
@@ -80,9 +80,9 @@
     </div>
 
     <!-- 主要内容区 -->
-    <div class="grid grid-cols-12 gap-8">
+    <div class="grid lg:grid-cols-12 md:grid-cols-1 gap-8">
       <!-- 左侧信息栏 -->
-      <div class="col-span-4">
+      <div class="lg:col-span-4">
         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 profile-card">
           <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
             <el-icon class="text-blue-500"><info-filled /></el-icon>
@@ -150,7 +150,7 @@
       </div>
 
       <!-- 右侧内容区 -->
-      <div class="col-span-8">
+      <div class="lg:col-span-8">
         <div class="bg-white dark:bg-slate-800 rounded-xl p-6 profile-card">
           <el-tabs class="custom-tabs">
             <el-tab-pane>
@@ -160,21 +160,21 @@
                   数据统计
                 </div>
               </template>
-              <div class="grid grid-cols-4 gap-6 py-6">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 py-6">
                 <div class="stat-card">
-                  <div class="text-4xl font-bold text-blue-500 mb-2">138</div>
+                  <div class="text-2xl lg:text-4xl font-bold text-blue-500 mb-2">138</div>
                   <div class="text-gray-500 text-sm">项目参与</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-4xl font-bold text-green-500 mb-2">2.3k</div>
+                  <div class="text-2xl lg:text-4xl font-bold text-green-500 mb-2">2.3k</div>
                   <div class="text-gray-500 text-sm">代码提交</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-4xl font-bold text-purple-500 mb-2">95%</div>
+                  <div class="text-2xl lg:text-4xl font-bold text-purple-500 mb-2">95%</div>
                   <div class="text-gray-500 text-sm">任务完成</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-4xl font-bold text-yellow-500 mb-2">12</div>
+                  <div class="text-2xl lg:text-4xl font-bold text-yellow-500 mb-2">12</div>
                   <div class="text-gray-500 text-sm">获得勋章</div>
                 </div>
               </div>
@@ -524,7 +524,7 @@
 
 <style lang="scss">
   .profile-container {
-    @apply p-6 min-h-screen bg-gray-50 dark:bg-slate-900;
+    @apply p-4 lg:p-6 min-h-screen bg-gray-50 dark:bg-slate-900;
 
     .bg-pattern {
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
@@ -542,7 +542,7 @@
     }
 
     .stat-card {
-      @apply p-6 rounded-lg bg-gray-50 dark:bg-slate-700/50 text-center hover:shadow-md transition-all duration-300;
+      @apply p-4 lg:p-6 rounded-lg bg-gray-50 dark:bg-slate-700/50 text-center hover:shadow-md transition-all duration-300;
     }
 
     .custom-tabs {

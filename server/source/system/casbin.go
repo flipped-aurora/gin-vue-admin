@@ -185,6 +185,9 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysParams/findSysParams", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysParams/getSysParamsList", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysParams/getSysParam", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/attachmentCategory/getCategoryList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/attachmentCategory/addCategory", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/attachmentCategory/deleteCategory", V2: "POST"},
 
 		{Ptype: "p", V0: "8881", V1: "/user/admin_register", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},

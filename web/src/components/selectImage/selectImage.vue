@@ -14,14 +14,6 @@
       <div class="flex">
         <div class="w-64" style="border-right: solid 1px var(--el-border-color);">
           <el-scrollbar style="height: calc(100vh - 110px)">
-            <div class="flex cursor-pointer">
-              <div class="w-36 ml-6" :class="search.classId === 0 ? 'text-blue-500 font-bold' : ''" @click="getAll">
-                全部分类
-              </div>
-              <el-icon class="ml-3 text-right mt-2" @click="addCategoryFun({ID:0})">
-                <Plus />
-              </el-icon>
-            </div>
             <el-tree
                 :data="categories"
                 node-key="id"
@@ -32,15 +24,14 @@
               <template #default="{ node, data }">
                 <div class="w-36" :class="search.classId === data.ID ? 'text-blue-500 font-bold' : ''">{{ data.name }}
                 </div>
-                <el-dropdown @command="(command) => handleCommand(data, command)">
-                  <el-icon class="ml-3 text-right">
-                    <MoreFilled />
-                  </el-icon>
+                <el-dropdown>
+                  <el-icon class="ml-3 text-right" v-if="data.ID > 0"><MoreFilled /></el-icon>
+                  <el-icon class="ml-3 text-right mt-1" v-else><Plus /></el-icon>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item command="add">添加分类</el-dropdown-item>
-                      <el-dropdown-item command="edit" v-if="data.ID > 0">编辑分类</el-dropdown-item>
-                      <el-dropdown-item command="delete" v-if="data.ID > 0">删除分类</el-dropdown-item>
+                      <el-dropdown-item @click="addCategoryFun(data)">添加分类</el-dropdown-item>
+                      <el-dropdown-item @click="editCategory(data)" v-if="data.ID > 0">编辑分类</el-dropdown-item>
+                      <el-dropdown-item @click="deleteCategoryFun(data.ID)" v-if="data.ID > 0">删除分类</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
@@ -113,6 +104,16 @@
                draggable
     >
       <el-form ref="categoryForm" :rules="rules" :model="categoryFormData" label-width="80px">
+        <el-form-item label="上级分类">
+          <el-tree-select
+              v-model="categoryFormData.pid"
+              :data="categories"
+              check-strictly
+              :props="defaultProps"
+              :render-after-expand="false"
+              style="width: 240px"
+          />
+        </el-form-item>
         <el-form-item label="分类名称" prop="name">
           <el-input v-model.trim="categoryFormData.name" placeholder="分类名称"></el-input>
         </el-form-item>
@@ -296,14 +297,21 @@ const deleteCheck = (item) => {
 const defaultProps = {
   children: 'children',
   label: 'name',
-  value: 'id'
+  value: 'ID'
 }
 
 const categories = ref([])
 const fetchCategories = async() => {
   const res = await getCategoryList()
+  let data = {
+    name: '全部分类',
+    ID: 0,
+    pid: 0,
+    children:[]
+  }
   if (res.code === 0) {
     categories.value = res.data
+    categories.value.unshift(data)
   }
 }
 
@@ -314,31 +322,10 @@ const handleNodeClick = (node) => {
   getImageList()
 }
 
-const getAll = () => {
-  search.value.keyword = null
-  search.value.classId = 0
-  page.value = 1
-  getImageList()
-}
-
 const onSuccess = () => {
   search.value.keyword = null
   page.value = 1
   getImageList()
-}
-
-const handleCommand = (category, command) => {
-  switch (command) {
-    case 'add':
-      addCategoryFun(category)
-      break
-    case 'edit':
-      editCategory(category)
-      break
-    case 'delete':
-      deleteCategoryFun(category.ID)
-      break
-  }
 }
 
 const categoryDialogVisible = ref(false)

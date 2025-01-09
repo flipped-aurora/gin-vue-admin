@@ -12,12 +12,14 @@ type AttachmentCategoryService struct{}
 // AddCategory 创建/更新的分类
 func (a *AttachmentCategoryService) AddCategory(req *example.ExaAttachmentCategory) (err error) {
 	// 检查是否已存在相同名称的分类
-	if (!errors.Is(global.GVA_DB.Take(&example.ExaAttachmentCategory{}, "name = ?", req.Name).Error, gorm.ErrRecordNotFound)) {
+	if (!errors.Is(global.GVA_DB.Take(&example.ExaAttachmentCategory{}, "name = ? and pid = ?", req.Name, req.Pid).Error, gorm.ErrRecordNotFound)) {
 		return errors.New("分类名称已存在")
 	}
-
 	if req.ID > 0 {
-		if err = global.GVA_DB.Model(&example.ExaAttachmentCategory{}).Where("id = ?", req.ID).Update("name", req.Name).Error; err != nil {
+		if err = global.GVA_DB.Model(&example.ExaAttachmentCategory{}).Where("id = ?", req.ID).Updates(&example.ExaAttachmentCategory{
+			Name: req.Name,
+			Pid:  req.Pid,
+		}).Error; err != nil {
 			return err
 		}
 	} else {

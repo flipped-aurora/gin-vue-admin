@@ -3,10 +3,12 @@ package core
 import (
 	"flag"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
-	"github.com/gin-gonic/gin"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
+	"github.com/gin-gonic/gin"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -48,10 +50,17 @@ func Viper(path ...string) *viper.Viper {
 
 	v := viper.New()
 	v.SetConfigFile(config)
-	v.SetConfigType("yaml")
+
+	ext := strings.ToLower(filepath.Ext(config))
+	configType := strings.TrimPrefix(ext, ".")
+	if configType == "" {
+		configType = "yaml"
+	}
+	v.SetConfigType(configType)
+
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Errorf("fatal error reading config file: %w", err))
 	}
 	v.WatchConfig()
 

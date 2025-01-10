@@ -81,7 +81,7 @@
     }
     const fileR = new FileReader() // 创建一个reader用来读取文件流
     const fileInput = e.target.files[0] // 获取当前文件
-    const maxSize = 50 * 1024 * 1024
+    const maxSize = 5 * 1024 * 1024
     file.value = fileInput // file 丢全局方便后面用 可以改进为func传参形式
     percentage.value = 0
     if (file.value.size < maxSize) {

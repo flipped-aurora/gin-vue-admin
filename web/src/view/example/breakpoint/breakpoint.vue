@@ -3,25 +3,27 @@
     <div class="gva-table-box">
       <el-divider content-position="left">大文件上传</el-divider>
       <form id="fromCont" method="post">
-        <div class="fileUpload" @click="inputChange">
-          选择文件
-          <input
-            v-show="false"
-            id="file"
-            ref="FileInput"
-            multiple="multiple"
-            type="file"
-            @change="choseFile"
-          />
+        <!-- 新增按钮容器，使用 Flexbox 对齐按钮 -->
+        <div class="button-container">
+          <div class="fileUpload" @click="inputChange">
+            <span class="takeFile">选择文件</span>
+            <input
+              v-show="false"
+              id="file"
+              ref="FileInput"
+              multiple="multiple"
+              type="file"
+              @change="choseFile"
+            />
+          </div>
+          <el-button
+            :disabled="limitFileSize"
+            type="primary"
+            class="uploadBtn"
+            @click="getFile"
+          >上传文件</el-button>
         </div>
       </form>
-      <el-button
-        :disabled="limitFileSize"
-        type="primary"
-        class="uploadBtn"
-        @click="getFile"
-        >上传文件</el-button
-      >
       <div class="el-upload__tip">请上传不超过5MB的文件</div>
       <div class="list">
         <transition name="list" tag="p">
@@ -127,25 +129,29 @@
           })
         } else {
           waitUpLoad.value = [] // 秒传则没有需要上传的切片
-          ElMessage.success('文件已秒传')
+          ElMessage.success('文件已秒传!')
         }
         waitNum.value = waitUpLoad.value.length // 记录长度用于百分比展示
       }
     } else {
       limitFileSize.value = true
-      ElMessage('请上传小于5M文件')
+      ElMessage('请上传小于5M文件!')
     }
   }
 
   const getFile = () => {
     // 确定按钮
     if (file.value === null) {
-      ElMessage('请先上传文件')
+      ElMessage('请先上传文件!')
       return
     }
+    // 检查文件上传进度
     if (percentage.value === 100) {
+      ElMessage.success('上传已完成!')  // 添加提示消息
       percentageFlage.value = false
+      return // 如果进度已完成，阻止继续执行后续代码
     }
+    // 如果文件未上传完成，继续上传切片
     sliceFile() // 上传切片
   }
 
@@ -228,35 +234,75 @@
   #fromCont {
     display: inline-block;
   }
-  .fileUpload {
-    padding: 3px 10px;
-    font-size: 12px;
-    height: 20px;
-    line-height: 20px;
-    position: relative;
-    cursor: pointer;
-    border: 1px solid #c1c1c1;
-    border-radius: 4px;
-    overflow: hidden;
-    display: inline-block;
-    input {
-      position: absolute;
-      font-size: 100px;
-      right: 0;
-      top: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
+
+  .gva-table-box {
+    display: block;
   }
+
+  .button-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .fileUpload,
+  .uploadBtn {
+    width: 90px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .fileUpload {
+    padding: 0 15px;
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    margin-right: 5px;
+  }
+
+  .uploadBtn {
+    background-color: #007bff;
+    color: #fff;
+    margin-left: 10px;
+  }
+
+  .fileUpload:hover {
+    background-color: #0056b3;
+  }
+
+  .uploadBtn:hover {
+    background-color: #0056b3;
+  }
+
+
+  .fileUpload:active,
+  .uploadBtn:active {
+    transform: translateY(2px);
+  }
+
+  .fileUpload input {
+    position: relative;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+
+
   .fileName {
     display: inline-block;
     vertical-align: top;
     margin: 6px 15px 0 15px;
-  }
-  .uploadBtn {
-    position: relative;
-    top: -10px;
-    margin-left: 15px;
   }
   .tips {
     margin-top: 30px;

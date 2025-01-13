@@ -1,5 +1,6 @@
 <template>
   <div>
+    <warning-bar title="获取参数且缓存方法已在前端utils/params 已经封装完成 不必自己书写 使用方法查看文件内注释" />
     <div class="gva-search-box">
       <el-form
         ref="elSearchFormRef"
@@ -231,7 +232,7 @@
         <p class="mb-2 text-sm text-gray-600">
           前端可以通过引入
           <code class="bg-blue-100 px-1 py-0.5 rounded"
-            >import { getParams } from '@/utils/dictionary'</code
+            >import { getParams } from '@/utils/params'</code
           >
           然后通过
           <code class="bg-blue-100 px-1 py-0.5 rounded"
@@ -297,6 +298,7 @@
   import { formatDate } from '@/utils/format'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { ref, reactive } from 'vue'
+  import WarningBar from "@/components/warningBar/warningBar.vue";
 
   defineOptions({
     name: 'SysParams'

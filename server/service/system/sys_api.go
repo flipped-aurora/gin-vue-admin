@@ -3,13 +3,12 @@ package system
 import (
 	"errors"
 	"fmt"
-	"strings"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"gorm.io/gorm"
+	"strings"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -136,7 +135,7 @@ func (apiService *ApiService) IgnoreApi(ignoreApi system.SysIgnoreApi) (err erro
 func (apiService *ApiService) EnterSyncApi(syncApis systemRes.SysSyncApis) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var txErr error
-		if len(syncApis.NewApis) > 0 {
+		if syncApis.NewApis != nil && len(syncApis.NewApis) > 0 {
 			txErr = tx.Create(&syncApis.NewApis).Error
 			if txErr != nil {
 				return txErr

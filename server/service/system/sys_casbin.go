@@ -87,12 +87,12 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
+	e := casbinService.Casbin()
+	err = e.LoadPolicy()
 	if err != nil {
 		return err
 	}
-
-	e := casbinService.Casbin()
-	return e.LoadPolicy()
+	return err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

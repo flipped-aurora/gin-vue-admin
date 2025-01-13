@@ -4,21 +4,20 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go/ast"
-	"go/format"
-	"go/parser"
-	"go/token"
-	"os"
-	"path/filepath"
-	"strings"
-	"text/template"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	utilsAst "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"go/ast"
+	"go/format"
+	"go/parser"
+	"go/token"
 	"gorm.io/gorm"
+	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
 )
 
 var AutoCodeTemplate = new(autoCodeTemplate)
@@ -192,12 +191,13 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 		return nil, errors.Wrap(err, "查询包失败!")
 	}
 	// 增加判断: 重复创建struct 或者重复的简称
-	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Abbreviation, info.Package) && !info.IsAdd {
+	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Abbreviation, info.Package) && !info.IsAdd  {
 		return nil, errors.New("已经创建过此数据结构或重复简称,请勿重复创建!")
 	}
 
+	codes := make(map[string]strings.Builder)
 	preview := make(map[string]string)
-	codes, _, _, err := s.generate(ctx, info, entity)
+	codes, _, _, err = s.generate(ctx, info, entity)
 	if err != nil {
 		return nil, err
 	}
@@ -291,7 +291,8 @@ func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
 	if err != nil {
 		return err
 	}
-	return s.addTemplateToAst("router", info)
+	err = s.addTemplateToAst("router", info)
+	return nil
 }
 
 func (s *autoCodeTemplate) GetApiAndServer(info request.AutoFunc) (map[string]string, error) {
@@ -352,14 +353,10 @@ func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) err
 	}
 
 	src, err := os.ReadFile(tPath)
-	if err != nil {
-		return err
-	}
-
 	fileSet := token.NewFileSet()
 	astFile, err := parser.ParseFile(fileSet, "", src, 0)
 	if err != nil {
-		return err
+		fmt.Println(err)
 	}
 	funcDecl := utilsAst.FindFunction(astFile, funcName)
 	stmtNode := utilsAst.CreateStmt(stmtStr)

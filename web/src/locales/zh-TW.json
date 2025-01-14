@@ -1006,6 +1006,7 @@
       },
       "user": {
         "loggingIn": "登錄中，請稍候...",
+        "loginFailed": "登入失敗",
         "connectAdmin": "請聯繫管理員進行授權"
       }
     }

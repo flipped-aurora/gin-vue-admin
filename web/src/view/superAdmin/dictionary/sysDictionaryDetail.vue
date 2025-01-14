@@ -54,7 +54,7 @@
           width="120"
         />
 
-        <el-table-column align="left" :label="t('general.operations')" :min-width="appStore.operateMinWith">
+        <el-table-column align="left" :label="t('general.operations')" :min-width="appStore.operateMinWith" width="200px">
           <template #default="scope">
             <el-button
               type="primary"

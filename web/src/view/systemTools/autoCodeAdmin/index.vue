@@ -53,7 +53,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          :lable="t('general.operations')"
+          :label="t('general.operations')"
           min-width="240"
         >
           <template #default="scope">

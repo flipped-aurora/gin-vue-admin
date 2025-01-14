@@ -26,8 +26,8 @@
         />
         <el-table-column
           align="left"
-          :lable="t('general.operations')"
-          width="460"
+          :label="t('general.operations')"
+          width="440"
         >
           <template #default="scope">
             <el-button

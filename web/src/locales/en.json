@@ -255,6 +255,7 @@
       },
       "user": {
         "loggingIn": "Logging in, please wait...",
+        "loginFailed": "Login Failed",
         "connectAdmin": "Please contact the administrator for authorization"
       }
     }

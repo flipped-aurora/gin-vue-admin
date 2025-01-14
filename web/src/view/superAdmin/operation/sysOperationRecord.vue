@@ -100,7 +100,7 @@
           align="left"
           :label="t('general.request')"
           prop="path"
-          width="100"
+          width="200"
         >
           <template #default="scope">
             <div>
@@ -127,7 +127,7 @@
           align="left"
           :label="t('view.operation.sysOperationRecord.response')"
           prop="path"
-          width="100"
+          width="200"
         >
           <template #default="scope">
             <div>
@@ -160,7 +160,7 @@
           }}</template>
         </el-table-column>
 
-        <el-table-column align="left" :label="t('general.operations')">
+        <el-table-column align="left" :label="t('general.operations')" fixed="right">
           <template #default="scope">
             <el-button
               icon="delete"

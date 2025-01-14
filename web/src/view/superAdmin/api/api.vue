@@ -118,7 +118,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="left" fixed="right" :label="t('general.operations')" :min-width="appStore.operateMinWith">
+        <el-table-column align="left" fixed="right" :label="t('general.operations')" :min-width="appStore.operateMinWith" width="180px">
           <template #default="scope">
             <el-button
               icon="edit"

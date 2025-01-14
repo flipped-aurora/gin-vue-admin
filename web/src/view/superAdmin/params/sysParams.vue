@@ -113,10 +113,10 @@
           align="left"
           :label="t('view.superAdmin.params.paramName')"
           prop="name"
-          width="160"
+          width="200"
         />
-        <el-table-column align="left" :label="t('view.superAdmin.params.paramKey')" prop="key" width="160" />
-        <el-table-column align="left" :label="t('view.superAdmin.params.paramValue')" prop="value" width="160" />
+        <el-table-column align="left" :label="t('view.superAdmin.params.paramKey')" prop="key" width="200" />
+        <el-table-column align="left" :label="t('view.superAdmin.params.paramValue')" prop="value" width="200" />
         <el-table-column
           align="left"
           :label="t('view.superAdmin.params.paramDesc')"

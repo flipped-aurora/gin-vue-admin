@@ -257,6 +257,7 @@
       },
       "user": {
         "loggingIn": "登录中，请稍候...",
+        "loginFailed": "登录失败",
         "connectAdmin": "请联系管理员进行授权"
       }
     }

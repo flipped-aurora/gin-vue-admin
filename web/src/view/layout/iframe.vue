@@ -29,18 +29,12 @@
           class="overflow-auto"
           :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
         >
-          <router-view v-if="reloadFlag" v-slot="{ Component, route }">
-            <div
-              id="gva-base-load-dom"
-              class="gva-body-h bg-gray-50 dark:bg-slate-800"
-            >
-              <transition mode="out-in" name="el-fade-in-linear">
-                <keep-alive :include="routerStore.keepAliveRouters">
-                  <component :is="Component" :key="route.fullPath" />
-                </keep-alive>
-              </transition>
-            </div>
-          </router-view>
+          <iframe
+            v-if="reloadFlag"
+            id="gva-base-load-dom"
+            class="gva-body-h bg-gray-50 dark:bg-slate-800 w-full border-t border-gray-200 dark:border-slate-700"
+            src="https://www.gin-vue-admin.com"
+          ></iframe>
           <BottomInfo />
         </div>
       </div>
@@ -65,7 +59,7 @@
   const { config, isDark, device } = storeToRefs(appStore)
 
   defineOptions({
-    name: 'GvaLayout'
+    name: 'GvaLayoutIframe'
   })
 
   useResponsive(true)

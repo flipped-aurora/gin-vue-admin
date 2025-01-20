@@ -40,6 +40,10 @@
   const isCollapse = ref(false)
   const active = ref('')
   watchEffect(() => {
+    if (route.name === 'Iframe') {
+      active.value = decodeURIComponent(route.query.url)
+      return
+    }
     active.value = route.meta.activeName || route.name
   })
 
@@ -66,7 +70,12 @@
       })
     if (index === route.name) return
     if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-      window.open(index)
+      query.url = decodeURIComponent(index)
+      router.push({
+        name: 'Iframe',
+        query,
+        params
+      })
     } else {
       router.push({ name: index, query, params })
     }

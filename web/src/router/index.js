@@ -21,6 +21,11 @@ const routes = [
       closeTab: true
     },
     component: () => import('@/view/error/index.vue')
+  },
+  {
+    path: '/iframe',
+    name: 'Iframe',
+    component: () => import('@/view/layout/iframe.vue')
   }
 ]
 

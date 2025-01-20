@@ -79,6 +79,11 @@ router.beforeEach(async (to, from) => {
 
   // 设置页面标题
   document.title = getPageTitle(to.meta.title, to)
+
+  if (to.meta.client) {
+    return true
+  }
+
   // 白名单路由处理
   if (WHITE_LIST.includes(to.name)) {
     if (

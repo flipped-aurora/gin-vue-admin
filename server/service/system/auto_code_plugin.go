@@ -168,7 +168,7 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 
 	// we can use the CompressedArchive type to gzip a tarball
 	// (compression is not required; you could use Tar directly)
-	format := archiver.CompressedArchive{
+	format := archiver.Archive{
 		Archival: archiver.Zip{},
 	}
 

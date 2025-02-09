@@ -129,9 +129,13 @@
         router.push({ name: index, query, params })
         return
       }
-      if (!routerStore.setLeftMenu(index)) {
+      const leftMenu = routerStore.setLeftMenu(index)
+      if (!leftMenu) {
         router.push({ name: index, query, params })
+        return;
       }
+      const firstMenu = leftMenu.find((item) => !item.hidden && item.path.indexOf("http://") === -1 && item.path.indexOf("https://") === -1)
+      router.push({ name: firstMenu.name, query, params })
     }
   }
 

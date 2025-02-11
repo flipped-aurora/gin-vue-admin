@@ -252,6 +252,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 		second := filepath.Join(templateDir, templateDirs[i].Name())
 		switch templateDirs[i].Name() {
 		case "server":
+			if !info.GenerateServer {
+				break
+			}
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {
@@ -599,6 +602,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				}
 			}
 		case "web":
+			if !info.GenerateWeb {
+				break
+			}
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {

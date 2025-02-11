@@ -31,6 +31,8 @@ type AutoCode struct {
 	TreeJson            string                 `json:"treeJson" example:"展示的树json字段"`       // 展示的树json字段
 	IsAdd               bool                   `json:"isAdd" example:"false"`               // 是否新增
 	Fields              []*AutoCodeField       `json:"fields"`
+	GenerateWeb         bool                   `json:"generateWeb" example:"true"`    // 是否生成web
+	GenerateServer      bool                   `json:"generateServer" example:"true"` // 是否生成server
 	Module              string                 `json:"-"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`

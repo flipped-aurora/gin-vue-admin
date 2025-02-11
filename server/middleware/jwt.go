@@ -8,10 +8,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
-
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
@@ -35,7 +37,7 @@ func JWTAuth() gin.HandlerFunc {
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if errors.Is(err, utils.TokenExpired) {
+			if errors.Is(err, utils.ErrTokenExpired) {
 				response.NoAuth("授权已过期", c)
 				utils.ClearToken(c)
 				c.Abort()

@@ -18,21 +18,21 @@
       <source :src="getUrl(model) + '#t=1'" />
     </video>
 
-    <img
+    <el-image
       v-if="model && !isVideoExt(model)"
       class="w-full h-full"
-      :src="getUrl(model)"
-      alt="图片"
+      :src="imgUrl"
+      :preview-src-list="srcList"
+      fit="cover"
     />
     <div
       v-if="model"
-      class="left-0 top-0 hidden text-gray-600 group-hover:bg-gray-600 group-hover:bg-opacity-30 w-full h-full group-hover:flex justify-center items-center absolute z-10"
+      class="right-0 top-0 hidden text-gray-600 group-hover:flex justify-center items-center absolute z-10"
       @click="deleteItem"
     >
-      <el-icon>
-        <delete />
+      <el-icon :size="32">
+        <CircleCloseFilled />
       </el-icon>
-      删除
     </div>
     <div
       v-else
@@ -48,9 +48,10 @@
 </template>
 <script setup>
   import { getUrl, isVideoExt } from '@/utils/image'
-  import { Delete, Plus } from '@element-plus/icons-vue'
+  import { CircleCloseFilled, Plus } from '@element-plus/icons-vue'
+  import { computed } from 'vue'
 
-  defineProps({
+  const props = defineProps({
     model: {
       default: '',
       type: String
@@ -66,4 +67,12 @@
   const deleteItem = () => {
     emits('deleteItem')
   }
+
+  const imgUrl = computed(() => {
+    return getUrl(props.model)
+  })
+
+  const srcList = computed(() => {
+    return imgUrl.value ? [imgUrl.value] : []
+  })
 </script>

@@ -19,11 +19,16 @@
           </div>
 
           <!-- 右侧信息 -->
-          <div class="flex-1 pt-20 w-full">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-              <div>
+          <div class="flex-1 pt-12 lg:pt-20 w-full">
+            <div
+              class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
+            >
+              <div class="lg:mt-4">
                 <div class="flex items-center gap-4 mb-4">
-                  <div v-if="!editFlag" class="text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-gray-100">
+                  <div
+                    v-if="!editFlag"
+                    class="text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-gray-100"
+                  >
                     {{ userStore.userInfo.nickName }}
                     <el-icon
                       class="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
@@ -33,11 +38,7 @@
                     </el-icon>
                   </div>
                   <div v-else class="flex items-center gap-3">
-                    <el-input
-                      v-model="nickName"
-                      class="w-48"
-                      size="large"
-                    />
+                    <el-input v-model="nickName" class="w-48" size="large" />
                     <el-button type="success" circle @click="enterEdit">
                       <el-icon><check /></el-icon>
                     </el-button>
@@ -47,7 +48,9 @@
                   </div>
                 </div>
 
-                <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 text-gray-500 dark:text-gray-400">
+                <div
+                  class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 text-gray-500 dark:text-gray-400"
+                >
                   <div class="flex items-center gap-2">
                     <el-icon><location /></el-icon>
                     <span>中国·北京市·朝阳区</span>
@@ -64,14 +67,10 @@
               </div>
 
               <div class="flex gap-4 mt-4 lg:mt-0">
-                <el-button type="primary" plain>
-                  <el-icon><message /></el-icon>
+                <el-button type="primary" plain icon="message">
                   发送消息
                 </el-button>
-                <el-button>
-                  <el-icon><share /></el-icon>
-                  分享主页
-                </el-button>
+                <el-button icon="share"> 分享主页 </el-button>
               </div>
             </div>
           </div>
@@ -83,13 +82,17 @@
     <div class="grid lg:grid-cols-12 md:grid-cols-1 gap-8">
       <!-- 左侧信息栏 -->
       <div class="lg:col-span-4">
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 profile-card">
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 profile-card"
+        >
           <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
             <el-icon class="text-blue-500"><info-filled /></el-icon>
             基本信息
           </h2>
           <div class="space-y-4">
-            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <div
+              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
+            >
               <el-icon class="text-blue-500"><phone /></el-icon>
               <span class="font-medium">手机号码：</span>
               <span>{{ userStore.userInfo.phone || '未设置' }}</span>
@@ -102,9 +105,11 @@
                 修改
               </el-button>
             </div>
-            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <div
+              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
+            >
               <el-icon class="text-green-500"><message /></el-icon>
-              <span class="font-medium">邮箱地址：</span>
+              <span class="font-medium flex-shrink-0">邮箱地址：</span>
               <span>{{ userStore.userInfo.email || '未设置' }}</span>
               <el-button
                 link
@@ -115,7 +120,9 @@
                 修改
               </el-button>
             </div>
-            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <div
+              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
+            >
               <el-icon class="text-purple-500"><lock /></el-icon>
               <span class="font-medium">账号密码：</span>
               <span>已设置</span>
@@ -162,19 +169,35 @@
               </template>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 py-6">
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-blue-500 mb-2">138</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-blue-500 mb-2"
+                  >
+                    138
+                  </div>
                   <div class="text-gray-500 text-sm">项目参与</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-green-500 mb-2">2.3k</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-green-500 mb-2"
+                  >
+                    2.3k
+                  </div>
                   <div class="text-gray-500 text-sm">代码提交</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-purple-500 mb-2">95%</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-purple-500 mb-2"
+                  >
+                    95%
+                  </div>
                   <div class="text-gray-500 text-sm">任务完成</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-yellow-500 mb-2">12</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-yellow-500 mb-2"
+                  >
+                    12
+                  </div>
                   <div class="text-gray-500 text-sm">获得勋章</div>
                 </div>
               </div>
@@ -196,7 +219,9 @@
                     :hollow="true"
                     class="pb-6"
                   >
-                    <h3 class="text-base font-medium mb-1">{{ activity.title }}</h3>
+                    <h3 class="text-base font-medium mb-1">
+                      {{ activity.title }}
+                    </h3>
                     <p class="text-gray-500 text-sm">{{ activity.content }}</p>
                   </el-timeline-item>
                 </el-timeline>

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 )
@@ -83,9 +82,6 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
-		return nil, TokenInvalid
-
-	} else {
-		return nil, TokenInvalid
 	}
+		return nil, ErrTokenInvalid
 }

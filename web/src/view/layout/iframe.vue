@@ -2,61 +2,25 @@
   <div
     class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
   >
-    <el-watermark
-      v-if="config.show_watermark"
-      :font="font"
-      :z-index="9999"
-      :gap="[180, 150]"
-      class="absolute inset-0 pointer-events-none"
-      :content="userStore.userInfo.nickName"
-    />
-    <gva-header />
-    <div class="flex flex-row w-full gva-container pt-16 box-border h-full">
-      <gva-aside
-        v-if="
-          config.side_mode === 'normal' ||
-          (device === 'mobile' && config.side_mode == 'head') ||
-          (device === 'mobile' && config.side_mode == 'combination')
-        "
-      />
-      <gva-aside
-        v-if="config.side_mode === 'combination' && device !== 'mobile'"
-        mode="normal"
-      />
-      <div class="flex-1 p-2 w-0 h-full">
-        <gva-tabs v-if="config.showTabs" />
-        <div
-          class="overflow-auto"
-          :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
-        >
-          <iframe
-            v-if="reloadFlag"
-            id="gva-base-load-dom"
-            class="gva-body-h bg-gray-50 dark:bg-slate-800 w-full border-t border-gray-200 dark:border-slate-700"
-            src="https://www.gin-vue-admin.com"
-          ></iframe>
-          <BottomInfo />
-        </div>
-      </div>
-    </div>
+    <iframe
+        v-if="reloadFlag"
+        id="gva-base-load-dom"
+        class="gva-body-h bg-gray-50 dark:bg-slate-800 w-full border-t border-gray-200 dark:border-slate-700"
+        src="https://www.gin-vue-admin.com"
+    ></iframe>
   </div>
 </template>
 
 <script setup>
-  import GvaAside from '@/view/layout/aside/index.vue'
-  import GvaHeader from '@/view/layout/header/index.vue'
   import useResponsive from '@/hooks/responsive'
-  import GvaTabs from './tabs/index.vue'
-  import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
   import { emitter } from '@/utils/bus.js'
   import { ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import { useRouterStore } from '@/pinia/modules/router'
   import { useUserStore } from '@/pinia/modules/user'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()
-  const { config, isDark, device } = storeToRefs(appStore)
+  const { isDark } = storeToRefs(appStore)
 
   defineOptions({
     name: 'GvaLayoutIframe'
@@ -73,7 +37,6 @@
 
   const router = useRouter()
   const route = useRoute()
-  const routerStore = useRouterStore()
 
   onMounted(() => {
     // 挂载一些通用的事件

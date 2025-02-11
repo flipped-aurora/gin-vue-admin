@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type JWT struct {
@@ -14,7 +14,7 @@ type JWT struct {
 }
 
 var (
-	TokenValid            = errors.New("你今天看上去不错")
+	TokenValid            = errors.New("未知错误")
 	TokenExpired          = errors.New("token已过期")
 	TokenNotValidYet      = errors.New("token尚未激活")
 	TokenMalformed        = errors.New("这不是一个token")
@@ -66,13 +66,13 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 
 	if err != nil {
 		switch {
-		case token.Valid:
-			return nil, TokenValid
+		case errors.Is(err, jwt.ErrTokenExpired):
+			return nil, TokenExpired
 		case errors.Is(err, jwt.ErrTokenMalformed):
 			return nil, TokenMalformed
 		case errors.Is(err, jwt.ErrTokenSignatureInvalid):
 			return nil, TokenSignatureInvalid
-		case errors.Is(err, jwt.ErrTokenExpired) || errors.Is(err, jwt.ErrTokenNotValidYet):
+		case errors.Is(err, jwt.ErrTokenNotValidYet):
 			return nil, TokenNotValidYet
 		default:
 			return nil, TokenInvalid
@@ -83,5 +83,5 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 			return claims, nil
 		}
 	}
-		return nil, ErrTokenInvalid
+	return nil, TokenValid
 }

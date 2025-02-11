@@ -367,7 +367,7 @@ const fetchCategories = async () => {
     children:[]
   }
   if (res.code === 0) {
-    categories.value = res.data
+    categories.value = res.data || []
     categories.value.unshift(data)
   }
 }

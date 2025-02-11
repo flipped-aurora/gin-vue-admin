@@ -12,16 +12,17 @@
         <div class="flex flex-col lg:flex-row items-start gap-8">
           <!-- 左侧头像 -->
           <div class="profile-avatar-wrapper flex-shrink-0 mx-auto lg:mx-0">
-            <ProfileAvatar
-              v-model="userStore.userInfo.headerImg"
-              @update:modelValue="handleAvatarChange"
+            <SelectImage
+                v-model="userStore.userInfo.headerImg"
+                file-type="image"
+                rounded
             />
           </div>
 
           <!-- 右侧信息 -->
           <div class="flex-1 pt-12 lg:pt-20 w-full">
             <div
-              class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4"
+              class="flex flex-col lg:flex-row items-start lg:items-start justify-between gap-4"
             >
               <div class="lg:mt-4">
                 <div class="flex items-center gap-4 mb-4">
@@ -37,13 +38,13 @@
                       <edit />
                     </el-icon>
                   </div>
-                  <div v-else class="flex items-center gap-3">
-                    <el-input v-model="nickName" class="w-48" size="large" />
-                    <el-button type="success" circle @click="enterEdit">
-                      <el-icon><check /></el-icon>
+                  <div v-else class="flex items-center">
+                    <el-input v-model="nickName" class="w-48 mr-4" />
+                    <el-button type="primary" plain @click="enterEdit">
+                      确认
                     </el-button>
-                    <el-button type="danger" circle @click="closeEdit">
-                      <el-icon><close /></el-icon>
+                    <el-button type="danger" plain @click="closeEdit">
+                      取消
                     </el-button>
                   </div>
                 </div>
@@ -57,7 +58,7 @@
                   </div>
                   <div class="flex items-center gap-2">
                     <el-icon><office-building /></el-icon>
-                    <span>北京反转极光科技有限公司</span>
+                    <span>北京翻转极光科技有限公司</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <el-icon><user /></el-icon>
@@ -66,7 +67,7 @@
                 </div>
               </div>
 
-              <div class="flex gap-4 mt-4 lg:mt-0">
+              <div class="flex gap-4 mt-4">
                 <el-button type="primary" plain icon="message">
                   发送消息
                 </el-button>
@@ -283,7 +284,7 @@
           <div class="flex gap-4">
             <el-input
               v-model="phoneForm.code"
-              placeholder="请输入验证码"
+              placeholder="请输入验证码[模拟]"
               class="flex-1"
             >
               <template #prefix>
@@ -327,7 +328,7 @@
           <div class="flex gap-4">
             <el-input
               v-model="emailForm.code"
-              placeholder="请输入验证码"
+              placeholder="请输入验证码[模拟]"
               class="flex-1"
             >
               <template #prefix>
@@ -357,11 +358,10 @@
 
 <script setup>
   import { setSelfInfo, changePassword } from '@/api/user.js'
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import { useUserStore } from '@/pinia/modules/user'
-  import ProfileAvatar from '@/components/Avatar/ProfileAvatar.vue'
-
+  import SelectImage from '@/components/selectImage/selectImage.vue'
   defineOptions({
     name: 'Person'
   })
@@ -511,12 +511,16 @@
     }
   }
 
-  const handleAvatarChange = async (newUrl) => {
-    const res = await setSelfInfo({ headerImg: newUrl })
+  watch(() => userStore.userInfo.headerImg, async(val) => {
+    const res = await setSelfInfo({ headerImg: val })
     if (res.code === 0) {
-      userStore.ResetUserInfo({ headerImg: newUrl })
+      userStore.ResetUserInfo({ headerImg: val })
+      ElMessage({
+        type: 'success',
+        message: '设置成功',
+      })
     }
-  }
+  })
 
   // 添加活动数据
   const activities = [

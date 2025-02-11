@@ -1,11 +1,11 @@
 <template>
   <div>
-    <selectComponent v-if="!props.multiple" :model="model" @chooseItem="openChooseImg" @deleteItem="openChooseImg" />
+    <selectComponent :rounded="rounded" v-if="!props.multiple" :model="model" @chooseItem="openChooseImg" @deleteItem="openChooseImg" />
     <div v-else class="w-full gap-4 flex flex-wrap">
-      <selectComponent v-for="(item, index) in model" :key="index" :model="item" @chooseItem="openChooseImg"
+      <selectComponent :rounded="rounded" v-for="(item, index) in model" :key="index" :model="item" @chooseItem="openChooseImg"
                        @deleteItem="deleteImg(index)"
       />
-      <selectComponent v-if="model.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+      <selectComponent :rounded="rounded" v-if="model.length < props.maxUpdateCount || props.maxUpdateCount === 0"
                        @chooseItem="openChooseImg" @deleteItem="openChooseImg"
       />
     </div>
@@ -170,6 +170,10 @@ const props = defineProps({
   maxUpdateCount: {
     type: Number,
     default: 0
+  },
+  rounded: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -310,7 +314,7 @@ const fetchCategories = async() => {
     children:[]
   }
   if (res.code === 0) {
-    categories.value = res.data
+    categories.value = res.data || []
     categories.value.unshift(data)
   }
 }

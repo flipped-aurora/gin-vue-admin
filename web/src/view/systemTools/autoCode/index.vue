@@ -367,7 +367,7 @@
                       effect="light"
                   >
                     <el-form-item label="创建按钮权限">
-                      <el-checkbox v-model="form.autoCreateBtnAuth" />
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateBtnAuth" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
@@ -395,7 +395,7 @@
                       effect="light"
                   >
                     <el-form-item label="自动创建API">
-                      <el-checkbox v-model="form.autoCreateApiToSql" />
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoCreateApiToSql" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
@@ -406,7 +406,7 @@
                       effect="light"
                   >
                     <el-form-item label="自动创建菜单">
-                      <el-checkbox v-model="form.autoCreateMenuToSql" />
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateMenuToSql" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
@@ -417,7 +417,7 @@
                       effect="light"
                   >
                     <el-form-item label="同步表结构">
-                      <el-checkbox v-model="form.autoMigrate" />
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoMigrate" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
@@ -1258,6 +1258,13 @@
       })
       return false
     }
+    if(!form.value.generateWeb && !form.value.generateServer){
+      ElMessage({
+        type: 'error',
+        message: '请至少选择一个生成项'
+      })
+      return false
+    }
     if (!form.value.onlyTemplate) {
       if (form.value.fields.length <= 0) {
         ElMessage({
@@ -1538,6 +1545,20 @@
       }
     }
   )
+
+  watch(()=>form.value.generateServer,()=>{
+    if(!form.value.generateServer){
+      form.value.autoCreateApiToSql = false
+      form.value.autoMigrate = false
+    }
+  })
+
+  watch(()=>form.value.generateWeb,()=>{
+    if(!form.value.generateWeb){
+      form.value.autoCreateMenuToSql = false
+      form.value.autoCreateBtnAuth = false
+    }
+  })
 
   const catchData = () => {
     window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))

@@ -217,7 +217,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 }
 
 func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, map[string]string, map[string]utilsAst.Ast, error) {
-	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
+	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info, false)
 	if err != nil {
 		return nil, nil, nil, err
 	}

@@ -946,6 +946,10 @@
       for (let key in json) {
         form.value[key] = json[key]
       }
+
+      form.value.generateServer = true
+      form.value.generateWeb = true
+
     }
   }
 
@@ -1429,6 +1433,8 @@
       form.value.abbreviation = toLowerCase(tbHump)
       form.value.description = tbHump + '表'
       form.value.autoCreateApiToSql = true
+      form.value.generateServer = true
+      form.value.generateWeb = true
       form.value.fields = []
       res.data.columns &&
         res.data.columns.forEach((item) => {

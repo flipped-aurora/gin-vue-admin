@@ -28,9 +28,12 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = val
     if (val.originSetting) {
       Object.keys(appStore.config).forEach((key) => {
-        appStore.config[key] = val.originSetting[key]
+        if (val.originSetting[key]) {
+          appStore.config[key] = val.originSetting[key]
+        }
       })
     }
+    console.log(appStore.config)
   }
 
   const setToken = (val) => {
@@ -66,7 +69,7 @@ export const useUserStore = defineStore('user', () => {
       })
 
       const res = await login(loginInfo)
-      
+
       if (res.code !== 0) {
         ElMessage.error(res.message || '登录失败')
         return false

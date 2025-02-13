@@ -32,6 +32,7 @@
   "/src/view/layout/screenfull/index.vue": "Screenfull",
   "/src/view/layout/search/search.vue": "BtnBox",
   "/src/view/layout/setting/index.vue": "GvaSetting",
+  "/src/view/layout/setting/title.vue": "layoutSettingTitle",
   "/src/view/layout/tabs/index.vue": "HistoryComponent",
   "/src/view/login/index.vue": "Login",
   "/src/view/person/person.vue": "Person",

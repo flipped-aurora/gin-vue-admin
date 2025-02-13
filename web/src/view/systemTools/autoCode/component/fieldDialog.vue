@@ -386,20 +386,22 @@
   }
 
   const canSelect = (item) => {
-    const fieldType = middleDate.value.fieldType
-    if (fieldType !== 'string' && item === 'LIKE') {
-      return true
+    const fieldType = middleDate.value.fieldType;
+
+    if (fieldType === 'richtext') {
+      return item !== 'LIKE';
     }
 
-    if (
-      fieldType !== 'int' &&
-      fieldType !== 'time.Time' &&
-      fieldType !== 'float64' &&
-      (item === 'BETWEEN' || item === 'NOT BETWEEN')
-    ) {
-      return true
+    if (fieldType !== 'string' && item === 'LIKE') {
+      return true;
     }
-    return false
+
+    const nonNumericTypes = ['int', 'time.Time', 'float64'];
+    if (!nonNumericTypes.includes(fieldType) && ['BETWEEN', 'NOT BETWEEN'].includes(item)) {
+      return true;
+    }
+
+    return false;
   }
 
   const clearOther = () => {

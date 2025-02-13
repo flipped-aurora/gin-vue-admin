@@ -703,14 +703,7 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="
-                    (row.fieldType !== 'string' && item.value === 'LIKE') ||
-                    (row.fieldType !== 'int' &&
-                      row.fieldType !== 'time.Time' &&
-                      row.fieldType !== 'float64' &&
-                      (item.value === 'BETWEEN' ||
-                        item.value === 'NOT BETWEEN'))
-                  "
+                  :disabled="canSelect(row.fieldType,item.value)"
                 />
               </el-select>
             </template>
@@ -1652,6 +1645,23 @@
       }
     }
   )
+
+  const canSelect = (fieldType,item) => {
+    if (fieldType === 'richtext') {
+      return item !== 'LIKE';
+    }
+
+    if (fieldType !== 'string' && item === 'LIKE') {
+      return true;
+    }
+
+    const nonNumericTypes = ['int', 'time.Time', 'float64'];
+    if (!nonNumericTypes.includes(fieldType) && ['BETWEEN', 'NOT BETWEEN'].includes(item)) {
+      return true;
+    }
+
+    return false;
+  }
 </script>
 
 <style>

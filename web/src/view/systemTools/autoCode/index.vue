@@ -378,7 +378,7 @@
                 </el-col>
                 <el-col :span="3">
                   <el-form-item label="生成后端">
-                    <el-checkbox v-model="form.generateServer" />
+                    <el-checkbox disabled v-model="form.generateServer" />
                   </el-form-item>
                 </el-col>
               </el-row>

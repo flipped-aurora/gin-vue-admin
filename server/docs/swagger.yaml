@@ -675,6 +675,26 @@ definitions:
         description: 栈名
         type: string
     type: object
+  example.ExaAttachmentCategory:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      children:
+        items:
+          $ref: '#/definitions/example.ExaAttachmentCategory'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      name:
+        type: string
+      pid:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   example.ExaCustomer:
     properties:
       ID:
@@ -751,6 +771,9 @@ definitions:
     properties:
       ID:
         description: 主键ID
+        type: integer
+      classId:
+        description: 分类id
         type: integer
       createdAt:
         description: 创建时间
@@ -869,6 +892,14 @@ definitions:
         items:
           $ref: '#/definitions/request.AutoCodeField'
         type: array
+      generateServer:
+        description: 是否生成server
+        example: true
+        type: boolean
+      generateWeb:
+        description: 是否生成web
+        example: true
+        type: boolean
       gvaModel:
         description: 是否使用gva默认Model
         example: false
@@ -1029,6 +1060,20 @@ definitions:
     type: object
   request.Empty:
     type: object
+  request.ExaAttachmentCategorySearch:
+    properties:
+      classId:
+        type: integer
+      keyword:
+        description: 关键字
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+    type: object
   request.GetAuthorityId:
     properties:
       authorityId:
@@ -1089,6 +1134,9 @@ definitions:
         type: string
       port:
         description: 数据库连接端口
+        type: string
+      template:
+        description: postgresql指定template
         type: string
       userName:
         description: 数据库用户名
@@ -1881,7 +1929,7 @@ info:
   contact: {}
   description: 使用gin+vue进行极速开发的全栈开发基础平台
   title: Gin-Vue-Admin Swagger API接口文档
-  version: v2.7.8-beta1
+  version: v2.7.9-beta
 paths:
   /api/createApi:
     post:
@@ -2179,6 +2227,74 @@ paths:
       summary: 修改基础api
       tags:
       - SysApi
+  /attachmentCategory/addCategory:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 媒体库分类数据
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/example.ExaAttachmentCategory'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - AttachmentCategory: []
+      summary: 添加媒体库分类
+      tags:
+      - AddCategory
+  /attachmentCategory/deleteCategory:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分类id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除分类
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - AttachmentCategory: []
+      summary: 删除分类
+      tags:
+      - DeleteCategory
+  /attachmentCategory/getCategoryList:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 媒体库分类列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/example.ExaAttachmentCategory'
+                msg:
+                  type: string
+              type: object
+      security:
+      - AttachmentCategory: []
+      summary: 媒体库分类列表
+      tags:
+      - GetCategoryList
   /authority/copyAuthority:
     post:
       consumes:
@@ -3345,12 +3461,12 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小
+      - description: 页码, 每页大小, 分类id
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.PageInfo'
+          $ref: '#/definitions/request.ExaAttachmentCategorySearch'
       produces:
       - application/json
       responses:
@@ -4409,6 +4525,18 @@ paths:
       summary: 更新SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysExportTemplate/ExportTemplate:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 导出表格模板
+      tags:
+      - SysExportTemplate
   /sysExportTemplate/createSysExportTemplate:
     post:
       consumes:
@@ -4487,7 +4615,7 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: 导出表格模板
+      summary: 导出表格
       tags:
       - SysExportTemplate
   /sysExportTemplate/findSysExportTemplate:
@@ -5543,3 +5671,7 @@ securityDefinitions:
     name: x-token
     type: apiKey
 swagger: "2.0"
+tags:
+- name: Base
+- description: 用户
+  name: SysUser

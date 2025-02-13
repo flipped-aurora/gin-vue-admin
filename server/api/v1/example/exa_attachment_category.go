@@ -16,7 +16,7 @@ type AttachmentCategoryApi struct{}
 // @Summary   媒体库分类列表
 // @Security  AttachmentCategory
 // @Produce   application/json
-// @Success   200   {object}  response.Response{data=systemRes.SysAttachmentCategoryResponse,msg=string}  "媒体库分类列表"
+// @Success   200   {object}  response.Response{data=example.ExaAttachmentCategory,msg=string}  "媒体库分类列表"
 // @Router    /attachmentCategory/getCategoryList [get]
 func (a *AttachmentCategoryApi) GetCategoryList(c *gin.Context) {
 	res, err := attachmentCategoryService.GetCategoryList()
@@ -34,8 +34,7 @@ func (a *AttachmentCategoryApi) GetCategoryList(c *gin.Context) {
 // @Security  AttachmentCategory
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      example.ExaAttachmentCategory  true  ""
-// @Success   200   {object}  response.Response{msg=string}   "添加媒体库分类"
+// @Param     data  body      example.ExaAttachmentCategory  true  "媒体库分类数据"// @Success   200   {object}  response.Response{msg=string}   "添加媒体库分类"
 // @Router    /attachmentCategory/addCategory [post]
 func (a *AttachmentCategoryApi) AddCategory(c *gin.Context) {
 	var req example.ExaAttachmentCategory

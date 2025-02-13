@@ -53,7 +53,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 			return errors.Wrap(err, "创建失败!")
 		}
 		code := info.AutoCode()
-		_, asts, creates, err := s.templates(ctx, create, code)
+		_, asts, creates, err := s.templates(ctx, create, code, true)
 		if err != nil {
 			return err
 		}
@@ -239,7 +239,7 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 	return templates, nil
 }
 
-func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode) (code map[string]string, asts map[string]ast.Ast, creates map[string]string, err error) {
+func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode, isPackage bool) (code map[string]string, asts map[string]ast.Ast, creates map[string]string, err error) {
 	code = make(map[string]string)
 	asts = make(map[string]ast.Ast)
 	creates = make(map[string]string)
@@ -252,6 +252,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 		second := filepath.Join(templateDir, templateDirs[i].Name())
 		switch templateDirs[i].Name() {
 		case "server":
+			if !info.GenerateServer && !isPackage {
+				break
+			}
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {
@@ -599,6 +602,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				}
 			}
 		case "web":
+			if !info.GenerateWeb && !isPackage {
+				break
+			}
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {

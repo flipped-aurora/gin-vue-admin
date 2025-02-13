@@ -21,7 +21,7 @@ const routes = [
       closeTab: true
     },
     component: () => import('@/view/error/index.vue')
-  }
+  },
 ]
 
 const router = createRouter({

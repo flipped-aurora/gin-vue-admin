@@ -1,34 +1,29 @@
 <template>
   <div class="mt-2">
-    <el-row :gutter="10">
-      <el-col :span="12">
-        <el-card>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="w-full md:w-1/2">
+        <el-card class="min-w-96">
           <template #header>
             <el-divider>gin-vue-admin</el-divider>
           </template>
           <div>
-            <el-row>
-              <el-col :span="8" :offset="8">
-                <a href="https://github.com/flipped-aurora/gin-vue-admin">
+            <div class="w-full flex items-center justify-center">
+              <a href="https://github.com/flipped-aurora/gin-vue-admin">
                   <img
                     class="org-img dom-center"
                     src="@/assets/logo.png"
                     alt="gin-vue-admin"
                   />
                 </a>
-              </el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="8">
-                <a href="https://github.com/flipped-aurora/gin-vue-admin">
+            </div>
+            <div class="w-full flex items-center justify-around">
+              <a href="https://github.com/flipped-aurora/gin-vue-admin">
                   <img
                     class="dom-center"
                     src="https://img.shields.io/github/watchers/flipped-aurora/gin-vue-admin.svg?label=Watch"
                     alt=""
                   />
                 </a>
-              </el-col>
-              <el-col :span="8">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
                   <img
                     class="dom-center"
@@ -36,8 +31,6 @@
                     alt=""
                   />
                 </a>
-              </el-col>
-              <el-col :span="8">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
                   <img
                     class="dom-center"
@@ -45,17 +38,15 @@
                     alt=""
                   />
                 </a>
-              </el-col>
-            </el-row>
+            </div>
           </div>
         </el-card>
-        <el-card style="margin-top: 20px">
+        <el-card class="min-w-96 mt-5">
           <template #header>
             <div>flipped-aurora团队</div>
           </template>
           <div>
-            <el-row>
-              <el-col :span="8" :offset="8">
+            <div class="w-full flex items-center justify-center">
                 <a href="https://github.com/flipped-aurora">
                   <img
                     class="org-img dom-center"
@@ -63,17 +54,13 @@
                     alt="flipped-aurora"
                   />
                 </a>
-              </el-col>
-            </el-row>
-            <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4"
-            >
-              <div v-for="(item, index) in members" :key="index" :span="8">
-                <a :href="item.html_url" class="flex items-center">
+              </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 mt-4">
+              <div v-for="(item, index) in members" :key="index" class="min-h-10 flex items-center">
+                <a :href="item.html_url" class="flex items-center group">
                   <img class="w-8 h-8 rounded-full" :src="item.avatar_url" />
                   <el-link
-                    class="text-blue-700 ml-2 text-xl font-bold font-sans"
-                    style=""
+                    class="text-blue-700 ml-2 text-lg font-bold font-sans break-all"
                     >{{ item.login }}</el-link
                   >
                 </a>
@@ -81,13 +68,13 @@
             </div>
           </div>
         </el-card>
-      </el-col>
-      <el-col :span="12">
+      </div>
+      <div class="w-full md:w-1/2">
         <el-card>
           <template #header>
             <div>提交记录</div>
           </template>
-          <div>
+          <div class="h-[calc(100vh-300px)] overflow-y-auto">
             <el-timeline>
               <el-timeline-item
                 v-for="(item, index) in dataTimeline"
@@ -102,12 +89,14 @@
               </el-timeline-item>
             </el-timeline>
           </div>
+         <div class="w-full flex items-center justify-center">
           <el-button class="load-more" type="primary" link @click="loadMore">
             Load more
           </el-button>
+         </div>
         </el-card>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -155,10 +144,6 @@
 </script>
 
 <style scoped>
-  .load-more {
-    margin-left: 120px;
-  }
-
   .avatar-img {
     float: left;
     height: 40px;

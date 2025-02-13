@@ -1,18 +1,17 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"strconv"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
@@ -257,17 +256,17 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 		return
 	}
 	claims := utils.GetUserInfo(c)
-	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	claims.AuthorityId = sua.AuthorityId
-	if token, err := j.CreateToken(*claims); err != nil {
+	token, err := utils.NewJWT().CreateToken(*claims)
+	if err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
-	} else {
-		c.Header("new-token", token)
-		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
-		utils.SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
-		response.OkWithMessage("修改成功", c)
+		return
 	}
+	c.Header("new-token", token)
+	c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
+	utils.SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
+	response.OkWithMessage("修改成功", c)
 }
 
 // SetUserAuthorities

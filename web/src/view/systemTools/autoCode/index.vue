@@ -329,141 +329,158 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：会自动在结构体global.Model其中包含主键和软删除相关操作配置"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    使用GVA结构 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.gvaModel" @change="useGva" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：把自动生成的API注册进数据库"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    自动创建API <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateApiToSql" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：把自动生成的菜单注册进数据库"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    自动创建菜单 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateMenuToSql" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：自动同步数据库表结构，如果不需要可以选择关闭。"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    同步表结构 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoMigrate" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    创建按钮权限 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateBtnAuth" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    创建资源标识 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateResource" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    基础模板 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.onlyTemplate" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="9">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                    content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
-                    placement="bottom"
-                    effect="light"
-                >
-                  <div>
-                    树型结构 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <div class="flex gap-2 items-center">
-                <el-checkbox v-model="form.isTree" />
-                <el-input v-model="form.treeJson" :disabled="!form.isTree" placeholder="前端展示json属性"></el-input>
-              </div>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
       </el-form>
+    </div>
+    <div class="gva-search-box">
+      <el-collapse class="no-border-collapse">
+        <el-collapse-item>
+          <template #title>
+            <div class="text-lg text-gray-600 font-normal">
+              专家模式
+            </div>
+          </template>
+          <template #icon="{ isActive }">
+          <span class="text-lg ml-auto mr-4 font-normal">
+            {{ isActive ? '收起' : '展开' }}
+          </span>
+          </template>
+          <div class="p-4">
+            <!-- 基础设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">基础设置</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：会自动在结构体global.Model其中包含主键和软删除相关操作配置"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="使用GVA结构">
+                      <el-checkbox v-model="form.gvaModel" @change="useGva" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="创建按钮权限">
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateBtnAuth" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="生成前端">
+                    <el-checkbox v-model="form.generateWeb" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="生成后端">
+                    <el-checkbox v-model="form.generateServer" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 自动化设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">自动化设置</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：把自动生成的API注册进数据库"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="自动创建API">
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoCreateApiToSql" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：把自动生成的菜单注册进数据库"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="自动创建菜单">
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateMenuToSql" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：自动同步数据库表结构，如果不需要可以选择关闭"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="同步表结构">
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoMigrate" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 高级设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">高级设置</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="创建资源标识">
+                      <el-checkbox v-model="form.autoCreateResource" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="基础模板">
+                      <el-checkbox v-model="form.onlyTemplate" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 树形结构设置 -->
+            <div class="last:pb-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">树形结构设置</h3>
+              <el-row :gutter="20" align="middle">
+                <el-col :span="24">
+                    <el-form-item label="树型结构">
+                      <div class="flex items-center gap-4">
+                        <el-tooltip
+                            content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                            placement="top"
+                            effect="light"
+                        >
+                          <el-checkbox v-model="form.isTree" />
+                        </el-tooltip>
+                        <el-input
+                            v-model="form.treeJson"
+                            :disabled="!form.isTree"
+                            placeholder="前端展示json属性"
+                            class="flex-1"
+                        />
+                      </div>
+                    </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
     <!-- 组件列表 -->
     <div class="gva-table-box">
@@ -929,6 +946,10 @@
       for (let key in json) {
         form.value[key] = json[key]
       }
+
+      form.value.generateServer = true
+      form.value.generateWeb = true
+
     }
   }
 
@@ -1118,6 +1139,8 @@
     autoCreateResource: false,
     onlyTemplate: false,
     isTree: false,
+    generateWeb:true,
+    generateServer:true,
     treeJson: "",
     fields: []
   })
@@ -1236,6 +1259,13 @@
       ElMessage({
         type: 'error',
         message: '请填写树型结构的前端展示json属性'
+      })
+      return false
+    }
+    if(!form.value.generateWeb && !form.value.generateServer){
+      ElMessage({
+        type: 'error',
+        message: '请至少选择一个生成项'
       })
       return false
     }
@@ -1403,6 +1433,8 @@
       form.value.abbreviation = toLowerCase(tbHump)
       form.value.description = tbHump + '表'
       form.value.autoCreateApiToSql = true
+      form.value.generateServer = true
+      form.value.generateWeb = true
       form.value.fields = []
       res.data.columns &&
         res.data.columns.forEach((item) => {
@@ -1520,6 +1552,20 @@
     }
   )
 
+  watch(()=>form.value.generateServer,()=>{
+    if(!form.value.generateServer){
+      form.value.autoCreateApiToSql = false
+      form.value.autoMigrate = false
+    }
+  })
+
+  watch(()=>form.value.generateWeb,()=>{
+    if(!form.value.generateWeb){
+      form.value.autoCreateMenuToSql = false
+      form.value.autoCreateBtnAuth = false
+    }
+  })
+
   const catchData = () => {
     window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
   }
@@ -1607,3 +1653,18 @@
     }
   )
 </script>
+
+<style>
+.no-border-collapse{
+  @apply border-none;
+  .el-collapse-item__header{
+    @apply border-none;
+  }
+  .el-collapse-item__wrap{
+    @apply border-none;
+  }
+  .el-collapse-item__content{
+    @apply pb-0;
+  }
+}
+</style>

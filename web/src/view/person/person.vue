@@ -12,18 +12,24 @@
         <div class="flex flex-col lg:flex-row items-start gap-8">
           <!-- 左侧头像 -->
           <div class="profile-avatar-wrapper flex-shrink-0 mx-auto lg:mx-0">
-            <ProfileAvatar
-              v-model="userStore.userInfo.headerImg"
-              @update:modelValue="handleAvatarChange"
+            <SelectImage
+                v-model="userStore.userInfo.headerImg"
+                file-type="image"
+                rounded
             />
           </div>
 
           <!-- 右侧信息 -->
-          <div class="flex-1 pt-20 w-full">
-            <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-              <div>
+          <div class="flex-1 pt-12 lg:pt-20 w-full">
+            <div
+              class="flex flex-col lg:flex-row items-start lg:items-start justify-between gap-4"
+            >
+              <div class="lg:mt-4">
                 <div class="flex items-center gap-4 mb-4">
-                  <div v-if="!editFlag" class="text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-gray-100">
+                  <div
+                    v-if="!editFlag"
+                    class="text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-gray-100"
+                  >
                     {{ userStore.userInfo.nickName }}
                     <el-icon
                       class="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
@@ -32,29 +38,27 @@
                       <edit />
                     </el-icon>
                   </div>
-                  <div v-else class="flex items-center gap-3">
-                    <el-input
-                      v-model="nickName"
-                      class="w-48"
-                      size="large"
-                    />
-                    <el-button type="success" circle @click="enterEdit">
-                      <el-icon><check /></el-icon>
+                  <div v-else class="flex items-center">
+                    <el-input v-model="nickName" class="w-48 mr-4" />
+                    <el-button type="primary" plain @click="enterEdit">
+                      确认
                     </el-button>
-                    <el-button type="danger" circle @click="closeEdit">
-                      <el-icon><close /></el-icon>
+                    <el-button type="danger" plain @click="closeEdit">
+                      取消
                     </el-button>
                   </div>
                 </div>
 
-                <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 text-gray-500 dark:text-gray-400">
+                <div
+                  class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 text-gray-500 dark:text-gray-400"
+                >
                   <div class="flex items-center gap-2">
                     <el-icon><location /></el-icon>
                     <span>中国·北京市·朝阳区</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <el-icon><office-building /></el-icon>
-                    <span>北京反转极光科技有限公司</span>
+                    <span>北京翻转极光科技有限公司</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <el-icon><user /></el-icon>
@@ -63,15 +67,11 @@
                 </div>
               </div>
 
-              <div class="flex gap-4 mt-4 lg:mt-0">
-                <el-button type="primary" plain>
-                  <el-icon><message /></el-icon>
+              <div class="flex gap-4 mt-4">
+                <el-button type="primary" plain icon="message">
                   发送消息
                 </el-button>
-                <el-button>
-                  <el-icon><share /></el-icon>
-                  分享主页
-                </el-button>
+                <el-button icon="share"> 分享主页 </el-button>
               </div>
             </div>
           </div>
@@ -83,13 +83,17 @@
     <div class="grid lg:grid-cols-12 md:grid-cols-1 gap-8">
       <!-- 左侧信息栏 -->
       <div class="lg:col-span-4">
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 profile-card">
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 profile-card"
+        >
           <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
             <el-icon class="text-blue-500"><info-filled /></el-icon>
             基本信息
           </h2>
           <div class="space-y-4">
-            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <div
+              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
+            >
               <el-icon class="text-blue-500"><phone /></el-icon>
               <span class="font-medium">手机号码：</span>
               <span>{{ userStore.userInfo.phone || '未设置' }}</span>
@@ -102,9 +106,11 @@
                 修改
               </el-button>
             </div>
-            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <div
+              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
+            >
               <el-icon class="text-green-500"><message /></el-icon>
-              <span class="font-medium">邮箱地址：</span>
+              <span class="font-medium flex-shrink-0">邮箱地址：</span>
               <span>{{ userStore.userInfo.email || '未设置' }}</span>
               <el-button
                 link
@@ -115,7 +121,9 @@
                 修改
               </el-button>
             </div>
-            <div class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+            <div
+              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
+            >
               <el-icon class="text-purple-500"><lock /></el-icon>
               <span class="font-medium">账号密码：</span>
               <span>已设置</span>
@@ -162,19 +170,35 @@
               </template>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 py-6">
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-blue-500 mb-2">138</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-blue-500 mb-2"
+                  >
+                    138
+                  </div>
                   <div class="text-gray-500 text-sm">项目参与</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-green-500 mb-2">2.3k</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-green-500 mb-2"
+                  >
+                    2.3k
+                  </div>
                   <div class="text-gray-500 text-sm">代码提交</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-purple-500 mb-2">95%</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-purple-500 mb-2"
+                  >
+                    95%
+                  </div>
                   <div class="text-gray-500 text-sm">任务完成</div>
                 </div>
                 <div class="stat-card">
-                  <div class="text-2xl lg:text-4xl font-bold text-yellow-500 mb-2">12</div>
+                  <div
+                    class="text-2xl lg:text-4xl font-bold text-yellow-500 mb-2"
+                  >
+                    12
+                  </div>
                   <div class="text-gray-500 text-sm">获得勋章</div>
                 </div>
               </div>
@@ -196,7 +220,9 @@
                     :hollow="true"
                     class="pb-6"
                   >
-                    <h3 class="text-base font-medium mb-1">{{ activity.title }}</h3>
+                    <h3 class="text-base font-medium mb-1">
+                      {{ activity.title }}
+                    </h3>
                     <p class="text-gray-500 text-sm">{{ activity.content }}</p>
                   </el-timeline-item>
                 </el-timeline>
@@ -258,7 +284,7 @@
           <div class="flex gap-4">
             <el-input
               v-model="phoneForm.code"
-              placeholder="请输入验证码"
+              placeholder="请输入验证码[模拟]"
               class="flex-1"
             >
               <template #prefix>
@@ -302,7 +328,7 @@
           <div class="flex gap-4">
             <el-input
               v-model="emailForm.code"
-              placeholder="请输入验证码"
+              placeholder="请输入验证码[模拟]"
               class="flex-1"
             >
               <template #prefix>
@@ -332,11 +358,10 @@
 
 <script setup>
   import { setSelfInfo, changePassword } from '@/api/user.js'
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import { useUserStore } from '@/pinia/modules/user'
-  import ProfileAvatar from '@/components/Avatar/ProfileAvatar.vue'
-
+  import SelectImage from '@/components/selectImage/selectImage.vue'
   defineOptions({
     name: 'Person'
   })
@@ -486,12 +511,16 @@
     }
   }
 
-  const handleAvatarChange = async (newUrl) => {
-    const res = await setSelfInfo({ headerImg: newUrl })
+  watch(() => userStore.userInfo.headerImg, async(val) => {
+    const res = await setSelfInfo({ headerImg: val })
     if (res.code === 0) {
-      userStore.ResetUserInfo({ headerImg: newUrl })
+      userStore.ResetUserInfo({ headerImg: val })
+      ElMessage({
+        type: 'success',
+        message: '设置成功',
+      })
     }
-  }
+  })
 
   // 添加活动数据
   const activities = [

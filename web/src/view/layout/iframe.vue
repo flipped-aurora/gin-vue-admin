@@ -6,7 +6,7 @@
         v-if="reloadFlag"
         id="gva-base-load-dom"
         class="gva-body-h bg-gray-50 dark:bg-slate-800 w-full border-t border-gray-200 dark:border-slate-700"
-        src="https://www.gin-vue-admin.com"
+        :src="url"
     ></iframe>
   </div>
 </template>
@@ -21,6 +21,7 @@
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()
   const { isDark } = storeToRefs(appStore)
+
 
   defineOptions({
     name: 'GvaLayoutIframe'
@@ -37,6 +38,8 @@
 
   const router = useRouter()
   const route = useRoute()
+
+  const url = route.query.url || 'https://www.gin-vue-admin.com'
 
   onMounted(() => {
     // 挂载一些通用的事件

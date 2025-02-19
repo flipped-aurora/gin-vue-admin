@@ -33,6 +33,8 @@
           <warning-bar title="点击“文件名”可以编辑；选择的类别即是上传的类别。" />
           <div class="gva-btn-list gap-3">
             <upload-common :image-common="imageCommon" :classId="search.classId" @on-success="onSuccess" />
+            <cropper-image :classId="search.classId" @on-success="onSuccess" />
+            <QRCodeUpload :classId="search.classId" @on-success="onSuccess" />
             <upload-image
                 :image-url="imageUrl"
                 :file-size="512"
@@ -170,11 +172,14 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import {ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {addCategory, deleteCategory, getCategoryList} from "@/api/attachmentCategory";
+import CropperImage from "@/components/upload/cropper.vue";
+import QRCodeUpload from "@/components/upload/QR-code.vue";
 
 defineOptions({
   name: 'Upload'
 })
 
+const fullscreenLoading = ref(false)
 const path = ref(import.meta.env.VITE_BASE_API)
 
 const imageUrl = ref('')
@@ -238,7 +243,7 @@ const deleteFileFunc = async (row) => {
           if (tableData.value.length === 1 && page.value > 1) {
             page.value--
           }
-          getTableData()
+          await getTableData()
         }
       })
       .catch(() => {

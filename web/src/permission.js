@@ -13,7 +13,7 @@ Nprogress.configure({
 })
 
 // 白名单路由
-const WHITE_LIST = ['Login', 'Init']
+const WHITE_LIST = ['Login', 'Init', 'ScanUpload']
 
 // 处理路由加载
 const setupRouter = async (userStore) => {

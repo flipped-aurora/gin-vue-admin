@@ -6,10 +6,9 @@
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"
       :multiple="false"
+      :data="{'classId': props.classId}"
     >
-      <el-button type="primary">{{
-        t('components.upload.image.compressedUpload')
-      }}</el-button>
+      <el-button type="primary" :icon="Upload">{{ t('components.upload.image.compressedUpload') }}</el-button>
     </el-upload>
   </div>
 </template>
@@ -18,9 +17,10 @@
   import ImageCompress from '@/utils/image'
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import {Upload} from "@element-plus/icons-vue";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'UploadImage'
@@ -39,6 +39,10 @@
     maxWH: {
       type: Number,
       default: 1920 // 图片长宽上限
+    },
+    classId: {
+      type: Number,
+      default: 0
     }
   })
 

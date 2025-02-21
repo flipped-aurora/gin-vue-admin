@@ -551,6 +551,126 @@ const docTemplate = `{
                 }
             }
         },
+        "/attachmentCategory/addCategory": {
+            "post": {
+                "security": [
+                    {
+                        "AttachmentCategory": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AddCategory"
+                ],
+                "summary": "添加媒体库分类",
+                "parameters": [
+                    {
+                        "description": "媒体库分类数据",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/example.ExaAttachmentCategory"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/attachmentCategory/deleteCategory": {
+            "post": {
+                "security": [
+                    {
+                        "AttachmentCategory": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "DeleteCategory"
+                ],
+                "summary": "删除分类",
+                "parameters": [
+                    {
+                        "description": "分类id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除分类",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/attachmentCategory/getCategoryList": {
+            "get": {
+                "security": [
+                    {
+                        "AttachmentCategory": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetCategoryList"
+                ],
+                "summary": "媒体库分类列表",
+                "responses": {
+                    "200": {
+                        "description": "媒体库分类列表",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/example.ExaAttachmentCategory"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/authority/copyAuthority": {
             "post": {
                 "security": [
@@ -2612,12 +2732,12 @@ const docTemplate = `{
                 "summary": "分页文件列表",
                 "parameters": [
                     {
-                        "description": "页码, 每页大小",
+                        "description": "页码, 每页大小, 分类id",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.PageInfo"
+                            "$ref": "#/definitions/request.ExaAttachmentCategorySearch"
                         }
                     }
                 ],
@@ -4457,6 +4577,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/sysExportTemplate/ExportTemplate": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "导出表格模板",
+                "responses": {}
+            }
+        },
         "/sysExportTemplate/createSysExportTemplate": {
             "post": {
                 "security": [
@@ -4587,7 +4727,7 @@ const docTemplate = `{
                 "tags": [
                     "SysExportTemplate"
                 ],
-                "summary": "导出表格模板",
+                "summary": "导出表格",
                 "responses": {}
             }
         },
@@ -7353,6 +7493,35 @@ const docTemplate = `{
                 }
             }
         },
+        "example.ExaAttachmentCategory": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/example.ExaAttachmentCategory"
+                    }
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "example.ExaCustomer": {
             "type": "object",
             "properties": {
@@ -7463,6 +7632,10 @@ const docTemplate = `{
             "properties": {
                 "ID": {
                     "description": "主键ID",
+                    "type": "integer"
+                },
+                "classId": {
+                    "description": "分类id",
                     "type": "integer"
                 },
                 "createdAt": {
@@ -7623,6 +7796,16 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/request.AutoCodeField"
                     }
+                },
+                "generateServer": {
+                    "description": "是否生成server",
+                    "type": "boolean",
+                    "example": true
+                },
+                "generateWeb": {
+                    "description": "是否生成web",
+                    "type": "boolean",
+                    "example": true
                 },
                 "gvaModel": {
                     "description": "是否使用gva默认Model",
@@ -7846,6 +8029,26 @@ const docTemplate = `{
         "request.Empty": {
             "type": "object"
         },
+        "request.ExaAttachmentCategorySearch": {
+            "type": "object",
+            "properties": {
+                "classId": {
+                    "type": "integer"
+                },
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                }
+            }
+        },
         "request.GetAuthorityId": {
             "type": "object",
             "properties": {
@@ -7936,6 +8139,10 @@ const docTemplate = `{
                 },
                 "port": {
                     "description": "数据库连接端口",
+                    "type": "string"
+                },
+                "template": {
+                    "description": "postgresql指定template",
                     "type": "string"
                 },
                 "userName": {
@@ -9075,12 +9282,21 @@ const docTemplate = `{
             "name": "x-token",
             "in": "header"
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Base"
+        },
+        {
+            "description": "用户",
+            "name": "SysUser"
+        }
+    ]
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "v2.7.8",
+	Version:          "v2.7.9",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},

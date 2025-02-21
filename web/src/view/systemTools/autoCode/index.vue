@@ -219,11 +219,7 @@
               <div class="flex gap-2 w-full">
                 <el-input
                   v-model="form.structName"
-                  :placeholder="
-                    t(
-                      'view.systemTools.autoCode.capitalizeFirstLetterAutomatically'
-                    )
-                  "
+                  :placeholder="t('view.systemTools.autoCode.capitalizeFirstLetterAutomatically')"
                 />
                 <el-button
                   :disabled="form.onlyTemplate"
@@ -290,7 +286,7 @@
           </el-col>
         </el-row>
         <el-row class="w-full">
-          <el-col :span="6">
+          <el-col :span="7">
             <el-form-item class="w-full" prop="packageName">
               <template #label>
                 <el-tooltip
@@ -389,182 +385,158 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.useGvaNote')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t('view.systemTools.autoCode.groupInfos.useGvaStructure')
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.gvaModel" @change="useGva" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.groupInfos.note1')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t('view.systemTools.autoCode.groupInfos.autoCreateApi')
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateApiToSql" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.groupInfos.note2')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t('view.systemTools.autoCode.groupInfos.autoCreateMenu')
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateMenuToSql" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.groupInfos.note3')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t(
-                        'view.systemTools.autoCode.groupInfos.syncTableStructure'
-                      )
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoMigrate" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.groupInfos.note4')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t(
-                        'view.systemTools.autoCode.groupInfos.createButtonPermissions'
-                      )
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateBtnAuth" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.groupInfos.note5')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t(
-                        'view.systemTools.autoCode.groupInfos.createResourceIdentifier'
-                      )
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateResource" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="2">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  :content="t('view.systemTools.autoCode.groupInfos.note6')"
-                  effect="light"
-                  placement="bottom"
-                >
-                  <div>
-                    {{
-                      t('view.systemTools.autoCode.groupInfos.basicTemplate')
-                    }}
-                    <el-icon>
-                      <QuestionFilled />
-                    </el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.onlyTemplate" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="9">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                    :content="t('view.systemTools.autoCode.groupInfos.parentIdNote')"
-                    placement="bottom"
-                    effect="light"
-                >
-                  <div>
-                    {{ t('view.systemTools.autoCode.groupInfos.treeStructure') }} <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <div class="flex gap-2 items-center">
-                <el-checkbox v-model="form.isTree" />
-                <el-input v-model="form.treeJson" :disabled="!form.isTree" :placeholder="t('view.systemTools.autoCode.groupInfos.frontendJsonAttr')"></el-input>
-              </div>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
       </el-form>
+    </div>
+    <div class="gva-search-box">
+      <el-collapse class="no-border-collapse">
+        <el-collapse-item>
+          <template #title>
+            <div class="text-lg text-gray-600 font-normal">
+              {{ t('view.systemTools.autoCode.expertMode') }}
+            </div>
+          </template>
+          <template #icon="{ isActive }">
+          <span class="text-lg ml-auto mr-4 font-normal">
+            {{ isActive ? t('general.collapse') : t('general.expand') }}
+          </span>
+          </template>
+          <div class="p-4">
+            <!-- 基础设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.basicSettings') }}</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.useGvaNote')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.useGvaStructure')">
+                      <el-checkbox v-model="form.gvaModel" @change="useGva" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.groupInfos.note4')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.createButtonPermissions')">
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateBtnAuth" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item :label="t('view.systemTools.autoCode.generateFrontend')">
+                    <el-checkbox v-model="form.generateWeb" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item :label="t('view.systemTools.autoCode.generateBackend')">
+                    <el-checkbox disabled v-model="form.generateServer" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 自动化设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.automationSettings') }}</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.groupInfos.note1')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.autoCreateApi')">
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoCreateApiToSql" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.groupInfos.note2')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.autoCreateMenu')">
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateMenuToSql" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.groupInfos.note3')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.syncTableStructure')">
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoMigrate" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 高级设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.advancedSettings') }}</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.groupInfos.note5')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.createResourceIdentifier')">
+                      <el-checkbox v-model="form.autoCreateResource" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      :content="t('view.systemTools.autoCode.groupInfos.note6')"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.basicTemplate')">
+                      <el-checkbox v-model="form.onlyTemplate" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 树形结构设置 -->
+            <div class="last:pb-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.treeStructureSettings') }}</h3>
+              <el-row :gutter="20" align="middle">
+                <el-col :span="24">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.treeStructure')">
+                      <div class="flex items-center gap-4">
+                        <el-tooltip
+                            :content="t('view.systemTools.autoCode.groupInfos.parentIdNote')"
+                            placement="top"
+                            effect="light"
+                        >
+                          <el-checkbox v-model="form.isTree" />
+                        </el-tooltip>
+                        <el-input
+                            v-model="form.treeJson"
+                            :disabled="!form.isTree"
+                            :placeholder="t('view.systemTools.autoCode.groupInfos.frontendJsonAttr')"
+                            class="flex-1"
+                        />
+                      </div>
+                    </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
     <!-- 组件列表 -->
     <div class="gva-table-box">
@@ -803,16 +775,9 @@
                 <el-option
                   v-for="item in typeSearchOptions"
                   :key="item.value"
-                  :disabled="
-                    (row.fieldType !== 'string' && item.value === 'LIKE') ||
-                    (row.fieldType !== 'int' &&
-                      row.fieldType !== 'time.Time' &&
-                      row.fieldType !== 'float64' &&
-                      (item.value === 'BETWEEN' ||
-                        item.value === 'NOT BETWEEN'))
-                  "
                   :label="item.label"
                   :value="item.value"
+                  :disabled="canSelect(row.fieldType,item.value)"
                 />
               </el-select>
             </template>
@@ -960,9 +925,9 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import Sortable from 'sortablejs'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   const handleFocus = () => {
     document.addEventListener('keydown', handleKeydown);
@@ -1076,6 +1041,10 @@
       for (let key in json) {
         form.value[key] = json[key]
       }
+
+      form.value.generateServer = true
+      form.value.generateWeb = true
+
     }
   }
 
@@ -1265,6 +1234,8 @@
     autoCreateResource: false,
     onlyTemplate: false,
     isTree: false,
+    generateWeb:true,
+    generateServer:true,
     treeJson: "",
     fields: []
   })
@@ -1409,6 +1380,13 @@
       ElMessage({
         type: 'error',
         message: t('view.systemTools.autoCode.fillJsonDataNote')
+      })
+      return false
+    }
+    if(!form.value.generateWeb && !form.value.generateServer){
+      ElMessage({
+        type: 'error',
+        message: '请至少选择一个生成项'
       })
       return false
     }
@@ -1576,6 +1554,8 @@
       form.value.abbreviation = toLowerCase(tbHump)
       form.value.description = tbHump + ' ' + t('view.systemTools.autoCode.table')
       form.value.autoCreateApiToSql = true
+      form.value.generateServer = true
+      form.value.generateWeb = true
       form.value.fields = []
       res.data.columns &&
         res.data.columns.forEach((item) => {
@@ -1698,6 +1678,20 @@
     }
   )
 
+  watch(()=>form.value.generateServer,()=>{
+    if(!form.value.generateServer){
+      form.value.autoCreateApiToSql = false
+      form.value.autoMigrate = false
+    }
+  })
+
+  watch(()=>form.value.generateWeb,()=>{
+    if(!form.value.generateWeb){
+      form.value.autoCreateMenuToSql = false
+      form.value.autoCreateBtnAuth = false
+    }
+  })
+
   const catchData = () => {
     window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
   }
@@ -1784,4 +1778,36 @@
       }
     }
   )
+
+  const canSelect = (fieldType,item) => {
+    if (fieldType === 'richtext') {
+      return item !== 'LIKE';
+    }
+
+    if (fieldType !== 'string' && item === 'LIKE') {
+      return true;
+    }
+
+    const nonNumericTypes = ['int', 'time.Time', 'float64'];
+    if (!nonNumericTypes.includes(fieldType) && ['BETWEEN', 'NOT BETWEEN'].includes(item)) {
+      return true;
+    }
+
+    return false;
+  }
 </script>
+
+<style>
+.no-border-collapse{
+  @apply border-none;
+  .el-collapse-item__header{
+    @apply border-none;
+  }
+  .el-collapse-item__wrap{
+    @apply border-none;
+  }
+  .el-collapse-item__content{
+    @apply pb-0;
+  }
+}
+</style>

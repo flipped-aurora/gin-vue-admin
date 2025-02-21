@@ -185,6 +185,9 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.parameterManagement", Method: "GET", Path: "/sysParams/findSysParams", Description: "system.api.desc.getParametersById"},
 		{ApiGroup: "system.api.group.parameterManagement", Method: "GET", Path: "/sysParams/getSysParamsList", Description: "system.api.desc.getParametersList"},
 		{ApiGroup: "system.api.group.parameterManagement", Method: "GET", Path: "/sysParams/getSysParam", Description: "system.api.desc.getParametersList"},
+		{ApiGroup: "system.api.group.mediaLibraryCategories", Method: "GET", Path: "/attachmentCategory/getCategoryList", Description: "system.api.desc.categoryList"},
+		{ApiGroup: "system.api.group.mediaLibraryCategories", Method: "POST", Path: "/attachmentCategory/addCategory", Description: "system.api.desc.addEditCategory"},
+		{ApiGroup: "system.api.group.mediaLibraryCategories", Method: "POST", Path: "/attachmentCategory/deleteCategory", Description: "system.api.desc.deleteCategory"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+" "+global.Translate("general.tabelDataInitFail"))

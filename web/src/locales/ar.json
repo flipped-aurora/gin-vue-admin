@@ -35,6 +35,22 @@
       "uploadFiles": "رفع الملفات",
       "uploadFailed": "فشل رفع الملفات "
     },
+    "selectImage": {
+      "selectImage": {
+        "mediaLibrary": "مكتبة الوسائط",
+        "addCategory": "إضافة فئة",
+        "editCategory": "تعديل فئة",
+        "deleteCategory" : "حذف فئة",
+        "editCategoryNote": "انقر فوق \"اسم الملف\" للتحرير؛ الفئة المحددة هي الفئة التي تم تحميلها",
+        "confirmSelection": "تأكيد الاختيار",
+        "categories": " فئة",
+        "parentCategory": "الفئة الرئيسية",
+        "categoryName": "اسم الفئة",
+        "allCategories": "جميع الفئات",
+        "enterCategoryName": "الرجاء إدخال اسم الفئة",
+        "categoryNameNote": "الحد الأقصى 20 حرفًا"
+      }
+    },
     "upload": {
       "common": {
         "normalUpload": "رفع عادي",
@@ -208,7 +224,12 @@
       "colorFadeMode": "وضع تلاشي الألوان",
       "menuMode": "وضع القائمة",
       "showTabs": "عرض علامات التبويب",
-      "layputSizeConfig": "تكوين حجم التخطيط",
+      "pageSwitchAnimation": "رسوم متحركة لتبديل الصفحات",
+      "fadeInOut": "التلاشي والاختفاء",
+      "slide": "شرائح",
+      "zoom": "تكبير",
+      "noAnimation": "لا يوجد رسوم متحركة",
+      "layoutSizeConfig": "تكوين حجم التخطيط",
       "sidebarExpandedWidth": "عرض الشريط الجانبي الموسع",
       "sidebarShrinkWidth": "عرض الشريط الجانبي المنكمش",
       "sidebarItemHeight": "ارتفاع عنصر الشريط الجانبي",
@@ -398,6 +419,7 @@
         "fileTransferredSec": "تم نقل الملف على الفور",
         "uploadFileSizeNote": "يرجى تحميل ملفات أصغر من 5M",
         "uploadFileFirst": "يرجى تحميل الملف أولا",
+        "uploadCompleted": "تم التحميل",
         "uploadSuccessfully": "تم التحميل بنجاح"
       },
       "customer": {
@@ -426,7 +448,7 @@
         "browserNotSupportVideo": "متصفحك لا يدعم تشغيل الفيديو",
         "enterFileNameOrComment": "الرجاء إدخال اسم الملف أو الملاحظات",
         "typeNotSupported": "استخدام النوع الحالي غير مدعم",
-        "delectFileConfirmation": "هل تريد حذف الملف؟",
+        "deleteFileConfirmation": "هل تريد حذف الملف؟",
         "review": "معاينة",
         "inputPlaceholder": "صوري|https://my-oss.com/my.png\nhttps://my-oss.com/my_1.png",
         "importSuccess": "تم الاستيراد بنجاح!",
@@ -528,6 +550,7 @@
         "": ""
       },
       "params": {
+        "paramNote": "تم تضمين طريقة الحصول على المعلمات والتخزين المؤقت في ملفات utils/params الموجودة في الواجهة الأمامية. لا يتعين عليك كتابتها بنفسك. راجع التعليقات الموجودة في الملف للتعرف على كيفية الاستخدام.",
         "paramName": "إسم البراميتر",
         "paramKey": "مفتاح البراميتر",
         "paramValue": "قيمة البراميتر",
@@ -908,6 +931,13 @@
         "useGvaNote": "ملاحظة: سيشمل الهيكل global.Model تلقائيًا العمليات المتعلقة بالمفتاح الأساسي والحذف الناعم",
         "aiClearDataNote": "سيقوم محرك الذكاء الاصطناعي بمسح البيانات الحالية. هل تريد المتابعة؟",
         "fillJsonDataNote": "يرجى ملء سمات json للعرض الأمامي لهيكل الشجرة",
+        "expertMode": "وضع الخبراء",
+        "basicSettings": "الإعدادات الأساسية",
+        "generateFrontend": "إنشاء الواجهة الأمامية",
+        "generateBackend": "إنشاء الواجهة الخلفية",
+        "automationSettings": "إعدادات التشغيل الآلي",
+        "advancedSettings": "الإعدادات المتقدمة",
+        "treeStructureSettings": "إعدادات بنية الشجرة",
         "groupInfos": {
           "useGvaStructure": "استخدام هيكل GVA",
           "note1": "ملاحظة: تسجيل API الذي تم إنشاؤه تلقائيًا في قاعدة البيانات",

@@ -1,13 +1,14 @@
 package utils
 
 import (
+	"net"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
-	"github.com/gofrs/uuid/v5"
-	"net"
-	"time"
+	"github.com/google/uuid"
 )
 
 func ClearToken(c *gin.Context) {
@@ -134,7 +135,7 @@ func GetUserName(c *gin.Context) string {
 }
 
 func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims, err error) {
-	j := &JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
+	j := NewJWT()
 	claims = j.CreateClaims(systemReq.BaseClaims{
 		UUID:        user.GetUUID(),
 		ID:          user.GetUserId(),
@@ -143,8 +144,5 @@ func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims,
 		AuthorityId: user.GetAuthorityId(),
 	})
 	token, err = j.CreateToken(claims)
-	if err != nil {
-		return
-	}
 	return
 }

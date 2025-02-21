@@ -35,6 +35,22 @@
       "uploadFiles": "Upload Files",
       "uploadFailed": "Upload Failed "
     },
+    "selectImage": {
+      "selectImage": {
+        "mediaLibrary": "Media Library",
+        "addCategory": "Add Category",
+        "editCategory": "Edit Category",
+        "deleteCategory" : "Delete Category",
+        "editCategoryNote": "Click \"File Name\" to edit it; the selected category is the uploaded category.",
+        "confirmSelection": "Confirm Selection",
+        "category": " Category",
+        "parentCategory": "Parent Category",
+        "categoryName": "Category Name",
+        "allCategories": "All Categories",
+        "enterCategoryName": "Please enter a category name",
+        "categoryNameNote": "Maximum 20 characters"
+      }
+    },
     "upload": {
       "common": {
         "normalUpload": "Normal Upload",
@@ -209,7 +225,12 @@
       "colorFadeMode": "Color Fade Mode",
       "menuMode": "Menu Mode",
       "showTabs": "Show Tabs",
-      "layputSizeConfig": "Layout Size Configuration",
+      "pageSwitchAnimation": "Page Switching Animation",
+      "fadeInOut": "Fade In And Out",
+      "slide": "Slide",
+      "zoom": "Zoom",
+      "noAnimation": "No Animation",
+      "layoutSizeConfig": "Layout Size Configuration",
       "sidebarExpandedWidth": "Sidebar Expanded Width",
       "sidebarShrinkWidth": "Sidebar Shrink Width",
       "sidebarItemHeight": "Sidebar Item Height",
@@ -400,6 +421,7 @@
         "fileTransferredSec": "File has been transferred in seconds",
         "uploadFileSizeNote": "Please upload a file smaller than 5M",
         "uploadFileFirst": "Please upload the file first",
+        "uploadCompleted": "Upload completed",
         "uploadSuccessfully": "Upload Successfully"
       },
       "customer": {
@@ -428,7 +450,7 @@
         "browserNotSupportVideo": "Your browser does not support video playback",
         "enterFileNameOrComment": "Please enter a file name or comment",
         "typeNotSupported": "The current type is not supported.",
-        "delectFileConfirmation": "Do you want to delete the file?",
+        "deleteFileConfirmation": "Do you want to delete the file?",
         "review": "Review",
         "inputPlaceholder": "My picture|https://my-oss.com/my.png\nhttps://my-oss.com/my_1.png",
         "importSuccess": "Import successful!",
@@ -530,6 +552,7 @@
         "": ""
       },
       "params": {
+        "paramNote": "The method for getting parameters and caching has been encapsulated in the front-end utils/params. You don’t have to write it yourself. See the comments in the file for usage.",
         "paramName": "Parameter Name",
         "paramKey": "Parameter Key",
         "paramValue": "Parameter Value",
@@ -911,6 +934,13 @@
         "useGvaNote": "Note: The struct global.Model will automatically include primary key and soft delete related operations",
         "aiClearDataNote": "AI generation will clear the current data, do you want to continue?",
         "fillJsonDataNote": "Please fill in the front-end display json properties of the tree structure",
+        "expertMode": "Expert Mode",
+        "basicSettings": "Basic Settings",
+        "generateFrontend": "Generate Frontend",
+        "generateBackend": "Generate Backend",
+        "automationSettings": "Automation Settings",
+        "advancedSettings": "Advanced Settings",
+        "treeStructureSettings": "Tree Structure Settings",
         "groupInfos": {
           "useGvaStructure": "GVA Structure",
           "note1": "Note: Register the automatically generated API into the database",

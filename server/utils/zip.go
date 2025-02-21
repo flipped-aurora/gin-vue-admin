@@ -3,11 +3,12 @@ package utils
 import (
 	"archive/zip"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
 // 解压
@@ -20,7 +21,7 @@ func Unzip(zipFile string, destDir string) ([]string, error) {
 	defer zipReader.Close()
 
 	for _, f := range zipReader.File {
-		if strings.Index(f.Name, "..") > -1 {
+		if strings.Contains(f.Name, "..") {
 			return []string{}, fmt.Errorf("%s %s", f.Name, global.Translate("utils.fileNameInvalid"))
 		}
 		fpath := filepath.Join(destDir, f.Name)

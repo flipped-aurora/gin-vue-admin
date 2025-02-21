@@ -35,6 +35,22 @@
       "uploadFiles": "上传文件",
       "uploadFailed": "上传失败"
     },
+    "selectImage": {
+      "selectImage": {
+        "mediaLibrary": "媒体库",
+        "addCategory": "添加分类",
+        "editCategory": "编辑分类",
+        "deleteCategory": "删除分类",
+        "editCategoryNote": "点击“文件名”可以编辑；选择的类别即是上传的类别。",
+        "confirmSelection": "确认所选",
+        "category": "分类",
+        "parentCategory": "上级分类",
+        "categoryName": "分类名称",
+        "allCategories": "全部分类",
+        "enterCategoryName": "请输入分类名称",
+        "categoryNameNote": "最多20位字符" 
+      }
+    },
     "upload": {
       "common": {
         "normalUpload": "普通上传",
@@ -210,7 +226,12 @@
       "colorFadeMode": "色弱模式",
       "menuMode": "菜单模式",
       "showTabs": "显示标签页",
-      "layputSizeConfig": "layout 大小配置",
+      "pageSwitchAnimation": "页面切换动画",
+      "fadeInOut": "淡入淡出",
+      "slide": "滑动",
+      "zoom": "缩放",
+      "noAnimation": "无动画",
+      "layoutSizeConfig": "layout 大小配置",
       "sidebarExpandedWidth": "侧边栏展开宽度",
       "sidebarShrinkWidth": "侧边栏收缩宽度",
       "sidebarItemHeight": "侧边栏子项高度",
@@ -399,9 +420,10 @@
         "uploadFiles": "上传文件",
         "uploadFilesNote": "请上传不超过5MB的文件",
         "breakpointNote": "此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹",
-        "fileTransferredSec": "文件已秒传",
-        "uploadFileSizeNote": "请上传小于5M文件",
-        "uploadFileFirst": "请先上传文件",
+        "fileTransferredSec": "文件已秒传!",
+        "uploadFileSizeNote": "请上传小于5M文件!",
+        "uploadFileFirst": "请先上传文件!",
+        "uploadCompleted": "上传已完成!",
         "uploadSuccessfully": "上传成功"
       },
       "customer": {
@@ -418,7 +440,6 @@
         "importURL": "导入URL",
         "image": "图片",
         "upload": "上传",
-        "mediaLibrary": "媒体库",
         "fileNameComments": "文件名/备注",
         "link": "链接",
         "label": "标签",
@@ -430,7 +451,7 @@
         "browserNotSupportVideo": "您的浏览器不支持视频播放",
         "enterFileNameOrComment": "请输入文件名或者备注",
         "typeNotSupported": "当前类型不支持使用",
-        "delectFileConfirmation": "是否删除该文件",
+        "deleteFileConfirmation": "是否删除该文件",
         "review": "预览",
         "inputPlaceholder": "我的图片|https://my-oss.com/my.png\nhttps://my-oss.com/my_1.png",
         "importSuccess": "导入成功!",
@@ -532,6 +553,7 @@
         "": ""
       },
       "params": {
+        "paramNote": "获取参数且缓存方法已在前端utils/params 已经封装完成 不必自己书写 使用方法查看文件内注释",
         "paramName": "参数名称",
         "paramKey": "参数键",
         "paramValue": "参数值",
@@ -896,6 +918,13 @@
         "useGvaNote": "注：会自动在结构体global.Model其中包含主键和软删除相关操作配置",
         "aiClearDataNote": "AI生成会清空当前数据，是否继续?",
         "fillJsonDataNote": "请填写树型结构的前端展示json属性",
+        "expertMode": "专家模式",
+        "basicSettings": "基础设置",
+        "generateFrontend": "生成前端",
+        "generateBackend": "生成后端",
+        "automationSettings": "自动化设置",
+        "advancedSettings": "高级设置",
+        "treeStructureSettings": "树形结构设置",
         "groupInfos": {
           "useGvaStructure": "使用GVA结构",
           "note1": "注：把自动生成的API注册进数据库",

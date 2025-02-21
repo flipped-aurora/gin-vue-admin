@@ -321,7 +321,10 @@
                 "batchDeleteParameters": "Batch Delete Parameters",
                 "updateParameters": "Update Parameters",
                 "getParametersById": "Get Parameters By ID",
-                "getParametersList": "Get Parameters List"
+                "getParametersList": "Get Parameters List",
+                "categoryList": "Category List",
+                "addEditCategory": "Add/Edit Category",
+                "deleteCategory": "Delete Category"
             },
             "group": {
                 "announcement": "Announcement",
@@ -344,7 +347,8 @@
                 "systemUser": "System User",
                 "tableTemplate": "Table Templates",
                 "templateConfiguration": "Template Configuration",
-                "parameterManagement": "Parameter Management"
+                "parameterManagement": "Parameter Management",
+                "mediaLibraryCategories": "Media Library Categories"
             }
         },
         "authority": {

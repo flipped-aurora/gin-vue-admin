@@ -2,12 +2,17 @@
 <div align=center>
 <img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width="300" height="300" />
 </div>
+
 <div align=center>
 <img src="https://img.shields.io/badge/golang-1.20-blue"/>
 <img src="https://img.shields.io/badge/gin-1.9.1-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-2.3.8-green"/>
 <img src="https://img.shields.io/badge/gorm-1.25.2-red"/>
+</div>
+
+<div align=center>
+<a href="https://trendshift.io/repositories/3250" target="_blank"><img src="https://trendshift.io/api/badge/repositories/3250" alt="Calcium-Ion%2Fnew-api | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </div>
 
 [English](./README-en.md) | 简体中文

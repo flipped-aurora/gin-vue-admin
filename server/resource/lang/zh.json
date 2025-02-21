@@ -325,7 +325,10 @@
                 "batchDeleteParameters": "批量删除参数",
                 "updateParameters": "更新参数",
                 "getParametersById": "根据ID获取参数",
-                "getParametersList": "获取参数列表"
+                "getParametersList": "获取参数列表",
+                "categoryList": "分类列表",
+                "addEditCategory": "添加/编辑分类",
+                "deleteCategory": "删除分类"
             },
             "group": {
                 "announcement": "公告",
@@ -348,7 +351,8 @@
                 "systemUser": "系统用户",
                 "tableTemplate": "表格模板",
                 "templateConfiguration": "模板配置",
-                "parameterManagement": "参数管理"
+                "parameterManagement": "参数管理",
+                "mediaLibraryCategories": "媒体库分类"
             }
         },
         "authority": {
@@ -411,7 +415,7 @@
             "buttonKey": "按钮关键key",
             "buttonComment": "按钮备注",
             "menuID": "菜单ID",
-            "parameterManagement" : "参数管理"
+            "parameterManagement": "参数管理"
         }
     },
     "announcement": {

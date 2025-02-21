@@ -1,4 +1,5 @@
 import service from '@/utils/request'
+import i18n from '@/i18n' // added by mohamed hassan to multilangauge
 
 export const preview = (data) => {
   return service({
@@ -148,7 +149,7 @@ export const llmAuto = (data) => {
     loadingOption: {
       lock: true,
       fullscreen: true,
-      text: `小淼正在思考，请稍候...`
+      text: i18n.global.t('view.systemTools.autoCodeAdmin.xiaoMiaoIsThinking')
     }
   })
 }

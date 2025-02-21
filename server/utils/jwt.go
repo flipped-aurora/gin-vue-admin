@@ -4,10 +4,9 @@ import (
 	"errors"
 	"time"
 
-	jwt "github.com/golang-jwt/jwt/v4"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	jwt "github.com/golang-jwt/jwt/v5"
 )
 
 type JWT struct {
@@ -15,10 +14,12 @@ type JWT struct {
 }
 
 var (
-	TokenExpired     = errors.New("Token is expired")
-	TokenNotValidYet = errors.New("Token not active yet")
-	TokenMalformed   = errors.New("That's not even a token")
-	TokenInvalid     = errors.New("Couldn't handle this token:")
+	TokenValid            = errors.New("未知错误")
+	TokenExpired          = errors.New("token已过期")
+	TokenNotValidYet      = errors.New("token尚未激活")
+	TokenMalformed        = errors.New("这不是一个token")
+	TokenSignatureInvalid = errors.New("无效签名")
+	TokenInvalid          = errors.New("无法处理此token")
 )
 
 func NewJWT() *JWT {
@@ -62,27 +63,25 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &request.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
 	})
+
 	if err != nil {
-		if ve, ok := err.(*jwt.ValidationError); ok {
-			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, TokenMalformed
-			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				// Token is expired
-				return nil, TokenExpired
-			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, TokenNotValidYet
-			} else {
-				return nil, TokenInvalid
-			}
+		switch {
+		case errors.Is(err, jwt.ErrTokenExpired):
+			return nil, TokenExpired
+		case errors.Is(err, jwt.ErrTokenMalformed):
+			return nil, TokenMalformed
+		case errors.Is(err, jwt.ErrTokenSignatureInvalid):
+			return nil, TokenSignatureInvalid
+		case errors.Is(err, jwt.ErrTokenNotValidYet):
+			return nil, TokenNotValidYet
+		default:
+			return nil, TokenInvalid
 		}
 	}
 	if token != nil {
 		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
 			return claims, nil
 		}
-		return nil, TokenInvalid
-
-	} else {
-		return nil, TokenInvalid
 	}
+	return nil, TokenValid
 }

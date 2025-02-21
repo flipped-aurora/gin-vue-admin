@@ -118,5 +118,5 @@
     ElMessage.success(t('general.copySuccess'))
   }
 
-  defineExpose({ copy })
+  defineExpose({ copy, selectText })
 </script>

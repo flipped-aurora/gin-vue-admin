@@ -314,7 +314,10 @@
                 "batchDeleteParameters": "حذف مجموعة براميترات",
                 "updateParameters": "تحديث البراميترات",
                 "getParametersById": "الحصول على البراميتر بال ID",
-                "getParametersList": "الحصول على قائمة البراميترات"
+                "getParametersList": "الحصول على قائمة البراميترات",
+                "categoryList": "قائمة الفئات",
+                "addEditCategory": "إضافة/تعديل الفئة",
+                "deleteCategory": "حذف الفئة"
             },
             "group": {
                 "announcement": "الإعلان",
@@ -337,7 +340,8 @@
                 "systemUser": "مستخدم النظام",
                 "tableTemplate": "قالب الجدول",
                 "templateConfiguration": "تكوين القالب",
-                "parameterManagement": "إدارة البراميترات"
+                "parameterManagement": "إدارة البراميترات",
+                "mediaLibraryCategories": "فئات مكتبة الوسائط"
             }
         },
         "authority": {

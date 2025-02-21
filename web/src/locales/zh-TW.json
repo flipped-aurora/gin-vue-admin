@@ -1,4 +1,29 @@
 {
+  "components": {
+    "commandMenu": {
+      "commandMenuNote": "請輸入你需要快捷到達的功能",
+      "close": "關閉",
+      "jump": "跳轉",
+      "operate": "操作",
+      "lightTheme": "亮色主題",
+      "darkTheme": "暗色主題",
+      "logout": "退出登錄"
+    },
+    "exportExcel": {
+      "exportExcel": {
+        "export": "導出",
+        "templateIdErr": "組件未設置模板ID"
+      },
+      "exportTemplate": {
+        "exportTemplate": "下載模板",
+        "templateIdErr": "組件未設置模板ID"
+      },
+      "importExcel": {
+        "import": "導入",
+        "importSuccess": "導入成功"
+      }
+    }
+  },
   "api": {
     "group": "組",
     "setupSuccess": "API設定成功"
@@ -161,7 +186,12 @@
       "colorFadeMode": "色弱模式",
       "menuMode": "菜單模式",
       "showTabs": "顯示標籤頁",
-      "layputSizeConfig": "layout 大小配置",
+      "pageSwitchAnimation": "頁面切換動畫",
+      "fadeInOut": "淡入淡出",
+      "slide": "滑動",
+      "zoom": "縮放",
+      "noAnimation": "無動畫",
+      "layoutSizeConfig": "layout 大小配置",
       "sidebarExpandedWidth": "側邊欄展開寬度",
       "sidebarShrinkWidth": "側邊欄收縮寬度",
       "sidebarItemHeight": "側邊欄子項高度",
@@ -340,6 +370,7 @@
         "": ""
       },
       "params": {
+        "paramNote": "取得參數且快取方法已在前端utils/params 已經封裝完成 不必自己書寫 使用方法檢視文件內註釋",
         "paramName": "參數名稱",
         "paramKey": "参数键",
         "paramValue": "参数值",
@@ -744,6 +775,13 @@
         "useGvaNote": "注：会自动在结构体global.Model其中包含主键和软删除相关操作配置",
         "aiClearDataNote": "AI生成会清空当前数据，是否继续?",
         "fillJsonDataNote": "请填写树型结构的前端展示json属性",
+        "expertMode": "專家模式",
+        "basicSettings": "基礎設定",
+        "generateFrontend": "產生前端",
+        "generateBackend": "產生後端",
+        "automationSettings": "自动化设置",
+        "advancedSettings": "詳細設定",
+        "treeStructureSettings": "樹狀結構設置",
         "groupInfos": {
           "useGvaStructure": "使用GVA结构",
           "note1": "注：把自动生成的API注册进数据库",
@@ -971,31 +1009,6 @@
         "templateInfoFormatError": "模板信息格式不正確，請檢查",
         "exportConditionError": "請填寫完整的導出條件",
         "completeAssociationError": "請填寫完整的關聯"
-      }
-    }
-  },
-  "components": {
-    "commandMenu": {
-      "commandMenuNote": "請輸入你需要快捷到達的功能",
-      "close": "關閉",
-      "jump": "跳轉",
-      "operate": "操作",
-      "lightTheme": "亮色主題",
-      "darkTheme": "暗色主題",
-      "logout": "退出登錄"
-    },
-    "exportExcel": {
-      "exportExcel": {
-        "export": "導出",
-        "templateIdErr": "組件未設置模板ID"
-      },
-      "exportTemplate": {
-        "exportTemplate": "下載模板",
-        "templateIdErr": "組件未設置模板ID"
-      },
-      "importExcel": {
-        "import": "導入",
-        "importSuccess": "導入成功"
       }
     }
   },

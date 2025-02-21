@@ -1,5 +1,6 @@
 <template>
   <div>
+    <warning-bar :title="t('view.superAdmin.params.paramNote')" />
     <div class="gva-search-box">
       <el-form
         ref="elSearchFormRef"
@@ -231,7 +232,7 @@
         <p class="mb-2 text-sm text-gray-600">
           {{ t('view.superAdmin.params.instructionNote1') }}
           <code class="bg-blue-100 px-1 py-0.5 rounded"
-            >import { getParams } from '@/utils/dictionary'</code
+            >import { getParams } from '@/utils/params'</code
           >
           {{ t('view.superAdmin.params.instructionNote2') }}
           <code class="bg-blue-100 px-1 py-0.5 rounded"
@@ -293,13 +294,14 @@
     getSysParamsList
   } from '@/api/sysParams'
 
-// 全量引入格式化工具 请按需保留
-import { formatDate } from '@/utils/format'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref, reactive } from 'vue'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+  // 全量引入格式化工具 请按需保留
+  import { formatDate } from '@/utils/format'
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { ref, reactive } from 'vue'
+  import WarningBar from "@/components/warningBar/warningBar.vue";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-const { t } = useI18n() // added by mohamed hassan to support multilingual
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'SysParams'
@@ -326,7 +328,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ],
@@ -338,7 +340,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ],
@@ -350,7 +352,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ]
@@ -364,12 +366,12 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
             searchInfo.value.startCreatedAt &&
             !searchInfo.value.endCreatedAt
           ) {
-            callback(new Error('请填写结束日期'))
+            callback(new Error(t('general.placeInputEndData')))
           } else if (
             !searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt
           ) {
-            callback(new Error('请填写开始日期'))
+            callback(new Error(t('general.placeInputStartData')))
           } else if (
             searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt &&
@@ -378,7 +380,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
               searchInfo.value.startCreatedAt.getTime() >
                 searchInfo.value.endCreatedAt.getTime())
           ) {
-            callback(new Error('开始日期应当早于结束日期'))
+            callback(new Error(t('general.startDataMustBeforeEndData')))
           } else {
             callback()
           }
@@ -520,7 +522,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '删除成功'
+        message: t('general.deleteSuccess')
       })
       if (tableData.value.length === 1 && page.value > 1) {
         page.value--
@@ -567,7 +569,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilingual
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '创建/更改成功'
+          message: t('general.createUpdateSuccess')
         })
         closeDialog()
         getTableData()

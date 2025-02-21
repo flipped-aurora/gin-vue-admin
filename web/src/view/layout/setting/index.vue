@@ -16,10 +16,8 @@
     </template>
     <div class="flex flex-col">
       <div class="mb-8">
-        <div class="text-gray-800 dark:text-gray-100">
-          {{ t('layout.setting.defaultTheme') }}
-        </div>
-        <div class="mt-2 text-sm p-2 flex items-center gap-2">
+        <Title :title="t('layout.setting.defaultTheme')"></Title>
+        <div class="mt-2 text-sm p-2 flex items-center justify-center gap-2">
           <el-segmented
             v-model="config.darkMode"
             :options="options"
@@ -29,10 +27,8 @@
         </div>
       </div>
       <div class="mb-8">
-        <div class="text-gray-800 dark:text-gray-100">
-          {{ t('layout.setting.themeColor') }}
-        </div>
-        <div class="mt-2 text-sm p-2 flex items-center gap-2">
+        <Title :title="t('layout.setting.themeColor')"></Title>
+        <div class="mt-2 text-sm p-2 flex items-center gap-2 justify-center">
           <div
             v-for="item in colors"
             :key="item"
@@ -51,10 +47,8 @@
         </div>
       </div>
       <div class="mb-8">
-        <div class="text-gray-800 dark:text-gray-100">
-          {{ t('layout.setting.interfaceDisplay') }}
-        </div>
-        <div class="mt-2 text-sm p-2">
+        <Title :title="t('layout.setting.interfaceDisplay')"></Title>
+        <div class="mt-2 text-md p-2 flex flex-col gap-2">
           <div class="flex items-center justify-between">
             <div>{{ t('layout.setting.showWaterMark') }}</div>
             <el-switch
@@ -81,14 +75,6 @@
               size="default"
               @change="appStore.toggleSideMode"
             />
-            <!-- <el-select
-              v-model="config.side_mode"
-              @change="handleSideModelChange"
-            >
-              <el-option value="normal" label="标准模式" />
-              <el-option value="head" label="顶部导航栏" />
-              <el-option value="multilayer" disabled label="多侧边导航模式" />
-            </el-select> -->
           </div>
 
           <div class="flex items-center justify-between">
@@ -98,14 +84,25 @@
               @change="appStore.toggleTabs"
             />
           </div>
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex-shrink-0">{{ t('layout.setting.pageSwitchAnimation') }}</div>
+            <el-select
+              v-model="config.transition_type"
+              @change="appStore.toggleTransition"
+              class="w-40"
+            >
+              <el-option value="fade" :label="t('layout.setting.fadeInOut')" />
+              <el-option value="slide" :label="t('layout.setting.slide')" />
+              <el-option value="zoom" :label="t('layout.setting.zoom')" />
+              <el-option value="none" :label="t('layout.setting.noAnimation')" />
+            </el-select>
+          </div>
         </div>
       </div>
 
       <div class="mb-8">
-        <div class="text-gray-800 dark:text-gray-100">
-          {{ t('layout.setting.layputSizeConfig') }}
-        </div>
-        <div class="mt-2 text-sm p-2">
+        <Title :title="t('layout.setting.layoutSizeConfig')"></Title>
+        <div class="mt-2 text-md p-2 flex flex-col gap-2">
           <div class="flex items-center justify-between mb-2">
             <div>{{ t('layout.setting.sidebarExpandedWidth') }}</div>
             <el-input-number
@@ -143,8 +140,9 @@
   import { ref, computed } from 'vue'
   import { ElMessage } from 'element-plus'
   import { setSelfSetting } from '@/api/user'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  import Title from './title.vue'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
   const appStore = useAppStore()
   const { config, device } = storeToRefs(appStore)
 

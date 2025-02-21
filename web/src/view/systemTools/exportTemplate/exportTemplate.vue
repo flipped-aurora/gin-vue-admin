@@ -277,7 +277,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="t('view.systemTools.exportTemplate.tableToBeUsed')" prop="tables">
+        <el-form-item :label="t('view.systemTools.exportTemplate.tableToBeUsed')" prop="tables">
           <el-select
             multiple
             v-model="tables"

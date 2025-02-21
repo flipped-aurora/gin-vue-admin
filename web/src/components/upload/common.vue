@@ -6,12 +6,11 @@
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="false"
+      :data="{'classId': props.classId}"
       multiple
       class="upload-btn"
     >
-      <el-button type="primary">{{
-        t('components.upload.common.normalUpload')
-      }}</el-button>
+      <el-button type="primary" :icon="Upload">{{ t('components.upload.common.normalUpload') }}</el-button>
     </el-upload>
   </div>
 </template>
@@ -21,12 +20,20 @@
   import { ElMessage } from 'element-plus'
   import { isVideoMime, isImageMime } from '@/utils/image'
   import { getBaseUrl } from '@/utils/format'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import {Upload} from "@element-plus/icons-vue";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'UploadCommon'
+  })
+
+  const props = defineProps({
+    classId: {
+      type: Number,
+      default: 0
+    }
   })
 
   const emit = defineEmits(['on-success'])

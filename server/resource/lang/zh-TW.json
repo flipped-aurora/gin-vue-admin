@@ -317,7 +317,16 @@
         "updateRole": "更新角色信息",
         "userLoginRequired": "用戶登錄(必選)",
         "userRegistration": "用戶註冊",
-        "tableDataInitFail": "表數據初始化失敗"
+        "tableDataInitFail": "表數據初始化失敗",
+        "newParameter": "新參數",
+        "deleteParameter": "刪除參數",
+        "batchDeleteParameters": "批量刪除參數",
+        "updateParameters": "更新參數",
+        "getParametersById": "根據ID獲取參數",
+        "getParametersList": "取得參數列表",
+        "categoryList": "分類列表",
+        "addEditCategory": "新增/編輯分類",
+        "deleteCategory": "刪除分類"
       },
       "group": {
         "announcement": "公告",
@@ -341,12 +350,7 @@
         "tableTemplate": "表格模板",
         "templateConfiguration": "模板配置",
         "parameterManagement": "參數管理",
-        "newParameter": "新參數",
-        "deleteParameter": "刪除參數",
-        "batchDeleteParameters": "批量刪除參數",
-        "updateParameters": "更新參數",
-        "getParametersById": "根據ID獲取參數",
-        "getParametersList": "取得參數列表"
+        "mediaLibraryCategories": "媒體庫分類"
       }
     },
     "authority": {
@@ -409,7 +413,8 @@
       "buttonKey": "按鈕關鍵key",
       "buttonComment": "按鈕備註",
       "menuID": "菜單ID",
-      "parameterManagement" : "參數管理"
+      "parameterManagement" : "參數管理",
+      "": ""
     }
   },
   "announcement": {

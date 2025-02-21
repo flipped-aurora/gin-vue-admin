@@ -263,7 +263,7 @@
                 <div>
                   <span> {{ t('view.superAdmin.menu.highlightMenu') }} </span>
                   <el-tooltip
-                    :content="t('authority.routeNote')"
+                    :content="t('view.superAdmin.menu.highlightMenu')"
                     placement="top"
                     effect="light"
                   >

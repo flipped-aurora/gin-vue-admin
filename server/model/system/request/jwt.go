@@ -1,11 +1,11 @@
 package request
 
 import (
-	"github.com/gofrs/uuid/v5"
-	jwt "github.com/golang-jwt/jwt/v4"
+	jwt "github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
-// Custom claims structure
+// CustomClaims structure
 type CustomClaims struct {
 	BaseClaims
 	BufferTime int64

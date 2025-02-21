@@ -40,10 +40,10 @@ func SetToken(c *gin.Context, token string, maxAge int) {
 }
 
 func GetToken(c *gin.Context) string {
-	token, _ := c.Cookie("x-token")
+	token := c.Request.Header.Get("x-token")
 	if token == "" {
 		j := NewJWT()
-		token = c.Request.Header.Get("x-token")
+		token, _ = c.Cookie("x-token")
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			global.GVA_LOG.Error("重新写入cookie token失败,未能成功解析token,请检查请求头是否存在x-token且claims是否为规定结构")

@@ -657,7 +657,7 @@
           <el-table-column
             align="left"
             prop="dataTypeLong"
-            label="数据库字段长度"
+            label="字段长度/枚举值"
             width="160"
           >
             <template #default="{ row }">
@@ -931,7 +931,6 @@
     if (res.code === 0) {
       form.value.fields = []
       const json = JSON.parse(res.data)
-
       json.fields?.forEach((item) => {
         item.fieldName = toUpperCase(item.fieldName)
       })

@@ -38,11 +38,12 @@
     "selectImage": {
       "selectImage": {
         "mediaLibrary": "媒体库",
+        "mediaLibraryNote": "媒体库 | 点击“文件名”可以编辑，选择的类别即是上传的类别",
         "addCategory": "添加分类",
         "editCategory": "编辑分类",
         "deleteCategory": "删除分类",
         "editCategoryNote": "点击“文件名”可以编辑；选择的类别即是上传的类别。",
-        "confirmSelection": "确认所选",
+        "select": "选定",
         "category": "分类",
         "parentCategory": "上级分类",
         "categoryName": "分类名称",

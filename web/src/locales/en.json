@@ -38,11 +38,12 @@
     "selectImage": {
       "selectImage": {
         "mediaLibrary": "Media Library",
+        "mediaLibraryNote": "Media Library | Click on the \"File Name\" to edit it. The selected category is the uploaded category.",
         "addCategory": "Add Category",
         "editCategory": "Edit Category",
         "deleteCategory" : "Delete Category",
         "editCategoryNote": "Click \"File Name\" to edit it; the selected category is the uploaded category.",
-        "confirmSelection": "Confirm Selection",
+        "select": "Select",
         "category": " Category",
         "parentCategory": "Parent Category",
         "categoryName": "Category Name",

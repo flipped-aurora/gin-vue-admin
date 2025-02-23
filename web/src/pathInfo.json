@@ -16,6 +16,7 @@
   "/src/view/example/breakpoint/breakpoint.vue": "BreakPoint",
   "/src/view/example/customer/customer.vue": "Customer",
   "/src/view/example/index.vue": "Example",
+  "/src/view/example/upload/scanUpload.vue": "scanUpload",
   "/src/view/example/upload/upload.vue": "Upload",
   "/src/view/init/index.vue": "Init",
   "/src/view/layout/aside/asideComponent/asyncSubmenu.vue": "AsyncSubmenu",

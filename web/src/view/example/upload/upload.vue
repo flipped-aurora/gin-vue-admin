@@ -33,6 +33,8 @@
           <warning-bar :title="t('components.selectImage.selectImage.editCategoryNote')" />
           <div class="gva-btn-list gap-3">
             <upload-common :image-common="imageCommon" :classId="search.classId" @on-success="onSuccess" />
+            <cropper-image :classId="search.classId" @on-success="onSuccess" />
+            <QRCodeUpload :classId="search.classId" @on-success="onSuccess" />
             <upload-image
                 :image-url="imageUrl"
                 :file-size="512"
@@ -170,6 +172,8 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import {ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {addCategory, deleteCategory, getCategoryList} from "@/api/attachmentCategory";
+import CropperImage from "@/components/upload/cropper.vue";
+import QRCodeUpload from "@/components/upload/QR-code.vue";
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
 const { t } = useI18n() // added by mohamed hassan to support multilingual
@@ -178,6 +182,7 @@ defineOptions({
   name: 'Upload'
 })
 
+const fullscreenLoading = ref(false)
 const path = ref(import.meta.env.VITE_BASE_API)
 
 const imageUrl = ref('')
@@ -241,7 +246,7 @@ const deleteFileFunc = async (row) => {
           if (tableData.value.length === 1 && page.value > 1) {
             page.value--
           }
-          getTableData()
+          await getTableData()
         }
       })
       .catch(() => {

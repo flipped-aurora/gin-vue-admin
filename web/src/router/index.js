@@ -16,6 +16,14 @@ const routes = [
     component: () => import('@/view/login/index.vue')
   },
   {
+    path: '/scanUpload',
+    name: 'ScanUpload',
+    meta: {
+      title: '扫码上传'
+    },
+    component: () => import('@/view/example/upload/scanUpload.vue')
+  },
+  {
     path: '/:catchAll(.*)',
     meta: {
       closeTab: true

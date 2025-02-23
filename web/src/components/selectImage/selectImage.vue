@@ -10,7 +10,7 @@
       />
     </div>
 
-    <el-drawer v-model="drawer" :title="t('components.selectImage.selectImage.mediaLibrary')" :size="880">
+    <el-drawer v-model="drawer" :title="t('components.selectImage.selectImage.mediaLibraryNote')" :size="880">
       <div class="flex">
         <div class="w-64" style="border-right: solid 1px var(--el-border-color);">
           <el-scrollbar style="height: calc(100vh - 110px)">
@@ -39,14 +39,17 @@
             </el-tree>
           </el-scrollbar>
         </div>
-        <div class="ml-4 image-library">
-          <warning-bar :title="t('components.selectImage.selectImage.editCategoryNote')" />
+        <div class="ml-4 w-[605px]">
           <div class="gva-btn-list gap-2">
-            <el-button @click="useSelectedImages" type="danger" :disabled="selectedImages.length === 0" :icon="ArrowLeftBold">{{ t('components.selectImage.selectImage.confirmSelection') }}</el-button>
+            <el-input v-model.trim="search.keyword" class="w-96" :placeholder="t('view.example.upload.enterFileName')" clearable />
+            <el-button type="primary" icon="search" @click="onSubmit"></el-button>
+          </div>
+          <div class="gva-btn-list gap-2">
+            <el-button @click="useSelectedImages" type="danger" :disabled="selectedImages.length === 0" :icon="ArrowLeftBold">{{ t('components.selectImage.selectImage.select') }}</el-button>
             <upload-common :image-common="imageCommon" :classId="search.classId" @on-success="onSuccess" />
+            <cropper-image :classId="search.classId" @on-success="onSuccess" />
+            <QRCodeUpload :classId="search.classId" @on-success="onSuccess" />
             <upload-image :image-url="imageUrl" :file-size="2048" :max-w-h="1080" :classId="search.classId" @on-success="onSuccess" />
-            <el-input v-model.trim="search.keyword" class="w-52" :placeholder="t('components.selectImage.selectImage.enterFileName')" clearable />
-            <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
           </div>
           <div class="flex flex-wrap gap-4">
             <div v-for="(item,key) in picList" :key="key" class="w-40">
@@ -144,6 +147,8 @@ import {
 } from '@element-plus/icons-vue'
 import selectComponent from '@/components/selectImage/selectComponent.vue'
 import { addCategory, deleteCategory, getCategoryList } from '@/api/attachmentCategory'
+import CropperImage from "@/components/upload/cropper.vue";
+import QRCodeUpload from "@/components/upload/QR-code.vue";
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
 const { t } = useI18n() // added by mohamed hassan to support multilingual
@@ -426,10 +431,6 @@ const useSelectedImages = () => {
 <style scoped>
 .selected {
   border: 3px solid #409eff;
-}
-
-.image-library {
-  width: 605px;
 }
 
 .selected:before {

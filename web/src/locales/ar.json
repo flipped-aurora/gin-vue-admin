@@ -38,11 +38,12 @@
     "selectImage": {
       "selectImage": {
         "mediaLibrary": "مكتبة الوسائط",
+        "mediaLibraryNote": "مكتبة الوسائط | انقر على \"اسم الملف\" لتحريره. الفئة المحددة هي الفئة التي تم تحميلها.",
         "addCategory": "إضافة فئة",
         "editCategory": "تعديل فئة",
         "deleteCategory" : "حذف فئة",
         "editCategoryNote": "انقر فوق \"اسم الملف\" للتحرير؛ الفئة المحددة هي الفئة التي تم تحميلها",
-        "confirmSelection": "تأكيد الاختيار",
+        "select": "إختيار",
         "categories": " فئة",
         "parentCategory": "الفئة الرئيسية",
         "categoryName": "اسم الفئة",

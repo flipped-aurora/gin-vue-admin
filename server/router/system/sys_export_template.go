@@ -17,7 +17,7 @@ func (s *SysExportTemplateRouter) InitSysExportTemplateRouter(Router *gin.Router
 		sysExportTemplateRouter.DELETE("deleteSysExportTemplate", exportTemplateApi.DeleteSysExportTemplate)           // 删除导出模板
 		sysExportTemplateRouter.DELETE("deleteSysExportTemplateByIds", exportTemplateApi.DeleteSysExportTemplateByIds) // 批量删除导出模板
 		sysExportTemplateRouter.PUT("updateSysExportTemplate", exportTemplateApi.UpdateSysExportTemplate)              // 更新导出模板
-		sysExportTemplateRouter.POST("importExcel", exportTemplateApi.ImportExcel)                                     // 更新导出模板
+		sysExportTemplateRouter.POST("importExcel", exportTemplateApi.ImportExcel)                                     // 导入excel模板数据
 	}
 	{
 		sysExportTemplateRouterWithoutRecord.GET("findSysExportTemplate", exportTemplateApi.FindSysExportTemplate)       // 根据ID获取导出模板

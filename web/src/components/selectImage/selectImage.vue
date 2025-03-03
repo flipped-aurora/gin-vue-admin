@@ -5,7 +5,7 @@
       <selectComponent :rounded="rounded" v-for="(item, index) in model" :key="index" :model="item" @chooseItem="openChooseImg"
                        @deleteItem="deleteImg(index)"
       />
-      <selectComponent :rounded="rounded" v-if="model.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+      <selectComponent :rounded="rounded" v-if="model?.length < props.maxUpdateCount || props.maxUpdateCount === 0"
                        @chooseItem="openChooseImg" @deleteItem="openChooseImg"
       />
     </div>

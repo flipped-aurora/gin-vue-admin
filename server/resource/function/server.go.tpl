@@ -8,7 +8,7 @@
 
 // {{.FuncName}} {{.FuncDesc}}
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) {{.FuncName}}() (err error) {
+func (s *{{.Abbreviation}}) {{.FuncName}}(ctx context.Context) (err error) {
 	db := {{$db}}.Model(&model.{{.StructName}}{})
     return db.Error
 }
@@ -17,7 +17,7 @@ func (s *{{.Abbreviation}}) {{.FuncName}}() (err error) {
 
 // {{.FuncName}} {{.FuncDesc}}
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service){{.FuncName}}() (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service){{.FuncName}}(ctx context.Context) (err error) {
 	// 请在这里实现自己的业务逻辑
 	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
     return db.Error

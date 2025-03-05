@@ -28,7 +28,7 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = val
     if (val.originSetting) {
       Object.keys(appStore.config).forEach((key) => {
-        if (val.originSetting[key]) {
+        if (val.originSetting[key] !== undefined) {
           appStore.config[key] = val.originSetting[key]
         }
       })

@@ -56,8 +56,8 @@
       return
     }
     model.value.push({
-      name: data.file.name,
-      url: data.file.url
+      name: data.name,
+      url: data.url
     })
     emits('on-success', res)
   }

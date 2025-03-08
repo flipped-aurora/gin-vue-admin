@@ -1,156 +1,161 @@
 <template>
   <div>
-    <el-row :gutter="15" class="py-1">
-      <el-col :span="12">
-        <el-card v-if="state.os" class="card_item">
-          <template #header>
-            <div>Runtime</div>
-          </template>
-          <div>
-            <el-row :gutter="10">
-              <el-col :span="12">os:</el-col>
-              <el-col :span="12">{{ state.os.goos }}</el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="12">cpu nums:</el-col>
-              <el-col :span="12">{{ state.os.numCpu }}</el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="12">compiler:</el-col>
-              <el-col :span="12">{{ state.os.compiler }}</el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="12">go version:</el-col>
-              <el-col :span="12">{{ state.os.goVersion }}</el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="12">goroutine nums:</el-col>
-              <el-col :span="12">{{ state.os.numGoroutine }}</el-col>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card
-          v-if="state.disk"
-          class="card_item"
-          :body-style="{ height: '180px', 'overflow-y': 'scroll' }"
-        >
-          <template #header>
-            <div>Disk</div>
-          </template>
-          <div>
-            <el-row
-              v-for="(item, index) in state.disk"
-              :key="index"
-              :gutter="10"
-              style="margin-bottom: 2rem"
-            >
-              <el-col :span="12">
-                <el-row :gutter="10">
-                  <el-col :span="12">MountPoint</el-col>
-                  <el-col :span="12">{{ item.mountPoint }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">total (MB)</el-col>
-                  <el-col :span="12">{{ item.totalMb }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">used (MB)</el-col>
-                  <el-col :span="12">{{ item.usedMb }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">total (GB)</el-col>
-                  <el-col :span="12">{{ item.totalGb }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">used (GB)</el-col>
-                  <el-col :span="12">{{ item.usedGb }}</el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-progress
-                  type="dashboard"
-                  :percentage="item.usedPercent"
-                  :color="colors"
-                />
-              </el-col>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="15" class="py-1">
-      <el-col :span="12">
-        <el-card
-          v-if="state.cpu"
-          class="card_item"
-          :body-style="{ height: '180px', 'overflow-y': 'scroll' }"
-        >
-          <template #header>
-            <div>CPU</div>
-          </template>
-          <div>
-            <el-row :gutter="10">
-              <el-col :span="12">physical number of cores:</el-col>
-              <el-col :span="12">{{ state.cpu.cores }}</el-col>
-            </el-row>
-            <el-row
-              v-for="(item, index) in state.cpu.cpus"
-              :key="index"
-              :gutter="10"
-            >
-              <el-col :span="12">core {{ index }}:</el-col>
-              <el-col :span="12">
-                <el-progress
-                  type="line"
-                  :percentage="+item.toFixed(0)"
-                  :color="colors"
-                />
-              </el-col>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="12">
-        <el-card v-if="state.ram" class="card_item">
-          <template #header>
-            <div>Ram</div>
-          </template>
-          <div>
-            <el-row :gutter="10">
-              <el-col :span="12">
-                <el-row :gutter="10">
-                  <el-col :span="12">total (MB)</el-col>
-                  <el-col :span="12">{{ state.ram.totalMb }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">used (MB)</el-col>
-                  <el-col :span="12">{{ state.ram.usedMb }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">total (GB)</el-col>
-                  <el-col :span="12">{{ state.ram.totalMb / 1024 }}</el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">used (GB)</el-col>
-                  <el-col :span="12">{{
-                    (state.ram.usedMb / 1024).toFixed(2)
-                  }}</el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-progress
-                  type="dashboard"
-                  :percentage="state.ram.usedPercent"
-                  :color="colors"
-                />
-              </el-col>
-            </el-row>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-empty v-if="showEmpty" :description="errorMsg">
+      <el-button type="primary" @click="reload">重新加载</el-button>
+    </el-empty>
+    <div v-else>
+      <el-row :gutter="15" class="py-1">
+        <el-col :span="12">
+          <el-card v-if="state.os" class="card_item">
+            <template #header>
+              <div>Runtime</div>
+            </template>
+            <div>
+              <el-row :gutter="10">
+                <el-col :span="12">os:</el-col>
+                <el-col :span="12">{{ state.os.goos }}</el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="12">cpu nums:</el-col>
+                <el-col :span="12">{{ state.os.numCpu }}</el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="12">compiler:</el-col>
+                <el-col :span="12">{{ state.os.compiler }}</el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="12">go version:</el-col>
+                <el-col :span="12">{{ state.os.goVersion }}</el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="12">goroutine nums:</el-col>
+                <el-col :span="12">{{ state.os.numGoroutine }}</el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card
+            v-if="state.disk"
+            class="card_item"
+            :body-style="{ height: '180px', 'overflow-y': 'scroll' }"
+          >
+            <template #header>
+              <div>Disk</div>
+            </template>
+            <div>
+              <el-row
+                v-for="(item, index) in state.disk"
+                :key="index"
+                :gutter="10"
+                style="margin-bottom: 2rem"
+              >
+                <el-col :span="12">
+                  <el-row :gutter="10">
+                    <el-col :span="12">MountPoint</el-col>
+                    <el-col :span="12">{{ item.mountPoint }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">total (MB)</el-col>
+                    <el-col :span="12">{{ item.totalMb }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">used (MB)</el-col>
+                    <el-col :span="12">{{ item.usedMb }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">total (GB)</el-col>
+                    <el-col :span="12">{{ item.totalGb }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">used (GB)</el-col>
+                    <el-col :span="12">{{ item.usedGb }}</el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-progress
+                    type="dashboard"
+                    :percentage="item.usedPercent"
+                    :color="colors"
+                  />
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="15" class="py-1">
+        <el-col :span="12">
+          <el-card
+            v-if="state.cpu"
+            class="card_item"
+            :body-style="{ height: '180px', 'overflow-y': 'scroll' }"
+          >
+            <template #header>
+              <div>CPU</div>
+            </template>
+            <div>
+              <el-row :gutter="10">
+                <el-col :span="12">physical number of cores:</el-col>
+                <el-col :span="12">{{ state.cpu.cores }}</el-col>
+              </el-row>
+              <el-row
+                v-for="(item, index) in state.cpu.cpus"
+                :key="index"
+                :gutter="10"
+              >
+                <el-col :span="12">core {{ index }}:</el-col>
+                <el-col :span="12">
+                  <el-progress
+                    type="line"
+                    :percentage="+item.toFixed(0)"
+                    :color="colors"
+                  />
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card v-if="state.ram" class="card_item">
+            <template #header>
+              <div>Ram</div>
+            </template>
+            <div>
+              <el-row :gutter="10">
+                <el-col :span="12">
+                  <el-row :gutter="10">
+                    <el-col :span="12">total (MB)</el-col>
+                    <el-col :span="12">{{ state.ram.totalMb }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">used (MB)</el-col>
+                    <el-col :span="12">{{ state.ram.usedMb }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">total (GB)</el-col>
+                    <el-col :span="12">{{ state.ram.totalMb / 1024 }}</el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">used (GB)</el-col>
+                    <el-col :span="12">{{
+                      (state.ram.usedMb / 1024).toFixed(2)
+                    }}</el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="12">
+                  <el-progress
+                    type="dashboard"
+                    :percentage="state.ram.usedPercent"
+                    :color="colors"
+                  />
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 <script setup>
@@ -163,6 +168,8 @@
 
   const timer = ref(null)
   const state = ref({})
+  const showEmpty = ref(false)
+  const errorMsg = ref('')
   const colors = ref([
     { color: '#5cb87a', percentage: 20 },
     { color: '#e6a23c', percentage: 40 },
@@ -170,14 +177,29 @@
   ])
 
   const reload = async () => {
-    const { data } = await getSystemState()
+    const { data, code, msg } = await getSystemState()
+    // 请求失败
+    if (code !== 0) {
+      errorMsg.value = msg
+      showEmpty.value = true
+      // 停止定时请求
+      clearInterval(timer.value)
+      timer.value = null
+      return
+    }
+
     state.value = data.server
+    showEmpty.value = false
+
+    // 请求成功后才开启定时器
+    if (!timer.value) {
+      timer.value = setInterval(() => {
+        reload()
+      }, 1000 * 10)
+    }
   }
 
   reload()
-  timer.value = setInterval(() => {
-    reload()
-  }, 1000 * 10)
 
   onUnmounted(() => {
     clearInterval(timer.value)

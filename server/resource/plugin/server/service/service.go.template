@@ -58,6 +58,7 @@ package service
 
 import (
 {{- if not .OnlyTemplate }}
+	"context"
 	"{{.Module}}/global"
 	"{{.Module}}/plugin/{{.Package}}/model"
 	{{- if not .IsTree }}

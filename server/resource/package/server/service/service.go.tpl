@@ -58,6 +58,7 @@ package {{.Package}}
 
 import (
 {{- if not .OnlyTemplate }}
+	"context"
 	"{{.Module}}/global"
 	"{{.Module}}/model/{{.Package}}"
 	{{- if not .IsTree}}

@@ -84,6 +84,7 @@ import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
 import { useRouter } from 'vue-router'
+import { useUserStore } from "@/pinia";
 
 defineOptions({
   name: 'scanUpload'

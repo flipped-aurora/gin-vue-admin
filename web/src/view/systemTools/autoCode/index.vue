@@ -741,6 +741,7 @@
           class="flex items-center"
           :before-upload="importJson"
           :show-file-list="false"
+          :headers="{'x-token': token}"
           accept=".json"
         >
           <el-button type="primary" class="mx-2" :disabled="isAdd"
@@ -828,6 +829,11 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import Sortable from 'sortablejs'
+  import { useUserStore } from "@/pinia";
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const handleFocus = () => {
     document.addEventListener('keydown', handleKeydown);

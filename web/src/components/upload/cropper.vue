@@ -8,6 +8,7 @@
       :data="{'classId': props.classId}"
       :on-success="handleImageSuccess"
       :on-change="handleFileChange"
+      :headers="{'x-token': token}"
   >
     <el-button type="primary" icon="crop"> 裁剪上传</el-button>
   </el-upload>
@@ -87,6 +88,7 @@ import { RefreshLeft, RefreshRight, Plus, Minus } from '@element-plus/icons-vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
+import { useUserStore } from "@/pinia";
 
 defineOptions({
   name: 'CropperImage'

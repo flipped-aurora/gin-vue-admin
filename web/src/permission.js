@@ -86,14 +86,13 @@ router.beforeEach(async (to, from) => {
 
   // 白名单路由处理
   if (WHITE_LIST.includes(to.name)) {
-    if (
-      token &&
-      !routerStore.asyncRouterFlag &&
-      !WHITE_LIST.includes(from.name)
-    ) {
-      await setupRouter(userStore)
+    if (token) {
+      if(!routerStore.asyncRouterFlag){
+        await setupRouter(userStore)
+      }
+      return { name: userStore.userInfo.authority.defaultRouter }
     }
-    return { name: userStore.userInfo.authority.defaultRouter }
+    return  true
   }
 
   // 需要登录的路由处理

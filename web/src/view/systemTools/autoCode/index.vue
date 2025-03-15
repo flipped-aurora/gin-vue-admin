@@ -657,7 +657,7 @@
           <el-table-column
             align="left"
             prop="dataTypeLong"
-            label="数据库字段长度"
+            label="字段长度/枚举值"
             width="160"
           >
             <template #default="{ row }">
@@ -741,6 +741,7 @@
           class="flex items-center"
           :before-upload="importJson"
           :show-file-list="false"
+          :headers="{'x-token': token}"
           accept=".json"
         >
           <el-button type="primary" class="mx-2" :disabled="isAdd"
@@ -828,6 +829,11 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import Sortable from 'sortablejs'
+  import { useUserStore } from "@/pinia";
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const handleFocus = () => {
     document.addEventListener('keydown', handleKeydown);
@@ -931,7 +937,6 @@
     if (res.code === 0) {
       form.value.fields = []
       const json = JSON.parse(res.data)
-
       json.fields?.forEach((item) => {
         item.fieldName = toUpperCase(item.fieldName)
       })

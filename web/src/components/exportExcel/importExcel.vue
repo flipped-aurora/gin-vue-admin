@@ -4,6 +4,7 @@
     :show-file-list="false"
     :on-success="handleSuccess"
     :multiple="false"
+    :headers="{'x-token': token}"
   >
     <el-button type="primary" icon="upload" class="ml-3"> 导入 </el-button>
   </el-upload>
@@ -11,6 +12,7 @@
 
 <script setup>
   import { ElMessage } from 'element-plus'
+  import { useUserStore } from "@/pinia";
 
   let baseUrl = import.meta.env.VITE_BASE_API
   if (baseUrl === "/"){
@@ -23,6 +25,10 @@
       required: true
     }
   })
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const emit = defineEmits(['on-success'])
 

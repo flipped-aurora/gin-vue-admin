@@ -33,6 +33,9 @@ type {{.Abbreviation}} struct {}
 // @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func (a *{{.Abbreviation}}) Create{{.StructName}}(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
 	var info model.{{.StructName}}
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
@@ -42,7 +45,7 @@ func (a *{{.Abbreviation}}) Create{{.StructName}}(c *gin.Context) {
 	{{- if .AutoCreateResource }}
     info.CreatedBy = utils.GetUserID(c)
 	{{- end }}
-	err = service{{ .StructName }}.Create{{.StructName}}(&info)
+	err = service{{ .StructName }}.Create{{.StructName}}(ctx,&info)
 	if err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败:" + err.Error(), c)
@@ -61,11 +64,14 @@ func (a *{{.Abbreviation}}) Create{{.StructName}}(c *gin.Context) {
 // @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func (a *{{.Abbreviation}}) Delete{{.StructName}}(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
 	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")
 {{- if .AutoCreateResource }}
     userID := utils.GetUserID(c)
 {{- end }}
-	err := service{{ .StructName }}.Delete{{.StructName}}({{.PrimaryField.FieldJson}} {{- if .AutoCreateResource -}},userID{{- end -}})
+	err := service{{ .StructName }}.Delete{{.StructName}}(ctx,{{.PrimaryField.FieldJson}} {{- if .AutoCreateResource -}},userID{{- end -}})
 	if err != nil {
         global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败:" + err.Error(), c)
@@ -83,11 +89,14 @@ func (a *{{.Abbreviation}}) Delete{{.StructName}}(c *gin.Context) {
 // @Success 200 {object} response.Response{msg=string} "批量删除成功"
 // @Router /{{.Abbreviation}}/delete{{.StructName}}ByIds [delete]
 func (a *{{.Abbreviation}}) Delete{{.StructName}}ByIds(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
 	{{.PrimaryField.FieldJson}}s := c.QueryArray("{{.PrimaryField.FieldJson}}s[]")
 {{- if .AutoCreateResource }}
     userID := utils.GetUserID(c)
 {{- end }}
-	err := service{{ .StructName }}.Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s{{- if .AutoCreateResource }},userID{{- end }})
+	err := service{{ .StructName }}.Delete{{.StructName}}ByIds(ctx,{{.PrimaryField.FieldJson}}s{{- if .AutoCreateResource }},userID{{- end }})
 	if err != nil {
         global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败:" + err.Error(), c)
@@ -106,6 +115,9 @@ func (a *{{.Abbreviation}}) Delete{{.StructName}}ByIds(c *gin.Context) {
 // @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /{{.Abbreviation}}/update{{.StructName}} [put]
 func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
 	var info model.{{.StructName}}
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
@@ -115,7 +127,7 @@ func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
 {{- if .AutoCreateResource }}
     info.UpdatedBy = utils.GetUserID(c)
 {{- end }}
-	err = service{{ .StructName }}.Update{{.StructName}}(info)
+	err = service{{ .StructName }}.Update{{.StructName}}(ctx,info)
     if err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败:" + err.Error(), c)
@@ -134,8 +146,11 @@ func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
 // @Success 200 {object} response.Response{data=model.{{.StructName}},msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func (a *{{.Abbreviation}}) Find{{.StructName}}(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
 	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")
-	re{{.Abbreviation}}, err := service{{ .StructName }}.Get{{.StructName}}({{.PrimaryField.FieldJson}})
+	re{{.Abbreviation}}, err := service{{ .StructName }}.Get{{.StructName}}(ctx,{{.PrimaryField.FieldJson}})
 	if err != nil {
         global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败:" + err.Error(), c)
@@ -154,7 +169,10 @@ func (a *{{.Abbreviation}}) Find{{.StructName}}(c *gin.Context) {
 // @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
-	list, err := service{{ .StructName }}.Get{{.StructName}}InfoList()
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
+	list, err := service{{ .StructName }}.Get{{.StructName}}InfoList(ctx)
 	if err != nil {
 	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
         response.FailWithMessage("获取失败:" + err.Error(), c)
@@ -173,13 +191,16 @@ func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
 // @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
 	var pageInfo request.{{.StructName}}Search
 	err := c.ShouldBindQuery(&pageInfo)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := service{{ .StructName }}.Get{{.StructName}}InfoList(pageInfo)
+	list, total, err := service{{ .StructName }}.Get{{.StructName}}InfoList(ctx,pageInfo)
 	if err != nil {
 	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
         response.FailWithMessage("获取失败:" + err.Error(), c)
@@ -203,8 +224,11 @@ func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
 // @Success 200 {object} response.Response{data=object,msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}DataSource [get]
 func (a *{{.Abbreviation}}) Get{{.StructName}}DataSource(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
     // 此接口为获取数据源定义的数据
-   dataSource, err := service{{ .StructName }}.Get{{.StructName}}DataSource()
+   dataSource, err := service{{ .StructName }}.Get{{.StructName}}DataSource(ctx)
    if err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
         response.FailWithMessage("查询失败:" + err.Error(), c)
@@ -222,7 +246,10 @@ func (a *{{.Abbreviation}}) Get{{.StructName}}DataSource(c *gin.Context) {
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}Public [get]
 func (a *{{.Abbreviation}}) Get{{.StructName}}Public(c *gin.Context) {
+    // 创建业务用Context
+    ctx := c.Request.Context()
+
     // 此接口不需要鉴权 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
-    service{{ .StructName }}.Get{{.StructName}}Public()
+    service{{ .StructName }}.Get{{.StructName}}Public(ctx)
     response.OkWithDetailed(gin.H{"info": "不需要鉴权的{{.Description}}接口信息"}, "获取成功", c)
 }

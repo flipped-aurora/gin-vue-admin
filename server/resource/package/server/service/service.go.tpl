@@ -58,6 +58,7 @@ package {{.Package}}
 
 import (
 {{- if not .OnlyTemplate }}
+	"context"
 	"{{.Module}}/global"
 	"{{.Module}}/model/{{.Package}}"
 	{{- if not .IsTree}}
@@ -77,14 +78,14 @@ type {{.StructName}}Service struct {}
 {{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}(ctx context.Context, {{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
 	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .IsTree }}
        var count int64
 	   err = {{$db}}.Find(&{{.Package}}.{{.StructName}}{},"parent_id = ?",{{.PrimaryField.FieldJson}}).Count(&count).Error
@@ -114,7 +115,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ctx context.Context, {{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
@@ -133,14 +134,14 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
 
 // Update{{.StructName}} 更新{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}(ctx context.Context, {{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
 	err = {{$db}}.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
 	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
@@ -149,7 +150,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.Pri
 {{- if .IsTree }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录,Tree模式下不添加分页和搜索
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList() (list []*{{.Package}}.{{.StructName}},err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(ctx context.Context) (list []*{{.Package}}.{{.StructName}},err error) {
     // 创建db
 	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
     var {{.Abbreviation}}s []*{{.Package}}.{{.StructName}}
@@ -161,7 +162,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 {{- else }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(ctx context.Context, info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
@@ -226,7 +227,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 {{- end }}
 
 {{- if .HasDataSource }}
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource(ctx context.Context) (res map[string][]map[string]any, err error) {
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)
@@ -243,7 +244,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSou
 }
 {{- end }}
 {{- end }}
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}Public() {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}Public(ctx context.Context) {
     // 此方法为获取数据源定义的数据
     // 请自行实现
 }

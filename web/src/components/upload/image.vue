@@ -6,8 +6,10 @@
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"
       :multiple="false"
+      :data="{'classId': props.classId}"
+      :headers="{'x-token': token}"
     >
-      <el-button type="primary">压缩上传</el-button>
+      <el-button type="primary" :icon="Upload">压缩上传</el-button>
     </el-upload>
   </div>
 </template>
@@ -16,6 +18,8 @@
   import ImageCompress from '@/utils/image'
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
+  import { Upload } from "@element-plus/icons-vue";
+  import { useUserStore } from "@/pinia";
 
   defineOptions({
     name: 'UploadImage'
@@ -34,8 +38,16 @@
     maxWH: {
       type: Number,
       default: 1920 // 图片长宽上限
+    },
+    classId: {
+      type: Number,
+      default: 0
     }
   })
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const beforeImageUpload = (file) => {
     const isJPG = file.type?.toLowerCase() === 'image/jpeg'

@@ -18,12 +18,38 @@
           v-model="prompt"
           type="textarea"
           :rows="5"
-          :maxlength="100"
-          :placeholder="`现已完全免费\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
+          :maxlength="2000"
+          :placeholder="`现已完全免费\n试试复制一张图片然后按下ctrl+v或者commend+v\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
           resize="none"
           @focus="handleFocus"
           @blur="handleBlur"
         />
+
+        <div class="flex absolute right-28 bottom-2">
+          <el-tooltip effect="light">
+            <template #content>
+              <div>
+                【完全免费】前往<a
+                  class="text-blue-600"
+                  href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
+                  target="_blank"
+              >插件市场个人中心</a
+              >申请AIPath，填入config.yaml的ai-path属性即可使用。
+              </div>
+            </template>
+            <el-button
+                :disabled="form.onlyTemplate"
+                type="primary"
+                @click="eyeFunc()"
+            >
+              <el-icon size="18">
+                <ai-gva />
+              </el-icon>
+              识图
+            </el-button>
+          </el-tooltip>
+        </div>
+
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip effect="light">
             <template #content>
@@ -303,121 +329,158 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：会自动在结构体global.Model其中包含主键和软删除相关操作配置"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    使用GVA结构 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.gvaModel" @change="useGva" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：把自动生成的API注册进数据库"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    自动创建API <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateApiToSql" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：把自动生成的菜单注册进数据库"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    自动创建菜单 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateMenuToSql" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：自动同步数据库表结构，如果不需要可以选择关闭。"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    同步表结构 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoMigrate" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    创建按钮权限 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateBtnAuth" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    创建资源标识 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.autoCreateResource" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
-            <el-form-item>
-              <template #label>
-                <el-tooltip
-                  content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div>
-                    基础模板 <el-icon><QuestionFilled /></el-icon>
-                  </div>
-                </el-tooltip>
-              </template>
-              <el-checkbox v-model="form.onlyTemplate" />
-            </el-form-item>
-          </el-col>
-        </el-row>
       </el-form>
+    </div>
+    <div class="gva-search-box">
+      <el-collapse class="no-border-collapse">
+        <el-collapse-item>
+          <template #title>
+            <div class="text-lg text-gray-600 font-normal">
+              专家模式
+            </div>
+          </template>
+          <template #icon="{ isActive }">
+          <span class="text-lg ml-auto mr-4 font-normal">
+            {{ isActive ? '收起' : '展开' }}
+          </span>
+          </template>
+          <div class="p-4">
+            <!-- 基础设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">基础设置</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：会自动在结构体global.Model其中包含主键和软删除相关操作配置"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="使用GVA结构">
+                      <el-checkbox v-model="form.gvaModel" @change="useGva" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="创建按钮权限">
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateBtnAuth" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="生成前端">
+                    <el-checkbox v-model="form.generateWeb" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
+                  <el-form-item label="生成后端">
+                    <el-checkbox disabled v-model="form.generateServer" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 自动化设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">自动化设置</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：把自动生成的API注册进数据库"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="自动创建API">
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoCreateApiToSql" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：把自动生成的菜单注册进数据库"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="自动创建菜单">
+                      <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateMenuToSql" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：自动同步数据库表结构，如果不需要可以选择关闭"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="同步表结构">
+                      <el-checkbox  :disabled="!form.generateServer" v-model="form.autoMigrate" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 高级设置组 -->
+            <div class="border-b border-gray-200 last:border-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">高级设置</h3>
+              <el-row :gutter="20">
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="创建资源标识">
+                      <el-checkbox v-model="form.autoCreateResource" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="3">
+                  <el-tooltip
+                      content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
+                      placement="top"
+                      effect="light"
+                  >
+                    <el-form-item label="基础模板">
+                      <el-checkbox v-model="form.onlyTemplate" />
+                    </el-form-item>
+                  </el-tooltip>
+                </el-col>
+              </el-row>
+            </div>
+
+            <!-- 树形结构设置 -->
+            <div class="last:pb-0">
+              <h3 class="text-lg font-medium mb-4 text-gray-700">树形结构设置</h3>
+              <el-row :gutter="20" align="middle">
+                <el-col :span="24">
+                    <el-form-item label="树型结构">
+                      <div class="flex items-center gap-4">
+                        <el-tooltip
+                            content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                            placement="top"
+                            effect="light"
+                        >
+                          <el-checkbox v-model="form.isTree" />
+                        </el-tooltip>
+                        <el-input
+                            v-model="form.treeJson"
+                            :disabled="!form.isTree"
+                            placeholder="前端展示json属性"
+                            class="flex-1"
+                        />
+                      </div>
+                    </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
     <!-- 组件列表 -->
     <div class="gva-table-box">
@@ -594,7 +657,7 @@
           <el-table-column
             align="left"
             prop="dataTypeLong"
-            label="数据库字段长度"
+            label="字段长度/枚举值"
             width="160"
           >
             <template #default="{ row }">
@@ -640,14 +703,7 @@
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  :disabled="
-                    (row.fieldType !== 'string' && item.value === 'LIKE') ||
-                    (row.fieldType !== 'int' &&
-                      row.fieldType !== 'time.Time' &&
-                      row.fieldType !== 'float64' &&
-                      (item.value === 'BETWEEN' ||
-                        item.value === 'NOT BETWEEN'))
-                  "
+                  :disabled="canSelect(row.fieldType,item.value)"
                 />
               </el-select>
             </template>
@@ -685,6 +741,7 @@
           class="flex items-center"
           :before-upload="importJson"
           :show-file-list="false"
+          :headers="{'x-token': token}"
           accept=".json"
         >
           <el-button type="primary" class="mx-2" :disabled="isAdd"
@@ -764,7 +821,7 @@
     preview,
     getMeta,
     getPackageApi,
-    llmAuto
+    llmAuto, butler, eye
   } from '@/api/autoCode'
   import { getDict } from '@/utils/dictionary'
   import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
@@ -772,13 +829,20 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import Sortable from 'sortablejs'
+  import { useUserStore } from "@/pinia";
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const handleFocus = () => {
-    document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('paste', handlePaste);
   }
 
   const handleBlur = () => {
-    document.removeEventListener('keydown', handleKeydown)
+    document.removeEventListener('keydown', handleKeydown);
+    document.removeEventListener('paste', handlePaste);
   }
 
   const handleKeydown = (event) => {
@@ -786,6 +850,25 @@
       llmAutoFunc()
     }
   }
+
+  const handlePaste = (event) => {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload =async (e) => {
+          const base64String = e.target.result;
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
 
   const getOnlyNumber = () => {
     let randomNumber = ''
@@ -796,6 +879,32 @@
   }
 
   const prompt = ref('')
+
+  const eyeFunc = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64String = e.target.result;
+
+          const res = await eye({ picture: base64String,command: 'eye' })
+          if (res.code === 0) {
+            prompt.value = res.data
+            llmAutoFunc()
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    input.click();
+  }
+
 
   const llmAutoFunc = async (flag) => {
     if (flag && !form.value.structName) {
@@ -828,7 +937,6 @@
     if (res.code === 0) {
       form.value.fields = []
       const json = JSON.parse(res.data)
-
       json.fields?.forEach((item) => {
         item.fieldName = toUpperCase(item.fieldName)
       })
@@ -836,6 +944,10 @@
       for (let key in json) {
         form.value[key] = json[key]
       }
+
+      form.value.generateServer = true
+      form.value.generateWeb = true
+
     }
   }
 
@@ -1024,6 +1136,10 @@
     gvaModel: true,
     autoCreateResource: false,
     onlyTemplate: false,
+    isTree: false,
+    generateWeb:true,
+    generateServer:true,
+    treeJson: "",
     fields: []
   })
   const rules = ref({
@@ -1137,6 +1253,20 @@
   }
   const autoCodeForm = ref(null)
   const enterForm = async (isPreview) => {
+    if (form.value.isTree && !form.value.treeJson){
+      ElMessage({
+        type: 'error',
+        message: '请填写树型结构的前端展示json属性'
+      })
+      return false
+    }
+    if(!form.value.generateWeb && !form.value.generateServer){
+      ElMessage({
+        type: 'error',
+        message: '请至少选择一个生成项'
+      })
+      return false
+    }
     if (!form.value.onlyTemplate) {
       if (form.value.fields.length <= 0) {
         ElMessage({
@@ -1297,10 +1427,12 @@
       const tbHump = toHump(dbform.value.tableName)
       form.value.structName = toUpperCase(tbHump)
       form.value.tableName = dbform.value.tableName
-      form.value.packageName = tbHump
-      form.value.abbreviation = tbHump
+      form.value.packageName = toLowerCase(tbHump)
+      form.value.abbreviation = toLowerCase(tbHump)
       form.value.description = tbHump + '表'
       form.value.autoCreateApiToSql = true
+      form.value.generateServer = true
+      form.value.generateWeb = true
       form.value.fields = []
       res.data.columns &&
         res.data.columns.forEach((item) => {
@@ -1418,6 +1550,20 @@
     }
   )
 
+  watch(()=>form.value.generateServer,()=>{
+    if(!form.value.generateServer){
+      form.value.autoCreateApiToSql = false
+      form.value.autoMigrate = false
+    }
+  })
+
+  watch(()=>form.value.generateWeb,()=>{
+    if(!form.value.generateWeb){
+      form.value.autoCreateMenuToSql = false
+      form.value.autoCreateBtnAuth = false
+    }
+  })
+
   const catchData = () => {
     window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
   }
@@ -1445,6 +1591,8 @@
       gvaModel: true,
       autoCreateResource: false,
       onlyTemplate: false,
+      isTree: false,
+      treeJson: "",
       fields: []
     }
     await nextTick()
@@ -1502,4 +1650,36 @@
       }
     }
   )
+
+  const canSelect = (fieldType,item) => {
+    if (fieldType === 'richtext') {
+      return item !== 'LIKE';
+    }
+
+    if (fieldType !== 'string' && item === 'LIKE') {
+      return true;
+    }
+
+    const nonNumericTypes = ['int', 'time.Time', 'float64'];
+    if (!nonNumericTypes.includes(fieldType) && ['BETWEEN', 'NOT BETWEEN'].includes(item)) {
+      return true;
+    }
+
+    return false;
+  }
 </script>
+
+<style>
+.no-border-collapse{
+  @apply border-none;
+  .el-collapse-item__header{
+    @apply border-none;
+  }
+  .el-collapse-item__wrap{
+    @apply border-none;
+  }
+  .el-collapse-item__content{
+    @apply pb-0;
+  }
+}
+</style>

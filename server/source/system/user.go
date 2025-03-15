@@ -5,7 +5,7 @@ import (
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/gofrs/uuid/v5"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -35,7 +35,7 @@ func (i *initUser) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&sysModel.SysUser{})
 }
 
-func (i initUser) InitializerName() string {
+func (i *initUser) InitializerName() string {
 	return sysModel.SysUser{}.TableName()
 }
 
@@ -56,7 +56,7 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 
 	entities := []sysModel.SysUser{
 		{
-			UUID:        uuid.Must(uuid.NewV4()),
+			UUID:        uuid.New(),
 			Username:    "admin",
 			Password:    adminPassword,
 			NickName:    "Mr.奇淼",
@@ -66,7 +66,7 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 			Email:       "333333333@qq.com",
 		},
 		{
-			UUID:        uuid.Must(uuid.NewV4()),
+			UUID:        uuid.New(),
 			Username:    "a303176530",
 			Password:    password,
 			NickName:    "用户1",
@@ -79,7 +79,7 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 		return ctx, errors.Wrap(err, sysModel.SysUser{}.TableName()+"表数据初始化失败!")
 	}
 	next = context.WithValue(ctx, i.InitializerName(), entities)
-	authorityEntities, ok := ctx.Value(initAuthority{}.InitializerName()).([]sysModel.SysAuthority)
+	authorityEntities, ok := ctx.Value(new(initAuthority).InitializerName()).([]sysModel.SysAuthority)
 	if !ok {
 		return next, errors.Wrap(system.ErrMissingDependentContext, "创建 [用户-权限] 关联失败, 未找到权限表初始化数据")
 	}

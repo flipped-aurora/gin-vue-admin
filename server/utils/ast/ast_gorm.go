@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-// 自动为 gorm.go 注册一个自动迁移
+// AddRegisterTablesAst 自动为 gorm.go 注册一个自动迁移
 func AddRegisterTablesAst(path, funcName, pk, varName, dbName, model string) {
 	modelPk := fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", pk)
 	src, err := os.ReadFile(path)
@@ -147,7 +147,7 @@ func addAutoMigrate(astBody *ast.BlockStmt, dbname string, pk string, model stri
 	}
 }
 
-// 为automigrate增加实参
+// NeedAppendModel 为automigrate增加实参
 func NeedAppendModel(callNode ast.Node, pk string, model string) bool {
 	flag := true
 	ast.Inspect(callNode, func(node ast.Node) bool {

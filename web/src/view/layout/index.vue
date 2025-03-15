@@ -23,7 +23,7 @@
         v-if="config.side_mode === 'combination' && device !== 'mobile'"
         mode="normal"
       />
-      <div class="flex-1 p-2 w-0 h-full">
+      <div class="flex-1 px-2 w-0 h-full">
         <gva-tabs v-if="config.showTabs" />
         <div
           class="overflow-auto"
@@ -34,7 +34,7 @@
               id="gva-base-load-dom"
               class="gva-body-h bg-gray-50 dark:bg-slate-800"
             >
-              <transition mode="out-in" name="el-fade-in-linear">
+              <transition mode="out-in" :name="config.transition_type">
                 <keep-alive :include="routerStore.keepAliveRouters">
                   <component :is="Component" :key="route.fullPath" />
                 </keep-alive>
@@ -61,8 +61,9 @@
   import { useUserStore } from '@/pinia/modules/user'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
+  import '@/style/transition.scss'
   const appStore = useAppStore()
-  const { config, theme, device } = storeToRefs(appStore)
+  const { config, isDark, device } = storeToRefs(appStore)
 
   defineOptions({
     name: 'GvaLayout'
@@ -74,8 +75,7 @@
   })
 
   watchEffect(() => {
-    font.color =
-      theme.value === 'dark' ? 'rgba(255,255,255, .15)' : 'rgba(0, 0, 0, .15)'
+    font.color = isDark.value ? 'rgba(255,255,255, .15)' : 'rgba(0, 0, 0, .15)'
   })
 
   const router = useRouter()

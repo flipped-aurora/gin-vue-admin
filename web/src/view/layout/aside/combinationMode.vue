@@ -95,7 +95,6 @@
       return config.value.layout_side_collapsed_width
     }
   })
-
   watchEffect(() => {
     active.value = route.meta.activeName || route.name
   })
@@ -123,16 +122,22 @@
       })
     if (index === route.name) return
     if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-      window.open(index)
-    } else {
+        window.open(index, '_blank')
+        return
+    }
+
       if (!top) {
         router.push({ name: index, query, params })
         return
       }
-      if (!routerStore.setLeftMenu(index)) {
+      const leftMenu = routerStore.setLeftMenu(index)
+      if (!leftMenu) {
         router.push({ name: index, query, params })
+        return;
       }
-    }
+      const firstMenu = leftMenu.find((item) => !item.hidden && item.path.indexOf("http://") === -1 && item.path.indexOf("https://") === -1)
+      router.push({ name: firstMenu.name, query, params })
+
   }
 
   const toggleCollapse = () => {

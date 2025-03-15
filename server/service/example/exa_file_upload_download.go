@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/upload"
 )
 
@@ -62,24 +62,28 @@ func (e *FileUploadAndDownloadService) EditFileName(file example.ExaFileUploadAn
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetFileRecordInfoList
 //@description: 分页获取数据
-//@param: info request.PageInfo
+//@param: info request.ExaAttachmentCategorySearch
 //@return: list interface{}, total int64, err error
 
-func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
+func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.ExaAttachmentCategorySearch) (list []example.ExaFileUploadAndDownload, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	keyword := info.Keyword
 	db := global.GVA_DB.Model(&example.ExaFileUploadAndDownload{})
-	var fileLists []example.ExaFileUploadAndDownload
-	if len(keyword) > 0 {
-		db = db.Where("name LIKE ?", "%"+keyword+"%")
+
+	if len(info.Keyword) > 0 {
+		db = db.Where("name LIKE ?", "%"+info.Keyword+"%")
 	}
+
+	if info.ClassId > 0 {
+		db = db.Where("class_id = ?", info.ClassId)
+	}
+
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
-	return fileLists, total, err
+	err = db.Limit(limit).Offset(offset).Order("id desc").Find(&list).Error
+	return list, total, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -88,7 +92,7 @@ func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageIn
 //@param: header *multipart.FileHeader, noSave string
 //@return: file model.ExaFileUploadAndDownload, err error
 
-func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, noSave string) (file example.ExaFileUploadAndDownload, err error) {
+func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, noSave string, classId int) (file example.ExaFileUploadAndDownload, err error) {
 	oss := upload.NewOss()
 	filePath, key, uploadErr := oss.UploadFile(header)
 	if uploadErr != nil {
@@ -96,10 +100,11 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 	}
 	s := strings.Split(header.Filename, ".")
 	f := example.ExaFileUploadAndDownload{
-		Url:  filePath,
-		Name: header.Filename,
-		Tag:  s[len(s)-1],
-		Key:  key,
+		Url:     filePath,
+		Name:    header.Filename,
+		ClassId: classId,
+		Tag:     s[len(s)-1],
+		Key:     key,
 	}
 	if noSave == "0" {
 		return f, e.Upload(f)

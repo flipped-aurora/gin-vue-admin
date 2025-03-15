@@ -115,5 +115,5 @@
     ElMessage.success('复制成功')
   }
 
-  defineExpose({ copy })
+  defineExpose({ copy, selectText })
 </script>

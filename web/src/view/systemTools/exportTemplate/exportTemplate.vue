@@ -121,9 +121,18 @@
           label="模板信息"
           prop="templateInfo"
           min-width="120"
+          show-overflow-tooltip
         />
-        <el-table-column align="left" label="操作" min-width="120">
+        <el-table-column align="left" label="操作" min-width="280">
           <template #default="scope">
+            <el-button
+                type="primary"
+                link
+                icon="documentCopy"
+                class="table-button"
+                @click="copyFunc(scope.row)"
+            >复制</el-button
+            >
             <el-button
               type="primary"
               link
@@ -833,6 +842,28 @@ JOINS模式下不支持导入
 
   // 行为控制标记（弹窗内部需要增还是改）
   const type = ref('')
+
+  // 复制
+  const copyFunc = async (row) => {
+    let copyData
+    const res = await findSysExportTemplate({ ID: row.ID })
+    if (res.code === 0) {
+      copyData = JSON.parse(JSON.stringify(res.data.resysExportTemplate))
+      if (!copyData.conditions) {
+        copyData.conditions = []
+      }
+      if (!copyData.joinTemplate) {
+        copyData.joinTemplate = []
+      }
+      delete copyData.ID
+      delete copyData.CreatedAt
+      delete copyData.UpdatedAt
+      copyData.templateID = copyData.templateID + '_copy'
+      copyData.name = copyData.name + '_copy'
+      formData.value = copyData
+      dialogFormVisible.value = true
+    }
+  }
 
   // 更新行
   const updateSysExportTemplateFunc = async (row) => {

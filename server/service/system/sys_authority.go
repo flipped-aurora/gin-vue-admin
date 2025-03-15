@@ -224,7 +224,10 @@ func (authorityService *AuthorityService) GetStructAuthorityList(authorityID uin
 	if len(authorities) > 0 {
 		for k := range authorities {
 			list = append(list, authorities[k].AuthorityId)
-			_, err = authorityService.GetStructAuthorityList(authorities[k].AuthorityId)
+			childrenList, err := authorityService.GetStructAuthorityList(authorities[k].AuthorityId)
+			if err == nil {
+				list = append(list, childrenList...)
+			}
 		}
 	}
 	if *auth.ParentId == 0 {

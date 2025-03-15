@@ -95,3 +95,34 @@ export const getSysExportTemplateList = (params) => {
     params
   })
 }
+
+
+// ExportExcel 导出表格token
+// @Tags SysExportTemplate
+// @Summary 导出表格
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Router /sysExportTemplate/exportExcel [get]
+export const exportExcel = (params) => {
+  return service({
+    url: '/sysExportTemplate/exportExcel',
+    method: 'get',
+    params
+  })
+}
+
+// ExportTemplate 导出表格模板
+// @Tags SysExportTemplate
+// @Summary 导出表格模板
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Router /sysExportTemplate/exportTemplate [get]
+export const exportTemplate = (params) => {
+  return service({
+    url: '/sysExportTemplate/exportTemplate',
+    method: 'get',
+    params
+  })
+}

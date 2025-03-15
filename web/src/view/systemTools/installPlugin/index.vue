@@ -6,6 +6,7 @@
       :show-file-list="false"
       :on-success="handleSuccess"
       :on-error="handleSuccess"
+      :headers="{'x-token': token}"
       name="plug"
     >
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
@@ -20,6 +21,11 @@
 <script setup>
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
+  import { useUserStore } from "@/pinia";
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const handleSuccess = (res) => {
     if (res.code === 0) {

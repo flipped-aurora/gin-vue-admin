@@ -148,49 +148,64 @@
           :model="autoFunc"
           label-width="80px"
         >
-          <el-form-item label="包名：">
-            <el-input
-              v-model="autoFunc.package"
-              placeholder="请输入包名"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item label="结构体名：">
-            <el-input
-              v-model="autoFunc.structName"
-              placeholder="请输入结构体名"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item label="前端文件名：">
-            <el-input
-              v-model="autoFunc.packageName"
-              placeholder="请输入文件名"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item label="后端文件名：">
-            <el-input
-              v-model="autoFunc.humpPackageName"
-              placeholder="请输入文件名"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item label="描述：">
-            <el-input
-              v-model="autoFunc.description"
-              placeholder="请输入描述"
-              disabled
-            />
-          </el-form-item>
-          <el-form-item label="缩写：">
-            <el-input
-              v-model="autoFunc.abbreviation"
-              placeholder="请输入缩写"
-              disabled
-            />
-          </el-form-item>
-
+          <el-row :gutter="12">
+            <el-col :span="8">
+              <el-form-item label="包名：">
+                <el-input
+                    v-model="autoFunc.package"
+                    placeholder="请输入包名"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="结构体名：">
+                <el-input
+                    v-model="autoFunc.structName"
+                    placeholder="请输入结构体名"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="前端文件名：">
+                <el-input
+                    v-model="autoFunc.packageName"
+                    placeholder="请输入文件名"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="12">
+            <el-col :span="8">
+              <el-form-item label="后端文件名：">
+                <el-input
+                    v-model="autoFunc.humpPackageName"
+                    placeholder="请输入文件名"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="描述：">
+                <el-input
+                    v-model="autoFunc.description"
+                    placeholder="请输入描述"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="缩写：">
+                <el-input
+                    v-model="autoFunc.abbreviation"
+                    placeholder="请输入缩写"
+                    disabled
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-form-item label="是否AI填充：">
             <el-switch v-model="autoFunc.isAi" />
             <span class="text-sm text-red-600 p-2"

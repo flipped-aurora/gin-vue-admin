@@ -15,7 +15,7 @@
         unique-opened
         @select="selectMenuItem"
       >
-        <template v-for="item in routerStore.asyncRouters[0].children">
+        <template v-for="item in routerStore.asyncRouters[0]?.children || []">
           <aside-component
             v-if="!item.hidden"
             :key="item.name"
@@ -65,6 +65,10 @@
     }
   })
   watchEffect(() => {
+    if (route.name === 'Iframe') {
+      active.value = decodeURIComponent(route.query.url)
+      return
+    }
     active.value = route.meta.activeName || route.name
   })
 
@@ -91,7 +95,18 @@
       })
     if (index === route.name) return
     if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-      window.open(index)
+      if (index === 'Iframe') {
+        query.url = decodeURIComponent(index)
+        router.push({
+          name: 'Iframe',
+          query,
+          params
+        })
+        return
+      } else {
+        window.open(index, '_blank')
+        return
+      }
     } else {
       router.push({ name: index, query, params })
     }

@@ -1,13 +1,14 @@
 package utils
 
 import (
+	"net"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
-	"github.com/gofrs/uuid/v5"
-	"net"
-	"time"
+	"github.com/google/uuid"
 )
 
 func ClearToken(c *gin.Context) {
@@ -39,10 +40,10 @@ func SetToken(c *gin.Context, token string, maxAge int) {
 }
 
 func GetToken(c *gin.Context) string {
-	token, _ := c.Cookie("x-token")
+	token := c.Request.Header.Get("x-token")
 	if token == "" {
 		j := NewJWT()
-		token = c.Request.Header.Get("x-token")
+		token, _ = c.Cookie("x-token")
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			global.GVA_LOG.Error("重新写入cookie token失败,未能成功解析token,请检查请求头是否存在x-token且claims是否为规定结构")
@@ -134,7 +135,7 @@ func GetUserName(c *gin.Context) string {
 }
 
 func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims, err error) {
-	j := &JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
+	j := NewJWT()
 	claims = j.CreateClaims(systemReq.BaseClaims{
 		UUID:        user.GetUUID(),
 		ID:          user.GetUserId(),
@@ -143,8 +144,5 @@ func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims,
 		AuthorityId: user.GetAuthorityId(),
 	})
 	token, err = j.CreateToken(claims)
-	if err != nil {
-		return
-	}
 	return
 }

@@ -8,18 +8,18 @@
 {{- else if eq .FieldType "video" }}
 {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
 {{- else if eq .FieldType "file" }}
-{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
 {{- else if eq .FieldType "pictures" }}
-{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
 {{- else if eq .FieldType "richtext" }}
 {{.FieldName}}  *string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}}`
 {{- else if eq .FieldType "json" }}
-{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"object"`
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end }} swaggertype:"object"`
 {{- else if eq .FieldType "array" }}
-{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+{{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
 {{- else }}
 {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
-{{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }}
+{{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}}{{ end }}
 {{- end }}
 
 {{ else }}
@@ -54,23 +54,27 @@ type {{.StructName}} struct {
     {{- else if eq .FieldType "video" }}
     {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
     {{- else if eq .FieldType "file" }}
-    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
     {{- else if eq .FieldType "pictures" }}
-    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
     {{- else if eq .FieldType "richtext" }}
     {{.FieldName}}  *string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}}`
     {{- else if eq .FieldType "json" }}
-    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"object"`
+    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end }} swaggertype:"object"`
     {{- else if eq .FieldType "array" }}
-    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end -}} swaggertype:"array,object"`
+    {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;" {{- if .Require }} binding:"required"{{- end }} swaggertype:"array,object"`
     {{- else }}
     {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if ne .FieldIndexType "" -}}{{ .FieldIndexType }};{{- end -}}{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
-    {{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }}
+    {{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}}{{ end }}
 {{- end }}
     {{- if .AutoCreateResource }}
     CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`
     UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
     DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
+    {{- end }}
+    {{- if .IsTree }}
+    Children   []*{{.StructName}} `json:"children" gorm:"-"`     //子节点
+    ParentID   int             `json:"parentID" gorm:"column:parent_id;comment:父节点"`
     {{- end }}
 {{- end }}
 }
@@ -82,5 +86,26 @@ func ({{.StructName}}) TableName() string {
 }
 {{ end }}
 
+{{if .IsTree }}
+// GetChildren 实现TreeNode接口
+func (s *{{.StructName}}) GetChildren() []*{{.StructName}} {
+    return s.Children
+}
+
+// SetChildren 实现TreeNode接口
+func (s *{{.StructName}}) SetChildren(children *{{.StructName}}) {
+	s.Children = append(s.Children, children)
+}
+
+// GetID 实现TreeNode接口
+func (s *{{.StructName}}) GetID() int {
+    return int({{if not .GvaModel}}*{{- end }}s.{{.PrimaryField.FieldName}})
+}
+
+// GetParentID 实现TreeNode接口
+func (s *{{.StructName}}) GetParentID() int {
+    return s.ParentID
+}
+{{ end }}
 
 {{ end }}

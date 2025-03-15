@@ -11,6 +11,7 @@
       :limit="limit"
       :accept="accept"
       class="upload-btn"
+      :headers="{'x-token': token}"
     >
       <el-button type="primary"> 上传文件 </el-button>
     </el-upload>
@@ -21,6 +22,7 @@
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
+  import { useUserStore } from "@/pinia";
 
   defineOptions({
     name: 'UploadCommon'
@@ -36,6 +38,10 @@
       default: ''
     }
   })
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const fullscreenLoading = ref(false)
 

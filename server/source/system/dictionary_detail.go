@@ -34,7 +34,7 @@ func (i *initDictDetail) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&sysModel.SysDictionaryDetail{})
 }
 
-func (i initDictDetail) InitializerName() string {
+func (i *initDictDetail) InitializerName() string {
 	return sysModel.SysDictionaryDetail{}.TableName()
 }
 
@@ -43,7 +43,7 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	dicts, ok := ctx.Value(initDict{}.InitializerName()).([]sysModel.SysDictionary)
+	dicts, ok := ctx.Value(new(initDict).InitializerName()).([]sysModel.SysDictionary)
 	if !ok {
 		return ctx, errors.Wrap(system.ErrMissingDependentContext,
 			fmt.Sprintf("未找到 %s 表初始化数据", sysModel.SysDictionary{}.TableName()))

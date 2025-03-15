@@ -13,7 +13,7 @@ Nprogress.configure({
 })
 
 // 白名单路由
-const WHITE_LIST = ['Login', 'Init', 'ScanUpload']
+const WHITE_LIST = ['Login', 'Init']
 
 // 处理路由加载
 const setupRouter = async (userStore) => {
@@ -93,7 +93,7 @@ router.beforeEach(async (to, from) => {
     ) {
       await setupRouter(userStore)
     }
-    return true
+    return { name: userStore.userInfo.authority.defaultRouter }
   }
 
   // 需要登录的路由处理

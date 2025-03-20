@@ -34,7 +34,7 @@
               id="gva-base-load-dom"
               class="gva-body-h bg-gray-50 dark:bg-slate-800"
             >
-              <transition mode="out-in" :name="config.transition_type">
+              <transition mode="out-in" :name="route.meta.transitionType || config.transition_type">
                 <keep-alive :include="routerStore.keepAliveRouters">
                   <component :is="Component" :key="route.fullPath" />
                 </keep-alive>

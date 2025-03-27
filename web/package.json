@@ -52,7 +52,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
     "@eslint/js": "^8.56.0",
-    "@vitejs/plugin-legacy": "^5.2.0",
+    "@vitejs/plugin-legacy": "^6.0.0",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",

@@ -113,7 +113,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ```bash
 
 # 克隆项目
-git clone https://github.com/flipped-aurora/gin-vue-admin.git
+git clone --depth=1 https://github.com/flipped-aurora/gin-vue-admin.git
 # 进入server文件夹
 cd server
 

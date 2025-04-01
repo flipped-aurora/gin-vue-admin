@@ -31,7 +31,7 @@
                     color:
                       row.defaultRouter === data.name ? '#E6A23C' : '#85ce61'
                   }"
-                  @click="() => setDefault(data)"
+                  @click.stop="() => setDefault(data)"
                 >
                   {{ row.defaultRouter === data.name ? '首页' : '设为首页' }}
                 </el-button>

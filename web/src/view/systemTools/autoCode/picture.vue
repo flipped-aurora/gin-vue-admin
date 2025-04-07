@@ -70,6 +70,8 @@ import { createWeb
 } from '@/api/autoCode'
 import {ref} from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
+import { ElMessage } from 'element-plus'
+
 
 defineOptions({
   name: 'Picture'
@@ -90,6 +92,24 @@ const handleKeydown = (event) => {
     llmAutoFunc()
   }
 }
+
+// 复制方法：把某个字符串写进剪贴板
+const copySnippet = (htmlString) => {
+  navigator.clipboard.writeText(htmlString)
+      .then(() => {
+        ElMessage({
+          message: '复制成功',
+          type: 'success',
+        })
+      })
+      .catch(err => {
+        ElMessage({
+          message: '复制失败',
+          type: 'warning',
+        })
+      })
+}
+
 
 const prompt = ref('')
 

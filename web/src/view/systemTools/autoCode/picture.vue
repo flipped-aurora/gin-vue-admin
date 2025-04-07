@@ -17,8 +17,8 @@
         <el-input
             v-model="prompt"
             :maxlength="2000"
-            :placeholder="`请大体描述您希望生成的页面`"
-            :rows="5"
+            :placeholder="placeholder"
+            :rows="8"
             resize="none"
             type="textarea"
             @blur="handleBlur"
@@ -106,6 +106,15 @@ const llmAutoFunc = async () => {
     htmlFromLLM.value.push(res.data)
   }
 }
+
+const placeholder = ref(`"✨ 请详细描述您想要的页面，例如：
+• 页面用途（企业官网/电商页面/个人博客等）
+• 需要包含的主要内容板块
+• 偏好的风格（简约/科技感/温馨/专业等）
+• 需要特别强调的元素
+• 参考网站或配色建议
+
+示例：'需要一个科技公司的产品介绍页，包含banner轮播图、三栏功能特点展示、客户案例模块，喜欢深蓝色调，参考苹果官网的简洁风格'"`)
 
 
 

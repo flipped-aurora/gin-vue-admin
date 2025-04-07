@@ -66,8 +66,7 @@
 </template>
 
 <script setup>
-import {
-  eye, createWeb
+import { createWeb
 } from '@/api/autoCode'
 import {ref} from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'

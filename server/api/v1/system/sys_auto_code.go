@@ -118,7 +118,7 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 		return
 	}
 
-	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("chat/%s", llm["mode"]))
+	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("api/chat/%s", llm["mode"]))
 	res, err := request.HttpRequest(
 		path,
 		"POST",

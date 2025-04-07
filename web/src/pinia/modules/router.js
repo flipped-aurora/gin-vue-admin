@@ -4,6 +4,7 @@ import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import pathInfo from '@/pathInfo.json'
+import {useRoute} from "vue-router";
 
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
@@ -58,6 +59,9 @@ export const useRouterStore = defineStore('router', () => {
     })
     keepAliveRouters.value = Array.from(new Set(keepArrTemp))
   }
+
+  const route = useRoute()
+
   emitter.on('setKeepAlive', setKeepAliveRouters)
 
   const asyncRouters = ref([])
@@ -80,6 +84,20 @@ export const useRouterStore = defineStore('router', () => {
     return menuMap[name]?.children
   }
 
+  const findTopActive = (menuMap, routeName) => {
+    for (let topName in menuMap) {
+      const topItem = menuMap[topName];
+      if (topItem.children?.some(item => item.name === routeName)) {
+        return topName;
+      }
+      const foundName = findTopActive(topItem.children || {}, routeName);
+      if (foundName) {
+        return topName;
+      }
+    }
+    return null;
+  };
+
   watchEffect(() => {
     let topActive = sessionStorage.getItem('topActive')
     asyncRouters.value[0]?.children.forEach((item) => {
@@ -88,6 +106,9 @@ export const useRouterStore = defineStore('router', () => {
       topMenu.value.push({ ...item, children: [] })
     })
 
+  if (!topActive || topActive === 'undefined' || topActive === 'null') {
+    topActive = findTopActive(menuMap, route.name);
+  }
     setLeftMenu(topActive)
   })
 

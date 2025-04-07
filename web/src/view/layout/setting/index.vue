@@ -9,7 +9,7 @@
     <template #header>
       <div class="flex justify-between items-center">
         <span class="text-lg">系统配置</span>
-        <el-button type="primary" @click="saveConfig">保存配置</el-button>
+        <el-button type="primary" @click="resetConfig">重置配置</el-button>
       </div>
     </template>
     <div class="flex flex-col">
@@ -144,6 +144,8 @@
   import { ElMessage } from 'element-plus'
   import { setSelfSetting } from '@/api/user'
   import Title from './title.vue'
+  import { watch } from 'vue';
+
   const appStore = useAppStore()
   const { config, device } = storeToRefs(appStore)
   defineOptions({
@@ -185,24 +187,24 @@
   ]
 
   const saveConfig = async () => {
-    /*const input = document.createElement("textarea");
-  input.value = JSON.stringify(config.value);
-  // 添加回车
-  input.value = input.value.replace(/,/g, ",\n");
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("copy");
-  document.body.removeChild(input);
-  ElMessage.success("复制成功, 请自行保存到本地文件中");*/
     const res = await setSelfSetting(config.value)
+    console.log(config.value)
     if (res.code === 0) {
       localStorage.setItem('originSetting', JSON.stringify(config.value))
       ElMessage.success('保存成功')
-      drawer.value = false
     }
   }
 
   const customColor = ref('')
+
+  const resetConfig = () => {
+    appStore.resetConfig()
+  }
+
+
+  watch(config, async () => {
+    await saveConfig();
+  }, { deep: true });
 </script>
 
 <style lang="scss" scoped>

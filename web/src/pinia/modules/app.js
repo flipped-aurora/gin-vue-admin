@@ -100,17 +100,18 @@ export const useAppStore = defineStore('app', () => {
   }
 
   const baseCoinfg = {
-    darkMode: 'auto',
-    primaryColor: '#3b82f6',
-    show_watermark: false,
-    grey: false,
     weakness: false,
-    side_mode: 'normal',
+    grey: false,
+    primaryColor: '#3b82f6',
     showTabs: true,
-    transition_type: 'fade',
-    layout_side_width: 200,
-    layout_side_collapsed_width: 60,
-    layout_side_item_height: 40
+    darkMode: 'auto',
+    layout_side_width: 256,
+    layout_side_collapsed_width: 80,
+    layout_side_item_height: 48,
+    show_watermark: true,
+    side_mode: 'normal',
+    // 页面过渡动画配置
+    transition_type: 'slide'
   }
 
   const resetConfig = () => {

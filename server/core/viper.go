@@ -22,7 +22,7 @@ func Viper() *viper.Viper {
 	v.SetConfigType("yaml")
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 	v.WatchConfig()
 
@@ -33,7 +33,7 @@ func Viper() *viper.Viper {
 		}
 	})
 	if err = v.Unmarshal(&global.GVA_CONFIG); err != nil {
-		panic(err)
+		panic(fmt.Errorf("fatal error unmarshal config: %w", err))
 	}
 
 	// root 适配性 根据root位置去找到对应迁移位置,保证root路径有效
@@ -58,12 +58,19 @@ func getConfigPath() (config string) {
 
 	switch gin.Mode() { // 根据 gin 模式文件名
 	case gin.DebugMode:
-		config = internal.ConfigDefaultFile
+		config = internal.ConfigDebugFile
 	case gin.ReleaseMode:
 		config = internal.ConfigReleaseFile
 	case gin.TestMode:
 		config = internal.ConfigTestFile
 	}
 	fmt.Printf("您正在使用 gin 的 %s 模式运行, config 的路径为 %s\n", gin.Mode(), config)
+
+	_, err := os.Stat(config)
+	if err != nil || os.IsNotExist(err) {
+		config = internal.ConfigDefaultFile
+		fmt.Printf("配置文件路径不存在, 使用默认配置文件路径: %s\n", config)
+	}
+
 	return
 }

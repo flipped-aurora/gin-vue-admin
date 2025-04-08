@@ -3,12 +3,6 @@ package system
 import (
 	"context"
 	"fmt"
-	"go/token"
-	"os"
-	"path/filepath"
-	"strings"
-	"text/template"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -16,7 +10,12 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"go/token"
 	"gorm.io/gorm"
+	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
 )
 
 var AutoCodePackage = new(autoCodePackage)
@@ -59,7 +58,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		}
 		for key, value := range creates { // key 为 模版绝对路径
 			var files *template.Template
-			files, err = template.ParseFiles(key)
+			files, err = template.New(filepath.Base(key)).Funcs(utils.GetTemplateFuncMap()).ParseFiles(key)
 			if err != nil {
 				return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", key)
 			}

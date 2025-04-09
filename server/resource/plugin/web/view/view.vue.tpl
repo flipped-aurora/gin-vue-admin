@@ -112,12 +112,12 @@ getDataSourceFunc()
       </el-form-item>
       {{ end -}}
            {{- range .Fields}} {{- if .FieldSearchType}} {{- if not .FieldSearchHide }}
-            {{ {{ GenerateSearchFormItem .}}
-            {{ end }}{{ end }}{{ end }}
+            {{ GenerateSearchFormItem .}}
+           {{ end }}{{ end }}{{ end }}
         <template v-if="showAllQuery">
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if .FieldSearchHide }}
-          {{ {{ GenerateSearchFormItem .}}
+          {{ GenerateSearchFormItem .}}
           {{ end }}{{ end }}{{ end }}
         </template>
 

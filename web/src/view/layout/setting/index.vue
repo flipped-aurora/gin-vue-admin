@@ -183,6 +183,10 @@
     {
       label: '组合模式',
       value: 'combination'
+    },
+    {
+      label: '侧边栏常驻',
+      value: 'sidebar'
     }
   ]
 

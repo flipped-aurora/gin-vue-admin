@@ -9,6 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/autocode"
 	"github.com/pkg/errors"
 	"go/token"
 	"gorm.io/gorm"
@@ -58,7 +59,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		}
 		for key, value := range creates { // key 为 模版绝对路径
 			var files *template.Template
-			files, err = template.New(filepath.Base(key)).Funcs(utils.GetTemplateFuncMap()).ParseFiles(key)
+			files, err = template.New(filepath.Base(key)).Funcs(autocode.GetTemplateFuncMap()).ParseFiles(key)
 			if err != nil {
 				return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", key)
 			}

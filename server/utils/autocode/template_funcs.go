@@ -1,4 +1,4 @@
-package utils
+package autocode
 
 import (
 	"strings"

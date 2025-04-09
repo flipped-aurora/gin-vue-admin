@@ -267,7 +267,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				three := filepath.Join(second, secondDirs[j].Name())
 				if !secondDirs[j].IsDir() {
 					ext := filepath.Ext(secondDirs[j].Name())
-					if ext != ".template" && ext != ".tpl" {
+					if ext != ".tpl" {
 						return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", three)
 					}
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
@@ -301,7 +301,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")
@@ -473,7 +473,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						gen := strings.Index(threeDirs[k].Name(), "gen")
@@ -557,7 +557,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", five)
 								}
 								ext := filepath.Ext(five)
-								if ext != ".template" && ext != ".tpl" {
+								if ext != ".tpl" {
 									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", five)
 								}
 								hasRequest := strings.Index(fourDirs[l].Name(), "request")
@@ -573,7 +573,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							continue
 						}
 						ext := filepath.Ext(threeDirs[k].Name())
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						hasModel := strings.Index(threeDirs[k].Name(), "model")
@@ -634,7 +634,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")

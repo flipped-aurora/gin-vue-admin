@@ -57,7 +57,6 @@
               </template>
             </el-menu-item>
             </template>
-            
           </template>
         </el-menu>
       </el-scrollbar>
@@ -143,25 +142,27 @@
     const menu = routerStore.asyncRouters[0]?.children.find(item => item.name === menuName)
     if (menu && menu.children && menu.children.length > 0) {
       secondLevelMenus.value = menu.children
-    } else {
-      secondLevelMenus.value = []
     }
   }
   
   // 选择一级菜单
   const selectTopMenuItem = (index) => {
     topActive.value = index
-    updateSecondLevelMenus(index)
     
-    // 如果选中的一级菜单有子菜单，则导航到第一个子菜单
+    // 获取选中的菜单项
     const menu = routerStore.asyncRouters[0]?.children.find(item => item.name === index)
+    
+    // 只有当选中的菜单有子菜单时，才更新二级菜单区域
     if (menu && menu.children && menu.children.length > 0) {
+      updateSecondLevelMenus(index)
+      
+      // 导航到第一个可见的子菜单
       const firstVisibleChild = menu.children.find(child => !child.hidden)
       if (firstVisibleChild) {
         navigateToMenuItem(firstVisibleChild.name)
       }
     } else {
-      // 如果没有子菜单，直接导航到该菜单
+      // 如果没有子菜单，直接导航到该菜单，但不更新二级菜单区域
       navigateToMenuItem(index)
     }
   }
@@ -217,6 +218,15 @@
     
     // 找到当前路由所属的一级菜单
     const findParentMenu = () => {
+      // 首先检查当前路由是否就是一级菜单
+      const isTopMenu = routerStore.asyncRouters[0]?.children.some(
+        item => !item.hidden && item.name === route.name
+      )
+      
+      if (isTopMenu) {
+        return route.name
+      }
+      
       for (const topMenu of routerStore.asyncRouters[0]?.children || []) {
         if (topMenu.hidden) continue
         
@@ -248,15 +258,34 @@
     const parentMenu = findParentMenu()
     if (parentMenu) {
       topActive.value = parentMenu
-      updateSecondLevelMenus(parentMenu)
+      
+      // 只有当父菜单有子菜单时，才更新二级菜单区域
+      const menu = routerStore.asyncRouters[0]?.children.find(item => item.name === parentMenu)
+      if (menu && menu.children && menu.children.length > 0) {
+        updateSecondLevelMenus(parentMenu)
+      } else {
+        // 如果找到的父菜单没有子菜单，保持当前一级菜单高亮，但需要显示一些二级菜单
+        // 寻找第一个有子菜单的一级菜单来显示其子菜单
+        const firstMenuWithChildren = routerStore.asyncRouters[0].children.find(
+          item => !item.hidden && item.children && item.children.length > 0
+        )
+        
+        if (firstMenuWithChildren) {
+          // 只更新二级菜单区域，但保持当前一级菜单的高亮状态
+          updateSecondLevelMenus(firstMenuWithChildren.name)
+        }
+      }
     } else if (routerStore.asyncRouters[0]?.children?.length > 0) {
-      // 如果没有找到父菜单，默认选择第一个有子菜单的一级菜单
+      // 如果没有找到父菜单，保持当前路由名称作为高亮，但需要显示一些二级菜单
+      // 寻找第一个有子菜单的一级菜单来显示其子菜单
       const firstMenuWithChildren = routerStore.asyncRouters[0].children.find(
         item => !item.hidden && item.children && item.children.length > 0
       )
+      
       if (firstMenuWithChildren) {
-        topActive.value = firstMenuWithChildren.name
-        updateSecondLevelMenus(firstMenuWithChildren.name)
+        // 只更新二级菜单区域，高亮状态保持为当前路由
+        topActive.value = route.name
+        secondLevelMenus.value = firstMenuWithChildren.children
       }
     }
   })
@@ -269,11 +298,3 @@
     }
   })
 </script>
-
-<style lang="scss" scoped>
-  :deep(.el-menu--vertical) {
-    .is-active {
-      background-color: var(--el-color-primary-light-8) !important;
-    }
-  }
-</style>

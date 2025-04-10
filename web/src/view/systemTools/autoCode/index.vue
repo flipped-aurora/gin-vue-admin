@@ -206,7 +206,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="TableName" class="w-full">
+            <el-form-item label="abbreviation" prop="abbreviation" class="w-full">
               <template #label>
                 <el-tooltip
                   content="简称会作为入参对象名和路由group"
@@ -534,7 +534,7 @@
             width="160"
           >
             <template #default="{ row }">
-              <el-input :disabled="row.disabled" v-model="row.fieldName" />
+              <el-input disabled v-model="row.fieldName" />
             </template>
           </el-table-column>
           <el-table-column

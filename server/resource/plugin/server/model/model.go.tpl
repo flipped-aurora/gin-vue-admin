@@ -1,7 +1,7 @@
 {{- if .IsAdd}}
 // 在结构体中新增如下字段
 {{- range .Fields}}
-  {{ RenderField . }}
+  {{ GenerateField . }}
 {{- end }}
 
 {{ else }}
@@ -28,7 +28,7 @@ type {{.StructName}} struct {
     global.GVA_MODEL
 {{- end }}
 {{- range .Fields}}
-  {{ RenderField . }}
+  {{ GenerateField . }}
 {{- end }}
     {{- if .AutoCreateResource }}
     CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`

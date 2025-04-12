@@ -11,7 +11,7 @@ import (
 // GetTemplateFuncMap 返回模板函数映射，用于在模板中使用
 func GetTemplateFuncMap() template.FuncMap {
 	return template.FuncMap{
-		"RenderField":              RenderField,
+		"GenerateField":            GenerateField,
 		"GenerateSearchConditions": GenerateSearchConditions,
 		"GenerateSearchFormItem":   GenerateSearchFormItem,
 		"GenerateTableColumn":      GenerateTableColumn,
@@ -22,7 +22,7 @@ func GetTemplateFuncMap() template.FuncMap {
 }
 
 // 渲染Model中的字段
-func RenderField(field systemReq.AutoCodeField) string {
+func GenerateField(field systemReq.AutoCodeField) string {
 	// 构建gorm标签
 	gormTag := `gorm:"`
 

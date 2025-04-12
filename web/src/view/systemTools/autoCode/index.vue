@@ -268,7 +268,7 @@
               prop="package"
               class="w-full relative"
             >
-              <el-select v-model="form.package" class="w-full pr-12">
+              <el-select v-model="form.package" class="w-full pr-12" filterable>
                 <el-option
                   v-for="item in pkgs"
                   :key="item.ID"

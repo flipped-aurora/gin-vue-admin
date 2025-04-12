@@ -1619,6 +1619,8 @@
     reader.onload = (e) => {
       try {
         form.value = JSON.parse(e.target.result)
+        form.value.generateServer = true
+        form.value.generateWeb = true
         ElMessage.success('JSON 文件导入成功')
       } catch (_) {
         ElMessage.error('无效的 JSON 文件')

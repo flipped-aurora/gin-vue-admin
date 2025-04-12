@@ -191,7 +191,7 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 		if field.FieldType == "array" {
 			multipleAttr = "multiple "
 		}
-		result += fmt.Sprintf(`  <el-select %sv-model="searchInfo.%s" clearable placeholder="请选择" @clear="()=>{searchInfo.%s=undefined}">
+		result += fmt.Sprintf(`  <el-select %sv-model="searchInfo.%s" clearable filterable placeholder="请选择" @clear="()=>{searchInfo.%s=undefined}">
 `,
 			multipleAttr, field.FieldJson, field.FieldJson)
 		result += fmt.Sprintf(`    <el-option v-for="(item,key) in %sOptions" :key="key" :label="item.label" :value="item.value" />
@@ -204,7 +204,7 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 		if field.DataSource.Association == 2 {
 			multipleAttr = "multiple "
 		}
-		result += fmt.Sprintf(`  <el-select %sv-model="searchInfo.%s" placeholder="请选择%s" :clearable="%v">
+		result += fmt.Sprintf(`  <el-select %sv-model="searchInfo.%s" filterable placeholder="请选择%s" :clearable="%v">
 `,
 			multipleAttr, field.FieldJson, field.FieldDesc, field.Clearable)
 		result += fmt.Sprintf(`    <el-option v-for="(item,key) in dataSource.%s" :key="key" :label="item.label" :value="item.value" />
@@ -454,7 +454,7 @@ func GenerateFormItem(field systemReq.AutoCodeField) string {
 		if field.DataSource.Association == 2 {
 			multipleAttr = " multiple"
 		}
-		result += fmt.Sprintf(`    <el-select%s v-model="formData.%s" placeholder="请选择%s" style="width:100%%" :clearable="%v">
+		result += fmt.Sprintf(`    <el-select%s v-model="formData.%s" placeholder="请选择%s" filterable style="width:100%%" :clearable="%v">
 `,
 			multipleAttr, field.FieldJson, field.FieldDesc, field.Clearable)
 		result += fmt.Sprintf(`        <el-option v-for="(item,key) in dataSource.%s" :key="key" :label="item.label" :value="item.value" />
@@ -471,7 +471,7 @@ func GenerateFormItem(field systemReq.AutoCodeField) string {
 
 		case "string":
 			if field.DictType != "" {
-				result += fmt.Sprintf(`    <el-select v-model="formData.%s" placeholder="请选择%s" style="width:100%%" :clearable="%v">
+				result += fmt.Sprintf(`    <el-select v-model="formData.%s" placeholder="请选择%s" style="width:100%%" filterable :clearable="%v">
 `,
 					field.FieldJson, field.FieldDesc, field.Clearable)
 				result += fmt.Sprintf(`        <el-option v-for="(item,key) in %sOptions" :key="key" :label="item.label" :value="item.value" />
@@ -497,7 +497,7 @@ func GenerateFormItem(field systemReq.AutoCodeField) string {
 
 		case "array":
 			if field.DictType != "" {
-				result += fmt.Sprintf(`    <el-select multiple v-model="formData.%s" placeholder="请选择%s" style="width:100%%" :clearable="%v">
+				result += fmt.Sprintf(`    <el-select multiple v-model="formData.%s" placeholder="请选择%s" filterable style="width:100%%" :clearable="%v">
 `,
 					field.FieldJson, field.FieldDesc, field.Clearable)
 				result += fmt.Sprintf(`        <el-option v-for="(item,key) in %sOptions" :key="key" :label="item.label" :value="item.value" />
@@ -526,7 +526,7 @@ func GenerateFormItem(field systemReq.AutoCodeField) string {
 				field.FieldJson, field.Clearable)
 
 		case "enum":
-			result += fmt.Sprintf(`    <el-select v-model="formData.%s" placeholder="请选择%s" style="width:100%%" :clearable="%v">
+			result += fmt.Sprintf(`    <el-select v-model="formData.%s" placeholder="请选择%s" style="width:100%%" filterable :clearable="%v">
 `,
 				field.FieldJson, field.FieldDesc, field.Clearable)
 			result += fmt.Sprintf(`       <el-option v-for="item in [%s]" :key="item" :label="item" :value="item" />

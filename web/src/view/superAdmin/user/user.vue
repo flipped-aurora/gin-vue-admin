@@ -143,6 +143,38 @@
         />
       </div>
     </div>
+    <!-- 重置密码对话框 -->
+    <el-dialog
+      v-model="resetPwdDialog"
+      title="重置密码"
+      width="500px"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <el-form :model="resetPwdInfo" ref="resetPwdForm" label-width="100px">
+        <el-form-item label="用户账号">
+          <el-input v-model="resetPwdInfo.userName" disabled />
+        </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input v-model="resetPwdInfo.nickName" disabled />
+        </el-form-item>
+        <el-form-item label="新密码">
+          <div class="flex w-full">
+            <el-input class="flex-1" v-model="resetPwdInfo.password" placeholder="请输入新密码" show-password />
+            <el-button type="primary" @click="generateRandomPassword" style="margin-left: 10px">
+              生成随机密码
+            </el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeResetPwdDialog">取 消</el-button>
+          <el-button type="primary" @click="confirmResetPassword">确 定</el-button>
+        </div>
+      </template>
+    </el-dialog>
+    
     <el-drawer
       v-model="addUserDialog"
       :size="appStore.drawerSize"
@@ -332,27 +364,80 @@
 
   initPage()
 
-  const resetPasswordFunc = (row) => {
-    ElMessageBox.confirm('是否将此用户密码重置为123456?', '警告', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(async () => {
-      const res = await resetPassword({
-        ID: row.ID
+  // 重置密码对话框相关
+  const resetPwdDialog = ref(false)
+  const resetPwdForm = ref(null)
+  const resetPwdInfo = ref({
+    ID: '',
+    userName: '',
+    nickName: '',
+    password: ''
+  })
+  
+  // 生成随机密码
+  const generateRandomPassword = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'
+    let password = ''
+    for (let i = 0; i < 12; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    resetPwdInfo.value.password = password
+    // 复制到剪贴板
+    navigator.clipboard.writeText(password).then(() => {
+      ElMessage({
+        type: 'success',
+        message: '密码已复制到剪贴板'
       })
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: res.msg
-        })
-      } else {
-        ElMessage({
-          type: 'error',
-          message: res.msg
-        })
-      }
+    }).catch(() => {
+      ElMessage({
+        type: 'error',
+        message: '复制失败，请手动复制'
+      })
     })
+  }
+  
+  // 打开重置密码对话框
+  const resetPasswordFunc = (row) => {
+    resetPwdInfo.value.ID = row.ID
+    resetPwdInfo.value.userName = row.userName
+    resetPwdInfo.value.nickName = row.nickName
+    resetPwdInfo.value.password = ''
+    resetPwdDialog.value = true
+  }
+  
+  // 确认重置密码
+  const confirmResetPassword = async () => {
+    if (!resetPwdInfo.value.password) {
+      ElMessage({
+        type: 'warning',
+        message: '请输入或生成密码'
+      })
+      return
+    }
+    
+    const res = await resetPassword({
+      ID: resetPwdInfo.value.ID,
+      password: resetPwdInfo.value.password
+    })
+    
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: res.msg || '密码重置成功'
+      })
+      resetPwdDialog.value = false
+    } else {
+      ElMessage({
+        type: 'error',
+        message: res.msg || '密码重置失败'
+      })
+    }
+  }
+  
+  // 关闭重置密码对话框
+  const closeResetPwdDialog = () => {
+    resetPwdInfo.value.password = ''
+    resetPwdDialog.value = false
   }
   const setAuthorityIds = () => {
     tableData.value &&

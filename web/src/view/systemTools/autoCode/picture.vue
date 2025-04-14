@@ -1,12 +1,12 @@
 <template>
   <div>
     <warning-bar
-        href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
-        title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。"
+        href="https://www.gin-vue-admin.com/empower/"
+        title="此功能只针对授权用户开放，点我【购买授权】"
     />
     <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">
-        使用AI创建<a
+      <div class="text-xl mb-2 text-gray-600">
+        AI前端工程师<a
           class="text-blue-600 text-sm ml-4"
           href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
           target="_blank"
@@ -18,7 +18,7 @@
       <div class="mb-4">
         <div class="mb-3">
           <div class="text-base font-medium mb-2">页面用途</div>
-          <el-radio-group v-model="pageType" class="mb-2">
+          <el-radio-group v-model="pageType" class="mb-2" @change="handlePageTypeChange">
             <el-radio label="企业官网">企业官网</el-radio>
             <el-radio label="电商页面">电商页面</el-radio>
             <el-radio label="个人博客">个人博客</el-radio>
@@ -43,6 +43,14 @@
             <el-checkbox label="FAQ/常见问题">FAQ/常见问题</el-checkbox>
             <el-checkbox label="用户评价">用户评价</el-checkbox>
             <el-checkbox label="数据统计">数据统计</el-checkbox>
+            <el-checkbox label="商品列表">商品列表</el-checkbox>
+            <el-checkbox label="商品卡片">商品卡片</el-checkbox>
+            <el-checkbox label="购物车">购物车</el-checkbox>
+            <el-checkbox label="结算页面">结算页面</el-checkbox>
+            <el-checkbox label="订单跟踪">订单跟踪</el-checkbox>
+            <el-checkbox label="商品分类">商品分类</el-checkbox>
+            <el-checkbox label="热门推荐">热门推荐</el-checkbox>
+            <el-checkbox label="限时特惠">限时特惠</el-checkbox>
             <el-checkbox label="其他">其他</el-checkbox>
           </el-checkbox-group>
           <el-input v-if="contentBlocks.includes('其他')" v-model="contentBlocksCustom" placeholder="请输入其他内容板块" class="w-full" />
@@ -69,8 +77,14 @@
             <el-radio label="单栏布局">单栏布局</el-radio>
             <el-radio label="双栏布局">双栏布局</el-radio>
             <el-radio label="三栏布局">三栏布局</el-radio>
+            <el-radio label="网格布局">网格布局</el-radio>
+            <el-radio label="画廊布局">画廊布局</el-radio>
             <el-radio label="瀑布流">瀑布流</el-radio>
             <el-radio label="卡片式">卡片式</el-radio>
+            <el-radio label="侧边栏+内容布局">侧边栏+内容布局</el-radio>
+            <el-radio label="分屏布局">分屏布局</el-radio>
+            <el-radio label="全屏滚动布局">全屏滚动布局</el-radio>
+            <el-radio label="混合布局">混合布局</el-radio>
             <el-radio label="响应式">响应式</el-radio>
             <el-radio label="其他">其他</el-radio>
           </el-radio-group>
@@ -84,6 +98,7 @@
             <el-radio label="绿色系">绿色系</el-radio>
             <el-radio label="红色系">红色系</el-radio>
             <el-radio label="黑白灰">黑白灰</el-radio>
+            <el-radio label="纯黑白">纯黑白</el-radio>
             <el-radio label="暖色调">暖色调</el-radio>
             <el-radio label="冷色调">冷色调</el-radio>
             <el-radio label="其他">其他</el-radio>
@@ -109,12 +124,12 @@
           <el-tooltip effect="light">
             <template #content>
               <div>
-                【完全免费】前往<a
+                此功能仅针对授权用户开放，前往<a
                   class="text-blue-600"
-                  href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
+                  href="https://www.gin-vue-admin.com/empower/"
                   target="_blank"
-              >插件市场个人中心</a
-              >申请AIPath，填入config.yaml的ai-path属性即可使用。
+              >购买授权</a
+              >
               </div>
             </template>
             <el-button
@@ -224,6 +239,15 @@ const layoutDesign = ref('响应式')
 const layoutDesignCustom = ref('')
 const colorScheme = ref('蓝色系')
 const colorSchemeCustom = ref('')
+
+// 页面用途与内容板块的推荐映射关系
+const pageTypeContentMap = {
+  '企业官网': ['Banner轮播图', '产品/服务介绍', '功能特点展示', '客户案例', '联系表单'],
+  '电商页面': ['Banner轮播图', '商品列表', '商品卡片', '购物车', '商品分类', '热门推荐', '限时特惠', '结算页面', '用户评价'],
+  '个人博客': ['Banner轮播图', '新闻/博客列表', '用户评价', '联系表单'],
+  '产品介绍': ['Banner轮播图', '产品/服务介绍', '功能特点展示', '价格表', 'FAQ/常见问题'],
+  '活动落地页': ['Banner轮播图', '功能特点展示', '联系表单', '数据统计']
+}
 
 const prompt = ref('')
 
@@ -349,6 +373,13 @@ const loadVueComponent = async (vueCode) => {
   } catch (error) {
     console.error('组件创建总错误:', error)
     return null
+  }
+}
+
+// 当页面用途改变时，更新内容板块的选择
+const handlePageTypeChange = (value) => {
+  if (value !== '其他' && pageTypeContentMap[value]) {
+    contentBlocks.value = [...pageTypeContentMap[value]]
   }
 }
 

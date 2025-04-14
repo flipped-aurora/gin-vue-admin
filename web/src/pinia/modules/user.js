@@ -71,7 +71,6 @@ export const useUserStore = defineStore('user', () => {
       const res = await login(loginInfo)
 
       if (res.code !== 0) {
-        ElMessage.error(res.message || '登录失败')
         return false
       }
       // 登陆成功，设置用户信息和权限相关信息

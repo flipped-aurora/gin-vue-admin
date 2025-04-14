@@ -49,6 +49,7 @@
     "vue-qr": "^4.0.9",
     "vue-router": "^4.4.3",
     "vue3-ace-editor": "^2.2.4",
+    "vue3-sfc-loader": "^0.9.5",
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {

@@ -37,7 +37,7 @@
                 </el-button>
               </span>
               <span v-if="data.menuBtn.length">
-                <el-button type="primary" link @click="() => OpenBtn(data)">
+                <el-button type="primary" link @click.stop="() => OpenBtn(data)">
                   分配按钮
                 </el-button>
               </span>

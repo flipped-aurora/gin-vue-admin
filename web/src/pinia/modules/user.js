@@ -88,6 +88,11 @@ export const useUserStore = defineStore('user', () => {
         router.addRoute(asyncRouter)
       })
 
+      if(router.currentRoute.value.query.redirect) {
+        await router.replace(router.currentRoute.value.query.redirect)
+        return true
+      }
+
       if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
         ElMessage.error('请联系管理员进行授权')
       } else {

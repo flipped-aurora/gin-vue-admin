@@ -155,7 +155,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" {{- if .IsTree }} min-{{- end }}width="180">
+        <el-table-column sortable align="left" label="日期" prop="createdAt" {{- if .IsTree }} min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -420,6 +420,8 @@ const searchInfo = ref({})
 // 排序
 const sortChange = ({ prop, order }) => {
   const sortMap = {
+    CreatedAt:"CreatedAt",
+    ID:"ID",
     {{- range .Fields}}
      {{- if .Table}}
       {{- if and .Sort}}

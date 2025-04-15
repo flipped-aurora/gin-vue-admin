@@ -416,6 +416,8 @@ const searchInfo = ref({})
 // 排序
 const sortChange = ({ prop, order }) => {
   const sortMap = {
+    CreatedAt:"CreatedAt",
+    ID:"ID",
     {{- range .Fields}}
      {{- if .Table}}
       {{- if and .Sort}}

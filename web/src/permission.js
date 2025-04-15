@@ -115,7 +115,7 @@ router.beforeEach(async (to, from) => {
 
       return {
         name: 'Login',
-        query: { redirect: to.href }
+        query: { redirect: to.fullPath }
       }
     }
 
@@ -126,7 +126,7 @@ router.beforeEach(async (to, from) => {
   return {
     name: 'Login',
     query: {
-      redirect: document.location.hash
+      redirect: to.fullPath
     }
   }
 })

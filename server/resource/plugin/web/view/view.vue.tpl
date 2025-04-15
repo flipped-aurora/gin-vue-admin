@@ -97,7 +97,7 @@ getDataSourceFunc()
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
-      <el-form-item label="创建日期" prop="createdAt">
+      <el-form-item label="创建日期" prop="CreatedAt">
       <template #label>
         <span>
           创建日期
@@ -153,7 +153,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" {{- if .IsTree }} min-{{- end }}width="180">
+        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{- if .IsTree }} min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -370,7 +370,7 @@ const rule = reactive({
 })
 
 const searchRule = reactive({
-  createdAt: [
+  CreatedAt: [
     { validator: (rule, value, callback) => {
       if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
         callback(new Error('请填写结束日期'))

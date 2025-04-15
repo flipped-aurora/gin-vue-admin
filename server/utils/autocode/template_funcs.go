@@ -24,7 +24,7 @@ func GetTemplateFuncMap() template.FuncMap {
 // 渲染Model中的字段
 func GenerateField(field systemReq.AutoCodeField) string {
 	// 构建gorm标签
-	gormTag := `gorm:"`
+	gormTag := ``
 
 	if field.FieldIndexType != "" {
 		gormTag += field.FieldIndexType + ";"
@@ -38,48 +38,54 @@ func GenerateField(field systemReq.AutoCodeField) string {
 		gormTag += fmt.Sprintf("default:%s;", field.DefaultValue)
 	}
 
+	if field.Comment != "" {
+		gormTag += fmt.Sprintf("comment:%s;", field.Comment)
+	}
+
 	gormTag += "column:" + field.ColumnName + ";"
+
+	requireTag := ` binding:"required"` + "`"
 
 	// 根据字段类型构建不同的字段定义
 	var result string
 	switch field.FieldType {
 	case "enum":
-		result = fmt.Sprintf(`%s  string `+"`"+`json:"%s" form:"%s" %stype:enum(%s);comment:%s;"`+"`",
-			field.FieldName, field.FieldJson, field.FieldJson, gormTag, field.DataTypeLong, field.Comment)
+		result = fmt.Sprintf(`%s  string `+"`"+`json:"%s" form:"%s" gorm:"%stype:enum(%s);"`+"`",
+			field.FieldName, field.FieldJson, field.FieldJson, gormTag, field.DataTypeLong)
 	case "picture", "video":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" %scomment:%s;`,
-			field.FieldJson, field.FieldJson, gormTag, field.Comment)
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+			field.FieldJson, field.FieldJson, gormTag)
 		if field.DataTypeLong != "" {
 			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
 		}
 		result = fmt.Sprintf(`%s  string `+"`"+`%s`+"`"+``, field.FieldName, tagContent)
 	case "file", "pictures", "array":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" %scomment:%s;`,
-			field.FieldJson, field.FieldJson, gormTag, field.Comment)
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+			field.FieldJson, field.FieldJson, gormTag)
 		if field.DataTypeLong != "" {
 			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
 		}
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"array,object"`+"`"+``,
 			field.FieldName, tagContent)
 	case "richtext":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" %scomment:%s;`,
-			field.FieldJson, field.FieldJson, gormTag, field.Comment)
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+			field.FieldJson, field.FieldJson, gormTag)
 		if field.DataTypeLong != "" {
 			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
 		}
 		result = fmt.Sprintf(`%s  *string `+"`"+`%stype:text;"`+"`"+``,
 			field.FieldName, tagContent)
 	case "json":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" %scomment:%s;`,
-			field.FieldJson, field.FieldJson, gormTag, field.Comment)
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+			field.FieldJson, field.FieldJson, gormTag)
 		if field.DataTypeLong != "" {
 			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
 		}
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"object"`+"`"+``,
 			field.FieldName, tagContent)
 	default:
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" %scomment:%s;`,
-			field.FieldJson, field.FieldJson, gormTag, field.Comment)
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+			field.FieldJson, field.FieldJson, gormTag)
 		if field.DataTypeLong != "" {
 			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
 		}
@@ -87,9 +93,8 @@ func GenerateField(field systemReq.AutoCodeField) string {
 			field.FieldName, field.FieldType, tagContent)
 	}
 
-	// 添加验证标签
 	if field.Require {
-		result = strings.Replace(result, "`"+``, "`"+` binding:"required"`+"`"+``, 1)
+		result = result[0:len(result)-1] + requireTag
 	}
 
 	// 添加字段描述

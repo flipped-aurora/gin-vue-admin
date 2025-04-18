@@ -88,9 +88,13 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .el-menu--horizontal.el-menu,
   .el-menu--horizontal > .el-menu-item.is-active {
+    border-bottom: none !important;
+  }
+
+  .el-menu--horizontal>.el-sub-menu.is-active .el-sub-menu__title {
     border-bottom: none !important;
   }
 

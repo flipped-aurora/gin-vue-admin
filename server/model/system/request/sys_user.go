@@ -33,6 +33,11 @@ type ChangePasswordReq struct {
 	NewPassword string `json:"newPassword"` // 新密码
 }
 
+type ResetPassword struct {
+	ID       uint   `json:"ID" form:"ID"`
+	Password string `json:"password" form:"password" gorm:"comment:用户登录密码"` // 用户登录密码
+}
+
 // SetUserAuth Modify user's auth structure
 type SetUserAuth struct {
 	AuthorityId uint `json:"authorityId"` // 角色ID

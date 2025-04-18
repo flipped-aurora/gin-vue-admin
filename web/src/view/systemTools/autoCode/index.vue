@@ -206,7 +206,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="TableName" class="w-full">
+            <el-form-item label="abbreviation" prop="abbreviation" class="w-full">
               <template #label>
                 <el-tooltip
                   content="简称会作为入参对象名和路由group"
@@ -268,7 +268,7 @@
               prop="package"
               class="w-full relative"
             >
-              <el-select v-model="form.package" class="w-full pr-12">
+              <el-select v-model="form.package" class="w-full pr-12" filterable>
                 <el-option
                   v-for="item in pkgs"
                   :key="item.ID"
@@ -534,7 +534,7 @@
             width="160"
           >
             <template #default="{ row }">
-              <el-input :disabled="row.disabled" v-model="row.fieldName" />
+              <el-input disabled v-model="row.fieldName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -1619,6 +1619,8 @@
     reader.onload = (e) => {
       try {
         form.value = JSON.parse(e.target.result)
+        form.value.generateServer = true
+        form.value.generateWeb = true
         ElMessage.success('JSON 文件导入成功')
       } catch (_) {
         ElMessage.error('无效的 JSON 文件')

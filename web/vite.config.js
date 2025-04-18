@@ -42,9 +42,13 @@ export default ({ mode }) => {
     }
   }
 
+  const base = "/"
+  const root = "./"
+  const outDir = "dist"
+
   const config = {
-    base: '/', // 编译后js导入的资源路径
-    root: './', // index.html文件所在位置
+    base: base, // 编译后js导入的资源路径
+    root: root, // index.html文件所在位置
     publicDir: 'public', // 静态资源文件夹
     resolve: {
       alias
@@ -79,7 +83,7 @@ export default ({ mode }) => {
       minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
-      outDir: 'dist', // 产出目录
+      outDir: outDir, // 产出目录
       terserOptions: {
         compress: {
           //生产环境时移除console
@@ -105,8 +109,7 @@ export default ({ mode }) => {
         ]
       }),
       vuePlugin(),
-      svgBuilder('./src/assets/icons/'),
-      svgBuilder('./src/plugin/'),
+      svgBuilder(['./src/plugin/','./src/assets/icons/'],base, outDir,'assets', NODE_ENV),
       [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
       VueFilePathPlugin('./src/pathInfo.json')
     ]

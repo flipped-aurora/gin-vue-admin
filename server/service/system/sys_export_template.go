@@ -175,6 +175,29 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	db = db.Select(selects).Table(template.TableName)
 
+	filterDeleted := false
+
+	filterParam := values.Get("filterDeleted")
+	if filterParam == "true" {
+		filterDeleted = true
+	}
+
+	if filterDeleted {
+		// 自动过滤主表的软删除
+		db = db.Where(fmt.Sprintf("%s.deleted_at IS NULL", template.TableName))
+
+		// 过滤关联表的软删除(如果有)
+		if len(template.JoinTemplate) > 0 {
+			for _, join := range template.JoinTemplate {
+				// 检查关联表是否有deleted_at字段
+				hasDeletedAt := sysExportTemplateService.hasDeletedAtColumn(join.Table)
+				if hasDeletedAt {
+					db = db.Where(fmt.Sprintf("%s.deleted_at IS NULL", join.Table))
+				}
+			}
+		}
+	}
+
 	if len(template.Conditions) > 0 {
 		for _, condition := range template.Conditions {
 			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
@@ -342,6 +365,13 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 	}
 
 	return file, template.Name, nil
+}
+
+// 辅助函数：检查表是否有deleted_at列
+func (s *SysExportTemplateService) hasDeletedAtColumn(tableName string) bool {
+	var count int64
+	global.GVA_DB.Raw("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = 'deleted_at'", tableName).Count(&count)
+	return count > 0
 }
 
 // ImportExcel 导入Excel

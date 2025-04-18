@@ -14,7 +14,7 @@
     <div class="flex flex-row w-full gva-container pt-16 box-border h-full">
       <gva-aside
         v-if="
-          config.side_mode === 'normal' ||
+          config.side_mode === 'normal' || config.side_mode === 'sidebar' ||
           (device === 'mobile' && config.side_mode == 'head') ||
           (device === 'mobile' && config.side_mode == 'combination')
         "

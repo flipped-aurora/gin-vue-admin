@@ -4,6 +4,9 @@ import { useUserStore } from '@/pinia/modules/user'
 import router from '@/router/index'
 import { ElLoading } from 'element-plus'
 
+// 添加一个状态变量，用于跟踪是否已有错误弹窗显示
+let errorBoxVisible = false
+
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
   timeout: 99999
@@ -93,7 +96,13 @@ service.interceptors.response.use(
       closeLoading()
     }
 
+    // 如果已经有错误弹窗显示，则不再显示新的弹窗
+    if (errorBoxVisible) {
+      return error
+    }
+
     if (!error.response) {
+      errorBoxVisible = true
       ElMessageBox.confirm(
         `
         <p>检测到请求错误</p>
@@ -106,12 +115,16 @@ service.interceptors.response.use(
           confirmButtonText: '稍后重试',
           cancelButtonText: '取消'
         }
-      )
+      ).finally(() => {
+        // 弹窗关闭后重置状态
+        errorBoxVisible = false
+      })
       return
     }
 
     switch (error.response.status) {
       case 500:
+        errorBoxVisible = true
         ElMessageBox.confirm(
           `
         <p>检测到接口错误${error}</p>
@@ -128,9 +141,13 @@ service.interceptors.response.use(
           const userStore = useUserStore()
           userStore.ClearStorage()
           router.push({ name: 'Login', replace: true })
+        }).finally(() => {
+          // 弹窗关闭后重置状态
+          errorBoxVisible = false
         })
         break
       case 404:
+        errorBoxVisible = true
         ElMessageBox.confirm(
           `
           <p>检测到接口错误${error}</p>
@@ -143,9 +160,13 @@ service.interceptors.response.use(
             confirmButtonText: '我知道了',
             cancelButtonText: '取消'
           }
-        )
+        ).finally(() => {
+          // 弹窗关闭后重置状态
+          errorBoxVisible = false
+        })
         break
       case 401:
+        errorBoxVisible = true
         ElMessageBox.confirm(
           `
           <p>无效的令牌</p>
@@ -162,6 +183,9 @@ service.interceptors.response.use(
           const userStore = useUserStore()
           userStore.ClearStorage()
           router.push({ name: 'Login', replace: true })
+        }).finally(() => {
+          // 弹窗关闭后重置状态
+          errorBoxVisible = false
         })
         break
     }

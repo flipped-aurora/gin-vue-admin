@@ -8,29 +8,7 @@
 {{- if .IsAdd}}
 
 // Get{{.StructName}}InfoList 新增搜索语句
-        {{- range .Fields}}
-            {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
-if info.{{.FieldName}} != "" {
-        {{- if or (eq .FieldType "enum") }}
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-        {{- else}}
-// 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
-        {{- end}}
-}
-    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
-}
-    {{- else}}
-if info.{{.FieldName}} != nil{{- if eq .FieldType "string" }} && *info.{{.FieldName}} != ""{{- end }} {
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-}
-            {{- end }}
-        {{- end }}
-    {{- end }}
-
-
+       {{ GenerateSearchConditions .Fields }}
 // Get{{.StructName}}InfoList 新增排序语句 请自行在搜索语句中添加orderMap内容
        {{- range .Fields}}
             {{- if .Sort}}
@@ -174,27 +152,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
      db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
     }
 {{- end }}
-        {{- range .Fields}}
-            {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
-    if info.{{.FieldName}} != "" {
-        {{- if or (eq .FieldType "enum")}}
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-        {{- else}}
-        // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
-        {{- end}}
-    }
-    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-        if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
-            db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
-        }
-    {{- else}}
-    if info.{{.FieldName}} != nil{{- if eq .FieldType "string" }} && *info.{{.FieldName}} != ""{{- end }} {
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-    }
-            {{- end }}
-        {{- end }}
-    {{- end }}
+    {{ GenerateSearchConditions .Fields }}
 	err = db.Count(&total).Error
 	if err!=nil {
     	return
@@ -202,6 +160,10 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
     {{- if .NeedSort}}
         var OrderStr string
         orderMap := make(map[string]bool)
+        {{- if .GvaModel }}
+           orderMap["ID"] = true
+           orderMap["CreatedAt"] = true
+        {{- end }}
        {{- range .Fields}}
             {{- if .Sort}}
          	orderMap["{{.ColumnName}}"] = true

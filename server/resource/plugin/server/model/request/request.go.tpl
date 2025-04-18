@@ -3,13 +3,13 @@
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}
         {{- if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-Start{{.FieldName}}  *{{.FieldType}}  `{{ formatFieldTag (print "start" .FieldName) false }}`
-End{{.FieldName}}  *{{.FieldType}}  `{{ formatFieldTag (print "end" .FieldName) false }}`
+Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
+End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
         {{- else }}
             {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "json") }}
-{{.FieldName}}  string `{{ formatFieldTag .FieldJson false }}`
+{{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- else }}
-{{.FieldName}}  *{{.FieldType}} `{{ formatFieldTag .FieldJson false }}`
+{{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- end }}
         {{- end }}
     {{- end}}
@@ -36,13 +36,13 @@ type {{.StructName}}Search struct{
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}
         {{- if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-    Start{{.FieldName}}  *{{.FieldType}}  `{{ formatFieldTag (print "start" .FieldName) false }}`
-    End{{.FieldName}}  *{{.FieldType}}  `{{ formatFieldTag (print "end" .FieldName) false }}`
+    Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
+    End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
         {{- else }}
             {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "json") }}
-    {{.FieldName}}  string `{{ formatFieldTag .FieldJson false }}`
+    {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- else }}
-    {{.FieldName}}  *{{.FieldType}} `{{ formatFieldTag .FieldJson false }}`
+    {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- end }}
         {{- end }}
     {{- end}}

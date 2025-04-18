@@ -123,6 +123,8 @@
       callback(new Error('不能为中文'))
     } else if (/^\d+$/.test(value[0])) {
       callback(new Error('不能够以数字开头'))
+    } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      callback(new Error('只能包含英文字母、数字和下划线'))
     } else {
       callback()
     }

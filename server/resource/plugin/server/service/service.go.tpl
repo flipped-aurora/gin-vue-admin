@@ -8,18 +8,8 @@
 {{- if .IsAdd}}
 
 // Get{{.StructName}}InfoList 新增搜索语句
-        {{- range .Fields}}
-            {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
-{{ formatSearchCondition .ColumnName .FieldSearchType .FieldName .FieldType }}
-                {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-{{ formatBetweenCondition .ColumnName .FieldSearchType .FieldName }}
-                {{- else}}
-{{ formatSearchCondition .ColumnName .FieldSearchType .FieldName .FieldType }}
-            {{- end }}
-        {{- end }}
-    {{- end }}
 
+    {{ GenerateSearchConditions .Fields }}
 
 // Get{{.StructName}}InfoList 新增排序语句 请自行在搜索语句中添加orderMap内容
        {{- range .Fields}}
@@ -33,13 +23,7 @@ orderMap["{{.ColumnName}}"] = true
 //  Get{{.StructName}}DataSource()方法新增关联语句
 	{{range $key, $value := .DataSourceMap}}
 {{$key}} := make([]map[string]any, 0)
-{{ $dataDB := "" }}
-{{- if eq $value.DBName "" }}
-{{ $dataDB = $db }}
-{{- else}}
-{{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
-{{- end}}
-{{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+{{$db}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 res["{{$key}}"] = {{$key}}
 	{{- end }}
 {{- end }}
@@ -175,23 +159,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
      db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
     }
 {{- end }}
-        {{- range .Fields}}
-            {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
-    if info.{{.FieldName}} != "" {
-            {{- if or (eq .FieldType "enum")}}
-            {{ formatLikeCondition .ColumnName .FieldName }}
-            {{- else}}
-            // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
-            {{- end}}
-        }
-    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-        {{ formatBetweenCondition .ColumnName .FieldSearchType .FieldName }}
-    {{- else}}
-    {{ formatSearchCondition .ColumnName .FieldSearchType .FieldName .FieldType }}
-            {{- end }}
-        {{- end }}
-    {{- end }}
+  {{ GenerateSearchConditions .Fields }}
 	err = db.Count(&total).Error
 	if err!=nil {
     	return
@@ -199,6 +167,10 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
     {{- if .NeedSort}}
         var OrderStr string
         orderMap := make(map[string]bool)
+      {{- if .GvaModel }}
+        orderMap["ID"] = true
+        orderMap["CreatedAt"] = true
+      {{- end }}
        {{- range .Fields}}
         {{- if .Sort}}
         orderMap["{{.ColumnName}}"] = true
@@ -225,13 +197,7 @@ func (s *{{.Abbreviation}})Get{{.StructName}}DataSource(ctx context.Context) (re
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)
-	   {{ $dataDB := "" }}
-       {{- if eq $value.DBName "" }}
-       {{ $dataDB = $db }}
-       {{- else}}
-       {{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
-       {{- end}}
-       {{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+	   {{$db}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 	   res["{{$key}}"] = {{$key}}
 	{{- end }}
 	return

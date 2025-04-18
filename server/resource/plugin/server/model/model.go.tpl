@@ -5,8 +5,7 @@
 {{- end }}
 
 {{ else }}
-// 自动生成模板{{.StructName}}
-package {{.Package}}
+package model
 
 {{- if not .OnlyTemplate}}
 import (
@@ -22,7 +21,7 @@ import (
 )
 {{- end }}
 
-// {{.Description}} 结构体  {{.StructName}}
+// {{.StructName}} {{.Description}} 结构体
 type {{.StructName}} struct {
 {{- if not .OnlyTemplate}}
 {{- if .GvaModel }}
@@ -40,7 +39,7 @@ type {{.StructName}} struct {
     Children   []*{{.StructName}} `json:"children" gorm:"-"`     //子节点
     ParentID   int             `json:"parentID" gorm:"column:parent_id;comment:父节点"`
     {{- end }}
-{{- end }}
+    {{- end }}
 }
 
 {{ if .TableName }}
@@ -49,6 +48,7 @@ func ({{.StructName}}) TableName() string {
     return "{{.TableName}}"
 }
 {{ end }}
+
 
 {{if .IsTree }}
 // GetChildren 实现TreeNode接口
@@ -71,5 +71,6 @@ func (s *{{.StructName}}) GetParentID() int {
     return s.ParentID
 }
 {{ end }}
+
 
 {{ end }}

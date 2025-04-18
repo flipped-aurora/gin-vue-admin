@@ -1,16 +1,29 @@
 <template>
   <el-menu-item
     :index="routerInfo.name"
-    class="dark:text-slate-300 overflow-hidden"
     :style="{
-      height: sideHeight
-    }"
+          height: sideHeight
+        }"
   >
-    <el-icon v-if="routerInfo.meta.icon">
-      <component :is="routerInfo.meta.icon" />
-    </el-icon>
-    <template #title>
-      {{ routerInfo.meta.title }}
+  <template #title>
+      <div
+        v-if="!isCollapse"
+        class="flex items-center"
+        :style="{
+          height: sideHeight
+        }"
+      >
+        <el-icon v-if="routerInfo.meta.icon">
+          <component :is="routerInfo.meta.icon" />
+        </el-icon>
+        <span>{{ routerInfo.meta.title }}</span>
+      </div>
+      <template v-else>
+        <el-icon v-if="routerInfo.meta.icon">
+          <component :is="routerInfo.meta.icon" />
+        </el-icon>
+        <span>{{ routerInfo.meta.title }}</span>
+      </template>
     </template>
   </el-menu-item>
 </template>

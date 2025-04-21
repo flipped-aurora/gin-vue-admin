@@ -9,7 +9,7 @@
       <component :is="routerInfo.meta.icon" />
     </el-icon>
     <template v-else>
-      {{ routerInfo.meta.title[0] }}
+      {{ isCollapse ? routerInfo.meta.title[0] : "" }}
     </template>
     <template #title>
       {{ routerInfo.meta.title }}
@@ -36,6 +36,10 @@ import {computed, inject} from 'vue'
       type: Object
     }
   })
+
+const isCollapse = inject('isCollapse', {
+  default: false
+})
 
   const sideHeight = computed(() => {
     return config.value.layout_side_item_height + 'px'

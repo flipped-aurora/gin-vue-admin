@@ -127,7 +127,7 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 				} else {
 					condition = fmt.Sprintf(`
     if info.%s != "" {
-        db = db.Where("%s %s ?", *info.%s)
+        db = db.Where("%s %s ?", info.%s)
     }`,
 						field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName)
 				}

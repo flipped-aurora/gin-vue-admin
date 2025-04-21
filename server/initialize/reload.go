@@ -1,8 +1,7 @@
-package utils
+package initialize
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"go.uber.org/zap"
 )
 
@@ -27,19 +26,19 @@ func Reload() error {
 	}
 
 	// 重新建立数据库连接
-	global.GVA_DB = initialize.Gorm()
+	global.GVA_DB = Gorm()
 
 	// 重新初始化其他配置
-	initialize.OtherInit()
-	initialize.DBList()
+	OtherInit()
+	DBList()
 
 	if global.GVA_DB != nil {
 		// 确保数据库表结构是最新的
-		initialize.RegisterTables()
+		RegisterTables()
 	}
 
 	// 重新初始化定时任务
-	initialize.Timer()
+	Timer()
 
 	global.GVA_LOG.Info("系统配置重新加载完成")
 	return nil

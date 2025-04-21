@@ -61,7 +61,8 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 // @Success   200  {object}  response.Response{msg=string}  "重载系统"
 // @Router    /system/reloadSystem [post]
 func (s *SystemApi) ReloadSystem(c *gin.Context) {
-	err := utils.Reload()
+	// 触发系统重载事件
+	err := utils.GlobalSystemEvents.TriggerReload()
 	if err != nil {
 		global.GVA_LOG.Error("重载系统失败!", zap.Error(err))
 		response.FailWithMessage("重载系统失败:"+err.Error(), c)

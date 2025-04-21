@@ -121,13 +121,13 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 				if field.FieldSearchType == "LIKE" {
 					condition = fmt.Sprintf(`
     if info.%s != "" {
-        db = db.Where("%s LIKE ?", "%%"+ *info.%s+"%%")
+        db = db.Where("%s LIKE ?", "%%"+ info.%s+"%%")
     }`,
 						field.FieldName, field.ColumnName, field.FieldName)
 				} else {
 					condition = fmt.Sprintf(`
     if info.%s != "" {
-        db = db.Where("%s %s ?", *info.%s)
+        db = db.Where("%s %s ?", info.%s)
     }`,
 						field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName)
 				}

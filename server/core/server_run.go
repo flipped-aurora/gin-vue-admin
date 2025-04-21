@@ -18,19 +18,8 @@ type server interface {
 	Shutdown(context.Context) error
 }
 
-// 初始化服务
-func initServer(address string, router *gin.Engine) server {
-	return &http.Server{
-		Addr:           address,
-		Handler:        router,
-		ReadTimeout:    10 * time.Minute,
-		WriteTimeout:   10 * time.Minute,
-		MaxHeaderBytes: 1 << 20,
-	}
-}
-
-// RunServer 启动服务并实现优雅关闭
-func RunServer(address string, router *gin.Engine, readTimeout, writeTimeout time.Duration) {
+// initServer 启动服务并实现优雅关闭
+func initServer(address string, router *gin.Engine, readTimeout, writeTimeout time.Duration) {
 	// 创建服务
 	srv := &http.Server{
 		Addr:           address,
@@ -61,10 +50,10 @@ func RunServer(address string, router *gin.Engine, readTimeout, writeTimeout tim
 	// 设置5秒的超时时间
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	
+
 	if err := srv.Shutdown(ctx); err != nil {
 		zap.L().Fatal("服务器关闭异常", zap.Error(err))
 	}
-	
+
 	zap.L().Info("服务器已优雅关闭")
 }

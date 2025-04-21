@@ -8,10 +8,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type server interface {
-	ListenAndServe() error
-}
-
 func RunWindowsServer() {
 	if global.GVA_CONFIG.System.UseMultipoint || global.GVA_CONFIG.System.UseRedis {
 		// 初始化redis服务

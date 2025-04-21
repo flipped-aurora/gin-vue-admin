@@ -5,31 +5,20 @@
           height: sideHeight
         }"
   >
-  <template #title>
-      <div
-        v-if="!isCollapse"
-        class="flex items-center"
-        :style="{
-          height: sideHeight
-        }"
-      >
-        <el-icon v-if="routerInfo.meta.icon">
-          <component :is="routerInfo.meta.icon" />
-        </el-icon>
-        <span>{{ routerInfo.meta.title }}</span>
-      </div>
-      <template v-else>
-        <el-icon v-if="routerInfo.meta.icon">
-          <component :is="routerInfo.meta.icon" />
-        </el-icon>
-        <span>{{ routerInfo.meta.title }}</span>
-      </template>
+    <el-icon v-if="routerInfo.meta.icon">
+      <component :is="routerInfo.meta.icon" />
+    </el-icon>
+    <template v-else>
+      {{ routerInfo.meta.title[0] }}
+    </template>
+    <template #title>
+      {{ routerInfo.meta.title }}
     </template>
   </el-menu-item>
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+import {computed, inject} from 'vue'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()

@@ -12,6 +12,7 @@ import (
 func GetTemplateFuncMap() template.FuncMap {
 	return template.FuncMap{
 		"GenerateField":            GenerateField,
+		"GenerateSearchField":      GenerateSearchField,
 		"GenerateSearchConditions": GenerateSearchConditions,
 		"GenerateSearchFormItem":   GenerateSearchFormItem,
 		"GenerateTableColumn":      GenerateTableColumn,
@@ -44,6 +45,10 @@ func GenerateField(field systemReq.AutoCodeField) string {
 
 	gormTag += "column:" + field.ColumnName + ";"
 
+	if field.DataTypeLong != "" && field.FieldType != "enum" {
+		gormTag += fmt.Sprintf("size:%s;", field.DataTypeLong)
+	}
+
 	requireTag := ` binding:"required"` + "`"
 
 	// 根据字段类型构建不同的字段定义
@@ -55,40 +60,30 @@ func GenerateField(field systemReq.AutoCodeField) string {
 	case "picture", "video":
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
-		if field.DataTypeLong != "" {
-			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
-		}
+
 		result = fmt.Sprintf(`%s  string `+"`"+`%s`+"`"+``, field.FieldName, tagContent)
 	case "file", "pictures", "array":
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
-		if field.DataTypeLong != "" {
-			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
-		}
+
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"array,object"`+"`"+``,
 			field.FieldName, tagContent)
 	case "richtext":
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
-		if field.DataTypeLong != "" {
-			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
-		}
+
 		result = fmt.Sprintf(`%s  *string `+"`"+`%stype:text;"`+"`"+``,
 			field.FieldName, tagContent)
 	case "json":
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
-		if field.DataTypeLong != "" {
-			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
-		}
+
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"object"`+"`"+``,
 			field.FieldName, tagContent)
 	default:
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
-		if field.DataTypeLong != "" {
-			tagContent += fmt.Sprintf("size:%s;", field.DataTypeLong)
-		}
+
 		result = fmt.Sprintf(`%s  *%s `+"`"+`%s`+"`"+``,
 			field.FieldName, field.FieldType, tagContent)
 	}
@@ -671,4 +666,35 @@ func GenerateDefaultFormValue(field systemReq.AutoCodeField) string {
 
 	// 返回格式化后的默认值字符串
 	return fmt.Sprintf(`%s: %s,`, field.FieldJson, defaultValue)
+}
+
+// GenerateSearchField 根据字段属性生成搜索结构体中的字段定义
+func GenerateSearchField(field systemReq.AutoCodeField) string {
+	var result string
+
+	if field.FieldSearchType == "" {
+		return "" // 如果没有搜索类型，返回空字符串
+	}
+
+	if field.FieldSearchType == "BETWEEN" || field.FieldSearchType == "NOT BETWEEN" {
+		// 生成范围搜索字段
+		startField := fmt.Sprintf("Start%s  *%s  `json:\"start%s\" form:\"start%s\"`",
+			field.FieldName, field.FieldType, field.FieldName, field.FieldName)
+		endField := fmt.Sprintf("End%s  *%s  `json:\"end%s\" form:\"end%s\"`",
+			field.FieldName, field.FieldType, field.FieldName, field.FieldName)
+		result = startField + "\n" + endField
+	} else {
+		// 生成普通搜索字段
+		if field.FieldType == "enum" || field.FieldType == "picture" ||
+			field.FieldType == "pictures" || field.FieldType == "video" ||
+			field.FieldType == "json" || field.FieldType == "richtext" {
+			result = fmt.Sprintf("%s  string `json:\"%s\" form:\"%s\"` ",
+				field.FieldName, field.FieldJson, field.FieldJson)
+		} else {
+			result = fmt.Sprintf("%s  *%s `json:\"%s\" form:\"%s\"` ",
+				field.FieldName, field.FieldType, field.FieldJson, field.FieldJson)
+		}
+	}
+
+	return result
 }

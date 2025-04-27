@@ -3,6 +3,7 @@ package system
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"mime/multipart"
 	"net/url"
@@ -398,6 +399,9 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 	if err != nil {
 		return err
 	}
+	if len(rows) < 2 {
+		return errors.New("Excel data is not enough.\nIt should contain title row and data")
+	}
 
 	var templateInfoMap = make(map[string]string)
 	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
@@ -417,11 +421,17 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 
 	return db.Transaction(func(tx *gorm.DB) error {
 		excelTitle := rows[0]
+		for i, str := range excelTitle {
+			excelTitle[i] = strings.TrimSpace(str)
+		}
 		values := rows[1:]
 		items := make([]map[string]interface{}, 0, len(values))
 		for _, row := range values {
 			var item = make(map[string]interface{})
 			for ii, value := range row {
+			    if _, ok := titleKeyMap[excelTitle[ii]]; !ok {
+					continue // excel中多余的标题，在模板信息中没有对应的字段，因此key为空，必须跳过
+				}
 				key := titleKeyMap[excelTitle[ii]]
 				item[key] = value
 			}

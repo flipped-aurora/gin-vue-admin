@@ -938,7 +938,7 @@
     </el-form>
     <div class="mt-4">
       <el-button type="primary" @click="update">立即更新 </el-button>
-      <el-button type="primary" @click="reload">重启服务 </el-button>
+      <el-button type="primary" @click="reload">重载服务 </el-button>
     </div>
   </div>
 </template>
@@ -1010,7 +1010,7 @@
   }
   initForm()
   const reload = () => {
-    ElMessageBox.confirm('确定要重启服务?', '警告', {
+    ElMessageBox.confirm('确定要重载服务?', '警告', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'

@@ -11,12 +11,9 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
-
-var userService = service.ServiceGroupApp.SystemServiceGroup.UserService
 
 func ErrorToEmail() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -26,11 +23,12 @@ func ErrorToEmail() gin.HandlerFunc {
 			username = claims.Username
 		} else {
 			id, _ := strconv.Atoi(c.Request.Header.Get("x-user-id"))
-			user, err := userService.FindUserById(id)
+			var u system.SysUser
+			err := global.GVA_DB.Where("id = ?", id).First(&u).Error
 			if err != nil {
 				username = "Unknown"
 			}
-			username = user.Username
+			username = u.Username
 		}
 		body, _ := io.ReadAll(c.Request.Body)
 		// 再重新写回请求体body中，ioutil.ReadAll会清空c.Request.Body中的数据

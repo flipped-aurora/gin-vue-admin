@@ -3,17 +3,14 @@ package system
 import (
 	"errors"
 	"strconv"
-	"sync"
 
 	"gorm.io/gorm"
 
-	"github.com/casbin/casbin/v2"
-	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	_ "github.com/go-sql-driver/mysql"
-	"go.uber.org/zap"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -68,7 +65,7 @@ func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID u
 	if len(rules) == 0 {
 		return nil
 	} // 设置空权限无需调用 AddPolicies 方法
-	e := casbinService.Casbin()
+	e := utils.GetCasbin()
 	success, _ := e.AddPolicies(rules)
 	if !success {
 		return errors.New("存在相同api,添加失败,请联系管理员")
@@ -91,7 +88,7 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 		return err
 	}
 
-	e := casbinService.Casbin()
+	e := utils.GetCasbin()
 	return e.LoadPolicy()
 }
 
@@ -102,7 +99,7 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 //@return: pathMaps []request.CasbinInfo
 
 func (casbinService *CasbinService) GetPolicyPathByAuthorityId(AuthorityID uint) (pathMaps []request.CasbinInfo) {
-	e := casbinService.Casbin()
+	e := utils.GetCasbin()
 	authorityId := strconv.Itoa(int(AuthorityID))
 	list, _ := e.GetFilteredPolicy(0, authorityId)
 	for _, v := range list {
@@ -121,7 +118,7 @@ func (casbinService *CasbinService) GetPolicyPathByAuthorityId(AuthorityID uint)
 //@return: bool
 
 func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
-	e := casbinService.Casbin()
+	e := utils.GetCasbin()
 	success, _ := e.RemoveFilteredPolicy(v, p...)
 	return success
 }
@@ -170,52 +167,7 @@ func (casbinService *CasbinService) AddPolicies(db *gorm.DB, rules [][]string) e
 }
 
 func (casbinService *CasbinService) FreshCasbin() (err error) {
-	e := casbinService.Casbin()
+	e := utils.GetCasbin()
 	err = e.LoadPolicy()
 	return err
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Casbin
-//@description: 持久化到数据库  引入自定义规则
-//@return: *casbin.Enforcer
-
-var (
-	syncedCachedEnforcer *casbin.SyncedCachedEnforcer
-	once                 sync.Once
-)
-
-func (casbinService *CasbinService) Casbin() *casbin.SyncedCachedEnforcer {
-	once.Do(func() {
-		a, err := gormadapter.NewAdapterByDB(global.GVA_DB)
-		if err != nil {
-			zap.L().Error("适配数据库失败请检查casbin表是否为InnoDB引擎!", zap.Error(err))
-			return
-		}
-		text := `
-		[request_definition]
-		r = sub, obj, act
-		
-		[policy_definition]
-		p = sub, obj, act
-		
-		[role_definition]
-		g = _, _
-		
-		[policy_effect]
-		e = some(where (p.eft == allow))
-		
-		[matchers]
-		m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act
-		`
-		m, err := model.NewModelFromString(text)
-		if err != nil {
-			zap.L().Error("字符串加载模型失败!", zap.Error(err))
-			return
-		}
-		syncedCachedEnforcer, _ = casbin.NewSyncedCachedEnforcer(m, a)
-		syncedCachedEnforcer.SetExpireTime(60 * 60)
-		_ = syncedCachedEnforcer.LoadPolicy()
-	})
-	return syncedCachedEnforcer
 }

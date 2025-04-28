@@ -13,10 +13,12 @@ type server interface {
 }
 
 func RunWindowsServer() {
-	if global.GVA_CONFIG.System.UseMultipoint || global.GVA_CONFIG.System.UseRedis {
+	if global.GVA_CONFIG.System.UseRedis {
 		// 初始化redis服务
 		initialize.Redis()
-		initialize.RedisList()
+		if global.GVA_CONFIG.System.UseMultipoint {
+			initialize.RedisList()
+		}
 	}
 
 	if global.GVA_CONFIG.System.UseMongo {

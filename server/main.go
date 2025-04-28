@@ -32,7 +32,7 @@ func main() {
 	initializeSystem()
 
 	// 运行服务器
-	core.RunWindowsServer()
+	core.RunServer()
 }
 
 // initializeSystem 初始化系统所有组件

@@ -2,16 +2,7 @@
 // 在结构体中新增如下字段
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}
-        {{- if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
-End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
-        {{- else }}
-            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "json") }}
-{{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- else }}
-{{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- end }}
-        {{- end }}
+      {{ GenerateSearchField . }}
     {{- end}}
 {{- end }}
 {{- if .NeedSort}}
@@ -36,16 +27,7 @@ type {{.StructName}}Search struct{
 {{- end }}
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}
-        {{- if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-    Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
-    End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
-        {{- else }}
-            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "pictures") (eq .FieldType "video") (eq .FieldType "json") }}
-            {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- else }}
-    {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- end }}
-        {{- end }}
+      {{ GenerateSearchField . }}
     {{- end}}
 {{- end }}
     request.PageInfo

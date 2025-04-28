@@ -17,8 +17,8 @@
           @select="selectTopMenuItem"
         >
           <template v-for="item in routerStore.asyncRouters[0]?.children || []">
-            <el-menu-item 
-              v-if="!item.hidden && (!item.children || item.children.length === 0)" 
+            <el-menu-item
+              v-if="!item.hidden && (!item.children || item.children.length === 0)"
               :key="item.name"
               :index="item.name"
               class="dark:text-slate-300 overflow-hidden"
@@ -31,13 +31,13 @@
               </el-icon>
               <template v-else>
                 {{ item.meta.title[0] }}
-                </template>
+              </template>
               <template #title>
                 {{ item.meta.title }}
               </template>
             </el-menu-item>
             <template v-else-if="!item.hidden" >
-             <el-menu-item 
+             <el-menu-item
               :key="item.name"
               :index="item.name"
               :class="{'is-active': topActive === item.name}"
@@ -110,14 +110,14 @@
   import { useRouterStore } from '@/pinia/modules/router'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  
+
   const appStore = useAppStore()
   const { device, config } = storeToRefs(appStore)
 
   defineOptions({
     name: 'SidebarMode'
   })
-  
+
   const route = useRoute()
   const router = useRouter()
   const routerStore = useRouterStore()
@@ -125,7 +125,7 @@
   const active = ref('')
   const topActive = ref('')
   const secondLevelMenus = ref([])
-  
+
   const layoutSideWidth = computed(() => {
     if (!isCollapse.value) {
       return config.value.layout_side_width
@@ -136,7 +136,7 @@
 
 
   provide('isCollapse', isCollapse)
-  
+
   // 更新二级菜单
   const updateSecondLevelMenus = (menuName) => {
     const menu = routerStore.asyncRouters[0]?.children.find(item => item.name === menuName)
@@ -144,18 +144,18 @@
       secondLevelMenus.value = menu.children
     }
   }
-  
+
   // 选择一级菜单
   const selectTopMenuItem = (index) => {
     topActive.value = index
-    
+
     // 获取选中的菜单项
     const menu = routerStore.asyncRouters[0]?.children.find(item => item.name === index)
-    
+
     // 只有当选中的菜单有子菜单时，才更新二级菜单区域
     if (menu && menu.children && menu.children.length > 0) {
       updateSecondLevelMenus(index)
-      
+
       // 导航到第一个可见的子菜单
       const firstVisibleChild = menu.children.find(child => !child.hidden)
       if (firstVisibleChild) {
@@ -166,12 +166,12 @@
       navigateToMenuItem(index)
     }
   }
-  
+
   // 选择二级或更深层级的菜单
   const selectMenuItem = (index) => {
     navigateToMenuItem(index)
   }
-  
+
   // 导航到指定菜单
   const navigateToMenuItem = (index) => {
     const query = {}
@@ -208,33 +208,33 @@
   }
 
 
-    
+
   watchEffect(() => {
     if (route.name === 'Iframe') {
       active.value = decodeURIComponent(route.query.url)
       return
     }
     active.value = route.meta.activeName || route.name
-    
+
     // 找到当前路由所属的一级菜单
     const findParentMenu = () => {
       // 首先检查当前路由是否就是一级菜单
       const isTopMenu = routerStore.asyncRouters[0]?.children.some(
         item => !item.hidden && item.name === route.name
       )
-      
+
       if (isTopMenu) {
         return route.name
       }
-      
+
       for (const topMenu of routerStore.asyncRouters[0]?.children || []) {
         if (topMenu.hidden) continue
-        
+
         // 检查当前路由是否是这个一级菜单的子菜单
         if (topMenu.children && topMenu.children.some(child => child.name === route.name)) {
           return topMenu.name
         }
-        
+
         // 递归检查更深层级
         const checkChildren = (items) => {
           for (const item of items || []) {
@@ -247,18 +247,18 @@
           }
           return false
         }
-        
+
         if (topMenu.children && checkChildren(topMenu.children)) {
           return topMenu.name
         }
       }
       return null
     }
-    
+
     const parentMenu = findParentMenu()
     if (parentMenu) {
       topActive.value = parentMenu
-      
+
       // 只有当父菜单有子菜单时，才更新二级菜单区域
       const menu = routerStore.asyncRouters[0]?.children.find(item => item.name === parentMenu)
       if (menu && menu.children && menu.children.length > 0) {
@@ -269,7 +269,7 @@
         const firstMenuWithChildren = routerStore.asyncRouters[0].children.find(
           item => !item.hidden && item.children && item.children.length > 0
         )
-        
+
         if (firstMenuWithChildren) {
           // 只更新二级菜单区域，但保持当前一级菜单的高亮状态
           updateSecondLevelMenus(firstMenuWithChildren.name)
@@ -281,7 +281,7 @@
       const firstMenuWithChildren = routerStore.asyncRouters[0].children.find(
         item => !item.hidden && item.children && item.children.length > 0
       )
-      
+
       if (firstMenuWithChildren) {
         // 只更新二级菜单区域，高亮状态保持为当前路由
         topActive.value = route.name

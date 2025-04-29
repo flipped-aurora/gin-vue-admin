@@ -6,13 +6,10 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"go.uber.org/zap"
+	"time"
 )
 
-type server interface {
-	ListenAndServe() error
-}
-
-func RunWindowsServer() {
+func RunServer() {
 	if global.GVA_CONFIG.System.UseRedis {
 		// 初始化redis服务
 		initialize.Redis()
@@ -35,9 +32,6 @@ func RunWindowsServer() {
 	Router := initialize.Routers()
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
-	s := initServer(address, Router)
-
-	global.GVA_LOG.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`
 	欢迎使用 gin-vue-admin
@@ -53,5 +47,6 @@ func RunWindowsServer() {
 	** 版权持有公司：北京翻转极光科技有限责任公司 **
 	** 剔除授权标识需购买商用授权：https://gin-vue-admin.com/empower/index.html **
 `, address)
-	global.GVA_LOG.Error(s.ListenAndServe().Error())
+
+	initServer(address, Router, 10*time.Minute, 10*time.Minute)
 }

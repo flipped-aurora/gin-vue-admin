@@ -1,2 +1,14 @@
 *.sql linguist-language=GO
 *.html linguist-language=GO
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.otf binary

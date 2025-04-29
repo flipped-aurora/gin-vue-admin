@@ -3,6 +3,7 @@ package system
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"mime/multipart"
 	"net/url"
@@ -175,6 +176,29 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	db = db.Select(selects).Table(template.TableName)
 
+	filterDeleted := false
+
+	filterParam := values.Get("filterDeleted")
+	if filterParam == "true" {
+		filterDeleted = true
+	}
+
+	if filterDeleted {
+		// 自动过滤主表的软删除
+		db = db.Where(fmt.Sprintf("%s.deleted_at IS NULL", template.TableName))
+
+		// 过滤关联表的软删除(如果有)
+		if len(template.JoinTemplate) > 0 {
+			for _, join := range template.JoinTemplate {
+				// 检查关联表是否有deleted_at字段
+				hasDeletedAt := sysExportTemplateService.hasDeletedAtColumn(join.Table)
+				if hasDeletedAt {
+					db = db.Where(fmt.Sprintf("%s.deleted_at IS NULL", join.Table))
+				}
+			}
+		}
+	}
+
 	if len(template.Conditions) > 0 {
 		for _, condition := range template.Conditions {
 			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
@@ -344,6 +368,13 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 	return file, template.Name, nil
 }
 
+// 辅助函数：检查表是否有deleted_at列
+func (s *SysExportTemplateService) hasDeletedAtColumn(tableName string) bool {
+	var count int64
+	global.GVA_DB.Raw("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = 'deleted_at'", tableName).Count(&count)
+	return count > 0
+}
+
 // ImportExcel 导入Excel
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID string, file *multipart.FileHeader) (err error) {
@@ -368,6 +399,9 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 	if err != nil {
 		return err
 	}
+	if len(rows) < 2 {
+		return errors.New("Excel data is not enough.\nIt should contain title row and data")
+	}
 
 	var templateInfoMap = make(map[string]string)
 	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
@@ -387,11 +421,17 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 
 	return db.Transaction(func(tx *gorm.DB) error {
 		excelTitle := rows[0]
+		for i, str := range excelTitle {
+			excelTitle[i] = strings.TrimSpace(str)
+		}
 		values := rows[1:]
 		items := make([]map[string]interface{}, 0, len(values))
 		for _, row := range values {
 			var item = make(map[string]interface{})
 			for ii, value := range row {
+			    if _, ok := titleKeyMap[excelTitle[ii]]; !ok {
+					continue // excel中多余的标题，在模板信息中没有对应的字段，因此key为空，必须跳过
+				}
 				key := titleKeyMap[excelTitle[ii]]
 				item[key] = value
 			}

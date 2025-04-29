@@ -1,7 +1,6 @@
 {{- $global := . }}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
 {{- if .IsAdd }}
-
 // 请在搜索条件中增加如下代码
 {{- range .Fields}}
     {{- if .FieldSearchType}}
@@ -83,7 +82,7 @@ const dataSource = ref({})
 const getDataSourceFunc = async()=>{
   const res = await get{{.StructName}}DataSource()
   if (res.code === 0) {
-    dataSource.value = res.data
+    dataSource.value = res.data || []
   }
 }
 getDataSourceFunc()
@@ -112,10 +111,9 @@ getDataSourceFunc()
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
       {{ end -}}
-           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if not .FieldSearchHide }}
+           {{- range .Fields}} {{- if .FieldSearchType}} {{- if not .FieldSearchHide }}
             {{ GenerateSearchFormItem .}}
-            {{ end }}{{ end }}{{ end }}
-
+           {{ end }}{{ end }}{{ end }}
         <template v-if="showAllQuery">
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if .FieldSearchHide }}
@@ -164,14 +162,14 @@ getDataSourceFunc()
             {{ GenerateTableColumn . }}
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="操作" fixed="right" :min-width="appStore.operateMinWith">
+        <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
             {{- if .IsTree }}
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>新增子节点</el-button>
             {{- end }}
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
-            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length" {{ end }} {{if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length"{{ end }} {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -187,7 +185,7 @@ getDataSourceFunc()
             />
         </div>
     </div>
-    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
+    <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
@@ -215,13 +213,13 @@ getDataSourceFunc()
           {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
-            {{ GenerateFormItem . }}
+             {{ GenerateFormItem . }}
           {{- end }}
-          {{- end }}
+       {{- end }}
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
+    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
             <el-descriptions :column="1" border>
             {{- if .IsTree }}
             <el-descriptions-item label="父节点">
@@ -240,7 +238,7 @@ getDataSourceFunc()
             {{- end }}
             {{- range .Fields}}
               {{- if .Desc }}
-                    {{ GenerateDescriptionItem . }}
+                 {{ GenerateDescriptionItem . }}
               {{- end }}
             {{- end }}
             </el-descriptions>
@@ -260,7 +258,7 @@ import {
   update{{.StructName}},
   find{{.StructName}},
   get{{.StructName}}List
-} from '@/api/{{.Package}}/{{.PackageName}}'
+} from '@/plugin/{{.Package}}/api/{{.PackageName}}'
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'
@@ -294,7 +292,6 @@ import { ref, reactive } from 'vue'
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
 {{- end }}
-import { useAppStore } from "@/pinia"
 
 {{if .HasExcel -}}
 // 导出组件
@@ -317,7 +314,6 @@ defineOptions({
 
 // 提交按钮loading
 const btnLoading = ref(false)
-const appStore = useAppStore()
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)

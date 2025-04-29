@@ -118,6 +118,10 @@
   }
 }
 
+.el-menu-item.is-active{
+  color: var(--el-color-primary)!important;
+}
+
 .el-sub-menu__title.el-tooltip__trigger,
 .el-menu-item .el-menu-tooltip__trigger {
   justify-content: center;

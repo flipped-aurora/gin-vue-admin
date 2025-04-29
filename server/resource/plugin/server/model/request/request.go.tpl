@@ -2,7 +2,7 @@
 // 在结构体中新增如下字段
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}
-      {{ GenerateSearchField . }}
+         {{ GenerateSearchField . }}
     {{- end}}
 {{- end }}
 {{- if .NeedSort}}
@@ -11,23 +11,22 @@ Order string `json:"order" form:"order"`
 {{- end}}
 {{- else }}
 package request
-
+{{- if not .OnlyTemplate}}
 import (
-{{- if not .OnlyTemplate }}
 	"{{.Module}}/model/common/request"
 	{{ if or .HasSearchTimer .GvaModel}}"time"{{ end }}
-{{- end }}
 )
-
+{{- end}}
 type {{.StructName}}Search struct{
 {{- if not .OnlyTemplate}}
+
 {{- if .GvaModel }}
     StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
     EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
 {{- end }}
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}
-      {{ GenerateSearchField . }}
+       {{ GenerateSearchField . }}
     {{- end}}
 {{- end }}
     request.PageInfo
@@ -35,6 +34,6 @@ type {{.StructName}}Search struct{
     Sort  string `json:"sort" form:"sort"`
     Order string `json:"order" form:"order"`
     {{- end}}
-{{- end}}
+{{- end }}
 }
 {{- end }}

@@ -71,7 +71,6 @@ export const useUserStore = defineStore('user', () => {
       const res = await login(loginInfo)
 
       if (res.code !== 0) {
-        ElMessage.error(res.message || '登录失败')
         return false
       }
       // 登陆成功，设置用户信息和权限相关信息
@@ -87,6 +86,11 @@ export const useUserStore = defineStore('user', () => {
       asyncRouters.forEach((asyncRouter) => {
         router.addRoute(asyncRouter)
       })
+
+      if(router.currentRoute.value.query.redirect) {
+        await router.replace(router.currentRoute.value.query.redirect)
+        return true
+      }
 
       if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
         ElMessage.error('请联系管理员进行授权')

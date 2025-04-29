@@ -1,14 +1,16 @@
 <template>
   <el-menu-item
     :index="routerInfo.name"
-    class="dark:text-slate-300 overflow-hidden"
     :style="{
-      height: sideHeight
-    }"
+          height: sideHeight
+        }"
   >
     <el-icon v-if="routerInfo.meta.icon">
       <component :is="routerInfo.meta.icon" />
     </el-icon>
+    <template v-else>
+      {{ isCollapse ? routerInfo.meta.title[0] : "" }}
+    </template>
     <template #title>
       {{ routerInfo.meta.title }}
     </template>
@@ -16,7 +18,7 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+import {computed, inject} from 'vue'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()
@@ -34,6 +36,10 @@
       type: Object
     }
   })
+
+const isCollapse = inject('isCollapse', {
+  default: false
+})
 
   const sideHeight = computed(() => {
     return config.value.layout_side_item_height + 'px'

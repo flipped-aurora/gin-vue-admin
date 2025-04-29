@@ -46,7 +46,7 @@ func Routers() *gin.Engine {
 	// VUE_APP_BASE_API = /
 	// VUE_APP_BASE_PATH = http://localhost
 	// 然后执行打包命令 npm run build。在打开下面3行注释
-	// Router.Static("/favicon.ico", "./dist/favicon.ico")
+	// Router.StaticFile("/favicon.ico", "./dist/favicon.ico")
 	// Router.Static("/assets", "./dist/assets")   // dist里面的静态资源
 	// Router.StaticFile("/", "./dist/index.html") // 前端网页入口页面
 

@@ -100,17 +100,16 @@ export const useRouterStore = defineStore('router', () => {
 
   watchEffect(() => {
     let topActive = sessionStorage.getItem('topActive')
+    // 初始化菜单内容，防止重复添加
+    topMenu.value = [];
     asyncRouters.value[0]?.children.forEach((item) => {
-      // 初始化菜单内容，防止重复添加
-      topMenu.value = [];
       if (item.hidden) return
       menuMap[item.name] = item
       topMenu.value.push({ ...item, children: [] })
     })
-
-  if (!topActive || topActive === 'undefined' || topActive === 'null') {
-    topActive = findTopActive(menuMap, route.name);
-  }
+    if (!topActive || topActive === 'undefined' || topActive === 'null') {
+      topActive = findTopActive(menuMap, route.name);
+    }
     setLeftMenu(topActive)
   })
 

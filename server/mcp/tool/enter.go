@@ -4,15 +4,7 @@ import (
 	"context"
 	"github.com/ThinkInAIXYZ/go-mcp/protocol"
 	"github.com/ThinkInAIXYZ/go-mcp/server"
-	"github.com/flipped-aurora/gin-vue-admin/server/mcp/tool/current_time"
-	"github.com/flipped-aurora/gin-vue-admin/server/mcp/tool/weather"
 )
-
-func init() {
-	// 注册工具
-	RegisterTool(&current_time.Tool{})
-	RegisterTool(&weather.Tool{})
-}
 
 // McpTool 定义了MCP工具必须实现的接口
 type McpTool interface {

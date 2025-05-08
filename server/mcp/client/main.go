@@ -7,25 +7,15 @@ import (
 	"github.com/ThinkInAIXYZ/go-mcp/transport"
 )
 
-type Client struct{}
-
-var mcpClient *client.Client
-
-// 链接mcp服务器
-func (c *Client) New() error {
-	transportClient, err := transport.NewSSEClientTransport("http://localhost:8888/sse")
+// 创建MCP客户端
+func NewClient(url string, clientInfo protocol.Implementation) (*client.Client, error) {
+	transportClient, err := transport.NewSSEClientTransport(url)
 	if err != nil {
-		return fmt.Errorf("创建mcp客户端失败SSE: %v", err)
+		return nil, fmt.Errorf("创建MCP客户端失败: %v", err)
 	}
-	mcpClient, err = client.NewClient(transportClient, client.WithClientInfo(protocol.Implementation{
-		Name:    "client",
-		Version: "v0.0.1",
-	}))
+	mcpClient, err := client.NewClient(transportClient, client.WithClientInfo(clientInfo))
 	if err != nil {
-		return fmt.Errorf("创建mcp客户端失败: %v", err)
+		return nil, fmt.Errorf("创建MCP客户端失败: %v", err)
 	}
-	defer mcpClient.Close()
-	fmt.Println("MCP客户端已启动")
-
-	return nil
+	return mcpClient, nil
 }

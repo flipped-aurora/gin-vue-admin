@@ -30,7 +30,6 @@ import (
 func main() {
 	// 初始化系统
 	initializeSystem()
-
 	// 运行服务器
 	core.RunServer()
 }

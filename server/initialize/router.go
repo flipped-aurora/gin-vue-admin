@@ -1,9 +1,6 @@
 package initialize
 
 import (
-	"github.com/ThinkInAIXYZ/go-mcp/transport"
-	"github.com/flipped-aurora/gin-vue-admin/server/mcp"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 
@@ -36,25 +33,22 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 
 // 初始化总路由
 
-func Routers() (*gin.Engine, transport.ServerTransport) {
+func Routers() *gin.Engine {
 	Router := gin.New()
 	Router.Use(gin.Recovery())
 	if gin.Mode() == gin.DebugMode {
 		Router.Use(gin.Logger())
 	}
 
-	mcpServer, mcpHandler, err := mcp.Run()
-	if err != nil {
-		global.GVA_LOG.Error("创建MCP服务器失败", zap.Error(err))
-	}
+	sseServer := McpRun()
 
 	// 注册mcp服务
 	Router.GET(global.GVA_CONFIG.MCP.SSEPath, func(c *gin.Context) {
-		mcpHandler.HandleSSE().ServeHTTP(c.Writer, c.Request)
+		sseServer.SSEHandler().ServeHTTP(c.Writer, c.Request)
 	})
 
 	Router.POST(global.GVA_CONFIG.MCP.MessagePath, func(c *gin.Context) {
-		mcpHandler.HandleMessage().ServeHTTP(c.Writer, c.Request)
+		sseServer.MessageHandler().ServeHTTP(c.Writer, c.Request)
 	})
 
 	systemRouter := router.RouterGroupApp.System
@@ -124,5 +118,5 @@ func Routers() (*gin.Engine, transport.ServerTransport) {
 	global.GVA_ROUTERS = Router.Routes()
 
 	global.GVA_LOG.Info("router register success")
-	return Router, mcpServer
+	return Router
 }

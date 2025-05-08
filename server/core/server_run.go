@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"fmt"
-	"github.com/ThinkInAIXYZ/go-mcp/transport"
 	"net/http"
 	"os"
 	"os/signal"
@@ -20,7 +19,7 @@ type server interface {
 }
 
 // initServer 启动服务并实现优雅关闭
-func initServer(address string, router *gin.Engine, mcpServer transport.ServerTransport, readTimeout, writeTimeout time.Duration) {
+func initServer(address string, router *gin.Engine, readTimeout, writeTimeout time.Duration) {
 	// 创建服务
 	srv := &http.Server{
 		Addr:           address,
@@ -58,12 +57,4 @@ func initServer(address string, router *gin.Engine, mcpServer transport.ServerTr
 	}
 
 	zap.L().Info("WEB服务已关闭")
-
-	zap.L().Info("关闭MCP服务...")
-
-	if err := mcpServer.Shutdown(ctx, ctx); err != nil {
-		zap.L().Fatal("MCP服务器关闭异常", zap.Error(err))
-	}
-
-	zap.L().Info("MCP服务器已关闭")
 }

@@ -34,5 +34,6 @@ func (t *CurrentTime) New() mcp.Tool {
 		mcp.WithString("timezone",
 			mcp.Required(),
 			mcp.Description("时区"),
+			mcp.Enum("UTC", "CST", "PST", "EST", "GMT", "CET", "JST", "MST", "IST", "AST", "HST"),
 		))
 }

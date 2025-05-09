@@ -30,6 +30,11 @@
               </el-select>
             </template>
           </el-table-column>
+          <el-table-column label="默认值" width="300">
+            <template #default="scope">
+              <el-input :disabled="scope.row.type === 'object'" v-model="scope.row.default" />
+            </template>
+          </el-table-column>
           <el-table-column prop="required" label="必填" width="80">
             <template #default="scope">
               <el-checkbox v-model="scope.row.required" />

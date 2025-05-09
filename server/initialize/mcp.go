@@ -14,6 +14,8 @@ func McpRun() *server.SSEServer {
 		config.Version,
 	)
 
+	global.GVA_MCP_SERVER = s
+
 	mcpTool.RegisterAllTools(s)
 
 	return server.NewSSEServer(s,

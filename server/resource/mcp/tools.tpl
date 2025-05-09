@@ -3,7 +3,6 @@ package mcpTool
 import (
 	"context"
 	"github.com/mark3labs/mcp-go/mcp"
-	"time"
 )
 
 func init() {

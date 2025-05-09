@@ -11,7 +11,7 @@ import (
 	"text/template"
 )
 
-func (s *autoCodeTemplate) CreateMcp(ctx context.Context, info request.AutoMcpTool) (err error) {
+func (s *autoCodeTemplate) CreateMcp(ctx context.Context, info request.AutoMcpTool) (toolFilePath string, err error) {
 	mcpTemplatePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "mcp", "tools.tpl")
 	mcpToolPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "mcp")
 
@@ -21,23 +21,23 @@ func (s *autoCodeTemplate) CreateMcp(ctx context.Context, info request.AutoMcpTo
 
 	files, err = template.New(templateName).Funcs(autocode.GetTemplateFuncMap()).ParseFiles(mcpTemplatePath)
 	if err != nil {
-		return err
+		return
 	}
 
 	fileName := utils.HumpToUnderscore(info.Name)
 
-	toolFilePath := filepath.Join(mcpToolPath, fileName+".go")
+	toolFilePath = filepath.Join(mcpToolPath, fileName+".go")
 
 	f, err := os.Create(toolFilePath)
 	if err != nil {
-		return err
+		return
 	}
 	defer f.Close()
 
 	// 执行模板，将内容写入文件
 	err = files.Execute(f, info)
 	if err != nil {
-		return err
+		return
 	}
 
 	return

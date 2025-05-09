@@ -24,11 +24,11 @@ func (a *AutoCodeTemplateApi) MCP(c *gin.Context) {
 		return
 	}
 
-	err = autoCodeTemplateService.CreateMcp(c.Request.Context(), info)
+	toolFilePath, err := autoCodeTemplateService.CreateMcp(c.Request.Context(), info)
 	if err != nil {
 		response.FailWithMessage("创建失败", c)
 		global.GVA_LOG.Error(err.Error())
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithMessage("创建成功,MCP Tool路径:"+toolFilePath, c)
 }

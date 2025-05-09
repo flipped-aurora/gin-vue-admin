@@ -138,13 +138,10 @@ function submit() {
         return
       }
     }
-    try {
-      await mcp(form)
-      ElMessage.success('提交成功')
-      // 可根据需要清空表单或跳转
-    } catch (e) {
-      ElMessage.error('提交失败')
-    }
+      const res = await mcp(form)
+      if (res.code === 0) {
+        ElMessage.success(res.msg)
+      }
   })
 }
 </script>

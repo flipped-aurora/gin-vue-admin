@@ -25,27 +25,46 @@ func (t *GetNickname) New() mcp.Tool {
 		))
 }
 
-// 根据用户username获取nickname
+// Handle 处理获取昵称的请求
 func (t *GetNickname) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	name, ok := request.Params.Arguments["username"].(string)
+	// 1. 参数验证
+	username, ok := request.Params.Arguments["username"].(string)
 	if !ok {
-		return nil, errors.New("name must be a string")
+		return nil, errors.New("参数错误：username必须是字符串类型")
 	}
 
-	var user system.SysUser
+	if username == "" {
+		return nil, errors.New("参数错误：username不能为空")
+	}
 
-	err := global.GVA_DB.First(&user, "username = ?", name).Error
+	// 2. 记录操作日志
+	global.GVA_LOG.Info("getNickname工具被调用", "username", username)
 
+	// 3. 优化查询，只选择需要的字段
+	var user struct {
+		NickName string
+	}
+
+	err := global.GVA_DB.Model(&system.SysUser{}).
+		Select("nick_name").
+		Where("username = ?", username).
+		First(&user).Error
+
+	// 4. 优化错误处理
 	if err != nil {
-		return nil, err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("用户不存在")
+		}
+		global.GVA_LOG.Error("数据库查询错误", "error", err)
+		return nil, errors.New("系统错误，请稍后再试")
 	}
 
-	//构造回复信息
+	// 构造回复信息
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{
 			mcp.TextContent{
 				Type: "text",
-				Text: fmt.Sprintf("%s的昵称是%s", name, user.NickName),
+				Text: fmt.Sprintf("用户 %s 的昵称是 %s", username, user.NickName),
 			},
 		},
 	}, nil

@@ -7,6 +7,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/mark3labs/mcp-go/mcp"
+	"gorm.io/gorm"
 )
 
 func init() {
@@ -38,7 +39,7 @@ func (t *GetNickname) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	// 2. 记录操作日志
-	global.GVA_LOG.Info("getNickname工具被调用", "username", username)
+	global.GVA_LOG.Info("getNickname工具被调用")
 
 	// 3. 优化查询，只选择需要的字段
 	var user struct {
@@ -55,7 +56,7 @@ func (t *GetNickname) Handle(ctx context.Context, request mcp.CallToolRequest) (
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("用户不存在")
 		}
-		global.GVA_LOG.Error("数据库查询错误", "error", err)
+		global.GVA_LOG.Error("数据库查询错误")
 		return nil, errors.New("系统错误，请稍后再试")
 	}
 

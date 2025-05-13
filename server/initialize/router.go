@@ -40,6 +40,17 @@ func Routers() *gin.Engine {
 		Router.Use(gin.Logger())
 	}
 
+	sseServer := McpRun()
+
+	// 注册mcp服务
+	Router.GET(global.GVA_CONFIG.MCP.SSEPath, func(c *gin.Context) {
+		sseServer.SSEHandler().ServeHTTP(c.Writer, c.Request)
+	})
+
+	Router.POST(global.GVA_CONFIG.MCP.MessagePath, func(c *gin.Context) {
+		sseServer.MessageHandler().ServeHTTP(c.Writer, c.Request)
+	})
+
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的

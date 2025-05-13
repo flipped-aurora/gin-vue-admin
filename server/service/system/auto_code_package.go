@@ -233,6 +233,9 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 			if entries[i].Name() == "preview" {
 				continue
 			} // preview 为预览代码生成器的代码
+			if entries[i].Name() == "mcp" {
+				continue
+			} // preview 为mcp生成器的代码
 			templates = append(templates, entries[i].Name())
 		}
 	}

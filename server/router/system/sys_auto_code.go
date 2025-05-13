@@ -20,6 +20,9 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 		autoCodeRouter.POST("addFunc", autoCodeTemplateApi.AddFunc)   // 为代码插入方法
 	}
 	{
+		autoCodeRouter.POST("mcp", autoCodeTemplateApi.MCP) // 自动创建Mcp Tool模板
+	}
+	{
 		autoCodeRouter.POST("getPackage", autoCodePackageApi.All)       // 获取package包
 		autoCodeRouter.POST("delPackage", autoCodePackageApi.Delete)    // 删除package包
 		autoCodeRouter.POST("createPackage", autoCodePackageApi.Create) // 创建package包

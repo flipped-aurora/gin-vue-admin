@@ -275,3 +275,9 @@ cors:
           allow-methods: GET, POST
           expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
           allow-credentials: true # 布尔值
+mcp:
+    name: GVA_MCP
+    version: v1.0.0
+    sse_path: /sse
+    message_path: /message
+    url_prefix: ''

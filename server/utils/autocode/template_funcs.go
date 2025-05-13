@@ -11,6 +11,7 @@ import (
 // GetTemplateFuncMap 返回模板函数映射，用于在模板中使用
 func GetTemplateFuncMap() template.FuncMap {
 	return template.FuncMap{
+		"title":                    strings.Title,
 		"GenerateField":            GenerateField,
 		"GenerateSearchField":      GenerateSearchField,
 		"GenerateSearchConditions": GenerateSearchConditions,

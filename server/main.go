@@ -21,13 +21,22 @@ import (
 // @Tag.Description 用户
 
 // @title                       Gin-Vue-Admin Swagger API接口文档
-// @version                     v2.8.1
+// @version                     v2.8.2
 // @description                 使用gin+vue进行极速开发的全栈开发基础平台
 // @securityDefinitions.apikey  ApiKeyAuth
 // @in                          header
 // @name                        x-token
 // @BasePath                    /
 func main() {
+	// 初始化系统
+	initializeSystem()
+	// 运行服务器
+	core.RunServer()
+}
+
+// initializeSystem 初始化系统所有组件
+// 提取为单独函数以便于系统重载时调用
+func initializeSystem() {
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
 	global.GVA_LOG = core.Zap() // 初始化zap日志库
@@ -35,11 +44,9 @@ func main() {
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	initialize.Timer()
 	initialize.DBList()
+	initialize.SetupHandlers() // 注册全局函数
+	initialize.McpRun()
 	if global.GVA_DB != nil {
 		initialize.RegisterTables() // 初始化表
-		// 程序结束前关闭数据库链接
-		db, _ := global.GVA_DB.DB()
-		defer db.Close()
 	}
-	core.RunWindowsServer()
 }

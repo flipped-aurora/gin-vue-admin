@@ -215,3 +215,21 @@ export const mcp = (data) => {
     data
   })
 }
+
+
+export const mcpList = (data) => {
+  return service({
+    url: '/autoCode/mcpList',
+    method: 'post',
+    data
+  })
+}
+
+
+export const mcpTest = (data) => {
+  return service({
+    url: '/autoCode/mcpTest',
+    method: 'post',
+    data
+  })
+}

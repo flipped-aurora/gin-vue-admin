@@ -31,15 +31,15 @@ func (t *GetNickname) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	// 1. 参数验证
 	username, ok := request.Params.Arguments["username"].(string)
 	if !ok {
-		return nil, errors.New("参数错误：username必须是字符串类型")
+		return nil, errors.New("参数错误：username 必须是字符串类型")
 	}
 
 	if username == "" {
-		return nil, errors.New("参数错误：username不能为空")
+		return nil, errors.New("参数错误：username 不能为空")
 	}
 
 	// 2. 记录操作日志
-	global.GVA_LOG.Info("getNickname工具被调用")
+	global.GVA_LOG.Info("getNickname 工具被调用")
 
 	// 3. 优化查询，只选择需要的字段
 	var user struct {
@@ -54,7 +54,14 @@ func (t *GetNickname) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	// 4. 优化错误处理
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("用户不存在")
+			return &mcp.CallToolResult{
+				Content: []mcp.Content{
+					mcp.TextContent{
+						Type: "text",
+						Text: fmt.Sprintf("用户 %s 不存在", username),
+					},
+				},
+			}, nil
 		}
 		global.GVA_LOG.Error("数据库查询错误")
 		return nil, errors.New("系统错误，请稍后再试")

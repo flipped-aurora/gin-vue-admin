@@ -118,6 +118,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/installPlugin", Description: "安装插件"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/pubPlug", Description: "打包插件"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcp", Description: "自动生成 MCP Tool 模板"},
+		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpTest", Description: "MCP Tool 测试"},
+		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpList", Description: "获取 MCP ToolList"},
 
 		{ApiGroup: "模板配置", Method: "POST", Path: "/autoCode/createPackage", Description: "配置模板"},
 		{ApiGroup: "模板配置", Method: "GET", Path: "/autoCode/getTemplates", Description: "获取模板文件"},

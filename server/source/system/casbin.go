@@ -131,6 +131,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/pubPlug", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/addFunc", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/mcp", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/mcpTest", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/mcpList", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},

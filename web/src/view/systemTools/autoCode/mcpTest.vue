@@ -1,17 +1,20 @@
 <template>
-  <div class="p-5">
+  <div class="p-2">
 
-    <el-card class="mt-5">
+    <el-card class="mb-2">
       <template #header>
         <div class="flex justify-between items-center font-bold">
           <span>MCP 服务器配置示例</span>
+          <el-tooltip content="复制配置" placement="top">
+            <el-button :icon="DocumentCopy" circle @click="copyMcpConfig" />
+          </el-tooltip>
         </div>
       </template>
       <pre class="font-mono whitespace-pre-wrap break-words bg-gray-100 p-2.5 rounded text-gray-700">{{ mcpServerConfig }}</pre>
     </el-card>
 
     
-    <el-row :gutter="20">
+    <el-row :gutter="8">
       <el-col v-for="tool in mcpTools" :key="tool.name" :xs="24" :sm="12" :md="8" :lg="6">
         <el-card class="mb-5 h-[150px] flex flex-col overflow-hidden">
           <template #header>
@@ -110,7 +113,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { VideoPlay } from '@element-plus/icons-vue'
+import { VideoPlay, DocumentCopy } from '@element-plus/icons-vue' // Added DocumentCopy
 import { mcpList, mcpTest } from '@/api/autoCode'
 
 const mcpTools = ref([])
@@ -141,6 +144,15 @@ const fetchMcpTools = async () => {
 onMounted(() => {
   fetchMcpTools()
 })
+
+const copyMcpConfig = async () => {
+  try {
+    await navigator.clipboard.writeText(mcpServerConfig.value)
+    ElMessage.success('配置已复制到剪贴板')
+  } catch (err) {
+    ElMessage.error('复制失败: ' + err)
+  }
+}
 
 const openTestDialog = (tool) => {
   currentTestingTool.value = tool

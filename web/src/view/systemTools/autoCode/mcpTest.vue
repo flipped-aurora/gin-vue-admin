@@ -15,8 +15,8 @@
 
     
     <el-row :gutter="8">
-      <el-col v-for="tool in mcpTools" :key="tool.name" :xs="24" :sm="12" :md="8" :lg="6">
-        <el-card class="mb-5 h-[150px] flex flex-col overflow-hidden">
+      <el-col v-for="tool in mcpTools" :key="tool.name" :xs="24" :sm="12" :md="12" :lg="8">
+        <el-card class="mb-5 min-h-[150px] flex flex-col overflow-hidden">
           <template #header>
             <div class="flex justify-between items-center font-bold">
               <span>{{ tool.name }}</span>
@@ -25,7 +25,30 @@
               </el-tooltip>
             </div>
           </template>
-          <div class="text-sm">{{ tool.description }}</div>
+          <div class="text-sm mb-1">{{ tool.description }}</div>
+          <div v-if="tool.inputSchema && tool.inputSchema.properties && Object.keys(tool.inputSchema.properties).length > 0" class="mt-1 text-xs overflow-y-auto max-h-[100px] p-2 border-t border-gray-200 bg-gray-50 rounded-b">
+            <p class="font-semibold mb-1 text-gray-700 flex items-center">
+              <span class="mr-1 my-2">参数列表</span>
+              <span class="text-xs text-gray-500">({{ Object.keys(tool.inputSchema.properties).length }})</span>
+            </p>
+            <div class="space-y-2">
+              <div v-for="(propDetails, propName) in tool.inputSchema.properties" :key="propName" class="flex flex-col p-1.5 bg-white rounded border border-gray-100 hover:border-gray-300 transition-colors">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <span class="font-medium text-gray-800">{{ propName }}</span>
+                    <span v-if="tool.inputSchema.required && tool.inputSchema.required.includes(propName)" class="ml-1 text-red-500 text-xs">*</span>
+                  </div>
+                  <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded">{{ propDetails.type }}</span>
+                </div>
+                <div class="text-gray-500 mt-0.5 text-xs line-clamp-2" :title="propDetails.description || '无描述'">
+                  {{ propDetails.description || '无描述' }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="mt-1 text-xs p-2 border-t border-gray-200 bg-gray-50 rounded-b flex items-center justify-center">
+            <span class="text-gray-500 italic py-3">无输入参数</span>
+          </div>
         </el-card>
       </el-col>
     </el-row>

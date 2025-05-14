@@ -60,7 +60,18 @@ func (a *AutoCodeTemplateApi) MCPList(c *gin.Context) {
 		global.GVA_LOG.Error(err.Error())
 		return
 	}
-	response.OkWithData(list, c)
+
+	mcpServerConfig := map[string]interface{}{
+		"mcpServers": map[string]interface{}{
+			global.GVA_CONFIG.MCP.Name: map[string]string{
+				"url": baseUrl,
+			},
+		},
+	}
+	response.OkWithData(gin.H{
+		"mcpServerConfig": mcpServerConfig,
+		"list":            list,
+	}, c)
 }
 
 // Create

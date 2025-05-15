@@ -96,7 +96,7 @@ getDataSourceFunc()
   <div>
   {{- if not .IsTree }}
     <div class="gva-search-box">
-      <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
+      <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
       <el-form-item label="创建日期" prop="createdAtRange">
       <template #label>
@@ -377,18 +377,6 @@ const rule = reactive({
             {{- end }}
         {{- end }}
     {{- end }}
-})
-
-const searchRule = reactive({
-  createdAtRange: [
-    { validator: (rule, value, callback) => {
-      if (!searchInfo.value.createdAtRange || searchInfo.value.createdAtRange.length < 2) {
-        callback(new Error('请选择开始日期和结束日期'))
-      } else {
-        callback()
-      }
-    }, trigger: 'change' }
-  ]
 })
 
 const elFormRef = ref()

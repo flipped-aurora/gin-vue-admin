@@ -14,15 +14,14 @@ package request
 {{- if not .OnlyTemplate}}
 import (
 	"{{.Module}}/model/common/request"
-	{{ if or .HasSearchTimer .GvaModel}}"time"{{ end }}
+	{{ if .HasSearchTimer}}"time"{{ end }}
 )
 {{- end}}
 type {{.StructName}}Search struct{
 {{- if not .OnlyTemplate}}
 
 {{- if .GvaModel }}
-    StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
-    EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+    CreatedAtRange []string `json:"createdAtRange" form:"createdAtRange[]"`
 {{- end }}
 {{- range .Fields}}
     {{- if ne .FieldSearchType ""}}

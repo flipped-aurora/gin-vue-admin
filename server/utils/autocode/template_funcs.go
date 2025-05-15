@@ -135,13 +135,20 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 			}
 
 		} else if field.FieldSearchType == "BETWEEN" || field.FieldSearchType == "NOT BETWEEN" {
-			condition = fmt.Sprintf(`
-    if info.Start%s != nil && info.End%s != nil {
-        db = db.Where("%s %s ? AND ? ", info.Start%s, info.End%s)
-    }`,
-				field.FieldName, field.FieldName, field.ColumnName,
-				field.FieldSearchType, field.FieldName, field.FieldName)
-
+			if field.FieldType == "time.Time" {
+				condition = fmt.Sprintf(`
+	if info.%sRange != nil && len(info.%sRange) == 2 {
+		db = db.Where("%s %s ? AND ? ", info.%sRange[0], info.%sRange[1])
+	}`,
+					field.FieldName, field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName, field.FieldName)
+			} else {
+				condition = fmt.Sprintf(`
+	if info.Start%s != nil && info.End%s != nil {
+		db = db.Where("%s %s ? AND ? ", *info.Start%s, *info.End%s)
+	}`,
+					field.FieldName, field.FieldName, field.ColumnName,
+					field.FieldSearchType, field.FieldName, field.FieldName)
+			}
 		} else {
 			nullCheck := "info." + field.FieldName + " != nil"
 			if field.FieldType == "string" {
@@ -215,11 +222,11 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 `
 	} else if field.FieldType == "float64" || field.FieldType == "int" {
 		if field.FieldSearchType == "BETWEEN" || field.FieldSearchType == "NOT BETWEEN" {
-			result += fmt.Sprintf(`  <el-input v-model.number="searchInfo.start%s" placeholder="最小值" />
+			result += fmt.Sprintf(`  <el-input class="w-40" v-model.number="searchInfo.start%s" placeholder="最小值" />
 `, field.FieldName)
 			result += `  —
 `
-			result += fmt.Sprintf(`  <el-input v-model.number="searchInfo.end%s" placeholder="最大值" />
+			result += fmt.Sprintf(`  <el-input class="w-40" v-model.number="searchInfo.end%s" placeholder="最大值" />
 `, field.FieldName)
 		} else {
 			result += fmt.Sprintf(`  <el-input v-model.number="searchInfo.%s" placeholder="搜索条件" />
@@ -243,20 +250,9 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 `
 			result += `  </template>
 `
-			result += fmt.Sprintf(`  <el-date-picker v-model="searchInfo.start%s" type="datetime" placeholder="开始日期" `+
-				`:disabled-date="time=> searchInfo.end%s ? time.getTime() > searchInfo.end%s.getTime() : false"></el-date-picker>
-`,
-				field.FieldName, field.FieldName, field.FieldName)
-			result += `  —
-`
-			result += fmt.Sprintf(`  <el-date-picker v-model="searchInfo.end%s" type="datetime" placeholder="结束日期" `+
-				`:disabled-date="time=> searchInfo.start%s ? time.getTime() < searchInfo.start%s.getTime() : false"></el-date-picker>
-`,
-				field.FieldName, field.FieldName, field.FieldName)
+			result += fmt.Sprintf(`<el-date-picker class="w-[380px]" v-model="searchInfo.%sRange" type="datetimerange" range-separator="至"  start-placeholder="开始时间" end-placeholder="结束时间"></el-date-picker>`, field.FieldJson)
 		} else {
-			result += fmt.Sprintf(`  <el-date-picker v-model="searchInfo.%s" type="datetime" placeholder="搜索条件"></el-date-picker>
-`,
-				field.FieldJson)
+			result += fmt.Sprintf(`<el-date-picker v-model="searchInfo.%s" type="datetime" placeholder="搜索条件"></el-date-picker>`, field.FieldJson)
 		}
 	} else {
 		result += fmt.Sprintf(`  <el-input v-model="searchInfo.%s" placeholder="搜索条件" />
@@ -679,11 +675,17 @@ func GenerateSearchField(field systemReq.AutoCodeField) string {
 
 	if field.FieldSearchType == "BETWEEN" || field.FieldSearchType == "NOT BETWEEN" {
 		// 生成范围搜索字段
-		startField := fmt.Sprintf("Start%s  *%s  `json:\"start%s\" form:\"start%s\"`",
-			field.FieldName, field.FieldType, field.FieldName, field.FieldName)
-		endField := fmt.Sprintf("End%s  *%s  `json:\"end%s\" form:\"end%s\"`",
-			field.FieldName, field.FieldType, field.FieldName, field.FieldName)
-		result = startField + "\n" + endField
+		// time 的情况
+		if field.FieldType == "time.Time" {
+			result = fmt.Sprintf("%sRange  []string  `json:\"%sRange\" form:\"%sRange[]\"`",
+				field.FieldName, field.FieldJson, field.FieldJson)
+		} else {
+			startField := fmt.Sprintf("Start%s  *%s  `json:\"start%s\" form:\"start%s\"`",
+				field.FieldName, field.FieldType, field.FieldName, field.FieldName)
+			endField := fmt.Sprintf("End%s  *%s  `json:\"end%s\" form:\"end%s\"`",
+				field.FieldName, field.FieldType, field.FieldName, field.FieldName)
+			result = startField + "\n" + endField
+		}
 	} else {
 		// 生成普通搜索字段
 		if field.FieldType == "enum" || field.FieldType == "picture" ||

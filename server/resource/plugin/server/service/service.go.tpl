@@ -155,7 +155,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
     var {{.Abbreviation}}s []model.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
 {{- if .GvaModel }}
-    if info.CreatedAtRange !=nil && len(info.CreatedAtRange) == 2 {
+    if len(info.CreatedAtRange) == 2 {
      db = db.Where("created_at BETWEEN ? AND ?", info.CreatedAtRange[0], info.CreatedAtRange[1])
     }
 {{- end }}

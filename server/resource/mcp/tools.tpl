@@ -17,7 +17,7 @@ func (t *{{.Name | title}}) Handle(ctx context.Context, request mcp.CallToolRequ
 	// TODO: 实现工具逻辑
 	// 参数示例:
 	// {{- range .Params}}
-	// {{.Name}} := request.Params["{{.Name}}"]
+	// {{.Name}} := request.Params.Arguments["{{.Name}}"]
 	// {{- end}}
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{

@@ -2,9 +2,27 @@
   <div>
     <selectComponent :rounded="rounded" v-if="!props.multiple" :model="model" @chooseItem="openChooseImg" @deleteItem="openChooseImg" />
     <div v-else class="w-full gap-4 flex flex-wrap">
-      <selectComponent :rounded="rounded" v-for="(item, index) in model" :key="index" :model="item" @chooseItem="openChooseImg"
-                       @deleteItem="deleteImg(index)"
-      />
+      <draggable 
+        v-model="model" 
+        class="flex flex-wrap gap-4" 
+        item-key="url" 
+        ghost-class="ghost-item" 
+        handle=".drag-handle"
+        animation="300"
+        @start="onDragStart"
+        @end="onDragEnd"
+      >
+        <template #item="{element, index}">
+          <div class="relative group">
+            <div class="drag-handle absolute left-2 top-2 w-8 h-8 flex items-center justify-center cursor-move z-10 opacity-0 group-hover:opacity-100 rounded-full">
+              <el-icon :size="18"><Menu /></el-icon>
+            </div>
+            <selectComponent :rounded="rounded" :model="element" @chooseItem="openChooseImg"
+                           @deleteItem="deleteImg(index)"
+            />
+          </div>
+        </template>
+      </draggable>
       <selectComponent :rounded="rounded" v-if="model?.length < props.maxUpdateCount || props.maxUpdateCount === 0"
                        @chooseItem="openChooseImg" @deleteItem="openChooseImg"
       />
@@ -140,6 +158,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   ArrowLeftBold,
   CloseBold,
+  Menu,
   MoreFilled,
   Picture as IconPicture,
   Plus,
@@ -149,6 +168,7 @@ import selectComponent from '@/components/selectImage/selectComponent.vue'
 import { addCategory, deleteCategory, getCategoryList } from '@/api/attachmentCategory'
 import CropperImage from "@/components/upload/cropper.vue";
 import QRCodeUpload from "@/components/upload/QR-code.vue";
+import draggable from 'vuedraggable'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -424,6 +444,20 @@ const useSelectedImages = () => {
   selectedImages.value = []
 }
 
+const onDragStart = () => {
+  // 拖拽开始时的处理
+  document.body.style.cursor = 'grabbing'
+}
+
+const onDragEnd = () => {
+  // 拖拽结束时的处理
+  document.body.style.cursor = 'default'
+  // 确保model是数组类型
+  if (!Array.isArray(model.value)) {
+    model.value = []
+  }
+}
+
 </script>
 <style scoped>
 .selected {
@@ -449,5 +483,21 @@ const useSelectedImages = () => {
   border-top-color: transparent;
   border-left-color: transparent;
   transform: rotate(45deg);
+}
+
+.ghost-item {
+  opacity: 0.5;
+  background: #c8ebfb;
+  border: 1px dashed #409eff;
+}
+
+.drag-handle {
+  background-color: rgba(64, 158, 255, 0.1);
+  border-radius: 4px;
+  transition: opacity 0.3s;
+}
+
+.drag-handle:hover {
+  background-color: rgba(64, 158, 255, 0.2);
 }
 </style>

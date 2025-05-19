@@ -112,7 +112,7 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 
 		var condition string
 
-		if slices.Contains([]string{"enum", "pictures", "picture", "video", "json", "array"}, field.FieldType) {
+		if slices.Contains([]string{"enum", "pictures", "picture", "video", "json", "richtext", "array"}, field.FieldType) {
 			if field.FieldType == "enum" {
 				if field.FieldSearchType == "LIKE" {
 					condition = fmt.Sprintf(`
@@ -140,7 +140,7 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 			if len(info.%sRange) == 2 {
 				db = db.Where("%s %s ? AND ? ", info.%sRange[0], info.%sRange[1])
 			}`,
-					field.FieldName, field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName, field.FieldName)
+					field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName, field.FieldName)
 			} else {
 				condition = fmt.Sprintf(`
 	if info.Start%s != nil && info.End%s != nil {

@@ -128,9 +128,12 @@ export const useUserStore = defineStore('user', () => {
   /* 清理数据 */
   const ClearStorage = async () => {
     token.value = ''
-    xToken.value = ''
+    // 使用remove方法正确删除cookie
+    xToken.remove()
     sessionStorage.clear()
+    // 清理所有相关的localStorage项
     localStorage.removeItem('originSetting')
+    localStorage.removeItem('token')
   }
 
   return {

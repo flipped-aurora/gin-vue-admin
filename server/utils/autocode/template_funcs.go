@@ -140,7 +140,7 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 			if len(info.%sRange) == 2 {
 				db = db.Where("%s %s ? AND ? ", info.%sRange[0], info.%sRange[1])
 			}`,
-					field.FieldName, field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName, field.FieldName)
+					field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName, field.FieldName)
 			} else {
 				condition = fmt.Sprintf(`
 	if info.Start%s != nil && info.End%s != nil {
@@ -690,7 +690,7 @@ func GenerateSearchField(field systemReq.AutoCodeField) string {
 		// 生成普通搜索字段
 		if field.FieldType == "enum" || field.FieldType == "picture" ||
 			field.FieldType == "pictures" || field.FieldType == "video" ||
-			field.FieldType == "json" || field.FieldType == "richtext" || field.FieldType == "array" {
+			field.FieldType == "json" || field.FieldType == "array" {
 			result = fmt.Sprintf("%s  string `json:\"%s\" form:\"%s\"` ",
 				field.FieldName, field.FieldJson, field.FieldJson)
 		} else {

@@ -128,6 +128,11 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 // ExportExcel 导出Excel
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
+	var params = values.Get("params")
+	paramsValues, err := url.ParseQuery(params)
+	if err != nil {
+		return nil, "", fmt.Errorf("解析 params 参数失败: %v", err)
+	}
 	var template system.SysExportTemplate
 	err = global.GVA_DB.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
@@ -178,7 +183,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	filterDeleted := false
 
-	filterParam := values.Get("filterDeleted")
+	filterParam := paramsValues.Get("filterDeleted")
 	if filterParam == "true" {
 		filterDeleted = true
 	}
@@ -202,7 +207,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	if len(template.Conditions) > 0 {
 		for _, condition := range template.Conditions {
 			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
-			value := values.Get(condition.From)
+			value := paramsValues.Get(condition.From)
 			if value != "" {
 				if condition.Operator == "LIKE" {
 					value = "%" + value + "%"
@@ -212,7 +217,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		}
 	}
 	// 通过参数传入limit
-	limit := values.Get("limit")
+	limit := paramsValues.Get("limit")
 	if limit != "" {
 		l, e := strconv.Atoi(limit)
 		if e == nil {
@@ -225,7 +230,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 
 	// 通过参数传入offset
-	offset := values.Get("offset")
+	offset := paramsValues.Get("offset")
 	if offset != "" {
 		o, e := strconv.Atoi(offset)
 		if e == nil {
@@ -248,7 +253,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 
 	// 通过参数传入order
-	order := values.Get("order")
+	order := paramsValues.Get("order")
 
 	if order == "" && template.Order != "" {
 		// 如果没有order入参，这里会使用模板的默认排序
@@ -429,7 +434,7 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 		for _, row := range values {
 			var item = make(map[string]interface{})
 			for ii, value := range row {
-			    if _, ok := titleKeyMap[excelTitle[ii]]; !ok {
+				if _, ok := titleKeyMap[excelTitle[ii]]; !ok {
 					continue // excel中多余的标题，在模板信息中没有对应的字段，因此key为空，必须跳过
 				}
 				key := titleKeyMap[excelTitle[ii]]

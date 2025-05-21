@@ -509,7 +509,15 @@ JOINS模式下不支持导入
     {
       label: 'NOT BETWEEN',
       value: 'NOT BETWEEN'
-    }
+    },
+    {
+      label: 'IN',
+      value: 'IN'
+    },
+    {
+      label: 'NOT IN',
+      value: 'NOT IN'
+    },
   ])
 
   const addCondition = () => {

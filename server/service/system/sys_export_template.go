@@ -208,6 +208,11 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		for _, condition := range template.Conditions {
 			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
 			value := paramsValues.Get(condition.From)
+
+			if condition.Operator == "IN" || condition.Operator == "NOT IN" {
+				sql = fmt.Sprintf("%s %s (?)", condition.Column, condition.Operator)
+			}
+
 			if value != "" {
 				if condition.Operator == "LIKE" {
 					value = "%" + value + "%"

@@ -19,7 +19,7 @@ type CurrentTime struct {
 func (t *CurrentTime) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	// 获取当前系统时间
 
-	timezone, ok := request.Params.Arguments["timezone"].(string)
+	timezone, ok := request.GetArguments()["timezone"].(string)
 
 	if !ok {
 		return nil, errors.New("参数错误：timezone 必须是字符串类型")

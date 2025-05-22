@@ -29,7 +29,7 @@ func (t *GetNickname) New() mcp.Tool {
 // Handle 处理获取昵称的请求
 func (t *GetNickname) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	// 1. 参数验证
-	username, ok := request.Params.Arguments["username"].(string)
+	username, ok := request.GetArguments()["username"].(string)
 	if !ok {
 		return nil, errors.New("参数错误：username 必须是字符串类型")
 	}

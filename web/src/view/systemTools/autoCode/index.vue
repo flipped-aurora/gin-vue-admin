@@ -1566,6 +1566,7 @@
 
   const catchData = () => {
     window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
+    ElMessage.success('暂存成功')
   }
 
   const getCatch = () => {

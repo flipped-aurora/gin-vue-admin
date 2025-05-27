@@ -26,6 +26,7 @@ const (
 	InitOrderSystem   = 10
 	InitOrderInternal = 1000
 	InitOrderExternal = 100000
+	InitOrderGeo      = 1000000
 )
 
 var (
@@ -111,6 +112,9 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) (err error) {
 	case "mssql":
 		initHandler = NewMssqlInitHandler()
 		ctx = context.WithValue(ctx, "dbtype", "mssql")
+	case "oracle":
+		initHandler = NewOracleInitHandler()
+		ctx = context.WithValue(ctx, "dbtype", "oracle")
 	default:
 		initHandler = NewMysqlInitHandler()
 		ctx = context.WithValue(ctx, "dbtype", "mysql")

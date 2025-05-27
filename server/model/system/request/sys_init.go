@@ -53,6 +53,11 @@ func (i *InitDB) MssqlEmptyDsn() string {
 	return "sqlserver://" + i.UserName + ":" + i.Password + "@" + i.Host + ":" + i.Port + "?database=" + i.DBName + "&encrypt=disable"
 }
 
+func (i *InitDB) OracleEmptyDsn() string {
+	// Oracle DSN 格式: username/password@host:port/sid
+	return i.UserName + "/" + i.Password + "@" + i.Host + ":" + i.Port + "/" + i.DBName
+}
+
 // ToMysqlConfig 转换 config.Mysql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToMysqlConfig() config.Mysql {
@@ -119,6 +124,22 @@ func (i *InitDB) ToMssqlConfig() config.Mssql {
 			MaxOpenConns: 100,
 			LogMode:      "error",
 			Config:       "",
+		},
+	}
+}
+
+func (i *InitDB) ToOracleConfig() config.Oracle {
+	return config.Oracle{
+		GeneralDB: config.GeneralDB{
+			Path:         i.Host,
+			Port:         i.Port,
+			Dbname:       i.DBName,
+			Username:     i.UserName,
+			Password:     i.Password,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogMode:      "error",
+			Config:       "charset=utf8mb4&parseTime=True&loc=Local",
 		},
 	}
 }

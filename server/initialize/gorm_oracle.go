@@ -5,7 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
-
+	// github.com/sijms/go-ora/v2
 	//_ "github.com/godror/godror"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

@@ -315,7 +315,14 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 	for i, row := range rows {
 		for j, colCell := range row {
-			sErr := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", getColumnName(j+1), i+1), colCell)
+
+			var sErr error
+			if v, err := strconv.ParseFloat(colCell, 64); err == nil {
+				sErr = f.SetCellValue("Sheet1", cell, v)
+			} else {
+				sErr = f.SetCellValue("Sheet1", cell, colCell)
+			}
+
 			if sErr != nil {
 				return nil, "", sErr
 			}

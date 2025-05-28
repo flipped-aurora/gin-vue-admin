@@ -130,7 +130,7 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 			} else {
 				condition = fmt.Sprintf(`
     if info.%s != "" {
-        // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
+        // TODO 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
     }`, field.FieldName)
 			}
 

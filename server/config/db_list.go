@@ -1,8 +1,9 @@
 package config
 
 import (
-	"gorm.io/gorm/logger"
 	"strings"
+
+	"gorm.io/gorm/logger"
 )
 
 type DsnProvider interface {
@@ -31,13 +32,13 @@ type GeneralDB struct {
 
 func (c GeneralDB) LogLevel() logger.LogLevel {
 	switch strings.ToLower(c.LogMode) {
-	case "silent", "Silent":
+	case "silent":
 		return logger.Silent
-	case "error", "Error":
+	case "error":
 		return logger.Error
-	case "warn", "Warn":
+	case "warn":
 		return logger.Warn
-	case "info", "Info":
+	case "info":
 		return logger.Info
 	default:
 		return logger.Info

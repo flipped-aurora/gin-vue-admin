@@ -14,6 +14,7 @@
 		global.GVA_CONFIG.Email.Nickname,
 		global.GVA_CONFIG.Email.Port,
 		global.GVA_CONFIG.Email.IsSSL,
+		global.GVA_CONFIG.Email.IsLoginAuth,
 		))
 
     同样也可以再传入时写死
@@ -26,6 +27,7 @@
     "登录密钥",
     465,
     true,
+    true,
     ))
 
 ### 2. 配置说明
@@ -34,13 +36,14 @@
     //其中 Form 和 Secret 通常来说就是用户名和密码
 
     type Email struct {
-	    To       string  // 收件人:多个以英文逗号分隔 例：a@qq.com b@qq.com 正式开发中请把此项目作为参数使用 此处配置主要用于发送错误监控邮件
-	    From     string  // 发件人  你自己要发邮件的邮箱
-	    Host     string  // 服务器地址 例如 smtp.qq.com  请前往QQ或者你要发邮件的邮箱查看其smtp协议
-	    Secret   string  // 密钥    用于登录的密钥 最好不要用邮箱密码 去邮箱smtp申请一个用于登录的密钥
-	    Nickname string  // 昵称    发件人昵称 自定义即可 可以不填
-	    Port     int     // 端口     请前往QQ或者你要发邮件的邮箱查看其smtp协议 大多为 465
-	    IsSSL    bool    // 是否SSL   是否开启SSL
+	    To          string  // 收件人:多个以英文逗号分隔 例：a@qq.com b@qq.com 正式开发中请把此项目作为参数使用 此处配置主要用于发送错误监控邮件
+	    From        string  // 发件人  你自己要发邮件的邮箱
+	    Host        string  // 服务器地址 例如 smtp.qq.com  请前往QQ或者你要发邮件的邮箱查看其smtp协议
+	    Secret      string  // 密钥    用于登录的密钥 最好不要用邮箱密码 去邮箱smtp申请一个用于登录的密钥
+	    Nickname    string  // 昵称    发件人昵称 自定义即可 可以不填
+	    Port        int     // 端口     请前往QQ或者你要发邮件的邮箱查看其smtp协议 大多为 465
+	    IsSSL       bool    // 是否SSL   是否开启SSL
+	    IsLoginAuth bool    // 是否LoginAuth   是否使用LoginAuth认证方式（适用于IBM、微软邮箱服务器等）
     }
 #### 2-2 入参结构说明
     //其中 Form 和 Secret 通常来说就是用户名和密码

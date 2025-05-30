@@ -202,6 +202,9 @@
           <el-form-item label="是否为ssl">
             <el-switch v-model="config.email['is-ssl']" />
           </el-form-item>
+          <el-form-item label="是否LoginAuth认证">
+            <el-switch v-model="config.email['is-loginauth']" />
+          </el-form-item>
           <el-form-item label="secret">
             <el-input
               v-model.trim="config.email.secret"

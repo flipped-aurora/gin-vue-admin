@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-solid border-gray-100 h-full">
+  <div class="border border-solid border-gray-100 h-full z-10">
     <Toolbar
       :editor="editorRef"
       :default-config="toolbarConfig"
@@ -83,4 +83,6 @@
   )
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+</style>

@@ -195,7 +195,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSou
 	   {{$key}} := make([]map[string]any, 0)
 	   {{ $dataDB := "" }}
 	   {{- if eq $value.DBName "" }}
-       {{ $dataDB = $db }}
+       {{ $dataDB = "global.GVA_DB" }}
        {{- else}}
        {{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
        {{- end}}

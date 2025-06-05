@@ -307,6 +307,7 @@
               </template>
               <el-select
                 v-model="form.businessDB"
+                clearable
                 placeholder="选择业务库"
                 class="w-full"
               >

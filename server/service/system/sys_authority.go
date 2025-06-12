@@ -326,5 +326,8 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 func (authorityService *AuthorityService) GetParentAuthorityID(authorityID uint) (parentID uint, err error) {
 	var authority system.SysAuthority
 	err = global.GVA_DB.Where("authority_id = ?", authorityID).First(&authority).Error
-	return *authority.ParentId, err
+	if err != nil {
+		return
+	}
+	return *authority.ParentId, nil
 }

@@ -25,7 +25,7 @@
     "chokidar": "^4.0.0",
     "core-js": "^3.38.1",
     "echarts": "5.5.1",
-    "element-plus": "^2.8.5",
+    "element-plus": "^2.10.2",
     "highlight.js": "^11.10.0",
     "install": "^0.13.0",
     "marked": "14.1.1",

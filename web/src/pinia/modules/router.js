@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import i18n from '@/i18n' // added by mohamed hassan to multilangauge
 import pathInfo from '@/pathInfo.json'
+import {useRoute} from "vue-router";
 
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
@@ -59,6 +60,9 @@ export const useRouterStore = defineStore('router', () => {
     })
     keepAliveRouters.value = Array.from(new Set(keepArrTemp))
   }
+
+  const route = useRoute()
+
   emitter.on('setKeepAlive', setKeepAliveRouters)
 
   const asyncRouters = ref([])
@@ -81,14 +85,32 @@ export const useRouterStore = defineStore('router', () => {
     return menuMap[name]?.children
   }
 
+  const findTopActive = (menuMap, routeName) => {
+    for (let topName in menuMap) {
+      const topItem = menuMap[topName];
+      if (topItem.children?.some(item => item.name === routeName)) {
+        return topName;
+      }
+      const foundName = findTopActive(topItem.children || {}, routeName);
+      if (foundName) {
+        return topName;
+      }
+    }
+    return null;
+  };
+
   watchEffect(() => {
     let topActive = sessionStorage.getItem('topActive')
+    // 初始化菜单内容，防止重复添加
+    topMenu.value = [];
     asyncRouters.value[0]?.children.forEach((item) => {
       if (item.hidden) return
       menuMap[item.name] = item
       topMenu.value.push({ ...item, children: [] })
     })
-
+    if (!topActive || topActive === 'undefined' || topActive === 'null') {
+      topActive = findTopActive(menuMap, route.name);
+    }
     setLeftMenu(topActive)
   })
 

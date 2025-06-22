@@ -8,28 +8,8 @@
 {{- if .IsAdd}}
 
 // Get{{.StructName}}InfoList 新增搜索语句
-        {{- range .Fields}}
-            {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
-if info.{{.FieldName}} != "" {
-        {{- if or (eq .FieldType "enum") }}
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-        {{- else}}
-// 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
-        {{- end}}
-}
-    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
-}
-    {{- else}}
-if info.{{.FieldName}} != nil{{- if eq .FieldType "string" }} && *info.{{.FieldName}} != ""{{- end }} {
-    db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-}
-            {{- end }}
-        {{- end }}
-    {{- end }}
 
+    {{ GenerateSearchConditions .Fields }}
 
 // Get{{.StructName}}InfoList 新增排序语句 请自行在搜索语句中添加orderMap内容
        {{- range .Fields}}
@@ -43,13 +23,7 @@ orderMap["{{.ColumnName}}"] = true
 //  Get{{.StructName}}DataSource()方法新增关联语句
 	{{range $key, $value := .DataSourceMap}}
 {{$key}} := make([]map[string]any, 0)
-{{ $dataDB := "" }}
-{{- if eq $value.DBName "" }}
-{{ $dataDB = $db }}
-{{- else}}
-{{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
-{{- end}}
-{{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+{{$db}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 res["{{$key}}"] = {{$key}}
 	{{- end }}
 {{- end }}
@@ -58,6 +32,7 @@ package service
 
 import (
 {{- if not .OnlyTemplate }}
+	"context"
 	"{{.Module}}/global"
 	"{{.Module}}/plugin/{{.Package}}/model"
 	{{- if not .IsTree }}
@@ -87,14 +62,14 @@ type {{.Abbreviation}} struct {}
 {{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Create{{.StructName}}({{.Abbreviation}} *model.{{.StructName}}) (err error) {
+func (s *{{.Abbreviation}}) Create{{.StructName}}(ctx context.Context, {{.Abbreviation}} *model.{{.StructName}}) (err error) {
 	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
+func (s *{{.Abbreviation}}) Delete{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 
 	{{- if .IsTree }}
        var count int64
@@ -125,7 +100,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}({{.PrimaryField.FieldJson}} st
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
+func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds(ctx context.Context, {{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
@@ -144,14 +119,14 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson
 
 // Update{{.StructName}} 更新{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Update{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
+func (s *{{.Abbreviation}}) Update{{.StructName}}(ctx context.Context, {{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = {{$db}}.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} model.{{.StructName}}, err error) {
+func (s *{{.Abbreviation}}) Get{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} model.{{.StructName}}, err error) {
 	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
@@ -160,7 +135,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}({{.PrimaryField.FieldJson}} strin
 {{- if .IsTree }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录,Tree模式下不添加分页和搜索
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList() (list []*model.{{.StructName}},err error) {
+func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context) (list []*model.{{.StructName}},err error) {
     // 创建db
 	db := {{$db}}.Model(&model.{{.StructName}}{})
     var {{.Abbreviation}}s []*model.{{.StructName}}
@@ -172,7 +147,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList() (list []*model.{{.Struc
 {{- else }}
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
-func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (list []model.{{.StructName}}, total int64, err error) {
+func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info request.{{.StructName}}Search) (list []model.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
@@ -180,31 +155,11 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructNam
     var {{.Abbreviation}}s []model.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
 {{- if .GvaModel }}
-    if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
-     db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+    if len(info.CreatedAtRange) == 2 {
+     db = db.Where("created_at BETWEEN ? AND ?", info.CreatedAtRange[0], info.CreatedAtRange[1])
     }
 {{- end }}
-        {{- range .Fields}}
-            {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "json") }}
-    if info.{{.FieldName}} != "" {
-            {{- if or (eq .FieldType "enum")}}
-            db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-            {{- else}}
-            // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
-            {{- end}}
-        }
-    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-        if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
-            db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
-        }
-    {{- else}}
-    if info.{{.FieldName}} != nil{{- if eq .FieldType "string" }} && *info.{{.FieldName}} != ""{{- end }} {
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}*info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-    }
-            {{- end }}
-        {{- end }}
-    {{- end }}
+  {{ GenerateSearchConditions .Fields }}
 	err = db.Count(&total).Error
 	if err!=nil {
     	return
@@ -212,6 +167,10 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructNam
     {{- if .NeedSort}}
         var OrderStr string
         orderMap := make(map[string]bool)
+      {{- if .GvaModel }}
+        orderMap["ID"] = true
+        orderMap["CreatedAt"] = true
+      {{- end }}
        {{- range .Fields}}
         {{- if .Sort}}
         orderMap["{{.ColumnName}}"] = true
@@ -234,17 +193,11 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructNam
 }
 {{- end }}
 {{- if .HasDataSource }}
-func (s *{{.Abbreviation}})Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
+func (s *{{.Abbreviation}})Get{{.StructName}}DataSource(ctx context.Context) (res map[string][]map[string]any, err error) {
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)
-	   {{ $dataDB := "" }}
-       {{- if eq $value.DBName "" }}
-       {{ $dataDB = $db }}
-       {{- else}}
-       {{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
-       {{- end}}
-       {{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+	   {{$db}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 	   res["{{$key}}"] = {{$key}}
 	{{- end }}
 	return
@@ -252,7 +205,7 @@ func (s *{{.Abbreviation}})Get{{.StructName}}DataSource() (res map[string][]map[
 {{- end }}
 {{- end }}
 
-func (s *{{.Abbreviation}})Get{{.StructName}}Public() {
+func (s *{{.Abbreviation}})Get{{.StructName}}Public(ctx context.Context) {
 
 }
 {{- end }}

@@ -15,6 +15,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/autocode"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -59,7 +60,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		}
 		for key, value := range creates { // key 为 模版绝对路径
 			var files *template.Template
-			files, err = template.ParseFiles(key)
+			files, err = template.New(filepath.Base(key)).Funcs(autocode.GetTemplateFuncMap()).ParseFiles(key)
 			if err != nil {
 				translation := global.Translate("sys_auto_code.templateFileReadFailed")
 				formattedMessage := fmt.Sprintf(translation, key)
@@ -238,6 +239,9 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 			if entries[i].Name() == "preview" {
 				continue
 			} // preview 为预览代码生成器的代码
+			if entries[i].Name() == "mcp" {
+				continue
+			} // preview 为mcp生成器的代码
 			templates = append(templates, entries[i].Name())
 		}
 	}
@@ -272,7 +276,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				three := filepath.Join(second, secondDirs[j].Name())
 				if !secondDirs[j].IsDir() {
 					ext := filepath.Ext(secondDirs[j].Name())
-					if ext != ".template" && ext != ".tpl" {
+					if ext != ".tpl" {
 						return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), three)
 					}
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
@@ -306,7 +310,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")
@@ -478,7 +482,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						gen := strings.Index(threeDirs[k].Name(), "gen")
@@ -562,7 +566,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), five)
 								}
 								ext := filepath.Ext(five)
-								if ext != ".template" && ext != ".tpl" {
+								if ext != ".tpl" {
 									return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), five)
 								}
 								hasRequest := strings.Index(fourDirs[l].Name(), "request")
@@ -578,7 +582,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							continue
 						}
 						ext := filepath.Ext(threeDirs[k].Name())
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						hasModel := strings.Index(threeDirs[k].Name(), "model")
@@ -639,7 +643,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateDirectory"), four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf(global.Translate("sys_auto_code.illegalTemplateSuffix"), four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")

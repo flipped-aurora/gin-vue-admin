@@ -68,6 +68,23 @@ func MaheHump(s string) string {
 	return strings.Join(words, "")
 }
 
+// HumpToUnderscore 将驼峰命名转换为下划线分割模式
+func HumpToUnderscore(s string) string {
+	var result strings.Builder
+
+	for i, char := range s {
+		if i > 0 && char >= 'A' && char <= 'Z' {
+			// 在大写字母前添加下划线
+			result.WriteRune('_')
+			result.WriteRune(char - 'A' + 'a') // 转小写
+		} else {
+			result.WriteRune(char)
+		}
+	}
+
+	return strings.ToLower(result.String())
+}
+
 // RandomString 随机字符串
 func RandomString(n int) string {
 	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")

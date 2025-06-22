@@ -72,6 +72,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	var oldMenu system.SysBaseMenu
 	upDateMap := make(map[string]interface{})
 	upDateMap["keep_alive"] = menu.KeepAlive
+	upDateMap["transition_type"] = menu.TransitionType
 	upDateMap["close_tab"] = menu.CloseTab
 	upDateMap["default_menu"] = menu.DefaultMenu
 	upDateMap["parent_id"] = menu.ParentId

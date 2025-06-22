@@ -7,6 +7,7 @@
       :on-success="uploadSuccess"
       :show-file-list="false"
       :data="{'classId': props.classId}"
+      :headers="{'x-token': token}"
       multiple
       class="upload-btn"
     >
@@ -20,7 +21,8 @@
   import { ElMessage } from 'element-plus'
   import { isVideoMime, isImageMime } from '@/utils/image'
   import { getBaseUrl } from '@/utils/format'
-  import {Upload} from "@element-plus/icons-vue";
+  import { Upload } from "@element-plus/icons-vue";
+  import { useUserStore } from "@/pinia";
   import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
   const { t } = useI18n() // added by mohamed hassan to support multilingual
@@ -28,6 +30,10 @@
   defineOptions({
     name: 'UploadCommon'
   })
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const props = defineProps({
     classId: {

@@ -639,6 +639,7 @@
         "enterSenderEmail": "請輸入發送者郵箱",
         "enterHost": "請輸入host",
         "isSSL": "是否為ssl",
+        "useLoginAuth": "是否LoginAuth認證",
         "enterSecret": "請輸入secret",
         "testEmail": "測試郵件",
         "mongodbOptions": "請輸入mongodb 選項",

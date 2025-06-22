@@ -152,9 +152,9 @@
         new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote'))
       )
     } else if (/^\d+$/.test(value[0])) {
-      callback(
-        new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote'))
-      )
+      callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote')))
+    } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      callback(new Error('只能包含英文字母、数字和下划线'))
     } else {
       callback()
     }

@@ -782,6 +782,7 @@
         "enterSenderEmail": "请输入发送者邮箱",
         "enterHost": "请输入host",
         "isSSL": "是否为ssl",
+        "useLoginAuth": "是否LoginAuth认证",
         "enterSecret": "请输入secret",
         "testEmail": "测试邮件",
         "mongodbOptions": "请输入mongodb 选项",

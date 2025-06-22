@@ -35,7 +35,7 @@
                     color:
                       row.defaultRouter === data.name ? '#E6A23C' : '#85ce61'
                   }"
-                  @click="() => setDefault(data)"
+                  @click.stop="() => setDefault(data)"
                 >
                   {{
                     row.defaultRouter === data.name
@@ -47,10 +47,8 @@
                 </el-button>
               </span>
               <span v-if="data.menuBtn.length">
-                <el-button type="primary" link @click="() => OpenBtn(data)">
-                  {{
-                    t('view.superAdmin.authority.components.menus.assignButton')
-                  }}
+                <el-button type="primary" link @click.stop="() => OpenBtn(data)">
+                  {{ t('view.superAdmin.authority.components.menus.assignButton') }}
                 </el-button>
               </span>
             </span>

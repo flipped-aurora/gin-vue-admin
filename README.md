@@ -49,6 +49,8 @@
 
 [插件市场](https://plugin.gin-vue-admin.com/)
 
+[软件著作权证书](https://www.gin-vue-admin.com/copyright.pdf)
+
 # 重要提示
 
 1.本项目从起步到开发到部署均有文档和详细视频教程
@@ -99,7 +101,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ## 2. 使用说明
 
 ```
-- node版本 > v16.8.3
+- node版本 > v18.16.0
 - golang版本 >= v1.22
 - IDE推荐：Goland
 ```
@@ -346,7 +348,7 @@ swag init
 
 ### 7.1 技术群
 
-### QQ交流群：470239250
+### QQ交流群：971857775
 
 ### 微信交流群
 | 微信 |
@@ -367,9 +369,9 @@ fmt.Println(decodeBytes, err)
 
 感谢您对gin-vue-admin的贡献!
 
-<a href="https://github.com/flipped-aurora/gin-vue-admin/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=flipped-aurora/gin-vue-admin" />
-</a>
+<a href="https://openomy.app/github/flipped-aurora/gin-vue-admin" target="_blank" style="display: block; width: 100%;" align="center">
+  <img src="https://openomy.app/svg?repo=flipped-aurora/gin-vue-admin&chart=bubble&latestMonth=3" target="_blank" alt="Contribution Leaderboard" style="display: block; width: 100%;" />
+ </a>
 
 ## 9. 捐赠
 
@@ -377,4 +379,5 @@ fmt.Println(decodeBytes, err)
 
 ## 10. 商用注意事项
 
-如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。
+请严格遵守Apache 2.0协议并保留作品声明，商业用途请务必[获取授权](https://www.gin-vue-admin.com/empower/)  
+未授权商用将依法追究法律责任

@@ -32,7 +32,7 @@ export const useUserStore = defineStore('user', () => {
     userInfo.value = val
     if (val.originSetting) {
       Object.keys(appStore.config).forEach((key) => {
-        if (val.originSetting[key]) {
+        if (val.originSetting[key] !== undefined) {
           appStore.config[key] = val.originSetting[key]
         }
       })
@@ -85,7 +85,6 @@ export const useUserStore = defineStore('user', () => {
       const res = await login(loginInfo)
 
       if (res.code !== 0) {
-        ElMessage.error(res.message || i18n.global.t('pinia.modules.user.loginFailed'))
         return false
       }
       // 登陆成功，设置用户信息和权限相关信息
@@ -102,8 +101,13 @@ export const useUserStore = defineStore('user', () => {
         router.addRoute(asyncRouter)
       })
 
+      if(router.currentRoute.value.query.redirect) {
+        await router.replace(router.currentRoute.value.query.redirect)
+        return true
+      }
+
       if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-        ElMessage.error('请联系管理员进行授权')
+        ElMessage.error(i18n.global.t('pinia.modules.user.connectAdmin'))
       } else {
         await router.replace({ name: userInfo.value.authority.defaultRouter })
       }
@@ -138,9 +142,12 @@ export const useUserStore = defineStore('user', () => {
   /* 清理数据 */
   const ClearStorage = async () => {
     token.value = ''
-    xToken.value = ''
+    // 使用remove方法正确删除cookie
+    xToken.remove()
     sessionStorage.clear()
+    // 清理所有相关的localStorage项
     localStorage.removeItem('originSetting')
+    localStorage.removeItem('token')
   }
 
   return {

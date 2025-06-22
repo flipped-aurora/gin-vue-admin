@@ -11,6 +11,7 @@
       :limit="limit"
       :accept="accept"
       class="upload-btn"
+      :headers="{'x-token': token}"
     >
       <el-button type="primary">
         {{ t('components.selectFile.uploadFiles') }}
@@ -23,9 +24,10 @@
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { useUserStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'UploadCommon'
@@ -41,6 +43,10 @@
       default: ''
     }
   })
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const fullscreenLoading = ref(false)
 

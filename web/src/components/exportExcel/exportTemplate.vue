@@ -1,10 +1,16 @@
 <template>
-  <el-button type="primary" icon="download" @click="exportTemplate">{{
-    t('components.exportExcel.exportTemplate.exportTemplate')
-  }}</el-button>
+  <el-button type="primary" icon="download" @click="exportTemplateFunc"
+    >{{ t('components.exportExcel.exportTemplate.exportTemplate') }}</el-button
+  >
 </template>
 
 <script setup>
+  import { ElMessage } from 'element-plus'
+  import {exportTemplate} from "@/api/exportTemplate";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
+  
   const props = defineProps({
     templateId: {
       type: String,
@@ -12,12 +18,7 @@
     }
   })
 
-  import { ElMessage } from 'element-plus'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
-
-  const exportTemplate = async () => {
+  const exportTemplateFunc = async () => {
     if (props.templateId === '') {
       ElMessage.error(t('components.exportExcel.exportTemplate.templateIdErr'))
       return
@@ -26,7 +27,16 @@
     if (baseUrl === "/"){
       baseUrl = ""
     }
-    const url = `${baseUrl}/sysExportTemplate/exportTemplate?templateID=${props.templateId}`
-    window.open(url, '_blank')
+
+    const res = await exportTemplate({
+      templateID: props.templateId
+    })
+
+    if(res.code === 0){
+      ElMessage.success('创建导出任务成功，开始下载')
+      const url = `${baseUrl}${res.data}`
+      window.open(url, '_blank')
+    }
+
   }
 </script>

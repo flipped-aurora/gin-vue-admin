@@ -99,6 +99,27 @@ export const useAppStore = defineStore('app', () => {
     config.transition_type = e
   }
 
+  const baseCoinfg = {
+    weakness: false,
+    grey: false,
+    primaryColor: '#3b82f6',
+    showTabs: true,
+    darkMode: 'auto',
+    layout_side_width: 256,
+    layout_side_collapsed_width: 80,
+    layout_side_item_height: 48,
+    show_watermark: true,
+    side_mode: 'normal',
+    // 页面过渡动画配置
+    transition_type: 'slide'
+  }
+
+  const resetConfig = () => {
+    for (let baseCoinfgKey in baseCoinfg) {
+      config[baseCoinfgKey] = baseCoinfg[baseCoinfgKey]
+    }
+  }
+
   // 监听色弱模式和灰色模式
   watchEffect(() => {
     document.documentElement.classList.toggle('html-weakenss', config.weakness)
@@ -128,6 +149,7 @@ export const useAppStore = defineStore('app', () => {
     toggleConfigSideItemHeight,
     toggleConfigWatermark,
     toggleSideMode,
-    toggleTransition
+    toggleTransition,
+    resetConfig
   }
 })

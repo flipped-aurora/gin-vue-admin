@@ -611,7 +611,15 @@
     {
       label: 'NOT BETWEEN',
       value: 'NOT BETWEEN'
-    }
+    },
+    {
+      label: 'IN',
+      value: 'IN'
+    },
+    {
+      label: 'NOT IN',
+      value: 'NOT IN'
+    },
   ])
 
   const addCondition = () => {

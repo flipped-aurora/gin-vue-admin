@@ -55,16 +55,17 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 
 // ReloadSystem
 // @Tags      System
-// @Summary   重启系统
+// @Summary   重载系统
 // @Security  ApiKeyAuth
 // @Produce   application/json
-// @Success   200  {object}  response.Response{msg=string}  "重启系统"
+// @Success   200  {object}  response.Response{msg=string}  "重载系统"
 // @Router    /system/reloadSystem [post]
 func (s *SystemApi) ReloadSystem(c *gin.Context) {
-	err := utils.Reload()
+	// 触发系统重载事件
+	err := utils.GlobalSystemEvents.TriggerReload()
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_system.rebootFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("sys_system.rebootFailErr"), c)
+		response.FailWithMessage("重载系统失败:"+err.Error(), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("sys_system.rebootSuccess"), c)

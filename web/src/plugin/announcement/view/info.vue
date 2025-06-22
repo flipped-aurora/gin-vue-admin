@@ -99,12 +99,7 @@
       >
         <el-table-column type="selection" width="55" />
 
-        <el-table-column
-          align="left"
-          :label="t('general.createdAt')"
-          prop="createdAt"
-          width="180"
-        >
+        <el-table-column align="left" :label="t('general.createdAt')" prop="CreatedAt" width="180">
           <template #default="scope">
             {{ formatDate(scope.row.CreatedAt) }}
           </template>

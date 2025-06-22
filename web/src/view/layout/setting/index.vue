@@ -9,9 +9,7 @@
     <template #header>
       <div class="flex justify-between items-center">
         <span class="text-lg">{{ t('system.systemConfig') }}</span>
-        <el-button type="primary" @click="saveConfig">{{
-          t('layout.setting.copyConfig')
-        }}</el-button>
+        <el-button type="primary" @click="resetConfig">重置配置</el-button>
       </div>
     </template>
     <div class="flex flex-col">
@@ -141,8 +139,10 @@
   import { ElMessage } from 'element-plus'
   import { setSelfSetting } from '@/api/user'
   import Title from './title.vue'
+  import { watch } from 'vue';
   import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
   const { t } = useI18n() // added by mohamed hassan to support multilingual
+
   const appStore = useAppStore()
   const { config, device } = storeToRefs(appStore)
 
@@ -181,19 +181,32 @@
     {
       label: t('layout.setting.combinationMode'),
       value: 'combination'
+    },
+    {
+      label: '侧边栏常驻',
+      value: 'sidebar'
     }
   ]
 
   const saveConfig = async () => {
     const res = await setSelfSetting(config.value)
+    console.log(config.value)
     if (res.code === 0) {
       localStorage.setItem('originSetting', JSON.stringify(config.value))
       ElMessage.success(t('layout.setting.copyConfigSuccess'))
-      drawer.value = false
     }
   }
 
   const customColor = ref('')
+
+  const resetConfig = () => {
+    appStore.resetConfig()
+  }
+
+
+  watch(config, async () => {
+    await saveConfig();
+  }, { deep: true });
 </script>
 
 <style lang="scss" scoped>

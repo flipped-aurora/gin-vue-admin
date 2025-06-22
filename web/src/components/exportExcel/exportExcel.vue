@@ -5,9 +5,14 @@
 </template>
 
 <script setup>
-  import {getUrl} from "@/utils/image";
+
+import { exportExcel } from '@/api/exportTemplate'
 
   const props = defineProps({
+    filterDeleted: {
+      type: Boolean,
+      default: true
+    },
     templateId: {
       type: String,
       required: true
@@ -45,6 +50,11 @@
       baseUrl = ""
     }
     const paramsCopy = JSON.parse(JSON.stringify(props.condition))
+
+    if (props.filterDeleted) {
+      paramsCopy.filterDeleted = 'true'
+    }
+
     if (props.limit) {
       paramsCopy.limit = props.limit
     }
@@ -61,8 +71,17 @@
       )
       .join('&')
 
-    const url = `${baseUrl}/sysExportTemplate/exportExcel?templateID=${props.templateId}${params ? '&' + params : ''}`
+    const res = await exportExcel({
+      templateID: props.templateId,
+      params
+    })
 
-    window.open(url, '_blank')
+    if(res.code === 0){
+      ElMessage.success('创建导出任务成功，开始下载')
+      const url = `${baseUrl}${res.data}`
+      window.open(url, '_blank')
+    }
+
+
   }
 </script>

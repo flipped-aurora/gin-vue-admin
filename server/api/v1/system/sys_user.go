@@ -93,7 +93,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	}
 
 	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
-		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
+		if err := utils.SetRedisJWT(token, user.Username); err != nil {
 			global.GVA_LOG.Error(global.Translate("sys_user.loginStatusFail"), zap.Error(err))
 			response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
 			return
@@ -114,7 +114,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			response.FailWithMessage(global.Translate("sys_user.jwtInvalidationFailed"), c)
 			return
 		}
-		if err := jwtService.SetRedisJWT(token, user.GetUsername()); err != nil {
+		if err := utils.SetRedisJWT(token, user.GetUsername()); err != nil {
 			response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
 			return
 		}
@@ -467,13 +467,13 @@ func (b *BaseApi) GetUserInfo(c *gin.Context) {
 // @Success   200   {object}  response.Response{msg=string}  "重置用户密码"
 // @Router    /user/resetPassword [post]
 func (b *BaseApi) ResetPassword(c *gin.Context) {
-	var user system.SysUser
-	err := c.ShouldBindJSON(&user)
+	var rps systemReq.ResetPassword
+	err := c.ShouldBindJSON(&rps)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = userService.ResetPassword(user.ID)
+	err = userService.ResetPassword(rps.ID, rps.Password)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_user.resetPWFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("sys_user.resetPWFailErr")+" "+err.Error(), c)

@@ -1,6 +1,8 @@
 module github.com/flipped-aurora/gin-vue-admin/server
 
-go 1.22.2
+go 1.23
+
+toolchain go1.23.9
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
@@ -8,17 +10,17 @@ require (
 	github.com/casbin/casbin/v2 v2.103.0
 	github.com/casbin/gorm-adapter/v3 v3.32.0
 	github.com/fsnotify/fsnotify v1.8.0
-	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.10.0
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/goccy/go-json v0.10.4
-	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.5.4
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.24.9+incompatible
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
-	github.com/mholt/archiver/v4 v4.0.0-alpha.9
+	github.com/mark3labs/mcp-go v0.31.0
+	github.com/mholt/archives v0.1.1
 	github.com/minio/minio-go/v7 v7.0.84
 	github.com/mojocn/base64Captcha v1.3.8
 	github.com/nicksnyder/go-i18n/v2 v2.2.0
@@ -57,7 +59,7 @@ require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/STARRY-S/zip v0.1.0 // indirect
+	github.com/STARRY-S/zip v0.2.1 // indirect
 	github.com/alex-ant/gomath v0.0.0-20160516115720-89013a210a82 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.8.0 // indirect
@@ -116,6 +118,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/microsoft/go-mssqldb v1.8.0 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
+	github.com/minio/minlz v1.0.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -123,7 +126,7 @@ require (
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/mozillazg/go-httpheader v0.4.0 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
-	github.com/nwaples/rardecode/v2 v2.0.1 // indirect
+	github.com/nwaples/rardecode/v2 v2.1.0 // indirect
 	github.com/otiai10/mint v1.6.3 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pierrec/lz4/v4 v4.1.22 // indirect
@@ -157,6 +160,7 @@ require (
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/xuri/efp v0.0.0-20241211021726-c4e992084aa6 // indirect
 	github.com/xuri/nfp v0.0.0-20250111060730-82a408b9aa71 // indirect
+	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect

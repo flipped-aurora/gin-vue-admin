@@ -5,6 +5,9 @@ import router from '@/router/index'
 import { ElLoading } from 'element-plus'
 import i18n from '@/i18n' // added by mohamed hassan to multilangauge
 
+// 添加一个状态变量，用于跟踪是否已有错误弹窗显示
+let errorBoxVisible = false
+
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
   timeout: 99999
@@ -95,7 +98,13 @@ service.interceptors.response.use(
       closeLoading()
     }
 
+    // 如果已经有错误弹窗显示，则不再显示新的弹窗
+    if (errorBoxVisible) {
+      return error
+    }
+
     if (!error.response) {
+      errorBoxVisible = true
       ElMessageBox.confirm(
         i18n.global.t('utils.request.requestErrorDetected') +
           `<p>${error}</p>
@@ -107,11 +116,15 @@ service.interceptors.response.use(
           confirmButtonText: i18n.global.t('utils.request.tryAgainLater'),
           cancelButtonText: i18n.global.t('general.cancel')
         }
-      )
+      ).finally(() => {
+        // 弹窗关闭后重置状态
+        errorBoxVisible = false
+      })
       return
     }
     switch (error.response.status) {
       case 500:
+        errorBoxVisible = true
         ElMessageBox.confirm(
           i18n.global.t('utils.request.interfaceErrorDetected') +
             `<p>${error}</p>` +
@@ -131,9 +144,13 @@ service.interceptors.response.use(
           const userStore = useUserStore()
           userStore.ClearStorage()
           router.push({ name: 'Login', replace: true })
+        }).finally(() => {
+          // 弹窗关闭后重置状态
+          errorBoxVisible = false
         })
         break
       case 404:
+        errorBoxVisible = true
         ElMessageBox.confirm(
           i18n.global.t('utils.request.interfaceErrorDetected') +
             `<p>${error}</p>` +
@@ -149,9 +166,13 @@ service.interceptors.response.use(
             confirmButtonText: i18n.global.t('utils.request.iGotIt'),
             cancelButtonText: i18n.global.t('general.cancel')
           }
-        )
+        ).finally(() => {
+          // 弹窗关闭后重置状态
+          errorBoxVisible = false
+        })
         break
       case 401:
+        errorBoxVisible = true
         ElMessageBox.confirm(
           i18n.global.t('utils.request.invalidToken') +
             `<p>` +
@@ -170,6 +191,9 @@ service.interceptors.response.use(
           const userStore = useUserStore()
           userStore.ClearStorage()
           router.push({ name: 'Login', replace: true })
+        }).finally(() => {
+          // 弹窗关闭后重置状态
+          errorBoxVisible = false
         })
         break
     }

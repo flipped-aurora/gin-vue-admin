@@ -247,6 +247,9 @@
           <el-form-item :label="t('view.systemTools.system.isSSL')">
             <el-switch v-model="config.email['is-ssl']" />
           </el-form-item>
+          <el-form-item :label="t('view.systemTools.system.useLoginAuth')">
+            <el-switch v-model="config.email['is-loginauth']" />
+          </el-form-item>
           <el-form-item label="secret">
             <el-input
               v-model.trim="config.email.secret"
@@ -1154,12 +1157,8 @@
       </el-tabs>
     </el-form>
     <div class="mt-4">
-      <el-button type="primary" @click="update"
-        >{{ t('view.systemTools.system.updateNow') }}
-      </el-button>
-      <el-button type="primary" @click="reload"
-        >{{ t('view.systemTools.system.restartService') }}
-      </el-button>
+      <el-button type="primary" @click="update">{{ t('view.systemTools.system.updateNow') }} </el-button>
+      <el-button type="primary" @click="reload">{{ t('view.systemTools.system.restartService') }} </el-button>
     </div>
   </div>
 </template>
@@ -1235,15 +1234,11 @@
   }
   initForm()
   const reload = () => {
-    ElMessageBox.confirm(
-      t('view.systemTools.system.confirmRestartService'),
-      t('general.warning'),
-      {
-        confirmButtonText: t('general.confirm'),
-        cancelButtonText: t('general.cancel'),
-        type: 'warning'
-      }
-    )
+    ElMessageBox.confirm(t('view.systemTools.system.confirmRestartService'), t('general.warning'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
+      type: 'warning'
+    })
       .then(async () => {
         const res = await reloadSystem()
         if (res.code === 0) {

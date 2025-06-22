@@ -780,6 +780,7 @@
         "enterSenderEmail": "يرجى إدخال البريد الإلكتروني للمرسل",
         "enterHost": "يرجى إدخال المضيف",
         "isSSL": "هل تريد تمكين SSL",
+        "useLoginAuth": "استخدام مصادقة LoginAuth",
         "enterSecret": "يرجى إدخال السر",
         "testEmail": "اختبار البريد الإلكتروني",
         "mongodbOptions": "يرجى إدخال خيارات MongoDB",

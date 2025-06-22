@@ -120,6 +120,9 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "system.api.group.customer", Method: "POST", Path: "/autoCode/createPlug", Description: "system.api.desc.createPluginPackage"},
 		{ApiGroup: "system.api.group.customer", Method: "POST", Path: "/autoCode/installPlugin", Description: "system.api.desc.installPlugin"},
 		{ApiGroup: "system.api.group.customer", Method: "POST", Path: "/autoCode/pubPlug", Description: "system.api.desc.packagePlugin"},
+		{ApiGroup: "system.api.group.customer", Method: "POST", Path: "/autoCode/mcp", Description: "自动生成 MCP Tool 模板"},
+		{ApiGroup: "system.api.group.customer", Method: "POST", Path: "/autoCode/mcpTest", Description: "MCP Tool 测试"},
+		{ApiGroup: "system.api.group.customer", Method: "POST", Path: "/autoCode/mcpList", Description: "获取 MCP ToolList"},
 
 		{ApiGroup: "system.api.group.templateConfiguration", Method: "POST", Path: "/autoCode/createPackage", Description: "system.api.desc.configurationTemplates"},
 		{ApiGroup: "system.api.group.templateConfiguration", Method: "GET", Path: "/autoCode/getTemplates", Description: "system.api.desc.getTemplateFile"},

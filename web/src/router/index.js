@@ -19,7 +19,8 @@ const routes = [
     path: '/scanUpload',
     name: 'ScanUpload',
     meta: {
-      title: '扫码上传'
+      title: '扫码上传',
+      client: true
     },
     component: () => import('@/view/example/upload/scanUpload.vue')
   },

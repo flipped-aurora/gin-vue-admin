@@ -13,31 +13,6 @@ import (
 
 type OperationRecordApi struct{}
 
-// CreateSysOperationRecord
-// @Tags      SysOperationRecord
-// @Summary   创建SysOperationRecord
-// @Security  ApiKeyAuth
-// @accept    application/json
-// @Produce   application/json
-// @Param     data  body      system.SysOperationRecord      true  "创建SysOperationRecord"
-// @Success   200   {object}  response.Response{msg=string}  "创建SysOperationRecord"
-// @Router    /sysOperationRecord/createSysOperationRecord [post]
-func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
-	var sysOperationRecord system.SysOperationRecord
-	err := c.ShouldBindJSON(&sysOperationRecord)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	err = operationRecordService.CreateSysOperationRecord(sysOperationRecord)
-	if err != nil {
-		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
-		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
-		return
-	}
-	response.OkWithMessage(global.Translate("general.createSuccess"), c)
-}
-
 // DeleteSysOperationRecord
 // @Tags      SysOperationRecord
 // @Summary   删除SysOperationRecord

@@ -782,6 +782,7 @@
         "enterSenderEmail": "Please Enter Sender Email",
         "enterHost": "Please Enter Host",
         "isSSL": "Is SSL",
+        "useLoginAuth": "Use LoginAuth authentication",
         "enterSecret": "Please Enter Secret",
         "testEmail": "Test Email",
         "mongodbOptions": "Please Enter MongoDB Options",

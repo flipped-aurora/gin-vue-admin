@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin"
@@ -29,6 +30,7 @@ func bizPluginV1(group ...*gin.RouterGroup) {
 		global.GVA_CONFIG.Email.Nickname,
 		global.GVA_CONFIG.Email.Port,
 		global.GVA_CONFIG.Email.IsSSL,
+		global.GVA_CONFIG.Email.IsLoginAuth,
 	))
 	holder(public, private)
 }

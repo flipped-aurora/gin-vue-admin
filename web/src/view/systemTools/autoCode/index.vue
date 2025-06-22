@@ -235,7 +235,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item class="w-full" label="TableName">
+            <el-form-item label="abbreviation" prop="abbreviation" class="w-full">
               <template #label>
                 <el-tooltip
                   :content="
@@ -315,7 +315,7 @@
               class="w-full relative"
               prop="package"
             >
-              <el-select v-model="form.package" class="w-full pr-12">
+              <el-select v-model="form.package" class="w-full pr-12" filterable>
                 <el-option
                   v-for="item in pkgs"
                   :key="item.ID"
@@ -361,9 +361,8 @@
               </template>
               <el-select
                 v-model="form.businessDB"
-                :placeholder="
-                  t('view.systemTools.autoCode.selectBusinessLibrary')
-                "
+                clearable
+                :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
                 class="w-full"
               >
                 <el-option
@@ -589,7 +588,7 @@
             width="160"
           >
             <template #default="{ row }">
-              <el-input :disabled="row.disabled" v-model="row.fieldName" />
+              <el-input disabled v-model="row.fieldName" />
             </template>
           </el-table-column>
           <el-table-column
@@ -728,9 +727,9 @@
           </el-table-column>
           <el-table-column
             align="left"
-            :label="t('view.systemTools.autoCode.fieldLen')"
             prop="dataTypeLong"
-            width="180"
+            label="字段长度/枚举值"
+            width="160"
           >
             <template #default="{ row }">
               <el-input :disabled="row.disabled" v-model="row.dataTypeLong" />
@@ -819,6 +818,7 @@
         <el-upload
           :before-upload="importJson"
           :show-file-list="false"
+          :headers="{'x-token': token}"
           accept=".json"
           class="flex items-center"
         >
@@ -925,9 +925,14 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import Sortable from 'sortablejs'
+  import { useUserStore } from "@/pinia";
   import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
   const { t } = useI18n() // added by mohamed hassan to support multilingual
+  
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const handleFocus = () => {
     document.addEventListener('keydown', handleKeydown);
@@ -1033,7 +1038,6 @@
     if (res.code === 0) {
       form.value.fields = []
       const json = JSON.parse(res.data)
-
       json.fields?.forEach((item) => {
         item.fieldName = toUpperCase(item.fieldName)
       })
@@ -1694,6 +1698,7 @@
 
   const catchData = () => {
     window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
+    ElMessage.success('暂存成功')
   }
 
   const getCatch = () => {
@@ -1747,6 +1752,8 @@
     reader.onload = (e) => {
       try {
         form.value = JSON.parse(e.target.result)
+        form.value.generateServer = true
+        form.value.generateWeb = true
         ElMessage.success(t('view.systemTools.autoCode.jsonImportSuccess'))
       } catch (_) {
         ElMessage.error(t('view.systemTools.autoCode.invalidJsonFile'))

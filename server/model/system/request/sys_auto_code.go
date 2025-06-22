@@ -158,7 +158,7 @@ func (r *AutoCode) Pretreatment() error {
 			r.NeedJSON = true
 		case "time.Time":
 			r.HasTimer = true
-			if r.Fields[i].FieldSearchType != "" {
+			if r.Fields[i].FieldSearchType != "" && r.Fields[i].FieldSearchType != "BETWEEN" && r.Fields[i].FieldSearchType != "NOT BETWEEN" {
 				r.HasSearchTimer = true
 			}
 		}

@@ -4,6 +4,7 @@
     :show-file-list="false"
     :on-success="handleSuccess"
     :multiple="false"
+    :headers="{'x-token': token}"
   >
     <el-button type="primary" icon="upload" class="ml-3">
       {{ t('components.exportExcel.importExcel.import') }}
@@ -13,9 +14,10 @@
 
 <script setup>
   import { ElMessage } from 'element-plus'
-  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+  import { useUserStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   let baseUrl = import.meta.env.VITE_BASE_API
   if (baseUrl === "/"){
@@ -28,6 +30,10 @@
       required: true
     }
   })
+
+  const userStore = useUserStore()
+
+  const token = userStore.token
 
   const emit = defineEmits(['on-success'])
 

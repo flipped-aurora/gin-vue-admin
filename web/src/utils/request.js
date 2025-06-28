@@ -77,6 +77,9 @@ service.interceptors.response.use(
     if (response.headers['new-token']) {
       userStore.setToken(response.headers['new-token'])
     }
+    if (typeof response.data.code === 'undefined') {
+      return response
+    }
     if (response.data.code === 0 || response.headers.success === 'true') {
       if (response.headers.msg) {
         response.data.msg = decodeURI(response.headers.msg)

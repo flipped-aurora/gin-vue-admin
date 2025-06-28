@@ -80,9 +80,9 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/pinia'
-import ThemeModeSelector from '../../components/theme-mode-selector.vue'
-import ThemeColorPicker from '../../components/theme-color-picker.vue'
-import SettingItem from '../../components/setting-item.vue'
+import ThemeModeSelector from '../../components/themeModeSelector.vue'
+import ThemeColorPicker from '../../components/themeColorPicker.vue'
+import SettingItem from '../../components/settingItem.vue'
 
 defineOptions({
   name: 'AppearanceSettings'

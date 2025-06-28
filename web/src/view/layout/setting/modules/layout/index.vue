@@ -131,8 +131,8 @@
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/pinia'
-import LayoutModeCard from '../../components/layout-mode-card.vue'
-import SettingItem from '../../components/setting-item.vue'
+import LayoutModeCard from '../../components/layoutModeCard.vue'
+import SettingItem from '../../components/settingItem.vue'
 
 defineOptions({
   name: 'LayoutSettings'

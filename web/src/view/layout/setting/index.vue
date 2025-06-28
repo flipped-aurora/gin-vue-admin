@@ -5,206 +5,101 @@
     direction="rtl"
     :size="width"
     :show-close="false"
+    class="theme-config-drawer"
   >
     <template #header>
-      <div class="flex justify-between items-center">
-        <span class="text-lg">系统配置</span>
-        <el-button type="primary" @click="resetConfig">重置配置</el-button>
+      <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white font-inter">系统配置</h2>
+        <el-button
+          type="primary"
+          size="small"
+          class="reset-btn"
+          :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
+          @click="resetConfig"
+        >
+          重置配置
+        </el-button>
       </div>
     </template>
-    <div class="flex flex-col">
-      <div class="mb-8">
-        <Title title="默认主题"></Title>
-        <div class="mt-2 text-sm p-2 flex items-center justify-center gap-2">
-          <el-segmented
-            v-model="config.darkMode"
-            :options="options"
-            size="default"
-            @change="appStore.toggleDarkMode"
-          />
-        </div>
-      </div>
-      <div class="mb-8">
-        <Title title="主题色"></Title>
-        <div class="mt-2 text-sm p-2 flex items-center gap-2 justify-center">
-          <div
-            v-for="item in colors"
-            :key="item"
-            class="w-5 h-5 rounded cursor-pointer flex items-center justify-center"
-            :style="`background:${item}`"
-            @click="appStore.togglePrimaryColor(item)"
-          >
-            <el-icon v-if="config.primaryColor === item">
-              <Select />
-            </el-icon>
-          </div>
-          <el-color-picker
-            v-model="customColor"
-            @change="appStore.togglePrimaryColor"
-          />
-        </div>
-      </div>
-      <div class="mb-8">
-        <Title title="主题配置"></Title>
-        <div class="mt-2 text-md p-2 flex flex-col gap-2">
-          <div class="flex items-center justify-between">
-            <div>展示水印</div>
-            <el-switch
-              v-model="config.show_watermark"
-              @change="appStore.toggleConfigWatermark"
-            />
-          </div>
-          <div class="flex items-center justify-between">
-            <div>灰色模式</div>
-            <el-switch v-model="config.grey" @change="appStore.toggleGrey" />
-          </div>
-          <div class="flex items-center justify-between">
-            <div>色弱模式</div>
-            <el-switch
-              v-model="config.weakness"
-              @change="appStore.toggleWeakness"
-            />
-          </div>
-          <div class="flex items-center justify-between">
-            <div>菜单模式</div>
-            <el-segmented
-              v-model="config.side_mode"
-              :options="sideModes"
-              size="default"
-              @change="appStore.toggleSideMode"
-            />
-          </div>
 
-          <div class="flex items-center justify-between">
-            <div>显示标签页</div>
-            <el-switch
-              v-model="config.showTabs"
-              @change="appStore.toggleTabs"
-            />
-          </div>
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex-shrink-0">页面切换动画</div>
-            <el-select
-              v-model="config.transition_type"
-              @change="appStore.toggleTransition"
-              class="w-40"
+    <div class="h-full bg-white dark:bg-gray-900">
+      <div class="px-8 pt-4 pb-6 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex justify-center">
+          <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1.5 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <button
+              v-for="tab in tabs"
+              :key="tab.key"
+              class="px-6 py-3 text-base font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
+              :class="[
+                activeTab === tab.key
+                  ? 'text-white shadow-md transform -translate-y-0.5'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+              ]"
+              :style="activeTab === tab.key ? { backgroundColor: config.primaryColor } : {}"
+              @click="activeTab = tab.key"
             >
-              <el-option value="fade" label="淡入淡出" />
-              <el-option value="slide" label="滑动" />
-              <el-option value="zoom" label="缩放" />
-              <el-option value="none" label="无动画" />
-            </el-select>
+              {{ tab.label }}
+            </button>
           </div>
         </div>
       </div>
 
-      <div class="mb-8">
-        <Title title="layout 大小配置"></Title>
-        <div class="mt-2 text-md p-2 flex flex-col gap-2">
-          <div class="flex items-center justify-between mb-2">
-            <div>侧边栏展开宽度</div>
-            <el-input-number
-              v-model="config.layout_side_width"
-              :min="150"
-              :max="400"
-              :step="10"
-            ></el-input-number>
-          </div>
-          <div class="flex items-center justify-between mb-2">
-            <div>侧边栏收缩宽度</div>
-            <el-input-number
-              v-model="config.layout_side_collapsed_width"
-              :min="60"
-              :max="100"
-            ></el-input-number>
-          </div>
-          <div class="flex items-center justify-between mb-2">
-            <div>侧边栏子项高度</div>
-            <el-input-number
-              v-model="config.layout_side_item_height"
-              :min="30"
-              :max="50"
-            ></el-input-number>
-          </div>
+      <div class="pb-8 h-full overflow-y-auto">
+        <div class="transition-all duration-300 ease-in-out">
+          <AppearanceSettings v-if="activeTab === 'appearance'" />
+          <LayoutSettings v-else-if="activeTab === 'layout'" />
+          <GeneralSettings v-else-if="activeTab === 'general'" />
         </div>
       </div>
-
-      <!--      <el-alert type="warning" :closable="false">
-        请注意，所有配置请保存到本地文件的
-        <el-tag>config.json</el-tag> 文件中，否则刷新页面后会丢失配置
-      </el-alert>-->
     </div>
   </el-drawer>
 </template>
 
 <script setup>
-  import { useAppStore } from '@/pinia'
+  import { ref, computed, watch } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { ref, computed } from 'vue'
   import { ElMessage } from 'element-plus'
+  import { useAppStore } from '@/pinia'
   import { setSelfSetting } from '@/api/user'
-  import Title from './title.vue'
-  import { watch } from 'vue';
+  import AppearanceSettings from './modules/appearance/index.vue'
+  import LayoutSettings from './modules/layout/index.vue'
+  import GeneralSettings from './modules/general/index.vue'
 
-  const appStore = useAppStore()
-  const { config, device } = storeToRefs(appStore)
   defineOptions({
     name: 'GvaSetting'
   })
 
+  const appStore = useAppStore()
+  const { config, device } = storeToRefs(appStore)
+
+  const activeTab = ref('appearance')
+
+  const tabs = [
+    { key: 'appearance', label: '外观' },
+    { key: 'layout', label: '布局' },
+    { key: 'general', label: '通用' }
+  ]
+
   const width = computed(() => {
     return device.value === 'mobile' ? '100%' : '500px'
   })
-
-  const colors = [
-    '#EB2F96',
-    '#3b82f6',
-    '#2FEB54',
-    '#EBEB2F',
-    '#EB2F2F',
-    '#2FEBEB'
-  ]
 
   const drawer = defineModel('drawer', {
     default: true,
     type: Boolean
   })
 
-  const options = ['dark', 'light', 'auto']
-  const sideModes = [
-    {
-      label: '正常模式',
-      value: 'normal'
-    },
-    {
-      label: '顶部菜单栏模式',
-      value: 'head'
-    },
-    {
-      label: '组合模式',
-      value: 'combination'
-    },
-    {
-      label: '侧边栏常驻',
-      value: 'sidebar'
-    }
-  ]
-
   const saveConfig = async () => {
     const res = await setSelfSetting(config.value)
-    console.log(config.value)
     if (res.code === 0) {
       localStorage.setItem('originSetting', JSON.stringify(config.value))
       ElMessage.success('保存成功')
     }
   }
 
-  const customColor = ref('')
-
   const resetConfig = () => {
     appStore.resetConfig()
   }
-
 
   watch(config, async () => {
     await saveConfig();
@@ -212,7 +107,73 @@
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep(.el-drawer__header) {
-    @apply border-gray-400 dark:border-gray-600;
+.theme-config-drawer {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  ::v-deep(.el-drawer) {
+    background: white;
   }
+
+  ::v-deep(.el-drawer__header) {
+    padding: 0;
+    border: 0;
+  }
+
+  ::v-deep(.el-drawer__body) {
+    padding: 0;
+  }
+}
+
+.dark .theme-config-drawer {
+  ::v-deep(.el-drawer) {
+    background: #111827;
+  }
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.reset-btn {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+
+  &:hover {
+    background: #9ca3af;
+  }
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+
+  &:hover {
+    background: #6b7280;
+  }
+}
 </style>

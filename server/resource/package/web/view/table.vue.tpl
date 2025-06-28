@@ -332,8 +332,6 @@ const searchRule = reactive({
   {{- end }}
 })
 
-=======
->>>>>>> main
 const elFormRef = ref()
 const elSearchFormRef = ref()
 

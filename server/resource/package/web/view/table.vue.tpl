@@ -151,7 +151,6 @@
           {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
-<<<<<<< HEAD
             <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
             <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
@@ -298,7 +297,6 @@ const rule = reactive({
     {{- end }}
 })
 
-<<<<<<< HEAD
 const searchRule = reactive({
   createdAt: [
     { validator: (rule, value, callback) => {

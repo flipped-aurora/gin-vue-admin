@@ -12,7 +12,6 @@ const service = axios.create({
   timeout: 99999
 })
 let activeAxios = 0
-let timer
 let loadingInstance
 const showLoading = (
   option = {
@@ -20,22 +19,16 @@ const showLoading = (
   }
 ) => {
   const loadDom = document.getElementById('gva-base-load-dom')
-  activeAxios++
-  if (timer) {
-    clearTimeout(timer)
+  if (activeAxios <= 0) {
+    option.target = loadDom
+    loadingInstance = ElLoading.service(option)
   }
-  timer = setTimeout(() => {
-    if (activeAxios > 0) {
-      if (!option.target) option.target = loadDom
-      loadingInstance = ElLoading.service(option)
-    }
-  }, 400)
+  activeAxios++
 }
 
 const closeLoading = () => {
   activeAxios--
   if (activeAxios <= 0) {
-    clearTimeout(timer)
     loadingInstance && loadingInstance.close()
   }
 }

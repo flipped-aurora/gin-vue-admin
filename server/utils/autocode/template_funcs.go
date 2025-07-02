@@ -70,7 +70,7 @@ func GenerateField(field systemReq.AutoCodeField) string {
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"array,object"`+"`"+``,
 			field.FieldName, tagContent)
 	case "richtext":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s`,
 			field.FieldJson, field.FieldJson, gormTag)
 
 		result = fmt.Sprintf(`%s  *string `+"`"+`%stype:text;"`+"`"+``,

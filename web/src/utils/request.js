@@ -14,6 +14,9 @@ const service = axios.create({
 let activeAxios = 0
 let timer
 let loadingInstance
+let isLoadingVisible = false
+let forceCloseTimer
+
 const showLoading = (
   option = {
     target: null
@@ -21,13 +24,33 @@ const showLoading = (
 ) => {
   const loadDom = document.getElementById('gva-base-load-dom')
   activeAxios++
+  
+  // 清除之前的定时器
   if (timer) {
     clearTimeout(timer)
   }
+  
+  // 清除强制关闭定时器
+  if (forceCloseTimer) {
+    clearTimeout(forceCloseTimer)
+  }
+  
   timer = setTimeout(() => {
-    if (activeAxios > 0) {
+    // 再次检查activeAxios状态，防止竞态条件
+    if (activeAxios > 0 && !isLoadingVisible) {
       if (!option.target) option.target = loadDom
       loadingInstance = ElLoading.service(option)
+      isLoadingVisible = true
+      
+      // 设置强制关闭定时器，防止loading永远不关闭（30秒超时）
+      forceCloseTimer = setTimeout(() => {
+        if (isLoadingVisible && loadingInstance) {
+          console.warn('Loading强制关闭：超时30秒')
+          loadingInstance.close()
+          isLoadingVisible = false
+          activeAxios = 0 // 重置计数器
+        }
+      }, 30000)
     }
   }, 400)
 }
@@ -35,8 +58,44 @@ const showLoading = (
 const closeLoading = () => {
   activeAxios--
   if (activeAxios <= 0) {
+    activeAxios = 0 // 确保不会变成负数
     clearTimeout(timer)
-    loadingInstance && loadingInstance.close()
+    
+    if (forceCloseTimer) {
+      clearTimeout(forceCloseTimer)
+      forceCloseTimer = null
+    }
+    
+    if (isLoadingVisible && loadingInstance) {
+      loadingInstance.close()
+      isLoadingVisible = false
+    }
+    loadingInstance = null
+  }
+}
+
+// 全局重置loading状态的函数，用于异常情况
+const resetLoading = () => {
+  activeAxios = 0
+  isLoadingVisible = false
+  
+  if (timer) {
+    clearTimeout(timer)
+    timer = null
+  }
+  
+  if (forceCloseTimer) {
+    clearTimeout(forceCloseTimer)
+    forceCloseTimer = null
+  }
+  
+  if (loadingInstance) {
+    try {
+      loadingInstance.close()
+    } catch (e) {
+      console.warn('关闭loading时出错:', e)
+    }
+    loadingInstance = null
   }
 }
 // http request 拦截器
@@ -105,6 +164,8 @@ service.interceptors.response.use(
     }
 
     if (!error.response) {
+      // 网络错误时重置loading状态
+      resetLoading()
       errorBoxVisible = true
       ElMessageBox.confirm(
         `
@@ -196,4 +257,12 @@ service.interceptors.response.use(
     return error
   }
 )
+// 监听页面卸载事件，确保loading被正确清理
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeunload', resetLoading)
+  window.addEventListener('unload', resetLoading)
+}
+
+// 导出service和resetLoading函数
+export { resetLoading }
 export default service

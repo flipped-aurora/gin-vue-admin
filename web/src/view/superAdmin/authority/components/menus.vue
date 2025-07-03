@@ -100,9 +100,6 @@
     children: 'children',
     label: function (data) {
       return data.meta.title
-    },
-    disabled: function (data) {
-      return props.row.defaultRouter === data.name
     }
   })
 

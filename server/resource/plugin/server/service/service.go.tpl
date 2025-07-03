@@ -168,7 +168,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
         var OrderStr string
         orderMap := make(map[string]bool)
       {{- if .GvaModel }}
-        orderMap["ID"] = true
+        orderMap["id"] = true
         orderMap["CreatedAt"] = true
       {{- end }}
        {{- range .Fields}}

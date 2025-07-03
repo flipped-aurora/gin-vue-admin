@@ -20,25 +20,23 @@
           @check="nodeChange"
         >
           <template #default="{ node, data }">
-            <span class="custom-tree-node">
+            <div class="custom-tree-node flex item">
               <span>{{ node.label }}</span>
-              <span v-if="row.defaultRouter === data.name" style="color: #E6A23C">首页</span>
-              <span v-if="node.checked && row.defaultRouter !== data.name">
-                <el-button
-                  type="primary"
-                  link
-                  style="color: #85ce61"
-                  @click.stop="() => setDefault(data)"
-                >
-                  设为首页
-                </el-button>
+              <span v-if="row.defaultRouter === data.name" style="color: #E6A23C">首页
               </span>
-              <span v-if="data.menuBtn.length">
-                <el-button type="primary" link @click.stop="() => OpenBtn(data)">
-                  分配按钮
-                </el-button>
-              </span>
-            </span>
+              <el-button
+                  v-if="node.checked && row.defaultRouter !== data.name"
+                type="primary"
+                link
+                style="color: #85ce61"
+                @click.stop="() => setDefault(data)"
+              >
+                设为首页
+              </el-button>
+              <el-button v-if="data.menuBtn.length" type="primary" link @click.stop="() => OpenBtn(data)">
+                分配按钮
+              </el-button>
+            </div>
           </template>
         </el-tree>
       </el-scrollbar>
@@ -221,6 +219,9 @@
 <style lang="scss" scoped>
   .custom-tree-node {
     span + span {
+      @apply ml-3;
+    }
+    button{
       @apply ml-3;
     }
   }

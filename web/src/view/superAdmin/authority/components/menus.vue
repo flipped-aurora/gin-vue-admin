@@ -20,7 +20,7 @@
           @check="nodeChange"
         >
           <template #default="{ node, data }">
-            <div class="custom-tree-node flex item">
+            <div class="custom-tree-node flex item-center">
               <span>{{ node.label }}</span>
               <span v-if="row.defaultRouter === data.name" style="color: #E6A23C">首页
               </span>

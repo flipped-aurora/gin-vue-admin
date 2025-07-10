@@ -700,7 +700,7 @@
         if (res.code === 0) {
           ElMessage({
             type: 'success',
-            message: isEdit.value ? '编辑成功' : '添加成功!'
+            message: isEdit.value ? '编辑成功' : '添加成功，请到角色管理页面分配权限'
           })
           getTableData()
         }

@@ -83,6 +83,10 @@ import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { mcp } from '@/api/autoCode'
 
+defineOptions({
+  name: 'MCP'
+})
+
 const formRef = ref(null)
 const form = reactive({
   name: '',

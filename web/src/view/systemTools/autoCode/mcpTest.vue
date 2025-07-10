@@ -139,6 +139,11 @@ import { ElMessage } from 'element-plus'
 import { VideoPlay, DocumentCopy } from '@element-plus/icons-vue' // Added DocumentCopy
 import { mcpList, mcpTest } from '@/api/autoCode'
 
+defineOptions({
+  name: 'MCPTest'
+})
+
+
 const mcpTools = ref([])
 const testDialogVisible = ref(false)
 const currentTestingTool = ref(null)

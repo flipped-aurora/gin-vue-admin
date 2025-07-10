@@ -74,7 +74,6 @@ export const useRouterStore = defineStore('router', () => {
     })
     
     keepAliveRouters.value = Array.from(new Set(keepArrTemp))
-    console.log(keepAliveRouters.value)
   }
 
 

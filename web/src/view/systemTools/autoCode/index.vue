@@ -1542,15 +1542,6 @@
   }
   init()
 
-  watch(
-    () => route.params.id,
-    () => {
-      if (route.name === 'autoCodeEdit') {
-        init()
-      }
-    }
-  )
-
   watch(()=>form.value.generateServer,()=>{
     if(!form.value.generateServer){
       form.value.autoCreateApiToSql = false

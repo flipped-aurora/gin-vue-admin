@@ -8,7 +8,7 @@ import (
 type SysParamsRouter struct{}
 
 // InitSysParamsRouter 初始化 参数 路由信息
-func (s *SysParamsRouter) InitSysParamsRouter(Router *gin.RouterGroup, PublicRouter *gin.RouterGroup) {
+func (s *SysParamsRouter) InitSysParamsRouter(Router *gin.RouterGroup) {
 	sysParamsRouter := Router.Group("sysParams").Use(middleware.OperationRecord())
 	sysParamsRouterWithoutRecord := Router.Group("sysParams")
 	{

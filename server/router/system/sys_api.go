@@ -7,7 +7,7 @@ import (
 
 type ApiRouter struct{}
 
-func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup, RouterPub *gin.RouterGroup) {
+func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup) {
 	apiRouter := Router.Group("api").Use(middleware.OperationRecord())
 	apiRouterWithoutRecord := Router.Group("api")
 	{

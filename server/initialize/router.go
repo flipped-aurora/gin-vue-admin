@@ -88,7 +88,7 @@ func Routers() *gin.Engine {
 	}
 
 	{
-		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)               // 注册功能api路由
+		systemRouter.InitApiRouter(PrivateGroup)                            // 注册功能api路由
 		systemRouter.InitJwtRouter(PrivateGroup)                            // jwt相关路由
 		systemRouter.InitUserRouter(PrivateGroup)                           // 注册用户路由
 		systemRouter.InitMenuRouter(PrivateGroup)                           // 注册menu路由
@@ -102,11 +102,10 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)            // 字典详情管理
 		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)             // 按钮权限管理
 		systemRouter.InitSysExportTemplateRouter(PrivateGroup, PublicGroup) // 导出模板
-		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)         // 参数管理
+		systemRouter.InitSysParamsRouter(PrivateGroup)                      // 参数管理
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
 		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类
-
 	}
 
 	//插件路由安装

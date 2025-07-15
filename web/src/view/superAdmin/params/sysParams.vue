@@ -268,16 +268,16 @@
     >
       <el-descriptions :column="1" border>
         <el-descriptions-item label="参数名称">
-          {{ detailFrom.name }}
+          {{ detailForm.name }}
         </el-descriptions-item>
         <el-descriptions-item label="参数键">
-          {{ detailFrom.key }}
+          {{ detailForm.key }}
         </el-descriptions-item>
         <el-descriptions-item label="参数值">
-          {{ detailFrom.value }}
+          {{ detailForm.value }}
         </el-descriptions-item>
         <el-descriptions-item label="参数说明">
-          {{ detailFrom.desc }}
+          {{ detailForm.desc }}
         </el-descriptions-item>
       </el-descriptions>
     </el-drawer>
@@ -574,7 +574,7 @@
     })
   }
 
-  const detailFrom = ref({})
+  const detailForm = ref({})
 
   // 查看详情控制标记
   const detailShow = ref(false)
@@ -589,7 +589,7 @@
     // 打开弹窗
     const res = await findSysParams({ ID: row.ID })
     if (res.code === 0) {
-      detailFrom.value = res.data
+      detailForm.value = res.data
       openDetailShow()
     }
   }
@@ -597,7 +597,7 @@
   // 关闭详情弹窗
   const closeDetailShow = () => {
     detailShow.value = false
-    detailFrom.value = {}
+    detailForm.value = {}
   }
 </script>
 

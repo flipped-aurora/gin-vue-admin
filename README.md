@@ -9,6 +9,7 @@
 <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-2.3.8-green"/>
 <img src="https://img.shields.io/badge/gorm-1.25.2-red"/>
+<img src="https://gitcode.com/flipped-aurora/gin-vue-admin/star/badge.svg"/>
 </div>
 
 <div align=center>

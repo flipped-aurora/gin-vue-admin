@@ -131,6 +131,7 @@
         </div>
       </template>
 
+
       <warning-bar :title="t('view.superAdmin.menu.newMenuNote')" />
       <el-form
         v-if="dialogFormVisible"
@@ -267,8 +268,8 @@
                     placement="top"
                     effect="light"
                   >
-                    <el-icon><QuestionFilled /></el-icon>
-                  </el-tooltip>
+                    点我设置
+                  </el-button>
                 </div>
               </template>
               <el-input
@@ -473,7 +474,72 @@
             </template>
           </el-table-column>
         </el-table>
+
       </div>
+           
+      <!-- 可控按钮配置区域 -->
+      <div class="mb-2 mt-2">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-semibold text-gray-700">可控按钮配置</h3>
+          <div class="flex items-center gap-2">
+            <el-button type="primary" size="small" @click="addBtn(form)">
+              新增可控按钮
+            </el-button>
+            <el-tooltip
+              content="点击查看按钮权限配置文档"
+              placement="top"
+              effect="light"
+            >
+              <el-icon
+                class="cursor-pointer text-blue-500 hover:text-blue-700"
+                @click="toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')"
+              >
+                <QuestionFilled />
+              </el-icon>
+            </el-tooltip>
+          </div>
+        </div>
+             <el-table 
+               :data="form.menuBtn" 
+               style="width: 100%"
+               class="button-table"
+             >
+               <el-table-column
+                 align="center"
+                 prop="name"
+                 label="按钮名称"
+                 width="150"
+               >
+                 <template #default="scope">
+                   <el-input 
+                     v-model="scope.row.name" 
+                     size="small"
+                     placeholder="请输入按钮名称"
+                   />
+                 </template>
+               </el-table-column>
+               <el-table-column align="center" prop="desc" label="备注">
+                 <template #default="scope">
+                   <el-input 
+                     v-model="scope.row.desc" 
+                     size="small"
+                     placeholder="请输入按钮备注"
+                   />
+                 </template>
+               </el-table-column>
+               <el-table-column align="center" label="操作" width="100">
+                 <template #default="scope">
+                   <el-button
+                     type="danger"
+                     size="small"
+                     @click="deleteBtn(form.menuBtn, scope.$index)"
+                   >
+                     <el-icon><Delete /></el-icon>
+                   </el-button>
+                 </template>
+               </el-table-column>
+             </el-table>
+       </div>
     </el-drawer>
   </div>
 </template>
@@ -491,7 +557,7 @@
   import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
   import { reactive, ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { QuestionFilled } from '@element-plus/icons-vue'
+  import { QuestionFilled, InfoFilled, Delete } from '@element-plus/icons-vue'
   import { toDoc } from '@/utils/doc'
   import { toLowerCase } from '@/utils/stringFun'
   import ComponentsCascader from '@/view/superAdmin/menu/components/components-cascader.vue'
@@ -686,9 +752,11 @@
         if (res.code === 0) {
           ElMessage({
             type: 'success',
+
             message: isEdit.value
               ? t('general.editSuccess')
               : t('general.addSuccess')
+
           })
           getTableData()
         }
@@ -770,6 +838,54 @@
     align-items: center;
     .el-icon {
       margin-right: 8px;
+    }
+  }
+
+
+  
+  .form-tip {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #909399;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .el-icon {
+      color: #409eff;
+    }
+  }
+  
+  .label-with-tooltip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    .el-icon {
+      color: #909399;
+      cursor: help;
+      
+      &:hover {
+        color: #409eff;
+      }
+    }
+  }
+  
+  .parameter-table,
+  .button-table {
+    border: 1px solid #ebeef5;
+    border-radius: 6px;
+    
+    :deep(.el-table__header) {
+      background-color: #fafafa;
+    }
+    
+    :deep(.el-table__body) {
+      .el-table__row {
+        &:hover {
+          background-color: #f5f7fa;
+        }
+      }
     }
   }
 </style>

@@ -161,8 +161,8 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
         var OrderStr string
         orderMap := make(map[string]bool)
         {{- if .GvaModel }}
-           orderMap["ID"] = true
-           orderMap["CreatedAt"] = true
+           orderMap["id"] = true
+           orderMap["created_at"] = true
         {{- end }}
        {{- range .Fields}}
             {{- if .Sort}}

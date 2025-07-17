@@ -577,7 +577,7 @@
     })
   }
 
-  const detailFrom = ref({})
+  const detailForm = ref({})
 
   // 查看详情控制标记
   const detailShow = ref(false)
@@ -592,7 +592,7 @@
     // 打开弹窗
     const res = await findSysParams({ ID: row.ID })
     if (res.code === 0) {
-      detailFrom.value = res.data
+      detailForm.value = res.data
       openDetailShow()
     }
   }
@@ -600,7 +600,7 @@
   // 关闭详情弹窗
   const closeDetailShow = () => {
     detailShow.value = false
-    detailFrom.value = {}
+    detailForm.value = {}
   }
 </script>
 

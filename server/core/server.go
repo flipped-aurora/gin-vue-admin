@@ -36,6 +36,7 @@ func RunServer() {
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
 
 	fmt.Printf(`
+
 		%s gin-vue-admin
 		%s:v2.8.2
 		%s
@@ -63,5 +64,6 @@ func RunServer() {
 		global.Translate("core.server.copyright2"),
 		global.Translate("core.server.copyright3"),
 		global.Translate("core.server.copyright4"))
+
 	initServer(address, Router, 10*time.Minute, 10*time.Minute)
 }

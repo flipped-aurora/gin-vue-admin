@@ -61,7 +61,6 @@
   const deepMenus = (menus) => {
     const arr = []
     menus?.forEach((menu) => {
-      if (!menu?.children) return
       if (menu.children && menu.children.length > 0) {
         arr.push(...deepMenus(menu.children))
       } else {

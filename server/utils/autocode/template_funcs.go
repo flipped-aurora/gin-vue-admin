@@ -70,7 +70,7 @@ func GenerateField(field systemReq.AutoCodeField) string {
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"array,object"`+"`"+``,
 			field.FieldName, tagContent)
 	case "richtext":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s`,
 			field.FieldJson, field.FieldJson, gormTag)
 
 		result = fmt.Sprintf(`%s  *string `+"`"+`%stype:text;"`+"`"+``,
@@ -575,7 +575,7 @@ func GenerateDescriptionItem(field systemReq.AutoCodeField) string {
 		result += `    <template #default="scope">
 `
 		if field.DataSource.Association == 2 {
-			result += fmt.Sprintf(`        <el-tag v-for="(item,key) in filterDataSource(dataSource.%s,detailFrom.%s)" :key="key">
+			result += fmt.Sprintf(`        <el-tag v-for="(item,key) in filterDataSource(dataSource.%s,detailForm.%s)" :key="key">
 `,
 				field.FieldJson, field.FieldJson)
 			result += `             {{ item }}
@@ -583,7 +583,7 @@ func GenerateDescriptionItem(field systemReq.AutoCodeField) string {
 			result += `        </el-tag>
 `
 		} else {
-			result += fmt.Sprintf(`        <span>{{ filterDataSource(dataSource.%s,detailFrom.%s) }}</span>
+			result += fmt.Sprintf(`        <span>{{ filterDataSource(dataSource.%s,detailForm.%s) }}</span>
 `,
 				field.FieldJson, field.FieldJson)
 		}
@@ -592,26 +592,26 @@ func GenerateDescriptionItem(field systemReq.AutoCodeField) string {
 	} else if field.FieldType != "picture" && field.FieldType != "pictures" &&
 		field.FieldType != "file" && field.FieldType != "array" &&
 		field.FieldType != "richtext" {
-		result += fmt.Sprintf(`    {{ detailFrom.%s }}
+		result += fmt.Sprintf(`    {{ detailForm.%s }}
 `, field.FieldJson)
 	} else {
 		switch field.FieldType {
 		case "picture":
-			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailFrom.%s)" :src="getUrl(detailFrom.%s)" fit="cover" />
+			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailForm.%s)" :src="getUrl(detailForm.%s)" fit="cover" />
 `,
 				field.FieldJson, field.FieldJson)
 		case "array":
-			result += fmt.Sprintf(`    <ArrayCtrl v-model="detailFrom.%s"/>
+			result += fmt.Sprintf(`    <ArrayCtrl v-model="detailForm.%s"/>
 `, field.FieldJson)
 		case "pictures":
-			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.%s)" :initial-index="index" v-for="(item,index) in detailFrom.%s" :key="index" :src="getUrl(item)" fit="cover" />
+			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailForm.%s)" :initial-index="index" v-for="(item,index) in detailForm.%s" :key="index" :src="getUrl(item)" fit="cover" />
 `,
 				field.FieldJson, field.FieldJson)
 		case "richtext":
-			result += fmt.Sprintf(`    <RichView v-model="detailFrom.%s" />
+			result += fmt.Sprintf(`    <RichView v-model="detailForm.%s" />
 `, field.FieldJson)
 		case "file":
-			result += fmt.Sprintf(`    <div class="fileBtn" v-for="(item,index) in detailFrom.%s" :key="index">
+			result += fmt.Sprintf(`    <div class="fileBtn" v-for="(item,index) in detailForm.%s" :key="index">
 `, field.FieldJson)
 			result += `        <el-button type="primary" text bg @click="onDownloadFile(item.url)">
 `

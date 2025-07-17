@@ -5,6 +5,7 @@
     direction="rtl"
     :size="width"
     :show-close="false"
+    class="theme-config-drawer"
   >
     <template #header>
       <div class="flex justify-between items-center">
@@ -133,10 +134,10 @@
 </template>
 
 <script setup>
-  import { useAppStore } from '@/pinia'
+  import { ref, computed, watch } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { ref, computed } from 'vue'
   import { ElMessage } from 'element-plus'
+  import { useAppStore } from '@/pinia'
   import { setSelfSetting } from '@/api/user'
   import Title from './title.vue'
   import { watch } from 'vue';
@@ -146,27 +147,31 @@
   const appStore = useAppStore()
   const { config, device } = storeToRefs(appStore)
 
+
   defineOptions({
     name: 'GvaSetting'
   })
+
+  const appStore = useAppStore()
+  const { config, device } = storeToRefs(appStore)
+
+  const activeTab = ref('appearance')
+
+  const tabs = [
+    { key: 'appearance', label: '外观' },
+    { key: 'layout', label: '布局' },
+    { key: 'general', label: '通用' }
+  ]
 
   const width = computed(() => {
     return device.value === 'mobile' ? '100%' : '500px'
   })
 
-  const colors = [
-    '#EB2F96',
-    '#3b82f6',
-    '#2FEB54',
-    '#EBEB2F',
-    '#EB2F2F',
-    '#2FEBEB'
-  ]
-
   const drawer = defineModel('drawer', {
     default: true,
     type: Boolean
   })
+
 
   const options = ['dark', 'light', 'auto']
   const sideModes = [
@@ -188,21 +193,18 @@
     }
   ]
 
+
   const saveConfig = async () => {
     const res = await setSelfSetting(config.value)
-    console.log(config.value)
     if (res.code === 0) {
       localStorage.setItem('originSetting', JSON.stringify(config.value))
       ElMessage.success(t('layout.setting.copyConfigSuccess'))
     }
   }
 
-  const customColor = ref('')
-
   const resetConfig = () => {
     appStore.resetConfig()
   }
-
 
   watch(config, async () => {
     await saveConfig();
@@ -210,7 +212,73 @@
 </script>
 
 <style lang="scss" scoped>
-  ::v-deep(.el-drawer__header) {
-    @apply border-gray-400 dark:border-gray-600;
+.theme-config-drawer {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  ::v-deep(.el-drawer) {
+    background: white;
   }
+
+  ::v-deep(.el-drawer__header) {
+    padding: 0;
+    border: 0;
+  }
+
+  ::v-deep(.el-drawer__body) {
+    padding: 0;
+  }
+}
+
+.dark .theme-config-drawer {
+  ::v-deep(.el-drawer) {
+    background: #111827;
+  }
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.reset-btn {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+
+  &:hover {
+    background: #9ca3af;
+  }
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+
+  &:hover {
+    background: #6b7280;
+  }
+}
 </style>

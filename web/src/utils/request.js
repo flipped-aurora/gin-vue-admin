@@ -1,11 +1,8 @@
 import axios from 'axios' // 引入axios
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import { ElLoading, ElMessage } from 'element-plus'
+import { emitter } from '@/utils/bus'
 import router from '@/router/index'
-import { ElLoading } from 'element-plus'
-
-// 添加一个状态变量，用于跟踪是否已有错误弹窗显示
-let errorBoxVisible = false
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -24,24 +21,24 @@ const showLoading = (
 ) => {
   const loadDom = document.getElementById('gva-base-load-dom')
   activeAxios++
-  
+
   // 清除之前的定时器
   if (timer) {
     clearTimeout(timer)
   }
-  
+
   // 清除强制关闭定时器
   if (forceCloseTimer) {
     clearTimeout(forceCloseTimer)
   }
-  
+
   timer = setTimeout(() => {
     // 再次检查activeAxios状态，防止竞态条件
     if (activeAxios > 0 && !isLoadingVisible) {
       if (!option.target) option.target = loadDom
       loadingInstance = ElLoading.service(option)
       isLoadingVisible = true
-      
+
       // 设置强制关闭定时器，防止loading永远不关闭（30秒超时）
       forceCloseTimer = setTimeout(() => {
         if (isLoadingVisible && loadingInstance) {
@@ -60,12 +57,12 @@ const closeLoading = () => {
   if (activeAxios <= 0) {
     activeAxios = 0 // 确保不会变成负数
     clearTimeout(timer)
-    
+
     if (forceCloseTimer) {
       clearTimeout(forceCloseTimer)
       forceCloseTimer = null
     }
-    
+
     if (isLoadingVisible && loadingInstance) {
       loadingInstance.close()
       isLoadingVisible = false
@@ -78,17 +75,17 @@ const closeLoading = () => {
 const resetLoading = () => {
   activeAxios = 0
   isLoadingVisible = false
-  
+
   if (timer) {
     clearTimeout(timer)
     timer = null
   }
-  
+
   if (forceCloseTimer) {
     clearTimeout(forceCloseTimer)
     forceCloseTimer = null
   }
-  
+
   if (loadingInstance) {
     try {
       loadingInstance.close()
@@ -98,6 +95,7 @@ const resetLoading = () => {
     loadingInstance = null
   }
 }
+
 // http request 拦截器
 service.interceptors.request.use(
   (config) => {
@@ -117,14 +115,17 @@ service.interceptors.request.use(
     if (!error.config.donNotShowLoading) {
       closeLoading()
     }
-    ElMessage({
-      showClose: true,
-      message: error,
-      type: 'error'
+    emitter.emit('show-error', {
+      code: 'request',
+      message: error.message || '请求发送失败'
     })
     return error
   }
 )
+
+function getErrorMessage(error) {
+  return error.response?.data?.msg || '请求失败'
+}
 
 // http response 拦截器
 service.interceptors.response.use(
@@ -158,105 +159,38 @@ service.interceptors.response.use(
       closeLoading()
     }
 
-    // 如果已经有错误弹窗显示，则不再显示新的弹窗
-    if (errorBoxVisible) {
-      return error
-    }
-
     if (!error.response) {
-      // 网络错误时重置loading状态
+      // 网络错误
       resetLoading()
-      errorBoxVisible = true
-      ElMessageBox.confirm(
-        `
-        <p>检测到请求错误</p>
-        <p>${error}</p>
-        `,
-        '请求报错',
-        {
-          dangerouslyUseHTMLString: true,
-          distinguishCancelAndClose: true,
-          confirmButtonText: '稍后重试',
-          cancelButtonText: '取消'
-        }
-      ).finally(() => {
-        // 弹窗关闭后重置状态
-        errorBoxVisible = false
+      emitter.emit('show-error', {
+        code: 'network',
+        message: getErrorMessage(error)
       })
-      return
+      return Promise.reject(error)
     }
 
-    switch (error.response.status) {
-      case 500:
-        errorBoxVisible = true
-        ElMessageBox.confirm(
-          `
-        <p>检测到接口错误${error}</p>
-        <p>错误码<span style="color:red"> 500 </span>：此类错误内容常见于后台panic，请先查看后台日志，如果影响您正常使用可强制登出清理缓存</p>
-        `,
-          '接口报错',
-          {
-            dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: '清理缓存',
-            cancelButtonText: '取消'
-          }
-        ).then(() => {
+    // HTTP 状态码错误
+    if (error.response.status === 401) {
+      emitter.emit('show-error', {
+        code: '401',
+        message: getErrorMessage(error),
+        fn: () => {
           const userStore = useUserStore()
           userStore.ClearStorage()
           router.push({ name: 'Login', replace: true })
-        }).finally(() => {
-          // 弹窗关闭后重置状态
-          errorBoxVisible = false
-        })
-        break
-      case 404:
-        errorBoxVisible = true
-        ElMessageBox.confirm(
-          `
-          <p>检测到接口错误${error}</p>
-          <p>错误码<span style="color:red"> 404 </span>：此类错误多为接口未注册（或未重启）或者请求路径（方法）与api路径（方法）不符--如果为自动化代码请检查是否存在空格</p>
-          `,
-          '接口报错',
-          {
-            dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: '我知道了',
-            cancelButtonText: '取消'
-          }
-        ).finally(() => {
-          // 弹窗关闭后重置状态
-          errorBoxVisible = false
-        })
-        break
-      case 401:
-        errorBoxVisible = true
-        ElMessageBox.confirm(
-          `
-          <p>无效的令牌</p>
-          <p>错误码:<span style="color:red"> 401 </span>错误信息:${error}</p>
-          `,
-          '身份信息',
-          {
-            dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: '重新登录',
-            cancelButtonText: '取消'
-          }
-        ).then(() => {
-          const userStore = useUserStore()
-          userStore.ClearStorage()
-          router.push({ name: 'Login', replace: true })
-        }).finally(() => {
-          // 弹窗关闭后重置状态
-          errorBoxVisible = false
-        })
-        break
+        }
+      })
+      return Promise.reject(error)
     }
 
-    return error
+    emitter.emit('show-error', {
+      code: error.response.status,
+      message: getErrorMessage(error)
+    })
+    return Promise.reject(error)
   }
 )
+
 // 监听页面卸载事件，确保loading被正确清理
 if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', resetLoading)

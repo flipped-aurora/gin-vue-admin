@@ -17,7 +17,7 @@ func JWTAuth() gin.HandlerFunc {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
 		token := utils.GetToken(c)
 		if token == "" {
-			response.NoAuth("未登录或非法访问", c)
+			response.NoAuth("未登录或非法访问，请登录", c)
 			c.Abort()
 			return
 		}
@@ -32,7 +32,7 @@ func JWTAuth() gin.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if errors.Is(err, utils.TokenExpired) {
-				response.NoAuth("授权已过期", c)
+				response.NoAuth("登录已过期，请重新登录", c)
 				utils.ClearToken(c)
 				c.Abort()
 				return

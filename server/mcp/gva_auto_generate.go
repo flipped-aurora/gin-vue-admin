@@ -632,12 +632,16 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 		Paths:   make(map[string]string),
 	}
 
+	// 无论如何都先构建目录结构信息，确保paths始终返回
+	result.Paths = t.buildDirectoryStructure(plan)
+
 	// 创建包（如果需要）
 	if plan.NeedCreatedPackage && plan.PackageInfo != nil {
 		packageService := service.ServiceGroupApp.SystemServiceGroup.AutoCodePackage
 		err := packageService.Create(ctx, plan.PackageInfo)
 		if err != nil {
 			result.Message = fmt.Sprintf("创建包失败: %v", err)
+			// 即使创建包失败，也要返回paths信息
 			return result
 		}
 		result.Message += "包创建成功; "
@@ -650,23 +654,20 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 		err := plan.ModulesInfo.Pretreatment()
 		if err != nil {
 			result.Message += fmt.Sprintf("模块信息预处理失败: %v", err)
+			// 即使预处理失败，也要返回paths信息
 			return result
 		}
 
 		err = templateService.Create(ctx, *plan.ModulesInfo)
 		if err != nil {
 			result.Message += fmt.Sprintf("创建模块失败: %v", err)
+			// 即使创建模块失败，也要返回paths信息
 			return result
 		}
 		result.Message += "模块创建成功; "
 	}
 
-	if !plan.NeedCreatedModules {
-		// 如果需要创建模块但没有调用本体方法，则构建目录结构信息供AI使用
-		result.Paths = t.buildDirectoryStructure(plan)
-		result.Message += "已构建目录结构信息，需要AI根据路径信息创建代码文件; "
-	}
-
+	result.Message += "已构建目录结构信息; "
 	result.Success = true
 
 	if result.Message == "" {

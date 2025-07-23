@@ -469,10 +469,10 @@ func (t *AutomationModuleAnalyzer) buildDirectoryStructure(plan *ExecutionPlan) 
 		webBasePath := fmt.Sprintf("%s/%s", rootPath, webPath)
 
 		// Vue 页面路径
-		paths["vue_page"] = fmt.Sprintf("%s/src/view/%s", webBasePath, packageName)
+		paths["vue_page"] = fmt.Sprintf("%s/view/%s", webBasePath, packageName)
 
 		// API 路径
-		paths["vue_api"] = fmt.Sprintf("%s/src/api/%s", webBasePath, packageName)
+		paths["vue_api"] = fmt.Sprintf("%s/api/%s", webBasePath, packageName)
 	}
 
 	// 添加模块信息
@@ -636,7 +636,7 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 	result.Paths = t.buildDirectoryStructure(plan)
 
 	if !plan.NeedCreatedModules {
-		result.success = true
+		result.Success = true
 		result.Message += "已列出当前功能所涉及的目录结构信息; 请在paths中查看; 并且在对应指定文件中实现相关的业务逻辑; "
 		return result
 	}

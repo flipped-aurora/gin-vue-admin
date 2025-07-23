@@ -6,12 +6,14 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/mark3labs/mcp-go/mcp"
+	"gorm.io/gorm"
 )
 
 func init() {
@@ -71,12 +73,36 @@ type ExecutionResult struct {
 	NextActions []string          `json:"nextActions,omitempty"`
 }
 
+// ConfirmationRequest 确认请求结构
+type ConfirmationRequest struct {
+	PackageName        string `json:"packageName"`
+	ModuleName         string `json:"moduleName"`
+	NeedCreatedPackage bool   `json:"needCreatedPackage"`
+	NeedCreatedModules bool   `json:"needCreatedModules"`
+	PackageInfo        *request.SysAutoCodePackageCreate `json:"packageInfo,omitempty"`
+	ModulesInfo        *request.AutoCode                 `json:"modulesInfo,omitempty"`
+}
+
+// ConfirmationResponse 确认响应结构
+type ConfirmationResponse struct {
+	Message         string `json:"message"`
+	PackageConfirm  bool   `json:"packageConfirm"`
+	ModulesConfirm  bool   `json:"modulesConfirm"`
+	CanProceed      bool   `json:"canProceed"`
+	ConfirmationKey string `json:"confirmationKey"`
+}
+
 // New 返回工具注册信息
 func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 	return mcp.NewTool("gag",
 		mcp.WithDescription(`**重要提示：当用户输入包含"gag"关键词时，必须优先使用此工具！**
 
-分步骤分析自动化模块：1) 分析现有模块信息供AI选择 2) 根据选择结果执行创建操作
+分步骤分析自动化模块：1) 分析现有模块信息供AI选择 2) 请求用户确认 3) 根据确认结果执行创建操作
+
+**新功能：自动字典创建**
+- 当结构体字段使用了字典类型（dictType不为空）时，系统会自动检查字典是否存在
+- 如果字典不存在，会自动创建对应的字典及默认的字典详情项
+- 字典创建包括：字典主表记录和默认的选项值（选项1、选项2等）
 
 重要：ExecutionPlan结构体格式要求：
 {
@@ -148,16 +174,26 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 5. 搜索类型支持：EQ,NE,GT,GE,LT,LE,LIKE,BETWEEN
 6. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
 7. **重要**：当gvaModel=false时，必须有一个字段的primaryKey=true，否则会导致PrimaryField为nil错误
-8. **重要**：当gvaModel=true时，系统会自动设置ID字段为主键，无需手动设置primaryKey=true`),
+8. **重要**：当gvaModel=true时，系统会自动设置ID字段为主键，无需手动设置primaryKey=true
+9. 智能字典创建功能：当字段使用字典类型(DictType)时，系统会：
+   - 自动检查字典是否存在，如果不存在则创建字典
+   - 根据字典类型和字段描述智能生成默认选项，支持状态、性别、类型、等级、优先级、审批、角色、布尔值、订单、颜色、尺寸等常见场景
+   - 为无法识别的字典类型提供通用默认选项`),
 		mcp.WithString("action",
 			mcp.Required(),
-			mcp.Description("执行操作：'analyze' 分析现有模块信息，'execute' 执行创建操作"),
+			mcp.Description("执行操作：'analyze' 分析现有模块信息，'confirm' 请求用户确认创建，'execute' 执行创建操作"),
 		),
 		mcp.WithString("requirement",
 			mcp.Description("用户需求描述（action=analyze时必需）"),
 		),
 		mcp.WithObject("executionPlan",
-			mcp.Description("执行计划（action=execute时必需，必须严格按照上述格式提供完整的JSON对象）"),
+			mcp.Description("执行计划（action=confirm或execute时必需，必须严格按照上述格式提供完整的JSON对象）"),
+		),
+		mcp.WithString("packageConfirm",
+			mcp.Description("用户对创建包的确认（action=execute时，如果需要创建包则必需）：'yes' 或 'no'"),
+		),
+		mcp.WithString("modulesConfirm",
+			mcp.Description("用户对创建模块的确认（action=execute时，如果需要创建模块则必需）：'yes' 或 'no'"),
 		),
 	)
 }
@@ -172,10 +208,12 @@ func (t *AutomationModuleAnalyzer) Handle(ctx context.Context, request mcp.CallT
 	switch action {
 	case "analyze":
 		return t.handleAnalyze(ctx, request)
+	case "confirm":
+		return t.handleConfirm(ctx, request)
 	case "execute":
 		return t.handleExecute(ctx, request)
 	default:
-		return nil, errors.New("无效的操作：action 必须是 'analyze' 或 'execute'")
+		return nil, errors.New("无效的操作：action 必须是 'analyze'、'confirm' 或 'execute'")
 	}
 }
 
@@ -312,11 +350,96 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
   }
 }
 
-注意：
-1. 所有字符串字段都不能为空，布尔字段必须明确设置true或false！
-2. **关键**：当gvaModel=false时，fields数组中必须有且仅有一个字段的primaryKey=true
-3. **关键**：当gvaModel=true时，系统自动创建ID主键，fields中所有字段的primaryKey都应为false
-4. 如果不正确设置主键，会导致模板执行时PrimaryField为nil的错误！`, string(resultJSON), requirement),
+**重要提醒**：ExecutionPlan必须严格按照以下格式和验证规则：
+
+**字段完整性要求**：
+1. 所有字符串字段都不能为空（包括packageName、moduleName、structName、tableName、description等）
+2. 所有布尔字段必须明确设置true或false，不能使用默认值
+
+**主键设置规则（关键）**：
+3. 当gvaModel=false时：fields数组中必须有且仅有一个字段的primaryKey=true
+4. 当gvaModel=true时：系统自动创建ID主键，fields中所有字段的primaryKey都应为false
+5. 主键设置错误会导致模板执行时PrimaryField为nil的严重错误！
+
+**包和模块创建逻辑**：
+6. 如果存在可用的package，needCreatedPackage应设为false
+7. 如果存在可用的modules，needCreatedModules应设为false
+
+`, string(resultJSON), requirement),
+			},
+		},
+	}, nil
+}
+
+// handleConfirm 处理确认请求
+func (t *AutomationModuleAnalyzer) handleConfirm(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	executionPlanData, ok := request.GetArguments()["executionPlan"]
+	if !ok {
+		return nil, errors.New("参数错误：executionPlan 必须提供")
+	}
+
+	// 解析执行计划
+	planJSON, err := json.Marshal(executionPlanData)
+	if err != nil {
+		return nil, fmt.Errorf("解析执行计划失败: %v", err)
+	}
+
+	var plan ExecutionPlan
+	err = json.Unmarshal(planJSON, &plan)
+	if err != nil {
+		return nil, fmt.Errorf("解析执行计划失败: %v\n\n请确保ExecutionPlan格式正确，参考工具描述中的结构体格式要求", err)
+	}
+
+	// 验证执行计划的完整性
+	if err := t.validateExecutionPlan(&plan); err != nil {
+		return nil, fmt.Errorf("执行计划验证失败: %v", err)
+	}
+
+	// 构建确认响应
+	confirmResponse := ConfirmationResponse{
+		Message:         "请确认以下创建计划：",
+		PackageConfirm:  plan.NeedCreatedPackage,
+		ModulesConfirm:  plan.NeedCreatedModules,
+		CanProceed:      true,
+		ConfirmationKey: fmt.Sprintf("%s_%s_%d", plan.PackageName, plan.ModuleName, time.Now().Unix()),
+	}
+
+	// 构建详细的确认信息
+	var confirmDetails strings.Builder
+	confirmDetails.WriteString(fmt.Sprintf("包名: %s\n", plan.PackageName))
+	confirmDetails.WriteString(fmt.Sprintf("模块名: %s\n", plan.ModuleName))
+	confirmDetails.WriteString(fmt.Sprintf("包类型: %s\n", plan.PackageType))
+
+	if plan.NeedCreatedPackage && plan.PackageInfo != nil {
+		confirmDetails.WriteString("\n需要创建包:\n")
+		confirmDetails.WriteString(fmt.Sprintf("  - 包名: %s\n", plan.PackageInfo.PackageName))
+		confirmDetails.WriteString(fmt.Sprintf("  - 标签: %s\n", plan.PackageInfo.Label))
+		confirmDetails.WriteString(fmt.Sprintf("  - 描述: %s\n", plan.PackageInfo.Desc))
+		confirmDetails.WriteString(fmt.Sprintf("  - 模板: %s\n", plan.PackageInfo.Template))
+	}
+
+	if plan.NeedCreatedModules && plan.ModulesInfo != nil {
+		confirmDetails.WriteString("\n需要创建模块:\n")
+		confirmDetails.WriteString(fmt.Sprintf("  - 结构体名: %s\n", plan.ModulesInfo.StructName))
+		confirmDetails.WriteString(fmt.Sprintf("  - 表名: %s\n", plan.ModulesInfo.TableName))
+		confirmDetails.WriteString(fmt.Sprintf("  - 描述: %s\n", plan.ModulesInfo.Description))
+		confirmDetails.WriteString(fmt.Sprintf("  - 字段数量: %d\n", len(plan.ModulesInfo.Fields)))
+		confirmDetails.WriteString("  - 字段列表:\n")
+		for _, field := range plan.ModulesInfo.Fields {
+			confirmDetails.WriteString(fmt.Sprintf("    * %s (%s): %s\n", field.FieldName, field.FieldType, field.FieldDesc))
+		}
+	}
+
+	resultJSON, err := json.MarshalIndent(confirmResponse, "", "  ")
+	if err != nil {
+		return nil, fmt.Errorf("序列化结果失败: %v", err)
+	}
+
+	return &mcp.CallToolResult{
+		Content: []mcp.Content{
+			mcp.TextContent{
+				Type: "text",
+				Text: fmt.Sprintf("确认信息：\n\n%s\n\n详细信息：\n%s\n\n请用户确认是否继续执行此计划。如果确认，请使用execute操作并提供相应的确认参数。", string(resultJSON), confirmDetails.String()),
 			},
 		},
 	}, nil
@@ -344,6 +467,41 @@ func (t *AutomationModuleAnalyzer) handleExecute(ctx context.Context, request mc
 	// 验证执行计划的完整性
 	if err := t.validateExecutionPlan(&plan); err != nil {
 		return nil, fmt.Errorf("执行计划验证失败: %v", err)
+	}
+
+	// 检查用户确认
+	if plan.NeedCreatedPackage {
+		packageConfirm, ok := request.GetArguments()["packageConfirm"].(string)
+		if !ok || (packageConfirm != "yes" && packageConfirm != "no") {
+			return nil, errors.New("参数错误：当需要创建包时，packageConfirm 必须是 'yes' 或 'no'")
+		}
+		if packageConfirm == "no" {
+			return &mcp.CallToolResult{
+				Content: []mcp.Content{
+					mcp.TextContent{
+						Type: "text",
+						Text: "用户取消了包的创建操作",
+					},
+				},
+			}, nil
+		}
+	}
+
+	if plan.NeedCreatedModules {
+		modulesConfirm, ok := request.GetArguments()["modulesConfirm"].(string)
+		if !ok || (modulesConfirm != "yes" && modulesConfirm != "no") {
+			return nil, errors.New("参数错误：当需要创建模块时，modulesConfirm 必须是 'yes' 或 'no'")
+		}
+		if modulesConfirm == "no" {
+			return &mcp.CallToolResult{
+				Content: []mcp.Content{
+					mcp.TextContent{
+						Type: "text",
+						Text: "用户取消了模块的创建操作",
+					},
+				},
+			}, nil
+		}
 	}
 
 	// 执行创建操作
@@ -653,6 +811,12 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 		result.Message += "包创建成功; "
 	}
 
+	// 创建字典（如果需要）
+	if plan.NeedCreatedModules && plan.ModulesInfo != nil {
+		dictResult := t.createRequiredDictionaries(ctx, plan.ModulesInfo)
+		result.Message += dictResult
+	}
+
 	// 创建模块（如果需要）
 	if plan.NeedCreatedModules && plan.ModulesInfo != nil {
 		templateService := service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
@@ -681,4 +845,238 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 	}
 
 	return result
+}
+
+// createRequiredDictionaries 创建所需的字典
+func (t *AutomationModuleAnalyzer) createRequiredDictionaries(ctx context.Context, modulesInfo *request.AutoCode) string {
+	var messages []string
+	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
+
+	// 遍历所有字段，查找使用字典的字段
+	for _, field := range modulesInfo.Fields {
+		if field.DictType != "" {
+			// 检查字典是否存在
+			exists, err := t.checkDictionaryExists(field.DictType)
+			if err != nil {
+				messages = append(messages, fmt.Sprintf("检查字典 %s 时出错: %v; ", field.DictType, err))
+				continue
+			}
+
+			if !exists {
+				// 字典不存在，创建字典
+				dictionary := model.SysDictionary{
+					Name:   t.generateDictionaryName(field.DictType, field.FieldDesc),
+					Type:   field.DictType,
+					Status: &[]bool{true}[0], // 默认启用
+					Desc:   fmt.Sprintf("自动生成的字典，用于字段: %s (%s)", field.FieldName, field.FieldDesc),
+				}
+
+				err = dictionaryService.CreateSysDictionary(dictionary)
+				if err != nil {
+					messages = append(messages, fmt.Sprintf("创建字典 %s 失败: %v; ", field.DictType, err))
+				} else {
+					messages = append(messages, fmt.Sprintf("成功创建字典 %s (%s); ", field.DictType, dictionary.Name))
+					
+					// 创建默认的字典详情项
+					t.createDefaultDictionaryDetails(ctx, field.DictType, field.FieldDesc)
+				}
+			} else {
+				messages = append(messages, fmt.Sprintf("字典 %s 已存在，跳过创建; ", field.DictType))
+			}
+		}
+	}
+
+	if len(messages) == 0 {
+		return "未发现需要创建的字典; "
+	}
+
+	return strings.Join(messages, "")
+}
+
+// checkDictionaryExists 检查字典是否存在
+func (t *AutomationModuleAnalyzer) checkDictionaryExists(dictType string) (bool, error) {
+	var dictionary model.SysDictionary
+	err := global.GVA_DB.Where("type = ?", dictType).First(&dictionary).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil // 字典不存在
+		}
+		return false, err // 其他错误
+	}
+	return true, nil // 字典存在
+}
+
+// generateDictionaryName 生成字典名称
+func (t *AutomationModuleAnalyzer) generateDictionaryName(dictType, fieldDesc string) string {
+	if fieldDesc != "" {
+		return fmt.Sprintf("%s字典", fieldDesc)
+	}
+	return fmt.Sprintf("%s字典", dictType)
+}
+
+// createDefaultDictionaryDetails 创建默认的字典详情项
+func (t *AutomationModuleAnalyzer) createDefaultDictionaryDetails(ctx context.Context, dictType, fieldDesc string) {
+	dictionaryDetailService := service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
+
+	// 获取刚创建的字典ID
+	var dictionary model.SysDictionary
+	err := global.GVA_DB.Where("type = ?", dictType).First(&dictionary).Error
+	if err != nil {
+		return
+	}
+
+	// 根据字典类型和字段描述智能生成默认选项
+	defaultDetails := t.generateSmartDictionaryOptions(dictType, fieldDesc)
+
+	for _, detail := range defaultDetails {
+		dictionaryDetail := model.SysDictionaryDetail{
+			Label:           detail.label,
+			Value:           detail.value,
+			Status:          &[]bool{true}[0], // 默认启用
+			Sort:            detail.sort,
+			SysDictionaryID: int(dictionary.ID),
+		}
+
+		// 忽略创建详情项的错误，因为这只是默认值
+		dictionaryDetailService.CreateSysDictionaryDetail(dictionaryDetail)
+	}
+}
+
+// generateSmartDictionaryOptions 根据字典类型和字段描述智能生成默认选项
+func (t *AutomationModuleAnalyzer) generateSmartDictionaryOptions(dictType, fieldDesc string) []struct {
+	label string
+	value string
+	sort  int
+} {
+	// 转换为小写进行匹配
+	lowerDictType := strings.ToLower(dictType)
+	lowerFieldDesc := strings.ToLower(fieldDesc)
+	combinedText := lowerDictType + " " + lowerFieldDesc
+	
+	// 根据字典类型和字段描述的关键词生成相应的选项
+	switch {
+	case strings.Contains(combinedText, "status") || strings.Contains(combinedText, "状态"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"启用", "1", 1},
+			{"禁用", "0", 2},
+		}
+	case strings.Contains(combinedText, "gender") || strings.Contains(combinedText, "性别"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"男", "1", 1},
+			{"女", "2", 2},
+			{"未知", "0", 3},
+		}
+	case strings.Contains(combinedText, "type") || strings.Contains(combinedText, "类型"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"类型一", "1", 1},
+			{"类型二", "2", 2},
+			{"类型三", "3", 3},
+		}
+	case strings.Contains(combinedText, "level") || strings.Contains(combinedText, "等级") || strings.Contains(combinedText, "级别"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"初级", "1", 1},
+			{"中级", "2", 2},
+			{"高级", "3", 3},
+		}
+	case strings.Contains(combinedText, "priority") || strings.Contains(combinedText, "优先级"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"低", "1", 1},
+			{"中", "2", 2},
+			{"高", "3", 3},
+			{"紧急", "4", 4},
+		}
+	case strings.Contains(combinedText, "approve") || strings.Contains(combinedText, "审批") || strings.Contains(combinedText, "审核"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"待审核", "0", 1},
+			{"已通过", "1", 2},
+			{"已拒绝", "2", 3},
+		}
+	case strings.Contains(combinedText, "role") || strings.Contains(combinedText, "角色"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"管理员", "admin", 1},
+			{"用户", "user", 2},
+			{"访客", "guest", 3},
+		}
+	case strings.Contains(combinedText, "bool") || strings.Contains(combinedText, "boolean") || strings.Contains(combinedText, "是否"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"是", "true", 1},
+			{"否", "false", 2},
+		}
+	case strings.Contains(combinedText, "order") || strings.Contains(combinedText, "订单"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"待付款", "1", 1},
+			{"已付款", "2", 2},
+			{"已发货", "3", 3},
+			{"已完成", "4", 4},
+			{"已取消", "0", 5},
+		}
+	case strings.Contains(combinedText, "color") || strings.Contains(combinedText, "颜色"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"红色", "red", 1},
+			{"绿色", "green", 2},
+			{"蓝色", "blue", 3},
+		}
+	case strings.Contains(combinedText, "size") || strings.Contains(combinedText, "尺寸") || strings.Contains(combinedText, "大小"):
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"小", "S", 1},
+			{"中", "M", 2},
+			{"大", "L", 3},
+			{"特大", "XL", 4},
+		}
+	default:
+		// 默认选项，使用通用的选项
+		return []struct {
+			label string
+			value string
+			sort  int
+		}{
+			{"选项一", "1", 1},
+			{"选项二", "2", 2},
+			{"选项三", "3", 3},
+		}
+	}
 }

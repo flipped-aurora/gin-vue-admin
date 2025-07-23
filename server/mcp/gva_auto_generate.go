@@ -635,6 +635,12 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 	// 无论如何都先构建目录结构信息，确保paths始终返回
 	result.Paths = t.buildDirectoryStructure(plan)
 
+	if !plan.NeedCreatedModules {
+		result.success = true
+		result.Message += "已列出当前功能所涉及的目录结构信息; 请在paths中查看; 并且在对应指定文件中实现相关的业务逻辑; "
+		return result
+	}
+
 	// 创建包（如果需要）
 	if plan.NeedCreatedPackage && plan.PackageInfo != nil {
 		packageService := service.ServiceGroupApp.SystemServiceGroup.AutoCodePackage

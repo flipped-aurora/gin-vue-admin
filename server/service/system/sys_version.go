@@ -21,31 +21,15 @@ func (sysVersionService *SysVersionService) CreateSysVersion(ctx context.Context
 
 // DeleteSysVersion 删除版本管理记录
 // Author [yourname](https://github.com/yourname)
-func (sysVersionService *SysVersionService) DeleteSysVersion(ctx context.Context, ID string, userID uint) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(&system.SysVersion{}).Where("id = ?", ID).Update("deleted_by", userID).Error; err != nil {
-			return err
-		}
-		if err = tx.Delete(&system.SysVersion{}, "id = ?", ID).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (sysVersionService *SysVersionService) DeleteSysVersion(ctx context.Context, ID string) (err error) {
+	err = global.GVA_DB.Delete(&system.SysVersion{}, "id = ?", ID).Error
 	return err
 }
 
 // DeleteSysVersionByIds 批量删除版本管理记录
 // Author [yourname](https://github.com/yourname)
-func (sysVersionService *SysVersionService) DeleteSysVersionByIds(ctx context.Context, IDs []string, deleted_by uint) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(&system.SysVersion{}).Where("id in ?", IDs).Update("deleted_by", deleted_by).Error; err != nil {
-			return err
-		}
-		if err := tx.Where("id in ?", IDs).Delete(&system.SysVersion{}).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+func (sysVersionService *SysVersionService) DeleteSysVersionByIds(ctx context.Context, IDs []string) (err error) {
+	err = global.GVA_DB.Where("id in ?", IDs).Delete(&system.SysVersion{}).Error
 	return err
 }
 

@@ -119,8 +119,7 @@ func (sysVersionApi *SysVersionApi) DeleteSysVersion(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	ID := c.Query("ID")
-	userID := utils.GetUserID(c)
-	err := sysVersionService.DeleteSysVersion(ctx, ID, userID)
+	err := sysVersionService.DeleteSysVersion(ctx, ID)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败:"+err.Error(), c)
@@ -142,8 +141,7 @@ func (sysVersionApi *SysVersionApi) DeleteSysVersionByIds(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	IDs := c.QueryArray("IDs[]")
-	userID := utils.GetUserID(c)
-	err := sysVersionService.DeleteSysVersionByIds(ctx, IDs, userID)
+	err := sysVersionService.DeleteSysVersionByIds(ctx, IDs)
 	if err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败:"+err.Error(), c)
@@ -310,7 +308,6 @@ func (sysVersionApi *SysVersionApi) ExportVersion(c *gin.Context) {
 		Description: utils.Pointer(req.Description),
 		VersionData: utils.Pointer(string(jsonData)),
 	}
-	version.CreatedBy = utils.GetUserID(c)
 
 	err = sysVersionService.CreateSysVersion(ctx, &version)
 	if err != nil {
@@ -431,7 +428,6 @@ func (sysVersionApi *SysVersionApi) ImportVersion(c *gin.Context) {
 		Description: utils.Pointer(fmt.Sprintf("导入版本: %v", versionInfo["description"])),
 		VersionData: utils.Pointer(string(jsonData)),
 	}
-	version.CreatedBy = utils.GetUserID(c)
 
 	err = sysVersionService.CreateSysVersion(ctx, &version)
 	if err != nil {

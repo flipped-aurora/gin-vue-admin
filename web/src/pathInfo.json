@@ -58,9 +58,7 @@
   "/src/view/superAdmin/menu/menu.vue": "Menus",
   "/src/view/superAdmin/operation/sysOperationRecord.vue": "SysOperationRecord",
   "/src/view/superAdmin/params/sysParams.vue": "SysParams",
-  "/src/view/superAdmin/release/syncRelease.vue": "SyncRelease",
   "/src/view/superAdmin/user/user.vue": "User",
-  "/src/view/superAdmin/version/version.vue": "Version",
   "/src/view/system/state.vue": "State",
   "/src/view/systemTools/autoCode/component/fieldDialog.vue": "FieldDialog",
   "/src/view/systemTools/autoCode/component/previewCodeDialog.vue": "PreviewCodeDialog",
@@ -76,6 +74,7 @@
   "/src/view/systemTools/installPlugin/index.vue": "Index",
   "/src/view/systemTools/pubPlug/pubPlug.vue": "PubPlug",
   "/src/view/systemTools/system/system.vue": "Config",
+  "/src/view/systemTools/version/version.vue": "SysVersion",
   "/src/plugin/announcement/form/info.vue": "InfoForm",
   "/src/plugin/announcement/view/info.vue": "Info",
   "/src/plugin/email/view/index.vue": "Email"

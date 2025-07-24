@@ -75,10 +75,10 @@ type ExecutionResult struct {
 
 // ConfirmationRequest 确认请求结构
 type ConfirmationRequest struct {
-	PackageName        string `json:"packageName"`
-	ModuleName         string `json:"moduleName"`
-	NeedCreatedPackage bool   `json:"needCreatedPackage"`
-	NeedCreatedModules bool   `json:"needCreatedModules"`
+	PackageName        string                            `json:"packageName"`
+	ModuleName         string                            `json:"moduleName"`
+	NeedCreatedPackage bool                              `json:"needCreatedPackage"`
+	NeedCreatedModules bool                              `json:"needCreatedModules"`
 	PackageInfo        *request.SysAutoCodePackageCreate `json:"packageInfo,omitempty"`
 	ModulesInfo        *request.AutoCode                 `json:"modulesInfo,omitempty"`
 }
@@ -122,10 +122,10 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
     "tableName": "数据库表名(string)",
     "businessDB": "业务数据库(string)",
     "structName": "结构体名(string)",
-    "packageName": "包名(string)",
+    "packageName": "文件名称(string)",
     "description": "中文描述(string)",
     "abbreviation": "简称(string)",
-    "humpPackageName": "驼峰包名(string)",
+    "humpPackageName": "文件名称 一般是结构体名的小驼峰(string)",
     "gvaModel": "是否使用GVA模型(bool) 固定为true 后续不需要创建ID created_at deleted_at updated_at",
     "autoMigrate": "是否自动迁移(bool)",
     "autoCreateResource": "是否创建资源(bool)",
@@ -146,7 +146,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "dataTypeLong": "数据长度(string)",
       "comment": "注释(string)",
       "columnName": "数据库列名(string)",
-      "fieldSearchType": "搜索类型:EQ/LIKE/BETWEEN等(string)",
+      "fieldSearchType": "搜索类型:=/>/</>=/<=/NOT BETWEEN/LIKE/BETWEEN等(string)",
       "fieldSearchHide": "是否隐藏搜索(bool)",
       "dictType": "字典类型(string)",
       "form": "表单显示(bool)",
@@ -309,7 +309,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
     "packageName": "文件名称小驼峰模式 一般是结构体名的小驼峰",
     "description": "中文描述",
     "abbreviation": "简称 package和结构体简称不可同名 小驼峰模式",
-    "humpPackageName": " 一般是结构体名的小驼峰",
+    "humpPackageName": "一般是结构体名的下划线分割的小驼峰 例如：sys_user",
     "gvaModel": true,
     "autoMigrate": true,
     "autoCreateResource": true,
@@ -876,7 +876,7 @@ func (t *AutomationModuleAnalyzer) createRequiredDictionaries(ctx context.Contex
 					messages = append(messages, fmt.Sprintf("创建字典 %s 失败: %v; ", field.DictType, err))
 				} else {
 					messages = append(messages, fmt.Sprintf("成功创建字典 %s (%s); ", field.DictType, dictionary.Name))
-					
+
 					// 创建默认的字典详情项
 					t.createDefaultDictionaryDetails(ctx, field.DictType, field.FieldDesc)
 				}
@@ -952,7 +952,7 @@ func (t *AutomationModuleAnalyzer) generateSmartDictionaryOptions(dictType, fiel
 	lowerDictType := strings.ToLower(dictType)
 	lowerFieldDesc := strings.ToLower(fieldDesc)
 	combinedText := lowerDictType + " " + lowerFieldDesc
-	
+
 	// 根据字典类型和字段描述的关键词生成相应的选项
 	switch {
 	case strings.Contains(combinedText, "status") || strings.Contains(combinedText, "状态"):

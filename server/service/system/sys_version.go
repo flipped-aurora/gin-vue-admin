@@ -2,8 +2,6 @@ package system
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -89,75 +87,72 @@ func (sysVersionService *SysVersionService) GetApisByIds(ctx context.Context, id
 }
 
 // ImportMenus 导入菜单数据
-func (sysVersionService *SysVersionService) ImportMenus(ctx context.Context, menusData interface{}) error {
-	menusBytes, err := json.Marshal(menusData)
-	if err != nil {
-		return fmt.Errorf("序列化菜单数据失败: %v", err)
-	}
-
-	var menus []system.SysBaseMenu
-	err = json.Unmarshal(menusBytes, &menus)
-	if err != nil {
-		return fmt.Errorf("反序列化菜单数据失败: %v", err)
-	}
-
+func (sysVersionService *SysVersionService) ImportMenus(ctx context.Context, menus []system.SysBaseMenu) error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		for _, menu := range menus {
-			// 检查菜单是否已存在（根据path和name判断）
-			var existingMenu system.SysBaseMenu
-			err := tx.Where("path = ? AND name = ?", menu.Path, menu.Name).First(&existingMenu).Error
-			if err == gorm.ErrRecordNotFound {
-				// 菜单不存在，创建新菜单
-				menu.ID = 0 // 重置ID，让数据库自动生成
-				// 重置关联数据的ID
-				for i := range menu.Parameters {
-					menu.Parameters[i].ID = 0
-					menu.Parameters[i].SysBaseMenuID = 0
-				}
-				for i := range menu.MenuBtn {
-					menu.MenuBtn[i].ID = 0
-					menu.MenuBtn[i].SysBaseMenuID = 0
-				}
-				if err := tx.Create(&menu).Error; err != nil {
-					return fmt.Errorf("创建菜单失败: %v", err)
-				}
-			} else if err != nil {
-				return fmt.Errorf("查询菜单失败: %v", err)
-			}
-			// 如果菜单已存在，跳过创建
-		}
-		return nil
+		// 递归创建菜单
+		return sysVersionService.createMenusRecursively(tx, menus, 0)
 	})
 }
 
+// createMenusRecursively 递归创建菜单
+func (sysVersionService *SysVersionService) createMenusRecursively(tx *gorm.DB, menus []system.SysBaseMenu, parentId uint) error {
+	for _, menu := range menus {
+		// 检查菜单是否已存在
+		var existingMenu system.SysBaseMenu
+		if err := tx.Where("name = ? AND path = ?", menu.Name, menu.Path).First(&existingMenu).Error; err == nil {
+			// 菜单已存在，跳过
+			continue
+		}
+
+		// 创建新菜单
+		newMenu := system.SysBaseMenu{
+			ParentId:   parentId,
+			Path:       menu.Path,
+			Name:       menu.Name,
+			Hidden:     menu.Hidden,
+			Component:  menu.Component,
+			Sort:       menu.Sort,
+			Meta:       menu.Meta,
+			Parameters: menu.Parameters,
+			MenuBtn:    menu.MenuBtn,
+		}
+
+		if err := tx.Create(&newMenu).Error; err != nil {
+			return err
+		}
+
+		// 递归处理子菜单
+		if len(menu.Children) > 0 {
+			if err := sysVersionService.createMenusRecursively(tx, menu.Children, newMenu.ID); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 // ImportApis 导入API数据
-func (sysVersionService *SysVersionService) ImportApis(ctx context.Context, apisData interface{}) error {
-	apisBytes, err := json.Marshal(apisData)
-	if err != nil {
-		return fmt.Errorf("序列化API数据失败: %v", err)
-	}
-
-	var apis []system.SysApi
-	err = json.Unmarshal(apisBytes, &apis)
-	if err != nil {
-		return fmt.Errorf("反序列化API数据失败: %v", err)
-	}
-
+func (sysVersionService *SysVersionService) ImportApis(apis []system.SysApi) error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		for _, api := range apis {
-			// 检查API是否已存在（根据path和method判断）
+			// 检查API是否已存在
 			var existingApi system.SysApi
-			err := tx.Where("path = ? AND method = ?", api.Path, api.Method).First(&existingApi).Error
-			if err == gorm.ErrRecordNotFound {
-				// API不存在，创建新API
-				api.ID = 0 // 重置ID，让数据库自动生成
-				if err := tx.Create(&api).Error; err != nil {
-					return fmt.Errorf("创建API失败: %v", err)
-				}
-			} else if err != nil {
-				return fmt.Errorf("查询API失败: %v", err)
+			if err := tx.Where("path = ? AND method = ?", api.Path, api.Method).First(&existingApi).Error; err == nil {
+				// API已存在，跳过
+				continue
 			}
-			// 如果API已存在，跳过创建
+
+			// 创建新API
+			newApi := system.SysApi{
+				Path:        api.Path,
+				Description: api.Description,
+				ApiGroup:    api.ApiGroup,
+				Method:      api.Method,
+			}
+
+			if err := tx.Create(&newApi).Error; err != nil {
+				return err
+			}
 		}
 		return nil
 	})

@@ -12,6 +12,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -20,7 +21,7 @@ import (
 type SysVersionApi struct{}
 
 // buildMenuTree 构建菜单树结构
-func buildMenuTree(menus []system.SysBaseMenu) []map[string]interface{} {
+func buildMenuTree(menus []system.SysBaseMenu) []system.SysBaseMenu {
 	// 创建菜单映射
 	menuMap := make(map[uint]*system.SysBaseMenu)
 	for i := range menus {
@@ -28,66 +29,68 @@ func buildMenuTree(menus []system.SysBaseMenu) []map[string]interface{} {
 	}
 
 	// 构建树结构
-	var rootMenus []map[string]interface{}
+	var rootMenus []system.SysBaseMenu
 	for _, menu := range menus {
 		if menu.ParentId == 0 {
 			// 根菜单
-			menuData := convertMenuToMap(menu, menuMap)
+			menuData := convertMenuToStruct(menu, menuMap)
 			rootMenus = append(rootMenus, menuData)
 		}
 	}
 
 	// 按sort排序根菜单
 	sort.Slice(rootMenus, func(i, j int) bool {
-		sortI, _ := rootMenus[i]["sort"].(int)
-		sortJ, _ := rootMenus[j]["sort"].(int)
-		return sortI < sortJ
+		return rootMenus[i].Sort < rootMenus[j].Sort
 	})
 
 	return rootMenus
 }
 
-// convertMenuToMap 将菜单转换为map并递归处理子菜单
-func convertMenuToMap(menu system.SysBaseMenu, menuMap map[uint]*system.SysBaseMenu) map[string]interface{} {
-	result := map[string]interface{}{
-		"path":      menu.Path,
-		"name":      menu.Name,
-		"hidden":    menu.Hidden,
-		"component": menu.Component,
-		"sort":      menu.Sort,
-		"meta":      menu.Meta,
+// convertMenuToStruct 将菜单转换为结构体并递归处理子菜单
+func convertMenuToStruct(menu system.SysBaseMenu, menuMap map[uint]*system.SysBaseMenu) system.SysBaseMenu {
+	result := system.SysBaseMenu{
+		Path:      menu.Path,
+		Name:      menu.Name,
+		Hidden:    menu.Hidden,
+		Component: menu.Component,
+		Sort:      menu.Sort,
+		Meta:      menu.Meta,
 	}
 
-	// 处理参数
+	// 清理并复制参数数据
 	if len(menu.Parameters) > 0 {
-		params := make([]map[string]interface{}, 0)
+		cleanParameters := make([]system.SysBaseMenuParameter, 0, len(menu.Parameters))
 		for _, param := range menu.Parameters {
-			params = append(params, map[string]interface{}{
-				"type":  param.Type,
-				"key":   param.Key,
-				"value": param.Value,
-			})
+			cleanParam := system.SysBaseMenuParameter{
+				Type:  param.Type,
+				Key:   param.Key,
+				Value: param.Value,
+				// 不复制 ID, CreatedAt, UpdatedAt, SysBaseMenuID
+			}
+			cleanParameters = append(cleanParameters, cleanParam)
 		}
-		result["parameters"] = params
+		result.Parameters = cleanParameters
 	}
 
-	// 处理菜单按钮
+	// 清理并复制菜单按钮数据
 	if len(menu.MenuBtn) > 0 {
-		btns := make([]map[string]interface{}, 0)
+		cleanMenuBtns := make([]system.SysBaseMenuBtn, 0, len(menu.MenuBtn))
 		for _, btn := range menu.MenuBtn {
-			btns = append(btns, map[string]interface{}{
-				"name": btn.Name,
-				"desc": btn.Desc,
-			})
+			cleanBtn := system.SysBaseMenuBtn{
+				Name: btn.Name,
+				Desc: btn.Desc,
+				// 不复制 ID, CreatedAt, UpdatedAt, SysBaseMenuID
+			}
+			cleanMenuBtns = append(cleanMenuBtns, cleanBtn)
 		}
-		result["menuBtn"] = btns
+		result.MenuBtn = cleanMenuBtns
 	}
 
 	// 查找并处理子菜单
-	var children []map[string]interface{}
+	var children []system.SysBaseMenu
 	for _, childMenu := range menuMap {
 		if childMenu.ParentId == menu.ID {
-			childData := convertMenuToMap(*childMenu, menuMap)
+			childData := convertMenuToStruct(*childMenu, menuMap)
 			children = append(children, childData)
 		}
 	}
@@ -95,11 +98,9 @@ func convertMenuToMap(menu system.SysBaseMenu, menuMap map[uint]*system.SysBaseM
 	// 按sort排序子菜单
 	if len(children) > 0 {
 		sort.Slice(children, func(i, j int) bool {
-			sortI, _ := children[i]["sort"].(int)
-			sortJ, _ := children[j]["sort"].(int)
-			return sortI < sortJ
+			return children[i].Sort < children[j].Sort
 		})
-		result["children"] = children
+		result.Children = children
 	}
 
 	return result
@@ -269,28 +270,28 @@ func (sysVersionApi *SysVersionApi) ExportVersion(c *gin.Context) {
 	// 处理菜单数据，构建递归的children结构
 	processedMenus := buildMenuTree(menuData)
 
-	// 处理API数据，移除ID字段
-	processedApis := make([]map[string]interface{}, 0)
+	// 处理API数据，清除ID和时间戳字段
+	processedApis := make([]system.SysApi, 0, len(apiData))
 	for _, api := range apiData {
-		apiMap := map[string]interface{}{
-			"path":        api.Path,
-			"description": api.Description,
-			"apiGroup":    api.ApiGroup,
-			"method":      api.Method,
+		cleanApi := system.SysApi{
+			Path:        api.Path,
+			Description: api.Description,
+			ApiGroup:    api.ApiGroup,
+			Method:      api.Method,
 		}
-		processedApis = append(processedApis, apiMap)
+		processedApis = append(processedApis, cleanApi)
 	}
 
 	// 构建导出数据
-	exportData := map[string]interface{}{
-		"version": map[string]interface{}{
-			"name":        req.VersionName,
-			"code":        req.VersionCode,
-			"description": req.Description,
-			"exportTime":  time.Now().Format("2006-01-02 15:04:05"),
+	exportData := systemRes.ExportVersionResponse{
+		Version: systemReq.VersionInfo{
+			Name:        req.VersionName,
+			Code:        req.VersionCode,
+			Description: req.Description,
+			ExportTime:  time.Now().Format("2006-01-02 15:04:05"),
 		},
-		"menus": processedMenus,
-		"apis":  processedApis,
+		Menus: processedMenus,
+		Apis:  processedApis,
 	}
 
 	// 转换为JSON
@@ -351,15 +352,15 @@ func (sysVersionApi *SysVersionApi) DownloadVersionJson(c *gin.Context) {
 		jsonData = []byte(*version.VersionData)
 	} else {
 		// 如果没有存储的JSON数据，构建一个基本的结构
-		basicData := map[string]interface{}{
-			"version": map[string]interface{}{
-				"name":        *version.VersionName,
-				"code":        *version.VersionCode,
-				"description": *version.Description,
-				"exportTime":  version.CreatedAt.Format("2006-01-02 15:04:05"),
+		basicData := systemRes.ExportVersionResponse{
+			Version: systemReq.VersionInfo{
+				Name:        *version.VersionName,
+				Code:        *version.VersionCode,
+				Description: *version.Description,
+				ExportTime:  version.CreatedAt.Format("2006-01-02 15:04:05"),
 			},
-			"menus": []interface{}{},
-			"apis":  []interface{}{},
+			Menus: []system.SysBaseMenu{},
+			Apis:  []system.SysApi{},
 		}
 		jsonData, _ = json.MarshalIndent(basicData, "", "  ")
 	}
@@ -379,14 +380,14 @@ func (sysVersionApi *SysVersionApi) DownloadVersionJson(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body map[string]interface{} true "版本JSON数据"
+// @Param data body systemReq.ImportVersionRequest true "版本JSON数据"
 // @Success 200 {object} response.Response{msg=string} "导入成功"
 // @Router /sysVersion/importVersion [post]
 func (sysVersionApi *SysVersionApi) ImportVersion(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	// 获取JSON数据
-	var importData map[string]interface{}
+	var importData systemReq.ImportVersionRequest
 	err := c.ShouldBindJSON(&importData)
 	if err != nil {
 		response.FailWithMessage("解析JSON数据失败:"+err.Error(), c)
@@ -394,28 +395,25 @@ func (sysVersionApi *SysVersionApi) ImportVersion(c *gin.Context) {
 	}
 
 	// 验证数据格式
-	versionInfo, ok := importData["version"].(map[string]interface{})
-	if !ok {
+	if importData.VersionInfo.Name == "" || importData.VersionInfo.Code == "" {
 		response.FailWithMessage("版本信息格式错误", c)
 		return
 	}
 
 	// 导入菜单数据
-	if menusData, exists := importData["menus"]; exists {
-		err = sysVersionService.ImportMenus(ctx, menusData)
-		if err != nil {
+	if len(importData.ExportMenu) > 0 {
+		if err := sysVersionService.ImportMenus(ctx, importData.ExportMenu); err != nil {
 			global.GVA_LOG.Error("导入菜单失败!", zap.Error(err))
-			response.FailWithMessage("导入菜单失败:"+err.Error(), c)
+			response.FailWithMessage("导入菜单失败: "+err.Error(), c)
 			return
 		}
 	}
 
 	// 导入API数据
-	if apisData, exists := importData["apis"]; exists {
-		err = sysVersionService.ImportApis(ctx, apisData)
-		if err != nil {
+	if len(importData.ExportApi) > 0 {
+		if err := sysVersionService.ImportApis(importData.ExportApi); err != nil {
 			global.GVA_LOG.Error("导入API失败!", zap.Error(err))
-			response.FailWithMessage("导入API失败:"+err.Error(), c)
+			response.FailWithMessage("导入API失败: "+err.Error(), c)
 			return
 		}
 	}
@@ -423,9 +421,9 @@ func (sysVersionApi *SysVersionApi) ImportVersion(c *gin.Context) {
 	// 创建导入记录
 	jsonData, _ := json.Marshal(importData)
 	version := system.SysVersion{
-		VersionName: utils.Pointer(fmt.Sprintf("%v", versionInfo["name"])),
-		VersionCode: utils.Pointer(fmt.Sprintf("%v_imported_%s", versionInfo["code"], time.Now().Format("20060102150405"))),
-		Description: utils.Pointer(fmt.Sprintf("导入版本: %v", versionInfo["description"])),
+		VersionName: utils.Pointer(importData.VersionInfo.Name),
+		VersionCode: utils.Pointer(fmt.Sprintf("%s_imported_%s", importData.VersionInfo.Code, time.Now().Format("20060102150405"))),
+		Description: utils.Pointer(fmt.Sprintf("导入版本: %s", importData.VersionInfo.Description)),
 		VersionData: utils.Pointer(string(jsonData)),
 	}
 

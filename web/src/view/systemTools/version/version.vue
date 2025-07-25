@@ -96,7 +96,16 @@
     </el-drawer>
 
     <!-- 导出版本抽屉 -->
-    <el-drawer v-model="exportDialogVisible" title="创建发版" direction="rtl" size="80%" :before-close="closeExportDialog">
+    <el-drawer v-model="exportDialogVisible" title="创建发版" direction="rtl" size="80%" :before-close="closeExportDialog" :show-close="false">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">创建发版</span>
+          <div>
+            <el-button @click="closeExportDialog">取消</el-button>
+            <el-button type="primary" @click="handleExport" :loading="exportLoading">创建发版</el-button>
+          </div>
+        </div>
+      </template>
       <el-form :model="exportForm" label-width="100px">
         <el-form-item label="版本名称" required>
           <el-input v-model="exportForm.versionName" placeholder="请输入版本名称" />
@@ -108,21 +117,21 @@
           <el-input v-model="exportForm.description" type="textarea" placeholder="请输入版本描述" />
         </el-form-item>
         <el-form-item label="发版信息">
-          <div class="selection-row">
+          <div class="flex gap-5 w-full">
             <!-- 菜单选择 -->
-            <div class="tree-container half-width">
-              <div class="tree-header">
-                <span class="tree-title">选择菜单</span>
+            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/2">
+              <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
+                <span class="m-0 text-gray-800 text-base font-medium">选择菜单</span>
               </div>
-              <div class="tree-filter">
+              <div class="px-4 py-3 border-b border-gray-300 bg-gray-50">
                 <el-input v-model="menuFilterText" placeholder="输入关键字进行过滤" clearable size="small" />
               </div>
-              <div class="tree-content">
+              <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
                 <el-tree ref="menuTreeRef" :data="menuTreeData" :default-checked-keys="selectedMenuIds"
                   :props="menuTreeProps" default-expand-all highlight-current node-key="ID" show-checkbox
                   :filter-node-method="filterMenuNode" @check="onMenuCheck" class="menu-tree">
                   <template #default="{ node }">
-                    <span class="custom-tree-node">
+                    <span class="flex-1 flex items-center justify-between text-sm pr-2">
                       <span>{{ node.label }}</span>
                     </span>
                   </template>
@@ -131,16 +140,16 @@
             </div>
 
             <!-- API选择 -->
-            <div class="tree-container half-width">
-              <div class="tree-header">
-                <span class="tree-title">选择API</span>
+            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/2">
+              <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
+                <span class="m-0 text-gray-800 text-base font-medium">选择API</span>
               </div>
-              <div class="tree-filter">
+              <div class="px-4 py-3 border-b border-gray-300 bg-gray-50">
                 <el-input v-model="apiFilterTextName" placeholder="按名称过滤" clearable size="small"
                   style="margin-bottom: 8px" />
                 <el-input v-model="apiFilterTextPath" placeholder="按路径过滤" clearable size="small" />
               </div>
-              <div class="tree-content">
+              <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
                 <el-tree ref="apiTreeRef" :data="apiTreeData" :default-checked-keys="selectedApiIds"
                   :props="apiTreeProps" default-expand-all highlight-current node-key="onlyId" show-checkbox
                   :filter-node-method="filterApiNode" @check="onApiCheck" class="api-tree">
@@ -160,49 +169,104 @@
           </div>
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="drawer-footer">
-          <el-button @click="closeExportDialog">取消</el-button>
-          <el-button type="primary" @click="handleExport" :loading="exportLoading">创建发版</el-button>
-        </div>
-      </template>
     </el-drawer>
 
     <!-- 导入版本抽屉 -->
-    <el-drawer v-model="importDialogVisible" title="导入版本" direction="rtl" size="80%" :before-close="closeImportDialog">
+    <el-drawer v-model="importDialogVisible" title="导入版本" direction="rtl" size="80%" :before-close="closeImportDialog" :show-close="false">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">导入版本</span>
+          <div>
+            <el-button @click="closeImportDialog">取消</el-button>
+            <el-button type="primary" @click="handleImport" :loading="importLoading"
+              :disabled="!importJsonContent.trim()">导入</el-button>
+          </div>
+        </div>
+      </template>
       <el-form label-width="100px">
-        <el-form-item label="版本JSON内容">
-          <el-input v-model="importJsonContent" type="textarea" :rows="20" placeholder="请粘贴版本JSON内容"
+        <el-form-item label="上传文件">
+          <el-upload
+            ref="uploadRef"
+            :auto-upload="false"
+            :show-file-list="true"
+            :limit="1"
+            accept=".json"
+            :on-change="handleFileChange"
+            :on-remove="handleFileRemove"
+            drag
+          >
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              将JSON文件拖到此处，或<em>点击上传</em>
+            </div>
+            <template #tip>
+              <div class="el-upload__tip">
+                只能上传JSON文件
+              </div>
+            </template>
+          </el-upload>
+        </el-form-item>
+        <el-form-item label="版本JSON">
+          <el-input v-model="importJsonContent" type="textarea" :rows="20" placeholder="请粘贴版本JSON"
             @input="handleJsonContentChange" />
         </el-form-item>
         <el-form-item label="预览内容" v-if="importPreviewData">
-          <div class="import-preview">
-            <div class="preview-section">
-              <h4>菜单 ({{ importPreviewData.menus?.length || 0 }}项)</h4>
-              <el-scrollbar max-height="200px">
-                <div v-for="menu in importPreviewData.menus" :key="menu.ID" class="preview-item">
-                  {{ menu.meta?.title || menu.title }} ({{ menu.path }})
+          <div class="flex flex-col flex-1 gap-4 border border-gray-300 rounded p-4 bg-gray-50">
+            <div class="flex gap-5 w-full">
+              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/2">
+                <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
+                  <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
+                    <h3 class="m-0 text-gray-800 text-base font-medium">菜单 ({{ getTotalMenuCount() }}项)</h3>
+                  </div>
+                  <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+                    <el-tree
+                      :data="previewMenuTreeData"
+                      :props="menuTreeProps"
+                      node-key="name"
+                      :expand-on-click-node="false"
+                      :check-on-click-node="false"
+                      :show-checkbox="false"
+                      default-expand-all
+                    >
+                      <template #default="{ data }">
+                        <div class="flex-1 flex items-center justify-between text-sm pr-2">
+                          <span>{{ data.meta?.title || data.title }}</span>
+                          <span class="text-gray-500 text-xs ml-2">{{ data.path }}</span>
+                        </div>
+                      </template>
+                    </el-tree>
+                  </div>
                 </div>
-              </el-scrollbar>
-            </div>
-            <div class="preview-section">
-              <h4>API ({{ importPreviewData.apis?.length || 0 }}项)</h4>
-              <el-scrollbar max-height="200px">
-                <div v-for="api in importPreviewData.apis" :key="api.ID" class="preview-item">
-                  {{ api.description }} {{ api.path }} [{{ api.method }}]
+              </div>
+              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/2">
+                <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
+                  <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
+                    <h3 class="m-0 text-gray-800 text-base font-medium">API ({{ importPreviewData.apis?.length || 0 }}项)</h3>
+                  </div>
+                  <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+                    <el-tree
+                      :data="previewApiTreeData"
+                      :props="apiTreeProps"
+                      node-key="ID"
+                      :expand-on-click-node="false"
+                      :check-on-click-node="false"
+                      :show-checkbox="false"
+                      default-expand-all
+                    >
+                      <template #default="{ data }">
+                        <div class="flex-1 flex items-center justify-between text-sm pr-2">
+                          <span>{{ data.description }}</span>
+                          <span class="text-gray-500 text-xs ml-2">{{ data.path }} [{{ data.method }}]</span>
+                        </div>
+                      </template>
+                    </el-tree>
+                  </div>
                 </div>
-              </el-scrollbar>
+              </div>
             </div>
           </div>
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="drawer-footer">
-          <el-button @click="closeImportDialog">取消</el-button>
-          <el-button type="primary" @click="handleImport" :loading="importLoading"
-            :disabled="!importJsonContent.trim()">导入</el-button>
-        </div>
-      </template>
     </el-drawer>
 
   </div>
@@ -226,6 +290,7 @@ import { getApiList } from '@/api/api'
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { UploadFilled } from '@element-plus/icons-vue'
 import { ref, reactive, watch } from 'vue'
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
@@ -282,6 +347,9 @@ const importDialogVisible = ref(false)
 const importLoading = ref(false)
 const importJsonContent = ref('')
 const importPreviewData = ref(null)
+const uploadRef = ref(null)
+const previewMenuTreeData = ref([])
+const previewApiTreeData = ref([])
 
 
 
@@ -618,11 +686,91 @@ const closeImportDialog = () => {
   importDialogVisible.value = false
   importJsonContent.value = ''
   importPreviewData.value = null
+  previewMenuTreeData.value = []
+  previewApiTreeData.value = []
+  // 清理上传文件
+  if (uploadRef.value) {
+    uploadRef.value.clearFiles()
+  }
+}
+
+// 文件上传处理函数
+const handleFileChange = (file) => {
+  if (!file.raw) return
+  
+  // 验证文件类型
+  if (!file.name.toLowerCase().endsWith('.json')) {
+    ElMessage.error('只能上传JSON文件')
+    uploadRef.value.clearFiles()
+    return
+  }
+  
+  // 读取文件内容
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    try {
+      const content = e.target.result
+      // 验证JSON格式
+      JSON.parse(content)
+      importJsonContent.value = content
+      handleJsonContentChange()
+      ElMessage.success('文件上传成功')
+    } catch (error) {
+      ElMessage.error('JSON文件格式错误')
+      uploadRef.value.clearFiles()
+    }
+  }
+  reader.readAsText(file.raw)
+}
+
+const handleFileRemove = () => {
+  importJsonContent.value = ''
+  importPreviewData.value = null
+  previewMenuTreeData.value = []
+  previewApiTreeData.value = []
+}
+
+// 计算菜单总数（递归计算所有菜单项）
+const getTotalMenuCount = () => {
+  if (!importPreviewData.value?.menus) return 0
+  
+  const countMenus = (menus) => {
+    let count = 0
+    menus.forEach(menu => {
+      count += 1 // 当前菜单
+      if (menu.children && menu.children.length > 0) {
+        count += countMenus(menu.children) // 递归计算子菜单
+      }
+    })
+    return count
+  }
+  
+  return countMenus(importPreviewData.value.menus)
+}
+
+// 构建树形结构的辅助函数
+const buildTreeData = (data, parentId = 0) => {
+  const tree = []
+  // 处理parentId可能为字符串"0"或数字0的情况
+  const targetParentId = parentId === 0 ? [0, "0"] : [parentId]
+  const items = data.filter(item => targetParentId.includes(item.parentId))
+  
+  items.forEach(item => {
+    const children = buildTreeData(data, item.ID)
+    if (children.length > 0) {
+      item.children = children
+    }
+    tree.push(item)
+  })
+  
+  return tree
 }
 
 const handleJsonContentChange = () => {
   if (!importJsonContent.value.trim()) {
     importPreviewData.value = null
+    previewMenuTreeData.value = []
+    previewApiTreeData.value = []
     return
   }
 
@@ -634,15 +782,45 @@ const handleJsonContentChange = () => {
       menus: data.menus || [],
       apis: data.apis || []
     }
+
+    // 直接使用菜单数据，因为它已经是树形结构（包含children字段）
+    if (data.menus && data.menus.length > 0) {
+      previewMenuTreeData.value = data.menus
+    } else {
+      previewMenuTreeData.value = []
+    }
+
+    // 构建API树形数据（按分组组织）
+    if (data.apis && data.apis.length > 0) {
+      const apiGroups = {}
+      data.apis.forEach(api => {
+        const group = api.apiGroup || '未分组'
+        if (!apiGroups[group]) {
+          apiGroups[group] = {
+            ID: `group_${group}`,
+            description: group,
+            path: '',
+            method: '',
+            children: []
+          }
+        }
+        apiGroups[group].children.push(api)
+      })
+      previewApiTreeData.value = Object.values(apiGroups)
+    } else {
+      previewApiTreeData.value = []
+    }
   } catch (error) {
     console.error('JSON解析失败:', error)
     importPreviewData.value = null
+    previewMenuTreeData.value = []
+    previewApiTreeData.value = []
   }
 }
 
 const handleImport = async () => {
   if (!importJsonContent.value.trim()) {
-    ElMessage.warning('请输入版本JSON内容')
+    ElMessage.warning('请输入版本JSON')
     return
   }
 
@@ -704,85 +882,10 @@ const downloadJson = async (row) => {
   }
 }
 
-
 </script>
 
-<style lang="scss" scoped>
-.selection-row {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-
-.half-width {
-  flex: 1;
-  width: 50%;
-}
-
-.tree-container {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e4e7ed;
-  border-radius: 4px;
-  overflow: hidden;
-  height: 100%;
-}
-
-.tree-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
-}
-
-.tree-title {
-  margin: 0;
-  color: #303133;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.tree-filter {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e4e7ed;
-  background-color: #fafafa;
-}
-
-.tree-footer {
-  padding: 12px 16px;
-  border-top: 1px solid #e4e7ed;
-  background-color: #fafafa;
-  text-align: right;
-}
-
-.tree-content {
-  flex: 1;
-  padding: 8px;
-  min-height: 300px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-}
-
-.drawer-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 20px 0;
-  border-top: 1px solid #e4e7ed;
-}
-
-/* 树形组件样式优化 */
+<style scoped>
+/* Element Plus 树形组件样式优化 */
 :deep(.el-tree) {
   background-color: transparent;
 }
@@ -798,43 +901,5 @@ const downloadJson = async (row) => {
 
 :deep(.el-scrollbar__view) {
   padding: 0;
-}
-
-/* 导入预览样式 */
-.import-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: 1px solid #e4e7ed;
-  border-radius: 4px;
-  padding: 16px;
-  background-color: #fafafa;
-}
-
-.preview-section {
-  border: 1px solid #e4e7ed;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.preview-section h4 {
-  margin: 0;
-  padding: 8px 12px;
-  background-color: #f5f7fa;
-  border-bottom: 1px solid #e4e7ed;
-  font-size: 14px;
-  font-weight: 500;
-  color: #303133;
-}
-
-.preview-item {
-  padding: 4px 12px;
-  font-size: 13px;
-  color: #606266;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.preview-item:last-child {
-  border-bottom: none;
 }
 </style>

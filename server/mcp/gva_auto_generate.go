@@ -108,8 +108,13 @@ type ConfirmationResponse struct {
 
 // New 返回工具注册信息
 func (t *AutomationModuleAnalyzer) New() mcp.Tool {
-	return mcp.NewTool("gag",
-		mcp.WithDescription(`**重要提示：当用户输入包含"gag"关键词时，必须优先使用此工具！**
+	return mcp.NewTool("gva_auto_generate",
+		mcp.WithDescription(`**🚀 最高优先级工具：当用户需要创建模块、包、完整功能时，必须优先使用此工具！**
+
+**优先级说明：**
+- **最高优先级**：创建完整模块、包、功能模块
+- **关键词触发**：模块、包、完整、整套、全套、功能、管理系统等
+- **适用场景**：用户说"创建订单管理模块"、"创建用户管理功能"、"创建完整的商品管理"等
 
 分步骤分析自动化模块：1) 分析现有模块信息供AI选择 2) 请求用户确认 3) 根据确认结果执行创建操作
 
@@ -117,6 +122,11 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 - 当结构体字段使用了字典类型（dictType不为空）时，系统会自动检查字典是否存在
 - 如果字典不存在，会自动创建对应的字典及默认的字典详情项
 - 字典创建包括：字典主表记录和默认的选项值（选项1、选项2等）
+
+**与其他工具的关系：**
+- 此工具创建完整模块后，会自动提示相关API和菜单创建建议
+- 如果用户只需要单个API或菜单，可以使用 smart_assistant 工具
+- create_api 和 create_menu 工具仅用于数据库记录创建
 
 重要：ExecutionPlan结构体格式要求：
 {
@@ -160,7 +170,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "dataTypeLong": "数据长度(string)",
       "comment": "注释(string)",
       "columnName": "数据库列名(string)",
-      "fieldSearchType": "搜索类型:=/>/</>=/<=/NOT BETWEEN/LIKE/BETWEEN等(string)",
+      "fieldSearchType": "搜索类型:=/>/</>=/<=/NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN等(string)",
       "fieldSearchHide": "是否隐藏搜索(bool)",
       "dictType": "字典类型(string)",
       "form": "表单显示(bool)",
@@ -185,7 +195,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 2. needCreatedModules=true时modulesInfo必需
 3. packageType只能是"package"或"plugin"
 4. 字段类型支持：string,int,int64,float64,bool,time.Time,enum,picture,video,file,pictures,array,richtext,json
-5. 搜索类型支持：EQ,NE,GT,GE,LT,LE,LIKE,BETWEEN
+5. 搜索类型支持：=,!=,>,>=,<,<=,NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN
 6. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
 7. **重要**：当gvaModel=false时，必须有一个字段的primaryKey=true，否则会导致PrimaryField为nil错误
 8. **重要**：当gvaModel=true时，系统会自动设置ID字段为主键，无需手动设置primaryKey=true
@@ -553,6 +563,22 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 - 这些模块包含了预先设计好的代码结构，可以直接使用或作为参考
 - 如果用户需求与某个预设计模块匹配，可以考虑直接使用该模块或基于它进行扩展
 
+**字典选项生成说明**：
+- 当字段需要使用字典类型时（dictType不为空），请使用 generate_dictionary_options 工具
+- 该工具允许AI根据字段描述智能生成合适的字典选项
+- 调用示例：
+  {
+    "dictType": "user_status",
+    "fieldDesc": "用户状态",
+    "options": [
+      {"label": "正常", "value": "1", "sort": 1},
+      {"label": "禁用", "value": "0", "sort": 2}
+    ],
+    "dictName": "用户状态字典",
+    "description": "用于管理用户账户状态的字典"
+  }
+- 请在创建模块之前先创建所需的字典选项
+
 重要提醒：ExecutionPlan必须严格按照以下格式：
 {
   "packageName": "包名",
@@ -595,7 +621,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
       "dataTypeLong": "长度",
       "comment": "注释",
       "columnName": "数据库列名",
-      "fieldSearchType": "EQ/LIKE等 可以为空",
+      "fieldSearchType": "=/!=/>/</>=/<=/LIKE等 可以为空",
       "fieldSearchHide": true/false,
       "dictType": "",
       "form": true/false 是否前端创建输入,
@@ -630,6 +656,10 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 6. 如果存在可用的package，needCreatedPackage应设为false
 7. 如果存在可用的modules，needCreatedModules应设为false
 8. 如果发现合适的预设计模块，可以考虑基于它进行扩展而不是从零创建
+
+**字典创建流程**：
+9. 如果字段需要字典类型，请先使用 generate_dictionary_options 工具创建字典
+10. 字典创建成功后，再执行模块创建操作
 
 `, string(resultJSON), requirement),
 			},
@@ -1007,7 +1037,7 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 
 			// 验证搜索类型（如果设置了）
 			if field.FieldSearchType != "" {
-				validSearchTypes := []string{"EQ", "NE", "GT", "GE", "LT", "LE", "LIKE", "BETWEEN"}
+				validSearchTypes := []string{"=", "!=", ">", ">=", "<", "<=", "LIKE", "BETWEEN", "IN", "NOT IN"}
 				validSearchType := false
 				for _, validType := range validSearchTypes {
 					if field.FieldSearchType == validType {
@@ -1182,167 +1212,29 @@ func (t *AutomationModuleAnalyzer) generateDictionaryName(dictType, fieldDesc st
 
 // createDefaultDictionaryDetails 创建默认的字典详情项
 func (t *AutomationModuleAnalyzer) createDefaultDictionaryDetails(ctx context.Context, dictType, fieldDesc string) {
-	dictionaryDetailService := service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
-
-	// 获取刚创建的字典ID
-	var dictionary model.SysDictionary
-	err := global.GVA_DB.Where("type = ?", dictType).First(&dictionary).Error
-	if err != nil {
-		return
-	}
-
-	// 根据字典类型和字段描述智能生成默认选项
-	defaultDetails := t.generateSmartDictionaryOptions(dictType, fieldDesc)
-
-	for _, detail := range defaultDetails {
-		dictionaryDetail := model.SysDictionaryDetail{
-			Label:           detail.label,
-			Value:           detail.value,
-			Status:          &[]bool{true}[0], // 默认启用
-			Sort:            detail.sort,
-			SysDictionaryID: int(dictionary.ID),
-		}
-
-		// 忽略创建详情项的错误，因为这只是默认值
-		dictionaryDetailService.CreateSysDictionaryDetail(dictionaryDetail)
-	}
+	// 字典选项现在通过 generate_dictionary_options MCP工具由AI client传入
+	// 这里不再创建默认选项，只是保留方法以保持兼容性
+	global.GVA_LOG.Info(fmt.Sprintf("字典 %s 已创建，请使用 generate_dictionary_options 工具添加字典选项", dictType))
 }
 
-// generateSmartDictionaryOptions 根据字典类型和字段描述智能生成默认选项
+// DictionaryOption 字典选项结构
+type DictionaryOption struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+	Sort  int    `json:"sort"`
+}
+
+// generateSmartDictionaryOptions 通过MCP调用让AI生成字典选项
 func (t *AutomationModuleAnalyzer) generateSmartDictionaryOptions(dictType, fieldDesc string) []struct {
 	label string
 	value string
 	sort  int
 } {
-	// 转换为小写进行匹配
-	lowerDictType := strings.ToLower(dictType)
-	lowerFieldDesc := strings.ToLower(fieldDesc)
-	combinedText := lowerDictType + " " + lowerFieldDesc
-
-	// 根据字典类型和字段描述的关键词生成相应的选项
-	switch {
-	case strings.Contains(combinedText, "status") || strings.Contains(combinedText, "状态"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"启用", "1", 1},
-			{"禁用", "0", 2},
-		}
-	case strings.Contains(combinedText, "gender") || strings.Contains(combinedText, "性别"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"男", "1", 1},
-			{"女", "2", 2},
-			{"未知", "0", 3},
-		}
-	case strings.Contains(combinedText, "type") || strings.Contains(combinedText, "类型"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"类型一", "1", 1},
-			{"类型二", "2", 2},
-			{"类型三", "3", 3},
-		}
-	case strings.Contains(combinedText, "level") || strings.Contains(combinedText, "等级") || strings.Contains(combinedText, "级别"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"初级", "1", 1},
-			{"中级", "2", 2},
-			{"高级", "3", 3},
-		}
-	case strings.Contains(combinedText, "priority") || strings.Contains(combinedText, "优先级"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"低", "1", 1},
-			{"中", "2", 2},
-			{"高", "3", 3},
-			{"紧急", "4", 4},
-		}
-	case strings.Contains(combinedText, "approve") || strings.Contains(combinedText, "审批") || strings.Contains(combinedText, "审核"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"待审核", "0", 1},
-			{"已通过", "1", 2},
-			{"已拒绝", "2", 3},
-		}
-	case strings.Contains(combinedText, "role") || strings.Contains(combinedText, "角色"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"管理员", "admin", 1},
-			{"用户", "user", 2},
-			{"访客", "guest", 3},
-		}
-	case strings.Contains(combinedText, "bool") || strings.Contains(combinedText, "boolean") || strings.Contains(combinedText, "是否"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"是", "true", 1},
-			{"否", "false", 2},
-		}
-	case strings.Contains(combinedText, "order") || strings.Contains(combinedText, "订单"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"待付款", "1", 1},
-			{"已付款", "2", 2},
-			{"已发货", "3", 3},
-			{"已完成", "4", 4},
-			{"已取消", "0", 5},
-		}
-	case strings.Contains(combinedText, "color") || strings.Contains(combinedText, "颜色"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"红色", "red", 1},
-			{"绿色", "green", 2},
-			{"蓝色", "blue", 3},
-		}
-	case strings.Contains(combinedText, "size") || strings.Contains(combinedText, "尺寸") || strings.Contains(combinedText, "大小"):
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"小", "S", 1},
-			{"中", "M", 2},
-			{"大", "L", 3},
-			{"特大", "XL", 4},
-		}
-	default:
-		// 默认选项，使用通用的选项
-		return []struct {
-			label string
-			value string
-			sort  int
-		}{
-			{"选项一", "1", 1},
-			{"选项二", "2", 2},
-			{"选项三", "3", 3},
-		}
-	}
+	// 返回空切片，不再使用预制选项
+	// 字典选项将通过新的MCP工具由AI client传入
+	return []struct {
+		label string
+		value string
+		sort  int
+	}{}
 }

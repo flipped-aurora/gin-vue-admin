@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -44,11 +46,23 @@ type HistoryInfo struct {
 	CreatedAt    string `json:"createdAt"`
 }
 
+// PredesignedModuleInfo 预设计模块信息
+type PredesignedModuleInfo struct {
+	PackageName string   `json:"packageName"`
+	PackageType string   `json:"packageType"` // "plugin" 或 "package"
+	ModuleName  string   `json:"moduleName"`
+	Path        string   `json:"path"`
+	Modules     []string `json:"modules"` // 包含的模块列表（如api、model、service等）
+	Description string   `json:"description"`
+	StructName  string   `json:"structName,omitempty"` // 主要结构体名称
+}
+
 // AnalysisResponse 分析响应
 type AnalysisResponse struct {
-	Packages []ModuleInfo  `json:"packages"`
-	History  []HistoryInfo `json:"history"`
-	Message  string        `json:"message"`
+	Packages           []ModuleInfo            `json:"packages"`
+	History            []HistoryInfo           `json:"history"`
+	PredesignedModules []PredesignedModuleInfo `json:"predesignedModules"`
+	Message            string                  `json:"message"`
 }
 
 // ExecutionPlan 执行计划
@@ -198,6 +212,244 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 	)
 }
 
+// scanPredesignedModules 扫描预设计的模块
+func (t *AutomationModuleAnalyzer) scanPredesignedModules() ([]PredesignedModuleInfo, error) {
+	var predesignedModules []PredesignedModuleInfo
+
+	// 获取autocode配置路径
+	if global.GVA_CONFIG.AutoCode.Root == "" {
+		return predesignedModules, nil // 配置不存在时返回空列表，不报错
+	}
+
+	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+
+	// 扫描plugin目录下的各个插件模块
+	pluginPath := filepath.Join(serverPath, "plugin")
+	if pluginModules, err := t.scanPluginModules(pluginPath); err == nil {
+		predesignedModules = append(predesignedModules, pluginModules...)
+	}
+
+	// 扫描model目录下的各个包模块
+	modelPath := filepath.Join(serverPath, "model")
+	if packageModules, err := t.scanPackageModules(modelPath); err == nil {
+		predesignedModules = append(predesignedModules, packageModules...)
+	}
+
+	return predesignedModules, nil
+}
+
+// scanPluginModules 扫描plugin目录下的各个插件模块
+func (t *AutomationModuleAnalyzer) scanPluginModules(pluginPath string) ([]PredesignedModuleInfo, error) {
+	var modules []PredesignedModuleInfo
+
+	if _, err := os.Stat(pluginPath); os.IsNotExist(err) {
+		return modules, nil
+	}
+
+	entries, err := os.ReadDir(pluginPath)
+	if err != nil {
+		return modules, err
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		pluginName := entry.Name()
+		pluginDir := filepath.Join(pluginPath, pluginName)
+
+		// 扫描插件下的model目录，查找具体的模块文件
+		modelDir := filepath.Join(pluginDir, "model")
+		if _, err := os.Stat(modelDir); err == nil {
+			if pluginModules, err := t.scanModuleFiles(modelDir, pluginName, "plugin"); err == nil {
+				modules = append(modules, pluginModules...)
+			}
+		}
+	}
+
+	return modules, nil
+}
+
+// scanPackageModules 扫描model目录下的各个包模块
+func (t *AutomationModuleAnalyzer) scanPackageModules(modelPath string) ([]PredesignedModuleInfo, error) {
+	var modules []PredesignedModuleInfo
+
+	if _, err := os.Stat(modelPath); os.IsNotExist(err) {
+		return modules, nil
+	}
+
+	entries, err := os.ReadDir(modelPath)
+	if err != nil {
+		return modules, err
+	}
+
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		packageName := entry.Name()
+		// 跳过一些系统目录
+		if packageName == "common" || packageName == "request" || packageName == "response" {
+			continue
+		}
+
+		packageDir := filepath.Join(modelPath, packageName)
+
+		// 扫描包目录下的模块文件
+		if packageModules, err := t.scanModuleFiles(packageDir, packageName, "package"); err == nil {
+			modules = append(modules, packageModules...)
+		}
+	}
+
+	return modules, nil
+}
+
+// scanModuleFiles 扫描目录下的Go文件，识别具体的模块
+func (t *AutomationModuleAnalyzer) scanModuleFiles(dir, packageName, packageType string) ([]PredesignedModuleInfo, error) {
+	var modules []PredesignedModuleInfo
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return modules, err
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+
+		fileName := entry.Name()
+		if !strings.HasSuffix(fileName, ".go") {
+			continue
+		}
+
+		// 跳过一些非模块文件
+		if strings.HasSuffix(fileName, "_test.go") ||
+			fileName == "enter.go" ||
+			fileName == "request.go" ||
+			fileName == "response.go" {
+			continue
+		}
+
+		filePath := filepath.Join(dir, fileName)
+		moduleName := strings.TrimSuffix(fileName, ".go")
+
+		// 分析模块文件，提取结构体信息
+		if moduleInfo, err := t.analyzeModuleFile(filePath, packageName, moduleName, packageType); err == nil {
+			modules = append(modules, *moduleInfo)
+		}
+	}
+
+	return modules, nil
+}
+
+// analyzeModuleFile 分析具体的模块文件
+func (t *AutomationModuleAnalyzer) analyzeModuleFile(filePath, packageName, moduleName, packageType string) (*PredesignedModuleInfo, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	fileContent := string(content)
+
+	// 提取结构体名称和描述
+	structNames := t.extractStructNames(fileContent)
+	description := t.extractModuleDescription(fileContent, moduleName)
+
+	// 确定主要结构体名称
+	mainStruct := moduleName
+	if len(structNames) > 0 {
+		// 优先选择与文件名相关的结构体
+		for _, structName := range structNames {
+			if strings.Contains(strings.ToLower(structName), strings.ToLower(moduleName)) {
+				mainStruct = structName
+				break
+			}
+		}
+		if mainStruct == moduleName && len(structNames) > 0 {
+			mainStruct = structNames[0] // 如果没有匹配的，使用第一个
+		}
+	}
+
+	return &PredesignedModuleInfo{
+		PackageName: packageName,
+		PackageType: packageType,
+		ModuleName:  moduleName,
+		Path:        filePath,
+		Modules:     structNames,
+		Description: description,
+		StructName:  mainStruct,
+	}, nil
+}
+
+// extractStructNames 从文件内容中提取结构体名称
+func (t *AutomationModuleAnalyzer) extractStructNames(content string) []string {
+	var structNames []string
+	lines := strings.Split(content, "\n")
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "type ") && strings.Contains(line, " struct") {
+			// 提取结构体名称
+			parts := strings.Fields(line)
+			if len(parts) >= 3 && parts[2] == "struct" {
+				structNames = append(structNames, parts[1])
+			}
+		}
+	}
+
+	return structNames
+}
+
+// extractModuleDescription 从文件内容中提取模块描述
+func (t *AutomationModuleAnalyzer) extractModuleDescription(content, moduleName string) string {
+	lines := strings.Split(content, "\n")
+
+	// 查找package注释
+	for i, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "package ") {
+			// 向上查找注释
+			for j := i - 1; j >= 0; j-- {
+				commentLine := strings.TrimSpace(lines[j])
+				if strings.HasPrefix(commentLine, "//") {
+					comment := strings.TrimSpace(strings.TrimPrefix(commentLine, "//"))
+					if comment != "" && len(comment) > 5 {
+						return comment
+					}
+				} else if commentLine != "" {
+					break
+				}
+			}
+			break
+		}
+	}
+
+	// 查找结构体注释
+	for i, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "type ") && strings.Contains(line, " struct") {
+			// 向上查找注释
+			for j := i - 1; j >= 0; j-- {
+				commentLine := strings.TrimSpace(lines[j])
+				if strings.HasPrefix(commentLine, "//") {
+					comment := strings.TrimSpace(strings.TrimPrefix(commentLine, "//"))
+					if comment != "" && len(comment) > 5 {
+						return comment
+					}
+				} else if commentLine != "" {
+					break
+				}
+			}
+			break
+		}
+	}
+
+	return fmt.Sprintf("预设计的模块：%s", moduleName)
+}
+
 // Handle 处理工具调用
 func (t *AutomationModuleAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	action, ok := request.GetArguments()["action"].(string)
@@ -236,6 +488,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 		return nil, fmt.Errorf("获取历史记录失败: %v", err)
 	}
 
+	// 扫描预设计的模块
+	predesignedModules, err := t.scanPredesignedModules()
+	if err != nil {
+		global.GVA_LOG.Warn("扫描预设计模块失败" + err.Error())
+		predesignedModules = []PredesignedModuleInfo{} // 确保不为nil
+	}
+
 	// 转换包信息
 	var moduleInfos []ModuleInfo
 	for _, pkg := range packages {
@@ -266,9 +525,10 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 
 	// 构建分析结果
 	analysisResult := AnalysisResponse{
-		Packages: moduleInfos,
-		History:  historyInfos,
-		Message:  fmt.Sprintf("分析完成：获取到 %d 个包和 %d 个历史记录，请AI根据需求选择合适的包和模块", len(packages), len(histories)),
+		Packages:           moduleInfos,
+		History:            historyInfos,
+		PredesignedModules: predesignedModules,
+		Message:            fmt.Sprintf("分析完成：获取到 %d 个包、%d 个历史记录和 %d 个预设计模块，请AI根据需求选择合适的包和模块", len(packages), len(histories), len(predesignedModules)),
 	}
 
 	resultJSON, err := json.MarshalIndent(analysisResult, "", "  ")
@@ -286,7 +546,12 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 
 请AI根据用户需求：%s
 
-分析现有的包和历史记录，然后构建ExecutionPlan结构体调用execute操作。
+分析现有的包、历史记录和预设计模块，然后构建ExecutionPlan结构体调用execute操作。
+
+**预设计模块说明**：
+- 预设计模块是已经存在于autocode路径下的package或plugin
+- 这些模块包含了预先设计好的代码结构，可以直接使用或作为参考
+- 如果用户需求与某个预设计模块匹配，可以考虑直接使用该模块或基于它进行扩展
 
 重要提醒：ExecutionPlan必须严格按照以下格式：
 {
@@ -364,6 +629,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 **包和模块创建逻辑**：
 6. 如果存在可用的package，needCreatedPackage应设为false
 7. 如果存在可用的modules，needCreatedModules应设为false
+8. 如果发现合适的预设计模块，可以考虑基于它进行扩展而不是从零创建
 
 `, string(resultJSON), requirement),
 			},

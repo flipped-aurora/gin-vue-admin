@@ -100,30 +100,67 @@ func (sysVersionService *SysVersionService) createMenusRecursively(tx *gorm.DB, 
 		// 检查菜单是否已存在
 		var existingMenu system.SysBaseMenu
 		if err := tx.Where("name = ? AND path = ?", menu.Name, menu.Path).First(&existingMenu).Error; err == nil {
-			// 菜单已存在，跳过
+			// 菜单已存在，使用现有菜单ID继续处理子菜单
+			if len(menu.Children) > 0 {
+				if err := sysVersionService.createMenusRecursively(tx, menu.Children, existingMenu.ID); err != nil {
+					return err
+				}
+			}
 			continue
 		}
 
-		// 创建新菜单
+		// 保存参数和按钮数据，稍后处理
+		parameters := menu.Parameters
+		menuBtns := menu.MenuBtn
+		children := menu.Children
+
+		// 创建新菜单（不包含关联数据）
 		newMenu := system.SysBaseMenu{
-			ParentId:   parentId,
-			Path:       menu.Path,
-			Name:       menu.Name,
-			Hidden:     menu.Hidden,
-			Component:  menu.Component,
-			Sort:       menu.Sort,
-			Meta:       menu.Meta,
-			Parameters: menu.Parameters,
-			MenuBtn:    menu.MenuBtn,
+			ParentId:  parentId,
+			Path:      menu.Path,
+			Name:      menu.Name,
+			Hidden:    menu.Hidden,
+			Component: menu.Component,
+			Sort:      menu.Sort,
+			Meta:      menu.Meta,
 		}
 
 		if err := tx.Create(&newMenu).Error; err != nil {
 			return err
 		}
 
+		// 创建参数
+		if len(parameters) > 0 {
+			for _, param := range parameters {
+				newParam := system.SysBaseMenuParameter{
+					SysBaseMenuID: newMenu.ID,
+					Type:          param.Type,
+					Key:           param.Key,
+					Value:         param.Value,
+				}
+				if err := tx.Create(&newParam).Error; err != nil {
+					return err
+				}
+			}
+		}
+
+		// 创建菜单按钮
+		if len(menuBtns) > 0 {
+			for _, btn := range menuBtns {
+				newBtn := system.SysBaseMenuBtn{
+					SysBaseMenuID: newMenu.ID,
+					Name:          btn.Name,
+					Desc:          btn.Desc,
+				}
+				if err := tx.Create(&newBtn).Error; err != nil {
+					return err
+				}
+			}
+		}
+
 		// 递归处理子菜单
-		if len(menu.Children) > 0 {
-			if err := sysVersionService.createMenusRecursively(tx, menu.Children, newMenu.ID); err != nil {
+		if len(children) > 0 {
+			if err := sysVersionService.createMenusRecursively(tx, children, newMenu.ID); err != nil {
 				return err
 			}
 		}

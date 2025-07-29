@@ -41,7 +41,7 @@ type ApiCreator struct{}
 // New 创建API创建工具
 func (a *ApiCreator) New() mcp.Tool {
 	return mcp.NewTool("create_api",
-		mcp.WithDescription("创建后端API记录，用于在生成后端接口时自动创建对应的API权限记录，只要API层发生过变化，都需要调用此mcp。"),
+		mcp.WithDescription("创建后端API记录，用于在生成后端接口时自动创建对应的API权限记录，只要创建了API层，router下的文件产生了路径变化等，都需要调用此mcp。"),
 		mcp.WithString("path",
 			mcp.Required(),
 			mcp.Description("API路径，如：/user/create"),
@@ -67,9 +67,9 @@ func (a *ApiCreator) New() mcp.Tool {
 // Handle 处理API创建请求
 func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	args := request.GetArguments()
-	
+
 	var apis []ApiCreateRequest
-	
+
 	// 检查是否是批量创建
 	if apisStr, ok := args["apis"].(string); ok && apisStr != "" {
 		if err := json.Unmarshal([]byte(apisStr), &apis); err != nil {
@@ -81,22 +81,22 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 		if !ok || path == "" {
 			return nil, errors.New("path 参数是必需的")
 		}
-		
+
 		description, ok := args["description"].(string)
 		if !ok || description == "" {
 			return nil, errors.New("description 参数是必需的")
 		}
-		
+
 		apiGroup, ok := args["apiGroup"].(string)
 		if !ok || apiGroup == "" {
 			return nil, errors.New("apiGroup 参数是必需的")
 		}
-		
+
 		method := "POST"
 		if val, ok := args["method"].(string); ok && val != "" {
 			method = val
 		}
-		
+
 		apis = append(apis, ApiCreateRequest{
 			Path:        path,
 			Description: description,
@@ -104,16 +104,16 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 			Method:      method,
 		})
 	}
-	
+
 	if len(apis) == 0 {
 		return nil, errors.New("没有要创建的API")
 	}
-	
+
 	// 创建API记录
 	apiService := service.ServiceGroupApp.SystemServiceGroup.ApiService
 	var responses []ApiCreateResponse
 	successCount := 0
-	
+
 	for _, apiReq := range apis {
 		api := system.SysApi{
 			Path:        apiReq.Path,
@@ -121,14 +121,14 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 			ApiGroup:    apiReq.ApiGroup,
 			Method:      apiReq.Method,
 		}
-		
+
 		err := apiService.CreateApi(api)
 		if err != nil {
-			global.GVA_LOG.Warn("创建API失败", 
+			global.GVA_LOG.Warn("创建API失败",
 				zap.String("path", apiReq.Path),
 				zap.String("method", apiReq.Method),
 				zap.Error(err))
-			
+
 			responses = append(responses, ApiCreateResponse{
 				Success: false,
 				Message: fmt.Sprintf("创建API失败: %v", err),
@@ -142,7 +142,7 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 			if err != nil {
 				global.GVA_LOG.Warn("获取创建的API ID失败", zap.Error(err))
 			}
-			
+
 			responses = append(responses, ApiCreateResponse{
 				Success: true,
 				Message: fmt.Sprintf("成功创建API %s %s", apiReq.Method, apiReq.Path),
@@ -153,7 +153,7 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 			successCount++
 		}
 	}
-	
+
 	// 构建总体响应
 	var resultMessage string
 	if len(apis) == 1 {
@@ -161,7 +161,7 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 	} else {
 		resultMessage = fmt.Sprintf("批量创建API完成，成功 %d 个，失败 %d 个", successCount, len(apis)-successCount)
 	}
-	
+
 	result := map[string]interface{}{
 		"success":      successCount > 0,
 		"message":      resultMessage,
@@ -170,12 +170,12 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 		"failedCount":  len(apis) - successCount,
 		"details":      responses,
 	}
-	
+
 	resultJSON, err := json.MarshalIndent(result, "", "  ")
 	if err != nil {
 		return nil, fmt.Errorf("序列化结果失败: %v", err)
 	}
-	
+
 	// 添加权限分配提醒
 	permissionReminder := "\n\n⚠️ 重要提醒：\n" +
 		"API创建完成后，请前往【系统管理】->【角色管理】中为相关角色分配新创建的API权限，" +

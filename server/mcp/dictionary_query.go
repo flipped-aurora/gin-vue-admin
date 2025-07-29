@@ -56,10 +56,10 @@ func (d *DictionaryQuery) New() mcp.Tool {
 		mcp.WithString("dictType",
 			mcp.Description("可选：指定字典类型进行精确查询，如果不提供则返回所有字典"),
 		),
-		mcp.WithBool("includeDisabled",
+		mcp.WithBoolean("includeDisabled",
 			mcp.Description("是否包含已禁用的字典和字典项，默认为false（只返回启用的）"),
 		),
-		mcp.WithBool("detailsOnly",
+		mcp.WithBoolean("detailsOnly",
 			mcp.Description("是否只返回字典详情信息（不包含字典基本信息），默认为false"),
 		),
 	)
@@ -87,7 +87,6 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 	
 	// 获取字典服务
 	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
-	dictionaryDetailService := service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 	
 	var dictionaries []DictionaryInfo
 	var err error
@@ -103,8 +102,8 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 		if err != nil {
 			global.GVA_LOG.Error("查询字典失败", zap.Error(err))
 			return &mcp.CallToolResult{
-				Content: []interface{}{
-					mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "查询字典失败: %v", "total": 0, "dictionaries": []}`), err.Error())),
+				Content: []mcp.Content{
+					mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "查询字典失败: %v", "total": 0, "dictionaries": []}`, err.Error())),
 				},
 			}, nil
 		}
@@ -153,8 +152,8 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 		if err != nil {
 			global.GVA_LOG.Error("查询字典列表失败", zap.Error(err))
 			return &mcp.CallToolResult{
-				Content: []interface{}{
-					mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "查询字典列表失败: %v", "total": 0, "dictionaries": []}`), err.Error())),
+				Content: []mcp.Content{
+					mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "查询字典列表失败: %v", "total": 0, "dictionaries": []}`, err.Error())),
 				},
 			}, nil
 		}
@@ -203,7 +202,7 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 		
 		responseJSON, _ := json.Marshal(response)
 		return &mcp.CallToolResult{
-			Content: []interface{}{
+			Content: []mcp.Content{
 				mcp.NewTextContent(string(responseJSON)),
 			},
 		}, nil
@@ -221,14 +220,14 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 	if err != nil {
 		global.GVA_LOG.Error("序列化响应失败", zap.Error(err))
 		return &mcp.CallToolResult{
-			Content: []interface{}{
-				mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "序列化响应失败: %v", "total": 0, "dictionaries": []}`), err.Error())),
+			Content: []mcp.Content{
+				mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "序列化响应失败: %v", "total": 0, "dictionaries": []}`, err.Error())),
 			},
 		}, nil
 	}
 	
 	return &mcp.CallToolResult{
-		Content: []interface{}{
+		Content: []mcp.Content{
 			mcp.NewTextContent(string(responseJSON)),
 		},
 	}, nil

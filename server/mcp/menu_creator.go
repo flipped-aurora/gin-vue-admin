@@ -64,7 +64,7 @@ type MenuCreator struct{}
 // New 创建菜单创建工具
 func (m *MenuCreator) New() mcp.Tool {
 	return mcp.NewTool("create_menu",
-		mcp.WithDescription("创建前端菜单记录，用于在生成前端页面时自动创建对应的菜单项"),
+		mcp.WithDescription("创建前端菜单记录，用于在生成前端页面时自动创建对应的菜单项，只要前端有页面生成，都需要调用此mcp。"),
 		mcp.WithNumber("parentId",
 			mcp.Description("父菜单ID，0表示根菜单"),
 			mcp.DefaultNumber(0),

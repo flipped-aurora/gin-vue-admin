@@ -41,7 +41,7 @@ type ApiCreator struct{}
 // New 创建API创建工具
 func (a *ApiCreator) New() mcp.Tool {
 	return mcp.NewTool("create_api",
-		mcp.WithDescription("创建后端API记录，用于在生成后端接口时自动创建对应的API权限记录"),
+		mcp.WithDescription("创建后端API记录，用于在生成后端接口时自动创建对应的API权限记录，只要API层发生过变化，都需要调用此mcp。"),
 		mcp.WithString("path",
 			mcp.Required(),
 			mcp.Description("API路径，如：/user/create"),

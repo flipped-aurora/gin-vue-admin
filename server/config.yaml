@@ -196,13 +196,13 @@ qiniu:
 
 # minio oss configuration
 minio:
-  endpoint: yourEndpoint
-  access-key-id: yourAccessKeyId
-  access-key-secret: yourAccessKeySecret
-  bucket-name: yourBucketName
-  use-ssl: false
-  base-path: ""
-  bucket-url: "http://host:9000/yourBucketName"
+    endpoint: yourEndpoint
+    access-key-id: yourAccessKeyId
+    access-key-secret: yourAccessKeySecret
+    bucket-name: yourBucketName
+    use-ssl: false
+    base-path: ""
+    bucket-url: "http://host:9000/yourBucketName"
 
 # aliyun oss configuration
 aliyun-oss:

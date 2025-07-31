@@ -486,6 +486,15 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 		return nil, errors.New("参数错误：requirement 必须是非空字符串")
 	}
 
+	// 检测用户是否想要创建插件
+	suggestedType, isPlugin, confidence := t.detectPluginIntent(requirement)
+	pluginDetectionMsg := ""
+	if isPlugin {
+		pluginDetectionMsg = fmt.Sprintf("\n\n🔍 **插件检测结果**：检测到用户想要创建插件（置信度：%s）\n⚠️  **重要提醒**：当用户提到插件时，packageType和template字段都必须设置为 \"plugin\"，不能使用 \"package\"！", confidence)
+	} else {
+		pluginDetectionMsg = fmt.Sprintf("\n\n🔍 **类型检测结果**：建议使用 %s 类型", suggestedType)
+	}
+
 	// 从数据库获取所有自动化包信息
 	var packages []model.SysAutoCodePackage
 	if err := global.GVA_DB.Find(&packages).Error; err != nil {
@@ -554,7 +563,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 
 %s
 
-请AI根据用户需求：%s
+请AI根据用户需求：%s%s
 
 分析现有的包、历史记录和预设计模块，然后构建ExecutionPlan结构体调用execute操作。
 
@@ -583,13 +592,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 {
   "packageName": "包名",
   "moduleName": "模块名",
-  "packageType": "package或plugin",
+  "packageType": "package或plugin", // 当用户提到插件时必须是"plugin"
   "needCreatedPackage": true/false,
   "needCreatedModules": true/false,
   "packageInfo": {
     "desc": "描述",
     "label": "展示名",
-    "template": "package或plugin",
+    "template": "package或plugin", // 必须与packageType保持一致！
     "packageName": "包名"
   },
   "modulesInfo": {
@@ -643,25 +652,30 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 
 **重要提醒**：ExecutionPlan必须严格按照以下格式和验证规则：
 
+**插件类型检测规则（最重要）**：
+1. 当用户需求中包含"插件"、"plugin"等关键词时，packageType和template都必须设置为"plugin"
+2. packageType和template字段必须保持一致，不能一个是"package"另一个是"plugin"
+3. 如果检测到插件意图但设置错误，会导致创建失败
+
 **字段完整性要求**：
-1. 所有字符串字段都不能为空（包括packageName、moduleName、structName、tableName、description等）
-2. 所有布尔字段必须明确设置true或false，不能使用默认值
+4. 所有字符串字段都不能为空（包括packageName、moduleName、structName、tableName、description等）
+5. 所有布尔字段必须明确设置true或false，不能使用默认值
 
 **主键设置规则（关键）**：
-3. 当gvaModel=false时：fields数组中必须有且仅有一个字段的primaryKey=true
-4. 当gvaModel=true时：系统自动创建ID主键，fields中所有字段的primaryKey都应为false
-5. 主键设置错误会导致模板执行时PrimaryField为nil的严重错误！
+6. 当gvaModel=false时：fields数组中必须有且仅有一个字段的primaryKey=true
+7. 当gvaModel=true时：系统自动创建ID主键，fields中所有字段的primaryKey都应为false
+8. 主键设置错误会导致模板执行时PrimaryField为nil的严重错误！
 
 **包和模块创建逻辑**：
-6. 如果存在可用的package，needCreatedPackage应设为false
-7. 如果存在可用的modules，needCreatedModules应设为false
-8. 如果发现合适的预设计模块，可以考虑基于它进行扩展而不是从零创建
+9. 如果存在可用的package，needCreatedPackage应设为false
+10. 如果存在可用的modules，needCreatedModules应设为false
+11. 如果发现合适的预设计模块，可以考虑基于它进行扩展而不是从零创建
 
 **字典创建流程**：
-9. 如果字段需要字典类型，请先使用 generate_dictionary_options 工具创建字典
-10. 字典创建成功后，再执行模块创建操作
+12. 如果字段需要字典类型，请先使用 generate_dictionary_options 工具创建字典
+13. 字典创建成功后，再执行模块创建操作
 
-`, string(resultJSON), requirement),
+`, string(resultJSON), requirement, pluginDetectionMsg),
 			},
 		},
 	}, nil
@@ -965,6 +979,13 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 		return errors.New("packageType 必须是 'package' 或 'plugin'")
 	}
 
+	// 验证packageType和template字段的一致性
+	if plan.NeedCreatedPackage && plan.PackageInfo != nil {
+		if plan.PackageType != plan.PackageInfo.Template {
+			return errors.New("packageType 和 packageInfo.template 必须保持一致")
+		}
+	}
+
 	// 验证包信息
 	if plan.NeedCreatedPackage {
 		if plan.PackageInfo == nil {
@@ -1248,4 +1269,49 @@ func (t *AutomationModuleAnalyzer) generateSmartDictionaryOptions(dictType, fiel
 		value string
 		sort  int
 	}{}
+}
+
+// detectPluginIntent 检测用户需求中是否包含插件相关的关键词
+func (t *AutomationModuleAnalyzer) detectPluginIntent(requirement string) (suggestedType string, isPlugin bool, confidence string) {
+	// 转换为小写进行匹配
+	requirementLower := strings.ToLower(requirement)
+	
+	// 插件相关关键词
+	pluginKeywords := []string{
+		"插件", "plugin", "扩展", "extension", "addon", "模块插件",
+		"功能插件", "业务插件", "第三方插件", "自定义插件",
+	}
+	
+	// 包相关关键词（用于排除误判）
+	packageKeywords := []string{
+		"包", "package", "模块包", "业务包", "功能包",
+	}
+	
+	// 检测插件关键词
+	pluginMatches := 0
+	for _, keyword := range pluginKeywords {
+		if strings.Contains(requirementLower, keyword) {
+			pluginMatches++
+		}
+	}
+	
+	// 检测包关键词
+	packageMatches := 0
+	for _, keyword := range packageKeywords {
+		if strings.Contains(requirementLower, keyword) {
+			packageMatches++
+		}
+	}
+	
+	// 决策逻辑
+	if pluginMatches > 0 {
+		if packageMatches == 0 || pluginMatches > packageMatches {
+			return "plugin", true, "高"
+		} else {
+			return "plugin", true, "中"
+		}
+	}
+	
+	// 默认返回package
+	return "package", false, "低"
 }

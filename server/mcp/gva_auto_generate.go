@@ -11,9 +11,11 @@ import (
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	systemService "github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/mark3labs/mcp-go/mcp"
 	"gorm.io/gorm"
 )
@@ -507,16 +509,49 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 		return nil, fmt.Errorf("获取历史记录失败: %v", err)
 	}
 
-	// 扫描预设计的模块
-	predesignedModules, err := t.scanPredesignedModules()
-	if err != nil {
-		global.GVA_LOG.Warn("扫描预设计模块失败" + err.Error())
-		predesignedModules = []PredesignedModuleInfo{} // 确保不为nil
-	}
-
-	// 转换包信息
+	// 转换包信息并检查空文件夹
 	var moduleInfos []ModuleInfo
+	var validPackages []model.SysAutoCodePackage
+	var emptyPackageIDs []uint
+	var emptyPackageNames []string
+	
 	for _, pkg := range packages {
+		// 检查包对应的文件夹是否为空
+		isEmpty, err := t.isPackageFolderEmpty(pkg.PackageName, pkg.Template)
+		if err != nil {
+			global.GVA_LOG.Warn(fmt.Sprintf("检查包 %s 文件夹失败: %v", pkg.PackageName, err))
+			// 如果检查失败，仍然保留该包
+			validPackages = append(validPackages, pkg)
+			continue
+		}
+		
+		if isEmpty {
+			// 记录需要删除的包ID和包名
+			emptyPackageIDs = append(emptyPackageIDs, pkg.ID)
+			emptyPackageNames = append(emptyPackageNames, pkg.PackageName)
+			global.GVA_LOG.Info(fmt.Sprintf("发现空包文件夹: %s，将删除数据库记录和文件夹", pkg.PackageName))
+			
+			// 删除空文件夹
+			if err := t.removeEmptyPackageFolder(pkg.PackageName, pkg.Template); err != nil {
+				global.GVA_LOG.Warn(fmt.Sprintf("删除空包文件夹 %s 失败: %v", pkg.PackageName, err))
+			}
+		} else {
+			// 文件夹不为空，保留该包
+			validPackages = append(validPackages, pkg)
+		}
+	}
+	
+	// 批量删除空包的数据库记录
+	if len(emptyPackageIDs) > 0 {
+		if err := global.GVA_DB.Where("id IN ?", emptyPackageIDs).Delete(&model.SysAutoCodePackage{}).Error; err != nil {
+			global.GVA_LOG.Warn(fmt.Sprintf("删除空包数据库记录失败: %v", err))
+		} else {
+			global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 个空包的数据库记录", len(emptyPackageIDs)))
+		}
+	}
+	
+	// 转换有效的包信息
+	for _, pkg := range validPackages {
 		moduleInfos = append(moduleInfos, ModuleInfo{
 			ID:          pkg.ID,
 			PackageName: pkg.PackageName,
@@ -527,27 +562,150 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 		})
 	}
 
-	// 转换历史记录
+	// 删除与空包相关的历史记录
+	var emptyHistoryIDs []uint
+	if len(emptyPackageNames) > 0 {
+		for _, history := range histories {
+			for _, emptyPackageName := range emptyPackageNames {
+				if history.Package == emptyPackageName {
+					emptyHistoryIDs = append(emptyHistoryIDs, history.ID)
+					break
+				}
+			}
+		}
+		
+		// 清理相关的API和菜单记录
+		if len(emptyHistoryIDs) > 0 {
+			if err := t.cleanupRelatedApiAndMenus(emptyHistoryIDs); err != nil {
+				global.GVA_LOG.Warn(fmt.Sprintf("清理空包相关API和菜单失败: %v", err))
+			}
+		}
+		
+		// 批量删除相关历史记录
+		if len(emptyHistoryIDs) > 0 {
+			if err := global.GVA_DB.Where("id IN ?", emptyHistoryIDs).Delete(&model.SysAutoCodeHistory{}).Error; err != nil {
+				global.GVA_LOG.Warn(fmt.Sprintf("删除空包相关历史记录失败: %v", err))
+			} else {
+				global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 个空包相关的历史记录", len(emptyHistoryIDs)))
+			}
+		}
+	}
+	
+	// 创建有效包名的映射，用于快速查找
+	validPackageNames := make(map[string]bool)
+	for _, pkg := range validPackages {
+		validPackageNames[pkg.PackageName] = true
+	}
+	
+	// 收集需要删除的脏历史记录ID（包名不在有效包列表中的历史记录）
+	var dirtyHistoryIDs []uint
+	for _, history := range histories {
+		if !validPackageNames[history.Package] {
+			dirtyHistoryIDs = append(dirtyHistoryIDs, history.ID)
+		}
+	}
+	
+	// 删除脏历史记录
+	if len(dirtyHistoryIDs) > 0 {
+		// 清理相关的API和菜单记录
+		if err := t.cleanupRelatedApiAndMenus(dirtyHistoryIDs); err != nil {
+			global.GVA_LOG.Warn(fmt.Sprintf("清理脏历史记录相关API和菜单失败: %v", err))
+		}
+		
+		if err := global.GVA_DB.Where("id IN ?", dirtyHistoryIDs).Delete(&model.SysAutoCodeHistory{}).Error; err != nil {
+			global.GVA_LOG.Warn(fmt.Sprintf("删除脏历史记录失败: %v", err))
+		} else {
+			global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 个脏历史记录（包名不在有效包列表中）", len(dirtyHistoryIDs)))
+		}
+	}
+	
+	// 转换有效的历史记录（只保留包名存在于有效包列表中的历史记录）
 	var historyInfos []HistoryInfo
 	for _, history := range histories {
-		historyInfos = append(historyInfos, HistoryInfo{
-			ID:           history.ID,
-			StructName:   history.StructName,
-			TableName:    history.TableName(),
-			PackageName:  history.Package,
-			BusinessDB:   history.BusinessDB,
-			Description:  history.Description,
-			Abbreviation: history.Abbreviation,
-			CreatedAt:    history.CreatedAt.Format("2006-01-02 15:04:05"),
-		})
+		// 只保留包名存在于有效包列表中的历史记录
+		if validPackageNames[history.Package] {
+			historyInfos = append(historyInfos, HistoryInfo{
+				ID:           history.ID,
+				StructName:   history.StructName,
+				TableName:    history.TableName(),
+				PackageName:  history.Package,
+				BusinessDB:   history.BusinessDB,
+				Description:  history.Description,
+				Abbreviation: history.Abbreviation,
+				CreatedAt:    history.CreatedAt.Format("2006-01-02 15:04:05"),
+			})
+		}
 	}
 
+	// 扫描预设计的模块
+	allPredesignedModules, err := t.scanPredesignedModules()
+	if err != nil {
+		global.GVA_LOG.Warn("扫描预设计模块失败" + err.Error())
+		allPredesignedModules = []PredesignedModuleInfo{} // 确保不为nil
+	}
+	
+	// 过滤掉与已删除包相关的预设计模块
+	var predesignedModules []PredesignedModuleInfo
+	for _, module := range allPredesignedModules {
+		isDeleted := false
+		for _, emptyPackageName := range emptyPackageNames {
+			if module.PackageName == emptyPackageName {
+				isDeleted = true
+				break
+			}
+		}
+		
+		// 只保留未被删除包的预设计模块
+		if !isDeleted {
+			predesignedModules = append(predesignedModules, module)
+		}
+	}
+
+	// 构建分析结果消息
+	var message string
+	var deletionDetails []string
+	
+	// 收集删除信息
+	if len(emptyHistoryIDs) > 0 {
+		deletionDetails = append(deletionDetails, fmt.Sprintf("%d个空包相关历史记录", len(emptyHistoryIDs)))
+	}
+	if len(dirtyHistoryIDs) > 0 {
+		deletionDetails = append(deletionDetails, fmt.Sprintf("%d个脏历史记录", len(dirtyHistoryIDs)))
+	}
+	if len(allPredesignedModules) > len(predesignedModules) {
+		deletionDetails = append(deletionDetails, fmt.Sprintf("%d个相关预设计模块", len(allPredesignedModules)-len(predesignedModules)))
+	}
+	
+	if len(emptyPackageNames) > 0 || len(deletionDetails) > 0 {
+		var cleanupInfo string
+		if len(emptyPackageNames) > 0 {
+			cleanupInfo = fmt.Sprintf("检测到存在 %s 包但内容为空，我已经删除这些包的文件夹（包括model、api、service、router目录）和数据库记录", strings.Join(emptyPackageNames, "、"))
+		}
+		
+		deletionInfo := ""
+		if len(deletionDetails) > 0 {
+			if cleanupInfo != "" {
+				deletionInfo = fmt.Sprintf("，同时删除了%s", strings.Join(deletionDetails, "、"))
+			} else {
+				deletionInfo = fmt.Sprintf("检测到脏数据，已删除%s", strings.Join(deletionDetails, "、"))
+			}
+		}
+		
+		if cleanupInfo != "" {
+			message = fmt.Sprintf("分析完成：获取到 %d 个有效包、%d 个历史记录和 %d 个预设计模块。%s%s，如果需要使用这些包名，需要重新创建。请AI根据需求选择合适的包和模块", len(validPackages), len(historyInfos), len(predesignedModules), cleanupInfo, deletionInfo)
+		} else {
+			message = fmt.Sprintf("分析完成：获取到 %d 个有效包、%d 个历史记录和 %d 个预设计模块。%s。请AI根据需求选择合适的包和模块", len(validPackages), len(historyInfos), len(predesignedModules), deletionInfo)
+		}
+	} else {
+		message = fmt.Sprintf("分析完成：获取到 %d 个有效包、%d 个历史记录和 %d 个预设计模块，请AI根据需求选择合适的包和模块", len(validPackages), len(historyInfos), len(predesignedModules))
+	}
+	
 	// 构建分析结果
 	analysisResult := AnalysisResponse{
 		Packages:           moduleInfos,
 		History:            historyInfos,
 		PredesignedModules: predesignedModules,
-		Message:            fmt.Sprintf("分析完成：获取到 %d 个包、%d 个历史记录和 %d 个预设计模块，请AI根据需求选择合适的包和模块", len(packages), len(histories), len(predesignedModules)),
+		Message:            message,
 	}
 
 	resultJSON, err := json.MarshalIndent(analysisResult, "", "  ")
@@ -564,6 +722,8 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 %s
 
 请AI根据用户需求：%s%s
+
+%s
 
 分析现有的包、历史记录和预设计模块，然后构建ExecutionPlan结构体调用execute操作。
 
@@ -675,7 +835,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 12. 如果字段需要字典类型，请先使用 generate_dictionary_options 工具创建字典
 13. 字典创建成功后，再执行模块创建操作
 
-`, string(resultJSON), requirement, pluginDetectionMsg),
+`, string(resultJSON), requirement, pluginDetectionMsg, 
+			func() string {
+				if len(emptyPackageNames) > 0 {
+					return fmt.Sprintf("**重要提醒**：检测到 %s 包存在但内容为空，已自动删除相关文件夹和数据库记录。如果用户需求涉及这些包名，请设置 needCreatedPackage=true 重新创建。", strings.Join(emptyPackageNames, "、"))
+				}
+				return ""
+			}()),
 			},
 		},
 	}, nil
@@ -1314,4 +1480,164 @@ func (t *AutomationModuleAnalyzer) detectPluginIntent(requirement string) (sugge
 	
 	// 默认返回package
 	return "package", false, "低"
+}
+
+// isPackageFolderEmpty 检查包对应的文件夹是否为空
+func (t *AutomationModuleAnalyzer) isPackageFolderEmpty(packageName, template string) (bool, error) {
+	// 根据模板类型确定基础路径
+	var basePath string
+	if template == "plugin" {
+		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
+	} else {
+		// package 类型
+		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "model", packageName)
+	}
+	
+	// 检查文件夹是否存在
+	if _, err := os.Stat(basePath); os.IsNotExist(err) {
+		// 文件夹不存在，认为是空的
+		return true, nil
+	} else if err != nil {
+		return false, fmt.Errorf("检查文件夹状态失败: %v", err)
+	}
+	
+	// 读取文件夹内容
+	entries, err := os.ReadDir(basePath)
+	if err != nil {
+		return false, fmt.Errorf("读取文件夹内容失败: %v", err)
+	}
+	
+	// 检查目录下是否有 .go 文件
+	hasGoFiles := false
+	for _, entry := range entries {
+		name := entry.Name()
+		// 跳过隐藏文件、.DS_Store 等系统文件
+		if strings.HasPrefix(name, ".") {
+			continue
+		}
+		// 如果是目录，递归检查子目录中的 .go 文件
+		if entry.IsDir() {
+			subPath := filepath.Join(basePath, name)
+			subEntries, err := os.ReadDir(subPath)
+			if err != nil {
+				continue
+			}
+			for _, subEntry := range subEntries {
+				if !subEntry.IsDir() && strings.HasSuffix(subEntry.Name(), ".go") {
+					hasGoFiles = true
+					break
+				}
+			}
+			if hasGoFiles {
+				break
+			}
+		} else if strings.HasSuffix(name, ".go") {
+			// 如果是 .go 文件
+			hasGoFiles = true
+			break
+		}
+	}
+	
+	// 如果没有 .go 文件，认为是空包
+	return !hasGoFiles, nil
+}
+
+// removeEmptyPackageFolder 删除空的包文件夹
+func (t *AutomationModuleAnalyzer) removeEmptyPackageFolder(packageName, template string) error {
+	var errors []string
+	
+	if template == "plugin" {
+		// plugin 类型只删除 plugin 目录下的文件夹
+		basePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
+		if err := t.removeDirectoryIfExists(basePath); err != nil {
+			errors = append(errors, fmt.Sprintf("删除plugin文件夹失败: %v", err))
+		}
+	} else {
+		// package 类型需要删除多个目录下的相关文件
+		paths := []string{
+			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "model", packageName),
+			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", packageName),
+			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", packageName),
+			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", packageName),
+		}
+		
+		for _, path := range paths {
+			if err := t.removeDirectoryIfExists(path); err != nil {
+				errors = append(errors, fmt.Sprintf("删除%s失败: %v", path, err))
+			}
+		}
+	}
+	
+	if len(errors) > 0 {
+		return fmt.Errorf("删除过程中出现错误: %s", strings.Join(errors, "; "))
+	}
+	
+	return nil
+}
+
+// removeDirectoryIfExists 删除目录（如果存在）
+func (t *AutomationModuleAnalyzer) removeDirectoryIfExists(dirPath string) error {
+	// 检查文件夹是否存在
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		// 文件夹不存在，无需删除
+		return nil
+	} else if err != nil {
+		return fmt.Errorf("检查文件夹状态失败: %v", err)
+	}
+	
+	// 删除文件夹及其所有内容
+	if err := os.RemoveAll(dirPath); err != nil {
+		return fmt.Errorf("删除文件夹失败: %v", err)
+	}
+	
+	global.GVA_LOG.Info(fmt.Sprintf("成功删除目录: %s", dirPath))
+	return nil
+}
+
+// cleanupRelatedApiAndMenus 清理与删除的模块相关的API和菜单记录
+func (t *AutomationModuleAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) error {
+	if len(historyIDs) == 0 {
+		return nil
+	}
+	
+	// 获取要删除的历史记录信息
+	var histories []model.SysAutoCodeHistory
+	if err := global.GVA_DB.Where("id IN ?", historyIDs).Find(&histories).Error; err != nil {
+		return fmt.Errorf("获取历史记录失败: %v", err)
+	}
+	
+	var deletedApiCount, deletedMenuCount int
+	
+	for _, history := range histories {
+		// 删除相关的API记录（使用存储的API IDs）
+			if len(history.ApiIDs) > 0 {
+				ids := make([]int, 0, len(history.ApiIDs))
+				for _, id := range history.ApiIDs {
+					ids = append(ids, int(id))
+				}
+				idsReq := common.IdsReq{Ids: ids}
+				if err := systemService.ApiServiceApp.DeleteApisByIds(idsReq); err != nil {
+					global.GVA_LOG.Warn(fmt.Sprintf("删除API记录失败 (模块: %s): %v", history.StructName, err))
+				} else {
+					deletedApiCount += len(ids)
+					global.GVA_LOG.Info(fmt.Sprintf("成功删除API记录 (模块: %s, 数量: %d)", history.StructName, len(ids)))
+				}
+			}
+		
+		// 删除相关的菜单记录（使用存储的菜单ID）
+		if history.MenuID != 0 {
+			if err := systemService.BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID)); err != nil {
+				global.GVA_LOG.Warn(fmt.Sprintf("删除菜单记录失败 (模块: %s, 菜单ID: %d): %v", history.StructName, history.MenuID, err))
+			} else {
+				deletedMenuCount++
+				global.GVA_LOG.Info(fmt.Sprintf("成功删除菜单记录 (模块: %s, 菜单ID: %d)", history.StructName, history.MenuID))
+			}
+		}
+	}
+	
+	if deletedApiCount > 0 || deletedMenuCount > 0 {
+		global.GVA_LOG.Info(fmt.Sprintf("清理完成：删除了 %d 个API记录和 %d 个菜单记录", deletedApiCount, deletedMenuCount))
+	}
+	
+	return nil
 }

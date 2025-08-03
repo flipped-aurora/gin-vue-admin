@@ -8,12 +8,11 @@ ExecutionPlan 是用于自动化模块创建的执行计划结构体，包含了
 ```go
 type ExecutionPlan struct {
     PackageName        string                           `json:"packageName"`        // 包名，如："user", "order", "product"
-    ModuleName         string                           `json:"moduleName"`         // 模块名，通常与结构体名相同
     PackageType        string                           `json:"packageType"`        // "plugin" 或 "package"
     NeedCreatedPackage bool                             `json:"needCreatedPackage"` // 是否需要创建包
     NeedCreatedModules bool                             `json:"needCreatedModules"` // 是否需要创建模块
     PackageInfo        *request.SysAutoCodePackageCreate `json:"packageInfo,omitempty"`  // 包信息（当NeedCreatedPackage=true时必需）
-    ModulesInfo        *request.AutoCode                `json:"modulesInfo,omitempty"` // 模块信息（当NeedCreatedModules=true时必需）
+    ModulesInfo        []*request.AutoCode              `json:"modulesInfo,omitempty"` // 模块信息数组（当NeedCreatedModules=true时必需，支持批量创建）
     Paths              map[string]string                `json:"paths,omitempty"`       // 路径信息
 }
 ```
@@ -94,12 +93,11 @@ type AutoCodeField struct {
 
 ## 使用示例
 
-### 示例1：创建新包和模块
+### 示例1：创建新包和批量创建多个模块
 
 ```json
 {
   "packageName": "user",
-  "moduleName": "User",
   "packageType": "package",
   "needCreatedPackage": true,
   "needCreatedModules": true,
@@ -109,129 +107,256 @@ type AutoCodeField struct {
     "template": "package",
     "packageName": "user"
   },
-  "modulesInfo": {
-    "package": "user",
-    "tableName": "sys_users",
-    "businessDB": "",
-    "structName": "User",
-    "packageName": "user",
-    "description": "用户",
-    "abbreviation": "user",
-    "humpPackageName": "user",
-    "gvaModel": true,
-    "autoMigrate": true,
-    "autoCreateResource": true,
-    "autoCreateApiToSql": true,
-    "autoCreateMenuToSql": true,
-    "autoCreateBtnAuth": true,
-    "onlyTemplate": false,
-    "isTree": false,
-    "treeJson": "",
-    "isAdd": true,
-    "generateWeb": true,
-    "generateServer": true,
-    "fields": [
-      {
-        "fieldName": "Username",
-        "fieldDesc": "用户名",
-        "fieldType": "string",
-        "fieldJson": "username",
-        "dataTypeLong": "50",
-        "comment": "用户名",
-        "columnName": "username",
-        "fieldSearchType": "LIKE",
-        "fieldSearchHide": false,
-        "dictType": "",
-        "form": true,
-        "table": true,
-        "desc": true,
-        "excel": true,
-        "require": true,
-        "defaultValue": "",
-        "errorText": "请输入用户名",
-        "clearable": true,
-        "sort": false,
-        "primaryKey": false,
-        "dataSource": null,
-        "checkDataSource": false,
-        "fieldIndexType": ""
-      },
-      {
-        "fieldName": "Email",
-        "fieldDesc": "邮箱",
-        "fieldType": "string",
-        "fieldJson": "email",
-        "dataTypeLong": "100",
-        "comment": "邮箱地址",
-        "columnName": "email",
-        "fieldSearchType": "EQ",
-        "fieldSearchHide": false,
-        "dictType": "",
-        "form": true,
-        "table": true,
-        "desc": true,
-        "excel": true,
-        "require": true,
-        "defaultValue": "",
-        "errorText": "请输入邮箱",
-        "clearable": true,
-        "sort": false,
-        "primaryKey": false,
-        "dataSource": null,
-        "checkDataSource": false,
-        "fieldIndexType": "index"
-      }
-    ]
-  }
+  "modulesInfo": [
+    {
+      "package": "user",
+      "tableName": "sys_users",
+      "businessDB": "",
+      "structName": "User",
+      "packageName": "user",
+      "description": "用户",
+      "abbreviation": "user",
+      "humpPackageName": "user",
+      "gvaModel": true,
+      "autoMigrate": true,
+      "autoCreateResource": true,
+      "autoCreateApiToSql": true,
+      "autoCreateMenuToSql": true,
+      "autoCreateBtnAuth": true,
+      "onlyTemplate": false,
+      "isTree": false,
+      "treeJson": "",
+      "isAdd": true,
+      "generateWeb": true,
+      "generateServer": true,
+      "fields": [
+        {
+          "fieldName": "Username",
+          "fieldDesc": "用户名",
+          "fieldType": "string",
+          "fieldJson": "username",
+          "dataTypeLong": "50",
+          "comment": "用户名",
+          "columnName": "username",
+          "fieldSearchType": "LIKE",
+          "fieldSearchHide": false,
+          "dictType": "",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "excel": true,
+          "require": true,
+          "defaultValue": "",
+          "errorText": "请输入用户名",
+          "clearable": true,
+          "sort": false,
+          "primaryKey": false,
+          "dataSource": null,
+          "checkDataSource": false,
+          "fieldIndexType": ""
+        },
+        {
+          "fieldName": "Email",
+          "fieldDesc": "邮箱",
+          "fieldType": "string",
+          "fieldJson": "email",
+          "dataTypeLong": "100",
+          "comment": "邮箱地址",
+          "columnName": "email",
+          "fieldSearchType": "EQ",
+          "fieldSearchHide": false,
+          "dictType": "",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "excel": true,
+          "require": true,
+          "defaultValue": "",
+          "errorText": "请输入邮箱",
+          "clearable": true,
+          "sort": false,
+          "primaryKey": false,
+          "dataSource": null,
+          "checkDataSource": false,
+          "fieldIndexType": "index"
+        }
+      ]
+    },
+    {
+      "package": "user",
+      "tableName": "user_profiles",
+      "businessDB": "",
+      "structName": "UserProfile",
+      "packageName": "user",
+      "description": "用户档案",
+      "abbreviation": "userProfile",
+      "humpPackageName": "user",
+      "gvaModel": true,
+      "autoMigrate": true,
+      "autoCreateResource": true,
+      "autoCreateApiToSql": true,
+      "autoCreateMenuToSql": true,
+      "autoCreateBtnAuth": true,
+      "onlyTemplate": false,
+      "isTree": false,
+      "treeJson": "",
+      "isAdd": true,
+      "generateWeb": true,
+      "generateServer": true,
+      "fields": [
+        {
+          "fieldName": "UserID",
+          "fieldDesc": "用户ID",
+          "fieldType": "int",
+          "fieldJson": "userId",
+          "dataTypeLong": "",
+          "comment": "关联用户ID",
+          "columnName": "user_id",
+          "fieldSearchType": "EQ",
+          "fieldSearchHide": false,
+          "dictType": "",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "excel": true,
+          "require": true,
+          "defaultValue": "",
+          "errorText": "请选择用户",
+          "clearable": true,
+          "sort": false,
+          "primaryKey": false,
+          "dataSource": null,
+          "checkDataSource": false,
+          "fieldIndexType": "index"
+        },
+        {
+          "fieldName": "Avatar",
+          "fieldDesc": "头像",
+          "fieldType": "string",
+          "fieldJson": "avatar",
+          "dataTypeLong": "255",
+          "comment": "用户头像URL",
+          "columnName": "avatar",
+          "fieldSearchType": "",
+          "fieldSearchHide": true,
+          "dictType": "",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "excel": false,
+          "require": false,
+          "defaultValue": "",
+          "errorText": "",
+          "clearable": true,
+          "sort": false,
+          "primaryKey": false,
+          "dataSource": null,
+          "checkDataSource": false,
+          "fieldIndexType": ""
+        }
+      ]
+    }
+  ]
 }
 ```
 
-### 示例2：仅在现有包中创建模块
+### 示例2：仅在现有包中批量创建多个模块
 
 ```json
 {
   "packageName": "system",
-  "moduleName": "Role",
   "packageType": "package",
   "needCreatedPackage": false,
   "needCreatedModules": true,
   "packageInfo": null,
-  "modulesInfo": {
-    "package": "system",
-    "tableName": "sys_roles",
-    "businessDB": "",
-    "structName": "Role",
-    "packageName": "system",
-    "description": "角色",
-    "abbreviation": "role",
-    "humpPackageName": "system",
-    "gvaModel": true,
-    "autoMigrate": true,
-    "autoCreateResource": true,
-    "autoCreateApiToSql": true,
-    "autoCreateMenuToSql": true,
-    "autoCreateBtnAuth": true,
-    "onlyTemplate": false,
-    "isTree": false,
-    "generateWeb": true,
-    "generateServer": true,
-    "fields": [
-      {
-        "fieldName": "RoleName",
-        "fieldDesc": "角色名称",
-        "fieldType": "string",
-        "fieldJson": "roleName",
-        "dataTypeLong": "50",
-        "comment": "角色名称",
-        "columnName": "role_name",
-        "fieldSearchType": "LIKE",
-        "form": true,
-        "table": true,
-        "desc": true,
-        "require": true
-      }
-    ]
-  }
+  "modulesInfo": [
+    {
+      "package": "system",
+      "tableName": "sys_roles",
+      "businessDB": "",
+      "structName": "Role",
+      "packageName": "system",
+      "description": "角色",
+      "abbreviation": "role",
+      "humpPackageName": "system",
+      "gvaModel": true,
+      "autoMigrate": true,
+      "autoCreateResource": true,
+      "autoCreateApiToSql": true,
+      "autoCreateMenuToSql": true,
+      "autoCreateBtnAuth": true,
+      "onlyTemplate": false,
+      "isTree": false,
+      "generateWeb": true,
+      "generateServer": true,
+      "fields": [
+        {
+          "fieldName": "RoleName",
+          "fieldDesc": "角色名称",
+          "fieldType": "string",
+          "fieldJson": "roleName",
+          "dataTypeLong": "50",
+          "comment": "角色名称",
+          "columnName": "role_name",
+          "fieldSearchType": "LIKE",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "require": true
+        }
+      ]
+    },
+    {
+      "package": "system",
+      "tableName": "sys_permissions",
+      "businessDB": "",
+      "structName": "Permission",
+      "packageName": "system",
+      "description": "权限",
+      "abbreviation": "permission",
+      "humpPackageName": "system",
+      "gvaModel": true,
+      "autoMigrate": true,
+      "autoCreateResource": true,
+      "autoCreateApiToSql": true,
+      "autoCreateMenuToSql": true,
+      "autoCreateBtnAuth": true,
+      "onlyTemplate": false,
+      "isTree": false,
+      "generateWeb": true,
+      "generateServer": true,
+      "fields": [
+        {
+          "fieldName": "PermissionName",
+          "fieldDesc": "权限名称",
+          "fieldType": "string",
+          "fieldJson": "permissionName",
+          "dataTypeLong": "100",
+          "comment": "权限名称",
+          "columnName": "permission_name",
+          "fieldSearchType": "LIKE",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "require": true
+        },
+        {
+          "fieldName": "PermissionCode",
+          "fieldDesc": "权限代码",
+          "fieldType": "string",
+          "fieldJson": "permissionCode",
+          "dataTypeLong": "50",
+          "comment": "权限代码",
+          "columnName": "permission_code",
+          "fieldSearchType": "=",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "require": true
+        }
+      ]
+    }
+  ]
 }
 ```
 

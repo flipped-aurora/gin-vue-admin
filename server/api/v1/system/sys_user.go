@@ -27,8 +27,6 @@ import (
 func (b *BaseApi) Login(c *gin.Context) {
 	var l systemReq.Login
 	err := c.ShouldBindJSON(&l)
-	key := c.ClientIP()
-
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -39,6 +37,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 		return
 	}
 
+	key := c.ClientIP()
 	// 判断验证码是否开启
 	openCaptcha := global.GVA_CONFIG.Captcha.OpenCaptcha               // 是否开启防爆次数
 	openCaptchaTimeOut := global.GVA_CONFIG.Captcha.OpenCaptchaTimeOut // 缓存超时时间
@@ -49,7 +48,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 
 	var oc bool = openCaptcha == 0 || openCaptcha < interfaceToInt(v)
 
-	if !oc || (l.CaptchaId != "" && l.Captcha != "" && store.Verify(l.CaptchaId, l.Captcha, true)) {
+	if !oc || store.Verify(l.CaptchaId, l.Captcha, true) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		user, err := userService.Login(u)
 		if err != nil {

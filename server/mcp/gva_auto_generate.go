@@ -135,6 +135,10 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 2. AI分析需求为1xxx2xxx格式 → gva_auto_generate（执行创建）
 3. 创建完成后，根据需要使用其他辅助工具
 
+**重要限制：**
+- 当needCreatedModules=true时，模块创建会自动生成API和菜单，因此不应再调用api_creator和menu_creator工具
+- 只有在单独创建API或菜单（不涉及模块创建）时才使用api_creator和menu_creator工具
+
 重要：ExecutionPlan结构体格式要求（支持批量创建）：
 {
   "packageName": "包名(string)",
@@ -1365,6 +1369,13 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 		}
 
 		result.Message += fmt.Sprintf("批量创建完成，共处理 %d 个模块; ", len(plan.ModulesInfo))
+		
+		// 添加重要提醒：不要使用其他MCP工具
+		result.Message += "\n\n⚠️ 重要提醒：\n"
+		result.Message += "模块创建已完成，API和菜单已自动生成。请不要再调用以下MCP工具：\n"
+		result.Message += "- api_creator：API权限已在模块创建时自动生成\n"
+		result.Message += "- menu_creator：前端菜单已在模块创建时自动生成\n"
+		result.Message += "如需修改API或菜单，请直接在系统管理界面中进行配置。\n"
 	}
 
 	result.Message += "已构建目录结构信息; "

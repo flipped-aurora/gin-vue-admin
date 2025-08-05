@@ -41,7 +41,11 @@ type ApiCreator struct{}
 // New 创建API创建工具
 func (a *ApiCreator) New() mcp.Tool {
 	return mcp.NewTool("create_api",
-		mcp.WithDescription("创建后端API记录，用于AI编辑器自动添加API接口时自动创建对应的API权限记录。注意：使用gva_auto_generate创建的包和模块会自动创建API权限，无需调用此工具。仅在AI编辑器自动添加API或router下的文件产生路径变化时使用。"),
+		mcp.WithDescription(`创建后端API记录，用于AI编辑器自动添加API接口时自动创建对应的API权限记录。
+
+**重要限制：**
+- 当使用gva_auto_generate工具且needCreatedModules=true时，模块创建会自动生成API权限，不应调用此工具
+- 仅在以下情况使用：1) 单独创建API（不涉及模块创建）；2) AI编辑器自动添加API；3) router下的文件产生路径变化时`),
 		mcp.WithString("path",
 			mcp.Required(),
 			mcp.Description("API路径，如：/user/create"),

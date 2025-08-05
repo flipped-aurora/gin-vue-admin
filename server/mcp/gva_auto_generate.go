@@ -206,7 +206,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 1. needCreatedPackage=true时packageInfo必需
 2. needCreatedModules=true时modulesInfo必需
 3. packageType只能是"package"或"plugin"
-4. 字段类型支持：string,int,int64,float64,bool,time.Time,enum,picture,video,file,pictures,array,richtext,json
+4. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）
 5. 搜索类型支持：=,!=,>,>=,<,<=,NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN
 6. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
 7. **重要**：当gvaModel=false时，必须有一个字段的primaryKey=true，否则会导致PrimaryField为nil错误

@@ -202,3 +202,4 @@
 2. 在`execute`时必须提供相应的确认参数
 3. 确认参数的值必须是"yes"或"no"
 4. 如果不需要创建包或模块，则不需要提供对应的确认参数
+5. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）

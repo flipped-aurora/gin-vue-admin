@@ -500,7 +500,20 @@ type DataSource struct {
 1. **PackageType**: 只能是 "plugin" 或 "package"
 2. **NeedCreatedPackage**: 当为true时，PackageInfo必须提供
 3. **NeedCreatedModules**: 当为true时，ModulesInfo必须提供
-4. **字段类型**: FieldType支持的类型包括：string, int, int64, float64, bool, time.Time, enum, picture, video, file, pictures, array, richtext, json等
+4. **字段类型**: FieldType支持的类型包括：
+   - string（字符串）
+   - richtext（富文本）
+   - int（整型）
+   - bool（布尔值）
+   - float64（浮点型）
+   - time.Time（时间）
+   - enum（枚举）
+   - picture（单图片，字符串）
+   - pictures（多图片，json字符串）
+   - video（视频，字符串）
+   - file（文件，json字符串）
+   - json（JSON）
+   - array（数组）
 5. **搜索类型**: FieldSearchType支持：EQ, NE, GT, GE, LT, LE, LIKE, BETWEEN等
 6. **索引类型**: FieldIndexType支持：index, unique等
 7. **GvaModel**: 设置为true时会自动包含ID、CreatedAt、UpdatedAt、DeletedAt字段

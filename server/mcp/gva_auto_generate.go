@@ -171,7 +171,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
     "fields": [{
       "fieldName": "字段名(string)",
       "fieldDesc": "字段描述(string)",
-      "fieldType": "字段类型:string/int/bool/time.Time等(string)",
+      "fieldType": "字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）",
       "fieldJson": "JSON标签(string)",
       "dataTypeLong": "数据长度(string)",
       "comment": "注释(string)",
@@ -803,7 +803,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
     "fields": [{
       "fieldName": "字段名（必须大写开头）",
       "fieldDesc": "字段描述",
-      "fieldType": "GO 语言的数据类型",
+      "fieldType": "字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）",
       "fieldJson": "json标签",
       "dataTypeLong": "长度",
       "comment": "注释",

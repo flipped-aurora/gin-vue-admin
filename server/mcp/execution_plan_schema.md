@@ -85,9 +85,22 @@ type AutoCodeField struct {
     Clearable       bool        `json:"clearable"`       // 是否可清空
     Sort            bool        `json:"sort"`            // 是否支持排序
     PrimaryKey      bool        `json:"primaryKey"`      // 是否主键
-    DataSource      *DataSource `json:"dataSource"`      // 数据源
+    DataSource      *DataSource `json:"dataSource"`      // 数据源配置（用于关联其他表）
     CheckDataSource bool        `json:"checkDataSource"` // 是否检查数据源
     FieldIndexType  string      `json:"fieldIndexType"`  // 索引类型
+}
+```
+
+### 4. DataSource 结构体（关联表配置）
+
+```go
+type DataSource struct {
+    DBName       string `json:"dbName"`       // 关联的数据库名称
+    Table        string `json:"table"`        // 关联的表名
+    Label        string `json:"label"`        // 用于显示的字段名（如name、title等）
+    Value        string `json:"value"`        // 用于存储的值字段名（通常是id）
+    Association  int    `json:"association"`  // 关联关系：1=一对一，2=一对多
+    HasDeletedAt bool   `json:"hasDeletedAt"` // 关联表是否有软删除字段
 }
 ```
 
@@ -151,8 +164,15 @@ type AutoCodeField struct {
           "clearable": true,
           "sort": false,
           "primaryKey": false,
-          "dataSource": null,
-          "checkDataSource": false,
+          "dataSource": {
+            "dbName": "gva",
+            "table": "sys_users",
+            "label": "username",
+            "value": "id",
+            "association": 2,
+            "hasDeletedAt": true
+          },
+          "checkDataSource": true,
           "fieldIndexType": ""
         },
         {
@@ -360,6 +380,121 @@ type AutoCodeField struct {
 }
 ```
 
+### 示例3：模块关联关系配置详解
+
+以下示例展示了如何配置不同类型的关联关系：
+
+```json
+{
+  "packageName": "order",
+  "packageType": "package",
+  "needCreatedPackage": true,
+  "needCreatedModules": true,
+  "packageInfo": {
+    "desc": "订单管理模块",
+    "label": "订单管理",
+    "template": "package",
+    "packageName": "order"
+  },
+  "modulesInfo": [
+    {
+      "package": "order",
+      "tableName": "orders",
+      "structName": "Order",
+      "packageName": "order",
+      "description": "订单",
+      "abbreviation": "order",
+      "humpPackageName": "order",
+      "gvaModel": true,
+      "autoMigrate": true,
+      "autoCreateResource": true,
+      "autoCreateApiToSql": true,
+      "autoCreateMenuToSql": true,
+      "autoCreateBtnAuth": true,
+      "generateWeb": true,
+      "generateServer": true,
+      "fields": [
+        {
+          "fieldName": "UserID",
+          "fieldDesc": "下单用户",
+          "fieldType": "uint",
+          "fieldJson": "userId",
+          "columnName": "user_id",
+          "fieldSearchType": "EQ",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "require": true,
+          "dataSource": {
+            "dbName": "gva",
+            "table": "sys_users",
+            "label": "username",
+            "value": "id",
+            "association": 2,
+            "hasDeletedAt": true
+          },
+          "checkDataSource": true
+        },
+        {
+          "fieldName": "ProductID",
+          "fieldDesc": "商品",
+          "fieldType": "uint",
+          "fieldJson": "productId",
+          "columnName": "product_id",
+          "fieldSearchType": "EQ",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "require": true,
+          "dataSource": {
+            "dbName": "gva",
+            "table": "products",
+            "label": "name",
+            "value": "id",
+            "association": 2,
+            "hasDeletedAt": false
+          },
+          "checkDataSource": true
+        },
+        {
+          "fieldName": "Status",
+          "fieldDesc": "订单状态",
+          "fieldType": "int",
+          "fieldJson": "status",
+          "columnName": "status",
+          "fieldSearchType": "EQ",
+          "form": true,
+          "table": true,
+          "desc": true,
+          "require": true,
+          "dictType": "order_status"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## DataSource 配置说明
+
+### 关联关系类型
+- **association: 1** - 一对一关联（如用户与用户档案）
+- **association: 2** - 一对多关联（如用户与订单）
+
+### 配置要点
+1. **dbName**: 通常为 "gva"（默认数据库）
+2. **table**: 关联表的实际表名
+3. **label**: 用于前端显示的字段（如用户名、商品名称）
+4. **value**: 用于存储关联ID的字段（通常是 "id"）
+5. **hasDeletedAt**: 关联表是否支持软删除
+6. **checkDataSource**: 建议设为true，会验证关联表是否存在
+
+### 常见关联场景
+- 用户关联：`{"table": "sys_users", "label": "username", "value": "id"}`
+- 角色关联：`{"table": "sys_authorities", "label": "authorityName", "value": "authorityId"}`
+- 部门关联：`{"table": "sys_departments", "label": "name", "value": "id"}`
+- 分类关联：`{"table": "categories", "label": "name", "value": "id"}`
+
 ## 重要注意事项
 
 1. **PackageType**: 只能是 "plugin" 或 "package"
@@ -369,6 +504,7 @@ type AutoCodeField struct {
 5. **搜索类型**: FieldSearchType支持：EQ, NE, GT, GE, LT, LE, LIKE, BETWEEN等
 6. **索引类型**: FieldIndexType支持：index, unique等
 7. **GvaModel**: 设置为true时会自动包含ID、CreatedAt、UpdatedAt、DeletedAt字段
+8. **关联配置**: 使用dataSource时，确保关联表已存在，建议开启checkDataSource验证
 
 ## 常见错误避免
 

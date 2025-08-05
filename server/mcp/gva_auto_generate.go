@@ -189,8 +189,8 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "clearable": "是否可清空(bool)",
       "sort": "是否排序(bool)",
       "primaryKey": "是否主键(bool)",
-      "dataSource": "数据源(object)",
-      "checkDataSource": "检查数据源(bool)",
+      "dataSource": "数据源配置(object) - 用于配置字段的关联表信息，结构：{\"dbName\":\"数据库名\",\"table\":\"关联表名\",\"label\":\"显示字段\",\"value\":\"值字段\",\"association\":1或2(1=一对一,2=一对多),\"hasDeletedAt\":true/false}。\n\n**获取表名提示：**\n- 可在 server/model 和 plugin/xxx/model 目录下查看对应模块的 TableName() 接口实现获取实际表名\n- 例如：SysUser 的表名为 \"sys_users\"，ExaFileUploadAndDownload 的表名为 \"exa_file_upload_and_downloads\"\n- 插件模块示例：Info 的表名为 \"gva_announcements_info\"\n\n**获取数据库名提示：**\n- 主数据库：通常使用 \"gva\"（默认数据库标识）\n- 多数据库：可在 config.yaml 的 db-list 配置中查看可用数据库的 alias-name 字段\n- 如果用户未提及关联多数据库信息 则使用默认数据库 默认数据库的情况下 dbName此处填写为空",
+      "checkDataSource": "是否检查数据源(bool) - 启用后会验证关联表的存在性",
       "fieldIndexType": "索引类型(string)"
     }]
   }, {
@@ -214,7 +214,16 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 9. 智能字典创建功能：当字段使用字典类型(DictType)时，系统会：
    - 自动检查字典是否存在，如果不存在则创建字典
    - 根据字典类型和字段描述智能生成默认选项，支持状态、性别、类型、等级、优先级、审批、角色、布尔值、订单、颜色、尺寸等常见场景
-   - 为无法识别的字典类型提供通用默认选项`),
+   - 为无法识别的字典类型提供通用默认选项
+10. **模块关联配置**：当需要配置模块间的关联关系时，使用dataSource字段：
+   - **dbName**: 关联的数据库名称
+   - **table**: 关联的表名
+   - **label**: 用于显示的字段名（如name、title等）
+   - **value**: 用于存储的值字段名（通常是id）
+   - **association**: 关联关系类型（1=一对一关联，2=一对多关联）
+   - **hasDeletedAt**: 关联表是否有软删除字段
+   - **checkDataSource**: 设为true时会验证关联表的存在性
+   - 示例：{"dbName":"gva","table":"sys_users","label":"username","value":"id","association":2,"hasDeletedAt":true}`),
 		mcp.WithString("action",
 			mcp.Required(),
 			mcp.Description("执行操作：'analyze' 分析现有模块信息，'confirm' 请求用户确认创建，'execute' 执行创建操作（支持批量创建多个模块）"),

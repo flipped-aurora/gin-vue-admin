@@ -79,6 +79,38 @@
             "dataSource": {},
             "checkDataSource": false,
             "fieldIndexType": ""
+          },
+          {
+            "fieldName": "AuthorID",
+            "fieldDesc": "作者",
+            "fieldType": "uint",
+            "fieldJson": "authorId",
+            "dataTypeLong": "",
+            "comment": "作者ID",
+            "columnName": "author_id",
+            "fieldSearchType": "EQ",
+            "fieldSearchHide": false,
+            "dictType": "",
+            "form": true,
+            "table": true,
+            "desc": true,
+            "excel": true,
+            "require": true,
+            "defaultValue": "",
+            "errorText": "请选择作者",
+            "clearable": true,
+            "sort": false,
+            "primaryKey": false,
+            "dataSource": {
+              "dbName": "gva",
+              "table": "library_authors",
+              "label": "name",
+              "value": "id",
+              "association": 2,
+              "hasDeletedAt": true
+            },
+            "checkDataSource": true,
+            "fieldIndexType": ""
           }
         ]
       },

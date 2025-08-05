@@ -64,7 +64,7 @@ type MenuCreator struct{}
 // New 创建菜单创建工具
 func (m *MenuCreator) New() mcp.Tool {
 	return mcp.NewTool("create_menu",
-		mcp.WithDescription("创建前端菜单记录，用于在生成前端页面时自动创建对应的菜单项，只要前端有页面生成，都需要调用此mcp。"),
+		mcp.WithDescription("创建前端菜单记录，用于AI编辑器自动添加前端页面时自动创建对应的菜单项。注意：使用gva_auto_generate创建的包和模块会自动创建菜单项，无需调用此工具。仅在AI编辑器自动添加前端页面时使用。"),
 		mcp.WithNumber("parentId",
 			mcp.Description("父菜单ID，0表示根菜单"),
 			mcp.DefaultNumber(0),

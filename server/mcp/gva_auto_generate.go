@@ -67,15 +67,14 @@ type AnalysisResponse struct {
 	Message            string                  `json:"message"`
 }
 
-// ExecutionPlan 执行计划
+// ExecutionPlan 执行计划 - 支持批量创建
 type ExecutionPlan struct {
 	PackageName        string                            `json:"packageName"`
-	ModuleName         string                            `json:"moduleName"`
 	PackageType        string                            `json:"packageType"` // "plugin" 或 "package"
 	NeedCreatedPackage bool                              `json:"needCreatedPackage"`
 	NeedCreatedModules bool                              `json:"needCreatedModules"`
 	PackageInfo        *request.SysAutoCodePackageCreate `json:"packageInfo,omitempty"`
-	ModulesInfo        *request.AutoCode                 `json:"modulesInfo,omitempty"`
+	ModulesInfo        []*request.AutoCode               `json:"modulesInfo,omitempty"` // 改为数组支持多个模块
 	Paths              map[string]string                 `json:"paths,omitempty"`
 }
 
@@ -111,12 +110,18 @@ type ConfirmationResponse struct {
 // New 返回工具注册信息
 func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 	return mcp.NewTool("gva_auto_generate",
-		mcp.WithDescription(`**🚀 最高优先级工具：当用户需要创建模块、包、完整功能时，必须优先使用此工具！**
+		mcp.WithDescription(`**🔧 核心执行工具：接收requirement_analyzer分析结果，执行具体的模块创建操作**
 
-**优先级说明：**
-- **最高优先级**：创建完整模块、包、功能模块
-- **关键词触发**：模块、包、完整、整套、全套、功能、管理系统等
-- **适用场景**：用户说"创建订单管理模块"、"创建用户管理功能"、"创建完整的商品管理"等
+**工作流位置：**
+- **第二优先级**：在requirement_analyzer之后使用
+- **接收输入**：来自requirement_analyzer的1xxx2xxx格式分析结果
+- **执行操作**：根据分析结果创建完整模块、包、功能模块
+
+**批量创建功能：**
+- 支持在单个ExecutionPlan中创建多个模块
+- modulesInfo字段为数组，可包含多个模块配置
+- 一次性处理多个模块的创建和字典生成
+- 与requirement_analyzer配合实现完整工作流
 
 分步骤分析自动化模块：1) 分析现有模块信息供AI选择 2) 请求用户确认 3) 根据确认结果执行创建操作
 
@@ -125,15 +130,14 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 - 如果字典不存在，会自动创建对应的字典及默认的字典详情项
 - 字典创建包括：字典主表记录和默认的选项值（选项1、选项2等）
 
-**与其他工具的关系：**
-- 此工具创建完整模块后，会自动提示相关API和菜单创建建议
-- 如果用户只需要单个API或菜单，可以使用 smart_assistant 工具
-- create_api 和 create_menu 工具仅用于数据库记录创建
+**推荐工作流：**
+1. 用户提出需求 → requirement_analyzer（最高优先级）
+2. AI分析需求为1xxx2xxx格式 → gva_auto_generate（执行创建）
+3. 创建完成后，根据需要使用其他辅助工具
 
-重要：ExecutionPlan结构体格式要求：
+重要：ExecutionPlan结构体格式要求（支持批量创建）：
 {
   "packageName": "包名(string)",
-  "moduleName": "模块名(string)", 
   "packageType": "package或plugin(string)",
   "needCreatedPackage": "是否需要创建包(bool)",
   "needCreatedModules": "是否需要创建模块(bool)",
@@ -143,7 +147,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
     "template": "package或plugin(string)",
     "packageName": "包名(string)"
   },
-  "modulesInfo": {
+  "modulesInfo": [{
     "package": "包名(string)",
     "tableName": "数据库表名(string)",
     "businessDB": "业务数据库(string)",
@@ -185,18 +189,24 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "clearable": "是否可清空(bool)",
       "sort": "是否排序(bool)",
       "primaryKey": "是否主键(bool)",
-      "dataSource": "数据源(object)",
-      "checkDataSource": "检查数据源(bool)",
+      "dataSource": "数据源配置(object) - 用于配置字段的关联表信息，结构：{\"dbName\":\"数据库名\",\"table\":\"关联表名\",\"label\":\"显示字段\",\"value\":\"值字段\",\"association\":1或2(1=一对一,2=一对多),\"hasDeletedAt\":true/false}。\n\n**获取表名提示：**\n- 可在 server/model 和 plugin/xxx/model 目录下查看对应模块的 TableName() 接口实现获取实际表名\n- 例如：SysUser 的表名为 \"sys_users\"，ExaFileUploadAndDownload 的表名为 \"exa_file_upload_and_downloads\"\n- 插件模块示例：Info 的表名为 \"gva_announcements_info\"\n\n**获取数据库名提示：**\n- 主数据库：通常使用 \"gva\"（默认数据库标识）\n- 多数据库：可在 config.yaml 的 db-list 配置中查看可用数据库的 alias-name 字段\n- 如果用户未提及关联多数据库信息 则使用默认数据库 默认数据库的情况下 dbName此处填写为空",
+      "checkDataSource": "是否检查数据源(bool) - 启用后会验证关联表的存在性",
       "fieldIndexType": "索引类型(string)"
     }]
-  }
+  }, {
+    "package": "包名(string)",
+    "tableName": "第二个模块的表名(string)",
+    "structName": "第二个模块的结构体名(string)",
+    "description": "第二个模块的描述(string)",
+    "...": "更多模块配置..."
+  }]
 }
 
 注意：
 1. needCreatedPackage=true时packageInfo必需
 2. needCreatedModules=true时modulesInfo必需
 3. packageType只能是"package"或"plugin"
-4. 字段类型支持：string,int,int64,float64,bool,time.Time,enum,picture,video,file,pictures,array,richtext,json
+4. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）
 5. 搜索类型支持：=,!=,>,>=,<,<=,NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN
 6. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
 7. **重要**：当gvaModel=false时，必须有一个字段的primaryKey=true，否则会导致PrimaryField为nil错误
@@ -204,10 +214,19 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 9. 智能字典创建功能：当字段使用字典类型(DictType)时，系统会：
    - 自动检查字典是否存在，如果不存在则创建字典
    - 根据字典类型和字段描述智能生成默认选项，支持状态、性别、类型、等级、优先级、审批、角色、布尔值、订单、颜色、尺寸等常见场景
-   - 为无法识别的字典类型提供通用默认选项`),
+   - 为无法识别的字典类型提供通用默认选项
+10. **模块关联配置**：当需要配置模块间的关联关系时，使用dataSource字段：
+   - **dbName**: 关联的数据库名称
+   - **table**: 关联的表名
+   - **label**: 用于显示的字段名（如name、title等）
+   - **value**: 用于存储的值字段名（通常是id）
+   - **association**: 关联关系类型（1=一对一关联，2=一对多关联）
+   - **hasDeletedAt**: 关联表是否有软删除字段
+   - **checkDataSource**: 设为true时会验证关联表的存在性
+   - 示例：{"dbName":"gva","table":"sys_users","label":"username","value":"id","association":2,"hasDeletedAt":true}`),
 		mcp.WithString("action",
 			mcp.Required(),
-			mcp.Description("执行操作：'analyze' 分析现有模块信息，'confirm' 请求用户确认创建，'execute' 执行创建操作"),
+			mcp.Description("执行操作：'analyze' 分析现有模块信息，'confirm' 请求用户确认创建，'execute' 执行创建操作（支持批量创建多个模块）"),
 		),
 		mcp.WithString("requirement",
 			mcp.Description("用户需求描述（action=analyze时必需）"),
@@ -514,7 +533,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 	var validPackages []model.SysAutoCodePackage
 	var emptyPackageIDs []uint
 	var emptyPackageNames []string
-	
+
 	for _, pkg := range packages {
 		// 检查包对应的文件夹是否为空
 		isEmpty, err := t.isPackageFolderEmpty(pkg.PackageName, pkg.Template)
@@ -524,13 +543,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 			validPackages = append(validPackages, pkg)
 			continue
 		}
-		
+
 		if isEmpty {
 			// 记录需要删除的包ID和包名
 			emptyPackageIDs = append(emptyPackageIDs, pkg.ID)
 			emptyPackageNames = append(emptyPackageNames, pkg.PackageName)
 			global.GVA_LOG.Info(fmt.Sprintf("发现空包文件夹: %s，将删除数据库记录和文件夹", pkg.PackageName))
-			
+
 			// 删除空文件夹
 			if err := t.removeEmptyPackageFolder(pkg.PackageName, pkg.Template); err != nil {
 				global.GVA_LOG.Warn(fmt.Sprintf("删除空包文件夹 %s 失败: %v", pkg.PackageName, err))
@@ -540,7 +559,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 			validPackages = append(validPackages, pkg)
 		}
 	}
-	
+
 	// 批量删除空包的数据库记录
 	if len(emptyPackageIDs) > 0 {
 		if err := global.GVA_DB.Where("id IN ?", emptyPackageIDs).Delete(&model.SysAutoCodePackage{}).Error; err != nil {
@@ -549,7 +568,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 			global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 个空包的数据库记录", len(emptyPackageIDs)))
 		}
 	}
-	
+
 	// 转换有效的包信息
 	for _, pkg := range validPackages {
 		moduleInfos = append(moduleInfos, ModuleInfo{
@@ -573,14 +592,14 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 				}
 			}
 		}
-		
+
 		// 清理相关的API和菜单记录
 		if len(emptyHistoryIDs) > 0 {
 			if err := t.cleanupRelatedApiAndMenus(emptyHistoryIDs); err != nil {
 				global.GVA_LOG.Warn(fmt.Sprintf("清理空包相关API和菜单失败: %v", err))
 			}
 		}
-		
+
 		// 批量删除相关历史记录
 		if len(emptyHistoryIDs) > 0 {
 			if err := global.GVA_DB.Where("id IN ?", emptyHistoryIDs).Delete(&model.SysAutoCodeHistory{}).Error; err != nil {
@@ -590,13 +609,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 			}
 		}
 	}
-	
+
 	// 创建有效包名的映射，用于快速查找
 	validPackageNames := make(map[string]bool)
 	for _, pkg := range validPackages {
 		validPackageNames[pkg.PackageName] = true
 	}
-	
+
 	// 收集需要删除的脏历史记录ID（包名不在有效包列表中的历史记录）
 	var dirtyHistoryIDs []uint
 	for _, history := range histories {
@@ -604,21 +623,21 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 			dirtyHistoryIDs = append(dirtyHistoryIDs, history.ID)
 		}
 	}
-	
+
 	// 删除脏历史记录
 	if len(dirtyHistoryIDs) > 0 {
 		// 清理相关的API和菜单记录
 		if err := t.cleanupRelatedApiAndMenus(dirtyHistoryIDs); err != nil {
 			global.GVA_LOG.Warn(fmt.Sprintf("清理脏历史记录相关API和菜单失败: %v", err))
 		}
-		
+
 		if err := global.GVA_DB.Where("id IN ?", dirtyHistoryIDs).Delete(&model.SysAutoCodeHistory{}).Error; err != nil {
 			global.GVA_LOG.Warn(fmt.Sprintf("删除脏历史记录失败: %v", err))
 		} else {
 			global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 个脏历史记录（包名不在有效包列表中）", len(dirtyHistoryIDs)))
 		}
 	}
-	
+
 	// 转换有效的历史记录（只保留包名存在于有效包列表中的历史记录）
 	var historyInfos []HistoryInfo
 	for _, history := range histories {
@@ -643,7 +662,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 		global.GVA_LOG.Warn("扫描预设计模块失败" + err.Error())
 		allPredesignedModules = []PredesignedModuleInfo{} // 确保不为nil
 	}
-	
+
 	// 过滤掉与已删除包相关的预设计模块
 	var predesignedModules []PredesignedModuleInfo
 	for _, module := range allPredesignedModules {
@@ -654,7 +673,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 				break
 			}
 		}
-		
+
 		// 只保留未被删除包的预设计模块
 		if !isDeleted {
 			predesignedModules = append(predesignedModules, module)
@@ -664,7 +683,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 	// 构建分析结果消息
 	var message string
 	var deletionDetails []string
-	
+
 	// 收集删除信息
 	if len(emptyHistoryIDs) > 0 {
 		deletionDetails = append(deletionDetails, fmt.Sprintf("%d个空包相关历史记录", len(emptyHistoryIDs)))
@@ -675,13 +694,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 	if len(allPredesignedModules) > len(predesignedModules) {
 		deletionDetails = append(deletionDetails, fmt.Sprintf("%d个相关预设计模块", len(allPredesignedModules)-len(predesignedModules)))
 	}
-	
+
 	if len(emptyPackageNames) > 0 || len(deletionDetails) > 0 {
 		var cleanupInfo string
 		if len(emptyPackageNames) > 0 {
 			cleanupInfo = fmt.Sprintf("检测到存在 %s 包但内容为空，我已经删除这些包的文件夹（包括model、api、service、router目录）和数据库记录", strings.Join(emptyPackageNames, "、"))
 		}
-		
+
 		deletionInfo := ""
 		if len(deletionDetails) > 0 {
 			if cleanupInfo != "" {
@@ -690,7 +709,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 				deletionInfo = fmt.Sprintf("检测到脏数据，已删除%s", strings.Join(deletionDetails, "、"))
 			}
 		}
-		
+
 		if cleanupInfo != "" {
 			message = fmt.Sprintf("分析完成：获取到 %d 个有效包、%d 个历史记录和 %d 个预设计模块。%s%s，如果需要使用这些包名，需要重新创建。请AI根据需求选择合适的包和模块", len(validPackages), len(historyInfos), len(predesignedModules), cleanupInfo, deletionInfo)
 		} else {
@@ -699,7 +718,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 	} else {
 		message = fmt.Sprintf("分析完成：获取到 %d 个有效包、%d 个历史记录和 %d 个预设计模块，请AI根据需求选择合适的包和模块", len(validPackages), len(historyInfos), len(predesignedModules))
 	}
-	
+
 	// 构建分析结果
 	analysisResult := AnalysisResponse{
 		Packages:           moduleInfos,
@@ -748,10 +767,9 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
   }
 - 请在创建模块之前先创建所需的字典选项
 
-重要提醒：ExecutionPlan必须严格按照以下格式：
+重要提醒：ExecutionPlan必须严格按照以下格式（支持批量创建多个模块）：
 {
   "packageName": "包名",
-  "moduleName": "模块名",
   "packageType": "package或plugin", // 当用户提到插件时必须是"plugin"
   "needCreatedPackage": true/false,
   "needCreatedModules": true/false,
@@ -761,7 +779,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
     "template": "package或plugin", // 必须与packageType保持一致！
     "packageName": "包名"
   },
-  "modulesInfo": {
+  "modulesInfo": [{
     "package": "包名",
     "tableName": "数据库表名",
     "businessDB": "",
@@ -807,7 +825,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
       "checkDataSource": false,
       "fieldIndexType": ""
     }]
-  }
+  }, {
+    "package": "包名",
+    "tableName": "第二个模块的表名",
+    "structName": "第二个模块的结构体名",
+    "description": "第二个模块的描述",
+    "...": "更多模块配置..."
+  }]
 }
 
 **重要提醒**：ExecutionPlan必须严格按照以下格式和验证规则：
@@ -835,13 +859,13 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 12. 如果字段需要字典类型，请先使用 generate_dictionary_options 工具创建字典
 13. 字典创建成功后，再执行模块创建操作
 
-`, string(resultJSON), requirement, pluginDetectionMsg, 
-			func() string {
-				if len(emptyPackageNames) > 0 {
-					return fmt.Sprintf("**重要提醒**：检测到 %s 包存在但内容为空，已自动删除相关文件夹和数据库记录。如果用户需求涉及这些包名，请设置 needCreatedPackage=true 重新创建。", strings.Join(emptyPackageNames, "、"))
-				}
-				return ""
-			}()),
+`, string(resultJSON), requirement, pluginDetectionMsg,
+					func() string {
+						if len(emptyPackageNames) > 0 {
+							return fmt.Sprintf("**重要提醒**：检测到 %s 包存在但内容为空，已自动删除相关文件夹和数据库记录。如果用户需求涉及这些包名，请设置 needCreatedPackage=true 重新创建。", strings.Join(emptyPackageNames, "、"))
+						}
+						return ""
+					}()),
 			},
 		},
 	}, nil
@@ -872,18 +896,23 @@ func (t *AutomationModuleAnalyzer) handleConfirm(ctx context.Context, request mc
 	}
 
 	// 构建确认响应
+	var moduleNames []string
+	for _, moduleInfo := range plan.ModulesInfo {
+		moduleNames = append(moduleNames, moduleInfo.StructName)
+	}
+	moduleNamesStr := strings.Join(moduleNames, "_")
+
 	confirmResponse := ConfirmationResponse{
 		Message:         "请确认以下创建计划：",
 		PackageConfirm:  plan.NeedCreatedPackage,
 		ModulesConfirm:  plan.NeedCreatedModules,
 		CanProceed:      true,
-		ConfirmationKey: fmt.Sprintf("%s_%s_%d", plan.PackageName, plan.ModuleName, time.Now().Unix()),
+		ConfirmationKey: fmt.Sprintf("%s_%s_%d", plan.PackageName, moduleNamesStr, time.Now().Unix()),
 	}
 
 	// 构建详细的确认信息
 	var confirmDetails strings.Builder
 	confirmDetails.WriteString(fmt.Sprintf("包名: %s\n", plan.PackageName))
-	confirmDetails.WriteString(fmt.Sprintf("模块名: %s\n", plan.ModuleName))
 	confirmDetails.WriteString(fmt.Sprintf("包类型: %s\n", plan.PackageType))
 
 	if plan.NeedCreatedPackage && plan.PackageInfo != nil {
@@ -894,15 +923,18 @@ func (t *AutomationModuleAnalyzer) handleConfirm(ctx context.Context, request mc
 		confirmDetails.WriteString(fmt.Sprintf("  - 模板: %s\n", plan.PackageInfo.Template))
 	}
 
-	if plan.NeedCreatedModules && plan.ModulesInfo != nil {
-		confirmDetails.WriteString("\n需要创建模块:\n")
-		confirmDetails.WriteString(fmt.Sprintf("  - 结构体名: %s\n", plan.ModulesInfo.StructName))
-		confirmDetails.WriteString(fmt.Sprintf("  - 表名: %s\n", plan.ModulesInfo.TableName))
-		confirmDetails.WriteString(fmt.Sprintf("  - 描述: %s\n", plan.ModulesInfo.Description))
-		confirmDetails.WriteString(fmt.Sprintf("  - 字段数量: %d\n", len(plan.ModulesInfo.Fields)))
-		confirmDetails.WriteString("  - 字段列表:\n")
-		for _, field := range plan.ModulesInfo.Fields {
-			confirmDetails.WriteString(fmt.Sprintf("    * %s (%s): %s\n", field.FieldName, field.FieldType, field.FieldDesc))
+	if plan.NeedCreatedModules && len(plan.ModulesInfo) > 0 {
+		confirmDetails.WriteString(fmt.Sprintf("\n需要创建模块 (共%d个):\n", len(plan.ModulesInfo)))
+		for i, moduleInfo := range plan.ModulesInfo {
+			confirmDetails.WriteString(fmt.Sprintf("\n模块 %d:\n", i+1))
+			confirmDetails.WriteString(fmt.Sprintf("  - 结构体名: %s\n", moduleInfo.StructName))
+			confirmDetails.WriteString(fmt.Sprintf("  - 表名: %s\n", moduleInfo.TableName))
+			confirmDetails.WriteString(fmt.Sprintf("  - 描述: %s\n", moduleInfo.Description))
+			confirmDetails.WriteString(fmt.Sprintf("  - 字段数量: %d\n", len(moduleInfo.Fields)))
+			confirmDetails.WriteString("  - 字段列表:\n")
+			for _, field := range moduleInfo.Fields {
+				confirmDetails.WriteString(fmt.Sprintf("    * %s (%s): %s\n", field.FieldName, field.FieldType, field.FieldDesc))
+			}
 		}
 	}
 
@@ -1045,10 +1077,10 @@ func (t *AutomationModuleAnalyzer) buildDirectoryStructure(plan *ExecutionPlan) 
 		packageName = plan.PackageInfo.PackageName
 	}
 
-	// 如果计划中有模块信息，获取结构名
+	// 如果计划中有模块信息，获取第一个模块的结构名作为默认值
 	structName := "ExampleStruct"
-	if plan.ModulesInfo != nil && plan.ModulesInfo.StructName != "" {
-		structName = plan.ModulesInfo.StructName
+	if len(plan.ModulesInfo) > 0 && plan.ModulesInfo[0].StructName != "" {
+		structName = plan.ModulesInfo[0].StructName
 	}
 
 	// 根据包类型构建不同的路径结构
@@ -1138,9 +1170,6 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 	if plan.PackageName == "" {
 		return errors.New("packageName 不能为空")
 	}
-	if plan.ModuleName == "" {
-		return errors.New("moduleName 不能为空")
-	}
 	if plan.PackageType != "package" && plan.PackageType != "plugin" {
 		return errors.New("packageType 必须是 'package' 或 'plugin'")
 	}
@@ -1171,104 +1200,108 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 		}
 	}
 
-	// 验证模块信息
+	// 验证模块信息（批量验证）
 	if plan.NeedCreatedModules {
-		if plan.ModulesInfo == nil {
+		if len(plan.ModulesInfo) == 0 {
 			return errors.New("当 needCreatedModules=true 时，modulesInfo 不能为空")
 		}
-		if plan.ModulesInfo.Package == "" {
-			return errors.New("modulesInfo.package 不能为空")
-		}
-		if plan.ModulesInfo.StructName == "" {
-			return errors.New("modulesInfo.structName 不能为空")
-		}
-		if plan.ModulesInfo.TableName == "" {
-			return errors.New("modulesInfo.tableName 不能为空")
-		}
-		if plan.ModulesInfo.Description == "" {
-			return errors.New("modulesInfo.description 不能为空")
-		}
-		if plan.ModulesInfo.Abbreviation == "" {
-			return errors.New("modulesInfo.abbreviation 不能为空")
-		}
-		if plan.ModulesInfo.PackageName == "" {
-			return errors.New("modulesInfo.packageName 不能为空")
-		}
-		if plan.ModulesInfo.HumpPackageName == "" {
-			return errors.New("modulesInfo.humpPackageName 不能为空")
-		}
 
-		// 验证字段信息
-		if len(plan.ModulesInfo.Fields) == 0 {
-			return errors.New("modulesInfo.fields 不能为空，至少需要一个字段")
-		}
-
-		for i, field := range plan.ModulesInfo.Fields {
-			if field.FieldName == "" {
-				return fmt.Errorf("字段 %d 的 fieldName 不能为空", i+1)
+		// 遍历验证每个模块
+		for moduleIndex, moduleInfo := range plan.ModulesInfo {
+			if moduleInfo.Package == "" {
+				return fmt.Errorf("模块 %d 的 package 不能为空", moduleIndex+1)
 			}
-			if field.FieldDesc == "" {
-				return fmt.Errorf("字段 %d 的 fieldDesc 不能为空", i+1)
+			if moduleInfo.StructName == "" {
+				return fmt.Errorf("模块 %d 的 structName 不能为空", moduleIndex+1)
 			}
-			if field.FieldType == "" {
-				return fmt.Errorf("字段 %d 的 fieldType 不能为空", i+1)
+			if moduleInfo.TableName == "" {
+				return fmt.Errorf("模块 %d 的 tableName 不能为空", moduleIndex+1)
 			}
-			if field.FieldJson == "" {
-				return fmt.Errorf("字段 %d 的 fieldJson 不能为空", i+1)
+			if moduleInfo.Description == "" {
+				return fmt.Errorf("模块 %d 的 description 不能为空", moduleIndex+1)
 			}
-			if field.ColumnName == "" {
-				return fmt.Errorf("字段 %d 的 columnName 不能为空", i+1)
+			if moduleInfo.Abbreviation == "" {
+				return fmt.Errorf("模块 %d 的 abbreviation 不能为空", moduleIndex+1)
+			}
+			if moduleInfo.PackageName == "" {
+				return fmt.Errorf("模块 %d 的 packageName 不能为空", moduleIndex+1)
+			}
+			if moduleInfo.HumpPackageName == "" {
+				return fmt.Errorf("模块 %d 的 humpPackageName 不能为空", moduleIndex+1)
 			}
 
-			// 验证字段类型
-			validFieldTypes := []string{"string", "int", "int64", "float64", "bool", "time.Time", "enum", "picture", "video", "file", "pictures", "array", "richtext", "json"}
-			validType := false
-			for _, validFieldType := range validFieldTypes {
-				if field.FieldType == validFieldType {
-					validType = true
-					break
+			// 验证字段信息
+			if len(moduleInfo.Fields) == 0 {
+				return fmt.Errorf("模块 %d 的 fields 不能为空，至少需要一个字段", moduleIndex+1)
+			}
+
+			for i, field := range moduleInfo.Fields {
+				if field.FieldName == "" {
+					return fmt.Errorf("模块 %d 字段 %d 的 fieldName 不能为空", moduleIndex+1, i+1)
 				}
-			}
-			if !validType {
-				return fmt.Errorf("字段 %d 的 fieldType '%s' 不支持，支持的类型：%v", i+1, field.FieldType, validFieldTypes)
-			}
+				if field.FieldDesc == "" {
+					return fmt.Errorf("模块 %d 字段 %d 的 fieldDesc 不能为空", moduleIndex+1, i+1)
+				}
+				if field.FieldType == "" {
+					return fmt.Errorf("模块 %d 字段 %d 的 fieldType 不能为空", moduleIndex+1, i+1)
+				}
+				if field.FieldJson == "" {
+					return fmt.Errorf("模块 %d 字段 %d 的 fieldJson 不能为空", moduleIndex+1, i+1)
+				}
+				if field.ColumnName == "" {
+					return fmt.Errorf("模块 %d 字段 %d 的 columnName 不能为空", moduleIndex+1, i+1)
+				}
 
-			// 验证搜索类型（如果设置了）
-			if field.FieldSearchType != "" {
-				validSearchTypes := []string{"=", "!=", ">", ">=", "<", "<=", "LIKE", "BETWEEN", "IN", "NOT IN"}
-				validSearchType := false
-				for _, validType := range validSearchTypes {
-					if field.FieldSearchType == validType {
-						validSearchType = true
+				// 验证字段类型
+				validFieldTypes := []string{"string", "int", "int64", "float64", "bool", "time.Time", "enum", "picture", "video", "file", "pictures", "array", "richtext", "json"}
+				validType := false
+				for _, validFieldType := range validFieldTypes {
+					if field.FieldType == validFieldType {
+						validType = true
 						break
 					}
 				}
-				if !validSearchType {
-					return fmt.Errorf("字段 %d 的 fieldSearchType '%s' 不支持，支持的类型：%v", i+1, field.FieldSearchType, validSearchTypes)
+				if !validType {
+					return fmt.Errorf("模块 %d 字段 %d 的 fieldType '%s' 不支持，支持的类型：%v", moduleIndex+1, i+1, field.FieldType, validFieldTypes)
 				}
-			}
-		}
 
-		// 验证主键设置
-		if !plan.ModulesInfo.GvaModel {
-			// 当不使用GVA模型时，必须有且仅有一个字段设置为主键
-			primaryKeyCount := 0
-			for _, field := range plan.ModulesInfo.Fields {
-				if field.PrimaryKey {
-					primaryKeyCount++
+				// 验证搜索类型（如果设置了）
+				if field.FieldSearchType != "" {
+					validSearchTypes := []string{"=", "!=", ">", ">=", "<", "<=", "LIKE", "BETWEEN", "IN", "NOT IN"}
+					validSearchType := false
+					for _, validType := range validSearchTypes {
+						if field.FieldSearchType == validType {
+							validSearchType = true
+							break
+						}
+					}
+					if !validSearchType {
+						return fmt.Errorf("模块 %d 字段 %d 的 fieldSearchType '%s' 不支持，支持的类型：%v", moduleIndex+1, i+1, field.FieldSearchType, validSearchTypes)
+					}
 				}
 			}
-			if primaryKeyCount == 0 {
-				return errors.New("当 gvaModel=false 时，必须有一个字段的 primaryKey=true")
-			}
-			if primaryKeyCount > 1 {
-				return errors.New("当 gvaModel=false 时，只能有一个字段的 primaryKey=true")
-			}
-		} else {
-			// 当使用GVA模型时，所有字段的primaryKey都应该为false
-			for i, field := range plan.ModulesInfo.Fields {
-				if field.PrimaryKey {
-					return fmt.Errorf("当 gvaModel=true 时，字段 %d 的 primaryKey 应该为 false，系统会自动创建ID主键", i+1)
+
+			// 验证主键设置
+			if !moduleInfo.GvaModel {
+				// 当不使用GVA模型时，必须有且仅有一个字段设置为主键
+				primaryKeyCount := 0
+				for _, field := range moduleInfo.Fields {
+					if field.PrimaryKey {
+						primaryKeyCount++
+					}
+				}
+				if primaryKeyCount == 0 {
+					return fmt.Errorf("模块 %d：当 gvaModel=false 时，必须有一个字段的 primaryKey=true", moduleIndex+1)
+				}
+				if primaryKeyCount > 1 {
+					return fmt.Errorf("模块 %d：当 gvaModel=false 时，只能有一个字段的 primaryKey=true", moduleIndex+1)
+				}
+			} else {
+				// 当使用GVA模型时，所有字段的primaryKey都应该为false
+				for i, field := range moduleInfo.Fields {
+					if field.PrimaryKey {
+						return fmt.Errorf("模块 %d：当 gvaModel=true 时，字段 %d 的 primaryKey 应该为 false，系统会自动创建ID主键", moduleIndex+1, i+1)
+					}
 				}
 			}
 		}
@@ -1305,30 +1338,33 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 		result.Message += "包创建成功; "
 	}
 
-	// 创建字典（如果需要）
-	if plan.NeedCreatedModules && plan.ModulesInfo != nil {
-		dictResult := t.createRequiredDictionaries(ctx, plan.ModulesInfo)
-		result.Message += dictResult
-	}
-
-	// 创建模块（如果需要）
-	if plan.NeedCreatedModules && plan.ModulesInfo != nil {
+	// 批量创建字典和模块（如果需要）
+	if plan.NeedCreatedModules && len(plan.ModulesInfo) > 0 {
 		templateService := service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
 
-		err := plan.ModulesInfo.Pretreatment()
-		if err != nil {
-			result.Message += fmt.Sprintf("模块信息预处理失败: %v", err)
-			// 即使预处理失败，也要返回paths信息
-			return result
+		// 先批量创建所有模块需要的字典
+		dictResult := t.createRequiredDictionaries(ctx, plan.ModulesInfo)
+		result.Message += dictResult
+
+		// 遍历所有模块进行创建
+		for _, moduleInfo := range plan.ModulesInfo {
+
+			// 创建模块
+			err := moduleInfo.Pretreatment()
+			if err != nil {
+				result.Message += fmt.Sprintf("模块 %s 信息预处理失败: %v; ", moduleInfo.StructName, err)
+				continue // 继续处理下一个模块
+			}
+
+			err = templateService.Create(ctx, *moduleInfo)
+			if err != nil {
+				result.Message += fmt.Sprintf("创建模块 %s 失败: %v; ", moduleInfo.StructName, err)
+				continue // 继续处理下一个模块
+			}
+			result.Message += fmt.Sprintf("模块 %s 创建成功; ", moduleInfo.StructName)
 		}
 
-		err = templateService.Create(ctx, *plan.ModulesInfo)
-		if err != nil {
-			result.Message += fmt.Sprintf("创建模块失败: %v", err)
-			// 即使创建模块失败，也要返回paths信息
-			return result
-		}
-		result.Message += "模块创建成功; "
+		result.Message += fmt.Sprintf("批量创建完成，共处理 %d 个模块; ", len(plan.ModulesInfo))
 	}
 
 	result.Message += "已构建目录结构信息; "
@@ -1341,42 +1377,63 @@ func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *Ex
 	return result
 }
 
-// createRequiredDictionaries 创建所需的字典
-func (t *AutomationModuleAnalyzer) createRequiredDictionaries(ctx context.Context, modulesInfo *request.AutoCode) string {
+// createRequiredDictionaries 创建所需的字典（批量处理）
+func (t *AutomationModuleAnalyzer) createRequiredDictionaries(ctx context.Context, modulesInfoList []*request.AutoCode) string {
 	var messages []string
 	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
+	createdDictTypes := make(map[string]bool) // 用于避免重复创建相同的字典
 
-	// 遍历所有字段，查找使用字典的字段
-	for _, field := range modulesInfo.Fields {
-		if field.DictType != "" {
-			// 检查字典是否存在
-			exists, err := t.checkDictionaryExists(field.DictType)
-			if err != nil {
-				messages = append(messages, fmt.Sprintf("检查字典 %s 时出错: %v; ", field.DictType, err))
-				continue
-			}
+	// 遍历所有模块
+	for moduleIndex, modulesInfo := range modulesInfoList {
+		messages = append(messages, fmt.Sprintf("处理模块 %d (%s) 的字典: ", moduleIndex+1, modulesInfo.StructName))
 
-			if !exists {
-				// 字典不存在，创建字典
-				dictionary := model.SysDictionary{
-					Name:   t.generateDictionaryName(field.DictType, field.FieldDesc),
-					Type:   field.DictType,
-					Status: &[]bool{true}[0], // 默认启用
-					Desc:   fmt.Sprintf("自动生成的字典，用于字段: %s (%s)", field.FieldName, field.FieldDesc),
+		// 遍历当前模块的所有字段，查找使用字典的字段
+		moduleHasDictFields := false
+		for _, field := range modulesInfo.Fields {
+			if field.DictType != "" {
+				moduleHasDictFields = true
+
+				// 如果这个字典类型已经在之前的模块中创建过，跳过
+				if createdDictTypes[field.DictType] {
+					messages = append(messages, fmt.Sprintf("字典 %s 已在前面的模块中创建，跳过; ", field.DictType))
+					continue
 				}
 
-				err = dictionaryService.CreateSysDictionary(dictionary)
+				// 检查字典是否存在
+				exists, err := t.checkDictionaryExists(field.DictType)
 				if err != nil {
-					messages = append(messages, fmt.Sprintf("创建字典 %s 失败: %v; ", field.DictType, err))
-				} else {
-					messages = append(messages, fmt.Sprintf("成功创建字典 %s (%s); ", field.DictType, dictionary.Name))
-
-					// 创建默认的字典详情项
-					t.createDefaultDictionaryDetails(ctx, field.DictType, field.FieldDesc)
+					messages = append(messages, fmt.Sprintf("检查字典 %s 时出错: %v; ", field.DictType, err))
+					continue
 				}
-			} else {
-				messages = append(messages, fmt.Sprintf("字典 %s 已存在，跳过创建; ", field.DictType))
+
+				if !exists {
+					// 字典不存在，创建字典
+					dictionary := model.SysDictionary{
+						Name:   t.generateDictionaryName(field.DictType, field.FieldDesc),
+						Type:   field.DictType,
+						Status: &[]bool{true}[0], // 默认启用
+						Desc:   fmt.Sprintf("自动生成的字典，用于模块 %s 字段: %s (%s)", modulesInfo.StructName, field.FieldName, field.FieldDesc),
+					}
+
+					err = dictionaryService.CreateSysDictionary(dictionary)
+					if err != nil {
+						messages = append(messages, fmt.Sprintf("创建字典 %s 失败: %v; ", field.DictType, err))
+					} else {
+						messages = append(messages, fmt.Sprintf("成功创建字典 %s (%s); ", field.DictType, dictionary.Name))
+						createdDictTypes[field.DictType] = true // 标记为已创建
+
+						// 创建默认的字典详情项
+						t.createDefaultDictionaryDetails(ctx, field.DictType, field.FieldDesc)
+					}
+				} else {
+					messages = append(messages, fmt.Sprintf("字典 %s 已存在，跳过创建; ", field.DictType))
+					createdDictTypes[field.DictType] = true // 标记为已存在
+				}
 			}
+		}
+
+		if !moduleHasDictFields {
+			messages = append(messages, "无需创建字典; ")
 		}
 	}
 
@@ -1441,18 +1498,18 @@ func (t *AutomationModuleAnalyzer) generateSmartDictionaryOptions(dictType, fiel
 func (t *AutomationModuleAnalyzer) detectPluginIntent(requirement string) (suggestedType string, isPlugin bool, confidence string) {
 	// 转换为小写进行匹配
 	requirementLower := strings.ToLower(requirement)
-	
+
 	// 插件相关关键词
 	pluginKeywords := []string{
 		"插件", "plugin", "扩展", "extension", "addon", "模块插件",
 		"功能插件", "业务插件", "第三方插件", "自定义插件",
 	}
-	
+
 	// 包相关关键词（用于排除误判）
 	packageKeywords := []string{
 		"包", "package", "模块包", "业务包", "功能包",
 	}
-	
+
 	// 检测插件关键词
 	pluginMatches := 0
 	for _, keyword := range pluginKeywords {
@@ -1460,7 +1517,7 @@ func (t *AutomationModuleAnalyzer) detectPluginIntent(requirement string) (sugge
 			pluginMatches++
 		}
 	}
-	
+
 	// 检测包关键词
 	packageMatches := 0
 	for _, keyword := range packageKeywords {
@@ -1468,7 +1525,7 @@ func (t *AutomationModuleAnalyzer) detectPluginIntent(requirement string) (sugge
 			packageMatches++
 		}
 	}
-	
+
 	// 决策逻辑
 	if pluginMatches > 0 {
 		if packageMatches == 0 || pluginMatches > packageMatches {
@@ -1477,7 +1534,7 @@ func (t *AutomationModuleAnalyzer) detectPluginIntent(requirement string) (sugge
 			return "plugin", true, "中"
 		}
 	}
-	
+
 	// 默认返回package
 	return "package", false, "低"
 }
@@ -1492,7 +1549,7 @@ func (t *AutomationModuleAnalyzer) isPackageFolderEmpty(packageName, template st
 		// package 类型
 		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "model", packageName)
 	}
-	
+
 	// 检查文件夹是否存在
 	if _, err := os.Stat(basePath); os.IsNotExist(err) {
 		// 文件夹不存在，认为是空的
@@ -1500,13 +1557,13 @@ func (t *AutomationModuleAnalyzer) isPackageFolderEmpty(packageName, template st
 	} else if err != nil {
 		return false, fmt.Errorf("检查文件夹状态失败: %v", err)
 	}
-	
+
 	// 读取文件夹内容
 	entries, err := os.ReadDir(basePath)
 	if err != nil {
 		return false, fmt.Errorf("读取文件夹内容失败: %v", err)
 	}
-	
+
 	// 检查目录下是否有 .go 文件
 	hasGoFiles := false
 	for _, entry := range entries {
@@ -1537,7 +1594,7 @@ func (t *AutomationModuleAnalyzer) isPackageFolderEmpty(packageName, template st
 			break
 		}
 	}
-	
+
 	// 如果没有 .go 文件，认为是空包
 	return !hasGoFiles, nil
 }
@@ -1545,7 +1602,7 @@ func (t *AutomationModuleAnalyzer) isPackageFolderEmpty(packageName, template st
 // removeEmptyPackageFolder 删除空的包文件夹
 func (t *AutomationModuleAnalyzer) removeEmptyPackageFolder(packageName, template string) error {
 	var errors []string
-	
+
 	if template == "plugin" {
 		// plugin 类型只删除 plugin 目录下的文件夹
 		basePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
@@ -1560,18 +1617,18 @@ func (t *AutomationModuleAnalyzer) removeEmptyPackageFolder(packageName, templat
 			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", packageName),
 			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", packageName),
 		}
-		
+
 		for _, path := range paths {
 			if err := t.removeDirectoryIfExists(path); err != nil {
 				errors = append(errors, fmt.Sprintf("删除%s失败: %v", path, err))
 			}
 		}
 	}
-	
+
 	if len(errors) > 0 {
 		return fmt.Errorf("删除过程中出现错误: %s", strings.Join(errors, "; "))
 	}
-	
+
 	return nil
 }
 
@@ -1584,12 +1641,12 @@ func (t *AutomationModuleAnalyzer) removeDirectoryIfExists(dirPath string) error
 	} else if err != nil {
 		return fmt.Errorf("检查文件夹状态失败: %v", err)
 	}
-	
+
 	// 删除文件夹及其所有内容
 	if err := os.RemoveAll(dirPath); err != nil {
 		return fmt.Errorf("删除文件夹失败: %v", err)
 	}
-	
+
 	global.GVA_LOG.Info(fmt.Sprintf("成功删除目录: %s", dirPath))
 	return nil
 }
@@ -1599,31 +1656,31 @@ func (t *AutomationModuleAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) 
 	if len(historyIDs) == 0 {
 		return nil
 	}
-	
+
 	// 获取要删除的历史记录信息
 	var histories []model.SysAutoCodeHistory
 	if err := global.GVA_DB.Where("id IN ?", historyIDs).Find(&histories).Error; err != nil {
 		return fmt.Errorf("获取历史记录失败: %v", err)
 	}
-	
+
 	var deletedApiCount, deletedMenuCount int
-	
+
 	for _, history := range histories {
 		// 删除相关的API记录（使用存储的API IDs）
-			if len(history.ApiIDs) > 0 {
-				ids := make([]int, 0, len(history.ApiIDs))
-				for _, id := range history.ApiIDs {
-					ids = append(ids, int(id))
-				}
-				idsReq := common.IdsReq{Ids: ids}
-				if err := systemService.ApiServiceApp.DeleteApisByIds(idsReq); err != nil {
-					global.GVA_LOG.Warn(fmt.Sprintf("删除API记录失败 (模块: %s): %v", history.StructName, err))
-				} else {
-					deletedApiCount += len(ids)
-					global.GVA_LOG.Info(fmt.Sprintf("成功删除API记录 (模块: %s, 数量: %d)", history.StructName, len(ids)))
-				}
+		if len(history.ApiIDs) > 0 {
+			ids := make([]int, 0, len(history.ApiIDs))
+			for _, id := range history.ApiIDs {
+				ids = append(ids, int(id))
 			}
-		
+			idsReq := common.IdsReq{Ids: ids}
+			if err := systemService.ApiServiceApp.DeleteApisByIds(idsReq); err != nil {
+				global.GVA_LOG.Warn(fmt.Sprintf("删除API记录失败 (模块: %s): %v", history.StructName, err))
+			} else {
+				deletedApiCount += len(ids)
+				global.GVA_LOG.Info(fmt.Sprintf("成功删除API记录 (模块: %s, 数量: %d)", history.StructName, len(ids)))
+			}
+		}
+
 		// 删除相关的菜单记录（使用存储的菜单ID）
 		if history.MenuID != 0 {
 			if err := systemService.BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID)); err != nil {
@@ -1634,10 +1691,10 @@ func (t *AutomationModuleAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) 
 			}
 		}
 	}
-	
+
 	if deletedApiCount > 0 || deletedMenuCount > 0 {
 		global.GVA_LOG.Info(fmt.Sprintf("清理完成：删除了 %d 个API记录和 %d 个菜单记录", deletedApiCount, deletedMenuCount))
 	}
-	
+
 	return nil
 }

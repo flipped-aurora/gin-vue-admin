@@ -17,13 +17,12 @@
 }
 ```
 
-### 第二步：确认
+### 第二步：确认（支持批量创建多个模块）
 ```json
 {
   "action": "confirm",
   "executionPlan": {
     "packageName": "library",
-    "moduleName": "Book",
     "packageType": "package",
     "needCreatedPackage": true,
     "needCreatedModules": true,
@@ -33,55 +32,138 @@
       "template": "package",
       "packageName": "library"
     },
-    "modulesInfo": {
-      "package": "library",
-      "tableName": "library_books",
-      "businessDB": "",
-      "structName": "Book",
-      "packageName": "library",
-      "description": "图书信息",
-      "abbreviation": "book",
-      "humpPackageName": "Library",
-      "gvaModel": true,
-      "autoMigrate": true,
-      "autoCreateResource": true,
-      "autoCreateApiToSql": true,
-      "autoCreateMenuToSql": true,
-      "autoCreateBtnAuth": true,
-      "onlyTemplate": false,
-      "isTree": false,
-      "treeJson": "",
-      "isAdd": false,
-      "generateWeb": true,
-      "generateServer": true,
-      "fields": [
-        {
-          "fieldName": "title",
-          "fieldDesc": "书名",
-          "fieldType": "string",
-          "fieldJson": "title",
-          "dataTypeLong": "255",
-          "comment": "书名",
-          "columnName": "title",
-          "fieldSearchType": "LIKE",
-          "fieldSearchHide": false,
-          "dictType": "",
-          "form": true,
-          "table": true,
-          "desc": true,
-          "excel": true,
-          "require": true,
-          "defaultValue": "",
-          "errorText": "请输入书名",
-          "clearable": true,
-          "sort": false,
-          "primaryKey": false,
-          "dataSource": {},
-          "checkDataSource": false,
-          "fieldIndexType": ""
-        }
-      ]
-    }
+    "modulesInfo": [
+      {
+        "package": "library",
+        "tableName": "library_books",
+        "businessDB": "",
+        "structName": "Book",
+        "packageName": "library",
+        "description": "图书信息",
+        "abbreviation": "book",
+        "humpPackageName": "Library",
+        "gvaModel": true,
+        "autoMigrate": true,
+        "autoCreateResource": true,
+        "autoCreateApiToSql": true,
+        "autoCreateMenuToSql": true,
+        "autoCreateBtnAuth": true,
+        "onlyTemplate": false,
+        "isTree": false,
+        "treeJson": "",
+        "isAdd": false,
+        "generateWeb": true,
+        "generateServer": true,
+        "fields": [
+          {
+            "fieldName": "title",
+            "fieldDesc": "书名",
+            "fieldType": "string",
+            "fieldJson": "title",
+            "dataTypeLong": "255",
+            "comment": "书名",
+            "columnName": "title",
+            "fieldSearchType": "LIKE",
+            "fieldSearchHide": false,
+            "dictType": "",
+            "form": true,
+            "table": true,
+            "desc": true,
+            "excel": true,
+            "require": true,
+            "defaultValue": "",
+            "errorText": "请输入书名",
+            "clearable": true,
+            "sort": false,
+            "primaryKey": false,
+            "dataSource": {},
+            "checkDataSource": false,
+            "fieldIndexType": ""
+          },
+          {
+            "fieldName": "AuthorID",
+            "fieldDesc": "作者",
+            "fieldType": "uint",
+            "fieldJson": "authorId",
+            "dataTypeLong": "",
+            "comment": "作者ID",
+            "columnName": "author_id",
+            "fieldSearchType": "EQ",
+            "fieldSearchHide": false,
+            "dictType": "",
+            "form": true,
+            "table": true,
+            "desc": true,
+            "excel": true,
+            "require": true,
+            "defaultValue": "",
+            "errorText": "请选择作者",
+            "clearable": true,
+            "sort": false,
+            "primaryKey": false,
+            "dataSource": {
+              "dbName": "gva",
+              "table": "library_authors",
+              "label": "name",
+              "value": "id",
+              "association": 2,
+              "hasDeletedAt": true
+            },
+            "checkDataSource": true,
+            "fieldIndexType": ""
+          }
+        ]
+      },
+      {
+        "package": "library",
+        "tableName": "library_authors",
+        "businessDB": "",
+        "structName": "Author",
+        "packageName": "library",
+        "description": "作者信息",
+        "abbreviation": "author",
+        "humpPackageName": "Library",
+        "gvaModel": true,
+        "autoMigrate": true,
+        "autoCreateResource": true,
+        "autoCreateApiToSql": true,
+        "autoCreateMenuToSql": true,
+        "autoCreateBtnAuth": true,
+        "onlyTemplate": false,
+        "isTree": false,
+        "treeJson": "",
+        "isAdd": false,
+        "generateWeb": true,
+        "generateServer": true,
+        "fields": [
+          {
+            "fieldName": "name",
+            "fieldDesc": "作者姓名",
+            "fieldType": "string",
+            "fieldJson": "name",
+            "dataTypeLong": "100",
+            "comment": "作者姓名",
+            "columnName": "name",
+            "fieldSearchType": "LIKE",
+            "fieldSearchHide": false,
+            "dictType": "",
+            "form": true,
+            "table": true,
+            "desc": true,
+            "excel": true,
+            "require": true,
+            "defaultValue": "",
+            "errorText": "请输入作者姓名",
+            "clearable": true,
+            "sort": false,
+            "primaryKey": false,
+            "dataSource": {},
+            "checkDataSource": false,
+            "fieldIndexType": ""
+          }
+        ]
+      }
+    ]
   }
 }
 ```
@@ -120,3 +202,4 @@
 2. 在`execute`时必须提供相应的确认参数
 3. 确认参数的值必须是"yes"或"no"
 4. 如果不需要创建包或模块，则不需要提供对应的确认参数
+5. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）

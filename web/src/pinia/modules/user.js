@@ -93,7 +93,7 @@ export const useUserStore = defineStore('user', () => {
       }
 
       if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-        ElMessage.error('请联系管理员进行授权')
+        ElMessage.error('不存在可以登陆的首页，请联系管理员进行配置')
       } else {
         await router.replace({ name: userInfo.value.authority.defaultRouter })
       }

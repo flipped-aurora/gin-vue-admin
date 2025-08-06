@@ -47,7 +47,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 	}
 
 	var oc bool = openCaptcha == 0 || openCaptcha < interfaceToInt(v)
-	if oc && !store.Verify(l.CaptchaId, l.Captcha, true) {
+	if oc && (l.Captcha == "" || l.CaptchaId == "" || !store.Verify(l.CaptchaId, l.Captcha, true)) {
 		// 验证码次数+1
 		global.BlackCache.Increment(key, 1)
 		response.FailWithMessage("验证码错误", c)

@@ -173,7 +173,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
     "generateWeb": "是否生成前端(bool)",
     "generateServer": "是否生成后端(bool)",
     "fields": [{
-      "fieldName": "字段名(string)",
+      "fieldName": "字段名(string)必须大写开头",
       "fieldDesc": "字段描述(string)",
       "fieldType": "字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）",
       "fieldJson": "JSON标签(string)",
@@ -1242,6 +1242,14 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 			for i, field := range moduleInfo.Fields {
 				if field.FieldName == "" {
 					return fmt.Errorf("模块 %d 字段 %d 的 fieldName 不能为空", moduleIndex+1, i+1)
+				}
+				
+				// 确保字段名首字母大写
+				if len(field.FieldName) > 0 {
+					firstChar := string(field.FieldName[0])
+					if firstChar >= "a" && firstChar <= "z" {
+						moduleInfo.Fields[i].FieldName = strings.ToUpper(firstChar) + field.FieldName[1:]
+					}
 				}
 				if field.FieldDesc == "" {
 					return fmt.Errorf("模块 %d 字段 %d 的 fieldDesc 不能为空", moduleIndex+1, i+1)

@@ -378,7 +378,7 @@ fmt.Println(decodeBytes, err)
 
 如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/coffee/index.html)
 
-## 10. 商用注意事项
+## 10. 注意事项
 
-请严格遵守Apache 2.0协议并保留作品声明，商业用途请务必[获取授权](https://www.gin-vue-admin.com/empower/)  
-未授权商用将依法追究法律责任
+请严格遵守Apache 2.0协议并保留作品声明，去除版权信息请务必[获取授权](https://www.gin-vue-admin.com/empower/)  
+未授权去除版权信息将依法追究法律责任

@@ -121,6 +121,81 @@ func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
 				},
 			},
 		}
+
+		// 添加菜单参数
+		if len(menus[i].Parameters) > 0 {
+			var paramElts []ast.Expr
+			for _, param := range menus[i].Parameters {
+				paramElts = append(paramElts, &ast.CompositeLit{
+					Type: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "model"},
+						Sel: &ast.Ident{Name: "SysBaseMenuParameter"},
+					},
+					Elts: []ast.Expr{
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Type"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", param.Type)},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Key"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", param.Key)},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Value"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", param.Value)},
+						},
+					},
+				})
+			}
+			elts = append(elts, &ast.KeyValueExpr{
+				Key: &ast.Ident{Name: "Parameters"},
+				Value: &ast.CompositeLit{
+					Type: &ast.ArrayType{
+						Elt: &ast.SelectorExpr{
+							X:   &ast.Ident{Name: "model"},
+							Sel: &ast.Ident{Name: "SysBaseMenuParameter"},
+						},
+					},
+					Elts: paramElts,
+				},
+			})
+		}
+
+		// 添加菜单按钮
+		if len(menus[i].MenuBtn) > 0 {
+			var btnElts []ast.Expr
+			for _, btn := range menus[i].MenuBtn {
+				btnElts = append(btnElts, &ast.CompositeLit{
+					Type: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "model"},
+						Sel: &ast.Ident{Name: "SysBaseMenuBtn"},
+					},
+					Elts: []ast.Expr{
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Name"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", btn.Name)},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Desc"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", btn.Desc)},
+						},
+					},
+				})
+			}
+			elts = append(elts, &ast.KeyValueExpr{
+				Key: &ast.Ident{Name: "MenuBtn"},
+				Value: &ast.CompositeLit{
+					Type: &ast.ArrayType{
+						Elt: &ast.SelectorExpr{
+							X:   &ast.Ident{Name: "model"},
+							Sel: &ast.Ident{Name: "SysBaseMenuBtn"},
+						},
+					},
+					Elts: btnElts,
+				},
+			})
+		}
+
 		menuElts = append(menuElts, &ast.CompositeLit{
 			Type: nil,
 			Elts: elts,

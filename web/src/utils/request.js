@@ -1,6 +1,7 @@
 import axios from 'axios' // 引入axios
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import { ElLoading, ElMessage } from 'element-plus'
+import { emitter } from '@/utils/bus'
 import router from '@/router/index'
 import { ElLoading } from 'element-plus'
 import i18n from '@/i18n' // added by mohamed hassan to multilangauge
@@ -25,24 +26,24 @@ const showLoading = (
 ) => {
   const loadDom = document.getElementById('gva-base-load-dom')
   activeAxios++
-  
+
   // 清除之前的定时器
   if (timer) {
     clearTimeout(timer)
   }
-  
+
   // 清除强制关闭定时器
   if (forceCloseTimer) {
     clearTimeout(forceCloseTimer)
   }
-  
+
   timer = setTimeout(() => {
     // 再次检查activeAxios状态，防止竞态条件
     if (activeAxios > 0 && !isLoadingVisible) {
       if (!option.target) option.target = loadDom
       loadingInstance = ElLoading.service(option)
       isLoadingVisible = true
-      
+
       // 设置强制关闭定时器，防止loading永远不关闭（30秒超时）
       forceCloseTimer = setTimeout(() => {
         if (isLoadingVisible && loadingInstance) {
@@ -61,12 +62,12 @@ const closeLoading = () => {
   if (activeAxios <= 0) {
     activeAxios = 0 // 确保不会变成负数
     clearTimeout(timer)
-    
+
     if (forceCloseTimer) {
       clearTimeout(forceCloseTimer)
       forceCloseTimer = null
     }
-    
+
     if (isLoadingVisible && loadingInstance) {
       loadingInstance.close()
       isLoadingVisible = false
@@ -79,17 +80,17 @@ const closeLoading = () => {
 const resetLoading = () => {
   activeAxios = 0
   isLoadingVisible = false
-  
+
   if (timer) {
     clearTimeout(timer)
     timer = null
   }
-  
+
   if (forceCloseTimer) {
     clearTimeout(forceCloseTimer)
     forceCloseTimer = null
   }
-  
+
   if (loadingInstance) {
     try {
       loadingInstance.close()
@@ -99,6 +100,7 @@ const resetLoading = () => {
     loadingInstance = null
   }
 }
+
 // http request 拦截器
 service.interceptors.request.use(
   (config) => {
@@ -119,14 +121,17 @@ service.interceptors.request.use(
     if (!error.config.donNotShowLoading) {
       closeLoading()
     }
-    ElMessage({
-      showClose: true,
-      message: error,
-      type: 'error'
+    emitter.emit('show-error', {
+      code: 'request',
+      message: error.message || '请求发送失败'
     })
     return error
   }
 )
+
+function getErrorMessage(error) {
+  return error.response?.data?.msg || '请求失败'
+}
 
 // http response 拦截器
 service.interceptors.response.use(
@@ -160,111 +165,38 @@ service.interceptors.response.use(
       closeLoading()
     }
 
-    // 如果已经有错误弹窗显示，则不再显示新的弹窗
-    if (errorBoxVisible) {
-      return error
-    }
-
     if (!error.response) {
-      // 网络错误时重置loading状态
+      // 网络错误
       resetLoading()
-      errorBoxVisible = true
-      ElMessageBox.confirm(
-        i18n.global.t('utils.request.requestErrorDetected') +
-          `<p>${error}</p>
-        `,
-        i18n.global.t('utils.request.requestError'),
-        {
-          dangerouslyUseHTMLString: true,
-          distinguishCancelAndClose: true,
-          confirmButtonText: i18n.global.t('utils.request.tryAgainLater'),
-          cancelButtonText: i18n.global.t('general.cancel')
-        }
-      ).finally(() => {
-        // 弹窗关闭后重置状态
-        errorBoxVisible = false
+      emitter.emit('show-error', {
+        code: 'network',
+        message: getErrorMessage(error)
       })
-      return
-    }
-    switch (error.response.status) {
-      case 500:
-        errorBoxVisible = true
-        ElMessageBox.confirm(
-          i18n.global.t('utils.request.interfaceErrorDetected') +
-            `<p>${error}</p>` +
-            `<p>` +
-            i18n.global.t('utils.request.errorCode') +
-            `<span style="color:red"> 500 </span>：` +
-            i18n.global.t('utils.request.interfaceErrorNote') +
-            `</p>`,
-          i18n.global.t('utils.request.interfaceError'),
-          {
-            dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: i18n.global.t('utils.request.clearCache'),
-            cancelButtonText: i18n.global.t('general.cancel')
-          }
-        ).then(() => {
-          const userStore = useUserStore()
-          userStore.ClearStorage()
-          router.push({ name: 'Login', replace: true })
-        }).finally(() => {
-          // 弹窗关闭后重置状态
-          errorBoxVisible = false
-        })
-        break
-      case 404:
-        errorBoxVisible = true
-        ElMessageBox.confirm(
-          i18n.global.t('utils.request.interfaceErrorDetected') +
-            `<p>${error}</p>` +
-            `<p>` +
-            i18n.global.t('utils.request.errorCode') +
-            `<span style="color:red"> 404 </span>：` +
-            i18n.global.t('utils.request.interfaceNotRegisteredNote') +
-            `</p>`,
-          i18n.global.t('utils.request.interfaceError'),
-          {
-            dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: i18n.global.t('utils.request.iGotIt'),
-            cancelButtonText: i18n.global.t('general.cancel')
-          }
-        ).finally(() => {
-          // 弹窗关闭后重置状态
-          errorBoxVisible = false
-        })
-        break
-      case 401:
-        errorBoxVisible = true
-        ElMessageBox.confirm(
-          i18n.global.t('utils.request.invalidToken') +
-            `<p>` +
-            i18n.global.t('utils.request.errorCode') +
-            `<span style="color:red"> 401 </span>` +
-            i18n.global.t('utils.request.errorMessage') +
-            `: ${error}</p>`,
-          i18n.global.t('utils.request.identityInfo'),
-          {
-            dangerouslyUseHTMLString: true,
-            distinguishCancelAndClose: true,
-            confirmButtonText: i18n.global.t('utils.request.loginAgain'),
-            cancelButtonText: i18n.global.t('general.cancel')
-          }
-        ).then(() => {
-          const userStore = useUserStore()
-          userStore.ClearStorage()
-          router.push({ name: 'Login', replace: true })
-        }).finally(() => {
-          // 弹窗关闭后重置状态
-          errorBoxVisible = false
-        })
-        break
+      return Promise.reject(error)
     }
 
-    return error
+    // HTTP 状态码错误
+    if (error.response.status === 401) {
+      emitter.emit('show-error', {
+        code: '401',
+        message: getErrorMessage(error),
+        fn: () => {
+          const userStore = useUserStore()
+          userStore.ClearStorage()
+          router.push({ name: 'Login', replace: true })
+        }
+      })
+      return Promise.reject(error)
+    }
+
+    emitter.emit('show-error', {
+      code: error.response.status,
+      message: getErrorMessage(error)
+    })
+    return Promise.reject(error)
   }
 )
+
 // 监听页面卸载事件，确保loading被正确清理
 if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', resetLoading)

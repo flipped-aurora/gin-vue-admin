@@ -117,6 +117,20 @@ func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error
 	return nil
 }
 
+// DeleteByNames
+// @author: [piexlmax](https://github.com/piexlmax)
+// @author: [SliverHorn](https://github.com/SliverHorn)
+func (s *autoCodePackage) DeleteByNames(ctx context.Context, names []string) error {
+	if len(names) == 0 {
+		return nil
+	}
+	err := global.GVA_DB.WithContext(ctx).Where("package_name IN ?", names).Delete(&model.SysAutoCodePackage{}).Error
+	if err != nil {
+		return errors.Wrap(err, "删除失败!")
+	}
+	return nil
+}
+
 // All 获取所有包
 // @author: [piexlmax](https://github.com/piexlmax)
 // @author: [SliverHorn](https://github.com/SliverHorn)

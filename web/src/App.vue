@@ -5,6 +5,7 @@
   >
     <el-config-provider :locale="languages[locale]">
       <router-view />
+      <Application />
     </el-config-provider>
   </div>
 </template>
@@ -32,24 +33,26 @@
   const { locale } = useI18n()
 </script>
 <style lang="scss">
-  // 引入初始化样式
-  #app {
-    height: 100vh;
-    overflow: hidden;
-    font-weight: 400 !important;
-  }
-  .el-button {
-    font-weight: 400 !important;
-  }
+// 引入初始化样式
+#app {
+  height: 100vh;
+  overflow: hidden;
+  font-weight: 400 !important;
+}
 
-  .gva-body-h {
-    min-height: calc(100% - 3rem);
-  }
+.el-button {
+  font-weight: 400 !important;
+}
 
-  .gva-container {
-    height: calc(100% - 2.5rem);
-  }
-  .gva-container2 {
-    height: calc(100% - 4.5rem);
-  }
+.gva-body-h {
+  min-height: calc(100% - 3rem);
+}
+
+.gva-container {
+  height: calc(100% - 2.5rem);
+}
+
+.gva-container2 {
+  height: calc(100% - 4.5rem);
+}
 </style>

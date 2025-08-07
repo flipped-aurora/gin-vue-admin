@@ -1,10 +1,14 @@
 <template>
   <div>
     <div class="sticky top-0.5 z-10">
-      <el-input v-model="filterText" class="w-3/5" placeholder="筛选" />
-      <el-button class="float-right" type="primary" @click="relation"
-        >确 定</el-button
-      >
+      <el-input
+        v-model="filterText"
+        class="w-3/5"
+        :placeholder="t('general.filter')"
+      />
+      <el-button class="float-right" type="primary" @click="relation">{{
+        t('general.confirm')
+      }}</el-button>
     </div>
     <div class="tree-content clear-both">
       <el-scrollbar>
@@ -33,12 +37,18 @@
                   }"
                   @click.stop="() => setDefault(data)"
                 >
-                  {{ row.defaultRouter === data.name ? '首页' : '设为首页' }}
+                  {{
+                    row.defaultRouter === data.name
+                      ? t('view.superAdmin.authority.components.menus.home')
+                      : t(
+                          'view.superAdmin.authority.components.menus.setAsHome'
+                        )
+                  }}
                 </el-button>
               </span>
               <span v-if="data.menuBtn.length">
                 <el-button type="primary" link @click.stop="() => OpenBtn(data)">
-                  分配按钮
+                  {{ t('view.superAdmin.authority.components.menus.assignButton') }}
                 </el-button>
               </span>
             </span>
@@ -46,7 +56,11 @@
         </el-tree>
       </el-scrollbar>
     </div>
-    <el-dialog v-model="btnVisible" title="分配按钮" destroy-on-close>
+    <el-dialog
+      v-model="btnVisible"
+      :title="t('view.superAdmin.authority.components.menus.assignButton')"
+      destroy-on-close
+    >
       <el-table
         ref="btnTableRef"
         :data="btnData"
@@ -59,8 +73,10 @@
       </el-table>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{
+            t('general.confirm')
+          }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -77,6 +93,9 @@
   import { getAuthorityBtnApi, setAuthorityBtnApi } from '@/api/authorityBtn'
   import { nextTick, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'Menus'
@@ -96,6 +115,7 @@
   const menuTreeData = ref([])
   const menuTreeIds = ref([])
   const needConfirm = ref(false)
+
   const menuDefaultProps = ref({
     children: 'children',
     label: function (data) {
@@ -132,7 +152,7 @@
       defaultRouter: data.name
     })
     if (res.code === 0) {
-      relation()
+      ElMessage({ type: 'success', message: t('general.setupSuccess') })
       emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
     }
   }
@@ -154,7 +174,9 @@
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '菜单设置成功!'
+        message: t(
+          'view.superAdmin.authority.components.menus.menuSetupSuccess'
+        )
       })
     }
   }
@@ -208,7 +230,7 @@
       authorityId: props.row.authorityId
     })
     if (res.code === 0) {
-      ElMessage({ type: 'success', message: '设置成功' })
+      ElMessage({ type: 'success', message: t('general.setupSuccess') })
       btnVisible.value = false
     }
   }

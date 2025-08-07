@@ -1,6 +1,8 @@
 package system
 
 import (
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -8,7 +10,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"strings"
 )
 
 type AutoCodePackageApi struct{}
@@ -30,16 +31,16 @@ func (a *AutoCodePackageApi) Create(c *gin.Context) {
 		return
 	}
 	if strings.Contains(info.PackageName, "\\") || strings.Contains(info.PackageName, "/") || strings.Contains(info.PackageName, "..") {
-		response.FailWithMessage("包名不合法", c)
+		response.FailWithMessage(global.Translate("general.invalidPackageName"), c)
 		return
 	} // PackageName可能导致路径穿越的问题 / 和 \ 都要防止
 	err := autoCodePackageService.Create(c.Request.Context(), &info)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFail"), c)
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // Delete
@@ -56,11 +57,11 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&info)
 	err := autoCodePackageService.Delete(c.Request.Context(), info)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // All
@@ -74,11 +75,11 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 func (a *AutoCodePackageApi) All(c *gin.Context) {
 	data, err := autoCodePackageService.All(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(gin.H{"pkgs": data}, "获取成功", c)
+	response.OkWithDetailed(gin.H{"pkgs": data}, global.Translate("general.getDataSuccess"), c)
 }
 
 // Templates
@@ -92,9 +93,9 @@ func (a *AutoCodePackageApi) All(c *gin.Context) {
 func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 	data, err := autoCodePackageService.Templates(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(data, "获取成功", c)
+	response.OkWithDetailed(data, global.Translate("general.getDataSuccess"), c)
 }

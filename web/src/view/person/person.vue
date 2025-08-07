@@ -260,8 +260,12 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="showPassword = false">取 消</el-button>
-          <el-button type="primary" @click="savePassword">确 定</el-button>
+          <el-button @click="showPassword = false">{{
+            t('general.close')
+          }}</el-button>
+          <el-button type="primary" @click="savePassword">{{
+            t('general.confirm')
+          }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -304,8 +308,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeChangePhone">取 消</el-button>
-          <el-button type="primary" @click="changePhone">确 定</el-button>
+          <el-button @click="closeChangePhone"> {{ t('general.cancel') }} </el-button>
+          <el-button type="primary" @click="changePhone"> {{ t('general.confirm') }} </el-button>
         </div>
       </template>
     </el-dialog>
@@ -348,8 +352,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeChangeEmail">取 消</el-button>
-          <el-button type="primary" @click="changeEmail">确 定</el-button>
+          <el-button @click="closeChangeEmail">{{ t('general.cancel') }}</el-button>
+          <el-button type="primary" @click="changeEmail">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -362,6 +366,10 @@
   import { ElMessage } from 'element-plus'
   import { useUserStore } from '@/pinia/modules/user'
   import SelectImage from '@/components/selectImage/selectImage.vue'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
+  
   defineOptions({
     name: 'Person'
   })
@@ -439,7 +447,7 @@
     })
     if (res.code === 0) {
       userStore.ResetUserInfo({ nickName: nickName.value })
-      ElMessage.success('修改成功')
+      ElMessage.success( t('general.modifySuccess'))
     }
     nickName.value = ''
     editFlag.value = false

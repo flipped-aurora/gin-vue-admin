@@ -11,7 +11,7 @@
       multiple
       class="upload-btn"
     >
-      <el-button type="primary" :icon="Upload">普通上传</el-button>
+      <el-button type="primary" :icon="Upload">{{ t('components.upload.common.normalUpload') }}</el-button>
     </el-upload>
   </div>
 </template>
@@ -23,6 +23,9 @@
   import { getBaseUrl } from '@/utils/format'
   import { Upload } from "@element-plus/icons-vue";
   import { useUserStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'UploadCommon'
@@ -51,19 +54,17 @@
     const isImage = isImageMime(file.type)
     let pass = true
     if (!isVideo && !isImage) {
-      ElMessage.error(
-        '上传图片只能是 jpg,png,svg,webp 格式, 上传视频只能是 mp4,webm 格式!'
-      )
+      ElMessage.error(t('components.upload.common.fileFormatNote'))
       fullscreenLoading.value = false
       pass = false
     }
     if (!isLt5M && isVideo) {
-      ElMessage.error('上传视频大小不能超过 5MB')
+      ElMessage.error(t('components.upload.common.videoSizeError'))
       fullscreenLoading.value = false
       pass = false
     }
     if (!isLt500K && isImage) {
-      ElMessage.error('未压缩的上传图片大小不能超过 500KB，请使用压缩上传')
+      ElMessage.error(t('components.upload.common.imageSizeError'))
       fullscreenLoading.value = false
       pass = false
     }
@@ -83,7 +84,7 @@
   const uploadError = () => {
     ElMessage({
       type: 'error',
-      message: '上传失败'
+      message: t('selectFile.uploadFailed')
     })
     fullscreenLoading.value = false
   }

@@ -5,7 +5,12 @@
 
 <template>
   <div class="flex items-center mx-4 gap-4">
-    <el-tooltip class="" effect="dark" content="视频教程" placement="bottom">
+    <el-tooltip
+      class=""
+      effect="dark"
+      :content="t('layout.tools.videoTutorial')"
+      placement="bottom"
+    >
       <el-dropdown @command="toDoc">
         <el-icon
           class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
@@ -26,16 +31,26 @@
       </el-dropdown>
     </el-tooltip>
 
-    <el-tooltip class="" effect="dark" content="搜索" placement="bottom">
+    <el-tooltip
+      class=""
+      effect="dark"
+      :content="t('layout.tools.search')"
+      placement="bottom"
+    >
       <el-icon
-        @click="handleCommand"
         class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        @click="handleCommand"
       >
         <Search />
       </el-icon>
     </el-tooltip>
 
-    <el-tooltip class="" effect="dark" content="系统设置" placement="bottom">
+    <el-tooltip
+      class=""
+      effect="dark"
+      :content="t('layout.tools.systemSettings')"
+      placement="bottom"
+    >
       <el-icon
         class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         @click="toggleSetting"
@@ -44,7 +59,12 @@
       </el-icon>
     </el-tooltip>
 
-    <el-tooltip class="" effect="dark" content="刷新" placement="bottom">
+    <el-tooltip
+      class=""
+      effect="dark"
+      :content="t('layout.tools.refresh')"
+      placement="bottom"
+    >
       <el-icon
         class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         :class="showRefreshAnmite ? 'animate-spin' : ''"
@@ -56,7 +76,7 @@
     <el-tooltip
       class=""
       effect="dark"
-      content="切换主题"
+      :content="t('layout.tools.switchTheme')"
       placement="bottom"
     >
       <el-icon
@@ -75,7 +95,24 @@
       </el-icon>
     </el-tooltip>
 
-    <gva-setting v-model:drawer="showSettingDrawer"></gva-setting>
+    <el-tooltip
+      class=""
+      effect="dark"
+      :content="t('layout.tools.changeLanguage')"
+      placement="bottom"
+      :disabled="appStore.theme === 'auto'"
+    >
+      <SelectLang @success="changeSuccess">
+        <el-icon
+          class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+          @click="appStore.toggleLang"
+        >
+          <language />
+        </el-icon>
+      </SelectLang>
+    </el-tooltip>
+
+    <gva-setting v-model:drawer="showSettingDrawer" />
     <command-menu ref="command" />
   </div>
 </template>
@@ -86,7 +123,10 @@
   import { ref } from 'vue'
   import { emitter } from '@/utils/bus.js'
   import CommandMenu from '@/components/commandMenu/index.vue'
-  import { toDoc } from '@/utils/doc'
+  import { useI18n } from 'vue-i18n'
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+  import SelectLang from '@/components/i18n/selectLanguage.vue'
 
   const appStore = useAppStore()
   const showSettingDrawer = ref(false)
@@ -129,61 +169,65 @@
 
   initPage()
 
+  const changeSuccess = () => {
+    window.location.reload()
+  }
+
   const videoList = [
     {
-      title: '1.clone项目和安装依赖',
+      title: t('view.layout.header.tools.video01'),
       link: 'https://www.bilibili.com/video/BV1jx4y1s7xx'
     },
     {
-      title: '2.初始化项目',
+      title: t('view.layout.header.tools.video02'),
       link: 'https://www.bilibili.com/video/BV1sr421K7sv'
     },
     {
-      title: '3.开启调试工具+创建初始化包',
+      title: t('view.layout.header.tools.video03'),
       link: 'https://www.bilibili.com/video/BV1iH4y1c7Na'
     },
     {
-      title: '4.手动使用自动化创建功能',
+      title: t('view.layout.header.tools.video04'),
       link: 'https://www.bilibili.com/video/BV1UZ421T7fV'
     },
     {
-      title: '5.使用已有表格创建业务',
+      title: t('view.layout.header.tools.video05'),
       link: 'https://www.bilibili.com/video/BV1NE4m1977s'
     },
     {
-      title: '6.使用AI创建业务和创建数据源模式的可选项',
+      title: t('view.layout.header.tools.video06'),
       link: 'https://www.bilibili.com/video/BV17i421a7DE'
     },
     {
-      title: '7.创建自己的后端方法',
+      title: t('view.layout.header.tools.video07'),
       link: 'https://www.bilibili.com/video/BV1Yw4m1k7fg'
     },
     {
-      title: '8.新增一个前端页面',
+      title: t('view.layout.header.tools.video08'),
       link: 'https://www.bilibili.com/video/BV12y411i7oE'
     },
     {
-      title: '9.配置一个前端二级页面',
+      title: t('view.layout.header.tools.video09'),
       link: 'https://www.bilibili.com/video/BV1ZM4m1y7i3'
     },
     {
-      title: '10.配置一个前端菜单参数',
+      title: t('view.layout.header.tools.video10'),
       link: 'https://www.bilibili.com/video/BV1WS42197DZ'
     },
     {
-      title: '11.菜单参数实战+动态菜单标题+菜单高亮配置',
+      title: t('view.layout.header.tools.video11'),
       link: 'https://www.bilibili.com/video/BV1NE4m1979c'
     },
     {
-      title: '12.增加菜单可控按钮',
+      title: t('view.layout.header.tools.video12'),
       link: 'https://www.bilibili.com/video/BV1Sw4m1k746'
     },
     {
-      title: '14.新增客户角色和其相关配置教学',
+      title: t('view.layout.header.tools.video13'),
       link: 'https://www.bilibili.com/video/BV1Ki421a7X2'
     },
     {
-      title: '15.发布项目上线',
+      title: t('view.layout.header.tools.video14'),
       link: 'https://www.bilibili.com/video/BV1Lx4y1s77D'
     }
   ]

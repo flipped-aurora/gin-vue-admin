@@ -5,7 +5,7 @@
     class="h-[calc(100vh-110px)]"
   >
     <el-tab-pane
-      v-for="(item, key) in useCode"
+      v-for="(_, key) in useCode"
       :key="key"
       :label="key"
       :name="key"
@@ -22,6 +22,9 @@
   import { ElMessage } from 'element-plus'
   import { onMounted, ref, watchEffect } from 'vue'
   import { useAppStore } from '@/pinia'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   const appStore = useAppStore()
 
@@ -112,7 +115,7 @@
   const copy = () => {
     selectText()
     document.execCommand('copy')
-    ElMessage.success('复制成功')
+    ElMessage.success(t('general.copySuccess'))
   }
 
   defineExpose({ copy, selectText })

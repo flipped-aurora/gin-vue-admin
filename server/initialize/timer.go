@@ -19,7 +19,7 @@ func Timer() {
 			if err != nil {
 				fmt.Println("timer error:", err)
 			}
-		}, "定时清理数据库【日志，黑名单】内容", option...)
+		}, global.Translate("general.initialize.scheduledDatabaseCleanup"), option...)
 		if err != nil {
 			fmt.Println("add timer error:", err)
 		}

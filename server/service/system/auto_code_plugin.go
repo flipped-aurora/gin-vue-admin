@@ -73,8 +73,8 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 		}
 	}
 	if len(serverPlugin) == 0 && len(webPlugin) == 0 {
-		zap.L().Error("非标准插件，请按照文档自动迁移使用")
-		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
+		zap.L().Error(global.Translate("sys_auto_code.nonStandardPlugin"))
+		return webIndex, serverIndex, errors.New(global.Translate("sys_auto_code.nonStandardPlugin"))
 	}
 
 	if len(serverPlugin) != 0 {
@@ -106,8 +106,8 @@ func installation(path string, formPath string, toPath string) error {
 	var to = filepath.Join(global.GVA_CONFIG.AutoCode.Root, toPath, "plugin")
 	_, err := os.Stat(to + name)
 	if err == nil {
-		zap.L().Error("autoPath 已存在同名插件，请自行手动安装", zap.String("to", to))
-		return errors.New(toPath + "已存在同名插件，请自行手动安装")
+		zap.L().Error(global.Translate("sys_auto_code.autoPathExists"), zap.String("to", to))
+		return errors.New(toPath + global.Translate("sys_auto_code.duplicatePlugin"))
 	}
 	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
 }
@@ -132,7 +132,7 @@ func skipMacSpecialDocument(_ os.FileInfo, src, _ string) (bool, error) {
 
 func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 	if plugName == "" {
-		return "", errors.New("插件名称不能为空")
+		return "", errors.New(global.Translate("sys_auto_code.pluginNameRequired"))
 	}
 
 	// 防止路径穿越
@@ -145,11 +145,11 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 	// 判断目录是否存在
 	_, err = os.Stat(webPath)
 	if err != nil {
-		return "", errors.New("web路径不存在")
+		return "", errors.New(global.Translate("sys_auto_code.webPathNotExist"))
 	}
 	_, err = os.Stat(serverPath)
 	if err != nil {
-		return "", errors.New("server路径不存在")
+		return "", errors.New(global.Translate("sys_auto_code.serverPathNotExist"))
 	}
 
 	fileName := plugName + ".zip"

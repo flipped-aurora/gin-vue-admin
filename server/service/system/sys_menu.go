@@ -2,11 +2,14 @@ package system
 
 import (
 	"errors"
+	"regexp"
+	"strconv"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"gorm.io/gorm"
-	"strconv"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -43,6 +46,8 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[ui
 	}
 
 	for i := range baseMenu {
+		titleKey, params := getTitleAndRemainder(baseMenu[i].Title)
+		baseMenu[i].Title = global.Translate(titleKey) + params
 		allMenus = append(allMenus, system.SysMenu{
 			SysBaseMenu: baseMenu[i],
 			AuthorityId: authorityId,
@@ -212,8 +217,11 @@ func (menuService *MenuService) getBaseMenuTreeMap(authorityID uint) (treeMap ma
 	}
 
 	err = db.Find(&allMenus).Error
-	for _, v := range allMenus {
-		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
+
+	for i := range allMenus {
+		titleKey, params := getTitleAndRemainder(allMenus[i].Title)
+		allMenus[i].Title = global.Translate(titleKey) + params
+		treeMap[allMenus[i].ParentId] = append(treeMap[allMenus[i].ParentId], allMenus[i])
 	}
 	return treeMap, err
 }
@@ -304,6 +312,8 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 	err = global.GVA_DB.Where("id in (?) ", MenuIds).Order("sort").Find(&baseMenu).Error
 
 	for i := range baseMenu {
+		titleKey, params := getTitleAndRemainder(baseMenu[i].Title)
+		baseMenu[i].Title = global.Translate(titleKey) + params
 		menus = append(menus, system.SysMenu{
 			SysBaseMenu: baseMenu[i],
 			AuthorityId: info.AuthorityId,
@@ -328,4 +338,14 @@ func (menuService *MenuService) UserAuthorityDefaultRouter(user *system.SysUser)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		user.Authority.DefaultRouter = "404"
 	}
+}
+
+func getTitleAndRemainder(input string) (string, string) {
+	re := regexp.MustCompile(`\b\w+\.\w+\b(?:\.\w+)*`)
+	matches := re.FindAllString(input, -1)
+
+	remainder := re.ReplaceAllString(input, "")
+	remainder = strings.TrimSpace(remainder)
+
+	return strings.Join(matches, "."), remainder
 }

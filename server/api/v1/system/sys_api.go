@@ -38,11 +38,11 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 	}
 	err = apiService.CreateApi(api)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // SyncApi
@@ -56,8 +56,8 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 func (s *SystemApiApi) SyncApi(c *gin.Context) {
 	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
 	if err != nil {
-		global.GVA_LOG.Error("同步失败!", zap.Error(err))
-		response.FailWithMessage("同步失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_api.syncFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.syncFail"), c)
 		return
 	}
 	response.OkWithData(gin.H{
@@ -78,8 +78,8 @@ func (s *SystemApiApi) SyncApi(c *gin.Context) {
 func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
 	groups, apiGroupMap, err := apiService.GetApiGroups()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFail"), c)
 		return
 	}
 	response.OkWithData(gin.H{
@@ -105,8 +105,8 @@ func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 	}
 	err = apiService.IgnoreApi(ignoreApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
-		response.FailWithMessage("忽略失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_api.ignoreFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.ignoreFail"), c)
 		return
 	}
 	response.Ok(c)
@@ -129,8 +129,8 @@ func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
 	}
 	err = apiService.EnterSyncApi(syncApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
-		response.FailWithMessage("忽略失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_api.ignoreFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.ignoreFail"), c)
 		return
 	}
 	response.Ok(c)
@@ -159,11 +159,11 @@ func (s *SystemApiApi) DeleteApi(c *gin.Context) {
 	}
 	err = apiService.DeleteApi(api)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // GetApiList
@@ -189,8 +189,8 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 	}
 	list, total, err := apiService.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
 	response.OkWithDetailed(response.PageResult{
@@ -198,7 +198,7 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 		Total:    total,
 		Page:     pageInfo.Page,
 		PageSize: pageInfo.PageSize,
-	}, "获取成功", c)
+	}, global.Translate("general.getDataSuccess"), c)
 }
 
 // GetApiById
@@ -224,11 +224,11 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 	}
 	api, err := apiService.GetApiById(idInfo.ID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, "获取成功", c)
+	response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, global.Translate("general.getDataSuccess"), c)
 }
 
 // UpdateApi
@@ -254,14 +254,13 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 	}
 	err = apiService.UpdateApi(api)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
-		response.FailWithMessage("修改失败", c)
+		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.modifyFail"), c)
 		return
 	}
-	response.OkWithMessage("修改成功", c)
+	response.OkWithMessage(global.Translate("general.modifySuccess"), c)
 }
 
-// GetAllApis
 // @Tags      SysApi
 // @Summary   获取所有的Api 不分页
 // @Security  ApiKeyAuth
@@ -273,11 +272,11 @@ func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
 	apis, err := apiService.GetAllApis(authorityID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(systemRes.SysAPIListResponse{Apis: apis}, "获取成功", c)
+	response.OkWithDetailed(systemRes.SysAPIListResponse{Apis: apis}, global.Translate("general.getDataSuccess"), c)
 }
 
 // DeleteApisByIds
@@ -298,11 +297,11 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 	}
 	err = apiService.DeleteApisByIds(ids)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // FreshCasbin
@@ -315,9 +314,9 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
 	err := casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("刷新失败!", zap.Error(err))
-		response.FailWithMessage("刷新失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_api.refreshFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_api.refreshFail"), c)
 		return
 	}
-	response.OkWithMessage("刷新成功", c)
+	response.OkWithMessage(global.Translate("sys_api.refreshSuccess"), c)
 }

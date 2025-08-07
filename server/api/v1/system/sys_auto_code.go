@@ -2,10 +2,11 @@ package system
 
 import (
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
-	"github.com/goccy/go-json"
 	"io"
 	"strings"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
+	"github.com/goccy/go-json"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -37,10 +38,10 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 		dbList = append(dbList, item)
 	}
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, "获取成功", c)
+		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, global.Translate("general.getDataSuccess"), c)
 	}
 }
 
@@ -68,10 +69,10 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 
 	tables, err := autoCodeService.Database(businessDB).GetTables(businessDB, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("查询table失败!", zap.Error(err))
-		response.FailWithMessage("查询table失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.queryTablesFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.queryTablesFail"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"tables": tables}, "获取成功", c)
+		response.OkWithDetailed(gin.H{"tables": tables}, global.Translate("general.getDataSuccess"), c)
 	}
 }
 
@@ -99,10 +100,10 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database(businessDB).GetColumn(businessDB, tableName, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
+		response.OkWithDetailed(gin.H{"columns": columns}, global.Translate("general.getDataSuccess"), c)
 	}
 }
 
@@ -127,28 +128,28 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 		llm,
 	)
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
-		response.FailWithMessage("大模型生成失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.largeModelCreationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.largeModelCreationFailErr")+" "+err.Error(), c)
 		return
 	}
 	var resStruct response.Response
 	b, err := io.ReadAll(res.Body)
 	defer res.Body.Close()
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
-		response.FailWithMessage("大模型生成失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.largeModelCreationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.largeModelCreationFailErr")+" "+err.Error(), c)
 		return
 	}
 	err = json.Unmarshal(b, &resStruct)
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
-		response.FailWithMessage("大模型生成失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.largeModelCreationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.largeModelCreationFailErr")+" "+err.Error(), c)
 		return
 	}
 
 	if resStruct.Code == 7 {
-		global.GVA_LOG.Error("大模型生成失败!"+resStruct.Msg, zap.Error(err))
-		response.FailWithMessage("大模型生成失败"+resStruct.Msg, c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.largeModelCreationFail")+resStruct.Msg, zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.largeModelCreationFailErr")+" "+resStruct.Msg, c)
 		return
 	}
 	response.OkWithData(resStruct.Data, c)

@@ -2,6 +2,7 @@ package example
 
 import (
 	"context"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -47,7 +48,7 @@ func (i *initExaFileMysql) InitializeData(ctx context.Context) (context.Context,
 		{Name: "logo.png", Url: "https://qmplusimg.henrongyi.top/1576554439myAvatar.png", Tag: "png", Key: "1587973709logo.png"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
-		return ctx, errors.Wrap(err, example.ExaFileUploadAndDownload{}.TableName()+"表数据初始化失败!")
+		return ctx, errors.Wrap(err, example.ExaFileUploadAndDownload{}.TableName()+global.Translate("general.tabelDataInitFail"))
 	}
 	return ctx, nil
 }

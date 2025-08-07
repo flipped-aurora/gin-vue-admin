@@ -28,17 +28,17 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")
 	classId, _ := strconv.Atoi(c.DefaultPostForm("classId", "0"))
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
-		response.FailWithMessage("接收文件失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.fileFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.fileFail"), c)
 		return
 	}
 	file, err = fileUploadAndDownloadService.UploadFile(header, noSave, classId) // 文件上传后拿到文件路径
 	if err != nil {
-		global.GVA_LOG.Error("上传文件失败!", zap.Error(err))
-		response.FailWithMessage("上传文件失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.modifyDatabaseConnectionFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.modifyDatabaseConnectionFail"), c)
 		return
 	}
-	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, "上传成功", c)
+	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, global.Translate("api.example.exa_breakpoint_continue.uploadSuccess"), c)
 }
 
 // EditFileName 编辑文件名或者备注
@@ -51,11 +51,11 @@ func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
 	}
 	err = fileUploadAndDownloadService.EditFileName(file)
 	if err != nil {
-		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
-		response.FailWithMessage("编辑失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.editFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.editFail"), c)
 		return
 	}
-	response.OkWithMessage("编辑成功", c)
+	response.OkWithMessage(global.Translate("api.example.exa_breakpoint_continue.editSuccess"), c)
 }
 
 // DeleteFile
@@ -74,11 +74,11 @@ func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 		return
 	}
 	if err := fileUploadAndDownloadService.DeleteFile(file); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage("general.deleteFailErr", c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage("general.deleteSuccess", c)
 }
 
 // GetFileList
@@ -99,8 +99,8 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 	}
 	list, total, err := fileUploadAndDownloadService.GetFileRecordInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
 	response.OkWithDetailed(response.PageResult{
@@ -108,7 +108,7 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 		Total:    total,
 		Page:     pageInfo.Page,
 		PageSize: pageInfo.PageSize,
-	}, "获取成功", c)
+	}, "general.getDataSuccess", c)
 }
 
 // ImportURL
@@ -127,9 +127,9 @@ func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
 		return
 	}
 	if err := fileUploadAndDownloadService.ImportURL(&file); err != nil {
-		global.GVA_LOG.Error("导入URL失败!", zap.Error(err))
-		response.FailWithMessage("导入URL失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.editFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.editFail"), c)
 		return
 	}
-	response.OkWithMessage("导入URL成功", c)
+	response.OkWithMessage(global.Translate("api.example.exa_breakpoint_continue.importUrlSuccess"), c)
 }

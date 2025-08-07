@@ -57,17 +57,17 @@ func (b *BaseApi) Login(c *gin.Context) {
 	u := &system.SysUser{Username: l.Username, Password: l.Password}
 	user, err := userService.Login(u)
 	if err != nil {
-		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-		// 验证码次数+1
-		global.BlackCache.Increment(key, 1)
-		response.FailWithMessage("用户名不存在或者密码错误", c)
-		return
+		global.GVA_LOG.Error(global.Translate("sys_user.loginFail"), zap.Error(err))
+    // 验证码次数+1
+    global.BlackCache.Increment(key, 1)
+    response.FailWithMessage(global.Translate("sys_user.userNameOrPasswordError"), c)
+    return
 	}
 	if user.Enable != 1 {
-		global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+		global.GVA_LOG.Error(global.Translate("sys_user.loginFailUserBanned"))
 		// 验证码次数+1
 		global.BlackCache.Increment(key, 1)
-		response.FailWithMessage("用户被禁止登录", c)
+		response.FailWithMessage(global.Translate("sys_user.userBanned"), c)
 		return
 	}
 	b.TokenNext(c, *user)
@@ -77,8 +77,8 @@ func (b *BaseApi) Login(c *gin.Context) {
 func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	token, claims, err := utils.LoginToken(&user)
 	if err != nil {
-		global.GVA_LOG.Error("获取token失败!", zap.Error(err))
-		response.FailWithMessage("获取token失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_user.getTokenFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_user.getTokenErr"), c)
 		return
 	}
 	if !global.GVA_CONFIG.System.UseMultipoint {
@@ -87,14 +87,14 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			User:      user,
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
-		}, "登录成功", c)
+		}, global.Translate("sys_user.loginSuccess"), c)
 		return
 	}
 
 	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := utils.SetRedisJWT(token, user.Username); err != nil {
-			global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
-			response.FailWithMessage("设置登录状态失败", c)
+			global.GVA_LOG.Error(global.Translate("sys_user.loginStatusFail"), zap.Error(err))
+			response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
 			return
 		}
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
@@ -102,19 +102,19 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			User:      user,
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
-		}, "登录成功", c)
+		}, global.Translate("sys_user.loginSuccess"), c)
 	} else if err != nil {
-		global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
-		response.FailWithMessage("设置登录状态失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_user.loginStatusFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
 	} else {
 		var blackJWT system.JwtBlacklist
 		blackJWT.Jwt = jwtStr
 		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
-			response.FailWithMessage("jwt作废失败", c)
+			response.FailWithMessage(global.Translate("sys_user.jwtInvalidationFailed"), c)
 			return
 		}
 		if err := utils.SetRedisJWT(token, user.GetUsername()); err != nil {
-			response.FailWithMessage("设置登录状态失败", c)
+			response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
 			return
 		}
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
@@ -122,7 +122,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			User:      user,
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
-		}, "登录成功", c)
+		}, global.Translate("sys_user.loginSuccess"), c)
 	}
 }
 
@@ -154,11 +154,11 @@ func (b *BaseApi) Register(c *gin.Context) {
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities, Enable: r.Enable, Phone: r.Phone, Email: r.Email}
 	userReturn, err := userService.Register(*user)
 	if err != nil {
-		global.GVA_LOG.Error("注册失败!", zap.Error(err))
-		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_user.registrationFail"), zap.Error(err))
+		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, global.Translate("sys_user.registrationFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
+	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, global.Translate("sys_user.registrationSuccess"), c)
 }
 
 // ChangePassword
@@ -185,11 +185,11 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 	u := &system.SysUser{GVA_MODEL: global.GVA_MODEL{ID: uid}, Password: req.Password}
 	err = userService.ChangePassword(u, req.NewPassword)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
-		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
+		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.changePWErr"), c)
 		return
 	}
-	response.OkWithMessage("修改成功", c)
+	response.OkWithMessage(global.Translate("general.modifySuccess"), c)
 }
 
 // GetUserList
@@ -215,8 +215,8 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 	}
 	list, total, err := userService.GetUserInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
 	response.OkWithDetailed(response.PageResult{
@@ -224,7 +224,7 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 		Total:    total,
 		Page:     pageInfo.Page,
 		PageSize: pageInfo.PageSize,
-	}, "获取成功", c)
+	}, global.Translate("general.getDataSuccess"), c)
 }
 
 // SetUserAuthority
@@ -250,7 +250,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	userID := utils.GetUserID(c)
 	err = userService.SetUserAuthority(userID, sua.AuthorityId)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -258,14 +258,14 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	claims.AuthorityId = sua.AuthorityId
 	token, err := utils.NewJWT().CreateToken(*claims)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	c.Header("new-token", token)
 	c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
 	utils.SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
-	response.OkWithMessage("修改成功", c)
+	response.OkWithMessage(global.Translate("general.modifySuccess"), c)
 }
 
 // SetUserAuthorities
@@ -287,11 +287,11 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
 	err = userService.SetUserAuthorities(authorityID, sua.ID, sua.AuthorityIds)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
-		response.FailWithMessage("修改失败", c)
+		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.modifyFail"), c)
 		return
 	}
-	response.OkWithMessage("修改成功", c)
+	response.OkWithMessage(global.Translate("general.modifySuccess"), c)
 }
 
 // DeleteUser
@@ -317,16 +317,16 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 	}
 	jwtId := utils.GetUserID(c)
 	if jwtId == uint(reqId.ID) {
-		response.FailWithMessage("删除失败, 无法删除自己。", c)
+		response.FailWithMessage(global.Translate("sys_user.deleteUserFail"), c)
 		return
 	}
 	err = userService.DeleteUser(reqId.ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // SetUserInfo
@@ -354,8 +354,8 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		authorityID := utils.GetUserAuthorityId(c)
 		err = userService.SetUserAuthorities(authorityID, user.ID, user.AuthorityIds)
 		if err != nil {
-			global.GVA_LOG.Error("设置失败!", zap.Error(err))
-			response.FailWithMessage("设置失败", c)
+			global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
+			response.FailWithMessage(global.Translate("general.setupFail"), c)
 			return
 		}
 	}
@@ -370,11 +370,11 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		Enable:    user.Enable,
 	})
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
-		response.FailWithMessage("设置失败", c)
+		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.setupFail"), c)
 		return
 	}
-	response.OkWithMessage("设置成功", c)
+	response.OkWithMessage(global.Translate("general.setupSuccess"), c)
 }
 
 // SetSelfInfo
@@ -405,11 +405,11 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		Enable:    user.Enable,
 	})
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
-		response.FailWithMessage("设置失败", c)
+		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.setupFail"), c)
 		return
 	}
-	response.OkWithMessage("设置成功", c)
+	response.OkWithMessage(global.Translate("general.setupSuccess"), c)
 }
 
 // SetSelfSetting
@@ -418,7 +418,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      map[string]interface{}  true  "用户配置数据"
+// @Param     data  body      map[string]interface{}                                      true  "用户配置"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户配置"
 // @Router    /user/SetSelfSetting [put]
 func (b *BaseApi) SetSelfSetting(c *gin.Context) {
@@ -431,11 +431,11 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 
 	err = userService.SetSelfSetting(req, utils.GetUserID(c))
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
-		response.FailWithMessage("设置失败", c)
+		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.setupFailErr"), c)
 		return
 	}
-	response.OkWithMessage("设置成功", c)
+	response.OkWithMessage(global.Translate("general.setupSuccess"), c)
 }
 
 // GetUserInfo
@@ -450,11 +450,11 @@ func (b *BaseApi) GetUserInfo(c *gin.Context) {
 	uuid := utils.GetUserUuid(c)
 	ReqUser, err := userService.GetUserInfo(uuid)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "获取成功", c)
+	response.OkWithDetailed(gin.H{"userInfo": ReqUser}, global.Translate("general.getDataSuccess"), c)
 }
 
 // ResetPassword
@@ -474,9 +474,9 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 	}
 	err = userService.ResetPassword(rps.ID, rps.Password)
 	if err != nil {
-		global.GVA_LOG.Error("重置失败!", zap.Error(err))
-		response.FailWithMessage("重置失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("sys_user.resetPWFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_user.resetPWFailErr")+" "+err.Error(), c)
 		return
 	}
-	response.OkWithMessage("重置成功", c)
+	response.OkWithMessage(global.Translate("sys_user.resetPWSuccess"), c)
 }

@@ -45,7 +45,7 @@ func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID u
 				}
 			}
 			if !hasApi {
-				return errors.New("存在api不在权限列表中")
+				return errors.New(global.Translate("sys_auto_code.apiNotInPermissionList"))
 			}
 		}
 	}
@@ -68,7 +68,7 @@ func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID u
 	e := utils.GetCasbin()
 	success, _ := e.AddPolicies(rules)
 	if !success {
-		return errors.New("存在相同api,添加失败,请联系管理员")
+		return errors.New(global.Translate("sys_auto_code.duplicateApi"))
 	}
 	return nil
 }

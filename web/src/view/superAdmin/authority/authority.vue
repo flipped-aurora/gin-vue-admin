@@ -1,11 +1,11 @@
 <template>
   <div class="authority">
-    <warning-bar title="注：右上角头像下拉可切换角色" />
+    <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="addAuthority(0)"
-          >新增角色</el-button
-        >
+        <el-button type="primary" icon="plus" @click="addAuthority(0)">{{
+          t('authority.addRole')
+        }}</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -13,49 +13,57 @@
         row-key="authorityId"
         style="width: 100%"
       >
-        <el-table-column label="角色ID" min-width="180" prop="authorityId" />
+        <el-table-column
+          :label="t('authority.roleID')"
+          min-width="180"
+          prop="authorityId"
+        />
         <el-table-column
           align="left"
-          label="角色名称"
+          :label="t('authority.roleName')"
           min-width="180"
           prop="authorityName"
         />
-        <el-table-column align="left" label="操作" width="460">
+        <el-table-column
+          align="left"
+          :label="t('general.operations')"
+          width="440"
+        >
           <template #default="scope">
             <el-button
               icon="setting"
               type="primary"
               link
               @click="openDrawer(scope.row)"
-              >设置权限</el-button
+              >{{ t('authority.setPermissions') }}</el-button
             >
             <el-button
               icon="plus"
               type="primary"
               link
               @click="addAuthority(scope.row.authorityId)"
-              >新增子角色</el-button
+              >{{ t('general.add') }}</el-button
             >
             <el-button
               icon="copy-document"
               type="primary"
               link
               @click="copyAuthorityFunc(scope.row)"
-              >拷贝</el-button
+              >{{ t('general.copy') }}</el-button
             >
             <el-button
               icon="edit"
               type="primary"
               link
               @click="editAuthority(scope.row)"
-              >编辑</el-button
+              >{{ t('general.edit') }}</el-button
             >
             <el-button
               icon="delete"
               type="primary"
               link
               @click="deleteAuth(scope.row)"
-              >删除</el-button
+              >{{ t('general.delete') }}</el-button
             >
           </template>
         </el-table-column>
@@ -67,10 +75,12 @@
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ authorityTitleForm }}</span>
           <div>
-            <el-button @click="closeAuthorityForm">取 消</el-button>
-            <el-button type="primary" @click="submitAuthorityForm"
-              >确 定</el-button
-            >
+            <el-button @click="closeAuthorityForm">{{
+              t('general.close')
+            }}</el-button>
+            <el-button type="primary" @click="submitAuthorityForm">{{
+              t('general.confirm')
+            }}</el-button>
           </div>
         </div>
       </template>
@@ -78,9 +88,9 @@
         ref="authorityForm"
         :model="form"
         :rules="rules"
-        label-width="80px"
+        label-width="100px"
       >
-        <el-form-item label="父级角色" prop="parentId">
+        <el-form-item :label="t('authority.parentRole')" prop="parentId">
           <el-cascader
             v-model="form.parentId"
             style="width: 100%"
@@ -97,7 +107,7 @@
             filterable
           />
         </el-form-item>
-        <el-form-item label="角色ID" prop="authorityId">
+        <el-form-item :label="t('authority.roleID')" prop="authorityId">
           <el-input
             v-model="form.authorityId"
             :disabled="dialogType === 'edit'"
@@ -105,7 +115,7 @@
             maxlength="15"
           />
         </el-form-item>
-        <el-form-item label="角色姓名" prop="authorityName">
+        <el-form-item :label="t('authority.roleName')" prop="authorityName">
           <el-input v-model="form.authorityName" autocomplete="off" />
         </el-form-item>
       </el-form>
@@ -115,16 +125,16 @@
       v-if="drawer"
       v-model="drawer"
       :size="appStore.drawerSize"
-      title="角色配置"
+      :title="t('authority.roleConfig')"
     >
       <el-tabs :before-leave="autoEnter" type="border-card">
-        <el-tab-pane label="角色菜单">
+        <el-tab-pane :label="t('authority.roleMenu')">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="角色api">
+        <el-tab-pane :label="t('authority.roleAPI')">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="资源权限">
+        <el-tab-pane :label="t('authority.resourcePermissions')">
           <Datas
             ref="datas"
             :authority="tableData"
@@ -154,6 +164,8 @@
   import { ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { useAppStore } from "@/pinia"
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'Authority'
@@ -161,7 +173,7 @@
 
   const mustUint = (rule, value, callback) => {
     if (!/^[0-9]*[1-9][0-9]*$/.test(value)) {
-      return callback(new Error('请输入正整数'))
+      return callback(new Error(t('authority.positiveIntNote')))
     }
     return callback()
   }
@@ -169,7 +181,7 @@
   const AuthorityOption = ref([
     {
       authorityId: 0,
-      authorityName: '根角色/严格模式下为当前角色'
+      authorityName: t('authority.rootRole')
     }
   ])
   const drawer = ref(false)
@@ -177,7 +189,7 @@
   const activeRow = ref({})
   const appStore = useAppStore()
 
-  const authorityTitleForm = ref('新增角色')
+  const authorityTitleForm = ref(t('authority.addRole'))
   const authorityFormVisible = ref(false)
   const apiDialogFlag = ref(false)
   const copyForm = ref({})
@@ -189,13 +201,23 @@
   })
   const rules = ref({
     authorityId: [
-      { required: true, message: '请输入角色ID', trigger: 'blur' },
-      { validator: mustUint, trigger: 'blur', message: '必须为正整数' }
+      { required: true, message: t('authority.roleIdNote'), trigger: 'blur' },
+      {
+        validator: mustUint,
+        trigger: 'blur',
+        message: t('authority.roleIdError')
+      }
     ],
     authorityName: [
-      { required: true, message: '请输入角色名', trigger: 'blur' }
+      { required: true, message: t('authority.roleNameNote'), trigger: 'blur' }
     ],
-    parentId: [{ required: true, message: '请选择父角色', trigger: 'blur' }]
+    parentId: [
+      {
+        required: true,
+        message: t('authority.roleSelectMethod'),
+        trigger: 'blur'
+      }
+    ]
   })
 
   const tableData = ref([])
@@ -228,7 +250,7 @@
   // 拷贝角色
   const copyAuthorityFunc = (row) => {
     setOptions()
-    authorityTitleForm.value = '拷贝角色'
+    authorityTitleForm.value = t('authority.copyRole')
     dialogType.value = 'copy'
     for (const k in form.value) {
       form.value[k] = row[k]
@@ -242,9 +264,9 @@
   }
   // 删除角色
   const deleteAuth = (row) => {
-    ElMessageBox.confirm('此操作将永久删除该角色, 是否继续?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('authority.roleDeleteConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     })
       .then(async () => {
@@ -252,7 +274,7 @@
         if (res.code === 0) {
           ElMessage({
             type: 'success',
-            message: '删除成功!'
+            message: t('general.deleteSuccess')
           })
 
           getTableData()
@@ -261,7 +283,7 @@
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: '已取消删除'
+          message: t('general.undeleted')
         })
       })
   }
@@ -296,7 +318,7 @@
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: '添加成功!'
+                  message: t('general.addSuccess')
                 })
                 getTableData()
                 closeAuthorityForm()
@@ -309,7 +331,7 @@
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: '添加成功!'
+                  message: t('general.updateSuccess')
                 })
                 getTableData()
                 closeAuthorityForm()
@@ -335,7 +357,7 @@
             if (res.code === 0) {
               ElMessage({
                 type: 'success',
-                message: '复制成功！'
+                message: t('general.copySuccess')
               })
               getTableData()
             }
@@ -351,7 +373,7 @@
     AuthorityOption.value = [
       {
         authorityId: 0,
-        authorityName: '根角色(严格模式下为当前用户角色)'
+        authorityName: t('authority.rootRole')
       }
     ]
     setAuthorityOptions(tableData.value, AuthorityOption.value, false)
@@ -385,7 +407,7 @@
   // 增加角色
   const addAuthority = (parentId) => {
     initForm()
-    authorityTitleForm.value = '新增角色'
+    authorityTitleForm.value = t('authority.addRole')
     dialogType.value = 'add'
     form.value.parentId = parentId
     setOptions()
@@ -394,7 +416,7 @@
   // 编辑角色
   const editAuthority = (row) => {
     setOptions()
-    authorityTitleForm.value = '编辑角色'
+    authorityTitleForm.value = t('authority.editRole')
     dialogType.value = 'edit'
     for (const key in form.value) {
       form.value[key] = row[key]

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"os"
 	"path"
 	"path/filepath"
 	"strconv"
@@ -17,7 +18,7 @@ import (
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	request "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
+	"github.com/tidwall/sjson"
 	"go.uber.org/zap"
 )
 
@@ -32,7 +33,7 @@ func (s *autoCodeHistory) Create(ctx context.Context, info request.SysAutoHistor
 	create := info.Create()
 	err := global.GVA_DB.WithContext(ctx).Create(&create).Error
 	if err != nil {
-		return errors.Wrap(err, "创建失败!")
+		return errors.Wrap(err, global.Translate("general.creationFail"))
 	}
 	return nil
 }
@@ -44,7 +45,7 @@ func (s *autoCodeHistory) First(ctx context.Context, info common.GetById) (strin
 	var meta string
 	err := global.GVA_DB.WithContext(ctx).Model(model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Pluck("request", &meta).Error
 	if err != nil {
-		return "", errors.Wrap(err, "获取失败!")
+		return "", errors.Wrap(err, global.Translate("general.getDataFail"))
 	}
 	return meta, nil
 }
@@ -83,13 +84,13 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 	if info.DeleteMenu {
 		err = BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID))
 		if err != nil {
-			return errors.Wrap(err, "删除菜单失败!")
+			return errors.Wrap(err, global.Translate("service.menuDeleteFailed"))
 		}
 	} // 清除菜单表
 	if info.DeleteTable {
 		err = s.DropTable(history.BusinessDB, history.Table)
 		if err != nil {
-			return errors.Wrap(err, "删除表失败!")
+			return errors.Wrap(err, global.Translate("service.tableDeleteFailed"))
 		}
 	} // 删除表
 	templates := make(map[string]string, len(history.Templates))
@@ -160,7 +161,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			if err != nil {
 				return err
 			}
-			fmt.Printf("[filepath:%s]回滚注入代码成功!\n", key)
+			fmt.Printf("[filepath:%s]%s\n", key, global.Translate("service.rollbackInjectionSuccess"))
 		}
 	} // 清除注入代码
 	removeBasePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10))
@@ -171,12 +172,48 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		removePath := filepath.Join(removeBasePath, strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
 		err = utils.FileMove(value, removePath)
 		if err != nil {
-			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, removePath)
+			return errors.Wrapf(err, "[src:%s][dst:%s]%s", value, removePath, global.Translate("service.fileMoveFailed"))
 		}
 	} // 移动文件
+
 	err = global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Update("flag", 1).Error
 	if err != nil {
-		return errors.Wrap(err, "更新失败!")
+		return errors.Wrap(err, global.Translate("general.updateFail"))
+	}
+
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
+	files, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	if info.DeleteMenu {
+		for _, file := range files {
+			err := s.reWriteI18nJson(file, "menu", history.Package, history.StructName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	if info.DeleteApi {
+		for _, file := range files {
+			err := s.reWriteI18nJson(file, "api", history.Package, history.StructName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	localPath = path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+	files, err = s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	for _, file := range files {
+		err := s.reWriteI18nJson(file, "web", history.Package, history.StructName)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -187,7 +224,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 func (s *autoCodeHistory) Delete(ctx context.Context, info common.GetById) error {
 	err := global.GVA_DB.WithContext(ctx).Where("id = ?", info.Uint()).Delete(&model.SysAutoCodeHistory{}).Error
 	if err != nil {
-		return errors.Wrap(err, "删除失败!")
+		return errors.Wrap(err, global.Translate("general.deleteFail"))
 	}
 	return nil
 }
@@ -214,4 +251,76 @@ func (s *autoCodeHistory) DropTable(BusinessDb, tableName string) error {
 	} else {
 		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
 	}
+}
+
+func (s *autoCodeHistory) readJSONFiles(dir string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+func (s *autoCodeHistory) reWriteI18nJson(file string, flag string, packageName, structName string) error {
+	data, err := os.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	originJson := string(data)
+	switch flag {
+	case "api":
+		var err error
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.group.%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.add%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.delete%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.batch%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.update%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.find%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.list%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+	case "menu":
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.menu.%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+	case "web":
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("%s.%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+	}
+	err = os.WriteFile(file, []byte(originJson), 0666)
+	if err != nil {
+		return err
+	}
+	return nil
 }

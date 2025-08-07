@@ -1,12 +1,14 @@
 <template>
   <div class="break-point">
     <div class="gva-table-box">
-      <el-divider content-position="left">大文件上传</el-divider>
+      <el-divider content-position="left">{{
+        t('view.example.breakpoint.largeFileUpload')
+      }}</el-divider>
       <form id="fromCont" method="post">
         <!-- 新增按钮容器，使用 Flexbox 对齐按钮 -->
         <div class="button-container">
-          <div class="fileUpload" @click="inputChange">
-            <span class="takeFile">选择文件</span>
+          <div class="fileUpload" @click="inputChange" style="width:fit-content;">
+            <span class="takeFile">{{ t('view.example.breakpoint.selectFile') }}</span>
             <input
               v-show="false"
               id="file"
@@ -21,10 +23,10 @@
             type="primary"
             class="uploadBtn"
             @click="getFile"
-          >上传文件</el-button>
+          >{{ t('view.example.breakpoint.uploadFiles') }}</el-button>
         </div>
       </form>
-      <div class="el-upload__tip">请上传不超过5MB的文件</div>
+      <div class="el-upload__tip">{{ t('view.example.breakpoint.uploadFilesNote') }}</div>
       <div class="list">
         <transition name="list" tag="p">
           <div v-if="file" class="list-item">
@@ -42,9 +44,7 @@
           </div>
         </transition>
       </div>
-      <div class="tips">
-        此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹
-      </div>
+      <div class="tips">{{ t('view.example.breakpoint.breakpointNote') }}</div>
     </div>
   </div>
 </template>
@@ -59,6 +59,9 @@ import {
 } from '@/api/breakpoint'
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
   name: 'BreakPoint'
@@ -129,25 +132,25 @@ const choseFile = async (e) => {
         })
       } else {
         waitUpLoad.value = [] // 秒传则没有需要上传的切片
-        ElMessage.success('文件已秒传!')
+        ElMessage.success(t('view.example.breakpoint.fileTransferredSec'))
       }
       waitNum.value = waitUpLoad.value.length // 记录长度用于百分比展示
     }
   } else {
     limitFileSize.value = true
-    ElMessage('请上传小于5M文件!')
+    ElMessage(t('view.example.breakpoint.uploadFileSizeNote'))
   }
 }
 
 const getFile = () => {
   // 确定按钮
   if (file.value === null) {
-    ElMessage('请先上传文件!')
+    ElMessage(t('view.example.breakpoint.uploadFileFirst'))
     return
   }
   // 检查文件上传进度
   if (percentage.value === 100) {
-    ElMessage.success('上传已完成!')  // 添加提示消息
+    ElMessage.success(t('view.example.breakpoint.uploadCompleted'))  // 添加提示消息
     percentageFlage.value = false
     return // 如果进度已完成，阻止继续执行后续代码
   }
@@ -204,7 +207,7 @@ const upLoadFileSlice = async (item) => {
         fileMd5: fileMd5.value,
         filePath: res.data.filePath
       }
-      ElMessage.success('上传成功')
+      ElMessage.success(t('view.example.breakpoint.uploadSuccessfully'))
       await removeChunk(params)
     }
   }

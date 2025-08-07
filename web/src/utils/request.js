@@ -3,6 +3,11 @@ import { useUserStore } from '@/pinia/modules/user'
 import { ElLoading, ElMessage } from 'element-plus'
 import { emitter } from '@/utils/bus'
 import router from '@/router/index'
+import { ElLoading } from 'element-plus'
+import i18n from '@/i18n' // added by mohamed hassan to multilangauge
+
+// 添加一个状态变量，用于跟踪是否已有错误弹窗显示
+let errorBoxVisible = false
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -107,6 +112,7 @@ service.interceptors.request.use(
       'Content-Type': 'application/json',
       'x-token': userStore.token,
       'x-user-id': userStore.userInfo.ID,
+      'Accept-Language': userStore.language, // added by mohame hassan to allow store selected language for multilanguage support.
       ...config.headers
     }
     return config

@@ -3,7 +3,7 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button type="primary" icon="plus" @click="addMenu(0)">
-          新增根菜单
+          {{ t('view.superAdmin.menu.addRootMenu') }}
         </el-button>
       </div>
 
@@ -12,8 +12,8 @@
         <el-table-column align="left" label="ID" min-width="100" prop="ID" />
         <el-table-column
           align="left"
-          label="展示名称"
-          min-width="120"
+          :label="t('view.superAdmin.menu.displayName')"
+          min-width="160"
           prop="authorityName"
         >
           <template #default="scope">
@@ -22,7 +22,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="图标"
+          :label="t('view.superAdmin.menu.icon')"
           min-width="140"
           prop="authorityName"
         >
@@ -37,42 +37,51 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="路由Name"
+          :label="t('view.superAdmin.menu.routeName')"
           show-overflow-tooltip
           min-width="160"
           prop="name"
         />
         <el-table-column
           align="left"
-          label="路由Path"
+          :label="t('view.superAdmin.menu.routePath')"
           show-overflow-tooltip
           min-width="160"
           prop="path"
         />
         <el-table-column
           align="left"
-          label="是否隐藏"
+          :label="t('view.superAdmin.menu.visibility')"
           min-width="100"
           prop="hidden"
         >
           <template #default="scope">
-            <span>{{ scope.row.hidden ? '隐藏' : '显示' }}</span>
+            <span>{{
+              scope.row.hidden
+                ? t('view.superAdmin.menu.hide')
+                : t('view.superAdmin.menu.show')
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="父节点"
+          :label="t('view.superAdmin.menu.parent')"
           min-width="90"
           prop="parentId"
         />
-        <el-table-column align="left" label="排序" min-width="70" prop="sort" />
         <el-table-column
           align="left"
-          label="文件路径"
+          :label="t('view.superAdmin.menu.sort')"
+          min-width="70"
+          prop="sort"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.superAdmin.menu.filePath')"
           min-width="360"
           prop="component"
         />
-        <el-table-column align="left" fixed="right" label="操作" :min-width="appStore.operateMinWith">
+        <el-table-column align="left" fixed="right" :label="t('general.operations')" :min-width="appStore.operateMinWith" width="280px">
           <template #default="scope">
             <el-button
               type="primary"
@@ -80,7 +89,7 @@
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >
-              添加子菜单
+              {{ t('view.superAdmin.menu.addSubMenu') }}
             </el-button>
             <el-button
               type="primary"
@@ -88,7 +97,7 @@
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >
-              编辑
+              {{ t('general.edit') }}
             </el-button>
             <el-button
               type="primary"
@@ -96,7 +105,7 @@
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >
-              删除
+              {{ t('general.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -112,336 +121,360 @@
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ dialogTitle }}</span>
           <div>
-            <el-button @click="closeDialog"> 取 消 </el-button>
-            <el-button type="primary" @click="enterDialog"> 确 定 </el-button>
+            <el-button @click="closeDialog">
+              {{ t('general.close') }}
+            </el-button>
+            <el-button type="primary" @click="enterDialog">
+              {{ t('general.confirm') }}
+            </el-button>
           </div>
         </div>
       </template>
 
-      <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
-      
-      <!-- 基础信息区域 -->
-      <div class="border-b border-gray-200">
-        <h3 class="font-semibold text-gray-700 mb-4">基础信息</h3>
-        <el-form
-          v-if="dialogFormVisible"
-          ref="menuForm"
-          :inline="true"
-          :model="form"
-          :rules="rules"
-          label-position="top"
-        >
-          <el-row class="w-full">
-            <el-col :span="24">
-              <el-form-item label="文件路径" prop="component">
-                <components-cascader
-                  :component="form.component"
-                  @change="fmtComponent"
-                />
-                <div class="form-tip">
-                  <el-icon><InfoFilled /></el-icon>
-                  <span>如果菜单包含子菜单，请创建router-view二级路由页面或者</span>
-                  <el-button
-                    size="small"
-                    type="text"
-                    @click="form.component = 'view/routerHolder.vue'"
+
+      <warning-bar :title="t('view.superAdmin.menu.newMenuNote')" />
+      <el-form
+        v-if="dialogFormVisible"
+        ref="menuForm"
+        :inline="true"
+        :model="form"
+        :rules="rules"
+        label-position="top"
+      >
+        <el-row class="w-full">
+          <el-col :span="16">
+            <el-form-item
+              :label="t('view.superAdmin.menu.filePath')"
+              prop="component"
+            >
+              <components-cascader
+                :component="form.component"
+                @change="fmtComponent"
+              />
+              <span style="font-size: 12px; margin-right: 12px">{{
+                t('view.superAdmin.menu.subMenuNote')
+              }}</span>
+              <el-button
+                style="margin-top: 4px"
+                @click="form.component = 'view/routerHolder.vue'"
+              >
+                {{ t('view.superAdmin.menu.clickMe') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              :label="t('view.superAdmin.menu.displayName')"
+              prop="meta.title"
+            >
+              <el-input
+                v-model="form.meta.title"
+                autocomplete="off"
+                :placeholder="t('view.superAdmin.menu.titleNote')"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item
+              :label="t('view.superAdmin.menu.routeName')"
+              prop="path"
+            >
+              <el-input
+                v-model="form.name"
+                autocomplete="off"
+                :placeholder="t('view.superAdmin.menu.routeNameNote')"
+                @change="changeName"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="path">
+              <template #label>
+                <span style="display: inline-flex; align-items: center">
+                  <span>{{ t('view.superAdmin.menu.routePath') }}</span>
+                  <el-checkbox
+                    v-model="checkFlag"
+                    style="margin-left: 12px; height: auto"
+                    >{{ t('view.superAdmin.menu.addParameter') }}</el-checkbox
+                  >
+                </span>
+              </template>
+
+              <el-input
+                v-model="form.path"
+                :disabled="!checkFlag"
+                autocomplete="off"
+                :placeholder="t('view.superAdmin.menu.routePathNote')"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="t('view.superAdmin.menu.visibility')">
+              <el-select
+                v-model="form.hidden"
+                style="width: 100%"
+                :placeholder="t('view.superAdmin.menu.visibilityNote')"
+              >
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item :label="t('view.superAdmin.menu.parentId')">
+              <el-cascader
+                v-model="form.parentId"
+                style="width: 100%"
+                :disabled="!isEdit"
+                :options="menuOption"
+                :props="{
+                  checkStrictly: true,
+                  label: 'title',
+                  value: 'ID',
+                  disabled: 'disabled',
+                  emitPath: false
+                }"
+                :show-all-levels="false"
+                filterable
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              :label="t('view.superAdmin.menu.icon')"
+              prop="meta.icon"
+            >
+              <icon v-model="form.meta.icon" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="t('general.order')" prop="sort">
+              <el-input v-model.number="form.sort" autocomplete="off" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item prop="meta.activeName">
+              <template #label>
+                <div>
+                  <span> {{ t('view.superAdmin.menu.highlightMenu') }} </span>
+                  <el-tooltip
+                    :content="t('view.superAdmin.menu.highlightMenu')"
+                    placement="top"
+                    effect="light"
                   >
                     点我设置
                   </el-button>
                 </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row class="w-full">
-            <el-col :span="12">
-              <el-form-item label="展示名称" prop="meta.title">
-                <el-input 
-                  v-model="form.meta.title" 
-                  autocomplete="off" 
-                  placeholder="请输入菜单展示名称"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="路由Name" prop="path">
-                <el-input
-                  v-model="form.name"
-                  autocomplete="off"
-                  placeholder="唯一英文字符串"
-                  @change="changeName"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-       
-      <!-- 路由配置区域 -->
-      <div class="border-b border-gray-200">
-        <h3 class="font-semibold text-gray-700 mb-4">路由配置</h3>
-        <el-form
-          :inline="true"
-          :model="form"
-          :rules="rules"
-          label-position="top"
-        >
-           <el-row class="w-full">
-             <el-col :span="12">
-               <el-form-item label="父节点ID">
-                 <el-cascader
-                   v-model="form.parentId"
-                   style="width: 100%"
-                   :disabled="!isEdit"
-                   :options="menuOption"
-                   :props="{
-                     checkStrictly: true,
-                     label: 'title',
-                     value: 'ID',
-                     disabled: 'disabled',
-                     emitPath: false
-                   }"
-                   :show-all-levels="false"
-                   filterable
-                   placeholder="请选择父节点"
-                 />
-               </el-form-item>
-             </el-col>
-             <el-col :span="12">
-               <el-form-item prop="path">
-                 <template #label>
-                  <div class="inline-flex items-center h-4">
-                     <span>路由Path</span>
-                     <el-checkbox
-                       class="ml-2"
-                       v-model="checkFlag"
-                       >添加参数</el-checkbox
-                     >
-                    </div>
-                 </template>
-                 <el-input
-                   v-model="form.path"
-                   :disabled="!checkFlag"
-                   autocomplete="off"
-                   placeholder="建议只在后方拼接参数"
-                 />
-               </el-form-item>
-             </el-col>
-           </el-row>
-        </el-form>
-      </div>
-       
-      <!-- 显示设置区域 -->
-      <div class="border-b border-gray-200">
-        <h3 class="font-semibold text-gray-700 mb-4">显示设置</h3>
-        <el-form
-          :inline="true"
-          :model="form"
-          :rules="rules"
-          label-position="top"
-        >
-           <el-row class="w-full">
-              <el-col :span="8">
-                <el-form-item label="图标" prop="meta.icon">
-                  <icon v-model="form.meta.icon" />
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="排序标记" prop="sort">
-                  <el-input 
-                    v-model.number="form.sort" 
-                    autocomplete="off" 
-                    placeholder="请输入排序数字"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="是否隐藏">
-                  <el-select
-                    v-model="form.hidden"
-                    style="width: 100%"
-                    placeholder="是否在列表隐藏"
+              </template>
+              <el-input
+                v-model="form.meta.activeName"
+                :placeholder="form.name"
+                autocomplete="off"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="KeepAlive" prop="meta.keepAlive">
+              <el-select
+                v-model="form.meta.keepAlive"
+                style="width: 100%"
+                :placeholder="t('view.superAdmin.menu.keepAliveNote')"
+              >
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="CloseTab" prop="meta.closeTab">
+              <el-select
+                v-model="form.meta.closeTab"
+                style="width: 100%"
+                :placeholder="t('view.superAdmin.menu.closeTabNote')"
+              >
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item>
+              <template #label>
+                <div>
+                  <span> {{ t('view.superAdmin.menu.basicPage') }} </span>
+                  <el-tooltip
+                    :content="t('view.superAdmin.menu.basicPageNote')"
+                    placement="top"
+                    effect="light"
                   >
-                    <el-option :value="false" label="否" />
-                    <el-option :value="true" label="是" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-        </el-form>
-      </div>
-        
-      <!-- 高级配置区域 -->
-      <div class="border-b border-gray-200">
-        <h3 class="font-semibold text-gray-700 mb-4">高级配置</h3>
-        <el-form
-          :inline="true"
-          :model="form"
-          :rules="rules"
-          label-position="top"
-        >
-            <el-row class="w-full">
-              <el-col :span="12">
-                <el-form-item prop="meta.activeName">
-                  <template #label>
-                    <div class="label-with-tooltip">
-                      <span>高亮菜单</span>
-                      <el-tooltip
-                        content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
-                        placement="top"
-                        effect="light"
-                      >
-                        <el-icon><QuestionFilled /></el-icon>
-                      </el-tooltip>
-                    </div>
-                  </template>
-                  <el-input
-                    v-model="form.meta.activeName"
-                    :placeholder="form.name || '请输入高亮菜单名称'"
-                    autocomplete="off"
-                  />
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="KeepAlive" prop="meta.keepAlive">
-                  <el-select
-                    v-model="form.meta.keepAlive"
-                    style="width: 100%"
-                    placeholder="是否keepAlive缓存页面"
+                    <el-icon><QuestionFilled /></el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+
+              <el-select
+                v-model="form.meta.defaultMenu"
+                style="width: 100%"
+                :placeholder="t('view.superAdmin.menu.basicPage')"
+              >
+                <el-option :value="false" :label="t('general.no')" />
+                <el-option :value="true" :label="t('general.yes')" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item>
+              <template #label>
+                <div>
+                  <span> 路由切换动画 </span>
+                  <el-tooltip
+                      content="如果设置了路由切换动画，在本路由下的动画优先级高于全局动画切换优先级。"
+                      placement="top"
+                      effect="light"
                   >
-                    <el-option :value="false" label="否" />
-                    <el-option :value="true" label="是" />
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-             <el-row class="w-full">
-               <el-col :span="8">
-                 <el-form-item label="CloseTab" prop="meta.closeTab">
-                   <el-select
-                     v-model="form.meta.closeTab"
-                     style="width: 100%"
-                     placeholder="是否自动关闭tab"
-                   >
-                     <el-option :value="false" label="否" />
-                     <el-option :value="true" label="是" />
-                   </el-select>
-                 </el-form-item>
-               </el-col>
-               <el-col :span="8">
-                 <el-form-item>
-                   <template #label>
-                     <div class="label-with-tooltip">
-                       <span>是否为基础页面</span>
-                       <el-tooltip
-                         content="此项选择为是，则不会展示左侧菜单以及顶部信息。"
-                         placement="top"
-                         effect="light"
-                       >
-                         <el-icon><QuestionFilled /></el-icon>
-                       </el-tooltip>
-                     </div>
-                   </template>
-                   <el-select
-                     v-model="form.meta.defaultMenu"
-                     style="width: 100%"
-                     placeholder="是否为基础页面"
-                   >
-                     <el-option :value="false" label="否" />
-                     <el-option :value="true" label="是" />
-                   </el-select>
-                 </el-form-item>
-               </el-col>
-               <el-col :span="8">
-                 <el-form-item>
-                   <template #label>
-                     <div class="label-with-tooltip">
-                       <span>路由切换动画</span>
-                       <el-tooltip
-                         content="如果设置了路由切换动画，在本路由下的动画优先级高于全局动画切换优先级。"
-                         placement="top"
-                         effect="light"
-                       >
-                         <el-icon><QuestionFilled /></el-icon>
-                       </el-tooltip>
-                     </div>
-                   </template>
-                   <el-select
-                     v-model="form.meta.transitionType"
-                     style="width: 100%"
-                     placeholder="跟随全局"
-                     clearable
-                   >
-                     <el-option value="fade" label="淡入淡出" />
-                     <el-option value="slide" label="滑动" />
-                     <el-option value="zoom" label="缩放" />
-                     <el-option value="none" label="无动画" />
-                   </el-select>
-                 </el-form-item>
-               </el-col>
-             </el-row>
-        </el-form>
-      </div>
-          
-      <!-- 菜单参数配置区域 -->
-      <div class="border-b border-gray-200">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="font-semibold text-gray-700">菜单参数配置</h3>
-          <el-button type="primary" size="small" @click="addParameter(form)">
-            新增菜单参数
+                    <el-icon><QuestionFilled /></el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+
+              <el-select
+                  v-model="form.meta.transitionType"
+                  style="width: 100%"
+                  placeholder="跟随全局"
+                  clearable
+              >
+                <el-option value="fade" label="淡入淡出" />
+                <el-option value="slide" label="滑动" />
+                <el-option value="zoom" label="缩放" />
+                <el-option value="none" label="无动画" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div>
+        <div class="flex items-center gap-2">
+          <el-button type="primary" icon="edit" @click="addParameter(form)">
+            {{ t('view.superAdmin.menu.addMenuParameters') }}
           </el-button>
         </div>
-            <el-table 
-              :data="form.parameters" 
-              style="width: 100%"
-              class="parameter-table"
-            >
-              <el-table-column
-                align="center"
-                prop="type"
-                label="参数类型"
-                width="150"
+        <el-table :data="form.parameters" style="width: 100%; margin-top: 12px">
+          <el-table-column
+            align="left"
+            prop="type"
+            :label="t('view.superAdmin.menu.parameterType')"
+            width="180"
+          >
+            <template #default="scope">
+              <el-select
+                v-model="scope.row.type"
+                :placeholder="t('general.pleaseSelect')"
               >
-                <template #default="scope">
-                  <el-select 
-                    v-model="scope.row.type" 
-                    placeholder="请选择"
-                    size="small"
-                  >
-                    <el-option key="query" value="query" label="query" />
-                    <el-option key="params" value="params" label="params" />
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="key" label="参数key" width="150">
-                <template #default="scope">
-                  <el-input 
-                    v-model="scope.row.key" 
-                    size="small"
-                    placeholder="请输入参数key"
-                  />
-                </template>
-              </el-table-column>
-              <el-table-column align="center" prop="value" label="参数值">
-                <template #default="scope">
-                  <el-input 
-                    v-model="scope.row.value" 
-                    size="small"
-                    placeholder="请输入参数值"
-                  />
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label="操作" width="100">
-                <template #default="scope">
-                  <el-button
-                    type="danger"
-                    size="small"
-                    @click="deleteParameter(form.parameters, scope.$index)"
-                  >
-                    <el-icon><Delete /></el-icon>
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+                <el-option key="query" value="query" label="query" />
+                <el-option key="params" value="params" label="params" />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="key"
+            :label="t('view.superAdmin.menu.paremeterKey')"
+            width="180"
+          >
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.key" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="value"
+            :label="t('view.superAdmin.menu.parameterValue')"
+          >
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.value" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="left">
+            <template #default="scope">
+              <div>
+                <el-button
+                  type="danger"
+                  icon="delete"
+                  @click="deleteParameter(form.parameters, scope.$index)"
+                >
+                  {{ t('general.delete') }}
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div class="flex items-center gap-2 mt-3">
+          <el-button type="primary" icon="edit" @click="addBtn(form)">
+            {{ t('view.superAdmin.menu.addButton') }}
+          </el-button>
+          <el-icon
+            class="cursor-pointer"
+            @click="
+              toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')
+            "
+          >
+            <QuestionFilled />
+          </el-icon>
+        </div>
+
+        <el-table :data="form.menuBtn" style="width: 100%; margin-top: 12px">
+          <el-table-column
+            align="left"
+            prop="name"
+            :label="t('view.superAdmin.menu.buttonName')"
+            width="180"
+          >
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.name" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="name"
+            :label="t('view.superAdmin.menu.comments')"
+            width="180"
+          >
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.desc" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="left">
+            <template #default="scope">
+              <div>
+                <el-button
+                  type="danger"
+                  icon="delete"
+                  @click="deleteBtn(form.menuBtn, scope.$index)"
+                >
+                  {{ t('general.delete') }}
+                </el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+
       </div>
            
       <!-- 可控按钮配置区域 -->
@@ -531,6 +564,9 @@
 
   import pathInfo from '@/pathInfo.json'
   import { useAppStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'Menus'
@@ -539,10 +575,26 @@
   const appStore = useAppStore()
 
   const rules = reactive({
-    path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
-    component: [{ required: true, message: '请输入文件路径', trigger: 'blur' }],
+    path: [
+      {
+        required: true,
+        message: t('view.superAdmin.menu.enterMenuNameNote'),
+        trigger: 'blur'
+      }
+    ],
+    component: [
+      {
+        required: true,
+        message: t('view.superAdmin.menu.enterFilePathNote'),
+        trigger: 'blur'
+      }
+    ],
     'meta.title': [
-      { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
+      {
+        required: true,
+        message: t('view.superAdmin.menu.enterMenuDisplayNameNote'),
+        trigger: 'blur'
+      }
     ]
   })
 
@@ -632,11 +684,11 @@
   // 删除菜单
   const deleteMenu = (ID) => {
     ElMessageBox.confirm(
-      '此操作将永久删除所有角色下该菜单, 是否继续?',
-      '提示',
+      t('view.superAdmin.menu.deleteAllRolesConfirm'),
+      t('general.hint'),
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
       }
     )
@@ -645,7 +697,7 @@
         if (res.code === 0) {
           ElMessage({
             type: 'success',
-            message: '删除成功!'
+            message: t('general.deleteSuccess')
           })
 
           getTableData()
@@ -654,7 +706,7 @@
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: '已取消删除'
+          message: t('general.undeleted')
         })
       })
   }
@@ -700,7 +752,11 @@
         if (res.code === 0) {
           ElMessage({
             type: 'success',
-            message: isEdit.value ? '编辑成功' : '添加成功，请到角色管理页面分配权限'
+
+            message: isEdit.value
+              ? t('general.editSuccess')
+              : t('general.addSuccess')
+
           })
           getTableData()
         }
@@ -713,14 +769,14 @@
   const menuOption = ref([
     {
       ID: '0',
-      title: '根菜单'
+      title: t('view.superAdmin.menu.rootMenu')
     }
   ])
   const setOptions = () => {
     menuOption.value = [
       {
-        ID: 0,
-        title: '根目录'
+        ID: '0',
+        title: t('view.superAdmin.menu.rootDirctory')
       }
     ]
     setMenuOptions(tableData.value, menuOption.value, false)
@@ -754,9 +810,9 @@
 
   // 添加菜单方法，id为 0则为添加根菜单
   const isEdit = ref(false)
-  const dialogTitle = ref('新增菜单')
+  const dialogTitle = ref(t('view.superAdmin.menu.addMenu'))
   const addMenu = (id) => {
-    dialogTitle.value = '新增菜单'
+    dialogTitle.value = t('view.superAdmin.menu.addMenu')
     form.value.parentId = id
     isEdit.value = false
     setOptions()
@@ -764,7 +820,7 @@
   }
   // 修改菜单方法
   const editMenu = async (id) => {
-    dialogTitle.value = '编辑菜单'
+    dialogTitle.value = t('view.superAdmin.menu.editMenu')
     const res = await getBaseMenuById({ id })
     form.value = res.data.menu
     isEdit.value = true

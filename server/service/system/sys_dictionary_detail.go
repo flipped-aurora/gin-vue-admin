@@ -84,6 +84,9 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Order("sort").Find(&sysDictionaryDetails).Error
+	for i := range sysDictionaryDetails {
+		sysDictionaryDetails[i].Label = global.Translate(sysDictionaryDetails[i].Label)
+	}
 	return sysDictionaryDetails, total, err
 }
 
@@ -91,6 +94,9 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryList(dictionaryID uint) (list []system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetails []system.SysDictionaryDetail
 	err = global.GVA_DB.Find(&sysDictionaryDetails, "sys_dictionary_id = ?", dictionaryID).Error
+	for i := range sysDictionaryDetails {
+		sysDictionaryDetails[i].Label = global.Translate(sysDictionaryDetails[i].Label)
+	}
 	return sysDictionaryDetails, err
 }
 
@@ -99,6 +105,9 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryListByType(
 	var sysDictionaryDetails []system.SysDictionaryDetail
 	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
 	err = db.Debug().Find(&sysDictionaryDetails, "type = ?", t).Error
+	for i := range sysDictionaryDetails {
+		sysDictionaryDetails[i].Label = global.Translate(sysDictionaryDetails[i].Label)
+	}
 	return sysDictionaryDetails, err
 }
 
@@ -106,13 +115,15 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryListByType(
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByValue(dictionaryID uint, value string) (detail system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetail system.SysDictionaryDetail
 	err = global.GVA_DB.First(&sysDictionaryDetail, "sys_dictionary_id = ? and value = ?", dictionaryID, value).Error
+	sysDictionaryDetail.Label = global.Translate(sysDictionaryDetail.Label)
 	return sysDictionaryDetail, err
 }
 
 // 按照字典type+字典内容value获取单条字典内容
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByTypeValue(t string, value string) (detail system.SysDictionaryDetail, err error) {
-	var sysDictionaryDetails system.SysDictionaryDetail
+	var sysDictionaryDetail system.SysDictionaryDetail
 	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
-	err = db.First(&sysDictionaryDetails, "sys_dictionaries.type = ? and sys_dictionary_details.value = ?", t, value).Error
-	return sysDictionaryDetails, err
+	err = db.First(&sysDictionaryDetail, "sys_dictionaries.type = ? and sys_dictionary_details.value = ?", t, value).Error
+	sysDictionaryDetail.Label = global.Translate(sysDictionaryDetail.Label)
+	return sysDictionaryDetail, err
 }

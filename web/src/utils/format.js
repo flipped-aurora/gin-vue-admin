@@ -1,10 +1,12 @@
 import { formatTimeToStr } from '@/utils/date'
 import { getDict } from '@/utils/dictionary'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 export const formatBoolean = (bool) => {
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
   if (bool !== null) {
-    return bool ? '是' : '否'
+    return bool ? t('general.yes') : t('general.no')
   } else {
     return ''
   }

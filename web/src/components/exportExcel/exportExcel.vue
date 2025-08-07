@@ -1,7 +1,7 @@
 <template>
-  <el-button type="primary" icon="download" @click="exportExcelFunc"
-    >导出</el-button
-  >
+  <el-button type="primary" icon="download" @click="exportExcelFunc">{{
+    t('components.exportExcel.exportExcel.export')
+  }}</el-button>
 </template>
 
 <script setup>
@@ -36,10 +36,13 @@ import { exportExcel } from '@/api/exportTemplate'
   })
 
   import { ElMessage } from 'element-plus'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
   const exportExcelFunc = async () => {
     if (props.templateId === '') {
-      ElMessage.error('组件未设置模板ID')
+      ElMessage.error(t('components.exportExcel.exportExcel.templateIdErr'))
       return
     }
     let baseUrl = import.meta.env.VITE_BASE_API

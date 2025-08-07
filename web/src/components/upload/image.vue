@@ -9,7 +9,7 @@
       :data="{'classId': props.classId}"
       :headers="{'x-token': token}"
     >
-      <el-button type="primary" :icon="Upload">压缩上传</el-button>
+      <el-button type="primary" :icon="Upload">{{ t('components.upload.image.compressedUpload') }}</el-button>
     </el-upload>
   </div>
 </template>
@@ -20,6 +20,9 @@
   import { getBaseUrl } from '@/utils/format'
   import { Upload } from "@element-plus/icons-vue";
   import { useUserStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   defineOptions({
     name: 'UploadImage'
@@ -53,7 +56,7 @@
     const isJPG = file.type?.toLowerCase() === 'image/jpeg'
     const isPng = file.type?.toLowerCase() === 'image/png'
     if (!isJPG && !isPng) {
-      ElMessage.error('上传头像图片只能是 jpg或png 格式!')
+      ElMessage.error(t('components.upload.image.avatarImageFormatError'))
       return false
     }
 

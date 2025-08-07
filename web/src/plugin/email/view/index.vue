@@ -1,27 +1,29 @@
 <template>
   <div>
-    <warning-bar
-      title="需要提前配置email配置文件，为防止不必要的垃圾邮件，在线体验功能不开放此功能体验。"
-    />
+    <warning-bar :title="t('plugins.email.emailConfigNote')" />
     <div class="gva-form-box">
       <el-form
         ref="emailForm"
         label-position="right"
-        label-width="80px"
+        label-width="140px"
         :model="form"
       >
-        <el-form-item label="目标邮箱">
+        <el-form-item :label="t('plugins.email.targetEmail')">
           <el-input v-model="form.to" />
         </el-form-item>
-        <el-form-item label="邮件">
+        <el-form-item :label="t('plugins.email.email')">
           <el-input v-model="form.subject" />
         </el-form-item>
-        <el-form-item label="邮件内容">
+        <el-form-item :label="t('plugins.email.emailContent')">
           <el-input v-model="form.body" type="textarea" />
         </el-form-item>
         <el-form-item>
-          <el-button @click="sendTestEmail">发送测试邮件</el-button>
-          <el-button @click="sendEmail">发送邮件</el-button>
+          <el-button @click="sendTestEmail">{{
+            t('plugins.email.sendTestEmail')
+          }}</el-button>
+          <el-button @click="sendEmail">{{
+            t('plugins.email.sendEmail')
+          }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -33,7 +35,9 @@
   import { emailTest } from '@/plugin/email/api/email.js'
   import { ElMessage } from 'element-plus'
   import { reactive, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   defineOptions({
     name: 'Email'
   })
@@ -47,14 +51,14 @@
   const sendTestEmail = async () => {
     const res = await emailTest()
     if (res.code === 0) {
-      ElMessage.success('发送成功')
+      ElMessage.success(t('plugins.email.sendSuccess'))
     }
   }
 
   const sendEmail = async () => {
     const res = await emailTest()
     if (res.code === 0) {
-      ElMessage.success('发送成功,请查收')
+      ElMessage.success(t('plugins.email.sentSuccessPleaseCheck'))
     }
   }
 </script>

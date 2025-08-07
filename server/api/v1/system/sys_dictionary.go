@@ -28,11 +28,11 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 	}
 	err = dictionaryService.CreateSysDictionary(dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithMessage(global.Translate("general.createSuccess"), c)
 }
 
 // DeleteSysDictionary
@@ -53,11 +53,11 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 	}
 	err = dictionaryService.DeleteSysDictionary(dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // UpdateSysDictionary
@@ -78,11 +78,11 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 	}
 	err = dictionaryService.UpdateSysDictionary(&dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
 		return
 	}
-	response.OkWithMessage("更新成功", c)
+	response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 }
 
 // FindSysDictionary
@@ -103,11 +103,16 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	}
 	sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID, dictionary.Status)
 	if err != nil {
-		global.GVA_LOG.Error("字典未创建或未开启!", zap.Error(err))
-		response.FailWithMessage("字典未创建或未开启", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, "查询成功", c)
+	sysDictionary.Desc = global.Translate(sysDictionary.Desc)
+	sysDictionary.Name = global.Translate(sysDictionary.Name)
+	for i := range sysDictionary.SysDictionaryDetails {
+		sysDictionary.SysDictionaryDetails[i].Label = global.Translate(sysDictionary.SysDictionaryDetails[i].Label)
+	}
+	response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, global.Translate("general.querySuccess"), c)
 }
 
 // GetSysDictionaryList
@@ -121,9 +126,9 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 	list, err := dictionaryService.GetSysDictionaryInfoList()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(list, "获取成功", c)
+	response.OkWithDetailed(list, global.Translate("general.getDataSuccess"), c)
 }

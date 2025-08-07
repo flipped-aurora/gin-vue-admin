@@ -20,22 +20,33 @@ type DBApi struct{}
 // @Router   /init/initdb [post]
 func (i *DBApi) InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
-		global.GVA_LOG.Error("已存在数据库配置!")
-		response.FailWithMessage("已存在数据库配置", c)
+		global.GVA_LOG.Error(global.Translate("init.dbAlreadyExist"))
+		response.FailWithMessage(global.Translate("init.dbAlreadyExist"), c)
 		return
 	}
 	var dbInfo request.InitDB
 	if err := c.ShouldBindJSON(&dbInfo); err != nil {
-		global.GVA_LOG.Error("参数校验不通过!", zap.Error(err))
-		response.FailWithMessage("参数校验不通过", c)
+		global.GVA_LOG.Error(global.Translate("sys_initdb.paramVerifyFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_initdb.paramVerifyFailErr"), c)
 		return
 	}
+
+	// added by mohamed hassan to allow multilanguage support
+	if dbInfo.Language != "" {
+		if dbInfo.Language == "en" || dbInfo.Language == "zh" || dbInfo.Language == "ar" {
+			global.GVA_CONFIG.Language.Language = dbInfo.Language // set intial database and system langauge here
+		} else {
+			global.GVA_CONFIG.Language.Language = "en" // set defualt language to initialize database and system to english
+		}
+	}
+	// end of adding
+
 	if err := initDBService.InitDB(dbInfo); err != nil {
-		global.GVA_LOG.Error("自动创建数据库失败!", zap.Error(err))
-		response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)
+		global.GVA_LOG.Error(global.Translate("sys_initdb.autoCreateDBFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_initdb.autoCreateDBFailErr"), c)
 		return
 	}
-	response.OkWithMessage("自动创建数据库成功", c)
+	response.OkWithData(global.Translate("sys_initdb.autoCreateDBSuccess"), c)
 }
 
 // CheckDB
@@ -46,14 +57,14 @@ func (i *DBApi) InitDB(c *gin.Context) {
 // @Router   /init/checkdb [post]
 func (i *DBApi) CheckDB(c *gin.Context) {
 	var (
-		message  = "前往初始化数据库"
+		message  = "init.initDB"
 		needInit = true
 	)
 
 	if global.GVA_DB != nil {
-		message = "数据库无需初始化"
+		message = "init.dbAlreadyInit"
 		needInit = false
 	}
 	global.GVA_LOG.Info(message)
-	response.OkWithDetailed(gin.H{"needInit": needInit}, message, c)
+	response.OkWithDetailed(gin.H{"needInit": needInit}, global.Translate(message), c)
 }

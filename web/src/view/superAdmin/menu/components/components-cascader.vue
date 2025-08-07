@@ -2,7 +2,11 @@
   <div class="flex justify-between items-center gap-2 w-full">
     <el-cascader
       v-if="pathIsSelect"
-      placeholder="请选择文件路径"
+      :placeholder="
+        t(
+          'view.superAdmin.menu.components.componentsCascader.selectFilePathNote'
+        )
+      "
       :options="pathOptions"
       v-model="activeComponent"
       filterable
@@ -13,11 +17,19 @@
     <el-input
       v-else
       v-model="tempPath"
-      placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
+      :placeholder="
+        t('view.superAdmin.menu.components.componentsCascader.filePathNote')
+      "
       @change="emitChange"
     />
     <el-button @click="togglePathIsSelect"
-      >{{ pathIsSelect ? '手动输入' : '快捷选择' }}
+      >{{
+        pathIsSelect
+          ? t('view.superAdmin.menu.components.componentsCascader.manualInput')
+          : t(
+              'view.superAdmin.menu.components.componentsCascader.quickSelection'
+            )
+      }}
     </el-button>
   </div>
 </template>
@@ -25,6 +37,9 @@
 <script setup>
   import { onMounted, ref, watch } from 'vue'
   import pathInfo from '@/pathInfo.json'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   const props = defineProps({
     component: {

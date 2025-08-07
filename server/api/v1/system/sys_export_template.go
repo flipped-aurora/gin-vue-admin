@@ -74,10 +74,10 @@ func (sysExportTemplateApi *SysExportTemplateApi) CreateSysExportTemplate(c *gin
 		return
 	}
 	if err := sysExportTemplateService.CreateSysExportTemplate(&sysExportTemplate); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFail"), c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage(global.Translate("general.createSuccess"), c)
 	}
 }
 
@@ -98,10 +98,10 @@ func (sysExportTemplateApi *SysExportTemplateApi) DeleteSysExportTemplate(c *gin
 		return
 	}
 	if err := sysExportTemplateService.DeleteSysExportTemplate(sysExportTemplate); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deleteFailErr"), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}
 }
 
@@ -122,10 +122,10 @@ func (sysExportTemplateApi *SysExportTemplateApi) DeleteSysExportTemplateByIds(c
 		return
 	}
 	if err := sysExportTemplateService.DeleteSysExportTemplateByIds(IDS); err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFail"), c)
 	} else {
-		response.OkWithMessage("批量删除成功", c)
+		response.OkWithMessage(global.Translate("sys_operation_record.batchDeleteSuccess"), c)
 	}
 }
 
@@ -153,10 +153,10 @@ func (sysExportTemplateApi *SysExportTemplateApi) UpdateSysExportTemplate(c *gin
 		return
 	}
 	if err := sysExportTemplateService.UpdateSysExportTemplate(sysExportTemplate); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.updateFail"), c)
 	} else {
-		response.OkWithMessage("更新成功", c)
+		response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 	}
 }
 
@@ -177,8 +177,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) FindSysExportTemplate(c *gin.C
 		return
 	}
 	if resysExportTemplate, err := sysExportTemplateService.GetSysExportTemplate(sysExportTemplate.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFail"), c)
 	} else {
 		response.OkWithData(gin.H{"resysExportTemplate": resysExportTemplate}, c)
 	}
@@ -201,8 +201,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) GetSysExportTemplateList(c *gi
 		return
 	}
 	if list, total, err := sysExportTemplateService.GetSysExportTemplateInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFail"), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -223,7 +223,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) GetSysExportTemplateList(c *gi
 func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")
 	if templateID == "" {
-		response.FailWithMessage("模板ID不能为空", c)
+		response.FailWithMessage(global.Translate("sys_export.templateIDEmpty"), c)
 		return
 	}
 
@@ -295,8 +295,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 
 	// 导出
 	if file, name, err := sysExportTemplateService.ExportExcel(templateID, queryParams); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFail"), c)
 	} else {
 		c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", name+utils.RandomString(6)+".xlsx"))
 		c.Header("success", "true")
@@ -314,7 +314,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context) {
 	templateID := c.Query("templateID")
 	if templateID == "" {
-		response.FailWithMessage("模板ID不能为空", c)
+		response.FailWithMessage(global.Translate("sys_export.templateIDEmpty"), c)
 		return
 	}
 
@@ -391,8 +391,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 
 	// 导出模板
 	if file, name, err := sysExportTemplateService.ExportTemplate(templateID); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFail"), c)
 	} else {
 		c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", name+"模板.xlsx"))
 		c.Header("success", "true")
@@ -410,19 +410,19 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 func (sysExportTemplateApi *SysExportTemplateApi) ImportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")
 	if templateID == "" {
-		response.FailWithMessage("模板ID不能为空", c)
+		response.FailWithMessage(global.Translate("sys_export.templateIDEmpty"), c)
 		return
 	}
 	file, err := c.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("文件获取失败!", zap.Error(err))
-		response.FailWithMessage("文件获取失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_export.fileFetchFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_export.fileFetchFail"), c)
 		return
 	}
 	if err := sysExportTemplateService.ImportExcel(templateID, file); err != nil {
 		global.GVA_LOG.Error(err.Error(), zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithMessage("导入成功", c)
+		response.OkWithMessage(global.Translate("sys_export.importSuccess"), c)
 	}
 }

@@ -21,16 +21,16 @@ var BaseMenuServiceApp = new(BaseMenuService)
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
 	err = global.GVA_DB.First(&system.SysBaseMenu{}, "parent_id = ?", id).Error
 	if err == nil {
-		return errors.New("此菜单存在子菜单不可删除")
+		return errors.New(global.Translate("sys_auto_code.menuHasSubMenu"))
 	}
 	var menu system.SysBaseMenu
 	err = global.GVA_DB.First(&menu, id).Error
 	if err != nil {
-		return errors.New("记录不存在")
+		return errors.New(global.Translate("sys_auto_code.recordNotFound"))
 	}
 	err = global.GVA_DB.First(&system.SysAuthority{}, "default_router = ?", menu.Name).Error
 	if err == nil {
-		return errors.New("此菜单有角色正在作为首页，不可删除")
+		return errors.New(global.Translate("sys_auto_code.menuUsedAsHome"))
 	}
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 
@@ -89,8 +89,8 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 		tx.Where("id = ?", menu.ID).Find(&oldMenu)
 		if oldMenu.Name != menu.Name {
 			if !errors.Is(tx.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
-				global.GVA_LOG.Debug("存在相同name修改失败")
-				return errors.New("存在相同name修改失败")
+				global.GVA_LOG.Debug(global.Translate("sys_auto_code.duplicateNameUpdateFailed"))
+				return errors.New(global.Translate("sys_auto_code.duplicateNameUpdateFailed"))
 			}
 		}
 		txErr := tx.Unscoped().Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error

@@ -10,6 +10,7 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -19,6 +20,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	utilsAst "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"github.com/tidwall/sjson"
 	"gorm.io/gorm"
 )
 
@@ -106,6 +108,12 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			}
 			return nil
 		})
+
+		if err != nil {
+			return err
+		}
+
+		err = s.WriteApiJson(info)
 		if err != nil {
 			return err
 		}
@@ -144,6 +152,10 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			}
 		}
 		history.MenuID = id
+		err = s.WriteMenuJson(info)
+		if err != nil {
+			return err
+		}
 	}
 
 	if info.HasExcel {
@@ -182,6 +194,12 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return err
 	}
+
+	err = s.WriteWebJson(info)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -450,4 +468,110 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 	}
 
 	return nil
+}
+
+func (s *autoCodeTemplate) WriteMenuJson(info request.AutoCode) error {
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
+	jsonFiles, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	for _, file := range jsonFiles {
+		data, e := os.ReadFile(file)
+		if e != nil {
+			return e
+		}
+		modifiedData, je := sjson.SetBytes(data, fmt.Sprintf("system.menu.%s%s", info.Package, info.StructName), info.Description)
+		if je != nil {
+			return je
+		}
+		err = os.WriteFile(file, modifiedData, 0666)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *autoCodeTemplate) WriteApiJson(info request.AutoCode) error {
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
+	jsonFiles, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	for _, file := range jsonFiles {
+		data, e := os.ReadFile(file)
+		if e != nil {
+			return e
+		}
+
+		JsonMap := make(map[string]string)
+
+		JsonMap[fmt.Sprintf("system.api.desc.add%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "add", info.Description)
+		JsonMap[fmt.Sprintf("system.api.desc.delete%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "delete", info.Description)
+		JsonMap[fmt.Sprintf("system.api.desc.batch%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "batch", info.Description)
+		JsonMap[fmt.Sprintf("system.api.desc.update%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "update", info.Description)
+		JsonMap[fmt.Sprintf("system.api.desc.find%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "find", info.Description)
+		JsonMap[fmt.Sprintf("system.api.desc.list%s%s", info.Package, info.StructName)] = fmt.Sprintf("%s%s", "list", info.Description)
+		JsonMap[fmt.Sprintf("system.api.group.%s%s", info.Package, info.StructName)] = info.Description
+
+		var je error
+		for key, value := range JsonMap {
+			data, je = sjson.SetBytes(data, key, value)
+			if je != nil {
+				return je
+			}
+		}
+
+		err = os.WriteFile(file, data, 0666)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *autoCodeTemplate) WriteWebJson(info request.AutoCode) error {
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+	jsonFiles, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	for _, file := range jsonFiles {
+		data, e := os.ReadFile(file)
+		if e != nil {
+			return e
+		}
+
+		var je error
+		for _, field := range info.Fields {
+			data, je = sjson.SetBytes(data, fmt.Sprintf("%s.%s.%s", info.Package, info.StructName, field.FieldName), field.FieldDesc)
+			if je != nil {
+				return je
+			}
+		}
+
+		err = os.WriteFile(file, data, 0666)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *autoCodeTemplate) readJSONFiles(dir string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
 }

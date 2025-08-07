@@ -290,6 +290,8 @@ import RichEdit from '@/components/richtext/rich-edit.vue'
 import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 {{- end }}
 
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()

@@ -46,8 +46,8 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 	cp := base64Captcha.NewCaptcha(driver, store)
 	id, b64s, _, err := cp.Generate()
 	if err != nil {
-		global.GVA_LOG.Error("验证码获取失败!", zap.Error(err))
-		response.FailWithMessage("验证码获取失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_captcha.vCodeFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_captcha.vCodeFailErr"), c)
 		return
 	}
 	response.OkWithDetailed(systemRes.SysCaptchaResponse{
@@ -55,7 +55,7 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 		PicPath:       b64s,
 		CaptchaLength: global.GVA_CONFIG.Captcha.KeyLong,
 		OpenCaptcha:   oc,
-	}, "验证码获取成功", c)
+	}, global.Translate("sys_captcha.vCodeSuccess"), c)
 }
 
 // 类型转换

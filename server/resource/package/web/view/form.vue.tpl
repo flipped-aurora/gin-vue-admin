@@ -1,3 +1,4 @@
+{{- $top := . -}}
 {{- if .IsAdd }}
 // 新增表单中增加如下代码
 {{- range .Fields}}
@@ -25,22 +26,22 @@ const {{ $element }}Options = ref([])
         {{- end }}
 // 验证规则中增加如下字段
 
-{{- range .Fields }}
+   {{- range .Fields }}
         {{- if .Form }}
             {{- if eq .Require true }}
-{{.FieldJson }} : [{
-    required: true,
-    message: '{{ .ErrorText }}',
-    trigger: ['input','blur'],
-},
+               {{.FieldJson }} : [{
+                   required: true,
+                   message: '{{ .ErrorText }}',
+                   trigger: ['input','blur'],
+               },
                {{- if eq .FieldType "string" }}
-{
-    whitespace: true,
-    message: '不能只输入空格',
-    trigger: ['input', 'blur'],
-}
+               {
+                   whitespace: true,
+                   message: t('general.noOnlySpace'),
+                   trigger: ['input', 'blur'],
+              }
               {{- end }}
-],
+              ],
             {{- end }}
         {{- end }}
     {{- end }}
@@ -85,8 +86,8 @@ getDataSourceFunc()
       {{- end }}
       {{- end }}
         <el-form-item>
-          <el-button :loading="btnLoading" type="primary" @click="save">保存</el-button>
-          <el-button type="primary" @click="back">返回</el-button>
+          <el-button type="primary" @click="save">{{ "{{ t('general.save') }}" }}</el-button>
+          <el-button type="primary" @click="back">{{ "{{ t('general.back') }}" }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -115,6 +116,8 @@ import { getDictFunc } from '@/utils/format'
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 {{- if .HasPic }}
 // 图片选择组件
 import SelectImage from '@/components/selectImage/selectImage.vue'
@@ -182,16 +185,27 @@ const formData = ref({
           {{- end }}
         {{- end }}
         })
+
 // 验证规则
 const rule = reactive({
     {{- range .Fields }}
+        {{- if .Form }}
             {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,
                    message: '{{ .ErrorText }}',
                    trigger: ['input','blur'],
-               }],
+               },
+               {{- if eq .FieldType "string" }}
+               {
+                   whitespace: true,
+                   message: t('general.noOnlySpace'),
+                   trigger: ['input', 'blur'],
+              }
+              {{- end }}
+              ],
             {{- end }}
+        {{- end }}
     {{- end }}
 })
 
@@ -228,9 +242,8 @@ const init = async () => {
 init()
 // 保存按钮
 const save = async() => {
-      btnLoading.value = true
       elFormRef.value?.validate( async (valid) => {
-         if (!valid) return btnLoading.value = false
+         if (!valid) return
             let res
            switch (type.value) {
              case 'create':
@@ -243,11 +256,10 @@ const save = async() => {
                res = await create{{.StructName}}(formData.value)
                break
            }
-           btnLoading.value = false
            if (res.code === 0) {
              ElMessage({
                type: 'success',
-               message: '创建/更改成功'
+               message: t('general.createUpdateSuccess')
              })
            }
        })

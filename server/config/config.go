@@ -37,4 +37,6 @@ type Server struct {
 
 	// MCP配置
 	MCP MCP `mapstructure:"mcp" json:"mcp" yaml:"mcp"`
+	// added by mohamed hassan to support multi-language
+	Language Language `mapstructure:"language" json:"language" yaml:"language"`
 }

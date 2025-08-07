@@ -1,16 +1,17 @@
 <template>
   <div>
     <warning-bar
+      :title="t('view.systemTools.autoCode.autoCodeNote')"
       href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
-      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。"
     />
     <div class="gva-search-box" v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">
-        使用AI创建<a
+        {{ t('view.systemTools.autoCode.createdByAI')
+        }}<a
           class="text-blue-600 text-sm ml-4"
           href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
           target="_blank"
-          >获取AiPath</a
+          >{{ t('view.systemTools.autoCode.getAiPath') }}</a
         >
       </div>
       <div class="relative">
@@ -19,22 +20,22 @@
           type="textarea"
           :rows="5"
           :maxlength="2000"
-          :placeholder="`现已完全免费\n试试复制一张图片然后按下ctrl+v或者commend+v\n试试描述你的表，让AI帮你完成。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。\n按下 Ctrl+Enter 或 Cmd+Enter 直接生成`"
+          :placeholder="t('view.systemTools.autoCode.aiCodeNote')"
           resize="none"
           @focus="handleFocus"
           @blur="handleBlur"
         />
 
-        <div class="flex absolute right-28 bottom-2">
+        <div class="flex absolute bottom-2" style="right:9rem !important;">
           <el-tooltip effect="light">
             <template #content>
               <div>
-                【完全免费】前往<a
+                {{ t('view.systemTools.autoCode.aiNote1') }}<a
                   class="text-blue-600"
                   href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
                   target="_blank"
-              >插件市场个人中心</a
-              >申请AIPath，填入config.yaml的ai-path属性即可使用。
+              >{{ t('view.systemTools.autoCode.aiNote2') }}</a
+              >{{ t('view.systemTools.autoCode.aiNote3') }}
               </div>
             </template>
             <el-button
@@ -45,7 +46,7 @@
               <el-icon size="18">
                 <ai-gva />
               </el-icon>
-              识图
+              {{ t('view.systemTools.autoCode.imageRecognition') }}
             </el-button>
           </el-tooltip>
         </div>
@@ -54,12 +55,13 @@
           <el-tooltip effect="light">
             <template #content>
               <div>
-                【完全免费】前往<a
+                {{ t('view.systemTools.autoCode.aiNote1')
+                }}<a
                   class="text-blue-600"
                   href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
                   target="_blank"
-                  >插件市场个人中心</a
-                >申请AIPath，填入config.yaml的ai-path属性即可使用。
+                  >{{ t('view.systemTools.autoCode.aiNote2') }}</a
+                >{{ t('view.systemTools.autoCode.aiNote3') }}
               </div>
             </template>
             <el-button
@@ -70,48 +72,61 @@
               <el-icon size="18">
                 <ai-gva />
               </el-icon>
-              生成
+              {{ t('view.systemTools.autoCode.generate') }}
             </el-button>
           </el-tooltip>
         </div>
       </div>
-    </div>
+    </div>   
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box" v-if="!isAdd">
-      <div class="text-lg mb-2 text-gray-600">从数据库创建</div>
+      <div class="text-lg mb-2 text-gray-600">
+        {{ t('view.systemTools.autoCode.createdFromDB') }}
+      </div>
       <el-form
         ref="getTableForm"
         :inline="true"
         :model="dbform"
-        label-width="120px"
+        label-width="140px"
       >
         <el-row class="w-full">
           <el-col :span="6">
-            <el-form-item label="业务库" prop="selectDBtype" class="w-full">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.businessLibrary')"
+              class="w-full"
+              prop="selectDBtype"
+            >
               <template #label>
                 <el-tooltip
-                  content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）"
-                  placement="bottom"
+                  :content="
+                    t('view.systemTools.autoCode.businessLibraryNotice')
+                  "
                   effect="light"
+                  placement="bottom"
                 >
                   <div>
-                    业务库 <el-icon><QuestionFilled /></el-icon>
+                    {{ t('view.systemTools.autoCode.businessLibrary') }}
+                    <el-icon>
+                      <QuestionFilled />
+                    </el-icon>
                   </div>
                 </el-tooltip>
               </template>
               <el-select
                 v-model="dbform.businessDB"
-                clearable
-                placeholder="选择业务库"
-                @change="getDbFunc"
+                :placeholder="
+                  t('view.systemTools.autoCode.selectBusinessLibrary')
+                "
                 class="w-full"
+                clearable
+                @change="getDbFunc"
               >
                 <el-option
                   v-for="item in dbList"
                   :key="item.aliasName"
-                  :value="item.aliasName"
-                  :label="item.aliasName"
                   :disabled="item.disable"
+                  :label="item.aliasName"
+                  :value="item.aliasName"
                 >
                   <div>
                     <span>{{ item.aliasName }}</span>
@@ -125,13 +140,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="数据库名" prop="structName" class="w-full">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.dbName')"
+              class="w-full"
+              prop="structName"
+            >
               <el-select
                 v-model="dbform.dbName"
+                :placeholder="t('view.systemTools.autoCode.selectDB')"
+                class="w-full"
                 clearable
                 filterable
-                placeholder="请选择数据库"
-                class="w-full"
                 @change="getTableFunc"
               >
                 <el-option
@@ -144,13 +163,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="表名" prop="structName" class="w-full">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.tableName')"
+              class="w-full"
+              prop="structName"
+            >
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
+                :placeholder="t('view.systemTools.autoCode.selectTable')"
                 class="w-full"
                 filterable
-                placeholder="请选择表"
               >
                 <el-option
                   v-for="item in tableOptions"
@@ -165,7 +188,7 @@
             <el-form-item class="w-full">
               <div class="flex justify-end w-full">
                 <el-button type="primary" @click="getColumnFunc">
-                  使用此表
+                  {{ t('view.systemTools.autoCode.selectTableBtn') }}
                 </el-button>
               </div>
             </el-form-item>
@@ -175,22 +198,28 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <div class="text-lg mb-2 text-gray-600">自动化结构</div>
+      <div class="text-lg mb-2 text-gray-600">
+        {{ t('view.systemTools.autoCode.automationStructure') }}
+      </div>
       <el-form
-        :disabled="isAdd"
         ref="autoCodeForm"
-        :rules="rules"
-        :model="form"
-        label-width="120px"
+        :disabled="isAdd"
         :inline="true"
+        :model="form"
+        :rules="rules"
+        label-width="170px"
       >
         <el-row class="w-full">
-          <el-col :span="6">
-            <el-form-item label="结构名称" prop="structName" class="w-full">
+          <el-col :span="7">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.structureName')"
+              class="w-full"
+              prop="structName"
+            >
               <div class="flex gap-2 w-full">
                 <el-input
                   v-model="form.structName"
-                  placeholder="首字母自动转换大写"
+                  :placeholder="t('view.systemTools.autoCode.capitalizeFirstLetterAutomatically')"
                 />
                 <el-button
                   :disabled="form.onlyTemplate"
@@ -200,7 +229,7 @@
                   <el-icon size="18">
                     <ai-gva />
                   </el-icon>
-                  生成
+                  {{ t('view.systemTools.autoCode.generate') }}
                 </el-button>
               </div>
             </el-form-item>
@@ -209,71 +238,89 @@
             <el-form-item label="abbreviation" prop="abbreviation" class="w-full">
               <template #label>
                 <el-tooltip
-                  content="简称会作为入参对象名和路由group"
-                  placement="bottom"
+                  :content="
+                    t('view.systemTools.autoCode.objectNameAndRouteGroup')
+                  "
                   effect="light"
+                  placement="bottom"
                 >
                   <div>
-                    结构简称 <el-icon><QuestionFilled /></el-icon>
+                    {{ t('view.systemTools.autoCode.structureSimpleName') }}
+                    <el-icon>
+                      <QuestionFilled />
+                    </el-icon>
                   </div>
                 </el-tooltip>
               </template>
               <el-input
                 v-model="form.abbreviation"
-                placeholder="请输入Struct简称"
+                :placeholder="t('view.systemTools.autoCode.structNameInput')"
               />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="中文名称" prop="description" class="w-full">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.StructureOverview')"
+              class="w-full"
+              prop="description"
+            >
               <el-input
                 v-model="form.description"
-                placeholder="中文描述作为自动api描述"
+                :placeholder="
+                  t('view.systemTools.autoCode.structChineseNameNote')
+                "
               />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="表名" prop="tableName" class="w-full">
+          <el-col :span="5">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.tableName')"
+              class="w-full"
+              prop="tableName"
+            >
               <el-input
                 v-model="form.tableName"
-                placeholder="指定表名（非必填）"
+                :placeholder="t('view.systemTools.autoCode.tableNameNote')"
               />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row class="w-full">
-          <el-col :span="6">
-            <el-form-item prop="packageName" class="w-full">
+          <el-col :span="7">
+            <el-form-item class="w-full" prop="packageName">
               <template #label>
                 <el-tooltip
-                  content="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)"
-                  placement="bottom"
+                  :content="t('view.systemTools.autoCode.fileNameNote')"
                   effect="light"
+                  placement="bottom"
                 >
                   <div>
-                    文件名称 <el-icon><QuestionFilled /></el-icon>
+                    {{ t('view.systemTools.autoCode.fileName') }}
+                    <el-icon>
+                      <QuestionFilled />
+                    </el-icon>
                   </div>
                 </el-tooltip>
               </template>
               <el-input
                 v-model="form.packageName"
-                placeholder="请输入文件名称"
+                :placeholder="t('view.systemTools.autoCode.fineNameInput')"
                 @blur="toLowerCaseFunc(form, 'packageName')"
               />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item
-              label="选择模板"
-              prop="package"
+              :label="t('view.systemTools.autoCode.templateChoose')"
               class="w-full relative"
+              prop="package"
             >
               <el-select v-model="form.package" class="w-full pr-12" filterable>
                 <el-option
                   v-for="item in pkgs"
                   :key="item.ID"
-                  :value="item.packageName"
                   :label="item.packageName"
+                  :value="item.packageName"
                 />
               </el-select>
               <span class="absolute right-0">
@@ -293,30 +340,37 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="业务库" prop="businessDB" class="w-full">
+            <el-form-item
+              :label="t('view.systemTools.autoCode.businessLibrary')"
+              class="w-full"
+              prop="businessDB"
+            >
               <template #label>
                 <el-tooltip
-                  content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))"
-                  placement="bottom"
+                  :content="t('view.systemTools.autoCode.libraryNote')"
                   effect="light"
+                  placement="bottom"
                 >
                   <div>
-                    业务库 <el-icon><QuestionFilled /></el-icon>
+                    {{ t('view.systemTools.autoCode.businessLibrary') }}
+                    <el-icon>
+                      <QuestionFilled />
+                    </el-icon>
                   </div>
                 </el-tooltip>
               </template>
               <el-select
                 v-model="form.businessDB"
                 clearable
-                placeholder="选择业务库"
+                :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
                 class="w-full"
               >
                 <el-option
                   v-for="item in dbList"
                   :key="item.aliasName"
-                  :value="item.aliasName"
-                  :label="item.aliasName"
                   :disabled="item.disable"
+                  :label="item.aliasName"
+                  :value="item.aliasName"
                 >
                   <div>
                     <span>{{ item.aliasName }}</span>
@@ -337,48 +391,48 @@
         <el-collapse-item>
           <template #title>
             <div class="text-lg text-gray-600 font-normal">
-              专家模式
+              {{ t('view.systemTools.autoCode.expertMode') }}
             </div>
           </template>
           <template #icon="{ isActive }">
           <span class="text-lg ml-auto mr-4 font-normal">
-            {{ isActive ? '收起' : '展开' }}
+            {{ isActive ? t('general.collapse') : t('general.expand') }}
           </span>
           </template>
           <div class="p-4">
             <!-- 基础设置组 -->
             <div class="border-b border-gray-200 last:border-0">
-              <h3 class="text-lg font-medium mb-4 text-gray-700">基础设置</h3>
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.basicSettings') }}</h3>
               <el-row :gutter="20">
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：会自动在结构体global.Model其中包含主键和软删除相关操作配置"
+                      :content="t('view.systemTools.autoCode.useGvaNote')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="使用GVA结构">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.useGvaStructure')">
                       <el-checkbox v-model="form.gvaModel" @change="useGva" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
+                      :content="t('view.systemTools.autoCode.groupInfos.note4')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="创建按钮权限">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.createButtonPermissions')">
                       <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateBtnAuth" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="3">
-                  <el-form-item label="生成前端">
+                  <el-form-item :label="t('view.systemTools.autoCode.generateFrontend')">
                     <el-checkbox v-model="form.generateWeb" />
                   </el-form-item>
                 </el-col>
                 <el-col :span="3">
-                  <el-form-item label="生成后端">
+                  <el-form-item :label="t('view.systemTools.autoCode.generateBackend')">
                     <el-checkbox disabled v-model="form.generateServer" />
                   </el-form-item>
                 </el-col>
@@ -387,37 +441,37 @@
 
             <!-- 自动化设置组 -->
             <div class="border-b border-gray-200 last:border-0">
-              <h3 class="text-lg font-medium mb-4 text-gray-700">自动化设置</h3>
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.automationSettings') }}</h3>
               <el-row :gutter="20">
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：把自动生成的API注册进数据库"
+                      :content="t('view.systemTools.autoCode.groupInfos.note1')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="自动创建API">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.autoCreateApi')">
                       <el-checkbox  :disabled="!form.generateServer" v-model="form.autoCreateApiToSql" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：把自动生成的菜单注册进数据库"
+                      :content="t('view.systemTools.autoCode.groupInfos.note2')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="自动创建菜单">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.autoCreateMenu')">
                       <el-checkbox :disabled="!form.generateWeb" v-model="form.autoCreateMenuToSql" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：自动同步数据库表结构，如果不需要可以选择关闭"
+                      :content="t('view.systemTools.autoCode.groupInfos.note3')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="同步表结构">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.syncTableStructure')">
                       <el-checkbox  :disabled="!form.generateServer" v-model="form.autoMigrate" />
                     </el-form-item>
                   </el-tooltip>
@@ -427,26 +481,26 @@
 
             <!-- 高级设置组 -->
             <div class="border-b border-gray-200 last:border-0">
-              <h3 class="text-lg font-medium mb-4 text-gray-700">高级设置</h3>
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.advancedSettings') }}</h3>
               <el-row :gutter="20">
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
+                      :content="t('view.systemTools.autoCode.groupInfos.note5')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="创建资源标识">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.createResourceIdentifier')">
                       <el-checkbox v-model="form.autoCreateResource" />
                     </el-form-item>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="3">
                   <el-tooltip
-                      content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
+                      :content="t('view.systemTools.autoCode.groupInfos.note6')"
                       placement="top"
                       effect="light"
                   >
-                    <el-form-item label="基础模板">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.basicTemplate')">
                       <el-checkbox v-model="form.onlyTemplate" />
                     </el-form-item>
                   </el-tooltip>
@@ -456,13 +510,13 @@
 
             <!-- 树形结构设置 -->
             <div class="last:pb-0">
-              <h3 class="text-lg font-medium mb-4 text-gray-700">树形结构设置</h3>
+              <h3 class="text-lg font-medium mb-4 text-gray-700">{{ t('view.systemTools.autoCode.treeStructureSettings') }}</h3>
               <el-row :gutter="20" align="middle">
                 <el-col :span="24">
-                    <el-form-item label="树型结构">
+                    <el-form-item :label="t('view.systemTools.autoCode.groupInfos.treeStructure')">
                       <div class="flex items-center gap-4">
                         <el-tooltip
-                            content="注：会自动创建parentID来进行父子关系关联,仅支持主键为int类型"
+                            :content="t('view.systemTools.autoCode.groupInfos.parentIdNote')"
                             placement="top"
                             effect="light"
                         >
@@ -471,7 +525,7 @@
                         <el-input
                             v-model="form.treeJson"
                             :disabled="!form.isTree"
-                            placeholder="前端展示json属性"
+                            :placeholder="t('view.systemTools.autoCode.groupInfos.frontendJsonAttr')"
                             class="flex-1"
                         />
                       </div>
@@ -487,11 +541,11 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button
+          :disabled="form.onlyTemplate"
           type="primary"
           @click="editAndAddField()"
-          :disabled="form.onlyTemplate"
         >
-          新增字段
+          {{ t('view.systemTools.autoCode.addField') }}
         </el-button>
       </div>
       <div class="draggable">
@@ -513,25 +567,24 @@
             fixed="left"
             align="left"
             type="index"
-            label="序列"
-            width="60"
+            :label="t('view.systemTools.autoCode.fieldIndex')"
+            width="80"
           />
           <el-table-column
             fixed="left"
             align="left"
             type="index"
-            label="主键"
-            width="60"
+            :label="t('view.systemTools.autoCode.primaryKey')"
+            width="120"
           >
             <template #default="{ row }">
               <el-checkbox :disabled="row.disabled" v-model="row.primaryKey" />
             </template>
           </el-table-column>
           <el-table-column
-            fixed="left"
             align="left"
+            :label="t('view.systemTools.autoCode.fieldName')"
             prop="fieldName"
-            label="字段名称"
             width="160"
           >
             <template #default="{ row }">
@@ -540,8 +593,8 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.chineseName')"
             prop="fieldDesc"
-            label="中文名"
             width="160"
           >
             <template #default="{ row }">
@@ -550,50 +603,67 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.defaultValue')"
             prop="defaultValue"
-            label="默认值"
             width="160"
           >
             <template #default="{ row }">
               <el-input :disabled="row.disabled" v-model="row.defaultValue" />
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="require" label="必填">
+          <el-table-column
+            align="left"
+            :label="t('view.systemTools.autoCode.required')"
+            prop="require"
+            width="100"
+          >
             <template #default="{ row }">
               <el-checkbox :disabled="row.disabled" v-model="row.require" />
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="sort" label="排序">
+          <el-table-column
+            align="left"
+            :label="t('view.superAdmin.menu.sort')"
+            prop="sort"
+          >
             <template #default="{ row }">
               <el-checkbox :disabled="row.disabled" v-model="row.sort" />
             </template>
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.createEdit')"
             prop="form"
             width="100"
-            label="新建/编辑"
           >
             <template #default="{ row }">
               <el-checkbox :disabled="row.disabled" v-model="row.form" />
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="table" label="表格">
+          <el-table-column
+            align="left"
+            :label="t('view.systemTools.autoCode.table')"
+            prop="table"
+          >
             <template #default="{ row }">
               <el-checkbox :disabled="row.disabled" v-model="row.table" />
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="desc" label="详情">
+          <el-table-column
+            align="left"
+            :label="t('view.dictionary.sysDictionary.details')"
+            prop="desc"
+          >
             <template #default="{ row }">
               <el-checkbox :disabled="row.disabled" v-model="row.desc" />
             </template>
           </el-table-column>
           <el-table-column
+            v-if="!isAdd"
             align="left"
             prop="excel"
-            width="100"
-            label="导入/导出"
-            v-if="!isAdd"
+            width="120"
+            :label="t('view.systemTools.autoCode.importExport')"
           >
             <template #default="{ row }">
               <el-checkbox v-model="row.excel" />
@@ -601,9 +671,9 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.fieldJson')"
             prop="fieldJson"
             width="160px"
-            label="字段Json"
           >
             <template #default="{ row }">
               <el-input :disabled="row.disabled" v-model="row.fieldJson" />
@@ -611,17 +681,17 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.fieldType')"
             prop="fieldType"
-            label="字段类型"
             width="160"
           >
             <template #default="{ row }">
               <el-select
                 v-model="row.fieldType"
-                style="width: 100%"
-                placeholder="请选择字段类型"
-                :disabled="row.disabled"
                 clearable
+                :placeholder="t('view.systemTools.autoCode.selectFieldType')"
+                :disabled="row.disabled"
+                style="width: 100%"
               >
                 <el-option
                   v-for="item in typeOptions"
@@ -634,17 +704,17 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.indexType')"
             prop="fieldIndexType"
-            label="索引类型"
             width="160"
           >
             <template #default="{ row }">
               <el-select
                 v-model="row.fieldIndexType"
-                style="width: 100%"
-                placeholder="请选择字段索引类型"
-                :disabled="row.disabled"
                 clearable
+                :placeholder="t('view.systemTools.autoCode.selectIndexType')"
+                style="width: 100%"
+                :disabled="row.disabled"
               >
                 <el-option
                   v-for="item in typeIndexOptions"
@@ -667,8 +737,8 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.columnName')"
             prop="columnName"
-            label="数据库字段"
             width="160"
           >
             <template #default="{ row }">
@@ -677,8 +747,8 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('view.systemTools.autoCode.comment')"
             prop="comment"
-            label="数据库字段描述"
             width="160"
           >
             <template #default="{ row }">
@@ -687,15 +757,17 @@
           </el-table-column>
           <el-table-column
             align="left"
+            :label="t('general.searchCriteria')"
             prop="fieldSearchType"
-            label="搜索条件"
             width="130"
           >
             <template #default="{ row }">
               <el-select
                 v-model="row.fieldSearchType"
                 style="width: 100%"
-                placeholder="请选择字段查询条件"
+                :placeholder="
+                  t('view.systemTools.autoCode.selectSearchCondition')
+                "
                 clearable
                 :disabled="row.fieldType === 'json' || row.disabled"
               >
@@ -709,25 +781,30 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column align="left" label="操作" width="300" fixed="right">
+          <el-table-column
+            align="left"
+            fixed="right"
+            :label="t('components.commandMenu.operate')"
+            width="300"
+          >
             <template #default="scope">
               <el-button
                 v-if="!scope.row.disabled"
-                type="primary"
-                link
                 icon="edit"
+                link
+                type="primary"
                 @click="editAndAddField(scope.row)"
               >
-                高级编辑
+                {{ t('view.systemTools.autoCode.advancedEdit') }}
               </el-button>
               <el-button
                 v-if="!scope.row.disabled"
-                type="primary"
-                link
                 icon="delete"
+                link
+                type="primary"
                 @click="deleteField(scope.$index)"
               >
-                删除
+                {{ t('general.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -736,41 +813,47 @@
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-end mt-4">
         <el-button type="primary" :disabled="isAdd" @click="exportJson()">
-          导出json
+          {{ t('view.systemTools.autoCode.exportJson') }}
         </el-button>
         <el-upload
-          class="flex items-center"
           :before-upload="importJson"
           :show-file-list="false"
           :headers="{'x-token': token}"
           accept=".json"
+          class="flex items-center"
         >
-          <el-button type="primary" class="mx-2" :disabled="isAdd"
-            >导入json</el-button
-          >
+          <el-button class="mx-2" type="primary" :disabled="isAdd">{{
+            t('view.systemTools.autoCode.importJson')
+          }}</el-button>
         </el-upload>
         <el-button type="primary" :disabled="isAdd" @click="clearCatch()">
-          清除暂存
+          {{ t('view.systemTools.autoCode.clearTemp') }}
         </el-button>
         <el-button type="primary" :disabled="isAdd" @click="catchData()">
-          暂存
+          {{ t('view.systemTools.autoCode.temporary') }}
         </el-button>
         <el-button type="primary" :disabled="isAdd" @click="enterForm(false)">
-          生成代码
+          {{ t('view.systemTools.autoCode.generateCode') }}
         </el-button>
         <el-button type="primary" @click="enterForm(true)">
-          {{ isAdd ? '查看代码' : '预览代码' }}
+          {{ t('view.systemTools.autoCode.codePreview') }}
         </el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
-    <el-drawer v-model="dialogFlag" size="70%" :show-close="false">
+    <el-drawer v-model="dialogFlag" :show-close="false" size="70%">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">组件内容</span>
+          <span class="text-lg">{{
+            t('view.systemTools.autoCode.componentContent')
+          }}</span>
           <div>
-            <el-button @click="closeDialog"> 取 消 </el-button>
-            <el-button type="primary" @click="enterDialog"> 确 定 </el-button>
+            <el-button @click="closeDialog">
+              {{ t('general.close') }}
+            </el-button>
+            <el-button type="primary" @click="enterDialog">
+              {{ t('general.confirm') }}
+            </el-button>
           </div>
         </div>
       </template>
@@ -779,19 +862,25 @@
         v-if="dialogFlag"
         ref="fieldDialogNode"
         :dialog-middle="dialogMiddle"
+        :type-index-options="typeIndexOptions"
         :type-options="typeOptions"
         :type-search-options="typeSearchOptions"
-        :type-index-options="typeIndexOptions"
       />
     </el-drawer>
 
-    <el-drawer v-model="previewFlag" size="80%" :show-close="false">
+    <el-drawer v-model="previewFlag" :show-close="false" size="80%">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">操作栏</span>
+          <span class="text-lg">{{
+            t('view.systemTools.autoCode.actionBar')
+          }}</span>
           <div>
-            <el-button type="primary" @click="selectText"> 全选 </el-button>
-            <el-button type="primary" @click="copy"> 复制 </el-button>
+            <el-button type="primary" @click="selectText">
+              {{ t('general.selectAll') }}
+            </el-button>
+            <el-button type="primary" @click="copy">
+              {{ t('view.systemTools.autoCode.copy') }}
+            </el-button>
           </div>
         </div>
       </template>
@@ -804,6 +893,12 @@
     </el-drawer>
   </div>
 </template>
+
+<script>
+  export default {
+    name: 'AutoCode'
+  }
+</script>
 
 <script setup>
   import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
@@ -831,7 +926,10 @@
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import Sortable from 'sortablejs'
   import { useUserStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
 
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
+  
   const userStore = useUserStore()
 
   const token = userStore.token
@@ -909,21 +1007,21 @@
 
   const llmAutoFunc = async (flag) => {
     if (flag && !form.value.structName) {
-      ElMessage.error('请输入结构体名称')
+      ElMessage.error(t('view.systemTools.autoPkg.entStructName'))
       return
     }
     if (!flag && !prompt.value) {
-      ElMessage.error('请输入描述')
+      ElMessage.error(t('general.enterDescription'))
       return
     }
 
     if (form.value.fields.length > 0) {
       const res = await ElMessageBox.confirm(
-        'AI生成会清空当前数据，是否继续?',
-        '提示',
+        t('view.systemTools.autoCode.aiClearDataNote'),
+        t('general.hint'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('general.confirm'),
+          cancelButtonText: t('general.cancel'),
           type: 'warning'
         }
       )
@@ -933,7 +1031,9 @@
     }
 
     const res = await llmAuto({
-      prompt: flag ? '结构体名称为' + form.value.structName : prompt.value
+      prompt: flag
+        ? t('view.systemTools.autoPkg.structNameIs') + form.value.structName
+        : prompt.value
     })
     if (res.code === 0) {
       form.value.fields = []
@@ -985,47 +1085,47 @@
 
   const typeOptions = ref([
     {
-      label: '字符串',
+      label: t('view.systemTools.autoCode.fieldDialog.string'),
       value: 'string'
     },
     {
-      label: '富文本',
+      label: t('view.systemTools.autoCode.fieldDialog.richText'),
       value: 'richtext'
     },
     {
-      label: '整型',
+      label: t('view.systemTools.autoCode.fieldDialog.integer'),
       value: 'int'
     },
     {
-      label: '布尔值',
+      label: t('view.systemTools.autoCode.fieldDialog.boolean'),
       value: 'bool'
     },
     {
-      label: '浮点型',
+      label: t('view.systemTools.autoCode.fieldDialog.float'),
       value: 'float64'
     },
     {
-      label: '时间',
+      label: t('view.systemTools.autoCode.fieldDialog.time'),
       value: 'time.Time'
     },
     {
-      label: '枚举',
+      label: t('view.systemTools.autoCode.fieldDialog.enum'),
       value: 'enum'
     },
     {
-      label: '单图片（字符串）',
+      label: t('view.systemTools.autoCode.fieldDialog.singleImage'),
       value: 'picture'
     },
     {
-      label: '多图片（json字符串）',
+      label: t('view.systemTools.autoCode.fieldDialog.multipleImages'),
       value: 'pictures'
     },
     {
-      label: '视频（字符串）',
+      label: t('view.systemTools.autoCode.fieldDialog.video'),
       value: 'video'
     },
     {
-      label: '文件（json字符串）',
+      label: t('view.systemTools.autoCode.fieldDialog.file'),
       value: 'file'
     },
     {
@@ -1033,7 +1133,7 @@
       value: 'json'
     },
     {
-      label: '数组',
+      label: t('view.systemTools.autoCode.fieldDialog.array'),
       value: 'array'
     }
   ])
@@ -1145,23 +1245,42 @@
   })
   const rules = ref({
     structName: [
-      { required: true, message: '请输入结构体名称', trigger: 'blur' }
+      {
+        required: true,
+        message: t('view.systemTools.autoCode.entStructName'),
+        trigger: 'blur'
+      }
     ],
     abbreviation: [
-      { required: true, message: '请输入结构体简称', trigger: 'blur' }
+      {
+        required: true,
+        message: t('view.systemTools.autoCode.entStructAbbreviation'),
+        trigger: 'blur'
+      }
     ],
     description: [
-      { required: true, message: '请输入结构体描述', trigger: 'blur' }
+      {
+        required: true,
+        message: t('view.systemTools.autoCode.entStructDesc'),
+        trigger: 'blur'
+      }
     ],
     packageName: [
       {
         required: true,
-        message: '文件名称：sysXxxxXxxx',
+        message: t('view.systemTools.autoCode.entFileName'),
         trigger: 'blur'
       }
     ],
-    package: [{ required: true, message: '请选择package', trigger: 'blur' }]
+    package: [
+      {
+        required: true,
+        message: t('view.systemTools.autoCode.selectPackage'),
+        trigger: 'blur'
+      }
+    ]
   })
+
   const dialogMiddle = ref({})
   const bk = ref({})
   const dialogFlag = ref(false)
@@ -1170,11 +1289,11 @@
   const useGva = (e) => {
     if (e && form.value.fields.length) {
       ElMessageBox.confirm(
-        '如果您开启GVA默认结构，会自动添加ID,CreatedAt,UpdatedAt,DeletedAt字段，此行为将自动清除您目前在下方创建的重名字段，是否继续？',
-        '注意',
+        t('view.systemTools.autoCode.gvaStructureNote'),
+        t('view.systemTools.autoCode.note'),
         {
-          confirmButtonText: '继续',
-          cancelButtonText: '取消',
+          confirmButtonText: t('general.continue'),
+          cancelButtonText: t('general.cancel'),
           type: 'warning'
         }
       )
@@ -1193,13 +1312,17 @@
   const toLowerCaseFunc = (form, key) => {
     form[key] = toLowerCase(form[key])
   }
+
   const previewNode = ref(null)
+
   const selectText = () => {
     previewNode.value.selectText()
   }
+
   const copy = () => {
     previewNode.value.copy()
   }
+
   const editAndAddField = (item) => {
     dialogFlag.value = true
     if (item) {
@@ -1243,21 +1366,24 @@
     }
     dialogFlag.value = false
   }
+
   const deleteField = (index) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(async () => {
       form.value.fields.splice(index, 1)
     })
   }
+
   const autoCodeForm = ref(null)
+
   const enterForm = async (isPreview) => {
     if (form.value.isTree && !form.value.treeJson){
       ElMessage({
         type: 'error',
-        message: '请填写树型结构的前端展示json属性'
+        message: t('view.systemTools.autoCode.fillJsonDataNote')
       })
       return false
     }
@@ -1272,7 +1398,7 @@
       if (form.value.fields.length <= 0) {
         ElMessage({
           type: 'error',
-          message: '请填写至少一个field'
+          message: t('view.systemTools.autoCode.errNoFields')
         })
         return false
       }
@@ -1283,7 +1409,7 @@
       ) {
         ElMessage({
           type: 'error',
-          message: '您至少需要创建一个主键才能保证自动化代码的可行性'
+          message: t('view.systemTools.autoCode.primaryKeyRequirement')
         })
         return false
       }
@@ -1295,7 +1421,7 @@
       ) {
         ElMessage({
           type: 'error',
-          message: '存在与结构体同名的字段'
+          message: t('view.systemTools.autoCode.errSameFiledName')
         })
         return false
       }
@@ -1305,7 +1431,7 @@
       ) {
         ElMessage({
           type: 'error',
-          message: '存在与模板同名的的字段JSON'
+          message: t('view.systemTools.autoCode.errJsonFieldNameAsTemplate')
         })
         return false
       }
@@ -1313,7 +1439,7 @@
       if (form.value.fields.some((item) => !item.fieldType)) {
         ElMessage({
           type: 'error',
-          message: '请填写所有字段类型后进行提交'
+          message: t('view.systemTools.autoCode.fillFieldTypes')
         })
         return false
       }
@@ -1321,7 +1447,7 @@
       if (form.value.package === form.value.abbreviation) {
         ElMessage({
           type: 'error',
-          message: 'package和结构体简称不可同名'
+          message: t('view.systemTools.autoCode.packageNameConflict')
         })
         return false
       }
@@ -1342,7 +1468,7 @@
         if (form.value.structName === form.value.abbreviation) {
           ElMessage({
             type: 'error',
-            message: 'structName和struct简称不能相同'
+            message: t('view.systemTools.autoCode.errSameStructDescAbbr')
           })
           return false
         }
@@ -1382,7 +1508,7 @@
           }
           ElMessage({
             type: 'success',
-            message: '自动化代码创建成功，自动移动成功'
+            message: t('view.systemTools.autoCode.codeGenMoveSuccess')
           })
           clearCatch()
         }
@@ -1430,7 +1556,7 @@
       form.value.tableName = dbform.value.tableName
       form.value.packageName = toLowerCase(tbHump)
       form.value.abbreviation = toLowerCase(tbHump)
-      form.value.description = tbHump + '表'
+      form.value.description = tbHump + ' ' + t('view.systemTools.autoCode.table')
       form.value.autoCreateApiToSql = true
       form.value.generateServer = true
       form.value.generateWeb = true
@@ -1442,7 +1568,9 @@
             form.value.fields.push({
               onlyNumber: getOnlyNumber(),
               fieldName: toUpperCase(fbHump),
-              fieldDesc: item.columnComment || fbHump + '字段',
+              fieldDesc:
+                item.columnComment ||
+                fbHump + t('view.systemTools.autoCode.field'),
               fieldType: fdMap.value[item.dataType],
               dataType: item.dataType,
               fieldJson: fbHump,
@@ -1509,6 +1637,7 @@
     const res = await getMeta({ id: Number(id) })
     if (res.code === 0) {
       const add = route.query.isAdd
+      console.log(add)
       isAdd.value = add
       form.value = JSON.parse(res.data.meta)
       if (isAdd.value) {
@@ -1516,6 +1645,8 @@
           item.disabled = true
         })
       }
+
+      console.log(form.value.fields)
     }
   }
 
@@ -1614,9 +1745,9 @@
         form.value = JSON.parse(e.target.result)
         form.value.generateServer = true
         form.value.generateWeb = true
-        ElMessage.success('JSON 文件导入成功')
+        ElMessage.success(t('view.systemTools.autoCode.jsonImportSuccess'))
       } catch (_) {
-        ElMessage.error('无效的 JSON 文件')
+        ElMessage.error(t('view.systemTools.autoCode.invalidJsonFile'))
       }
     }
     reader.readAsText(file)
@@ -1628,11 +1759,11 @@
     (val) => {
       if (val) {
         ElMessageBox.confirm(
-          '使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑',
-          '注意',
+          t('view.systemTools.autoCode.basicTemplateNote'),
+          t('view.systemTools.autoCode.note'),
           {
-            confirmButtonText: '继续',
-            cancelButtonText: '取消',
+            confirmButtonText: t('general.continue'),
+            cancelButtonText: t('general.cancel'),
             type: 'warning'
           }
         )

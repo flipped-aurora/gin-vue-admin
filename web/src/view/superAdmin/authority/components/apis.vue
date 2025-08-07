@@ -4,16 +4,16 @@
       <el-input
         v-model="filterTextName"
         class="flex-1"
-        placeholder="筛选名字"
+        :placeholder="t('view.superAdmin.authority.components.apis.filterName')"
       />
       <el-input
         v-model="filterTextPath"
         class="flex-1"
-        placeholder="筛选路径"
+        :placeholder="t('view.superAdmin.authority.components.apis.filterPath')"
       />
-      <el-button class="float-right" type="primary" @click="authApiEnter"
-        >确 定</el-button
-      >
+      <el-button class="float-right" type="primary" @click="authApiEnter">{{
+        t('general.confirm')
+      }}</el-button>
     </div>
     <div class="tree-content">
       <el-scrollbar>
@@ -51,6 +51,9 @@
   import { UpdateCasbin, getPolicyPathByAuthorityId } from '@/api/casbin'
   import { ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
   defineOptions({
     name: 'Apis'
@@ -117,7 +120,7 @@
     for (const key in apiObj) {
       const treeNode = {
         ID: key,
-        description: key + '组',
+        description: key + t('api.group'),
         children: apiObj[key]
       }
       apiTree.push(treeNode)
@@ -143,7 +146,7 @@
       casbinInfos
     })
     if (res.code === 0) {
-      ElMessage({ type: 'success', message: 'api设置成功' })
+      ElMessage({ type: 'success', message: t('api.setupSuccess') })
     }
   }
 

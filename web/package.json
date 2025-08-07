@@ -50,13 +50,17 @@
     "vue-router": "^4.4.3",
     "vue3-ace-editor": "^2.2.4",
     "vue3-sfc-loader": "^0.9.5",
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "js-cookie": "^3.0.5",
+    "vue-i18n": "^9.4.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
     "@eslint/js": "^8.56.0",
     "@vitejs/plugin-legacy": "^6.0.0",
     "@vitejs/plugin-vue": "^5.0.3",
+    "@intlify/unplugin-vue-i18n": "^1.2.0",
+    "@intlify/vue-i18n-loader": "^4.2.0",
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-plugin-router": "~5.0.8",

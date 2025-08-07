@@ -19,7 +19,7 @@ func TestPluginInitialize_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Gva插件 注册注入",
+			name: global.Translate("utils.gvaPluginRegister"),
 			fields: fields{
 				Type:       TypePluginInitializeV2,
 				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
@@ -66,7 +66,7 @@ func TestPluginInitialize_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Gva插件 回滚",
+			name: global.Translate("utils.gvaPluginRollback"),
 			fields: fields{
 				Type:       TypePluginInitializeV2,
 				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),

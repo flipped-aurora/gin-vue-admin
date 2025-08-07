@@ -7,8 +7,9 @@ import { ref, computed } from 'vue'
 import { useRouterStore } from './router'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useStorage } from '@vueuse/core'
-
 import { useAppStore } from '@/pinia'
+import cookie from 'js-cookie'
+import i18n from '@/i18n' // added by mohamed hassan to multi languages
 
 export const useUserStore = defineStore('user', () => {
   const appStore = useAppStore()
@@ -24,6 +25,9 @@ export const useUserStore = defineStore('user', () => {
   const xToken = useCookies('x-token')
   const currentToken = computed(() => token.value || xToken.value || '')
 
+  const language = useStorage('language', '')
+  const xLanguage = useCookies('language')
+  const currentLanguage = computed(() => language.value || xLanguage.value || 'en')
   const setUserInfo = (val) => {
     userInfo.value = val
     if (val.originSetting) {
@@ -39,6 +43,16 @@ export const useUserStore = defineStore('user', () => {
   const setToken = (val) => {
     token.value = val
     xToken.value = val
+  }
+
+  // added by mohame hassan to allow store selected language for multilanguage support.
+  const setLanguage = (val) => {
+    console.log('setLanguage called with value: ' + val)
+    language.value = val
+  }
+
+  const getLanguage = () => {
+    return language.value
   }
 
   const NeedInit = async () => {
@@ -65,7 +79,7 @@ export const useUserStore = defineStore('user', () => {
     try {
       loadingInstance.value = ElLoading.service({
         fullscreen: true,
-        text: '登录中，请稍候...'
+        text: i18n.global.t('pinia.modules.user.loggingIn')
       })
 
       const res = await login(loginInfo)
@@ -93,7 +107,7 @@ export const useUserStore = defineStore('user', () => {
       }
 
       if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-        ElMessage.error('不存在可以登陆的首页，请联系管理员进行配置')
+        ElMessage.error(i18n.global.t('pinia.modules.user.connectAdmin'))
       } else {
         await router.replace({ name: userInfo.value.authority.defaultRouter })
       }
@@ -139,11 +153,14 @@ export const useUserStore = defineStore('user', () => {
   return {
     userInfo,
     token: currentToken,
+    language: currentLanguage,
     NeedInit,
     ResetUserInfo,
     GetUserInfo,
     LoginIn,
     LoginOut,
+    setLanguage, // added by mohamed hassan to allow store selected language for multilingual support.
+    getLanguage, // added by mohamed hassan to allow store selected language for multilingual support.
     setToken,
     loadingInstance,
     ClearStorage

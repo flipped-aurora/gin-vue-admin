@@ -2,20 +2,37 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="请求方法">
-          <el-input v-model="searchInfo.method" placeholder="搜索条件" />
+        <el-form-item
+          :label="t('view.operation.sysOperationRecord.requestMethod')"
+        >
+          <el-input
+            v-model="searchInfo.method"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
-        <el-form-item label="请求路径">
-          <el-input v-model="searchInfo.path" placeholder="搜索条件" />
+        <el-form-item
+          :label="t('view.operation.sysOperationRecord.requestPath')"
+        >
+          <el-input
+            v-model="searchInfo.path"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
-        <el-form-item label="结果状态码">
-          <el-input v-model="searchInfo.status" placeholder="搜索条件" />
+        <el-form-item
+          :label="t('view.operation.sysOperationRecord.resultStatusCode')"
+        >
+          <el-input
+            v-model="searchInfo.status"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit"
-            >查询</el-button
-          >
-          <el-button icon="refresh" @click="onReset">重置</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{
+            t('general.search')
+          }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{
+            t('general.reset')
+          }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -25,7 +42,7 @@
           icon="delete"
           :disabled="!multipleSelection.length"
           @click="onDelete"
-          >删除</el-button
+          >{{ t('general.delete') }}</el-button
         >
       </div>
       <el-table
@@ -37,39 +54,54 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="left" type="selection" width="55" />
-        <el-table-column align="left" label="操作人" width="140">
+        <el-table-column
+          align="left"
+          :label="t('view.operation.sysOperationRecord.operator')"
+          width="140"
+        >
           <template #default="scope">
             <div>
               {{ scope.row.user.userName }}({{ scope.row.user.nickName }})
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="日期" width="180">
-          <template #default="scope">{{
-            formatDate(scope.row.CreatedAt)
-          }}</template>
-        </el-table-column>
-        <el-table-column align="left" label="状态码" prop="status" width="120">
+
+        <el-table-column
+          align="left"
+          :label="t('view.operation.sysOperationRecord.statusCode')"
+          prop="status"
+          width="120"
+        >
           <template #default="scope">
             <div>
               <el-tag type="success">{{ scope.row.status }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="请求IP" prop="ip" width="120" />
         <el-table-column
           align="left"
-          label="请求方法"
-          prop="method"
+          :label="t('view.operation.sysOperationRecord.requestIP')"
+          prop="ip"
           width="120"
         />
         <el-table-column
           align="left"
-          label="请求路径"
+          :label="t('view.operation.sysOperationRecord.requestMethod')"
+          prop="method"
+          width="140"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.operation.sysOperationRecord.requestPath')"
           prop="path"
           width="240"
         />
-        <el-table-column align="left" label="请求" prop="path" width="80">
+        <el-table-column
+          align="left"
+          :label="t('general.request')"
+          prop="path"
+          width="200"
+        >
           <template #default="scope">
             <div>
               <el-popover
@@ -85,11 +117,18 @@
                 </template>
               </el-popover>
 
-              <span v-else>无</span>
+              <span v-else>{{
+                t('view.operation.sysOperationRecord.none')
+              }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="响应" prop="path" width="80">
+        <el-table-column
+          align="left"
+          :label="t('view.operation.sysOperationRecord.response')"
+          prop="path"
+          width="200"
+        >
           <template #default="scope">
             <div>
               <el-popover
@@ -104,18 +143,31 @@
                   <el-icon style="cursor: pointer"><warning /></el-icon>
                 </template>
               </el-popover>
-              <span v-else>无</span>
+              <span v-else>{{
+                t('view.operation.sysOperationRecord.none')
+              }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作">
+
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
+          <template #default="scope">{{
+            formatDate(scope.row.CreatedAt)
+          }}</template>
+        </el-table-column>
+
+        <el-table-column align="left" :label="t('general.operations')" fixed="right">
           <template #default="scope">
             <el-button
               icon="delete"
               type="primary"
               link
               @click="deleteSysOperationRecordFunc(scope.row)"
-              >删除</el-button
+              >{{ t('general.delete') }}</el-button
             >
           </template>
         </el-table-column>
@@ -144,6 +196,9 @@
   import { formatDate } from '@/utils/format'
   import { ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
   defineOptions({
     name: 'SysOperationRecord'
@@ -199,9 +254,9 @@
     multipleSelection.value = val
   }
   const onDelete = async () => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(async () => {
       const ids = []
@@ -213,7 +268,7 @@
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === ids.length && page.value > 1) {
           page.value--
@@ -223,16 +278,16 @@
     })
   }
   const deleteSysOperationRecordFunc = async (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(async () => {
       const res = await deleteSysOperationRecord({ ID: row.ID })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--

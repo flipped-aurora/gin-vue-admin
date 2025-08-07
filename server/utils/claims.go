@@ -46,7 +46,7 @@ func GetToken(c *gin.Context) string {
 		token, _ = c.Cookie("x-token")
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			global.GVA_LOG.Error("重新写入cookie token失败,未能成功解析token,请检查请求头是否存在x-token且claims是否为规定结构")
+			global.GVA_LOG.Error(global.Translate("utils.cookieRewriteFailed"))
 			return token
 		}
 		SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
@@ -59,7 +59,7 @@ func GetClaims(c *gin.Context) (*systemReq.CustomClaims, error) {
 	j := NewJWT()
 	claims, err := j.ParseToken(token)
 	if err != nil {
-		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
+		global.GVA_LOG.Error(global.Translate("utils.jwtParseFailed"))
 	}
 	return claims, err
 }

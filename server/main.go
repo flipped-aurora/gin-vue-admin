@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/translate"
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
 )
@@ -39,11 +40,18 @@ func main() {
 func initializeSystem() {
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
-	global.GVA_LOG = core.Zap() // 初始化zap日志库
+	global.GVA_LOG = core.Zap() // Initializing the zap log library
 	zap.ReplaceGlobals(global.GVA_LOG)
-	global.GVA_DB = initialize.Gorm() // gorm连接数据库
+	global.GVA_DB = initialize.Gorm() // Conneting to database using gorm
 	initialize.Timer()
 	initialize.DBList()
+
+	// added by mohamed hassan to support multilanguage
+	global.GVA_TRANSLATOR = translate.Translator{} // create translator inestance  here
+	//global.GVA_TRANSLATOR.InitTranslator(global.GVA_CONFIG.Language.Language, global.GVA_CONFIG.Language.Dir)
+	global.GVA_TRANSLATOR.InitTranslatorEx(global.GVA_CONFIG.Language.Language, global.GVA_CONFIG.Language.DefaultLanguage, global.GVA_CONFIG.Language.Dir)
+	// end of adding
+
 	initialize.SetupHandlers() // 注册全局函数
 	if global.GVA_DB != nil {
 		initialize.RegisterTables() // 初始化表

@@ -6,13 +6,18 @@
     :multiple="false"
     :headers="{'x-token': token}"
   >
-    <el-button type="primary" icon="upload" class="ml-3"> 导入 </el-button>
+    <el-button type="primary" icon="upload" class="ml-3">
+      {{ t('components.exportExcel.importExcel.import') }}
+    </el-button>
   </el-upload>
 </template>
 
 <script setup>
   import { ElMessage } from 'element-plus'
   import { useUserStore } from "@/pinia";
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   let baseUrl = import.meta.env.VITE_BASE_API
   if (baseUrl === "/"){
@@ -36,7 +41,7 @@
 
   const handleSuccess = (res) => {
     if (res.code === 0) {
-      ElMessage.success('导入成功')
+      ElMessage.success(t('components.exportExcel.importExcel.importSuccess'))
       emit('on-success')
     } else {
       ElMessage.error(res.msg)

@@ -1,7 +1,7 @@
 <template>
   <div>
     <WarningBar
-      title="本功能提供同步的表格导出功能，大数据量的异步表格导出功能，可以选择点我定制"
+      :title="t('view.systemTools.exportTemplate.syncTableExportFeature')"
       href="https://flipped-aurora.feishu.cn/docx/KwjxdnvatozgwIxGV0rcpkZSn4d"
     />
     <div class="gva-search-box">
@@ -13,13 +13,11 @@
         :rules="searchRule"
         @keyup.enter="onSubmit"
       >
-        <el-form-item label="创建日期" prop="createdAt">
+        <el-form-item :label="t('general.createDate')" prop="createdAt">
           <template #label>
             <span>
-              创建日期
-              <el-tooltip
-                content="搜索范围是开始日期（包含）至结束日期（不包含）"
-              >
+              {{ t('general.createDate') }}
+              <el-tooltip :content="t('general.searchDesc')">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
@@ -27,7 +25,7 @@
           <el-date-picker
             v-model="searchInfo.startCreatedAt"
             type="datetime"
-            placeholder="开始日期"
+            :placeholder="t('general.endData')"
             :disabled-date="
               (time) =>
                 searchInfo.endCreatedAt
@@ -39,7 +37,7 @@
           <el-date-picker
             v-model="searchInfo.endCreatedAt"
             type="datetime"
-            placeholder="结束日期"
+            :placeholder="t('general.startData')"
             :disabled-date="
               (time) =>
                 searchInfo.startCreatedAt
@@ -48,35 +46,55 @@
             "
           />
         </el-form-item>
-        <el-form-item label="模板名称" prop="name">
-          <el-input v-model="searchInfo.name" placeholder="搜索条件" />
+        <el-form-item
+          :label="t('view.systemTools.exportTemplate.templateName')"
+          prop="name"
+        >
+          <el-input
+            v-model="searchInfo.name"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
-        <el-form-item label="表名称" prop="tableName">
-          <el-input v-model="searchInfo.tableName" placeholder="搜索条件" />
+        <el-form-item
+          :label="t('view.systemTools.exportTemplate.tableName')"
+          prop="tableName"
+        >
+          <el-input
+            v-model="searchInfo.tableName"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
-        <el-form-item label="模板标识" prop="templateID">
-          <el-input v-model="searchInfo.templateID" placeholder="搜索条件" />
+        <el-form-item
+          :label="t('view.systemTools.exportTemplate.templateIdentifier')"
+          prop="templateID"
+        >
+          <el-input
+            v-model="searchInfo.templateID"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit"
-            >查询</el-button
-          >
-          <el-button icon="refresh" @click="onReset">重置</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{
+            t('general.search')
+          }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{
+            t('general.reset')
+          }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDialog"
-          >新增</el-button
-        >
+        <el-button type="primary" icon="plus" @click="openDialog">{{
+          t('general.add')
+        }}</el-button>
 
         <el-button
           icon="delete"
           style="margin-left: 10px"
           :disabled="!multipleSelection.length"
           @click="onDelete"
-          >删除</el-button
+          >{{ t('general.delete') }}</el-button
         >
       </div>
       <el-table
@@ -88,42 +106,53 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
           <template #default="scope">{{
             formatDate(scope.row.CreatedAt)
           }}</template>
         </el-table-column>
-        <el-table-column align="left" label="数据库" width="120">
+        <el-table-column
+          align="left"
+          :label="t('view.systemTools.autoCode.dbName')"
+          width="240"
+        >
           <template #default="scope">
-            <span>{{ scope.row.dbName || 'GVA库' }}</span>
+            <span>{{
+              scope.row.dbName ||
+              t('view.systemTools.exportTemplate.gvaDatabase')
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="模板标识"
+          :label="t('view.systemTools.exportTemplate.templateIdentifier')"
           prop="templateID"
-          width="120"
+          width="180"
         />
         <el-table-column
           align="left"
-          label="模板名称"
+          :label="t('view.systemTools.exportTemplate.templateName')"
           prop="name"
-          width="120"
+          width="260"
         />
         <el-table-column
           align="left"
-          label="表名称"
+          :label="t('view.systemTools.exportTemplate.tableName')"
           prop="tableName"
           width="120"
         />
         <el-table-column
           align="left"
-          label="模板信息"
+          :label="t('view.systemTools.exportTemplate.templateInfo')"
           prop="templateInfo"
           min-width="120"
           show-overflow-tooltip
         />
-        <el-table-column align="left" label="操作" min-width="280">
+        <el-table-column align="left" :label="t('components.commandMenu.operate')" min-width="280">
           <template #default="scope">
             <el-button
                 type="primary"
@@ -131,7 +160,7 @@
                 icon="documentCopy"
                 class="table-button"
                 @click="copyFunc(scope.row)"
-            >复制</el-button
+            >{{ t('view.systemTools.autoCode.copy') }}</el-button
             >
             <el-button
               type="primary"
@@ -139,7 +168,7 @@
               icon="edit-pen"
               class="table-button"
               @click="showCode(scope.row)"
-              >代码</el-button
+              >{{ t('view.systemTools.exportTemplate.code') }}</el-button
             >
             <el-button
               type="primary"
@@ -147,14 +176,14 @@
               icon="edit"
               class="table-button"
               @click="updateSysExportTemplateFunc(scope.row)"
-              >变更</el-button
+              >{{ t('general.change') }}</el-button
             >
             <el-button
               type="primary"
               link
               icon="delete"
               @click="deleteRow(scope.row)"
-              >删除</el-button
+              >{{ t('general.delete') }}</el-button
             >
           </template>
         </el-table-column>
@@ -173,18 +202,28 @@
     </div>
     <el-drawer
       v-model="dialogFormVisible"
-      size="60%"
+      size="40%"
       :before-close="closeDialog"
-      :title="type === 'create' ? '添加' : '修改'"
+      :title="
+        type === 'create'
+          ? t('view.systemTools.exportTemplate.add')
+          : t('view.systemTools.exportTemplate.edit')
+      "
       :show-close="false"
       destroy-on-close
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type === 'create' ? '添加' : '修改' }}</span>
+          <span class="text-lg">{{
+            type === 'create'
+              ? t('view.systemTools.exportTemplate.add')
+              : t('view.systemTools.exportTemplate.edit')
+          }}</span>
           <div>
-            <el-button @click="closeDialog">取 消</el-button>
-            <el-button type="primary" @click="enterDialog">确 定</el-button>
+            <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
+            <el-button type="primary" @click="enterDialog">{{
+              t('general.confirm')
+            }}</el-button>
           </div>
         </div>
       </template>
@@ -194,19 +233,24 @@
         :model="formData"
         label-position="right"
         :rules="rule"
-        label-width="100px"
+        label-width="160px"
         v-loading="aiLoading"
-        element-loading-text="小淼正在思考..."
+        :element-loading-text="t('view.systemTools.exportTemplate.xiaoMiaoIsThinking')"
       >
-        <el-form-item label="业务库" prop="dbName">
+        <el-form-item
+          label-width="160px"
+          :label="t('view.systemTools.autoCode.businessLibrary')"
+          prop="dbName"
+        >
           <template #label>
             <el-tooltip
-              content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。"
+              :content="t('view.systemTools.exportTemplate.dbListNote')"
               placement="bottom"
               effect="light"
             >
               <div>
-                业务库 <el-icon><QuestionFilled /></el-icon>
+                {{ t('view.systemTools.autoCode.businessLibrary') }}
+                <el-icon><QuestionFilled /></el-icon>
               </div>
             </el-tooltip>
           </template>
@@ -214,7 +258,7 @@
             v-model="formData.dbName"
             clearable
             @change="dbNameChange"
-            placeholder="选择业务库"
+            :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
           >
             <el-option
               v-for="item in dbList"
@@ -233,12 +277,12 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="需用到的表" prop="tables">
+        <el-form-item :label="t('view.systemTools.exportTemplate.tableToBeUsed')" prop="tables">
           <el-select
             multiple
             v-model="tables"
             clearable
-            placeholder="使用AI的情况下请选择"
+            :placeholder="t('view.systemTools.exportTemplate.selectWhenUSingAi')"
           >
             <el-option
               v-for="item in tableOptions"
@@ -249,31 +293,35 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="AI帮写:" prop="ai">
+        <el-form-item :label="t('view.systemTools.exportTemplate.aiHelpWriting')" prop="ai">
           <div class="relative w-full">
             <el-input
               type="textarea"
               v-model="prompt"
               :clearable="true"
               :rows="5"
-              placeholder="试试描述你要做的导出功能让AI帮你完成，在此之前请选择你需要导出的表所在的业务库，如不做选择，则默认使用gva库"
+              :placeholder="t('view.systemTools.exportTemplate.aiNote')"
             />
             <el-button
               class="absolute bottom-2 right-2"
               type="primary"
               @click="autoExport"
-              ><el-icon><ai-gva /></el-icon>帮写</el-button
+              ><el-icon><ai-gva /></el-icon>{{ t('view.systemTools.exportTemplate.helpWrite') }}</el-button
             >
           </div>
         </el-form-item>
 
-        <el-form-item label="表名称:" clearable prop="tableName">
+        <el-form-item
+          :label="t('view.systemTools.exportTemplate.tableName') + ':'"
+          clearable
+          prop="tableName"
+        >
           <div class="w-full flex gap-4">
             <el-select
               v-model="formData.tableName"
               class="flex-1"
               filterable
-              placeholder="请选择表"
+              :placeholder="t('view.systemTools.autoCode.selectTable')"
             >
               <el-option
                 v-for="item in tableOptions"
@@ -286,64 +334,89 @@
               :disabled="!formData.tableName"
               type="primary"
               @click="getColumnFunc(true)"
-              ><el-icon><ai-gva /></el-icon>自动补全</el-button
+              ><el-icon><ai-gva /></el-icon>{{ t('view.systemTools.exportTemplate.autoComplete') }}</el-button
             >
             <el-button
               :disabled="!formData.tableName"
               type="primary"
               @click="getColumnFunc(false)"
-              >自动生成模板</el-button
+              >{{ t('view.systemTools.exportTemplate.autoGenerateTemplates') }}</el-button
             >
           </div>
         </el-form-item>
 
-        <el-form-item label="模板名称:" prop="name">
+        <el-form-item :label="t('view.systemTools.exportTemplate.templateName2')" prop="name">
           <el-input
             v-model="formData.name"
             :clearable="true"
-            placeholder="请输入模板名称"
+            :placeholder="t('view.systemTools.exportTemplate.templateNameNote')"
           />
         </el-form-item>
 
-        <el-form-item label="模板标识:" prop="templateID">
+        <el-form-item
+          label-width="160px"
+          :label="t('view.systemTools.exportTemplate.templateIdentifier')"
+          prop="templateID"
+        >
           <el-input
             v-model="formData.templateID"
             :clearable="true"
-            placeholder="模板标识为前端组件需要挂在的标识属性"
+            :placeholder="
+              t('view.systemTools.exportTemplate.templateIdentifierInfo')
+            "
           />
         </el-form-item>
 
-        <el-form-item label="关联条件:">
+        <el-form-item
+          label-width="160px"
+          :label="t('view.systemTools.exportTemplate.associationCondition')"
+        >
           <div
             v-for="(join, key) in formData.joinTemplate"
             :key="key"
             class="flex gap-4 w-full mb-2"
           >
-            <el-select v-model="join.joins" placeholder="请选择关联方式">
+            <el-select
+              v-model="join.joins"
+              :placeholder="
+                t('view.systemTools.exportTemplate.selectAssociationMethod')
+              "
+            >
               <el-option label="LEFT JOIN" value="LEFT JOIN" />
               <el-option label="INNER JOIN" value="INNER JOIN" />
               <el-option label="RIGHT JOIN" value="RIGHT JOIN" />
             </el-select>
-            <el-input v-model="join.table" placeholder="请输入关联表" />
+            <el-input
+              v-model="join.table"
+              :placeholder="
+                t('view.systemTools.exportTemplate.enterAssociationTable')
+              "
+            />
             <el-input
               v-model="join.on"
-              placeholder="关联条件 table1.a = table2.b"
+              :placeholder="
+                t('view.systemTools.exportTemplate.associationCondition')
+              "
             />
             <el-button
               type="danger"
               icon="delete"
               @click="() => formData.joinTemplate.splice(key, 1)"
-              >删除</el-button
+              >{{ t('general.delete') }}</el-button
             >
           </div>
           <div class="flex justify-end w-full">
-            <el-button type="primary" icon="plus" @click="addJoin"
-              >添加条件</el-button
-            >
+            <el-button type="primary" icon="plus" @click="addJoin">{{
+              t('view.systemTools.exportTemplate.addCondition')
+            }}</el-button>
           </div>
         </el-form-item>
 
-        <el-form-item label="模板信息:" prop="templateInfo">
+        <el-form-item
+          label-width="160px"
+          :label="t('view.systemTools.exportTemplate.templateInfo')"
+          prop="templateInfo"
+        >
           <el-input
             v-model="formData.templateInfo"
             type="textarea"
@@ -352,7 +425,10 @@
             :placeholder="templatePlaceholder"
           />
         </el-form-item>
-        <el-form-item label="默认导出条数:">
+        <el-form-item
+          label-width="240px"
+          :label="t('view.systemTools.exportTemplate.defaultExportCount')"
+        >
           <el-input-number
             v-model="formData.limit"
             :step="1"
@@ -360,10 +436,21 @@
             :precision="0"
           />
         </el-form-item>
-        <el-form-item label="默认排序条件:">
-          <el-input v-model="formData.order" placeholder="例:id desc" />
+        <el-form-item
+          label-width="160px"
+          :label="t('view.systemTools.exportTemplate.defaultSortCondition')"
+        >
+          <el-input
+            v-model="formData.order"
+            :placeholder="
+              t('view.systemTools.exportTemplate.sortingCriteriaNote')
+            "
+          />
         </el-form-item>
-        <el-form-item label="导出条件:">
+        <el-form-item
+          label-width="160px"
+          :label="t('view.systemTools.exportTemplate.exportCondition')"
+        >
           <div
             v-for="(condition, key) in formData.conditions"
             :key="key"
@@ -371,12 +458,19 @@
           >
             <el-input
               v-model="condition.from"
-              placeholder="需要从查询条件取的json key"
+              :placeholder="
+                t('view.systemTools.exportTemplate.jsonKeyFromQuery')
+              "
             />
-            <el-input v-model="condition.column" placeholder="表对应的column" />
+            <el-input
+              v-model="condition.column"
+              :placeholder="t('view.systemTools.exportTemplate.tableColumn')"
+            />
             <el-select
               v-model="condition.operator"
-              placeholder="请选择查询条件"
+              :placeholder="
+                t('view.systemTools.exportTemplate.selectQueryCondition')
+              "
             >
               <el-option
                 v-for="item in typeSearchOptions"
@@ -389,13 +483,13 @@
               type="danger"
               icon="delete"
               @click="() => formData.conditions.splice(key, 1)"
-              >删除</el-button
+              >{{ t('general.delete') }}</el-button
             >
           </div>
           <div class="flex justify-end w-full">
-            <el-button type="primary" icon="plus" @click="addCondition"
-              >添加条件</el-button
-            >
+            <el-button type="primary" icon="plus" @click="addCondition">{{
+              t('view.systemTools.exportTemplate.addCondition')
+            }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -405,15 +499,15 @@
       v-model="codeVisible"
       size="60%"
       :before-close="closeDialog"
-      :title="type === 'create' ? '添加' : '修改'"
+      :title="type === 'create' ? t('general.addTo') : t('general.modify')"
       :show-close="false"
       destroy-on-close
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">模板</span>
+          <span class="text-lg">{{ t('view.systemTools.autoPkg.template') }}</span>
           <div>
-            <el-button type="primary" @click="closeDialog">确 定</el-button>
+            <el-button type="primary" @click="closeDialog">{{ t('general.confirm') }}</el-button>
           </div>
         </div>
       </template>
@@ -443,27 +537,35 @@
   import { ref, reactive } from 'vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import { getDB, getTable, getColumn, butler } from '@/api/autoCode'
+  import { useI18n } from 'vue-i18n'
   import { getCode } from './code'
   import { VAceEditor } from 'vue3-ace-editor'
 
   import 'ace-builds/src-noconflict/mode-vue'
   import 'ace-builds/src-noconflict/theme-github_dark'
 
+  const { t } = useI18n()
   defineOptions({
     name: 'ExportTemplate'
   })
 
-  const templatePlaceholder = `模板信息格式：key标识数据库column列名称（在join模式下需要写为 table.column），value标识导出excel列名称，如key为数据库关键字或函数，请按照关键字的处理模式处理，当前以mysql为例，如下：
-{
-  "table_column1":"第一列",
-  "table_column3":"第三列",
-  "table_column4":"第四列",
-  "\`rows\`":"我属于数据库关键字或函数",
-}
-如果增加了JOINS导出key应该列为 {table_name1.table_column1:"第一列",table_name2.table_column2:"第二列"}
-如果有重复的列名导出格式应为 {table_name1.table_column1 as key:"第一列",table_name2.table_column2 as key2:"第二列"}
-JOINS模式下不支持导入
-`
+  const templatePlaceholder =
+    t('view.systemTools.exportTemplate.templatePlaceholder1') +
+    `{
+  "table_column1":"` +
+    t('view.systemTools.exportTemplate.templatePlaceholder2') +
+    `",
+  "table_column3":"` +
+    t('view.systemTools.exportTemplate.templatePlaceholder3') +
+    `",
+  "table_column4":"` +
+    t('view.systemTools.exportTemplate.templatePlaceholder4') +
+    `",
+  "\`rows\`":"` +
+    t('view.systemTools.exportTemplate.templatePlaceholder5') +
+    `",
+}` +
+    t('view.systemTools.exportTemplate.templatePlaceholder6')
 
   // 自动化生成的字典（可能为空）以及字段
   const formData = ref({
@@ -546,7 +648,7 @@ JOINS模式下不支持导入
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ],
@@ -558,7 +660,7 @@ JOINS模式下不支持导入
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ],
@@ -570,7 +672,7 @@ JOINS模式下不支持导入
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ],
@@ -582,7 +684,7 @@ JOINS模式下不支持导入
       },
       {
         whitespace: true,
-        message: '不能只输入空格',
+        message: t('general.noOnlySpace'),
         trigger: ['input', 'blur']
       }
     ]
@@ -596,12 +698,12 @@ JOINS模式下不支持导入
             searchInfo.value.startCreatedAt &&
             !searchInfo.value.endCreatedAt
           ) {
-            callback(new Error('请填写结束日期'))
+            callback(new Error(t('general.placeInputEndData')))
           } else if (
             !searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt
           ) {
-            callback(new Error('请填写开始日期'))
+            callback(new Error(t('general.placeInputStartData')))
           } else if (
             searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt &&
@@ -610,7 +712,7 @@ JOINS模式下不支持导入
               searchInfo.value.startCreatedAt.getTime() >
                 searchInfo.value.endCreatedAt.getTime())
           ) {
-            callback(new Error('开始日期应当早于结束日期'))
+            callback(new Error(t('general.startDataMustBeforeEndData')))
           } else {
             callback()
           }
@@ -704,7 +806,7 @@ JOINS模式下不支持导入
     if (!formData.value.tableName) {
       ElMessage({
         type: 'error',
-        message: '请先选择业务库及选择表后再进行操作'
+        message: t('view.systemTools.selectBusinessDbAndTable')
       })
       return
     }
@@ -732,7 +834,7 @@ JOINS模式下不支持导入
           formData.value.templateID = aiData.templateID
           return
         }
-        ElMessage.warning('AI自动补全失败，已调整为逻辑填写')
+        ElMessage.warning(t('view.systemTools.exportTemplate.aiAutoCompleteFail'))
       }
 
       // 把返回值的data.columns做尊换，制作一组JSON数据，columnName做key，columnComment做value
@@ -806,9 +908,9 @@ JOINS模式下不支持导入
 
   // 删除行
   const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(() => {
       deleteSysExportTemplateFunc(row)
@@ -817,16 +919,16 @@ JOINS模式下不支持导入
 
   // 多选删除
   const onDelete = async () => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
       type: 'warning'
     }).then(async () => {
       const ids = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: '请选择要删除的数据'
+          message: t('general.selectDataToDelete')
         })
         return
       }
@@ -838,7 +940,7 @@ JOINS模式下不支持导入
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === ids.length && page.value > 1) {
           page.value--
@@ -895,7 +997,7 @@ JOINS模式下不支持导入
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '删除成功'
+        message: t('general.deleteSuccess')
       })
       if (tableData.value.length === 1 && page.value > 1) {
         page.value--
@@ -943,7 +1045,7 @@ JOINS模式下不支持导入
     } catch (_) {
       ElMessage({
         type: 'error',
-        message: '模板信息格式不正确，请检查'
+        message: t('view.systemTools.templateFormatIncorrect')
       })
       return
     }
@@ -957,7 +1059,7 @@ JOINS模式下不支持导入
       ) {
         ElMessage({
           type: 'error',
-          message: '请填写完整的导出条件'
+          message: t('view.systemTools.completeExportConditions')
         })
         return
       }
@@ -968,7 +1070,7 @@ JOINS模式下不支持导入
       if (!reqData.joinTemplate[i].joins || !reqData.joinTemplate[i].on) {
         ElMessage({
           type: 'error',
-          message: '请填写完整的关联'
+          message: t('view.systemTools.completeAssociation')
         })
         return
       }
@@ -992,7 +1094,7 @@ JOINS模式下不支持导入
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '创建/更改成功'
+          message: t('general.createUpdateSuccess')
         })
         closeDialog()
         getTableData()

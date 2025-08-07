@@ -9,7 +9,7 @@
       <input
         v-model="searchInput"
         class="quick-input"
-        placeholder="请输入你需要快捷到达的功能"
+        :placeholder="t('components.commandMenu.commandMenuNote')"
       />
     </template>
 
@@ -29,7 +29,9 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="close">关闭</el-button>
+        <el-button @click="close">{{
+          t('components.commandMenu.close')
+        }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -40,6 +42,10 @@
   import { useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
   import { useAppStore, useUserStore } from '@/pinia'
+  import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
   defineOptions({
     name: 'CommandMenu'
   })
@@ -74,7 +80,7 @@
 
   const addQuickMenu = () => {
     const option = {
-      label: '跳转',
+      label: t('components.commandMenu.jump'),
       children: []
     }
     const menus = deepMenus(routerStore.asyncRouters[0]?.children || [])
@@ -84,20 +90,20 @@
 
   const addQuickOption = () => {
     const option = {
-      label: '操作',
+      label: t('components.commandMenu.operate'),
       children: []
     }
     const quickArr = [
       {
-        label: '亮色主题',
+        label: t('components.commandMenu.lightTheme'),
         func: () => changeMode(false)
       },
       {
-        label: '暗色主题',
+        label: t('components.commandMenu.darkTheme'),
         func: () => changeMode(true)
       },
       {
-        label: '退出登录',
+        label: t('components.commandMenu.logout'),
         func: () => userStore.LoginOut()
       }
     ]

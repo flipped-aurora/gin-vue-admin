@@ -188,7 +188,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "desc": "详情显示(bool)",
       "excel": "导入导出(bool)",
       "require": "是否必填(bool)",
-      "defaultValue": "默认值(string)",
+      "defaultValue": "默认值(string)，JSON类型（array,json,file,pictures）请保持为空他们不可以设置默认值",
       "errorText": "错误提示(string)",
       "clearable": "是否可清空(bool)",
       "sort": "是否排序(bool)",

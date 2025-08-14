@@ -1,10 +1,18 @@
 package config
 
+import (
+	"fmt"
+	"net"
+	"net/url"
+)
+
 type Oracle struct {
 	GeneralDB `yaml:",inline" mapstructure:",squash"`
 }
 
 func (m *Oracle) Dsn() string {
-	return "oracle://" + m.Username + ":" + m.Password + "@" + m.Path + ":" + m.Port + "/" + m.Dbname + "?" + m.Config
+	dsn := fmt.Sprintf("oracle://%s:%s@%s/%s?%s", url.PathEscape(m.Username), url.PathEscape(m.Password),
+		net.JoinHostPort(m.Path, m.Port), url.PathEscape(m.Dbname), m.Config)
+	return dsn
 
 }

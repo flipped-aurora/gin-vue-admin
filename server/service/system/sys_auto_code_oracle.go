@@ -64,7 +64,7 @@ WHERE
     lower(a.table_name) = ?
     AND lower(a.OWNER) = ?
 ORDER BY
-    a.COLUMN_ID;
+    a.COLUMN_ID
 `
 
 	err = global.GVA_DBList[businessDB].Raw(sql, tableName, dbName).Scan(&entities).Error

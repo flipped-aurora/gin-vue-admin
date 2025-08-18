@@ -22,6 +22,7 @@ type Translator struct {
 // 	t.bundle.MustLoadMessageFile("./lang/en.json")
 // 	t.bundle.MustLoadMessageFile("./lang/zh.json")
 // 	t.bundle.MustLoadMessageFile("./lang/ar.json")
+// 	t.bundle.MustLoadMessageFile("./lang/ru.json")
 // 	t.localizer = i18n.NewLocalizer(t.bundle, initLang) // should add additionl check here
 // 	t.IsInit = true
 // 	// end of adding

@@ -43,7 +43,7 @@
     "spark-md5": "^3.0.2",
     "universal-cookie": "^7",
     "vform3-builds": "^3.0.10",
-    "vite-auto-import-svg": "^1.7.0",
+    "vite-auto-import-svg": "^1.9.0",
     "vue": "^3.5.7",
     "vue-cropper": "^1.1.4",
     "vue-echarts": "^7.0.3",

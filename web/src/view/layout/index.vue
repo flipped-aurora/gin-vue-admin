@@ -11,7 +11,7 @@
       :content="userStore.userInfo.nickName"
     />
     <gva-header />
-    <div class="flex flex-row w-full gva-container pt-16 box-border h-full">
+    <div class="flex flex-row w-full pt-16 box-border h-full">
       <gva-aside
         v-if="
           config.side_mode === 'normal' || config.side_mode === 'sidebar' ||

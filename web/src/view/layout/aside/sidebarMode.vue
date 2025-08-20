@@ -2,7 +2,7 @@
   <div class="flex h-full">
     <!-- 一级菜单常驻侧边栏 -->
     <div
-      class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700"
+      class="relative !h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700"
       :style="{
         width: config.layout_side_collapsed_width + 'px'
       }"
@@ -12,7 +12,7 @@
           :collapse="true"
           :collapse-transition="false"
           :default-active="topActive"
-          class="border-r-0 w-full"
+          class="!border-r-0 w-full"
           unique-opened
           @select="selectTopMenuItem"
         >
@@ -74,7 +74,7 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           :default-active="active"
-          class="border-r-0 w-full"
+          class="!border-r-0 w-full"
           unique-opened
           @select="selectMenuItem"
         >

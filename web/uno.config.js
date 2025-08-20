@@ -1,11 +1,7 @@
 import { defineConfig } from 'unocss'
+import presetWind3 from '@unocss/preset-wind3';
 
 export default defineConfig({
-  content: {
-    pipeline: {
-      exclude: ['node_modules', 'dist']
-    }
-  },
   theme: {
     backgroundColor: {
       main: '#F5F5F5'
@@ -20,4 +16,7 @@ export default defineConfig({
       'table-border': 'var(--el-border-color-lighter)'
     }
   },
+  presets: [
+    presetWind3({ dark: 'class' })
+  ],
 })

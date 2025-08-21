@@ -1,5 +1,6 @@
-import { defineConfig } from 'unocss'
+import { defineConfig } from '@unocss/vite';
 import presetWind3 from '@unocss/preset-wind3';
+import transformerDirectives from '@unocss/transformer-directives'
 
 export default defineConfig({
   theme: {
@@ -18,5 +19,8 @@ export default defineConfig({
   },
   presets: [
     presetWind3({ dark: 'class' })
+  ],
+  transformers: [
+    transformerDirectives(),
   ],
 })

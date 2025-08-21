@@ -9,10 +9,12 @@
     "preview": "vite preview",
     "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
   },
+  "type": "module",
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@form-create/designer": "^3.2.6",
     "@form-create/element-ui": "^3.2.10",
+    "@unocss/transformer-directives": "^66.4.2",
     "@vue-office/docx": "^1.6.2",
     "@vue-office/excel": "^1.7.11",
     "@vue-office/pdf": "^2.0.2",
@@ -55,7 +57,6 @@
     "@babel/eslint-parser": "^7.25.1",
     "@eslint/js": "^8.56.0",
     "@unocss/extractor-svelte": "^66.4.2",
-    "@unocss/postcss": "^66.4.2",
     "@unocss/preset-wind3": "^66.4.2",
     "@vitejs/plugin-legacy": "^6.0.0",
     "@vitejs/plugin-vue": "^5.0.3",

@@ -1,6 +1,8 @@
 @use '@/style/iconfont.css';
 @use "./transition.scss";
 
+@unocss;
+
 .html-grey {
   filter: grayscale(100%);
 }

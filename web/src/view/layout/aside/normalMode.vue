@@ -11,7 +11,7 @@
         :collapse="isCollapse"
         :collapse-transition="false"
         :default-active="active"
-        class="border-r-0 w-full"
+        class="!border-r-0 w-full"
         unique-opened
         @select="selectMenuItem"
       >

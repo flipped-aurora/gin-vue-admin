@@ -6,7 +6,7 @@
     <el-menu
       :default-active="active"
       mode="horizontal"
-      class="border-r-0 w-full flex gap-1 items-center box-border h-[calc(100%-1px)]"
+      class="!border-r-0 w-full flex gap-1 items-center box-border h-[calc(100%-1px)]"
       unique-opened
       :ellipsis="shouldEllipsis"
       @select="selectMenuItem"

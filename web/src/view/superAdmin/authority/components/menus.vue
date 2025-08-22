@@ -23,7 +23,7 @@
           <template #default="{ node, data }">
             <span class="custom-tree-node">
               <span>{{ node.label }}</span>
-              <span v-if="node.checked">
+              <span v-if="node.checked && !data.name?.startsWith('http://') && !data.name?.startsWith('https://')">
                 <el-button
                   type="primary"
                   link

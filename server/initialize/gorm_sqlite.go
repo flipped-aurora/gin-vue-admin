@@ -25,7 +25,9 @@ func initSqliteDatabase(s config.Sqlite) *gorm.DB {
 		return nil
 	}
 
-	if db, err := gorm.Open(sqlite.Open(s.Dsn()), internal.Gorm.Config(s.Prefix, s.Singular)); err != nil {
+	// 数据库配置
+	general := s.GeneralDB
+	if db, err := gorm.Open(sqlite.Open(s.Dsn()), internal.Gorm.Config(general)); err != nil {
 		panic(err)
 	} else {
 		sqlDB, _ := db.DB()

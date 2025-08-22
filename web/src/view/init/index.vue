@@ -136,7 +136,7 @@
   // @ts-ignore
   import { initDB } from '@/api/initdb'
   import { reactive, ref } from 'vue'
-  import { ElLoading, ElMessage } from 'element-plus'
+  import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
   import { useRouter } from 'vue-router'
 
   defineOptions({
@@ -274,7 +274,25 @@
           type: 'success',
           message: res.msg
         })
-        router.push({ name: 'Login' })
+        
+        // 显示AI助手配置提示弹窗
+        ElMessageBox.confirm(
+          '已经完成基础数据库初始化！建议先进行编辑器AI助手配置，以获得更好的开发体验。',
+          '配置完成',
+          {
+            confirmButtonText: '查看AI配置文档',
+            cancelButtonText: '稍后配置',
+            type: 'success',
+            center: true
+          }
+        ).then(() => {
+          // 点击确认按钮，打开AI配置文档
+          window.open('https://www.gin-vue-admin.com/guide/server/mcp.html', '_blank')
+          router.push({ name: 'Login' })
+        }).catch(() => {
+          // 点击取消按钮或关闭弹窗，直接跳转到登录页
+          router.push({ name: 'Login' })
+        })
       }
       loading.close()
     } catch (_) {

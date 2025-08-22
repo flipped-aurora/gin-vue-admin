@@ -22,7 +22,8 @@
 
 <table>
   <tr>
-    <td width="200">
+    <td width="250">
+	  <p>⭐️ <a href="https://www.bilibili.com/video/BV1B3htzqEf1/?spm_id_from=333.1387.homepage.video_card.click" target="__blank"> 高度适配AI编辑器的MCP </a></p>
       <p>📄 创建基础模板</p>
       <p>🤖 AI生成结构</p>
       <p>⏰ 生成代码</p>

@@ -24,7 +24,9 @@ func initOracleDatabase(m config.Oracle) *gorm.DB {
 	if m.Dbname == "" {
 		return nil
 	}
-	if db, err := gorm.Open(oracle.Open(m.Dsn()), internal.Gorm.Config(m.Prefix, m.Singular)); err != nil {
+	// 数据库配置
+	general := m.GeneralDB
+	if db, err := gorm.Open(oracle.Open(m.Dsn()), internal.Gorm.Config(general)); err != nil {
 		panic(err)
 	} else {
 		sqlDB, _ := db.DB()

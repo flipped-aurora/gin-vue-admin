@@ -281,3 +281,7 @@ mcp:
     sse_path: /sse
     message_path: /message
     url_prefix: ''
+language:
+    language: en
+    default-language: zh
+    dir: ./resource/lang/

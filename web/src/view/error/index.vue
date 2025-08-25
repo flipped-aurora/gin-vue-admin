@@ -40,7 +40,6 @@
         code: '401',
         message: "检测到其他用户修改了路由权限，请重新登录",
         fn: () => {
-          const userStore = useUserStore()
           userStore.ClearStorage()
           router.push({ name: 'Login', replace: true })
         }

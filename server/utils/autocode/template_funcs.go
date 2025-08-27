@@ -46,7 +46,8 @@ func GenerateField(field systemReq.AutoCodeField) string {
 
 	gormTag += "column:" + field.ColumnName + ";"
 
-	if field.DataTypeLong != "" && field.FieldType != "enum" {
+	// 对于int类型，根据DataTypeLong决定具体的Go类型，不使用size标签
+	if field.DataTypeLong != "" && field.FieldType != "enum" && field.FieldType != "int" {
 		gormTag += fmt.Sprintf("size:%s;", field.DataTypeLong)
 	}
 
@@ -85,8 +86,27 @@ func GenerateField(field systemReq.AutoCodeField) string {
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
 
+		// 对于int类型，根据DataTypeLong决定具体的Go类型
+		var fieldType string
+		if field.FieldType == "int" {
+			switch field.DataTypeLong {
+			case "1", "2", "3":
+				fieldType = "int8"
+			case "4", "5":
+				fieldType = "int16"
+			case "6", "7", "8", "9", "10":
+				fieldType = "int32"
+			case "11", "12", "13", "14", "15", "16", "17", "18", "19", "20":
+				fieldType = "int64"
+			default:
+				fieldType = "int64"
+			}
+		} else {
+			fieldType = field.FieldType
+		}
+
 		result = fmt.Sprintf(`%s  *%s `+"`"+`%s`+"`"+``,
-			field.FieldName, field.FieldType, tagContent)
+			field.FieldName, fieldType, tagContent)
 	}
 
 	if field.Require {

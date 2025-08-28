@@ -7,7 +7,7 @@
       <el-menu
         :default-active="routerStore.topActive"
         mode="horizontal"
-        class="border-r-0 border-b-0 w-full flex gap-1 items-center box-border h-[calc(100%-1px)]"
+        class="!border-r-0 border-b-0 w-full flex gap-1 items-center box-border h-[calc(100%-1px)]"
         unique-opened
         @select="(index, _, ele) => selectMenuItem(index, _, ele, true)"
       >
@@ -34,7 +34,7 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           :default-active="active"
-          class="border-r-0 w-full"
+          class="!border-r-0 w-full"
           unique-opened
           @select="(index, _, ele) => selectMenuItem(index, _, ele, false)"
         >

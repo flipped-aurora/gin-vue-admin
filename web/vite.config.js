@@ -9,6 +9,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import VueFilePathPlugin from './vitePlugin/componentName/index.js'
 import { svgBuilder } from 'vite-auto-import-svg'
 import { AddSecret } from './vitePlugin/secret'
+import UnoCSS from 'unocss/vite'
+
 // @see https://cn.vitejs.dev/config/
 export default ({ mode }) => {
   AddSecret('')
@@ -111,7 +113,8 @@ export default ({ mode }) => {
       vuePlugin(),
       svgBuilder(['./src/plugin/','./src/assets/icons/'],base, outDir,'assets', NODE_ENV),
       [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
-      VueFilePathPlugin('./src/pathInfo.json')
+      VueFilePathPlugin('./src/pathInfo.json'),
+      UnoCSS()
     ]
   }
   return config

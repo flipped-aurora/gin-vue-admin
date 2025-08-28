@@ -1,6 +1,6 @@
 // 运行项目前通过node执行此脚本 （此脚本与 node_modules 目录同级）
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 const wfPath = path.resolve(__dirname, './node_modules/.bin')
 
 fs.readdir(wfPath, (err, files) => {

@@ -1,9 +1,6 @@
 @use '@/style/main.scss';
 @use '@/style/reset';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 .el-button {
   font-weight: 400;

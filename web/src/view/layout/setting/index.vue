@@ -22,14 +22,14 @@
       </div>
     </template>
 
-    <div class="h-full bg-white dark:bg-gray-900">
+    <div class="bg-white dark:bg-gray-900">
       <div class="px-8 pt-4 pb-6 border-b border-gray-200 dark:border-gray-700">
         <div class="flex justify-center">
           <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1.5 border border-gray-200 dark:border-gray-700 shadow-sm">
-            <button
+            <div
               v-for="tab in tabs"
               :key="tab.key"
-              class="px-6 py-3 text-base font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
+              class="px-6 py-3 text-base text-center cursor-pointer font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
               :class="[
                 activeTab === tab.key
                   ? 'text-white shadow-md transform -translate-y-0.5'
@@ -39,7 +39,7 @@
               @click="activeTab = tab.key"
             >
               {{ tab.label }}
-            </button>
+            </div>
           </div>
         </div>
       </div>

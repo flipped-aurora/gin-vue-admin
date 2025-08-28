@@ -7,13 +7,13 @@
       <!-- 弹窗头部 -->
       <div class="p-5 border-b border-gray-100 flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-800">{{ displayData.title }}</h3>
-        <button class="text-gray-400 hover:text-gray-600 transition-colors" @click="closeModal">
-          <close />
-        </button>
+        <div class="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer" @click="closeModal">
+          <close class="h-6 w-6" />
+        </div>
       </div>
       
       <!-- 弹窗内容 -->
-      <div class="p-6">
+      <div class="p-6 pt-0">
         <!-- 错误类型 -->
         <div class="mb-4">
           <div class="text-xs font-medium text-gray-500 uppercase mb-2">错误类型</div>
@@ -45,16 +45,16 @@
       
       <!-- 弹窗底部 -->
       <div class="py-2 px-4 border-t border-gray-100 flex justify-end">
-        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm" @click="handleConfirm">
+        <div class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm cursor-pointer" @click="handleConfirm">
           确定
-        </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, computed, onMounted } from 'vue';
+import { defineProps, defineEmits, computed } from 'vue';
 
 const props = defineProps({
   errorData: {

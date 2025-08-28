@@ -4,13 +4,14 @@
  * */
 // 加载网站配置文件夹
 import { register } from './global'
+import packageInfo from '../../package.json'
 
 export default {
   install: (app) => {
     register(app)
     console.log(`
        欢迎使用 Gin-Vue-Admin
-       当前版本:v2.8.5
+       当前版本:v${packageInfo.version}
        加群方式:微信：shouzi_1994 QQ群：622360840
        项目地址：https://github.com/flipped-aurora/gin-vue-admin
        插件市场:https://plugin.gin-vue-admin.com

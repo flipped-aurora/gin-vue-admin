@@ -47,7 +47,7 @@
 
   const model = defineModel({ type: Array })
 
-  const fileList = ref(model.value)
+  const fileList = ref(model.value || [])
 
   const emits = defineEmits(['on-success', 'on-error'])
 

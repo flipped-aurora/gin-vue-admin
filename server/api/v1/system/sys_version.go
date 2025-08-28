@@ -267,6 +267,17 @@ func (sysVersionApi *SysVersionApi) ExportVersion(c *gin.Context) {
 		}
 	}
 
+	// 获取选中的字典数据
+	var dictData []system.SysDictionary
+	if len(req.DictIds) > 0 {
+		dictData, err = sysVersionService.GetDictionariesByIds(ctx, req.DictIds)
+		if err != nil {
+			global.GVA_LOG.Error("获取字典数据失败!", zap.Error(err))
+			response.FailWithMessage("获取字典数据失败:"+err.Error(), c)
+			return
+		}
+	}
+
 	// 处理菜单数据，构建递归的children结构
 	processedMenus := buildMenuTree(menuData)
 
@@ -282,6 +293,34 @@ func (sysVersionApi *SysVersionApi) ExportVersion(c *gin.Context) {
 		processedApis = append(processedApis, cleanApi)
 	}
 
+	// 处理字典数据，清除ID和时间戳字段，包含字典详情
+	processedDicts := make([]system.SysDictionary, 0, len(dictData))
+	for _, dict := range dictData {
+		cleanDict := system.SysDictionary{
+			Name:   dict.Name,
+			Type:   dict.Type,
+			Status: dict.Status,
+			Desc:   dict.Desc,
+		}
+		
+		// 处理字典详情数据，清除ID和时间戳字段
+		cleanDetails := make([]system.SysDictionaryDetail, 0, len(dict.SysDictionaryDetails))
+		for _, detail := range dict.SysDictionaryDetails {
+			cleanDetail := system.SysDictionaryDetail{
+				Label:  detail.Label,
+				Value:  detail.Value,
+				Extend: detail.Extend,
+				Status: detail.Status,
+				Sort:   detail.Sort,
+				// 不复制 ID, CreatedAt, UpdatedAt, SysDictionaryID
+			}
+			cleanDetails = append(cleanDetails, cleanDetail)
+		}
+		cleanDict.SysDictionaryDetails = cleanDetails
+		
+		processedDicts = append(processedDicts, cleanDict)
+	}
+
 	// 构建导出数据
 	exportData := systemRes.ExportVersionResponse{
 		Version: systemReq.VersionInfo{
@@ -290,8 +329,9 @@ func (sysVersionApi *SysVersionApi) ExportVersion(c *gin.Context) {
 			Description: req.Description,
 			ExportTime:  time.Now().Format("2006-01-02 15:04:05"),
 		},
-		Menus: processedMenus,
-		Apis:  processedApis,
+		Menus:        processedMenus,
+		Apis:         processedApis,
+		Dictionaries: processedDicts,
 	}
 
 	// 转换为JSON
@@ -414,6 +454,15 @@ func (sysVersionApi *SysVersionApi) ImportVersion(c *gin.Context) {
 		if err := sysVersionService.ImportApis(importData.ExportApi); err != nil {
 			global.GVA_LOG.Error("导入API失败!", zap.Error(err))
 			response.FailWithMessage("导入API失败: "+err.Error(), c)
+			return
+		}
+	}
+
+	// 导入字典数据
+	if len(importData.ExportDictionary) > 0 {
+		if err := sysVersionService.ImportDictionaries(importData.ExportDictionary); err != nil {
+			global.GVA_LOG.Error("导入字典失败!", zap.Error(err))
+			response.FailWithMessage("导入字典失败: "+err.Error(), c)
 			return
 		}
 	}

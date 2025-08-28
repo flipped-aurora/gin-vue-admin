@@ -117,9 +117,9 @@
           <el-input v-model="exportForm.description" type="textarea" placeholder="请输入版本描述" />
         </el-form-item>
         <el-form-item label="发版信息">
-          <div class="flex gap-5 w-full">
+          <div class="flex gap-3 w-full">
             <!-- 菜单选择 -->
-            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/2">
+            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/3">
               <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
                 <span class="m-0 text-gray-800 text-base font-medium">选择菜单</span>
               </div>
@@ -140,7 +140,7 @@
             </div>
 
             <!-- API选择 -->
-            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/2">
+            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/3">
               <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
                 <span class="m-0 text-gray-800 text-base font-medium">选择API</span>
               </div>
@@ -153,12 +153,38 @@
                 <el-tree ref="apiTreeRef" :data="apiTreeData" :default-checked-keys="selectedApiIds"
                   :props="apiTreeProps" default-expand-all highlight-current node-key="onlyId" show-checkbox
                   :filter-node-method="filterApiNode" @check="onApiCheck" class="api-tree">
-                  <template #default="{ _, data }">
+                  <template #default="{ data }">
                     <div class="flex items-center justify-between w-full pr-1">
                       <span>{{ data.description }}</span>
                       <el-tooltip :content="data.path">
                         <span class="max-w-[240px] break-all overflow-ellipsis overflow-hidden">
                           {{ data.path }}
+                        </span>
+                      </el-tooltip>
+                    </div>
+                  </template>
+                </el-tree>
+              </div>
+            </div>
+
+            <!-- 字典选择 -->
+            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/3">
+              <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
+                <span class="m-0 text-gray-800 text-base font-medium">选择字典</span>
+              </div>
+              <div class="px-4 py-3 border-b border-gray-300 bg-gray-50">
+                <el-input v-model="dictFilterText" placeholder="输入关键字进行过滤" clearable size="small" />
+              </div>
+              <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+                <el-tree ref="dictTreeRef" :data="dictTreeData" :default-checked-keys="selectedDictIds"
+                  :props="dictTreeProps" default-expand-all highlight-current node-key="ID" show-checkbox
+                  :filter-node-method="filterDictNode" @check="onDictCheck" class="dict-tree">
+                  <template #default="{ data }">
+                    <div class="flex items-center justify-between w-full pr-1">
+                      <span>{{ data.name || data.label }}</span>
+                      <el-tooltip :content="data.desc || (data.value ? `值: ${data.value}` : '')">
+                        <span class="text-gray-500 text-xs ml-2">
+                          {{ data.type || (data.value ? `值: ${data.value}` : '') }}
                         </span>
                       </el-tooltip>
                     </div>
@@ -212,8 +238,8 @@
         </el-form-item>
         <el-form-item label="预览内容" v-if="importPreviewData">
           <div class="flex flex-col flex-1 gap-4 border border-gray-300 rounded p-4 bg-gray-50">
-            <div class="flex gap-5 w-full">
-              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/2">
+            <div class="flex gap-3 w-full">
+              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/3">
                 <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
                   <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
                     <h3 class="m-0 text-gray-800 text-base font-medium">菜单 ({{ getTotalMenuCount() }}项)</h3>
@@ -238,7 +264,7 @@
                   </div>
                 </div>
               </div>
-              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/2">
+              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/3">
                 <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
                   <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
                     <h3 class="m-0 text-gray-800 text-base font-medium">API ({{ importPreviewData.apis?.length || 0 }}项)</h3>
@@ -257,6 +283,33 @@
                         <div class="flex-1 flex items-center justify-between text-sm pr-2">
                           <span>{{ data.description }}</span>
                           <span class="text-gray-500 text-xs ml-2">{{ data.path }} [{{ data.method }}]</span>
+                        </div>
+                      </template>
+                    </el-tree>
+                  </div>
+                </div>
+              </div>
+              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/3">
+                <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
+                  <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
+                    <h3 class="m-0 text-gray-800 text-base font-medium">字典 ({{ importPreviewData.dictionaries?.length || 0 }}项)</h3>
+                  </div>
+                  <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+                    <el-tree
+                      :data="previewDictTreeData"
+                      :props="dictTreeProps"
+                      node-key="ID"
+                      :expand-on-click-node="false"
+                      :check-on-click-node="false"
+                      :show-checkbox="false"
+                      default-expand-all
+                    >
+                      <template #default="{ data }">
+                        <div class="flex-1 flex items-center justify-between text-sm pr-2">
+                          <span>{{ data.name || data.label }}</span>
+                          <span class="text-gray-500 text-xs ml-2">
+                            {{ data.type || (data.value ? `值: ${data.value}` : '') }}
+                          </span>
                         </div>
                       </template>
                     </el-tree>
@@ -286,14 +339,13 @@ import {
 // 导入菜单和API相关接口
 import { getMenuList } from '@/api/menu'
 import { getApiList } from '@/api/api'
+import { getSysDictionaryList } from '@/api/sysDictionary'
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, filterDict } from '@/utils/format'
+import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { UploadFilled } from '@element-plus/icons-vue'
-import { ref, reactive, watch } from 'vue'
-// 引入按钮权限标识
-import { useBtnAuth } from '@/utils/btnAuth'
+import { ref, watch } from 'vue'
 import { useAppStore } from "@/pinia"
 
 defineOptions({
@@ -313,21 +365,26 @@ const exportForm = ref({
   versionCode: '',
   description: '',
   menuIds: [],
-  apiIds: []
+  apiIds: [],
+  dictIds: []
 })
 
 // 树形结构相关数据
 const menuTreeData = ref([])
 const apiTreeData = ref([])
+const dictTreeData = ref([])
 const selectedMenuIds = ref([])
 const selectedApiIds = ref([])
+const selectedDictIds = ref([])
 const menuFilterText = ref('')
 const apiFilterTextName = ref('')
 const apiFilterTextPath = ref('')
+const dictFilterText = ref('')
 
 // 树形组件引用
 const menuTreeRef = ref(null)
 const apiTreeRef = ref(null)
+const dictTreeRef = ref(null)
 
 // 树形属性配置
 const menuTreeProps = ref({
@@ -342,6 +399,21 @@ const apiTreeProps = ref({
   label: 'description'
 })
 
+const dictTreeProps = ref({
+  children: 'sysDictionaryDetails',
+  label: function (data) {
+    // 如果是字典主项，显示字典名称
+    if (data.name) {
+      return data.name
+    }
+    // 如果是字典详情项，显示标签
+    if (data.label) {
+      return data.label
+    }
+    return '未知项'
+  }
+})
+
 // 导入相关数据
 const importDialogVisible = ref(false)
 const importLoading = ref(false)
@@ -350,36 +422,10 @@ const importPreviewData = ref(null)
 const uploadRef = ref(null)
 const previewMenuTreeData = ref([])
 const previewApiTreeData = ref([])
+const previewDictTreeData = ref([])
 
 
 
-// 验证规则
-const rule = reactive({
-  versionName: [{
-    required: true,
-    message: '请输入版本名称',
-    trigger: ['input', 'blur'],
-  },
-  {
-    whitespace: true,
-    message: '不能只输入空格',
-    trigger: ['input', 'blur'],
-  }
-  ],
-  versionCode: [{
-    required: true,
-    message: '请输入版本号',
-    trigger: ['input', 'blur'],
-  },
-  {
-    whitespace: true,
-    message: '不能只输入空格',
-    trigger: ['input', 'blur'],
-  }
-  ]
-})
-
-const elFormRef = ref()
 const elSearchFormRef = ref()
 
 // =========== 表格控制部分 ===========
@@ -549,6 +595,19 @@ const getMenuAndApiList = async () => {
   }
 }
 
+// 获取字典列表
+const getDictList = async () => {
+  try {
+    const dictRes = await getSysDictionaryList({ page: 1, pageSize: 9999 })
+    if (dictRes.code === 0) {
+      dictTreeData.value = dictRes.data || []
+    }
+  } catch (error) {
+    console.error('获取字典数据失败:', error)
+    ElMessage.error('获取字典数据失败')
+  }
+}
+
 // 构建API树形结构
 const buildApiTree = (apis) => {
   const apiObj = {}
@@ -595,6 +654,20 @@ const filterApiNode = (value, data) => {
   return matchesName && matchesPath
 }
 
+const filterDictNode = (value, data) => {
+  if (!value) return true
+  const name = data.name || ''
+  const type = data.type || ''
+  const desc = data.desc || ''
+  const label = data.label || ''
+  const dataValue = data.value || ''
+  return name.indexOf(value) !== -1 || 
+         type.indexOf(value) !== -1 || 
+         desc.indexOf(value) !== -1 || 
+         label.indexOf(value) !== -1 || 
+         dataValue.indexOf(value) !== -1
+}
+
 const onMenuCheck = (data, checked) => {
   if (checked.checkedKeys) {
     selectedMenuIds.value = checked.checkedKeys
@@ -604,6 +677,12 @@ const onMenuCheck = (data, checked) => {
 const onApiCheck = (data, checked) => {
   if (checked.checkedKeys) {
     selectedApiIds.value = checked.checkedKeys
+  }
+}
+
+const onDictCheck = (data, checked) => {
+  if (checked.checkedKeys) {
+    selectedDictIds.value = checked.checkedKeys
   }
 }
 
@@ -620,10 +699,17 @@ watch([apiFilterTextName, apiFilterTextPath], () => {
   }
 })
 
+watch(dictFilterText, (val) => {
+  if (dictTreeRef.value) {
+    dictTreeRef.value.filter(val)
+  }
+})
+
 // 导出相关方法
 const openExportDialog = async () => {
   exportDialogVisible.value = true
   await getMenuAndApiList()
+  await getDictList()
 }
 
 const closeExportDialog = () => {
@@ -633,13 +719,16 @@ const closeExportDialog = () => {
     versionCode: '',
     description: '',
     menuIds: [],
-    apiIds: []
+    apiIds: [],
+    dictIds: []
   }
   selectedMenuIds.value = []
   selectedApiIds.value = []
+  selectedDictIds.value = []
   menuFilterText.value = ''
   apiFilterTextName.value = ''
   apiFilterTextPath.value = ''
+  dictFilterText.value = ''
 }
 
 const handleExport = async () => {
@@ -650,15 +739,18 @@ const handleExport = async () => {
 
   exportLoading.value = true
   try {
-    // 获取选中的菜单和API
+    // 获取选中的菜单、API和字典
     const checkedMenus = menuTreeRef.value ? menuTreeRef.value.getCheckedNodes(false, true) : []
     const checkedApis = apiTreeRef.value ? apiTreeRef.value.getCheckedNodes(true) : []
+    const checkedDicts = dictTreeRef.value ? dictTreeRef.value.getCheckedNodes(true) : []
 
     const menuIds = checkedMenus.map(menu => menu.ID)
     const apiIds = checkedApis.map(api => api.ID)
+    const dictIds = checkedDicts.map(dict => dict.ID)
 
     exportForm.value.menuIds = menuIds
     exportForm.value.apiIds = apiIds
+    exportForm.value.dictIds = dictIds
 
     const res = await exportVersion(exportForm.value)
     if (res.code !== 0) {
@@ -748,29 +840,14 @@ const getTotalMenuCount = () => {
   return countMenus(importPreviewData.value.menus)
 }
 
-// 构建树形结构的辅助函数
-const buildTreeData = (data, parentId = 0) => {
-  const tree = []
-  // 处理parentId可能为字符串"0"或数字0的情况
-  const targetParentId = parentId === 0 ? [0, "0"] : [parentId]
-  const items = data.filter(item => targetParentId.includes(item.parentId))
-  
-  items.forEach(item => {
-    const children = buildTreeData(data, item.ID)
-    if (children.length > 0) {
-      item.children = children
-    }
-    tree.push(item)
-  })
-  
-  return tree
-}
+
 
 const handleJsonContentChange = () => {
   if (!importJsonContent.value.trim()) {
     importPreviewData.value = null
     previewMenuTreeData.value = []
     previewApiTreeData.value = []
+    previewDictTreeData.value = []
     return
   }
 
@@ -780,7 +857,8 @@ const handleJsonContentChange = () => {
     // 构建预览数据
     importPreviewData.value = {
       menus: data.menus || [],
-      apis: data.apis || []
+      apis: data.apis || [],
+      dictionaries: data.dictionaries || []
     }
 
     // 直接使用菜单数据，因为它已经是树形结构（包含children字段）
@@ -810,11 +888,19 @@ const handleJsonContentChange = () => {
     } else {
       previewApiTreeData.value = []
     }
+
+    // 处理字典数据
+    if (data.dictionaries && data.dictionaries.length > 0) {
+      previewDictTreeData.value = data.dictionaries
+    } else {
+      previewDictTreeData.value = []
+    }
   } catch (error) {
     console.error('JSON解析失败:', error)
     importPreviewData.value = null
     previewMenuTreeData.value = []
     previewApiTreeData.value = []
+    previewDictTreeData.value = []
   }
 }
 

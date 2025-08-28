@@ -86,6 +86,12 @@ func (sysVersionService *SysVersionService) GetApisByIds(ctx context.Context, id
 	return
 }
 
+// GetDictionariesByIds 根据ID列表获取字典数据
+func (sysVersionService *SysVersionService) GetDictionariesByIds(ctx context.Context, ids []uint) (dictionaries []system.SysDictionary, err error) {
+	err = global.GVA_DB.Where("id in ?", ids).Preload("SysDictionaryDetails").Find(&dictionaries).Error
+	return
+}
+
 // ImportMenus 导入菜单数据
 func (sysVersionService *SysVersionService) ImportMenus(ctx context.Context, menus []system.SysBaseMenu) error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -188,6 +194,34 @@ func (sysVersionService *SysVersionService) ImportApis(apis []system.SysApi) err
 			}
 
 			if err := tx.Create(&newApi).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+// ImportDictionaries 导入字典数据
+func (sysVersionService *SysVersionService) ImportDictionaries(dictionaries []system.SysDictionary) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		for _, dict := range dictionaries {
+			// 检查字典是否已存在
+			var existingDict system.SysDictionary
+			if err := tx.Where("type = ?", dict.Type).First(&existingDict).Error; err == nil {
+				// 字典已存在，跳过
+				continue
+			}
+
+			// 创建新字典
+			newDict := system.SysDictionary{
+				Name:                 dict.Name,
+				Type:                 dict.Type,
+				Status:               dict.Status,
+				Desc:                 dict.Desc,
+				SysDictionaryDetails: dict.SysDictionaryDetails,
+			}
+
+			if err := tx.Create(&newDict).Error; err != nil {
 				return err
 			}
 		}

@@ -6,6 +6,7 @@ import (
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 	"io/ioutil"
+	"sync"
 )
 
 type Translator struct {
@@ -13,6 +14,7 @@ type Translator struct {
 	bundle           *i18n.Bundle
 	localizer        *i18n.Localizer
 	defaultLocalizer *i18n.Localizer
+	mu               sync.RWMutex // 保护localizer和defaultLocalizer的并发访问
 }
 
 // func (t *Translator) InitTranslator(initLang string) {
@@ -83,17 +85,26 @@ func (t *Translator) InitTranslatorEx(initLang string, defaultLang string, langP
 }
 
 func (t *Translator) SetTranslatorLanguage(lang string) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
 	t.localizer = i18n.NewLocalizer(t.bundle, lang)
 }
 
 func (t *Translator) SetTranslatorDefaultLanguage(lang string) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
 	t.defaultLocalizer = i18n.NewLocalizer(t.bundle, lang)
 }
 
 func (t *Translator) TranslateMessage(messageID string) string {
-	translatedMsg, err := t.localizer.LocalizeMessage(&i18n.Message{ID: messageID})
+	t.mu.RLock()
+	localizer := t.localizer
+	defaultLocalizer := t.defaultLocalizer
+	t.mu.RUnlock()
+
+	translatedMsg, err := localizer.LocalizeMessage(&i18n.Message{ID: messageID})
 	if err != nil || translatedMsg == "" { // if translation fail use default language transalator
-		translatedMsg, err = t.defaultLocalizer.LocalizeMessage(&i18n.Message{ID: messageID})
+		translatedMsg, err = defaultLocalizer.LocalizeMessage(&i18n.Message{ID: messageID})
 		if err != nil {
 			return messageID
 		}

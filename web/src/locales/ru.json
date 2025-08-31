@@ -31,6 +31,25 @@
         "importSuccess": "Импорт выполнен успешно"
       }
     },
+    "i18n": {
+      "chinese": "Китайский",
+      "traditionalChinese": "Традиционный китайский"
+    },
+    "office": {
+      "importDocx": "Импорт компонента VueOfficeDocx",
+      "importExcel": "Импорт компонента VueOfficeExcel",
+      "importStyles": "Импорт связанных стилей",
+      "pdfLoadSuccess": "PDF загружен успешно",
+      "pdfError": "Ошибка PDF"
+    },
+    "richtext": {
+      "importCss": "Импорт CSS",
+      "placeholder": "Пожалуйста, введите содержимое...",
+      "destroyEditor": "Уничтожить редактор при уничтожении компонента"
+    },
+    "charts": {
+      "referenceNote": "Этот компонент ссылается на реализацию arco-pro"
+    },
     "selectFile": {
       "uploadFiles": "Загрузить файлы",
       "uploadFailed": "Ошибка загрузки"
@@ -62,6 +81,36 @@
       "image": {
         "compressedUpload": "Сжатая загрузка",
         "avatarImageFormatError": "Загружаемые изображения для аватара могут быть только в формате jpg или png!"
+      },
+      "cropper": {
+        "cropUpload": "Обрезка и загрузка",
+        "imageCrop": "Обрезка изображения",
+        "leftEditArea": "Левая область редактирования",
+        "toolbar": "Панель инструментов",
+        "rotateLeft": "Повернуть влево",
+        "rotateRight": "Повернуть вправо",
+        "selectRatio": "Выбрать соотношение",
+        "rightPreviewArea": "Правая область предварительного просмотра",
+        "cropPreview": "Предварительный просмотр обрезки",
+        "cancel": "Отмена",
+        "upload": "Загрузить",
+        "uploading": "Загрузка...",
+        "responsiveData": "Адаптивные данные",
+        "zoomControl": "Управление масштабом",
+        "ratioPreset": "Предустановленное соотношение",
+        "freeRatio": "Свободное соотношение",
+        "fileProcessing": "Обработка файла",
+        "selectImageFile": "Пожалуйста, выберите файл изображения",
+        "fileSizeLimit": "Размер файла не может превышать 8 МБ!",
+        "rotationControl": "Управление поворотом",
+        "realtimePreview": "Предварительный просмотр в реальном времени",
+        "uploadProcessing": "Обработка загрузки",
+        "uploadFailed": "Ошибка загрузки: ",
+        "uploadSuccess": "Загрузка успешна"
+      },
+      "qrCode": {
+        "scanUpload": "Сканировать для загрузки",
+        "complete": "Завершить загрузку"
       }
     }
   },
@@ -791,7 +840,9 @@
           "enterBackendWTableFolderAddress": "Введите адрес папки WTable бэкенда",
           "confirmRestartService": "Подтвердить перезапуск службы",
           "operationSuccess": "Операция выполнена успешно",
-          "cancelRestart": "Отменить перезапуск"
+          "cancelRestart": "Отменить перезапуск",
+          "node": "Узел",
+          "chinese": "Китайский"
         }
       },
       "autoPkg": {
@@ -1118,8 +1169,16 @@
         "closeGenerateMenu": "Закрыть генерацию меню",
         "selectAtLeastOneAPI": "Выберите хотя бы один API",
         "enterPluginNameAgain": "Введите имя плагина еще раз",
-        "closeGenerateAPI": "Закрыть генерацию API"
+        "closeGenerateAPI": "Закрыть генерацию API",
+        "menuChildrenComment": "Если меню имеет дочерние элементы, рекурсивно развернуть до первого уровня"
       }
+    }
+  },
+  "vitePlugin": {
+    "componentName": {
+      "recursiveGetVueFiles": "Рекурсивно получить все .vue файлы в директории",
+      "extractComponentName": "Извлечь имя компонента из содержимого .vue файла",
+      "vitePluginDefinition": "Определение плагина Vite"
     }
   }
 }

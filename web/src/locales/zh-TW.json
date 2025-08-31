@@ -22,6 +22,69 @@
         "import": "導入",
         "importSuccess": "導入成功"
       }
+    },
+    "i18n": {
+      "chinese": "中文",
+      "traditionalChinese": "繁體中文"
+    },
+    "office": {
+      "importDocx": "引入VueOfficeDocx組件",
+      "importExcel": "引入VueOfficeExcel組件",
+      "importStyles": "引入相關樣式",
+      "pdfLoadSuccess": "PDF 載入成功",
+      "pdfError": "PDF 錯誤"
+    },
+    "richtext": {
+      "importCss": "引入CSS",
+      "placeholder": "請輸入內容...",
+      "destroyEditor": "組件銷毀時銷毀編輯器"
+    },
+    "charts": {
+      "referenceNote": "該組件參考了arco-pro的實現"
+    },
+    "upload": {
+      "common": {
+        "normalUpload": "普通上傳",
+        "fileFormatNote": "上傳圖片只能是 jpg,png,svg,webp 格式, 上傳視頻只能是 mp4,webm 格式!",
+        "videoSizeError": "上傳視頻大小不能超過 5MB",
+        "imageSizeError": "未壓縮的上傳圖片大小不能超過 500KB，請使用壓縮上傳",
+        "compression": "壓縮",
+        "shouldSupportProjectSettingToo": "應支持項目中設置"
+      },
+      "image": {
+        "compressedUpload": "壓縮上傳",
+        "avatarImageFormatError": "上傳頭像圖片只能是 jpg或png 格式!"
+      },
+      "cropper": {
+        "cropUpload": "裁剪上傳",
+        "imageCrop": "圖片裁剪",
+        "leftEditArea": "左側編輯區",
+        "toolbar": "工具欄",
+        "rotateLeft": "向左旋轉",
+        "rotateRight": "向右旋轉",
+        "selectRatio": "選擇比例",
+        "rightPreviewArea": "右側預覽區",
+        "cropPreview": "裁剪預覽",
+        "cancel": "取 消",
+        "upload": "上 傳",
+        "uploading": "上傳中...",
+        "responsiveData": "響應式數據",
+        "zoomControl": "縮放控制",
+        "ratioPreset": "比例預設",
+        "freeRatio": "自由比例",
+        "fileProcessing": "文件處理",
+        "selectImageFile": "請選擇圖片文件",
+        "fileSizeLimit": "文件大小不能超過8MB!",
+        "rotationControl": "旋轉控制",
+        "realtimePreview": "實時預覽",
+        "uploadProcessing": "上傳處理",
+        "uploadFailed": "上傳失敗: ",
+        "uploadSuccess": "上傳成功"
+      },
+      "qrCode": {
+        "scanUpload": "掃碼上傳",
+        "complete": "完成上傳"
+      }
     }
   },
   "api": {
@@ -698,7 +761,9 @@
         "enterBackendWTableFolderAddress": "請輸入後端WTable文件夾地址",
         "confirmRestartService": "確定要重啟服務",
         "operationSuccess": "操作成功",
-        "cancelRestart": "取消重啟"
+        "cancelRestart": "取消重啟",
+        "node": "節點",
+        "chinese": "中文"
       },
       "autoCode": {
         "getAiPath": "获取AiPath",
@@ -1010,6 +1075,120 @@
         "templateInfoFormatError": "模板信息格式不正確，請檢查",
         "exportConditionError": "請填寫完整的導出條件",
         "completeAssociationError": "請填寫完整的關聯"
+      },
+      "exportTemplate": {
+        "syncTableExportFeature": "本功能提供同步的表格導出功能，大數據量的異步表格導出功能，可以選擇點我定制",
+        "templateIdentifier": "模板標識",
+        "add": "添加",
+        "edit": "修改",
+        "gvaDatabase": "GVA庫",
+        "note": "註：需要提前到db-list自行配置多數據庫，如未配置需配置後重啟服務方可使用。若無法選擇，請到config.yaml中設置disabled:false，選擇導入導出的目標庫。",
+        "enterTemplateName": "請輸入模板名稱",
+        "templateIdentifierInfo": "模板標識為前端組件需要掛在的標識屬性",
+        "associationCondition": "關聯條件",
+        "selectAssociationMethod": "請選擇關聯方式",
+        "enterAssociationTable": "請輸入關聯表",
+        "associationConditionExample": "關聯條件 table1.a = table2.b",
+        "addCondition": "添加條件",
+        "defaultExportCount": "默認導出條數",
+        "defaultSortCondition": "默認排序條件",
+        "jsonKeyFromQuery": "需要從查詢條件取的json key",
+        "tableColumn": "表對應的column",
+        "selectQueryCondition": "請選擇查詢條件",
+        "templatePlaceholder": "",
+        "selectBusinessDbAndTable": "請先選擇業務庫及選擇表後再進行操作",
+        "templateFormatIncorrect": "模板信息格式不正確，請檢查",
+        "completeExportConditions": "請填寫完整的導出條件",
+        "completeAssociation": "請填寫完整的關聯",
+        "exportTemplateNote": "本功能提供同步的表格導出功能，大數據量的異步表格導出功能，可以選擇點我定制",
+        "creationDate": "創建日期",
+        "searchDateHint": "搜索範圍是開始日期（包含）至結束日期（不包含）",
+        "startDate": "開始日期",
+        "endDate": "結束日期",
+        "templateName": "模板名稱",
+        "searchCriteria": "搜索條件",
+        "tableName": "表名稱",
+        "templateId": "模板標識",
+        "database": "數據庫",
+        "gvaLibrary": "GVA庫",
+        "templateInfo": "模板信息",
+        "addTo": "添加",
+        "dbListNote": "註：需要提前到db-list自行配置多數據庫，如未配置需配置後重啟服務方可使用。若無法選擇，請到config.yaml中設置disabled:false，選擇導入導出的目標庫。",
+        "templateName2": "模板名稱:",
+        "templateNameNote": "請輸入模板名稱",
+        "tableName2": "表名稱:",
+        "autoGenerateTemplate": "自動生成模板",
+        "templateId2": "模板標識:",
+        "templateIdNote": "模板標識為前端組件需要掛在的標識屬性",
+        "associationConditions": "關聯條件:",
+        "associationConditionsNote": "請選擇關聯方式",
+        "associationTableNote": "請輸入關聯表",
+        "joinConditionNote": "關聯條件 table1.a = table2.b",
+        "addingCondtion": "添加條件",
+        "noOfExportedRecords": "默認導出條數:",
+        "sortingCriteria": "默認排序條件:",
+        "sortingCriteriaNote": "例:id desc",
+        "exportCondition": "導出條件:",
+        "jsonKeyNote": "需要從查詢條件取的json key",
+        "columnNote": "表對應的column",
+        "queryConditionNote": "請選擇查詢條件",
+        "templatePlaceholder1": "模板信息格式：key標識數據庫column列名稱（在join模式下需要寫為 table.column），value標識導出excel列名稱，如key為數據庫關鍵字或函數，請按照關鍵字的處理模式處理，當前以mysql為例，如下：",
+        "templatePlaceholder2": "第一列",
+        "templatePlaceholder3": "第三列",
+        "templatePlaceholder4": "第四列",
+        "templatePlaceholder5": "我屬於數據庫關鍵字或函數",
+        "templatePlaceholder6": "如果增加了JOINS導出key應該列為 {table_name1.table_column1:\"第一列\",table_name2.table_column2:\"第二列\"}\r\n如果有重複的列名導出格式應為 {table_name1.table_column1 as key:\"第一列\",table_name2.table_column2 as key2:\"第二列\"}\r\nJOINS模式下不支持導入",
+        "noSpaceOnlyNote": "不能只輸入空格",
+        "enterEndDate": "請填寫結束日期",
+        "enterStartDate": "請填寫開始日期",
+        "startDateBeforeEndDate": "開始日期應當早於結束日期",
+        "selectDBAndTable": "請先選擇業務庫及選擇表後再進行操作",
+        "templateInfoFormatError": "模板信息格式不正確，請檢查",
+        "exportConditionError": "請填寫完整的導出條件",
+        "completeAssociationError": "請填寫完整的關聯",
+        "xiaoMiaoIsThinking": "小淼正在思考...",
+        "tableToBeUsed": "需用到的表",
+        "selectWhenUSingAi": "使用AI的情況下請選擇",
+        "aiHelpWriting": "AI幫寫",
+        "aiNote": "試試描述你要做的導出功能讓AI幫你完成，在此之前請選擇你需要導出的表所在的業務庫，如不做選擇，則默認使用gva庫",
+        "helpWrite": "幫寫",
+        "autoComplete": "自動補全",
+        "autoGenerateTemplates": "自動生成模板",
+        "selectTableToExport": "請先選擇需要參與導出的表",
+        "aiAutoCompleteFail": "AI自動補全失敗，已調整為邏輯填寫"
+      },
+      "installPlugin": {
+        "dragOrClickUpload": "拖拽或點擊上傳",
+        "uploadPackage": "請把安裝包的zip拖拽至此處上傳"
+      },
+      "pubPlug": {
+        "pluginSupport": "目前只支持標準插件（通過插件模板生成的標準目錄插件），非標準插件請自行打包",
+        "pluginNameInput": "插件模板處填寫的【插件名】",
+        "menuSelectionNote": "穿梭框請只選擇子級菜單即可",
+        "menuGroupNameInput": "請輸入菜單組名，例：公告管理",
+        "menuNamePathInput": "請輸入菜單名稱/路徑",
+        "optionalMenu": "可選菜單",
+        "useMenu": "使用菜單",
+        "remove": "移除",
+        "selected": "選中",
+        "defineMenuInstall": "定義安裝菜單",
+        "apiDescriptionPathInput": "請輸入API描述/PATH",
+        "optionalAPI": "可選API",
+        "useAPI": "使用API",
+        "defineAPIInstall": "定義安裝API",
+        "packagePlugin": "打包插件",
+        "package": "打包",
+        "closePackage": "關閉打包",
+        "enterMenuGroupName": "請填寫菜單組名",
+        "selectAtLeastOneMenu": "請至少選擇一個菜單",
+        "enterPluginName": "請填寫插件名",
+        "generateInitialMenu": "生成初始菜單",
+        "generate": "生成",
+        "closeGenerateMenu": "關閉生成菜單",
+        "selectAtLeastOneAPI": "請至少選擇一個API",
+        "enterPluginNameAgain": "請填寫插件名",
+        "closeGenerateAPI": "關閉生成API",
+        "menuChildrenComment": "如果menu存在children，遞歸展開到一級"
       }
     }
   },
@@ -1041,6 +1220,13 @@
       "errorMessage": "錯誤信息",
       "identityInfo": "身份信息",
       "loginAgain": "重新登錄"
+    }
+  },
+  "vitePlugin": {
+    "componentName": {
+      "recursiveGetVueFiles": "遞歸獲取目錄下所有的 .vue 文件",
+      "extractComponentName": "從 .vue 文件內容中提取組件名稱",
+      "vitePluginDefinition": "Vite 插件定義"
     }
   }
 }

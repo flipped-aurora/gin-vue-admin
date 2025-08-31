@@ -12,12 +12,14 @@
 </script>
 <script setup>
   import { ref, watch } from 'vue'
-
   //引入VueOfficeDocx组件
   import VueOfficePdf from '@vue-office/pdf'
   //引入相关样式
   import '@vue-office/docx/lib/index.css'
-  console.log('pdf===>')
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
+
   const props = defineProps({
     modelValue: {
       type: String,
@@ -31,9 +33,9 @@
     { immediate: true }
   )
   const renderedHandler = () => {
-    console.log('pdf 加载成功')
+    console.log(t('components.office.pdfLoadSuccess'))
   }
   const errorHandler = () => {
-    console.log('pdf 错误')
+    console.log(t('components.office.pdfError'))
   }
 </script>

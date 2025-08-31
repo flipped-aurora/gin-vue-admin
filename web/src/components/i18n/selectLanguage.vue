@@ -32,7 +32,7 @@
             alt="Русский"
             class="w-8 mr-1"
             src="@/assets/flags/ru.svg"
-        />العربية
+        />Русский
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>

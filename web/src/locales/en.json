@@ -31,6 +31,25 @@
         "importSuccess": "Import Success"
       }
     },
+    "i18n": {
+      "chinese": "Chinese",
+      "traditionalChinese": "Traditional Chinese"
+    },
+    "office": {
+      "importDocx": "Import VueOfficeDocx component",
+      "importExcel": "Import VueOfficeExcel component",
+      "importStyles": "Import related styles",
+      "pdfLoadSuccess": "PDF loaded successfully",
+      "pdfError": "PDF error"
+    },
+    "richtext": {
+      "importCss": "Import CSS",
+      "placeholder": "Please enter content...",
+      "destroyEditor": "Destroy editor when component is destroyed"
+    },
+    "charts": {
+      "referenceNote": "This component references the arco-pro implementation"
+    },
     "selectFile": {
       "uploadFiles": "Upload Files",
       "uploadFailed": "Upload Failed "
@@ -62,6 +81,36 @@
       "image": {
         "compressedUpload": "Compressed Upload",
         "avatarImageFormatError": "Uploaded avatar images can only be in jpg or png format!"
+      },
+      "cropper": {
+        "cropUpload": "Crop Upload",
+        "imageCrop": "Image Crop",
+        "leftEditArea": "Left Edit Area",
+        "toolbar": "Toolbar",
+        "rotateLeft": "Rotate Left",
+        "rotateRight": "Rotate Right",
+        "selectRatio": "Select Ratio",
+        "rightPreviewArea": "Right Preview Area",
+        "cropPreview": "Crop Preview",
+        "cancel": "Cancel",
+        "upload": "Upload",
+        "uploading": "Uploading...",
+        "responsiveData": "Responsive Data",
+        "zoomControl": "Zoom Control",
+        "ratioPreset": "Ratio Preset",
+        "freeRatio": "Free Ratio",
+        "fileProcessing": "File Processing",
+        "selectImageFile": "Please select image file",
+        "fileSizeLimit": "File size cannot exceed 8MB!",
+        "rotationControl": "Rotation Control",
+        "realtimePreview": "Real-time Preview",
+        "uploadProcessing": "Upload Processing",
+        "uploadFailed": "Upload Failed: ",
+        "uploadSuccess": "Upload Success"
+      },
+      "qrCode": {
+        "scanUpload": "Scan to Upload",
+        "complete": "Complete Upload"
       }
     }
   },
@@ -841,7 +890,9 @@
         "enterBackendWTableFolderAddress": "Please Enter Backend WTable Folder Address",
         "confirmRestartService": "Confirm Restart Service",
         "operationSuccess": "Operation Successful",
-        "cancelRestart": "Cancel Restart"
+        "cancelRestart": "Cancel Restart",
+        "node": "Node",
+        "chinese": "Chinese"
       },
       "autoPkg": {
         "autoPkgNote": "This function is for development environment use only and is not recommended for production use. For specific usage effects, please watch the video https://www.bilibili.com/video/BV1kv4y1g7nT?p=3",
@@ -1167,8 +1218,16 @@
         "closeGenerateMenu": "Close Generate Menu",
         "selectAtLeastOneAPI": "Please select at least one API",
         "enterPluginNameAgain": "Please enter the plugin name again",
-        "closeGenerateAPI": "Close Generate API"
+        "closeGenerateAPI": "Close Generate API",
+        "menuChildrenComment": "If menu has children, recursively expand to first level"
       }
+    }
+  },
+  "vitePlugin": {
+    "componentName": {
+      "recursiveGetVueFiles": "Recursively get all .vue files in the directory",
+      "extractComponentName": "Extract component name from .vue file content",
+      "vitePluginDefinition": "Vite plugin definition"
     }
   }
 }

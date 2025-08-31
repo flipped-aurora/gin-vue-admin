@@ -31,6 +31,25 @@
         "importSuccess": "تم الاستيراد بنجاح"
       }
     },
+    "i18n": {
+      "chinese": "الصينية",
+      "traditionalChinese": "الصينية التقليدية"
+    },
+    "office": {
+      "importDocx": "استيراد مكون VueOfficeDocx",
+      "importExcel": "استيراد مكون VueOfficeExcel",
+      "importStyles": "استيراد الأنماط ذات الصلة",
+      "pdfLoadSuccess": "تم تحميل PDF بنجاح",
+      "pdfError": "خطأ في PDF"
+    },
+    "richtext": {
+      "importCss": "استيراد CSS",
+      "placeholder": "يرجى إدخال المحتوى...",
+      "destroyEditor": "تدمير المحرر عند تدمير المكون"
+    },
+    "charts": {
+      "referenceNote": "يشير هذا المكون إلى تنفيذ arco-pro"
+    },
     "selectFile": {
       "uploadFiles": "رفع الملفات",
       "uploadFailed": "فشل رفع الملفات "
@@ -62,6 +81,36 @@
       "image": {
         "compressedUpload": "رفع مضغوط",
         "avatarImageFormatError": "يمكن رقع الصور الرمزية فقط بتنسيق jpg أو png!"
+      },
+      "cropper": {
+        "cropUpload": "رفع مقطوع",
+        "imageCrop": "قطع الصورة",
+        "leftEditArea": "منطقة التحرير اليسرى",
+        "toolbar": "شريط الأدوات",
+        "rotateLeft": "تدوير يسار",
+        "rotateRight": "تدوير يمين",
+        "selectRatio": "اختيار النسبة",
+        "rightPreviewArea": "منطقة المعاينة اليمنى",
+        "cropPreview": "معاينة القطع",
+        "cancel": "إلغاء",
+        "upload": "رفع",
+        "uploading": "جاري الرفع...",
+        "responsiveData": "بيانات متجاوبة",
+        "zoomControl": "تحكم التكبير",
+        "ratioPreset": "نسبة محددة مسبقاً",
+        "freeRatio": "نسبة حرة",
+        "fileProcessing": "معالجة الملف",
+        "selectImageFile": "يرجى اختيار ملف صورة",
+        "fileSizeLimit": "حجم الملف لا يمكن أن يتجاوز 8 ميجابايت!",
+        "rotationControl": "تحكم التدوير",
+        "realtimePreview": "معاينة فورية",
+        "uploadProcessing": "معالجة الرفع",
+        "uploadFailed": "فشل الرفع: ",
+        "uploadSuccess": "نجح الرفع"
+      },
+      "qrCode": {
+        "scanUpload": "مسح للرفع",
+        "complete": "إكمال الرفع"
       }
     }
   },
@@ -839,7 +888,9 @@
         "enterBackendWTableFolderAddress": "ير��ى إدخال عنوان مجلد WTable الخلفي",
         "confirmRestartService": "هل تريد إعادة تشغيل الخدمة",
         "operationSuccess": "تمت العملية بنجاح",
-        "cancelRestart": "إلغاء إعادة التشغيل"
+        "cancelRestart": "إلغاء إعادة التشغيل",
+        "node": "عقدة",
+        "chinese": "الصينية"
       },
       "autoPkg": {
         "autoPkgNote": "هذه الميزة للاستخدام في بيئة التطوير، لا يُنصح بنشرها في الإنتاج، لمزيد من التفاصيل، يرجى مشاهدة الفيديو https://www.bilibili.com/video/BV1kv4y1g7nT?p=3",
@@ -1160,8 +1211,16 @@
         "closeGenerateMenu": "إغلاق إنشاء القائمة",
         "selectAtLeastOneAPI": "يرجى اختيار API واحد على الأقل",
         "enterPluginNameAgain": "يرجى إدخال اسم المكون الإضافي مرة أخرى",
-        "closeGenerateAPI": "إغلاق إنشاء API"
+        "closeGenerateAPI": "إغلاق إنشاء API",
+        "menuChildrenComment": "إذا كانت القائمة تحتوي على عناصر فرعية، قم بالتوسع تكراريًا إلى المستوى الأول"
       }
+    }
+  },
+  "vitePlugin": {
+    "componentName": {
+      "recursiveGetVueFiles": "الحصول على جميع ملفات .vue في الدليل بشكل تكراري",
+      "extractComponentName": "استخراج اسم المكون من محتوى ملف .vue",
+      "vitePluginDefinition": "تعريف إضافة Vite"
     }
   }
 }

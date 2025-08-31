@@ -27,6 +27,9 @@
 
   import { ElMessage } from 'element-plus'
   import { getUrl } from '@/utils/image'
+    import { useI18n } from 'vue-i18n'
+
+    const { t } = useI18n()
 
   const emits = defineEmits(['change', 'update:modelValue'])
 
@@ -47,7 +50,7 @@
 
   const toolbarConfig = {}
   const editorConfig = {
-    placeholder: '请输入内容...',
+    placeholder: t('components.richtext.placeholder'),
     MENU_CONF: {}
   }
   editorConfig.MENU_CONF['uploadImage'] = {

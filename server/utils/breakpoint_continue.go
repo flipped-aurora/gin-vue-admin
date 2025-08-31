@@ -5,6 +5,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
 // 前端传来文件片与当前片为什么文件的第几片
@@ -56,7 +58,7 @@ func CheckMd5(content []byte, chunkMd5 string) (CanUpload bool) {
 
 func makeFileContent(content []byte, fileName string, FileDir string, contentNumber int) (string, error) {
 	if strings.Contains(fileName, "..") || strings.Contains(FileDir, "..") {
-		return "", errors.New("文件名或路径不合法")
+		return "", errors.New(global.Translate("breakpoint.invalidFileNameOrPath"))
 	}
 	path := FileDir + fileName + "_" + strconv.Itoa(contentNumber)
 	f, err := os.Create(path)

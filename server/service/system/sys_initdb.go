@@ -16,10 +16,13 @@ const (
 	Pgsql           = "pgsql"
 	Sqlite          = "sqlite"
 	Mssql           = "mssql"
-	InitSuccess     = "\n[%v] --> 初始数据成功!\n"
-	InitDataExist   = "\n[%v] --> %v 的初始数据已存在!\n"
-	InitDataFailed  = "\n[%v] --> %v 初始数据失败! \nerr: %+v\n"
-	InitDataSuccess = "\n[%v] --> %v 初始数据成功!\n"
+)
+
+var (
+	InitSuccess     = "\n[%v] --> " + global.Translate("database.initDataSuccess") + "\n"
+	InitDataExist   = "\n[%v] --> %v " + global.Translate("database.initDataExists") + "\n"
+	InitDataFailed  = "\n[%v] --> %v " + global.Translate("database.initDataFailed") + " \nerr: %+v\n"
+	InitDataSuccess = "\n[%v] --> %v " + global.Translate("database.initDataSuccess") + "\n"
 )
 
 const (

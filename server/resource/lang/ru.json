@@ -530,5 +530,32 @@
         "sysNoSupport": "Система не поддерживает",
         "fileNameInvalid": "Имя файла недействительно"
     },
-    "router": {}
+    "router": {},
+    "directory": {
+        "fileExists": "Файл с таким именем существует"
+    },
+    "upload": {
+        "fileNotExists": "Файл не существует",
+        "readFileFailed": "Не удалось прочитать файл"
+    },
+    "jwt": {
+        "unknownError": "Неизвестная ошибка",
+        "tokenExpired": "Срок действия токена истек",
+        "tokenNotValidYet": "Токен еще не активен",
+        "tokenMalformed": "Это не токен",
+        "invalidSignature": "Недействительная подпись",
+        "tokenInvalid": "Невозможно обработать этот токен"
+    },
+    "breakpoint": {
+        "invalidFileNameOrPath": "Недействительное имя файла или путь"
+    },
+    "dictionary": {
+        "duplicateTypeNotAllowed": "Существует дублирующийся тип, создание не разрешено",
+        "doNotCauseTrouble": "Пожалуйста, не создавайте проблем",
+        "queryDictDataFailed": "Не удалось запросить данные словаря"
+    },
+    "category": {
+        "nameAlreadyExists": "Имя категории уже существует",
+        "deleteChildrenFirst": "Пожалуйста, сначала удалите дочерние элементы"
+    }
 }

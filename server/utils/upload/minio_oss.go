@@ -62,8 +62,8 @@ func (m *Minio) UploadFile(file *multipart.FileHeader) (filePathres, key string,
 	filecontent := bytes.Buffer{}
 	_, err := io.Copy(&filecontent, f)
 	if err != nil {
-		global.GVA_LOG.Error("读取文件失败", zap.Any("err", err.Error()))
-		return "", "", errors.New("读取文件失败, err:" + err.Error())
+		global.GVA_LOG.Error(global.Translate("upload.readFileFailed"), zap.Any("err", err.Error()))
+		return "", "", errors.New(global.Translate("upload.readFileFailed") + ", err:" + err.Error())
 	}
 	f.Close() // 创建文件 defer 关闭
 

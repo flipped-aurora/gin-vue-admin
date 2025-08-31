@@ -536,5 +536,32 @@
     "lengthOrValueOutOfRange": "長度或值不在合法範圍",
     "sysNoSupport": "系統不支持",
     "fileNameInvalid": "文件名不合法"
+  },
+  "directory": {
+    "fileExists": "存在相同名稱的檔案"
+  },
+  "upload": {
+    "fileNotExists": "檔案不存在",
+    "readFileFailed": "讀取檔案失敗"
+  },
+  "jwt": {
+    "unknownError": "未知錯誤",
+    "tokenExpired": "令牌已過期",
+    "tokenNotValidYet": "令牌尚未生效",
+    "tokenMalformed": "這不是一個令牌",
+    "invalidSignature": "無效簽名",
+    "tokenInvalid": "無法處理此令牌"
+  },
+  "breakpoint": {
+    "invalidFileNameOrPath": "無效的檔案名稱或路徑"
+  },
+  "dictionary": {
+    "duplicateTypeNotAllowed": "存在相同的type，不允許創建",
+    "doNotCauseTrouble": "請不要搗亂",
+    "queryDictDataFailed": "查詢字典數據失敗"
+  },
+  "category": {
+    "nameAlreadyExists": "分類名稱已存在",
+    "deleteChildrenFirst": "請先刪除子級"
   }
 }

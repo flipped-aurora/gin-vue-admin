@@ -14,13 +14,37 @@ type JWT struct {
 	SigningKey []byte
 }
 
+func GetTokenValid() error {
+	return errors.New(global.Translate("jwt.unknownError"))
+}
+
+func GetTokenExpired() error {
+	return errors.New(global.Translate("jwt.tokenExpired"))
+}
+
+func GetTokenNotValidYet() error {
+	return errors.New(global.Translate("jwt.tokenNotValidYet"))
+}
+
+func GetTokenMalformed() error {
+	return errors.New(global.Translate("jwt.tokenMalformed"))
+}
+
+func GetTokenSignatureInvalid() error {
+	return errors.New(global.Translate("jwt.invalidSignature"))
+}
+
+func GetTokenInvalid() error {
+	return errors.New(global.Translate("jwt.tokenInvalid"))
+}
+
 var (
-	TokenValid            = errors.New("未知错误")
-	TokenExpired          = errors.New("token已过期")
-	TokenNotValidYet      = errors.New("token尚未激活")
-	TokenMalformed        = errors.New("这不是一个token")
-	TokenSignatureInvalid = errors.New("无效签名")
-	TokenInvalid          = errors.New("无法处理此token")
+	TokenValid            = GetTokenValid()
+	TokenExpired          = GetTokenExpired()
+	TokenNotValidYet      = GetTokenNotValidYet()
+	TokenMalformed        = GetTokenMalformed()
+	TokenSignatureInvalid = GetTokenSignatureInvalid()
+	TokenInvalid          = GetTokenInvalid()
 )
 
 func NewJWT() *JWT {

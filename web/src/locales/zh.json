@@ -54,7 +54,6 @@
         "enterCategoryName": "请输入分类名称",
         "categoryNameNote": "最多20位字符",
         "deleteButton": "删除按钮在外层容器中",
-        "addCategory": "添加分类弹窗",
         "dragStart": "拖拽开始时的处理",
         "dragEnd": "拖拽结束时的处理",
         "ensureArrayType": "确保model是数组类型"

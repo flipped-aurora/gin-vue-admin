@@ -104,6 +104,7 @@ func (t *Translator) TranslateMessage(messageID string) string {
 
 	translatedMsg, err := localizer.LocalizeMessage(&i18n.Message{ID: messageID})
 	if err != nil || translatedMsg == "" { // if translation fail use default language transalator
+		fmt.Println(err.Error())
 		translatedMsg, err = defaultLocalizer.LocalizeMessage(&i18n.Message{ID: messageID})
 		if err != nil {
 			return messageID

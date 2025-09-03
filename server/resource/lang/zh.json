@@ -157,26 +157,11 @@
         "queryPackageFail": "查询包失败!",
         "createFolderFail": "[filepath:%s]创建文件夹失败!",
         "writeFileFail": "写入文件失败",
-        "createMenuFail": "创建菜单失败",
         "duplicateStructErr": "已经创建过此数据结构,请勿重复创建!",
         "duplicateStructOrAbbrevErr": "已经创建过此数据结构或重复简称,请勿重复创建!",
         "readTemplateFail": "读取模版文件失败!",
         "generateFileFail": "生成文件失败!"
      },
-     "utils": {
-          "jwt": {
-              "unknownError": "未知错误",
-              "tokenExpired": "token已过期",
-              "tokenNotActivated": "token尚未激活",
-              "notAToken": "这不是一个token",
-              "invalidSignature": "无效签名",
-              "cannotProcessToken": "无法处理此token"
-          },
-          "upload": {
-              "readFileFailed": "读取文件失败",
-              "uploadToMinioFailed": "上传文件到minio失败"
-          }
-      },
     "sys_auto_code_history": {
         "rollbackSuccess": "回滚成功"
     },
@@ -422,9 +407,9 @@
             "about": "关于我们",
             "adminTools": "超级管理员",
             "announcementManage": "公告管理[示例]",
-        "aiPageDraw": "AI页面绘制",
-        "mcpToolsTemplate": "Mcp Tools模板",
-        "mcpToolsTest": "Mcp Tools测试",
+            "aiPageDraw": "AI页面绘制",
+            "mcpToolsTemplate": "Mcp Tools模板",
+            "mcpToolsTest": "Mcp Tools测试",
             "apiManage": "api管理",
             "autoCode": "代码生成器",
             "autoCodeEdit": "自动化代码（复用）",
@@ -531,6 +516,8 @@
         "getHuaweiObjectFailedDuplicate": "获取华为对象存储对象失败!",
         "deleteObjectFailed": "删除对象(%s)失败!, output: %v",
 
+
+
         "fileOpenParseFailed": "[filepath:%s]打开/解析文件失败!",
         "fileOpenFailed": "[filepath:%s]打开文件失败!",
         "injectionFailed": "[filepath:%s]注入失败!",
@@ -587,7 +574,19 @@
         "formatValidationFailed": "格式校验不通过",
         "lengthOrValueOutOfRange": "长度或值不在合法范围",
         "sysNoSupport": "系统不支持",
-        "fileNameInvalid": "文件名不合法"
+        "fileNameInvalid": "文件名不合法",
+        "jwt": {
+            "unknownError": "未知错误",
+            "tokenExpired": "token已过期",
+            "tokenNotActivated": "token尚未激活",
+            "notAToken": "这不是一个token",
+            "invalidSignature": "无效签名",
+            "cannotProcessToken": "无法处理此token"
+        },
+        "upload": {
+            "readFileFailed": "读取文件失败",
+            "uploadToMinioFailed": "上传文件到minio失败"
+        }
     },
     "router": {
 
@@ -619,20 +618,6 @@
         "addAllParentMenus": "添加所有父级菜单",
         "addPartialChildMenus": "添加部分子菜单 - 系统工具、示例文件等模块的子菜单"
     },
-    "system": {
-        "osInfo": "OS信息",
-        "cpuInfo": "CPU信息",
-        "ramInfo": "RAM信息",
-        "diskInfo": "硬盘信息",
-        "readConfigFile": "读取配置文件",
-        "setConfigFile": "设置配置文件",
-        "getServerInfo": "获取服务器信息",
-        "clearDatabaseTables": "清理数据库表数据",
-        "databaseTableData": "数据库对象",
-        "tableName": "表名",
-        "compareField": "比较字段",
-        "interval": "间隔"
-    },
     "user": {
         "userRegistration": "用户注册",
         "userLogin": "用户登录",
@@ -650,13 +635,11 @@
         "adminRegister": "管理员注册账号",
         "changePassword": "用户修改密码",
         "setUserAuthority": "设置用户权限",
-        "setUserInfo": "设置用户信息",
         "setSelfInfo": "设置自身信息",
         "setUserAuthorities": "设置用户权限组",
         "resetPassword": "设置用户权限组",
         "setSelfSetting": "用户界面配置",
-        "getUserList": "分页获取用户列表",
-        "getUserInfo": "获取自身信息"
+        "getUserList": "分页获取用户列表"
     },
     "upload": {
         "uploadFile": "上传文件",

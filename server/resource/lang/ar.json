@@ -557,20 +557,6 @@
         "addAllParentMenus": "إضافة جميع القوائم الأساسية",
         "addPartialChildMenus": "إضافة قوائم فرعية جزئية - قوائم فرعية لأدوات النظام وملفات الأمثلة ووحدات أخرى"
     },
-    "system": {
-        "osInfo": "معلومات نظام التشغيل",
-        "cpuInfo": "معلومات المعالج",
-        "ramInfo": "معلومات الذاكرة",
-        "diskInfo": "معلومات القرص الصلب",
-        "readConfigFile": "قراءة ملف التكوين",
-        "setConfigFile": "تعيين ملف التكوين",
-        "getServerInfo": "الحصول على معلومات الخادم",
-        "clearDatabaseTables": "مسح بيانات جداول قاعدة البيانات",
-        "databaseTableData": "كائن قاعدة البيانات",
-        "tableName": "اسم الجدول",
-        "compareField": "حقل المقارنة",
-        "interval": "الفترة الزمنية"
-    },
     "user": {
         "userRegistration": "تسجيل المستخدم",
         "userLogin": "تسجيل دخول المستخدم",
@@ -596,6 +582,7 @@
         "getSelfInfo": "الحصول على المعلومات الذاتية"
     },
     "upload": {
+        "fileNotExists": "الملف غير موجود",
         "uploadFile": "رفع الملف",
         "deleteFile": "حذف الملف",
         "createFileDefer": "إنشاء ملف مع إغلاق مؤجل",
@@ -643,6 +630,7 @@
         "createSysParams": "إنشاء سجل معاملات النظام"
     },
     "breakpoint": {
+        "invalidFileNameOrPath": "اسم الملف أو المسار غير صالح",
         "frontendFileChunk": "جزء الملف المرسل من الواجهة الأمامية وأي جزء من أي ملف هو الجزء الحالي",
         "backendCompareChunk": "بعد أن يحصل الخلفية عليه، قارن ما إذا كان هذا الجزء مرفوع أم أنه جزء غير مكتمل",
         "frontendChunkSize": "حجم كل جزء مرسل من الواجهة الأمامية",
@@ -672,6 +660,9 @@
         "compareFunction": "دالة المقارنة"
     },
     "jwt": {
+        "tokenNotValidYet": "الرمز المميز غير نشط بعد",
+        "tokenMalformed": "هذا ليس رمزاً مميزاً",
+        "tokenInvalid": "لا يمكن معالجة هذا الرمز المميز",
         "unknownError": "خطأ غير معروف",
         "tokenExpired": "انتهت صلاحية الرمز المميز",
         "tokenNotActive": "الرمز المميز ليس نشطاً بعد",
@@ -703,6 +694,7 @@
         "getUserNameFromContext": "الحصول على اسم المستخدم المحلل من jwt من Context الخاص بـ Gin"
     },
     "directory": {
+        "fileExists": "يوجد ملف بنفس الاسم",
         "fileDirectoryExists": "ما إذا كان دليل الملف موجوداً",
         "sameNameFileExists": "ملف بنفس الاسم موجود",
         "batchCreateFolders": "إنشاء مجلدات بالدفعة",
@@ -816,24 +808,6 @@
         "generateRangeSearchField": "إنتاج حقل البحث النطاقي",
         "timeCase": "حالة الوقت",
         "generateNormalSearchField": "إنتاج حقل البحث العادي"
-    },
-    "directory": {
-        "fileExists": "يوجد ملف بنفس الاسم"
-    },
-    "upload": {
-        "fileNotExists": "الملف غير موجود",
-        "readFileFailed": "فشل في قراءة الملف"
-    },
-    "jwt": {
-        "unknownError": "خطأ غير معروف",
-        "tokenExpired": "انتهت صلاحية الرمز المميز",
-        "tokenNotValidYet": "الرمز المميز غير نشط بعد",
-        "tokenMalformed": "هذا ليس رمزاً مميزاً",
-        "invalidSignature": "توقيع غير صالح",
-        "tokenInvalid": "لا يمكن معالجة هذا الرمز المميز"
-    },
-    "breakpoint": {
-        "invalidFileNameOrPath": "اسم الملف أو المسار غير صالح"
     },
     "dictionary": {
         "duplicateTypeNotAllowed": "يوجد نوع مكرر، الإنشاء غير مسموح",

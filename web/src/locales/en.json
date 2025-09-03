@@ -913,7 +913,6 @@
       "autoCode": {
         "getAiPath": "Get AI Path",
         "aiCodeNote": "Now it is completely free\nTry to describe your table and let AI help you complete it. \nThis function requires you to go to the personal center of the plug-in market to obtain your own AI-Path, fill in the AI-Path in autocode-->ai-path under config.yaml, and restart the project to use it. \nPress Ctrl+Enter or Cmd+Enter to generate directly.",
-        "generate": "Generate",
         "aiNote1": "【Completely Free】Go to ",
         "aiNote2": "Personal Center of Plugin Market ",
         "aiNote3": "Apply for AIPath and fill in the ai-path property in config.yaml to use it.",

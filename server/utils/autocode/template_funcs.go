@@ -242,11 +242,11 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 `
 	} else if field.FieldType == "float64" || field.FieldType == "int" {
 		if field.FieldSearchType == "BETWEEN" || field.FieldSearchType == "NOT BETWEEN" {
-			result += fmt.Sprintf(`  <el-input class="w-40" v-model.number="searchInfo.start%s" placeholder="最小值" />
+			result += fmt.Sprintf(`  <el-input class="!w-40" v-model.number="searchInfo.start%s" placeholder="最小值" />
 `, field.FieldName)
 			result += `  —
 `
-			result += fmt.Sprintf(`  <el-input class="w-40" v-model.number="searchInfo.end%s" placeholder="最大值" />
+			result += fmt.Sprintf(`  <el-input class="!w-40" v-model.number="searchInfo.end%s" placeholder="最大值" />
 `, field.FieldName)
 		} else {
 			result += fmt.Sprintf(`  <el-input v-model.number="searchInfo.%s" placeholder="搜索条件" />
@@ -270,7 +270,7 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 `
 			result += `  </template>
 `
-			result += fmt.Sprintf(`<el-date-picker class="w-[380px]" v-model="searchInfo.%sRange" type="datetimerange" range-separator="至"  start-placeholder="开始时间" end-placeholder="结束时间"></el-date-picker>`, field.FieldJson)
+			result += fmt.Sprintf(`<el-date-picker class="!w-380px" v-model="searchInfo.%sRange" type="datetimerange" range-separator="至"  start-placeholder="开始时间" end-placeholder="结束时间"></el-date-picker>`, field.FieldJson)
 		} else {
 			result += fmt.Sprintf(`<el-date-picker v-model="searchInfo.%s" type="datetime" placeholder="搜索条件"></el-date-picker>`, field.FieldJson)
 		}

@@ -110,7 +110,7 @@ getDataSourceFunc()
 
       <el-date-picker
             v-model="searchInfo.createdAtRange"
-            class="w-[380px]"
+            class="!w-380px"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始时间"
@@ -161,7 +161,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{- if .IsTree }} min-{{- end -}}width="180">
+        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{ if .IsTree -}} min-{{- end -}}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}

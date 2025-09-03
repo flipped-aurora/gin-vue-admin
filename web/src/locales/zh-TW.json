@@ -1084,7 +1084,7 @@
         "autoComplete": "自動補全",
         "autoGenerateTemplates": "自動生成模板",
         "selectTableToExport": "請先選擇需要參與導出的表",
-        "aiAutoCompleteFail": "AI自動補全失敗，已調整為邏輯填寫",
+        "aiAutoCompleteFail": "AI自動補全失敗，已調整為邏輯填寫"
       },
       "installPlugin": {
         "dragOrClickUpload": "拖拽或點擊上傳",

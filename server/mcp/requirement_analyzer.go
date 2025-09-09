@@ -113,9 +113,9 @@ func (t *RequirementAnalyzer) generateAIPrompt(userRequirement string) string {
 ## 🎯 AI任务要求
 请将上述用户需求梳理成清晰的逻辑步骤，格式要求：
 
-**1. 第一步功能描述**
-**2. 第二步功能描述**  
-**3. 第三步功能描述**
+- **1. 第一步功能需要的字段**
+- **2. 第二步功能需要的字段** 
+- **3. 第三步功能需要的字段**
 **...**
 
 ## 📋 梳理要求
@@ -126,11 +126,9 @@ func (t *RequirementAnalyzer) generateAIPrompt(userRequirement string) string {
 - 考虑数据流和用户操作流程
 
 ## 🔄 后续流程
-梳理完成后，请使用 gva_auto_generate 工具进行代码生成：
-- gva_auto_generate 会根据梳理的逻辑步骤自动生成包名、模块名
-- gva_auto_generate 会设计数据表结构和API接口
-- gva_auto_generate 会生成完整的前后端代码
-
+梳理完成后，请使用 gva_analyzer 工具获取当前系统的模块信息，根据模块信息判断是否需要创建新的模块。
+如果需要创建新的模块和结构体，需要使用 gva_execution 工具进行代码生成。
+如果不需要创建新的模块和结构体，则返回当前的依赖路径，供非MCP的AI创建代码逻辑使用。
 
 现在请开始梳理用户需求："%s"`, userRequirement, userRequirement)
 

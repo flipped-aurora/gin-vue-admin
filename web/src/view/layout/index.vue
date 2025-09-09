@@ -7,7 +7,7 @@
       :font="font"
       :z-index="9999"
       :gap="[180, 150]"
-      class="absolute inset-0 pointer-events-none"
+      class="!absolute !inset-0 !pointer-events-none"
       :content="userStore.userInfo.nickName"
     />
     <gva-header />

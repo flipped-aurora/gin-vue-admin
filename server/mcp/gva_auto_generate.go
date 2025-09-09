@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	"unicode"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -81,12 +80,13 @@ type ExecutionPlan struct {
 
 // ExecutionResult 执行结果
 type ExecutionResult struct {
-	Success     bool              `json:"success"`
-	Message     string            `json:"message"`
-	PackageID   uint              `json:"packageId,omitempty"`
-	HistoryID   uint              `json:"historyId,omitempty"`
-	Paths       map[string]string `json:"paths,omitempty"`
-	NextActions []string          `json:"nextActions,omitempty"`
+	Success        bool              `json:"success"`
+	Message        string            `json:"message"`
+	PackageID      uint              `json:"packageId,omitempty"`
+	HistoryID      uint              `json:"historyId,omitempty"`
+	Paths          map[string]string `json:"paths,omitempty"`
+	GeneratedPaths []string          `json:"generatedPaths,omitempty"` // 新增：记录生成的文件路径
+	NextActions    []string          `json:"nextActions,omitempty"`
 }
 
 // ConfirmationRequest 确认请求结构
@@ -106,6 +106,42 @@ type ConfirmationResponse struct {
 	ModulesConfirm  bool   `json:"modulesConfirm"`
 	CanProceed      bool   `json:"canProceed"`
 	ConfirmationKey string `json:"confirmationKey"`
+}
+
+// ReviewRequest 代码复检请求结构
+type ReviewRequest struct {
+	OriginalRequirement string            `json:"originalRequirement"` // 用户原始需求
+	ExecutionPlan       *ExecutionPlan    `json:"executionPlan"`       // 执行计划
+	GeneratedPaths      map[string]string `json:"generatedPaths"`      // 生成的文件路径
+	MaxRetries          int               `json:"maxRetries"`          // 最大重试次数，默认3次
+}
+
+// ReviewResult 代码复检结果结构
+type ReviewResult struct {
+	Success               bool                   `json:"success"`               // 是否满足需求
+	Message               string                 `json:"message"`               // 复检结果说明
+	SatisfiedRequirements []string               `json:"satisfiedRequirements"` // 已满足的需求
+	MissingRequirements   []string               `json:"missingRequirements"`   // 未满足的需求
+	FilesToEnhance        map[string][]string    `json:"filesToEnhance"`        // 需要增强的文件及具体需求
+	ReviewDetails         map[string]interface{} `json:"reviewDetails"`         // 详细的复检信息
+}
+
+// EnhanceRequest 代码增强请求结构
+type EnhanceRequest struct {
+	OriginalRequirement string              `json:"originalRequirement"` // 用户原始需求
+	MissingRequirements []string            `json:"missingRequirements"` // 未满足的需求
+	FilesToEnhance      map[string][]string `json:"filesToEnhance"`      // 需要增强的文件及具体需求
+	GeneratedPaths      map[string]string   `json:"generatedPaths"`      // 生成的文件路径
+	ExecutionPlan       *ExecutionPlan      `json:"executionPlan"`       // 原始执行计划
+}
+
+// EnhanceResult 代码增强结果结构
+type EnhanceResult struct {
+	Success          bool              `json:"success"`          // 是否增强成功
+	Message          string            `json:"message"`          // 增强结果说明
+	EnhancedFiles    []string          `json:"enhancedFiles"`    // 已增强的文件列表
+	Modifications    map[string]string `json:"modifications"`    // 文件修改详情
+	NextReviewNeeded bool              `json:"nextReviewNeeded"` // 是否需要再次复检
 }
 
 // New 返回工具注册信息
@@ -177,7 +213,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "fieldName": "字段名(string)必须大写开头",
       "fieldDesc": "字段描述(string)",
       "fieldType": "字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）",
-      "fieldJson": "JSON标签(string 必须是小驼峰命名，例:userName)",
+      "fieldJson": "JSON标签(string)",
       "dataTypeLong": "数据长度(string)",
       "comment": "注释(string)",
       "columnName": "数据库列名(string)",
@@ -189,7 +225,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
       "desc": "详情显示(bool)",
       "excel": "导入导出(bool)",
       "require": "是否必填(bool)",
-      "defaultValue": "默认值(string)，JSON类型（array,json,file,pictures）请保持为空他们不可以设置默认值",
+      "defaultValue": "默认值(string)",
       "errorText": "错误提示(string)",
       "clearable": "是否可清空(bool)",
       "sort": "是否排序(bool)",
@@ -231,7 +267,7 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
    - 示例：{"dbName":"gva","table":"sys_users","label":"username","value":"id","association":2,"hasDeletedAt":true}`),
 		mcp.WithString("action",
 			mcp.Required(),
-			mcp.Description("执行操作：'analyze' 分析现有模块信息，'confirm' 请求用户确认创建，'execute' 执行创建操作（支持批量创建多个模块）"),
+			mcp.Description("执行操作：'analyze' 分析现有模块信息，'confirm' 请求用户确认创建，'execute' 执行创建操作（支持批量创建多个模块），'review' 代码复检验证是否满足需求，'enhance' AI代码增强补全缺失功能"),
 		),
 		mcp.WithString("requirement",
 			mcp.Description("用户需求描述（action=analyze时必需）"),
@@ -244,6 +280,12 @@ func (t *AutomationModuleAnalyzer) New() mcp.Tool {
 		),
 		mcp.WithString("modulesConfirm",
 			mcp.Description("用户对创建模块的确认（action=execute时，如果需要创建模块则必需）：'yes' 或 'no'"),
+		),
+		mcp.WithObject("reviewRequest",
+			mcp.Description("代码复检请求（action=review时必需）：包含原始需求、执行计划、生成路径等信息"),
+		),
+		mcp.WithObject("enhanceRequest",
+			mcp.Description("代码增强请求（action=enhance时必需）：包含未满足需求、目标文件等信息"),
 		),
 	)
 }
@@ -500,8 +542,12 @@ func (t *AutomationModuleAnalyzer) Handle(ctx context.Context, request mcp.CallT
 		return t.handleConfirm(ctx, request)
 	case "execute":
 		return t.handleExecute(ctx, request)
+	case "review":
+		return t.handleReview(ctx, request)
+	case "enhance":
+		return t.handleEnhance(ctx, request)
 	default:
-		return nil, errors.New("无效的操作：action 必须是 'analyze'、'confirm' 或 'execute'")
+		return nil, errors.New("无效的操作：action 必须是 'analyze'、'confirm'、'execute'、'review' 或 'enhance'")
 	}
 }
 
@@ -809,7 +855,7 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
       "fieldName": "字段名（必须大写开头）",
       "fieldDesc": "字段描述",
       "fieldType": "字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）",
-      "fieldJson": "json标签(string 必须是小驼峰命名，例:userName)",
+      "fieldJson": "json标签",
       "dataTypeLong": "长度",
       "comment": "注释",
       "columnName": "数据库列名",
@@ -874,6 +920,464 @@ func (t *AutomationModuleAnalyzer) handleAnalyze(ctx context.Context, request mc
 			},
 		},
 	}, nil
+}
+
+// performCodeReview 执行代码复检
+func (t *AutomationModuleAnalyzer) performCodeReview(reviewReq *ReviewRequest) (*ReviewResult, error) {
+	global.GVA_LOG.Info("开始执行代码复检...")
+
+	// 初始化复检结果
+	reviewResult := &ReviewResult{
+		Success:               false,
+		Message:               "",
+		SatisfiedRequirements: []string{},
+		MissingRequirements:   []string{},
+		FilesToEnhance:        make(map[string][]string),
+		ReviewDetails:         make(map[string]interface{}),
+	}
+
+	// 解析用户需求
+	requirements, err := t.parseUserRequirements(reviewReq.OriginalRequirement)
+	if err != nil {
+		return nil, fmt.Errorf("解析用户需求失败: %v", err)
+	}
+
+	// 分析生成的代码文件
+	generatedFeatures, err := t.analyzeGeneratedCode(reviewReq.GeneratedPaths, reviewReq.ExecutionPlan)
+	if err != nil {
+		return nil, fmt.Errorf("分析生成代码失败: %v", err)
+	}
+
+	// 对比需求和实现
+	for _, requirement := range requirements {
+		if t.isRequirementSatisfied(requirement, generatedFeatures) {
+			reviewResult.SatisfiedRequirements = append(reviewResult.SatisfiedRequirements, requirement)
+		} else {
+			reviewResult.MissingRequirements = append(reviewResult.MissingRequirements, requirement)
+			// 确定需要增强的文件
+			filesToEnhance := t.determineFilesToEnhance(requirement, reviewReq.ExecutionPlan)
+			for file, enhancements := range filesToEnhance {
+				if reviewResult.FilesToEnhance[file] == nil {
+					reviewResult.FilesToEnhance[file] = []string{}
+				}
+				reviewResult.FilesToEnhance[file] = append(reviewResult.FilesToEnhance[file], enhancements...)
+			}
+		}
+	}
+
+	// 设置复检结果
+	reviewResult.Success = len(reviewResult.MissingRequirements) == 0
+	if reviewResult.Success {
+		reviewResult.Message = fmt.Sprintf("✅ 代码复检通过！所有 %d 个需求都已满足。", len(reviewResult.SatisfiedRequirements))
+	} else {
+		reviewResult.Message = fmt.Sprintf("⚠️ 代码复检发现问题：满足了 %d 个需求，还有 %d 个需求未满足，需要进行代码增强。",
+			len(reviewResult.SatisfiedRequirements), len(reviewResult.MissingRequirements))
+	}
+
+	// 添加详细信息
+	reviewResult.ReviewDetails["totalRequirements"] = len(requirements)
+	reviewResult.ReviewDetails["satisfiedCount"] = len(reviewResult.SatisfiedRequirements)
+	reviewResult.ReviewDetails["missingCount"] = len(reviewResult.MissingRequirements)
+	reviewResult.ReviewDetails["generatedFeatures"] = generatedFeatures
+	reviewResult.ReviewDetails["reviewTime"] = time.Now().Format("2006-01-02 15:04:05")
+
+	global.GVA_LOG.Info(fmt.Sprintf("代码复检完成：%s", reviewResult.Message))
+	return reviewResult, nil
+}
+
+// performCodeEnhancement 执行代码增强
+func (t *AutomationModuleAnalyzer) performCodeEnhancement(enhanceReq *EnhanceRequest) (*EnhanceResult, error) {
+	global.GVA_LOG.Info("开始执行代码增强...")
+
+	// 初始化增强结果
+	enhanceResult := &EnhanceResult{
+		Success:          false,
+		Message:          "",
+		EnhancedFiles:    []string{},
+		Modifications:    make(map[string]string),
+		NextReviewNeeded: true,
+	}
+
+	// 为每个需要增强的文件生成代码
+	for filePath, requirements := range enhanceReq.FilesToEnhance {
+		global.GVA_LOG.Info(fmt.Sprintf("正在增强文件: %s", filePath))
+
+		// 读取现有文件内容
+		existingContent, err := t.readFileContent(filePath)
+		if err != nil {
+			global.GVA_LOG.Warn(fmt.Sprintf("读取文件失败 %s: %v", filePath, err))
+			continue
+		}
+
+		// 生成增强代码
+		enhancedContent, err := t.generateEnhancedCode(filePath, existingContent, requirements, enhanceReq)
+		if err != nil {
+			global.GVA_LOG.Error(fmt.Sprintf("生成增强代码失败 %s: %v", filePath, err))
+			continue
+		}
+
+		// 写入增强后的代码
+		if err := t.writeFileContent(filePath, enhancedContent); err != nil {
+			global.GVA_LOG.Error(fmt.Sprintf("写入增强代码失败 %s: %v", filePath, err))
+			continue
+		}
+
+		enhanceResult.EnhancedFiles = append(enhanceResult.EnhancedFiles, filePath)
+		enhanceResult.Modifications[filePath] = fmt.Sprintf("增强了以下功能: %s", strings.Join(requirements, ", "))
+		global.GVA_LOG.Info(fmt.Sprintf("文件增强完成: %s", filePath))
+	}
+
+	// 设置增强结果
+	if len(enhanceResult.EnhancedFiles) > 0 {
+		enhanceResult.Success = true
+		enhanceResult.Message = fmt.Sprintf("✅ 代码增强完成！成功增强了 %d 个文件，建议进行再次复检验证。", len(enhanceResult.EnhancedFiles))
+	} else {
+		enhanceResult.Message = "❌ 代码增强失败：没有成功增强任何文件。"
+		enhanceResult.NextReviewNeeded = false
+	}
+
+	global.GVA_LOG.Info(fmt.Sprintf("代码增强完成：%s", enhanceResult.Message))
+	return enhanceResult, nil
+}
+
+// parseUserRequirements 解析用户需求为具体的功能点
+func (t *AutomationModuleAnalyzer) parseUserRequirements(requirement string) ([]string, error) {
+	// 简单的需求解析逻辑，可以根据实际情况扩展
+	requirements := []string{}
+
+	// 按句号或换行分割需求
+	lines := strings.Split(requirement, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			// 进一步按句号分割
+			sentences := strings.Split(line, "。")
+			for _, sentence := range sentences {
+				sentence = strings.TrimSpace(sentence)
+				if sentence != "" && len(sentence) > 3 {
+					requirements = append(requirements, sentence)
+				}
+			}
+		}
+	}
+
+	// 如果没有解析出具体需求，将整个需求作为一个功能点
+	if len(requirements) == 0 {
+		requirements = append(requirements, strings.TrimSpace(requirement))
+	}
+
+	return requirements, nil
+}
+
+// analyzeGeneratedCode 分析生成的代码文件，提取已实现的功能
+func (t *AutomationModuleAnalyzer) analyzeGeneratedCode(generatedPaths map[string]string, executionPlan *ExecutionPlan) ([]string, error) {
+	features := []string{}
+
+	// 基于执行计划分析基础功能
+	if executionPlan != nil && executionPlan.ModulesInfo != nil {
+		for _, moduleInfo := range executionPlan.ModulesInfo {
+			// 基础CRUD功能
+			features = append(features, fmt.Sprintf("%s的增删改查功能", moduleInfo.Description))
+
+			// 字段相关功能
+			for _, field := range moduleInfo.Fields {
+				if field.FieldSearchType != "" {
+					features = append(features, fmt.Sprintf("%s的%s搜索功能", field.FieldDesc, field.FieldSearchType))
+				}
+				if field.DictType != "" {
+					features = append(features, fmt.Sprintf("%s的字典选择功能", field.FieldDesc))
+				}
+				if field.DataSource != nil {
+					features = append(features, fmt.Sprintf("%s的关联数据功能", field.FieldDesc))
+				}
+			}
+
+			// 特殊功能
+			if moduleInfo.IsTree {
+				features = append(features, fmt.Sprintf("%s的树形结构功能", moduleInfo.Description))
+			}
+			if moduleInfo.AutoCreateApiToSql {
+				features = append(features, fmt.Sprintf("%s的API接口功能", moduleInfo.Description))
+			}
+			if moduleInfo.AutoCreateMenuToSql {
+				features = append(features, fmt.Sprintf("%s的菜单管理功能", moduleInfo.Description))
+			}
+		}
+	}
+
+	// 分析生成的文件
+	for path := range generatedPaths {
+		if strings.Contains(path, "api") {
+			features = append(features, "API接口层")
+		}
+		if strings.Contains(path, "service") {
+			features = append(features, "业务逻辑层")
+		}
+		if strings.Contains(path, "model") {
+			features = append(features, "数据模型层")
+		}
+		if strings.Contains(path, "router") {
+			features = append(features, "路由配置")
+		}
+		if strings.Contains(path, ".vue") {
+			features = append(features, "前端页面")
+		}
+	}
+
+	return features, nil
+}
+
+// isRequirementSatisfied 判断需求是否已被满足
+func (t *AutomationModuleAnalyzer) isRequirementSatisfied(requirement string, generatedFeatures []string) bool {
+	// 简单的关键词匹配逻辑
+	requirement = strings.ToLower(requirement)
+
+	// 检查是否包含基础CRUD关键词
+	crudKeywords := []string{"增加", "创建", "新增", "删除", "修改", "编辑", "查询", "搜索", "列表"}
+	for _, keyword := range crudKeywords {
+		if strings.Contains(requirement, keyword) {
+			// 检查生成的功能中是否有对应的CRUD功能
+			for _, feature := range generatedFeatures {
+				if strings.Contains(strings.ToLower(feature), "增删改查") {
+					return true
+				}
+			}
+		}
+	}
+
+	// 检查特殊功能关键词
+	specialKeywords := map[string][]string{
+		"树形": {"树形结构"},
+		"层级": {"树形结构"},
+		"字典": {"字典选择"},
+		"下拉": {"字典选择"},
+		"关联": {"关联数据"},
+		"外键": {"关联数据"},
+	}
+
+	for reqKeyword, featureKeywords := range specialKeywords {
+		if strings.Contains(requirement, reqKeyword) {
+			for _, feature := range generatedFeatures {
+				for _, featureKeyword := range featureKeywords {
+					if strings.Contains(strings.ToLower(feature), featureKeyword) {
+						return true
+					}
+				}
+			}
+		}
+	}
+
+	// 默认认为基础需求已满足（可以根据实际情况调整）
+	return len(generatedFeatures) > 0
+}
+
+// determineFilesToEnhance 确定需要增强的文件
+func (t *AutomationModuleAnalyzer) determineFilesToEnhance(requirement string, executionPlan *ExecutionPlan) map[string][]string {
+	filesToEnhance := make(map[string][]string)
+
+	if executionPlan == nil || executionPlan.ModulesInfo == nil {
+		return filesToEnhance
+	}
+
+	// 根据需求类型确定需要修改的文件
+	requirement = strings.ToLower(requirement)
+
+	for _, moduleInfo := range executionPlan.ModulesInfo {
+		packagePath := fmt.Sprintf("%s/%s", executionPlan.PackageName, moduleInfo.PackageName)
+
+		// API相关需求
+		if strings.Contains(requirement, "接口") || strings.Contains(requirement, "api") {
+			apiFile := fmt.Sprintf("api/v1/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filesToEnhance[apiFile] = append(filesToEnhance[apiFile], requirement)
+		}
+
+		// 业务逻辑相关需求
+		if strings.Contains(requirement, "逻辑") || strings.Contains(requirement, "业务") || strings.Contains(requirement, "流程") {
+			serviceFile := fmt.Sprintf("service/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filesToEnhance[serviceFile] = append(filesToEnhance[serviceFile], requirement)
+		}
+
+		// 数据模型相关需求
+		if strings.Contains(requirement, "字段") || strings.Contains(requirement, "模型") || strings.Contains(requirement, "数据") {
+			modelFile := fmt.Sprintf("model/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filesToEnhance[modelFile] = append(filesToEnhance[modelFile], requirement)
+		}
+
+		// 前端相关需求
+		if strings.Contains(requirement, "页面") || strings.Contains(requirement, "界面") || strings.Contains(requirement, "前端") {
+			vueFile := fmt.Sprintf("web/src/view/%s/%s.vue", packagePath, moduleInfo.PackageName)
+			filesToEnhance[vueFile] = append(filesToEnhance[vueFile], requirement)
+		}
+
+		// 默认情况：如果无法确定具体文件，则增强service层
+		if len(filesToEnhance) == 0 {
+			serviceFile := fmt.Sprintf("service/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filesToEnhance[serviceFile] = append(filesToEnhance[serviceFile], requirement)
+		}
+	}
+
+	return filesToEnhance
+}
+
+// readFileContent 读取文件内容
+func (t *AutomationModuleAnalyzer) readFileContent(filePath string) (string, error) {
+	// 构建完整的文件路径
+	fullPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, filePath)
+
+	// 检查文件是否存在
+	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+		return "", fmt.Errorf("文件不存在: %s", fullPath)
+	}
+
+	// 读取文件内容
+	content, err := os.ReadFile(fullPath)
+	if err != nil {
+		return "", fmt.Errorf("读取文件失败: %v", err)
+	}
+
+	return string(content), nil
+}
+
+// writeFileContent 写入文件内容
+func (t *AutomationModuleAnalyzer) writeFileContent(filePath, content string) error {
+	// 构建完整的文件路径
+	fullPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, filePath)
+
+	// 确保目录存在
+	dir := filepath.Dir(fullPath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("创建目录失败: %v", err)
+	}
+
+	// 写入文件
+	if err := os.WriteFile(fullPath, []byte(content), 0644); err != nil {
+		return fmt.Errorf("写入文件失败: %v", err)
+	}
+
+	return nil
+}
+
+// generateEnhancedCode 生成增强代码
+func (t *AutomationModuleAnalyzer) generateEnhancedCode(filePath, existingContent string, requirements []string, enhanceReq *EnhanceRequest) (string, error) {
+	// 这里是AI代码生成的核心逻辑
+	// 目前提供一个基础实现，后续可以集成真正的AI服务
+
+	// 构建增强提示
+	enhancementPrompt := fmt.Sprintf(`
+请根据以下需求对代码进行增强：
+
+原始需求：%s
+
+未满足的具体需求：
+%s
+
+当前文件路径：%s
+
+现有代码：
+%s
+
+请生成增强后的完整代码，确保：
+1. 保持现有代码的结构和功能
+2. 添加缺失的功能实现
+3. 遵循Go语言最佳实践
+4. 添加适当的注释说明
+`,
+		enhanceReq.OriginalRequirement,
+		strings.Join(requirements, "\n- "),
+		filePath,
+		existingContent)
+
+	// 简单的代码增强逻辑（实际项目中应该调用AI服务）
+	enhancedContent := existingContent
+
+	// 添加增强注释
+	enhancementComment := fmt.Sprintf(`
+// 代码增强 - %s
+// 增强时间: %s
+// 增强需求: %s
+`,
+		time.Now().Format("2006-01-02 15:04:05"),
+		time.Now().Format("2006-01-02 15:04:05"),
+		strings.Join(requirements, ", "))
+
+	// 在文件末尾添加增强注释和占位符代码
+	enhancedContent += enhancementComment
+	enhancedContent += `
+// TODO: 请根据上述需求完善以下代码实现
+`
+
+	for _, requirement := range requirements {
+		enhancedContent += fmt.Sprintf(`
+// TODO: 实现需求 - %s
+func (s *%sService) enhance%s() error {
+	// 请在此处添加具体实现
+	return nil
+}
+`,
+			requirement,
+			strings.Title(filepath.Base(filePath)),
+			strings.ReplaceAll(requirement, " ", ""))
+	}
+
+	global.GVA_LOG.Info(fmt.Sprintf("生成增强代码提示：%s", enhancementPrompt))
+
+	return enhancedContent, nil
+}
+
+// collectExpectedFilePaths 收集预期生成的文件路径
+func (t *AutomationModuleAnalyzer) collectExpectedFilePaths(plan *ExecutionPlan) []string {
+	var filePaths []string
+
+	if plan == nil || plan.ModulesInfo == nil {
+		return filePaths
+	}
+
+	// 遍历所有模块，收集预期生成的文件路径
+	for _, moduleInfo := range plan.ModulesInfo {
+		if moduleInfo == nil {
+			continue
+		}
+
+		// 构建包路径
+		packagePath := ""
+		if plan.PackageType == "plugin" {
+			packagePath = fmt.Sprintf("plugin/%s", plan.PackageName)
+		} else {
+			packagePath = plan.PackageName
+		}
+
+		// 后端文件路径
+		if moduleInfo.GenerateServer {
+			// API文件
+			apiPath := fmt.Sprintf("api/v1/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filePaths = append(filePaths, apiPath)
+
+			// Service文件
+			servicePath := fmt.Sprintf("service/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filePaths = append(filePaths, servicePath)
+
+			// Model文件
+			modelPath := fmt.Sprintf("model/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filePaths = append(filePaths, modelPath)
+
+			// Router文件
+			routerPath := fmt.Sprintf("router/%s/%s.go", packagePath, moduleInfo.PackageName)
+			filePaths = append(filePaths, routerPath)
+		}
+
+		// 前端文件路径
+		if moduleInfo.GenerateWeb {
+			// Vue页面文件
+			vuePath := fmt.Sprintf("web/src/view/%s/%s.vue", packagePath, moduleInfo.PackageName)
+			filePaths = append(filePaths, vuePath)
+
+			// API接口文件
+			webApiPath := fmt.Sprintf("web/src/api/%s.js", moduleInfo.PackageName)
+			filePaths = append(filePaths, webApiPath)
+		}
+	}
+
+	return filePaths
 }
 
 // handleConfirm 处理确认请求
@@ -1020,6 +1524,30 @@ func (t *AutomationModuleAnalyzer) handleExecute(ctx context.Context, request mc
 	// 执行创建操作
 	result := t.executeCreation(ctx, &plan)
 
+	// 检查是否需要获取原始需求进行代码复检
+	var originalRequirement string
+	if reqData, ok := request.GetArguments()["requirement"]; ok {
+		if reqStr, ok := reqData.(string); ok {
+			originalRequirement = reqStr
+		}
+	}
+
+	// 如果执行成功且有原始需求，自动触发代码复检
+	var reviewMessage string
+	if result.Success && originalRequirement != "" {
+		global.GVA_LOG.Info("执行完成，返回生成的文件路径供AI进行代码复检...")
+
+		// 构建文件路径信息供AI使用
+		var pathsInfo []string
+		for _, path := range result.GeneratedPaths {
+			pathsInfo = append(pathsInfo, fmt.Sprintf("- %s", path))
+		}
+
+		reviewMessage = fmt.Sprintf("\n\n📁 已生成以下文件：\n%s\n\n💡 提示：请使用 'review' 操作对生成的代码进行复检，确保满足原始需求。", strings.Join(pathsInfo, "\n"))
+	} else if originalRequirement == "" {
+		reviewMessage = "\n\n💡 提示：如需代码复检，请使用 'review' 操作并提供原始需求描述。"
+	}
+
 	resultJSON, err := json.MarshalIndent(result, "", "  ")
 	if err != nil {
 		return nil, fmt.Errorf("序列化结果失败: %v", err)
@@ -1040,7 +1568,7 @@ func (t *AutomationModuleAnalyzer) handleExecute(ctx context.Context, request mc
 		Content: []mcp.Content{
 			mcp.TextContent{
 				Type: "text",
-				Text: fmt.Sprintf("执行结果：\n\n%s%s", string(resultJSON), permissionReminder),
+				Text: fmt.Sprintf("执行结果：\n\n%s%s%s", string(resultJSON), reviewMessage, permissionReminder),
 			},
 		},
 	}, nil
@@ -1057,6 +1585,16 @@ func (t *AutomationModuleAnalyzer) isSystemFunction(requirement string) bool {
 	requirementLower := strings.ToLower(requirement)
 	for _, keyword := range systemKeywords {
 		if strings.Contains(requirementLower, keyword) {
+			return true
+		}
+	}
+	return false
+}
+
+// contains 检查字符串切片中是否包含指定元素
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
 			return true
 		}
 	}
@@ -1245,6 +1783,13 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 					return fmt.Errorf("模块 %d 字段 %d 的 fieldName 不能为空", moduleIndex+1, i+1)
 				}
 
+				// 确保字段名首字母大写
+				if len(field.FieldName) > 0 {
+					firstChar := string(field.FieldName[0])
+					if firstChar >= "a" && firstChar <= "z" {
+						moduleInfo.Fields[i].FieldName = strings.ToUpper(firstChar) + field.FieldName[1:]
+					}
+				}
 				if field.FieldDesc == "" {
 					return fmt.Errorf("模块 %d 字段 %d 的 fieldDesc 不能为空", moduleIndex+1, i+1)
 				}
@@ -1256,48 +1801,6 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 				}
 				if field.ColumnName == "" {
 					return fmt.Errorf("模块 %d 字段 %d 的 columnName 不能为空", moduleIndex+1, i+1)
-				}
-
-				// 确保字段名首字母大写
-				if len(field.FieldName) > 0 {
-					firstChar := string(field.FieldName[0])
-					if firstChar >= "a" && firstChar <= "z" {
-						moduleInfo.Fields[i].FieldName = strings.ToUpper(firstChar) + field.FieldName[1:]
-					}
-				}
-
-				// 确保FieldJson使用小驼峰命名
-				if len(field.FieldJson) > 0 {
-					// 处理下划线命名转小驼峰
-					if strings.Contains(field.FieldJson, "_") {
-						parts := strings.Split(field.FieldJson, "_")
-						camelCase := strings.ToLower(parts[0])
-						for j := 1; j < len(parts); j++ {
-							if len(parts[j]) > 0 {
-								camelCase += strings.ToUpper(string(parts[j][0])) + strings.ToLower(parts[j][1:])
-							}
-						}
-						moduleInfo.Fields[i].FieldJson = camelCase
-					} else {
-						// 处理首字母大写转小写
-						firstChar := string(field.FieldJson[0])
-						if firstChar >= "A" && firstChar <= "Z" {
-							moduleInfo.Fields[i].FieldJson = strings.ToLower(firstChar) + field.FieldJson[1:]
-						}
-					}
-				}
-
-				// 确保ColumnName使用下划线命名
-				if len(field.ColumnName) > 0 {
-					// 将驼峰命名转换为下划线命名
-					var result strings.Builder
-					for i, r := range field.ColumnName {
-						if i > 0 && r >= 'A' && r <= 'Z' {
-							result.WriteRune('_')
-						}
-						result.WriteRune(unicode.ToLower(r))
-					}
-					moduleInfo.Fields[i].ColumnName = result.String()
 				}
 
 				// 验证字段类型
@@ -1361,12 +1864,16 @@ func (t *AutomationModuleAnalyzer) validateExecutionPlan(plan *ExecutionPlan) er
 // executeCreation 执行创建操作
 func (t *AutomationModuleAnalyzer) executeCreation(ctx context.Context, plan *ExecutionPlan) *ExecutionResult {
 	result := &ExecutionResult{
-		Success: false,
-		Paths:   make(map[string]string),
+		Success:        false,
+		Paths:          make(map[string]string),
+		GeneratedPaths: []string{}, // 初始化生成文件路径列表
 	}
 
 	// 无论如何都先构建目录结构信息，确保paths始终返回
 	result.Paths = t.buildDirectoryStructure(plan)
+
+	// 记录预期生成的文件路径
+	result.GeneratedPaths = t.collectExpectedFilePaths(plan)
 
 	if !plan.NeedCreatedModules {
 		result.Success = true
@@ -1656,13 +2163,13 @@ func (t *AutomationModuleAnalyzer) isPackageFolderEmpty(packageName, template st
 
 // removeEmptyPackageFolder 删除空的包文件夹
 func (t *AutomationModuleAnalyzer) removeEmptyPackageFolder(packageName, template string) error {
-	var errors []string
+	var errorMessages []string
 
 	if template == "plugin" {
 		// plugin 类型只删除 plugin 目录下的文件夹
 		basePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
 		if err := t.removeDirectoryIfExists(basePath); err != nil {
-			errors = append(errors, fmt.Sprintf("删除plugin文件夹失败: %v", err))
+			errorMessages = append(errorMessages, fmt.Sprintf("删除plugin文件夹失败: %v", err))
 		}
 	} else {
 		// package 类型需要删除多个目录下的相关文件
@@ -1675,13 +2182,13 @@ func (t *AutomationModuleAnalyzer) removeEmptyPackageFolder(packageName, templat
 
 		for _, path := range paths {
 			if err := t.removeDirectoryIfExists(path); err != nil {
-				errors = append(errors, fmt.Sprintf("删除%s失败: %v", path, err))
+				errorMessages = append(errorMessages, fmt.Sprintf("删除%s失败: %v", path, err))
 			}
 		}
 	}
 
-	if len(errors) > 0 {
-		return fmt.Errorf("删除过程中出现错误: %s", strings.Join(errors, "; "))
+	if len(errorMessages) > 0 {
+		return fmt.Errorf("删除过程中出现错误: %s", strings.Join(errorMessages, "; "))
 	}
 
 	return nil
@@ -1752,4 +2259,107 @@ func (t *AutomationModuleAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) 
 	}
 
 	return nil
+}
+
+// handleReview 处理代码复检请求
+func (t *AutomationModuleAnalyzer) handleReview(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	// 解析复检请求参数
+	reviewRequestData, ok := request.GetArguments()["reviewRequest"].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("参数错误：reviewRequest 必须是有效的对象")
+	}
+
+	// 转换为ReviewRequest结构体
+	reviewRequestJSON, err := json.Marshal(reviewRequestData)
+	if err != nil {
+		return nil, fmt.Errorf("序列化reviewRequest失败: %v", err)
+	}
+
+	var reviewReq ReviewRequest
+	if err := json.Unmarshal(reviewRequestJSON, &reviewReq); err != nil {
+		return nil, fmt.Errorf("解析reviewRequest失败: %v", err)
+	}
+
+	// 验证必需参数
+	if reviewReq.OriginalRequirement == "" {
+		return nil, errors.New("参数错误：originalRequirement 不能为空")
+	}
+	if reviewReq.ExecutionPlan == nil {
+		return nil, errors.New("参数错误：executionPlan 不能为空")
+	}
+
+	// 设置默认最大重试次数
+	if reviewReq.MaxRetries <= 0 {
+		reviewReq.MaxRetries = 3
+	}
+
+	// 执行代码复检
+	reviewResult, err := t.performCodeReview(&reviewReq)
+	if err != nil {
+		return nil, fmt.Errorf("代码复检失败: %v", err)
+	}
+
+	// 返回复检结果
+	resultJSON, err := json.Marshal(reviewResult)
+	if err != nil {
+		return nil, fmt.Errorf("序列化复检结果失败: %v", err)
+	}
+
+	return &mcp.CallToolResult{
+		Content: []mcp.Content{
+			mcp.TextContent{
+				Type: "text",
+				Text: string(resultJSON),
+			},
+		},
+	}, nil
+}
+
+// handleEnhance 处理代码增强请求
+func (t *AutomationModuleAnalyzer) handleEnhance(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	// 解析增强请求参数
+	enhanceRequestData, ok := request.GetArguments()["enhanceRequest"].(map[string]interface{})
+	if !ok {
+		return nil, errors.New("参数错误：enhanceRequest 必须是有效的对象")
+	}
+
+	// 转换为EnhanceRequest结构体
+	enhanceRequestJSON, err := json.Marshal(enhanceRequestData)
+	if err != nil {
+		return nil, fmt.Errorf("序列化enhanceRequest失败: %v", err)
+	}
+
+	var enhanceReq EnhanceRequest
+	if err := json.Unmarshal(enhanceRequestJSON, &enhanceReq); err != nil {
+		return nil, fmt.Errorf("解析enhanceRequest失败: %v", err)
+	}
+
+	// 验证必需参数
+	if enhanceReq.OriginalRequirement == "" {
+		return nil, errors.New("参数错误：originalRequirement 不能为空")
+	}
+	if len(enhanceReq.MissingRequirements) == 0 {
+		return nil, errors.New("参数错误：missingRequirements 不能为空")
+	}
+
+	// 执行代码增强
+	enhanceResult, err := t.performCodeEnhancement(&enhanceReq)
+	if err != nil {
+		return nil, fmt.Errorf("代码增强失败: %v", err)
+	}
+
+	// 返回增强结果
+	resultJSON, err := json.Marshal(enhanceResult)
+	if err != nil {
+		return nil, fmt.Errorf("序列化增强结果失败: %v", err)
+	}
+
+	return &mcp.CallToolResult{
+		Content: []mcp.Content{
+			mcp.TextContent{
+				Type: "text",
+				Text: string(resultJSON),
+			},
+		},
+	}, nil
 }

@@ -20,8 +20,6 @@ type RequirementAnalysisRequest struct {
 	UserRequirement string `json:"userRequirement"`
 }
 
-
-
 // RequirementAnalysisResponse 需求分析响应
 type RequirementAnalysisResponse struct {
 	AIPrompt string `json:"aiPrompt"` // 给AI的提示词
@@ -39,12 +37,13 @@ func (t *RequirementAnalyzer) New() mcp.Tool {
 
 **📋 工作流程：**
 1. 接收用户自然语言需求描述
-2. 生成专业的AI提示词，要求AI将需求梳理为清晰的逻辑步骤：
-   - **1. 第一步功能描述**
-   - **2. 第二步功能描述** 
-   - **3. 第三步功能描述**
+2. 生成专业的AI提示词，要求AI将需求梳理为清晰的步骤需求字段：
+   - **1. 第一步功能需要的字段**
+   - **2. 第二步功能需要的字段** 
+   - **3. 第三步功能需要的字段**
    - **...**
-3. 指导后续使用 gva_auto_generate 工具进行代码生成
+3. 需要清楚描述出这些需求需要的字段有哪些，如果用户提供了字段内容或者sql文件，一定不要发散思维，一定使用用户提供的字段。
+4. 指导后续使用 gva_auto_generate 工具进行代码生成
 
 **✅ 适用场景：**
 - 用户有新的业务需求需要开发

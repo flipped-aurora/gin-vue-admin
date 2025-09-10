@@ -163,7 +163,7 @@ func (g *GVAReviewer) generateAdjustmentPrompt(userRequirement string, generated
 	prompt.WriteString("9. 如果当前所有的vue页面内容无法满足需求，则自行书写vue文件，并且调用 menu_creator创建菜单记录\n\n")
 	prompt.WriteString("10. 如果需要API调用，请使用 api_lister获取api表，根据需求调用对应接口\n\n")
 	prompt.WriteString("11. 如果当前所有API无法满足则自行书写接口，补全前后端代码，并使用 api_creator创建api记录\n\n")
-
+	prompt.WriteString("12. 无论前后端都不要随意删除import的内容\n\n")
 	prompt.WriteString("**请基于用户需求和现有文件，提供完整的代码优化方案。**")
 
 	return prompt.String()

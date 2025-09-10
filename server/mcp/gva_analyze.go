@@ -117,23 +117,19 @@ func (g *GVAAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (
 
 // performAnalysis 执行分析逻辑
 func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (*AnalyzeResponse, error) {
-	// 1. 检测插件意图
-	suggestedType, isPlugin, confidence := g.detectPluginIntent(req.Requirement)
-	global.GVA_LOG.Info(fmt.Sprintf("插件意图检测结果: 类型=%s, 是否插件=%v, 置信度=%s", suggestedType, isPlugin, confidence))
-
-	// 2. 获取数据库中的包信息
+	// 1. 获取数据库中的包信息
 	var packages []model.SysAutoCodePackage
 	if err := global.GVA_DB.Find(&packages).Error; err != nil {
 		return nil, fmt.Errorf("获取包信息失败: %v", err)
 	}
 
-	// 3. 获取历史记录
+	// 2. 获取历史记录
 	var histories []model.SysAutoCodeHistory
 	if err := global.GVA_DB.Find(&histories).Error; err != nil {
 		return nil, fmt.Errorf("获取历史记录失败: %v", err)
 	}
 
-	// 4. 检查空包并进行清理
+	// 3. 检查空包并进行清理
 	cleanupInfo := &CleanupInfo{
 		DeletedPackages: []string{},
 		DeletedModules:  []string{},
@@ -225,7 +221,7 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	// 8. 构建分析结果消息
 	var analysisMessage strings.Builder
 	if len(cleanupInfo.DeletedPackages) > 0 || len(cleanupInfo.DeletedModules) > 0 {
-		analysisMessage.WriteString("🧹 **系统清理完成**\n\n")
+		analysisMessage.WriteString("**系统清理完成**\n\n")
 		if len(cleanupInfo.DeletedPackages) > 0 {
 			analysisMessage.WriteString(fmt.Sprintf("- 删除了 %d 个空包: %s\n", len(cleanupInfo.DeletedPackages), strings.Join(cleanupInfo.DeletedPackages, ", ")))
 		}
@@ -236,8 +232,7 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 		cleanupInfo.CleanupMessage = analysisMessage.String()
 	}
 
-	analysisMessage.WriteString("📊 **分析结果**\n\n")
-	analysisMessage.WriteString(fmt.Sprintf("- **插件意图检测**: %s (置信度: %s)\n", suggestedType, confidence))
+	analysisMessage.WriteString(" **分析结果**\n\n")
 	analysisMessage.WriteString(fmt.Sprintf("- **现有包数量**: %d\n", len(validPackages)))
 	analysisMessage.WriteString(fmt.Sprintf("- **预设计模块数量**: %d\n\n", len(filteredModules)))
 
@@ -269,41 +264,6 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	}
 
 	return response, nil
-}
-
-// detectPluginIntent 检测插件意图
-func (g *GVAAnalyzer) detectPluginIntent(requirement string) (string, bool, string) {
-	requirement = strings.ToLower(requirement)
-
-	// 插件关键词映射
-	pluginKeywords := map[string]string{
-		"插件":        "plugin",
-		"plugin":    "plugin",
-		"扩展":        "plugin",
-		"extension": "plugin",
-		"addon":     "plugin",
-		"模块":        "package",
-		"module":    "package",
-		"包":         "package",
-		"package":   "package",
-		"功能":        "package",
-		"feature":   "package",
-	}
-
-	// 检查关键词
-	for keyword, templateType := range pluginKeywords {
-		if strings.Contains(requirement, keyword) {
-			isPlugin := templateType == "plugin"
-			confidence := "高"
-			if strings.Contains(requirement, "可能") || strings.Contains(requirement, "也许") {
-				confidence = "中"
-			}
-			return templateType, isPlugin, confidence
-		}
-	}
-
-	// 默认返回package类型
-	return "package", false, "低"
 }
 
 // isPackageFolderEmpty 检查包文件夹是否为空

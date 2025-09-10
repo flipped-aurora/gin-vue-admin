@@ -88,14 +88,14 @@ func (g *GVAExecutor) New() mcp.Tool {
 重要：ExecutionPlan结构体格式要求（支持批量创建）：
 {
   "packageName": "包名(string)",
-  "packageType": "package或plugin(string)，在用户提到使用插件时，必须为plugin，其余情况下如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
+  "packageType": "package或plugin(string)，如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
   "needCreatedPackage": "是否需要创建包(bool)",
   "needCreatedModules": "是否需要创建模块(bool)",
   "needCreatedDictionaries": "是否需要创建字典(bool)",
   "packageInfo": {
     "desc": "描述(string)",
     "label": "展示名(string)", 
-    "template": "package或plugin(string)，在用户提到使用插件时，必须为plugin，其余情况下如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
+    "template": "package或plugin(string)，如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
     "packageName": "包名(string)"
   },
   "modulesInfo": [{

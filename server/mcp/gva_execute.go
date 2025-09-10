@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/mark3labs/mcp-go/mcp"
+	"go.uber.org/zap"
 )
 
 // 注册工具
@@ -42,28 +44,30 @@ type ExecuteResponse struct {
 
 // ExecutionPlan 执行计划结构
 type ExecutionPlan struct {
-	PackageName        string                            `json:"packageName"`
-	PackageType        string                            `json:"packageType"` // "plugin" 或 "package"
-	NeedCreatedPackage bool                              `json:"needCreatedPackage"`
-	NeedCreatedModules bool                              `json:"needCreatedModules"`
-	PackageInfo        *request.SysAutoCodePackageCreate `json:"packageInfo,omitempty"`
-	ModulesInfo        []*request.AutoCode               `json:"modulesInfo,omitempty"`
-	Paths              map[string]string                 `json:"paths,omitempty"`
+	PackageName             string                            `json:"packageName"`
+	PackageType             string                            `json:"packageType"` // "plugin" 或 "package"
+	NeedCreatedPackage      bool                              `json:"needCreatedPackage"`
+	NeedCreatedModules      bool                              `json:"needCreatedModules"`
+	NeedCreatedDictionaries bool                              `json:"needCreatedDictionaries"`
+	PackageInfo             *request.SysAutoCodePackageCreate `json:"packageInfo,omitempty"`
+	ModulesInfo             []*request.AutoCode               `json:"modulesInfo,omitempty"`
+	Paths                   map[string]string                 `json:"paths,omitempty"`
+	DictionariesInfo        []*DictionaryGenerateRequest      `json:"dictionariesInfo,omitempty"`
 }
 
 // New 创建GVA代码生成执行器工具
 func (g *GVAExecutor) New() mcp.Tool {
 	return mcp.NewTool("gva_execute",
-		mcp.WithDescription(`**🚀 GVA代码生成执行器：直接执行代码生成，无需确认步骤**
+		mcp.WithDescription(`**GVA代码生成执行器：直接执行代码生成，无需确认步骤**
 
 **核心功能：**
-- 接收ExecutionPlan执行计划，直接生成代码
+- 根据需求分析和当前的包信息判断是否调用，如果需要调用，则根据入参描述生成json，用于直接生成代码
 - 支持批量创建多个模块
 - 自动创建包、模块、字典等
 - 移除了确认步骤，提高执行效率
 
 **使用场景：**
-- 在gva_analyze分析完成后调用
+- 在gva_analyze获取了当前的包信息和字典信息之后，如果已经包含了可以使用的包和模块，那就不要调用本mcp
 - 根据分析结果直接生成代码
 - 适用于自动化代码生成流程
 
@@ -84,18 +88,19 @@ func (g *GVAExecutor) New() mcp.Tool {
 重要：ExecutionPlan结构体格式要求（支持批量创建）：
 {
   "packageName": "包名(string)",
-  "packageType": "package或plugin(string)",
+  "packageType": "package或plugin(string)，在用户提到使用插件时，必须为plugin，其余情况下如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
   "needCreatedPackage": "是否需要创建包(bool)",
   "needCreatedModules": "是否需要创建模块(bool)",
+  "needCreatedDictionaries": "是否需要创建字典(bool)",
   "packageInfo": {
     "desc": "描述(string)",
     "label": "展示名(string)", 
-    "template": "package或plugin(string)",
+    "template": "package或plugin(string)，在用户提到使用插件时，必须为plugin，其余情况下如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
     "packageName": "包名(string)"
   },
   "modulesInfo": [{
-    "package": "包名(string)",
-    "tableName": "数据库表名(string)",
+    "package": "包名(string，必然是小写开头)",
+    "tableName": "数据库表名(string，使用蛇形命名法)",
     "businessDB": "业务数据库(string)",
     "structName": "结构体名(string)",
     "packageName": "文件名称(string)",
@@ -104,12 +109,12 @@ func (g *GVAExecutor) New() mcp.Tool {
     "humpPackageName": "文件名称 一般是结构体名的小驼峰(string)",
     "gvaModel": "是否使用GVA模型(bool) 固定为true 后续不需要创建ID created_at deleted_at updated_at",
     "autoMigrate": "是否自动迁移(bool)",
-    "autoCreateResource": "是否创建资源(bool)",
-    "autoCreateApiToSql": "是否创建API(bool)",
-    "autoCreateMenuToSql": "是否创建菜单(bool)",
-    "autoCreateBtnAuth": "是否创建按钮权限(bool)",
-    "onlyTemplate": "是否仅模板(bool)",
-    "isTree": "是否树形结构(bool)",
+    "autoCreateResource": "是否创建资源(bool，默认为false)",
+    "autoCreateApiToSql": "是否创建API(bool，默认为true)",
+    "autoCreateMenuToSql": "是否创建菜单(bool，默认为true)",
+    "autoCreateBtnAuth": "是否创建按钮权限(bool，默认为false)",
+    "onlyTemplate": "是否仅模板(bool，默认为false)",
+    "isTree": "是否树形结构(bool，默认为false)",
     "treeJson": "树形JSON字段(string)",
     "isAdd": "是否新增(bool) 固定为false",
     "generateWeb": "是否生成前端(bool)",
@@ -145,31 +150,50 @@ func (g *GVAExecutor) New() mcp.Tool {
     "structName": "第二个模块的结构体名(string)",
     "description": "第二个模块的描述(string)",
     "...": "更多模块配置..."
-  }]
+  }],
+	"dictionariesInfo":[{
+		"dictType": "字典类型(string) - 用于标识字典的唯一性",
+		"dictName": "字典名称(string) - 必须生成，字典的中文名称",
+		"description": "字典描述(string) - 字典的用途说明",
+		"status": "字典状态(bool) - true启用，false禁用",
+		"fieldDesc": "字段描述(string) - 用于AI理解字段含义并生成合适的选项",
+		"options": [{
+			"label": "显示名称(string) - 用户看到的选项名",
+			"value": "选项值(string) - 实际存储的值",
+			"sort": "排序号(int) - 数字越小越靠前"
+		}]
+	}]
 }
 
 注意：
 1. needCreatedPackage=true时packageInfo必需
 2. needCreatedModules=true时modulesInfo必需
-3. packageType只能是"package"或"plugin"
-4. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）
-5. 搜索类型支持：=,!=,>,>=,<,<=,NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN
-6. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
-7. **重要**：当gvaModel=false时，必须有一个字段的primaryKey=true，否则会导致PrimaryField为nil错误
-8. **重要**：当gvaModel=true时，系统会自动设置ID字段为主键，无需手动设置primaryKey=true
-9. 智能字典创建功能：当字段使用字典类型(DictType)时，系统会：
+3. needCreatedDictionaries=true时dictionariesInfo必需
+4. dictionariesInfo中的options字段可选，如果不提供将根据fieldDesc自动生成默认选项
+5. 字典创建会在模块创建之前执行，确保模块字段可以正确引用字典类型
+6. packageType只能是"package"或"plugin"
+7. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）
+8. 搜索类型支持：=,!=,>,>=,<,<=,NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN
+9. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
+10. **重要**：当gvaModel=false时，必须有一个字段的primaryKey=true，否则会导致PrimaryField为nil错误
+11. **重要**：当gvaModel=true时，系统会自动设置ID字段为主键，无需手动设置primaryKey=true
+12. 智能字典创建功能：当字段使用字典类型(DictType)时，系统会：
    - 自动检查字典是否存在，如果不存在则创建字典
    - 根据字典类型和字段描述智能生成默认选项，支持状态、性别、类型、等级、优先级、审批、角色、布尔值、订单、颜色、尺寸等常见场景
    - 为无法识别的字典类型提供通用默认选项
-10. **模块关联配置**：当需要配置模块间的关联关系时，使用dataSource字段：
+13. **模块关联配置**：当需要配置模块间的关联关系时，使用dataSource字段：
    - **dbName**: 关联的数据库名称
    - **table**: 关联的表名
    - **label**: 用于显示的字段名（如name、title等）
    - **value**: 用于存储的值字段名（通常是id）
-   - **association**: 关联关系类型（1=一对一关联，2=一对多关联）
+   - **association**: 关联关系类型（1=一对一关联，2=一对多关联）一对一和一对多的前面的一是当前的实体，如果他只能关联另一个实体的一个，则选用一对一，如果他需要关联多个他的关联实体，则选用一对多。
    - **hasDeletedAt**: 关联表是否有软删除字段
    - **checkDataSource**: 设为true时会验证关联表的存在性
-   - 示例：{"dbName":"gva","table":"sys_users","label":"username","value":"id","association":2,"hasDeletedAt":true}`),
+   - 示例：{"dbName":"","table":"sys_users","label":"username","value":"id","association":1,"hasDeletedAt":true}
+14. **自动字段类型修正**：系统会自动检查和修正字段类型：
+   - 当字段配置了dataSource且association=2（一对多关联）时，系统会自动将fieldType修改为'array'
+   - 这确保了一对多关联数据的正确存储和处理
+   - 修正操作会记录在日志中，便于开发者了解变更情况`),
 		mcp.WithObject("executionPlan",
 			mcp.Description("执行计划，包含包信息和模块信息"),
 			mcp.Required(),
@@ -388,6 +412,23 @@ func (g *GVAExecutor) validateExecutionPlan(plan *ExecutionPlan) error {
 						return fmt.Errorf("模块 %d 字段 %d 的 fieldSearchType '%s' 不支持，支持的类型：%v", moduleIndex+1, i+1, field.FieldSearchType, validSearchTypes)
 					}
 				}
+
+				// 验证 dataSource 字段配置
+				if field.DataSource != nil {
+					associationValue := field.DataSource.Association
+					// 当 association 为 2（一对多关联）时，强制修改 fieldType 为 array
+					if associationValue == 2 {
+						if field.FieldType != "array" {
+							global.GVA_LOG.Info(fmt.Sprintf("模块 %d 字段 %d：检测到一对多关联(association=2)，自动将 fieldType 从 '%s' 修改为 'array'", moduleIndex+1, i+1, field.FieldType))
+							moduleInfo.Fields[i].FieldType = "array"
+						}
+					}
+
+					// 验证 association 值的有效性
+					if associationValue != 1 && associationValue != 2 {
+						return fmt.Errorf("模块 %d 字段 %d 的 dataSource.association 必须是 1（一对一）或 2（一对多）", moduleIndex+1, i+1)
+					}
+				}
 			}
 
 			// 验证主键设置
@@ -451,13 +492,15 @@ func (g *GVAExecutor) executeCreation(ctx context.Context, plan *ExecutionPlan) 
 		result.Message += "包创建成功; "
 	}
 
+	// 创建指定字典（如果需要）
+	if plan.NeedCreatedDictionaries && len(plan.DictionariesInfo) > 0 {
+		dictResult := g.createDictionariesFromInfo(ctx, plan.DictionariesInfo)
+		result.Message += dictResult
+	}
+
 	// 批量创建字典和模块（如果需要）
 	if plan.NeedCreatedModules && len(plan.ModulesInfo) > 0 {
 		templateService := service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
-
-		// 先批量创建所有模块需要的字典
-		dictResult := g.createRequiredDictionaries(ctx, plan.ModulesInfo)
-		result.Message += dictResult
 
 		// 遍历所有模块进行创建
 		for _, moduleInfo := range plan.ModulesInfo {
@@ -660,69 +703,6 @@ func (g *GVAExecutor) collectExpectedFilePaths(plan *ExecutionPlan) []string {
 	return paths
 }
 
-// createRequiredDictionaries 创建所需的字典（批量处理）
-func (g *GVAExecutor) createRequiredDictionaries(ctx context.Context, modulesInfoList []*request.AutoCode) string {
-	var messages []string
-	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
-	createdDictTypes := make(map[string]bool) // 用于避免重复创建相同的字典
-
-	// 遍历所有模块
-	for moduleIndex, modulesInfo := range modulesInfoList {
-		messages = append(messages, fmt.Sprintf("处理模块 %d (%s) 的字典: ", moduleIndex+1, modulesInfo.StructName))
-
-		// 遍历当前模块的所有字段，查找使用字典的字段
-		moduleHasDictFields := false
-		for _, field := range modulesInfo.Fields {
-			if field.DictType != "" {
-				moduleHasDictFields = true
-
-				// 如果这个字典类型已经在之前的模块中创建过，跳过
-				if createdDictTypes[field.DictType] {
-					messages = append(messages, fmt.Sprintf("字典 %s 已在前面的模块中创建，跳过; ", field.DictType))
-					continue
-				}
-
-				// 检查字典是否存在
-				exists, err := g.checkDictionaryExists(field.DictType)
-				if err != nil {
-					messages = append(messages, fmt.Sprintf("检查字典 %s 时出错: %v; ", field.DictType, err))
-					continue
-				}
-
-				if !exists {
-					// 字典不存在，创建字典
-					dictionary := model.SysDictionary{
-						Name:   g.generateDictionaryName(field.DictType, field.FieldDesc),
-						Type:   field.DictType,
-						Status: &[]bool{true}[0], // 默认启用
-						Desc:   fmt.Sprintf("自动生成的字典，用于模块 %s 字段: %s (%s)", modulesInfo.StructName, field.FieldName, field.FieldDesc),
-					}
-
-					err = dictionaryService.CreateSysDictionary(dictionary)
-					if err != nil {
-						messages = append(messages, fmt.Sprintf("创建字典 %s 失败: %v; ", field.DictType, err))
-					} else {
-						messages = append(messages, fmt.Sprintf("成功创建字典 %s (%s); ", field.DictType, dictionary.Name))
-						createdDictTypes[field.DictType] = true // 标记为已创建
-
-						// 创建默认的字典详情项
-						g.createDefaultDictionaryDetails(ctx, field.DictType, field.FieldDesc)
-					}
-				} else {
-					messages = append(messages, fmt.Sprintf("字典 %s 已存在，跳过创建; ", field.DictType))
-					createdDictTypes[field.DictType] = true // 标记为已存在
-				}
-			}
-		}
-
-		if !moduleHasDictFields {
-			messages = append(messages, "无需创建字典; ")
-		}
-	}
-
-	return strings.Join(messages, "")
-}
-
 // checkDictionaryExists 检查字典是否存在
 func (g *GVAExecutor) checkDictionaryExists(dictType string) (bool, error) {
 	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
@@ -738,69 +718,72 @@ func (g *GVAExecutor) checkDictionaryExists(dictType string) (bool, error) {
 	return true, nil
 }
 
-// generateDictionaryName 生成字典名称
-func (g *GVAExecutor) generateDictionaryName(dictType, fieldDesc string) string {
-	if fieldDesc != "" {
-		return fmt.Sprintf("%s选项", fieldDesc)
-	}
-	return fmt.Sprintf("%s字典", dictType)
-}
-
-// createDefaultDictionaryDetails 创建默认的字典详情项
-func (g *GVAExecutor) createDefaultDictionaryDetails(ctx context.Context, dictType, fieldDesc string) {
+// createDictionariesFromInfo 根据 DictionariesInfo 创建字典
+func (g *GVAExecutor) createDictionariesFromInfo(ctx context.Context, dictionariesInfo []*DictionaryGenerateRequest) string {
+	var messages []string
+	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
 	dictionaryDetailService := service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 
-	// 创建一些默认的字典项
-	defaultItems := []struct {
-		label string
-		value string
-		sort  int
-	}{
-		{"选项1", "option1", 1},
-		{"选项2", "option2", 2},
-		{"选项3", "option3", 3},
-	}
+	messages = append(messages, fmt.Sprintf("开始创建 %d 个指定字典: ", len(dictionariesInfo)))
 
-	for _, item := range defaultItems {
-		detail := model.SysDictionaryDetail{
-			Label:           item.label,
-			Value:           item.value,
-			Sort:            item.sort,
-			SysDictionaryID: 0, // 这里需要获取字典ID，但为了简化先设为0
-			Status:          &[]bool{true}[0],
+	for _, dictInfo := range dictionariesInfo {
+		// 检查字典是否存在
+		exists, err := g.checkDictionaryExists(dictInfo.DictType)
+		if err != nil {
+			messages = append(messages, fmt.Sprintf("检查字典 %s 时出错: %v; ", dictInfo.DictType, err))
+			continue
 		}
 
-		// 尝试创建字典详情，忽略错误
-		_ = dictionaryDetailService.CreateSysDictionaryDetail(detail)
-	}
-}
+		if !exists {
+			// 字典不存在，创建字典
+			dictionary := model.SysDictionary{
+				Name:   dictInfo.DictName,
+				Type:   dictInfo.DictType,
+				Status: utils.Pointer(true),
+				Desc:   dictInfo.Description,
+			}
 
-// isSystemFunction 检查是否为系统函数
-func (g *GVAExecutor) isSystemFunction(funcName string) bool {
-	systemFunctions := []string{
-		"Create", "Delete", "Update", "Find", "Get", "List",
-		"CreateInBatches", "Save", "First", "Take", "Last",
-		"Find", "Scan", "Pluck", "Count", "Distinct",
-		"Select", "Omit", "Where", "Not", "Or",
-		"Limit", "Offset", "Order", "Group", "Having",
-		"Joins", "Preload", "Raw", "Exec", "Row", "Rows",
-		"ScanRows", "Transaction", "Begin", "Commit", "Rollback",
-		"SavePoint", "RollbackTo", "CreateTable", "DropTable",
-		"HasTable", "ColumnTypes", "CreateIndex", "DropIndex",
-		"HasIndex", "Rename", "CurrentDatabase", "Debug",
-		"DryRun", "PrepareStmt", "WithContext", "Logger",
-		"NowFunc", "CloneDB", "Callback", "AddError",
-		"DB", "SetupJoinTable", "Use", "ToSQL",
-	}
-	return g.contains(systemFunctions, funcName)
-}
+			err = dictionaryService.CreateSysDictionary(dictionary)
+			if err != nil {
+				messages = append(messages, fmt.Sprintf("创建字典 %s 失败: %v; ", dictInfo.DictType, err))
+				continue
+			}
 
-// contains 检查切片是否包含指定元素
-func (g *GVAExecutor) contains(slice []string, item string) bool {
-	for _, s := range slice {
-		if s == item {
-			return true
+			messages = append(messages, fmt.Sprintf("成功创建字典 %s (%s); ", dictInfo.DictType, dictInfo.DictName))
+
+			// 获取刚创建的字典ID
+			var createdDict model.SysDictionary
+			err = global.GVA_DB.Where("type = ?", dictInfo.DictType).First(&createdDict).Error
+			if err != nil {
+				messages = append(messages, fmt.Sprintf("获取创建的字典失败: %v; ", err))
+				continue
+			}
+
+			// 创建字典选项
+			if len(dictInfo.Options) > 0 {
+				successCount := 0
+				for _, option := range dictInfo.Options {
+					dictionaryDetail := model.SysDictionaryDetail{
+						Label:           option.Label,
+						Value:           option.Value,
+						Status:          &[]bool{true}[0], // 默认启用
+						Sort:            option.Sort,
+						SysDictionaryID: int(createdDict.ID),
+					}
+
+					err = dictionaryDetailService.CreateSysDictionaryDetail(dictionaryDetail)
+					if err != nil {
+						global.GVA_LOG.Warn("创建字典详情项失败", zap.Error(err))
+					} else {
+						successCount++
+					}
+				}
+				messages = append(messages, fmt.Sprintf("创建了 %d 个字典选项; ", successCount))
+			}
+		} else {
+			messages = append(messages, fmt.Sprintf("字典 %s 已存在，跳过创建; ", dictInfo.DictType))
 		}
 	}
-	return false
+
+	return strings.Join(messages, "")
 }

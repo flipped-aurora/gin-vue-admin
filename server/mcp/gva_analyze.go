@@ -29,13 +29,9 @@ type AnalyzeRequest struct {
 
 // AnalyzeResponse 分析响应结构体
 type AnalyzeResponse struct {
-	NeedCreatedPackage bool                    `json:"needCreatedPackage"` // 是否需要创建新包
-	NeedCreatedModules []ModuleInfo            `json:"needCreatedModules"` // 需要创建的模块列表
 	ExistingPackages   []PackageInfo           `json:"existingPackages"`   // 现有包信息
 	PredesignedModules []PredesignedModuleInfo `json:"predesignedModules"` // 预设计模块信息
-	SuggestedPackage   string                  `json:"suggestedPackage"`   // 建议的包名
-	SuggestedTemplate  string                  `json:"suggestedTemplate"`  // 建议的模板类型 (package/plugin)
-	AnalysisMessage    string                  `json:"analysisMessage"`    // 分析结果消息
+	Dictionaries       []DictionaryPre         `json:"dictionaries"`       // 字典信息
 	CleanupInfo        *CleanupInfo            `json:"cleanupInfo"`        // 清理信息（如果有）
 }
 
@@ -79,7 +75,7 @@ type CleanupInfo struct {
 // New 创建GVA分析器工具
 func (g *GVAAnalyzer) New() mcp.Tool {
 	return mcp.NewTool("gva_analyze",
-		mcp.WithDescription("分析当前功能是否需要创建独立的package和module，或仅返回当前功能需要的文件路径"),
+		mcp.WithDescription("返回当前系统中有效的包和模块信息，并分析用户需求是否需要创建新的包、模块和字典。同时检查并清理空包，确保系统整洁。"),
 		mcp.WithString("requirement",
 			mcp.Description("用户需求描述，用于分析是否需要创建新的包和模块"),
 			mcp.Required(),
@@ -258,16 +254,18 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 		}
 	}
 
+	dictionaries := []DictionaryPre{} // 这里可以根据需要填充字典信息
+	err = global.GVA_DB.Table("sys_dictionaries").Find(&dictionaries, "deleted_at is null").Error
+	if err != nil {
+		global.GVA_LOG.Warn(fmt.Sprintf("获取字典信息失败: %v", err))
+		dictionaries = []DictionaryPre{} // 设置为空列表，不影响主流程
+	}
+
 	// 10. 构建响应
 	response := &AnalyzeResponse{
-		NeedCreatedPackage: true,           // 默认建议创建新包
-		NeedCreatedModules: []ModuleInfo{}, // 具体模块需要根据需求进一步分析
 		ExistingPackages:   existingPackages,
 		PredesignedModules: filteredModules,
-		SuggestedPackage:   "", // 需要根据需求生成
-		SuggestedTemplate:  suggestedType,
-		AnalysisMessage:    analysisMessage.String(),
-		CleanupInfo:        cleanupInfo,
+		Dictionaries:       dictionaries,
 	}
 
 	return response, nil

@@ -93,7 +93,7 @@ func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uin
 		flag = *status
 	}
 	err = global.GVA_DB.Where("(type = ? OR id = ?) and status = ?", Type, Id, flag).Preload("SysDictionaryDetails", func(db *gorm.DB) *gorm.DB {
-		return db.Where("status = ?", true).Order("sort")
+		return db.Where("status = ? and deleted_at is null", true).Order("sort")
 	}).First(&sysDictionary).Error
 	return
 }

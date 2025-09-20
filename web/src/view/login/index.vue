@@ -13,7 +13,7 @@
         >
           <div>
             <div class="flex items-center justify-center">
-              <img class="w-24" :src="$GIN_VUE_ADMIN.appLogo" alt />
+              <Logo :size="6" />
             </div>
             <div class="mb-9">
               <p class="text-center text-4xl font-bold">
@@ -131,6 +131,7 @@
   import { ElMessage } from 'element-plus'
   import { useRouter } from 'vue-router'
   import { useUserStore } from '@/pinia/modules/user'
+  import Logo from '@/components/logo/index.vue'
 
   defineOptions({
     name: 'Login'

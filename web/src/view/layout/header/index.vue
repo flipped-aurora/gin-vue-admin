@@ -13,11 +13,7 @@
         :class="isMobile ? '' : 'min-w-48'"
         @click="router.push({ path: '/' })"
       >
-        <img
-          alt
-          class="h-12 bg-white rounded-full"
-          :src="$GIN_VUE_ADMIN.appLogo"
-        />
+        <Logo />
         <div
           v-if="!isMobile"
           class="inline-flex font-bold text-2xl ml-2"
@@ -112,6 +108,8 @@
   import { setUserAuthority } from '@/api/user'
   import { fmtTitle } from '@/utils/fmtRouterTitle'
   import gvaAside from '@/view/layout/aside/index.vue'
+  import Logo from '@/components/logo/index.vue'
+
   const userStore = useUserStore()
   const router = useRouter()
   const route = useRoute()

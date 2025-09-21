@@ -16,6 +16,7 @@
   import zh from './locale/zh_cn.js' // 导入中文语言包
   import zh_tw from './locale/zh_tw.js' // 导入中文语言包
   import ar from './locale/ar.js'
+  import ru from './locale/ru.js'
   import { useI18n } from 'vue-i18n' // 导入中文语言包
 
   const { locale } = useI18n()
@@ -30,7 +31,8 @@
     'zh-cn': zh,
     'zh-TW': zh_tw,
     en: en,
-    ar: ar
+    ar: ar,
+    ru: ru
   }
 
   const designer = ref(null)

@@ -77,7 +77,7 @@ import { exportExcel } from '@/api/exportTemplate'
     })
 
     if(res.code === 0){
-      ElMessage.success('创建导出任务成功，开始下载')
+      ElMessage.success(t('components.exportExcel.createTaskSuccess'))
       const url = `${baseUrl}${res.data}`
       window.open(url, '_blank')
     }

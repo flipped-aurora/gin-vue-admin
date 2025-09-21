@@ -376,6 +376,9 @@
             "about": "About",
             "adminTools": "Administration Tools",
             "announcementManage": "Announcement Management [Example]",
+            "aiPageDraw": "AI PageDraw",
+            "mcpToolsTemplate": "Mcp Tools Template",
+            "mcpToolsTest": "Mcp Tools Test",
             "apiManage": "API Management",
             "autoCode": "Code Generator",
             "autoCodeEdit": "Automate code (reuse)",
@@ -532,6 +535,33 @@
     },
     "router": {
 
+    },
+    "directory": {
+        "fileExists": "File with the same name exists"
+    },
+    "upload": {
+        "fileNotExists": "File does not exist",
+        "readFileFailed": "Failed to read file"
+    },
+    "jwt": {
+        "unknownError": "Unknown error",
+        "tokenExpired": "Token has expired",
+        "tokenNotValidYet": "Token is not yet active",
+        "tokenMalformed": "This is not a token",
+        "invalidSignature": "Invalid signature",
+        "tokenInvalid": "Cannot process this token"
+    },
+    "breakpoint": {
+        "invalidFileNameOrPath": "Invalid file name or path"
+    },
+    "dictionary": {
+        "duplicateTypeNotAllowed": "Duplicate type exists, creation not allowed",
+        "doNotCauseTrouble": "Please do not cause trouble",
+        "queryDictDataFailed": "Failed to query dictionary data"
+    },
+    "category": {
+        "nameAlreadyExists": "Category name already exists",
+        "deleteChildrenFirst": "Please delete children first"
     }
 }
 

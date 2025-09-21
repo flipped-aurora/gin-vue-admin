@@ -14,7 +14,7 @@ func LanguageHandler() gin.HandlerFunc {
 
 		// fmt.Printf("Accept-Language value is: %s\r\n", lang)
 		var oldLang = global.GVA_CONFIG.Language.Language
-		if lang != "" && (lang == "en" || lang == "zh" || lang == "ar") { // currently we support en, zh, ar languages only
+		if lang != "" && (lang == "en" || lang == "zh" || lang == "ar" || lang == "ru") { // currently we support en, zh, ar, ru languages only
 			global.GVA_CONFIG.Language.Language = lang
 		} else {
 			global.GVA_CONFIG.Language.Language = "en"

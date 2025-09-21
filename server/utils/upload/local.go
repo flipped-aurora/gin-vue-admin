@@ -93,7 +93,7 @@ func (*Local) DeleteFile(key string) error {
 
 	// 检查文件是否存在
 	if _, err := os.Stat(p); os.IsNotExist(err) {
-		return errors.New("文件不存在")
+		return errors.New(global.Translate("upload.fileNotExists"))
 	}
 
 	// 使用文件锁防止并发删除

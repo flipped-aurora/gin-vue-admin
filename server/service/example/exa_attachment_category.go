@@ -13,7 +13,7 @@ type AttachmentCategoryService struct{}
 func (a *AttachmentCategoryService) AddCategory(req *example.ExaAttachmentCategory) (err error) {
 	// 检查是否已存在相同名称的分类
 	if (!errors.Is(global.GVA_DB.Take(&example.ExaAttachmentCategory{}, "name = ? and pid = ?", req.Name, req.Pid).Error, gorm.ErrRecordNotFound)) {
-		return errors.New("分类名称已存在")
+		return errors.New(global.Translate("category.nameAlreadyExists"))
 	}
 	if req.ID > 0 {
 		if err = global.GVA_DB.Model(&example.ExaAttachmentCategory{}).Where("id = ?", req.ID).Updates(&example.ExaAttachmentCategory{
@@ -38,7 +38,7 @@ func (a *AttachmentCategoryService) DeleteCategory(id *int) error {
 	var childCount int64
 	global.GVA_DB.Model(&example.ExaAttachmentCategory{}).Where("pid = ?", id).Count(&childCount)
 	if childCount > 0 {
-		return errors.New("请先删除子级")
+		return errors.New(global.Translate("category.deleteChildrenFirst"))
 	}
 	return global.GVA_DB.Where("id = ?", id).Unscoped().Delete(&example.ExaAttachmentCategory{}).Error
 }

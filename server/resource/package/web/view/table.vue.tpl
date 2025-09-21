@@ -63,7 +63,7 @@ const {{ $element }}Options = ref([])
                {{- if eq .FieldType "string" }}
 {
     whitespace: true,
-    message: '不能只输入空格',
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
 }
               {{- end }}
@@ -140,8 +140,8 @@ getDataSourceFunc()
   {{- end }}
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog()">新增</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog()">{{"{{"}}t('general.add'){{"}}"}}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">{{"{{"}}t('general.delete'){{"}}"}}</el-button>
             {{ if .HasExcel -}}
             <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
             <ExportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportExcel"{{ end }} template-id="{{$templateID}}" filterDeleted/>
@@ -161,7 +161,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{ if .IsTree -}} min-{{- end -}}width="180">
+        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{- if .IsTree }} min-{{- end -}}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -170,14 +170,14 @@ getDataSourceFunc()
             {{ GenerateTableColumn . }}
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="操作" fixed="right" :min-width="appStore.operateMinWith">
+        <el-table-column align="left" :label="t('general.operations')" fixed="right" :min-width="appStore.operateMinWith">
             <template #default="scope">
             {{- if .IsTree }}
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>新增子节点</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}}t('general.addChild'){{"}}"}}</el-button>
             {{- end }}
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
-            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length" {{ end }} {{if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}}t('general.detail'){{"}}"}} </el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{"{{"}}t('general.edit'){{"}}"}}</el-button>
+            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length" {{ end }} {{if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">{{"{{"}}t('general.delete'){{"}}"}}</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -198,15 +198,15 @@ getDataSourceFunc()
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
                 <div>
-                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">确 定</el-button>
-                  <el-button @click="closeDialog">取 消</el-button>
+                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">{{"{{"}}t('general.confirm'){{"}}"}}</el-button>
+                  <el-button @click="closeDialog">{{"{{"}}t('general.cancel'){{"}}"}}</el-button>
                 </div>
               </div>
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
           {{- if .IsTree }}
-            <el-form-item label="父节点:" prop="parentID" >
+            <el-form-item :label="t('general.parentNode')" prop="parentID" >
                 <el-tree-select
                     v-model="formData.parentID"
                     :data="[rootNode,...tableData]"
@@ -215,7 +215,7 @@ getDataSourceFunc()
                     :props="defaultProps"
                     clearable
                     style="width: 240px"
-                    placeholder="根节点"
+                    :placeholder="t('general.rootNode')"
                 />
             </el-form-item>
           {{- end }}
@@ -227,10 +227,10 @@ getDataSourceFunc()
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
+    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" :title="t('general.detail')">
             <el-descriptions :column="1" border>
             {{- if .IsTree }}
-            <el-descriptions-item label="父节点">
+            <el-descriptions-item :label="t('general.parentNode')">
                 <el-tree-select
                   v-model="detailForm.parentID"
                   :data="[rootNode,...tableData]"
@@ -240,7 +240,7 @@ getDataSourceFunc()
                   :props="defaultProps"
                   clearable
                   style="width: 240px"
-                  placeholder="根节点"
+                  :placeholder="t('general.rootNode')"
                 />
             </el-descriptions-item>
             {{- end }}
@@ -296,6 +296,8 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 {{- if .AutoCreateBtnAuth }}
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
@@ -312,6 +314,7 @@ import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
 {{- end}}
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
+
 
 
 defineOptions({
@@ -471,7 +474,7 @@ const defaultProps = {
 
 const rootNode = {
   {{ .PrimaryField.FieldJson }}: 0,
-  {{ .TreeJson }}: '根节点',
+  {{ .TreeJson }}: t('general.rootNode'),
   children: []
 }
 
@@ -508,9 +511,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+        confirmButtonText: t('general.confirm'),
+         cancelButtonText: t('general.cancel'),
         type: 'warning'
     }).then(() => {
             delete{{.StructName}}Func(row)

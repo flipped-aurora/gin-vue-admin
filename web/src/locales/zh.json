@@ -6,7 +6,9 @@
     "bottomInfo": {
       "poweredBy": "动力来自",
       "copyright": "版权",
-      "faTeam": "flipped-aurora团队"
+      "faTeam": "flipped-aurora团队",
+      "copyrightNotice": "此文件受版权保护，未经授权禁止修改！如果您尚未获得授权，请通过微信(shouzi_1994)联系我们以购买授权。在未授权状态下，只需保留此代码，不会影响任何正常使用。",
+      "unauthorizedWarning": "未经授权的商用使用可能会被我们的资产搜索引擎爬取，并可能导致后续索赔。索赔金额将不低于高级授权费的十倍。请您遵守版权法律法规，尊重知识产权。"
     },
     "commandMenu": {
       "commandMenuNote": "请输入你需要快捷到达的功能",
@@ -29,7 +31,8 @@
       "importExcel": {
         "import": "导入",
         "importSuccess": "导入成功"
-      }
+      },
+      "createExportTaskSuccess": "创建导出任务成功，开始下载"
     },
     "selectFile": {
       "uploadFiles": "上传文件",
@@ -49,7 +52,11 @@
         "categoryName": "分类名称",
         "allCategories": "全部分类",
         "enterCategoryName": "请输入分类名称",
-        "categoryNameNote": "最多20位字符" 
+        "categoryNameNote": "最多20位字符",
+        "deleteButton": "删除按钮在外层容器中",
+        "dragStart": "拖拽开始时的处理",
+        "dragEnd": "拖拽结束时的处理",
+        "ensureArrayType": "确保model是数组类型"
       }
     },
     "upload": {
@@ -57,12 +64,64 @@
         "normalUpload": "普通上传",
         "fileFormatNote": "上传图片只能是 jpg,png,svg,webp 格式, 上传视频只能是 mp4,webm 格式!",
         "videoSizeError": "上传视频大小不能超过 5MB",
-        "imageSizeError": "未压缩的上传图片大小不能超过 500KB，请使用压缩上传"
+        "imageSizeError": "未压缩的上传图片大小不能超过 500KB，请使用压缩上传",
+        "compression": "压缩",
+        "shouldSupportProjectSetting": "应支持在项目中设置",
+        "shouldSupportProjectSettingToo": "应支持项目中设置"
       },
       "image": {
         "compressedUpload": "压缩上传",
         "avatarImageFormatError": "上传头像图片只能是 jpg或png 格式!"
+      },
+      "cropper": {
+        "cropUpload": "裁剪上传",
+        "imageCrop": "图片裁剪",
+        "leftEditArea": "左侧编辑区",
+        "toolbar": "工具栏",
+        "rotateLeft": "向左旋转",
+        "rotateRight": "向右旋转",
+        "selectRatio": "选择比例",
+        "rightPreviewArea": "右侧预览区",
+        "cropPreview": "裁剪预览",
+        "cancel": "取 消",
+        "upload": "上 传",
+        "uploading": "上传中...",
+        "responsiveData": "响应式数据",
+        "zoomControl": "缩放控制",
+        "ratioPreset": "比例预设",
+        "freeRatio": "自由比例",
+        "fileProcessing": "文件处理",
+        "selectImageFile": "请选择图片文件",
+        "fileSizeLimit": "文件大小不能超过8MB!",
+        "rotationControl": "旋转控制",
+        "realtimePreview": "实时预览",
+        "uploadProcessing": "上传处理",
+        "uploadFailed": "上传失败: ",
+        "uploadSuccess": "上传成功"
+      },
+      "qrCode": {
+        "scanUpload": "扫码上传",
+        "complete": "完成上传"
       }
+    },
+    "i18n": {
+      "chinese": "中文",
+      "traditionalChinese": "繁體中文"
+    },
+    "office": {
+      "importDocx": "引入VueOfficeDocx组件",
+      "importExcel": "引入VueOfficeExcel组件",
+      "importStyles": "引入相关样式",
+      "pdfLoadSuccess": "pdf 加载成功",
+      "pdfError": "pdf 错误"
+    },
+    "richtext": {
+      "importCss": "引入 css",
+      "placeholder": "请输入内容...",
+      "destroyEditor": "组件销毁时，也及时销毁编辑器"
+    },
+    "charts": {
+      "referenceNote": "本组件参考 arco-pro 的实现"
     }
   },
   "api": {
@@ -847,7 +906,9 @@
         "enterBackendWTableFolderAddress": "请输入后端WTable文件夹地址",
         "confirmRestartService": "确定要重启服务",
         "operationSuccess": "操作成功",
-        "cancelRestart": "取消重启"
+        "cancelRestart": "取消重启",
+        "node": "节点",
+        "chinese": "中文"
       },
       "autoCode": {
         "getAiPath": "获取AiPath",
@@ -1200,8 +1261,16 @@
         "closeGenerateMenu": "关闭生成菜单",
         "selectAtLeastOneAPI": "请至少选择一个API",
         "enterPluginNameAgain": "请填写插件名",
-        "closeGenerateAPI": "关闭生成API"
+        "closeGenerateAPI": "关闭生成API",
+        "menuChildrenComment": "如果menu存在children，递归展开到一级"
       }
+    }
+  },
+  "vitePlugin": {
+    "componentName": {
+      "recursiveGetVueFiles": "递归获取目录下所有的 .vue 文件",
+      "extractComponentName": "从 .vue 文件内容中提取组件名称",
+      "vitePluginDefinition": "Vite 插件定义"
     }
   }
 }

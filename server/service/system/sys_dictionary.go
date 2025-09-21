@@ -20,7 +20,7 @@ var DictionaryServiceApp = new(DictionaryService)
 
 func (dictionaryService *DictionaryService) CreateSysDictionary(sysDictionary system.SysDictionary) (err error) {
 	if (!errors.Is(global.GVA_DB.First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
-		return errors.New("存在相同的type，不允许创建")
+		return errors.New(global.Translate("dictionary.duplicateTypeNotAllowed"))
 	}
 	err = global.GVA_DB.Create(&sysDictionary).Error
 	return err
@@ -35,7 +35,7 @@ func (dictionaryService *DictionaryService) CreateSysDictionary(sysDictionary sy
 func (dictionaryService *DictionaryService) DeleteSysDictionary(sysDictionary system.SysDictionary) (err error) {
 	err = global.GVA_DB.Where("id = ?", sysDictionary.ID).Preload("SysDictionaryDetails").First(&sysDictionary).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		return errors.New("请不要搞事")
+		return errors.New(global.Translate("dictionary.doNotCauseTrouble"))
 	}
 	if err != nil {
 		return err
@@ -68,11 +68,11 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 	err = global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict).Error
 	if err != nil {
 		global.GVA_LOG.Debug(err.Error())
-		return errors.New("查询字典数据失败")
+		return errors.New(global.Translate("dictionary.queryDictDataFailed"))
 	}
 	if dict.Type != sysDictionary.Type {
 		if !errors.Is(global.GVA_DB.First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound) {
-			return errors.New("存在相同的type，不允许创建")
+			return errors.New(global.Translate("dictionary.duplicateTypeNotAllowed"))
 		}
 	}
 	err = global.GVA_DB.Model(&dict).Updates(sysDictionaryMap).Error

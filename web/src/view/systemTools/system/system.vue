@@ -329,7 +329,7 @@
           <el-form-item
             v-for="(item, k) in config.mongo.hosts"
             :key="k"
-            :label="`节点 ${k + 1}`"
+            :label="`${$t('systemTools.system.node')} ${k + 1}`"
           >
             <div v-for="(_, k2) in item" :key="k2">
               <el-form-item :key="k + k2" :label="k2" label-width="60">
@@ -1142,6 +1142,7 @@
               <el-option value="en" label="English" />
               <el-option value="zh" label="中文" />
               <el-option value="ar" label="العربية" />
+              <el-option value="ru" label="Русский" />
             </el-select>
             <!-- <el-input v-model="config.language.language" /> -->
           </el-form-item>
@@ -1150,6 +1151,7 @@
               <el-option value="en" label="English" />
               <el-option value="zh" label="中文" />
               <el-option value="ar" label="العربية" />
+              <el-option value="ru" label="Русский" />
             </el-select>
             <!-- <el-input v-model="config.language.language" /> -->
           </el-form-item>

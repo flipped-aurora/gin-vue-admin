@@ -97,11 +97,11 @@ getDataSourceFunc()
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
-      <el-form-item label="创建日期" prop="createdAtRange">
+      <el-form-item label="{{ t('general.createdDate') }}" prop="createdAtRange">
       <template #label>
         <span>
-          创建日期
-          <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+          {{ t('general.createdDate') }}
+          <el-tooltip :content="t('general.searchDateRange')">
             <el-icon><QuestionFilled /></el-icon>
           </el-tooltip>
         </span>
@@ -110,9 +110,9 @@ getDataSourceFunc()
                   v-model="searchInfo.createdAtRange"
                   class="!w-380px"
                   type="datetimerange"
-                  range-separator="至"
-                  start-placeholder="开始时间"
-                  end-placeholder="结束时间"
+                  range-separator="{{ t('general.to') }}"
+                  start-placeholder="{{ t('general.startTime') }}"
+                  end-placeholder="{{ t('general.endTime') }}"
                 />
        </el-form-item>
       {{ end -}}
@@ -127,18 +127,18 @@ getDataSourceFunc()
         </template>
 
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button icon="refresh" @click="onReset">重置</el-button>
-          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
-          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
+          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">{{ t('general.expand') }}</el-button>
+          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>{{ t('general.collapse') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
   {{- end }}
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog()">新增</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog()">{{ t('general.add') }}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">{{ t('general.delete') }}</el-button>
             {{ if .HasExcel -}}
             <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
             <ExportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportExcel"{{ end }} template-id="{{$templateID}}" filterDeleted/>
@@ -158,7 +158,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{ if .IsTree -}} min-{{- end -}}width="180">
+        <el-table-column sortable align="left" label="{{ t('general.date') }}" prop="CreatedAt" {{- if .IsTree }} min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -167,14 +167,14 @@ getDataSourceFunc()
             {{ GenerateTableColumn . }}
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+        <el-table-column align="left" label="{{ t('general.operations') }}" fixed="right" min-width="240">
             <template #default="scope">
             {{- if .IsTree }}
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>新增子节点</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{ t('general.addChild') }}</el-button>
             {{- end }}
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看</el-button>
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
-            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length"{{ end }} {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{ t('general.view') }}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ t('general.edit') }}</el-button>
+            <el-button {{ if .IsTree }}v-if="!scope.row.children?.length"{{ end }} {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">{{ t('general.delete') }}</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -193,17 +193,17 @@ getDataSourceFunc()
     <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
-                <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
+                <span class="text-lg">{{"{{"}}type==='create'?t('general.add'):t('general.edit'){{"}}"}}}</span>
                 <div>
-                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">确 定</el-button>
-                  <el-button @click="closeDialog">取 消</el-button>
+                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+                  <el-button @click="closeDialog">{{ t('general.cancel') }}</el-button>
                 </div>
               </div>
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
           {{- if .IsTree }}
-            <el-form-item label="父节点:" prop="parentID" >
+            <el-form-item label="{{ t('general.parentNode') }}:" prop="parentID" >
                 <el-tree-select
                     v-model="formData.parentID"
                     :data="[rootNode,...tableData]"
@@ -212,7 +212,7 @@ getDataSourceFunc()
                     :props="defaultProps"
                     clearable
                     style="width: 240px"
-                    placeholder="根节点"
+                    placeholder="{{ t('general.rootNode') }}"
                 />
             </el-form-item>
           {{- end }}
@@ -224,10 +224,10 @@ getDataSourceFunc()
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
+    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="{{ t('general.view') }}">
             <el-descriptions :column="1" border>
             {{- if .IsTree }}
-            <el-descriptions-item label="父节点">
+            <el-descriptions-item label="{{ t('general.parentNode') }}">
                 <el-tree-select
                   v-model="detailForm.parentID"
                   :data="[rootNode,...tableData]"
@@ -237,7 +237,7 @@ getDataSourceFunc()
                   :props="defaultProps"
                   clearable
                   style="width: 240px"
-                  placeholder="根节点"
+                  placeholder="{{ t('general.rootNode') }}"
                 />
             </el-descriptions-item>
             {{- end }}
@@ -253,6 +253,7 @@ getDataSourceFunc()
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import {
   {{- if .HasDataSource }}
     get{{.StructName}}DataSource,
@@ -264,6 +265,8 @@ import {
   find{{.StructName}},
   get{{.StructName}}List
 } from '@/plugin/{{.Package}}/api/{{.PackageName}}'
+
+const { t } = useI18n()
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'
@@ -364,7 +367,7 @@ const rule = reactive({
                {{- if eq .FieldType "string" }}
                {
                    whitespace: true,
-                   message: '不能只输入空格',
+                   message: t('general.noSpaceOnly'),
                    trigger: ['input', 'blur'],
               }
               {{- end }}
@@ -464,7 +467,7 @@ const defaultProps = {
 
 const rootNode = {
   {{ .PrimaryField.FieldJson }}: 0,
-  {{ .TreeJson }}: '根节点',
+  {{ .TreeJson }}: t('general.rootNode'),
   children: []
 }
 
@@ -501,9 +504,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
     }).then(() => {
             delete{{.StructName}}Func(row)
@@ -512,16 +515,16 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
       const {{.PrimaryField.FieldJson}}s = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: '请选择要删除的数据'
+          message: t('general.selectDeleteData')
         })
         return
       }
@@ -533,7 +536,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === {{.PrimaryField.FieldJson}}s.length && page.value > 1) {
           page.value--
@@ -616,7 +619,7 @@ const enterDialog = async () => {
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: '创建/更改成功'
+                  message: t('general.createUpdateSuccess')
                 })
                 closeDialog()
                 getTableData()

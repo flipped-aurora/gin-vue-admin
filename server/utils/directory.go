@@ -23,7 +23,7 @@ func PathExists(path string) (bool, error) {
 		if fi.IsDir() {
 			return true, nil
 		}
-		return false, errors.New("存在同名文件")
+		return false, errors.New(global.Translate("directory.fileExists"))
 	}
 	if os.IsNotExist(err) {
 		return false, nil

@@ -13,7 +13,7 @@
     >
       <el-dropdown @command="toDoc">
         <el-icon
-          class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+          class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         >
           <Film />
         </el-icon>
@@ -38,8 +38,8 @@
       placement="bottom"
     >
       <el-icon
-        class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         @click="handleCommand"
+        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
       >
         <Search />
       </el-icon>
@@ -52,7 +52,7 @@
       placement="bottom"
     >
       <el-icon
-        class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         @click="toggleSetting"
       >
         <Setting />
@@ -66,7 +66,7 @@
       placement="bottom"
     >
       <el-icon
-        class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         :class="showRefreshAnmite ? 'animate-spin' : ''"
         @click="toggleRefresh"
       >
@@ -81,14 +81,14 @@
     >
       <el-icon
         v-if="appStore.isDark"
-        class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer border-solid"
+        class="w-8 h-8 p-2 shadow rounded-full border border-gray-600 cursor-pointer border-solid"
         @click="appStore.toggleTheme(false)"
       >
         <Sunny />
       </el-icon>
       <el-icon
         v-else
-        class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid"
+        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 cursor-pointer border-solid"
         @click="appStore.toggleTheme(true)"
       >
         <Moon />
@@ -124,7 +124,7 @@
   import { emitter } from '@/utils/bus.js'
   import CommandMenu from '@/components/commandMenu/index.vue'
   import { useI18n } from 'vue-i18n'
-  const { t } = useI18n() // added by mohamed hassan to support multilanguage
+  const { t } = useI18n() // added by mohamed hassan to support multilingual
 
   import SelectLang from '@/components/i18n/selectLanguage.vue'
 

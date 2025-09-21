@@ -67,7 +67,7 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	}
 
 	dicts[2].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: "date", Status: &True},
+		{Label: "date", Value: "0", Status: &True, Extend: "mysql", Sort: 0},
 		{Label: "time", Value: "1", Status: &True, Extend: "mysql", Sort: 1},
 		{Label: "year", Value: "2", Status: &True, Extend: "mysql", Sort: 2},
 		{Label: "datetime", Value: "3", Status: &True, Extend: "mysql", Sort: 3},
@@ -75,7 +75,7 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 		{Label: "timestamptz", Value: "6", Status: &True, Extend: "pgsql", Sort: 5},
 	}
 	dicts[3].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: "float", Status: &True},
+		{Label: "float", Value: "0", Status: &True, Extend: "mysql", Sort: 0},
 		{Label: "double", Value: "1", Status: &True, Extend: "mysql", Sort: 1},
 		{Label: "decimal", Value: "2", Status: &True, Extend: "mysql", Sort: 2},
 		{Label: "numeric", Value: "3", Status: &True, Extend: "pgsql", Sort: 3},
@@ -83,7 +83,7 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	}
 
 	dicts[4].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: "char", Status: &True},
+		{Label: "char", Value: "0", Status: &True, Extend: "mysql", Sort: 0},
 		{Label: "varchar", Value: "1", Status: &True, Extend: "mysql", Sort: 1},
 		{Label: "tinyblob", Value: "2", Status: &True, Extend: "mysql", Sort: 2},
 		{Label: "tinytext", Value: "3", Status: &True, Extend: "mysql", Sort: 3},

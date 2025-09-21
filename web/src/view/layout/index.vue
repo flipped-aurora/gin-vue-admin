@@ -7,11 +7,11 @@
       :font="font"
       :z-index="9999"
       :gap="[180, 150]"
-      class="absolute inset-0 pointer-events-none"
+      class="!absolute !inset-0 !pointer-events-none"
       :content="userStore.userInfo.nickName"
     />
     <gva-header />
-    <div class="flex flex-row w-full gva-container pt-16 box-border h-full">
+    <div class="flex flex-row w-full gva-container pt-16 box-border !h-full">
       <gva-aside
         v-if="
           config.side_mode === 'normal' || config.side_mode === 'sidebar' ||

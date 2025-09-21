@@ -27,6 +27,7 @@
 
   import { ElMessage } from 'element-plus'
   import { getUrl } from '@/utils/image'
+  import { useUserStore } from '@/pinia/modules/user'
 
   const emits = defineEmits(['change', 'update:modelValue'])
 
@@ -35,6 +36,7 @@
     emits('update:modelValue', valueHtml.value)
   }
 
+  const userStore = useUserStore()
   const props = defineProps({
     modelValue: {
       type: String,
@@ -53,6 +55,9 @@
   editorConfig.MENU_CONF['uploadImage'] = {
     fieldName: 'file',
     server: basePath + '/fileUploadAndDownload/upload?noSave=1',
+    headers: {
+      'x-token': userStore.token,
+    },
     customInsert(res, insertFn) {
       if (res.code === 0) {
         const urlPath = getUrl(res.data.file.url)

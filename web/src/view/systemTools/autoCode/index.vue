@@ -769,7 +769,7 @@
                   t('view.systemTools.autoCode.selectSearchCondition')
                 "
                 clearable
-                :disabled="row.fieldType !== 'json' || row.disabled"
+                :disabled="row.fieldType === 'json' || row.disabled"
               >
                 <el-option
                   v-for="item in typeSearchOptions"
@@ -1672,15 +1672,6 @@
     }
   }
   init()
-
-  watch(
-    () => route.params.id,
-    () => {
-      if (route.name === 'autoCodeEdit') {
-        init()
-      }
-    }
-  )
 
   watch(()=>form.value.generateServer,()=>{
     if(!form.value.generateServer){

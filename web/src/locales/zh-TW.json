@@ -145,6 +145,7 @@
     "enterDBPort": "請輸入資料庫端口",
     "enterDBUser": "請輸入資料庫用戶名",
     "enterDBUsername": "",
+    "enterPostgreSQLTemplate": "請輸入postgresql指定template",
     "initNow": "立即初始化",
     "language": "語",
     "defaultLanguage": "預設語言",
@@ -159,7 +160,12 @@
     "pleaseWait": "正在初始化資料庫，請稍候",
     "readDocs": "閱讀文檔",
     "adminPassword": "管理員密碼",
-    "adminPasswordNote": "admin賬號的默認密碼"
+    "adminPasswordNote": "admin賬號的默認密碼",
+    "adminPasswordLenNote": "密碼長度不能小於6位",
+    "configComplete" : "配置完成",
+    "dbInitNote": "已經完成基礎資料庫初始化！建議先進行編輯器AI助理配置，以獲得更好的開發體驗。",
+    "viewAIConfigDocs": "查看AI配置文檔",
+    "configLater" : "稍後配置"
   },
   "layout": {
     "header": {

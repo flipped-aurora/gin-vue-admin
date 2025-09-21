@@ -1,7 +1,5 @@
 {{- $global := . }}
-{{- $top := . -}}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
-
 {{- if .IsAdd }}
 
 // 请在搜索条件中增加如下代码
@@ -35,12 +33,84 @@
               {{- end }}
             {{- end }}
 
+// 字典增加如下代码
+    {{- range $index, $element := .DictTypes}}
+const {{ $element }}Options = ref([])
+    {{- end }}
+
+// setOptions方法中增加如下调用
+
+{{- range $index, $element := .DictTypes }}
+    {{ $element }}Options.value = await getDictFunc('{{$element}}')
+{{- end }}
+
+// 基础formData结构（变量处和关闭表单处）增加如下字段
+{{- range .Fields}}
+          {{- if .Form}}
+            {{ GenerateDefaultFormValue . }}
+          {{- end }}
+        {{- end }}
+// 验证规则中增加如下字段
+
+{{- range .Fields }}
+        {{- if .Form }}
+            {{- if eq .Require true }}
+{{.FieldJson }} : [{
+    required: true,
+    message: '{{ .ErrorText }}',
+    trigger: ['input','blur'],
+},
+               {{- if eq .FieldType "string" }}
+{
+    whitespace: true,
+    message: '不能只输入空格',
+    trigger: ['input', 'blur'],
+}
+              {{- end }}
+],
+            {{- end }}
+        {{- end }}
+    {{- end }}
+
+
+
+{{- if .HasDataSource }}
+// 请引用
+get{{.StructName}}DataSource,
+
+//  获取数据源
+const dataSource = ref({})
+const getDataSourceFunc = async()=>{
+  const res = await get{{.StructName}}DataSource()
+  if (res.code === 0) {
+    dataSource.value = res.data
+  }
+}
+getDataSourceFunc()
+{{- end }}
+
+{{- else }}
+
+{{- if not .OnlyTemplate}}
+<template>
+  <div>
+  {{- if not .IsTree }}
+    <div class="gva-search-box">
+      <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
+      {{- if .GvaModel }}
+      <el-form-item label="创建日期" prop="createdAtRange">
+      <template #label>
+        <span>
+          创建日期
+          <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+            <el-icon><QuestionFilled /></el-icon>
+          </el-tooltip>
         </span>
       </template>
 
       <el-date-picker
             v-model="searchInfo.createdAtRange"
-            class="w-[380px]"
+            class="!w-380px"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始时间"
@@ -60,10 +130,10 @@
         </template>
 
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">{{"{{"}}t('general.search'){{"}}"}}</el-button>
-          <el-button icon="refresh" @click="onReset">{{"{{"}}t('general.reset'){{"}}"}}</el-button>
-          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">{{"{{"}}t('general.expand'){{"}}"}}</el-button>
-          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>{{"{{"}}t('general.collapse'){{"}}"}}</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button icon="refresh" @click="onReset">重置</el-button>
+          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
+          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -91,7 +161,7 @@
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{- if .IsTree }} min-{{- end }}width="180">
+        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{ if .IsTree -}} min-{{- end -}}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -126,10 +196,10 @@
     <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
-                <span class="text-lg">{{"{{"}}type==='create'?t('general.add'):t('general.edit'){{"}}"}}</span>
+                <span class="text-lg">{{"{{"}}type==='create'?'新增':'编辑'{{"}}"}}</span>
                 <div>
-                  <el-button type="primary" @click="enterDialog">{{"{{"}}t('general.confirm'){{"}}"}}</el-button>
-                  <el-button @click="closeDialog">{{"{{"}}t('general.close'){{"}}"}}</el-button>
+                  <el-button :loading="btnLoading" type="primary" @click="enterDialog">确 定</el-button>
+                  <el-button @click="closeDialog">取 消</el-button>
                 </div>
               </div>
             </template>
@@ -151,32 +221,45 @@
           {{- end }}
         {{- range .Fields}}
           {{- if .Form}}
-<<<<<<< HEAD
-            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
-          {{- if .CheckDataSource}}
-            <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
-              <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
-            </el-select>
-          {{- else }}
-          {{- if eq .FieldType "bool" }}
-              <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
-          {{- end }}
-          {{- if eq .FieldType "string" }}
-          {{- if .DictType}}
-              <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
-                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-              </el-select>
-          {{- else }}
-              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
+            {{ GenerateFormItem . }}
           {{- end }}
           {{- end }}
-          {{- if eq .FieldType "richtext" }}
-              <RichEdit v-model="formData.{{.FieldJson}}"/>
-          {{- end }}
-          {{- if eq .FieldType "json" }}
-              // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
-              {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+          </el-form>
+    </el-drawer>
+
+    <el-drawer destroy-on-close :size="appStore.drawerSize" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="查看">
+            <el-descriptions :column="1" border>
+            {{- if .IsTree }}
+            <el-descriptions-item label="父节点">
+                <el-tree-select
+                  v-model="detailForm.parentID"
+                  :data="[rootNode,...tableData]"
+                  check-strictly
+                  disabled
+                  :render-after-expand="false"
+                  :props="defaultProps"
+                  clearable
+                  style="width: 240px"
+                  placeholder="根节点"
+                />
+            </el-descriptions-item>
+            {{- end }}
+            {{- range .Fields}}
+              {{- if .Desc }}
+                    {{ GenerateDescriptionItem . }}
+              {{- end }}
+            {{- end }}
+            </el-descriptions>
+        </el-drawer>
+
+  </div>
+</template>
+
+<script setup>
+import {
+  {{- if .HasDataSource }}
     get{{.StructName}}DataSource,
+  {{- end }}
   create{{.StructName}},
   delete{{.StructName}},
   delete{{.StructName}}ByIds,
@@ -213,9 +296,6 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
-
 {{- if .AutoCreateBtnAuth }}
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
@@ -230,6 +310,9 @@ import ImportExcel from '@/components/exportExcel/importExcel.vue'
 // 导出模板组件
 import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
 {{- end}}
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 
 defineOptions({
     name: '{{.StructName}}'
@@ -288,7 +371,7 @@ const rule = reactive({
                {{- if eq .FieldType "string" }}
                {
                    whitespace: true,
-                   message: t('general.noOnlySpace'),
+                   message: '不能只输入空格',
                    trigger: ['input', 'blur'],
               }
               {{- end }}
@@ -298,42 +381,6 @@ const rule = reactive({
     {{- end }}
 })
 
-<<<<<<< HEAD
-const searchRule = reactive({
-  createdAt: [
-    { validator: (rule, value, callback) => {
-      if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
-        callback(new Error(t('general.placeInputEndData')))
-      } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
-        callback(new Error(t('general.placeInputStartData')))
-      } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
-        callback(new Error(t('general.startDataMustBeforeEndData')))
-      } else {
-        callback()
-      }
-    }, trigger: 'change' }
-  ],
-  {{- range .Fields }}
-    {{- if .FieldSearchType}}
-      {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson }} : [{ validator: (rule, value, callback) => {
-        if (searchInfo.value.start{{.FieldName}} && !searchInfo.value.end{{.FieldName}}) {
-          callback(new Error(t('general.placeInputEndData')))
-        } else if (!searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}}) {
-          callback(new Error(t('general.placeInputStartData')))
-        } else if (searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}} && (searchInfo.value.start{{.FieldName}}.getTime() === searchInfo.value.end{{.FieldName}}.getTime() || searchInfo.value.start{{.FieldName}}.getTime() > searchInfo.value.end{{.FieldName}}.getTime())) {
-          callback(new Error(t('general.startDataMustBeforeEndData')))
-        } else {
-          callback()
-        }
-      }, trigger: 'change' }],
-      {{- end }}
-    {{- end }}
-  {{- end }}
-})
-
-=======
->>>>>>> main
 const elFormRef = ref()
 const elSearchFormRef = ref()
 
@@ -348,8 +395,8 @@ const searchInfo = ref({})
 // 排序
 const sortChange = ({ prop, order }) => {
   const sortMap = {
-    CreatedAt:"CreatedAt",
-    ID:"ID",
+    CreatedAt:"created_at",
+    ID:"id",
     {{- range .Fields}}
      {{- if .Table}}
       {{- if and .Sort}}
@@ -461,9 +508,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
-    confirmButtonText: t('general.confirm'),
-    cancelButtonText: t('general.cancel'),
+    ElMessageBox.confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
             delete{{.StructName}}Func(row)
@@ -472,16 +519,16 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
-    confirmButtonText: t('general.confirm'),
-    cancelButtonText: t('general.cancel'),
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
     type: 'warning'
   }).then(async() => {
       const {{.PrimaryField.FieldJson}}s = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: t('general.selectDataToDelete')
+          message: '请选择要删除的数据'
         })
         return
       }
@@ -493,7 +540,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: t('general.deleteSuccess')
+          message: '删除成功'
         })
         if (tableData.value.length === {{.PrimaryField.FieldJson}}s.length && page.value > 1) {
           page.value--
@@ -523,7 +570,7 @@ const delete{{.StructName}}Func = async (row) => {
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
-                message: t('general.deleteSuccess')
+                message: '删除成功'
             })
             if (tableData.value.length === 1 && page.value > 1) {
             page.value--
@@ -557,8 +604,9 @@ const closeDialog = () => {
 }
 // 弹窗确定
 const enterDialog = async () => {
+     btnLoading.value = true
      elFormRef.value?.validate( async (valid) => {
-             if (!valid) return
+             if (!valid) return btnLoading.value = false
               let res
               switch (type.value) {
                 case 'create':
@@ -571,10 +619,11 @@ const enterDialog = async () => {
                   res = await create{{.StructName}}(formData.value)
                   break
               }
+              btnLoading.value = false
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: t('general.createUpdateSuccess')
+                  message: '创建/更改成功'
                 })
                 closeDialog()
                 getTableData()
@@ -582,7 +631,7 @@ const enterDialog = async () => {
       })
 }
 
-const detailFrom = ref({})
+const detailForm = ref({})
 
 // 查看详情控制标记
 const detailShow = ref(false)
@@ -599,7 +648,7 @@ const getDetails = async (row) => {
   // 打开弹窗
   const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
   if (res.code === 0) {
-    detailFrom.value = res.data
+    detailForm.value = res.data
     openDetailShow()
   }
 }
@@ -608,7 +657,7 @@ const getDetails = async (row) => {
 // 关闭详情弹窗
 const closeDetailShow = () => {
   detailShow.value = false
-  detailFrom.value = {}
+  detailForm.value = {}
 }
 
 
@@ -642,6 +691,6 @@ defineOptions({
 </script>
 <style>
 </style>
-{{- end}}
+{{- end }}
 
 {{- end }}

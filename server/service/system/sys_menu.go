@@ -139,10 +139,52 @@ func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, tr
 //@return: error
 
 func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
-	if !errors.Is(global.GVA_DB.Where("name = ?", menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在重复name，请修改name")
-	}
-	return global.GVA_DB.Create(&menu).Error
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		// 检查name是否重复
+		if !errors.Is(tx.Where("name = ?", menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
+			return errors.New("存在重复name，请修改name")
+		}
+
+		if menu.ParentId != 0 {
+			// 检查父菜单是否存在
+			var parentMenu system.SysBaseMenu
+			if err := tx.First(&parentMenu, menu.ParentId).Error; err != nil {
+				if errors.Is(err, gorm.ErrRecordNotFound) {
+					return errors.New("父菜单不存在")
+				}
+				return err
+			}
+
+			// 检查父菜单下现有子菜单数量
+			var existingChildrenCount int64
+			err := tx.Model(&system.SysBaseMenu{}).Where("parent_id = ?", menu.ParentId).Count(&existingChildrenCount).Error
+			if err != nil {
+				return err
+			}
+
+			// 如果父菜单原本是叶子菜单（没有子菜单），现在要变成枝干菜单，需要清空其权限分配
+			if existingChildrenCount == 0 {
+				// 检查父菜单是否被其他角色设置为首页
+				var defaultRouterCount int64
+				err := tx.Model(&system.SysAuthority{}).Where("default_router = ?", parentMenu.Name).Count(&defaultRouterCount).Error
+				if err != nil {
+					return err
+				}
+				if defaultRouterCount > 0 {
+					return errors.New("父菜单已被其他角色的首页占用，请先释放父菜单的首页权限")
+				}
+
+				// 清空父菜单的所有权限分配
+				err = tx.Where("sys_base_menu_id = ?", menu.ParentId).Delete(&system.SysAuthorityMenu{}).Error
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		// 创建菜单
+		return tx.Create(&menu).Error
+	})
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

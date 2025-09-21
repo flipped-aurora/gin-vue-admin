@@ -10,7 +10,7 @@
       :options="pathOptions"
       v-model="activeComponent"
       filterable
-      class="w-full"
+      class="!w-full"
       clearable
       @change="emitChange"
     />

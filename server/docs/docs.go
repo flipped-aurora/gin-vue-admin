@@ -2,7 +2,10 @@
 
 package docs
 
-import "github.com/swaggo/swag"
+import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/swaggo/swag"
+)
 
 const docTemplate = `{
     "schemes": {{ marshal .Schemes }},
@@ -9296,7 +9299,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "v2.8.2",
+	Version:          global.Version,
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},

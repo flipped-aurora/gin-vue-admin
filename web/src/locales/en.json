@@ -186,6 +186,7 @@
     "enterDBPort": "Please enter database port",
     "enterDBUser": "",
     "enterDBUsername": "Please enter database username",
+    "enterPostgreSQLTemplate": "Please enter the postgresql specified template",
     "initNow": "Initialize Now",
     "language": "Language",
     "note": "Initialization notice",
@@ -199,7 +200,12 @@
     "pleaseWait": "Initializing database, please wait",
     "readDocs": "Read the documentation",
     "adminPassword": "Admin Password",
-    "adminPasswordNote": "Default password for admin account"
+    "adminPasswordNote": "Default password for admin account",
+    "adminPasswordLenNote": "Password length cannot be less than 6 characters",
+    "configComplete" : "Configuration Complete",
+    "dbInitNote": "The basic database has been initialized! It is recommended to configure the editor AI assistant first for a better development experience.",
+    "viewAIConfigDocs": "View AI configuration documentation",
+    "configLater" : "Configure Later"
   },
   "layout": {
     "header": {

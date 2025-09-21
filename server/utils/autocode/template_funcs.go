@@ -46,7 +46,8 @@ func GenerateField(field systemReq.AutoCodeField) string {
 
 	gormTag += "column:" + field.ColumnName + ";"
 
-	if field.DataTypeLong != "" && field.FieldType != "enum" {
+	// 对于int类型，根据DataTypeLong决定具体的Go类型，不使用size标签
+	if field.DataTypeLong != "" && field.FieldType != "enum" && field.FieldType != "int" {
 		gormTag += fmt.Sprintf("size:%s;", field.DataTypeLong)
 	}
 
@@ -70,7 +71,7 @@ func GenerateField(field systemReq.AutoCodeField) string {
 		result = fmt.Sprintf(`%s  datatypes.JSON `+"`"+`%s swaggertype:"array,object"`+"`"+``,
 			field.FieldName, tagContent)
 	case "richtext":
-		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
+		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s`,
 			field.FieldJson, field.FieldJson, gormTag)
 
 		result = fmt.Sprintf(`%s  *string `+"`"+`%stype:text;"`+"`"+``,
@@ -85,8 +86,27 @@ func GenerateField(field systemReq.AutoCodeField) string {
 		tagContent := fmt.Sprintf(`json:"%s" form:"%s" gorm:"%s"`,
 			field.FieldJson, field.FieldJson, gormTag)
 
+		// 对于int类型，根据DataTypeLong决定具体的Go类型
+		var fieldType string
+		if field.FieldType == "int" {
+			switch field.DataTypeLong {
+			case "1", "2", "3":
+				fieldType = "int8"
+			case "4", "5":
+				fieldType = "int16"
+			case "6", "7", "8", "9", "10":
+				fieldType = "int32"
+			case "11", "12", "13", "14", "15", "16", "17", "18", "19", "20":
+				fieldType = "int64"
+			default:
+				fieldType = "int64"
+			}
+		} else {
+			fieldType = field.FieldType
+		}
+
 		result = fmt.Sprintf(`%s  *%s `+"`"+`%s`+"`"+``,
-			field.FieldName, field.FieldType, tagContent)
+			field.FieldName, fieldType, tagContent)
 	}
 
 	if field.Require {
@@ -222,11 +242,11 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 `
 	} else if field.FieldType == "float64" || field.FieldType == "int" {
 		if field.FieldSearchType == "BETWEEN" || field.FieldSearchType == "NOT BETWEEN" {
-			result += fmt.Sprintf(`  <el-input class="w-40" v-model.number="searchInfo.start%s" placeholder="最小值" />
+			result += fmt.Sprintf(`  <el-input class="!w-40" v-model.number="searchInfo.start%s" placeholder="最小值" />
 `, field.FieldName)
 			result += `  —
 `
-			result += fmt.Sprintf(`  <el-input class="w-40" v-model.number="searchInfo.end%s" placeholder="最大值" />
+			result += fmt.Sprintf(`  <el-input class="!w-40" v-model.number="searchInfo.end%s" placeholder="最大值" />
 `, field.FieldName)
 		} else {
 			result += fmt.Sprintf(`  <el-input v-model.number="searchInfo.%s" placeholder="搜索条件" />
@@ -250,7 +270,7 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 `
 			result += `  </template>
 `
-			result += fmt.Sprintf(`<el-date-picker class="w-[380px]" v-model="searchInfo.%sRange" type="datetimerange" range-separator="至"  start-placeholder="开始时间" end-placeholder="结束时间"></el-date-picker>`, field.FieldJson)
+			result += fmt.Sprintf(`<el-date-picker class="!w-380px" v-model="searchInfo.%sRange" type="datetimerange" range-separator="至"  start-placeholder="开始时间" end-placeholder="结束时间"></el-date-picker>`, field.FieldJson)
 		} else {
 			result += fmt.Sprintf(`<el-date-picker v-model="searchInfo.%s" type="datetime" placeholder="搜索条件"></el-date-picker>`, field.FieldJson)
 		}
@@ -575,7 +595,7 @@ func GenerateDescriptionItem(field systemReq.AutoCodeField) string {
 		result += `    <template #default="scope">
 `
 		if field.DataSource.Association == 2 {
-			result += fmt.Sprintf(`        <el-tag v-for="(item,key) in filterDataSource(dataSource.%s,detailFrom.%s)" :key="key">
+			result += fmt.Sprintf(`        <el-tag v-for="(item,key) in filterDataSource(dataSource.%s,detailForm.%s)" :key="key">
 `,
 				field.FieldJson, field.FieldJson)
 			result += `             {{ item }}
@@ -583,7 +603,7 @@ func GenerateDescriptionItem(field systemReq.AutoCodeField) string {
 			result += `        </el-tag>
 `
 		} else {
-			result += fmt.Sprintf(`        <span>{{ filterDataSource(dataSource.%s,detailFrom.%s) }}</span>
+			result += fmt.Sprintf(`        <span>{{ filterDataSource(dataSource.%s,detailForm.%s) }}</span>
 `,
 				field.FieldJson, field.FieldJson)
 		}
@@ -592,26 +612,26 @@ func GenerateDescriptionItem(field systemReq.AutoCodeField) string {
 	} else if field.FieldType != "picture" && field.FieldType != "pictures" &&
 		field.FieldType != "file" && field.FieldType != "array" &&
 		field.FieldType != "richtext" {
-		result += fmt.Sprintf(`    {{ detailFrom.%s }}
+		result += fmt.Sprintf(`    {{ detailForm.%s }}
 `, field.FieldJson)
 	} else {
 		switch field.FieldType {
 		case "picture":
-			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailFrom.%s)" :src="getUrl(detailFrom.%s)" fit="cover" />
+			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailForm.%s)" :src="getUrl(detailForm.%s)" fit="cover" />
 `,
 				field.FieldJson, field.FieldJson)
 		case "array":
-			result += fmt.Sprintf(`    <ArrayCtrl v-model="detailFrom.%s"/>
+			result += fmt.Sprintf(`    <ArrayCtrl v-model="detailForm.%s"/>
 `, field.FieldJson)
 		case "pictures":
-			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.%s)" :initial-index="index" v-for="(item,index) in detailFrom.%s" :key="index" :src="getUrl(item)" fit="cover" />
+			result += fmt.Sprintf(`    <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailForm.%s)" :initial-index="index" v-for="(item,index) in detailForm.%s" :key="index" :src="getUrl(item)" fit="cover" />
 `,
 				field.FieldJson, field.FieldJson)
 		case "richtext":
-			result += fmt.Sprintf(`    <RichView v-model="detailFrom.%s" />
+			result += fmt.Sprintf(`    <RichView v-model="detailForm.%s" />
 `, field.FieldJson)
 		case "file":
-			result += fmt.Sprintf(`    <div class="fileBtn" v-for="(item,index) in detailFrom.%s" :key="index">
+			result += fmt.Sprintf(`    <div class="fileBtn" v-for="(item,index) in detailForm.%s" :key="index">
 `, field.FieldJson)
 			result += `        <el-button type="primary" text bg @click="onDownloadFile(item.url)">
 `

@@ -186,6 +186,7 @@
     "enterDBPort": "请输入数据库端口",
     "enterDBUser": "请输入数据库用户名",
     "enterDBUsername": "",
+    "enterPostgreSQLTemplate": "请输入postgresql指定template",
     "initNow": "立即初始化",
     "language": "语",
     "defaultLanguage": "默认语言",
@@ -200,7 +201,12 @@
     "pleaseWait": "正在初始化数据库，请稍候",
     "readDocs": "阅读文档",
     "adminPassword": "管理员密码",
-    "adminPasswordNote": "admin账号的默认密码"
+    "adminPasswordNote": "admin账号的默认密码",
+    "adminPasswordLenNote": "密码长度不能小于6位",
+    "configComplete" : "配置完成",
+    "dbInitNote": "已经完成基础数据库初始化！建议先进行编辑器AI助手配置，以获得更好的开发体验。",
+    "viewAIConfigDocs": "查看AI配置文档",
+    "configLater" : "稍后配置"
   },
   "layout": {
     "header": {

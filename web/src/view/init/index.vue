@@ -137,7 +137,7 @@
           <el-form-item v-if="form.dbType === 'pgsql'" label="template">
             <el-input
               v-model="form.template"
-              placeholder="请输入postgresql指定template"
+              :placeholder="t('init.enterPostgreSQLTemplate')"
             />
           </el-form-item>
           <el-form-item>
@@ -165,7 +165,7 @@
   // @ts-ignore
   import { initDB } from '@/api/initdb'
   import { reactive, ref } from 'vue'
-  import { ElLoading, ElMessage } from 'element-plus'
+  import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
   import { useRouter } from 'vue-router'
   import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
@@ -289,7 +289,7 @@
     if (form.adminPassword.length < 6) {
       ElMessage({
         type: 'error',
-        message: '密码长度不能小于6位'
+        message: t('init.adminPasswordLenNote')
       })
       return
     }
@@ -308,7 +308,25 @@
           type: 'success',
           message: res.msg
         })
-        router.push({ name: 'Login' })
+        
+        // 显示AI助手配置提示弹窗
+        ElMessageBox.confirm(
+          t('init.dbInitNote'),
+          t('init.configComplete'),
+          {
+            confirmButtonText: t('init.viewAIConfigDocs'),
+            cancelButtonText: t('init.configLater'),
+            type: 'success',
+            center: true
+          }
+        ).then(() => {
+          // 点击确认按钮，打开AI配置文档
+          window.open('https://www.gin-vue-admin.com/guide/server/mcp.html', '_blank')
+          router.push({ name: 'Login' })
+        }).catch(() => {
+          // 点击取消按钮或关闭弹窗，直接跳转到登录页
+          router.push({ name: 'Login' })
+        })
       }
       loading.close()
     } catch (_) {

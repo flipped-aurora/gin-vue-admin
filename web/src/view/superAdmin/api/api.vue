@@ -576,7 +576,7 @@
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '添加成功',
+        message: '添加成功，请到角色管理页面分配权限',
         showClose: true
       })
       syncApiData.value.newApis = syncApiData.value.newApis.filter(

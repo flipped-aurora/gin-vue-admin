@@ -1,5 +1,6 @@
 import './style/element_visiable.scss'
 import 'element-plus/theme-chalk/dark/css-vars.css'
+import 'uno.css';
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 

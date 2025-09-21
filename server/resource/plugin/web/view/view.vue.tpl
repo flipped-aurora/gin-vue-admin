@@ -108,7 +108,7 @@ getDataSourceFunc()
       </template>
          <el-date-picker
                   v-model="searchInfo.createdAtRange"
-                  class="w-[380px]"
+                  class="!w-380px"
                   type="datetimerange"
                   range-separator="至"
                   start-placeholder="开始时间"
@@ -158,7 +158,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{- if .IsTree }} min-{{- end }}width="180">
+        <el-table-column sortable align="left" label="日期" prop="CreatedAt" {{ if .IsTree -}} min-{{- end -}}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -229,7 +229,7 @@ getDataSourceFunc()
             {{- if .IsTree }}
             <el-descriptions-item label="父节点">
                 <el-tree-select
-                  v-model="detailFrom.parentID"
+                  v-model="detailForm.parentID"
                   :data="[rootNode,...tableData]"
                   check-strictly
                   disabled
@@ -388,8 +388,8 @@ const searchInfo = ref({})
 // 排序
 const sortChange = ({ prop, order }) => {
   const sortMap = {
-    CreatedAt:"CreatedAt",
-    ID:"ID",
+    CreatedAt:"created_at",
+    ID:"id",
     {{- range .Fields}}
      {{- if .Table}}
       {{- if and .Sort}}
@@ -624,7 +624,7 @@ const enterDialog = async () => {
       })
 }
 
-const detailFrom = ref({})
+const detailForm = ref({})
 
 // 查看详情控制标记
 const detailShow = ref(false)
@@ -641,7 +641,7 @@ const getDetails = async (row) => {
   // 打开弹窗
   const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
   if (res.code === 0) {
-    detailFrom.value = res.data
+    detailForm.value = res.data
     openDetailShow()
   }
 }
@@ -650,7 +650,7 @@ const getDetails = async (row) => {
 // 关闭详情弹窗
 const closeDetailShow = () => {
   detailShow.value = false
-  detailFrom.value = {}
+  detailForm.value = {}
 }
 
 

@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"mime"
 	"mime/multipart"
 	"path/filepath"
 	"strings"
@@ -76,12 +77,18 @@ func (m *Minio) UploadFile(file *multipart.FileHeader) (filePathres, key string,
 		filePathres = global.GVA_CONFIG.Minio.BasePath + "/" + time.Now().Format("2006-01-02") + "/" + filename
 	}
 
+	// 根据文件扩展名检测 MIME 类型
+	contentType := mime.TypeByExtension(ext)
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+
 	// 设置超时10分钟
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
 	defer cancel()
 
 	// Upload the file with PutObject   大文件自动切换为分片上传
-	info, err := m.Client.PutObject(ctx, global.GVA_CONFIG.Minio.BucketName, filePathres, &filecontent, file.Size, minio.PutObjectOptions{ContentType: "application/octet-stream"})
+	info, err := m.Client.PutObject(ctx, global.GVA_CONFIG.Minio.BucketName, filePathres, &filecontent, file.Size, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
 		global.GVA_LOG.Error("上传文件到minio失败", zap.Any("err", err.Error()))
 		return "", "", errors.New("上传文件到minio失败, err:" + err.Error())

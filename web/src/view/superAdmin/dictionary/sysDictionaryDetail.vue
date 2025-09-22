@@ -1,8 +1,26 @@
 <template>
   <div>
     <div class="gva-table-box">
-      <div class="gva-btn-list justify-between">
+      <div class="gva-btn-list justify-between flex items-center">
         <span class="text font-bold">字典详细内容</span>
+        <el-input
+          placeholder="搜索展示值"
+          v-model="searchName"
+          clearable
+          class="!w-64 ml-auto"
+          @clear="clearSearchInput"
+          :prefix-icon="Search"
+          v-click-outside="handleCloseSearchInput"
+          @keydown="handleInputKeyDown"
+        >
+          <template #append>
+            <el-button
+              :type="searchName ? 'primary' : 'info'"
+              @click="getTableData"
+              >搜索</el-button
+            >
+          </template>
+        </el-input>
         <el-button type="primary" icon="plus" @click="openDrawer">
           新增字典项
         </el-button>
@@ -45,7 +63,11 @@
           width="120"
         />
 
-        <el-table-column align="left" label="操作" :min-width="appStore.operateMinWith">
+        <el-table-column
+          align="left"
+          label="操作"
+          :min-width="appStore.operateMinWith"
+        >
           <template #default="scope">
             <el-button
               type="primary"
@@ -156,14 +178,14 @@
   import { ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { formatBoolean, formatDate } from '@/utils/format'
-  import { useAppStore } from "@/pinia";
+  import { useAppStore } from '@/pinia'
 
   defineOptions({
     name: 'SysDictionaryDetail'
   })
 
   const appStore = useAppStore()
-
+  const searchName = ref('')
   const props = defineProps({
     sysDictionaryID: {
       type: Number,
@@ -223,7 +245,8 @@
     const table = await getSysDictionaryDetailList({
       page: page.value,
       pageSize: pageSize.value,
-      sysDictionaryID: props.sysDictionaryID
+      sysDictionaryID: props.sysDictionaryID,
+      label: searchName.value.trim()
     })
     if (table.code === 0) {
       tableData.value = table.data.list

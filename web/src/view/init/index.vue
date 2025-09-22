@@ -314,6 +314,7 @@
           t('init.dbInitNote'),
           t('init.configComplete'),
           {
+            style: "width: 540px", 
             confirmButtonText: t('init.viewAIConfigDocs'),
             cancelButtonText: t('init.configLater'),
             type: 'success',

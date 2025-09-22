@@ -9,7 +9,7 @@
   >
     <template #header>
       <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white font-inter">系统配置</h2>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white font-inter">{{ t('view.systemTools.system.systemConfig') }}</h2>
         <el-button
           type="primary"
           size="small"
@@ -17,7 +17,7 @@
           :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
           @click="resetConfig"
         >
-          重置配置
+          {{ t('layout.setting.resetConfig') }}
         </el-button>
       </div>
     </template>
@@ -78,9 +78,9 @@
   const activeTab = ref('appearance')
 
   const tabs = [
-    { key: 'appearance', label: '外观' },
-    { key: 'layout', label: '布局' },
-    { key: 'general', label: '通用' }
+    { key: 'appearance', label: t('layout.setting.appearance') },
+    { key: 'layout', label: t('layout.setting.layout') },
+    { key: 'general', label: t('layout.setting.general') }
   ]
 
   const width = computed(() => {

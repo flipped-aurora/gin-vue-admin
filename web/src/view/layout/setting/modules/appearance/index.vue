@@ -4,7 +4,7 @@
     <div class="mb-10">
       <div class="flex items-center justify-center mb-6">
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">主题模式</span>
+        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('layout.setting.modules.appearance.themeMode') }}</span>
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
 
@@ -20,7 +20,7 @@
     <div class="mb-10">
       <div class="flex items-center justify-center mb-6">
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">主题颜色</span>
+        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('layout.setting.modules.appearance.themeColor') }}</span>
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
 
@@ -36,15 +36,15 @@
     <div class="mb-10">
       <div class="flex items-center justify-center mb-6">
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">视觉辅助</span>
+        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('layout.setting.modules.appearance.visualAid') }}</span>
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
 
       <div class="section-content">
         <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
-          <SettingItem label="灰色模式">
+          <SettingItem :label="t('layout.setting.modules.appearance.grayMode')">
             <template #suffix>
-              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">降低色彩饱和度</span>
+              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">{{ t('layout.setting.modules.appearance.reduceColor') }}</span>
             </template>
             <el-switch
               v-model="config.grey"
@@ -52,9 +52,9 @@
             />
           </SettingItem>
 
-          <SettingItem label="色弱模式">
+          <SettingItem :label="t('layout.setting.modules.appearance.colorWeaknessMode')">
             <template #suffix>
-              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">优化色彩对比度</span>
+              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">{{ t('layout.setting.modules.appearance.optimizeColor') }}</span>
             </template>
             <el-switch
               v-model="config.weakness"
@@ -62,9 +62,9 @@
             />
           </SettingItem>
 
-          <SettingItem label="显示水印">
+          <SettingItem :label="t('layout.setting.modules.appearance.showWaterMark')">
             <template #suffix>
-              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">在页面显示水印标识</span>
+              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">{{ t('layout.setting.modules.appearance.showWaterMarkOnPage') }}</span>
             </template>
             <el-switch
               v-model="config.show_watermark"
@@ -83,6 +83,9 @@ import { useAppStore } from '@/pinia'
 import ThemeModeSelector from '../../components/themeModeSelector.vue'
 import ThemeColorPicker from '../../components/themeColorPicker.vue'
 import SettingItem from '../../components/settingItem.vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
   name: 'AppearanceSettings'

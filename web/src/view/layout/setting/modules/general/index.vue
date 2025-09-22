@@ -3,7 +3,7 @@
     <div class="mb-10">
       <div class="flex items-center justify-center mb-6">
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">系统信息</span>
+        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('layout.setting.modules.general.systemInfo') }}</span>
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
 
@@ -11,27 +11,27 @@
         <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
           <div class="grid grid-cols-2 gap-4 text-sm">
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">版本</span>
+              <span class="text-gray-600 dark:text-gray-400 font-medium">{{ t('layout.setting.modules.general.version') }}</span>
               <span class="font-mono text-gray-900 dark:text-white font-semibold">v2.7.4</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">前端框架</span>
+              <span class="text-gray-600 dark:text-gray-400 font-medium">{{ t('layout.setting.modules.general.frontendFramework') }}</span>
               <span class="font-mono text-gray-900 dark:text-white font-semibold">Vue 3</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">UI 组件库</span>
+              <span class="text-gray-600 dark:text-gray-400 font-medium">{{ t('layout.setting.modules.general.uiComponentLib') }}</span>
               <span class="font-mono text-gray-900 dark:text-white font-semibold">Element Plus</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">构建工具</span>
+              <span class="text-gray-600 dark:text-gray-400 font-medium">{{ t('layout.setting.modules.general.buildTools') }}</span>
               <span class="font-mono text-gray-900 dark:text-white font-semibold">Vite</span>
             </div>
             <div class="flex justify-between items-center py-3">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">浏览器</span>
+              <span class="text-gray-600 dark:text-gray-400 font-medium">{{ t('layout.setting.modules.general.browser') }}</span>
               <span class="font-mono text-gray-900 dark:text-white font-semibold">{{ browserInfo }}</span>
             </div>
             <div class="flex justify-between items-center py-3">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">屏幕分辨率</span>
+              <span class="text-gray-600 dark:text-gray-400 font-medium">{{ t('layout.setting.modules.general.screenResolution') }}</span>
               <span class="font-mono text-gray-900 dark:text-white font-semibold">{{ screenResolution }}</span>
             </div>
           </div>
@@ -42,7 +42,7 @@
     <div class="mb-10">
       <div class="flex items-center justify-center mb-6">
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">配置管理</span>
+        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('layout.setting.modules.general.configManagement') }}</span>
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
 
@@ -55,8 +55,8 @@
                   🔄
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">重置配置</h4>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">将所有设置恢复为默认值</p>
+                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ t('layout.setting.resetConfig') }}</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('layout.setting.modules.general.resetConfigNote') }}</p>
                 </div>
               </div>
               <el-button
@@ -65,7 +65,7 @@
                 class="rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5"
                 @click="handleResetConfig"
               >
-                重置配置
+                {{ t('layout.setting.resetConfig') }}
               </el-button>
             </div>
 
@@ -75,8 +75,8 @@
                   📤
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">导出配置</h4>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">导出当前配置为 JSON 文件</p>
+                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ t('layout.setting.modules.general.exportConfig') }}</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('layout.setting.modules.general.exportConfigNote') }}</p>
                 </div>
               </div>
               <el-button
@@ -86,7 +86,7 @@
                 :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
                 @click="handleExportConfig"
               >
-                导出配置
+                {{ t('layout.setting.modules.general.exportConfig') }}
               </el-button>
             </div>
 
@@ -96,8 +96,8 @@
                   📥
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">导入配置</h4>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">从 JSON 文件导入配置</p>
+                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ t('layout.setting.modules.general.importConfig') }}</h4>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('layout.setting.modules.general.importConfigNote') }}</p>
                 </div>
               </div>
               <el-upload
@@ -112,7 +112,7 @@
                   size="small"
                   class="rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5"
                 >
-                  导入配置
+                  {{ t('layout.setting.modules.general.importConfig') }}
                 </el-button>
               </el-upload>
             </div>
@@ -124,7 +124,7 @@
     <div class="mb-10">
       <div class="flex items-center justify-center mb-6">
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">关于项目</span>
+        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">{{ t('layout.setting.modules.general.about') }}</span>
         <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
       </div>
 
@@ -142,7 +142,7 @@
             <div class="flex-1">
               <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Gin-Vue-Admin</h4>
               <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 leading-relaxed">
-                基于 Vue3 + Gin 的全栈开发基础平台，提供完整的后台管理解决方案
+                {{ t('layout.setting.modules.general.aboutNote') }}
               </p>
               <div class="flex items-center gap-3 text-sm">
                 <a
@@ -151,7 +151,7 @@
                   class="font-medium transition-colors duration-150 hover:underline"
                   :style="{ color: config.primaryColor }"
                 >
-                  GitHub 仓库
+                  {{ t('layout.setting.modules.general.githubRepo') }}
                 </a>
                 <span class="text-gray-400 dark:text-gray-500">·</span>
                 <a
@@ -160,7 +160,7 @@
                   class="font-medium transition-colors duration-150 hover:underline"
                   :style="{ color: config.primaryColor }"
                 >
-                  官方文档
+                  {{ t('layout.setting.modules.general.officialDocs') }}
                 </a>
               </div>
             </div>
@@ -176,6 +176,9 @@ import { ref, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { storeToRefs } from 'pinia'
 import { useAppStore } from '@/pinia'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilingual
+
+const { t } = useI18n() // added by mohamed hassan to support multilingual
 
 defineOptions({
   name: 'GeneralSettings'
@@ -213,17 +216,17 @@ const handleLogoError = () => {
 const handleResetConfig = async () => {
   try {
     await ElMessageBox.confirm(
-      '确定要重置所有配置吗？此操作不可撤销。',
-      '重置配置',
+      t('layout.setting.modules.general.resetAllConfigNote'),
+      t('layout.setting.resetConfig'),
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
       }
     )
     
     appStore.resetConfig()
-    ElMessage.success('配置已重置')
+    ElMessage.success(t('layout.setting.modules.general.configReset'))
   } catch {
     // User cancelled
   }
@@ -242,7 +245,7 @@ const handleExportConfig = () => {
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
   
-  ElMessage.success('配置已导出')
+  ElMessage.success(t('layout.setting.modules.general.configExported'))
 }
 
 const handleImportConfig = (file) => {
@@ -257,9 +260,9 @@ const handleImportConfig = (file) => {
         }
       })
       
-      ElMessage.success('配置已导入')
+      ElMessage.success(t('layout.setting.modules.general.configImported'))
     } catch (error) {
-      ElMessage.error('配置文件格式错误')
+      ElMessage.error(t('layout.setting.modules.general.configFileFormatError'))
     }
   }
   reader.readAsText(file.raw)

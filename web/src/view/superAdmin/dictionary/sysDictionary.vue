@@ -3,7 +3,7 @@
     <warning-bar
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <div class="flex gap-4 p-2">
+    <div class="flex gap-4">
       <div
         class="flex-none w-64 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
       >

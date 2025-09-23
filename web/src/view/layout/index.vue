@@ -27,7 +27,7 @@
       <div class="flex-1 w-0 h-full">
         <gva-tabs v-if="config.showTabs" />
         <div
-          class="overflow-auto"
+          class="overflow-auto px-2"
           :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
         >
           <router-view v-if="reloadFlag" v-slot="{ Component, route }">

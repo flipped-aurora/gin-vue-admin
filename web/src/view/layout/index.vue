@@ -14,7 +14,8 @@
     <div class="flex flex-row w-full gva-container pt-16 box-border !h-full">
       <gva-aside
         v-if="
-          config.side_mode === 'normal' || config.side_mode === 'sidebar' ||
+          config.side_mode === 'normal' ||
+          config.side_mode === 'sidebar' ||
           (device === 'mobile' && config.side_mode == 'head') ||
           (device === 'mobile' && config.side_mode == 'combination')
         "
@@ -23,10 +24,10 @@
         v-if="config.side_mode === 'combination' && device !== 'mobile'"
         mode="normal"
       />
-      <div class="flex-1 px-2 w-0 h-full">
+      <div class="flex-1 w-0 h-full">
         <gva-tabs v-if="config.showTabs" />
         <div
-          class="overflow-auto"
+          class="overflow-auto px-2"
           :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
         >
           <router-view v-if="reloadFlag" v-slot="{ Component, route }">
@@ -34,7 +35,10 @@
               id="gva-base-load-dom"
               class="gva-body-h bg-gray-50 dark:bg-slate-800"
             >
-              <transition mode="out-in" :name="route.meta.transitionType || config.transition_type">
+              <transition
+                mode="out-in"
+                :name="route.meta.transitionType || config.transition_type"
+              >
                 <keep-alive :include="routerStore.keepAliveRouters">
                   <component :is="Component" :key="route.fullPath" />
                 </keep-alive>

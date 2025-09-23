@@ -3,13 +3,39 @@
     <warning-bar
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <div class="flex gap-4 p-2">
+    <div class="flex gap-4">
       <div
-        class="flex-none w-52 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
+        class="flex-none w-64 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
       >
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center relative">
           <span class="text font-bold">字典列表</span>
-          <el-button type="primary" @click="openDrawer"> 新增 </el-button>
+          <el-input
+            class="!absolute top-0 left-0 z-2 ease-in-out animate-slide-left"
+            placeholder="搜索"
+            v-if="showSearchInput"
+            v-model="searchName"
+            clearable
+            :autofocus="showSearchInput"
+            @clear="clearSearchInput"
+            :prefix-icon="Search"
+            v-click-outside="handleCloseSearchInput"
+            @keydown="handleInputKeyDown"
+          >
+            <template #append>
+              <el-button
+                :type="searchName ? 'primary' : 'info'"
+                @click="getTableData"
+                >搜索</el-button
+              >
+            </template>
+          </el-input>
+          <el-button
+            class="ml-auto"
+            :icon="Search"
+            @click="showSearchInputHandler"
+          ></el-button>
+          <el-button type="primary" @click="openDrawer" :icon="Plus">
+          </el-button>
         </div>
         <el-scrollbar class="mt-4" style="height: calc(100vh - 300px)">
           <div
@@ -23,7 +49,11 @@
             "
             @click="toDetail(dictionary)"
           >
-            <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>
+            <div class="max-w-[160px] truncate">
+              {{ dictionary.name }}
+              <span class="mr-auto text-sm">（{{ dictionary.type }}）</span>
+            </div>
+
             <div class="min-w-[40px]">
               <el-icon
                 class="text-blue-500"
@@ -119,8 +149,8 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
-  import { Edit } from '@element-plus/icons-vue'
-  import { useAppStore } from "@/pinia";
+  import { Edit, Plus, Search } from '@element-plus/icons-vue'
+  import { useAppStore } from '@/pinia'
 
   defineOptions({
     name: 'SysDictionary'
@@ -136,6 +166,8 @@
     status: true,
     desc: null
   })
+  const searchName = ref('')
+  const showSearchInput = ref(false)
   const rules = ref({
     name: [
       {
@@ -164,7 +196,9 @@
 
   // 查询
   const getTableData = async () => {
-    const res = await getSysDictionaryList()
+    const res = await getSysDictionaryList({
+      name: searchName.value.trim()
+    })
     if (res.code === 0) {
       dictionaryData.value = res.data
       selectID.value = res.data[0].ID
@@ -240,6 +274,27 @@
     type.value = 'create'
     drawerForm.value && drawerForm.value.clearValidate()
     drawerFormVisible.value = true
+  }
+
+  const clearSearchInput = () => {
+    if (!showSearchInput.value) return
+    searchName.value = ''
+    showSearchInput.value = false
+    getTableData()
+  }
+  const handleCloseSearchInput = () => {
+    if (!showSearchInput.value || searchName.value.trim() != '') return
+    showSearchInput.value = false
+  }
+
+  const showSearchInputHandler = () => {
+    showSearchInput.value = true
+  }
+
+  const handleInputKeyDown = (e) => {
+    if (e.key === 'Enter' && searchName.value.trim() !== '') {
+      getTableData()
+    }
   }
 </script>
 

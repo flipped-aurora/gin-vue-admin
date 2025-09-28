@@ -124,7 +124,8 @@ service.interceptors.request.use(
 )
 
 function getErrorMessage(error) {
-  return error.response?.data?.msg || '请求失败'
+  // 优先级： 响应体中的 msg > statusText > 默认消息
+  return error.response?.data?.msg || error.response?.statusText || '请求失败'
 }
 
 // http response 拦截器

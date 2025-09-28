@@ -138,6 +138,7 @@
   })
 
   const router = useRouter()
+  const captchaRequiredLength = ref(6)
   // 验证函数
   const checkUsername = (rule, value, callback) => {
     if (value.length < 5) {
@@ -153,19 +154,36 @@
       callback()
     }
   }
+  const checkCaptcha = (rule, value, callback) => {
+    if (!loginFormData.openCaptcha) {
+      return callback()
+    }
+    const sanitizedValue = (value || '').replace(/\s+/g, '')
+    if (!sanitizedValue) {
+      return callback(new Error('请输入验证码'))
+    }
+    if (!/^\d+$/.test(sanitizedValue)) {
+      return callback(new Error('验证码须为数字'))
+    }
+    if (sanitizedValue.length < captchaRequiredLength.value) {
+      return callback(
+        new Error(`请输入至少${captchaRequiredLength.value}位数字验证码`)
+      )
+    }
+    if (sanitizedValue !== value) {
+      loginFormData.captcha = sanitizedValue
+    }
+    callback()
+  }
 
   // 获取验证码
   const loginVerify = async () => {
     const ele = await captcha()
-    rules.captcha.push({
-      max: ele.data.captchaLength,
-      min: ele.data.captchaLength,
-      message: `请输入${ele.data.captchaLength}位验证码`,
-      trigger: 'blur'
-    })
-    picPath.value = ele.data.picPath
-    loginFormData.captchaId = ele.data.captchaId
-    loginFormData.openCaptcha = ele.data.openCaptcha
+    const lengthFromServer = Number(ele.data?.captchaLength) || 0
+    captchaRequiredLength.value = Math.max(6, lengthFromServer)
+    picPath.value = ele.data?.picPath
+    loginFormData.captchaId = ele.data?.captchaId
+    loginFormData.openCaptcha = ele.data?.openCaptcha
   }
   loginVerify()
 
@@ -182,12 +200,7 @@
   const rules = reactive({
     username: [{ validator: checkUsername, trigger: 'blur' }],
     password: [{ validator: checkPassword, trigger: 'blur' }],
-    captcha: [
-      {
-        message: '验证码格式不正确',
-        trigger: 'blur'
-      }
-    ]
+    captcha: [{ validator: checkCaptcha, trigger: 'blur' }]
   })
 
   const userStore = useUserStore()
@@ -203,7 +216,6 @@
           message: '请正确填写登录信息',
           showClose: true
         })
-        await loginVerify()
         return false
       }
 

@@ -15,13 +15,65 @@ Nprogress.configure({
 // 白名单路由
 const WHITE_LIST = ['Login', 'Init']
 
+function isExternalUrl(val) {
+  return typeof val === 'string' && /^(https?:)?\/\//.test(val)
+}
+
+// 将 n 级菜单扁平化为：一级 layout + 二级页面组件
+function addRouteByChildren(route, segments = []) {
+  // 跳过外链根节点
+  if (isExternalUrl(route?.path) || isExternalUrl(route?.name) || isExternalUrl(route?.component)) {
+    return
+  }
+
+  // 顶层 layout 仅用于承载，不参与路径拼接
+  if (route?.name === 'layout') {
+    route.children?.forEach((child) => addRouteByChildren(child, []))
+    return
+  }
+
+  // 还有子节点，继续向下收集路径片段（忽略外链片段）
+  if (route?.children && route.children.length) {
+    const nextSegments = isExternalUrl(route.path) ? segments : [...segments, route.path]
+    route.children.forEach((child) => addRouteByChildren(child, nextSegments))
+    return
+  }
+
+  // 叶子节点：注册为 layout 的二级子路由
+  const fullPath = [...segments, route.path].filter(Boolean).join('/')
+  const newRoute = { ...route, path: fullPath }
+  delete newRoute.children
+  delete newRoute.parent
+  // 子路由使用相对路径，避免 /layout/layout/... 的问题
+  newRoute.path = newRoute.path.replace(/^\/+/, '')
+
+  router.addRoute('layout', newRoute)
+}
+
 // 处理路由加载
 const setupRouter = async (userStore) => {
   try {
     const routerStore = useRouterStore()
     await Promise.all([routerStore.SetAsyncRouter(), userStore.GetUserInfo()])
 
-    routerStore.asyncRouters.forEach((route) => router.addRoute(route))
+    // 确保先注册父级 layout
+    const baseRouters = routerStore.asyncRouters || []
+    const layoutRoute = baseRouters[0]
+    if (layoutRoute?.name === 'layout' && !router.hasRoute('layout')) {
+      router.addRoute(layoutRoute)
+    }
+
+    // 扁平化：将 layout.children 与其余顶层异步路由一并作为二级子路由注册到 layout 下
+    const toRegister = []
+    if (layoutRoute?.children?.length) {
+      toRegister.push(...layoutRoute.children)
+    }
+    if (baseRouters.length > 1) {
+      baseRouters.slice(1).forEach((r) => {
+        if (r?.name !== 'layout') toRegister.push(r)
+      })
+    }
+    toRegister.forEach((r) => addRouteByChildren(r, []))
     return true
   } catch (error) {
     console.error('Setup router failed:', error)

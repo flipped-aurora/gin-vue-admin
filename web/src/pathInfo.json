@@ -43,6 +43,10 @@
   "/src/view/layout/setting/modules/layout/index.vue": "LayoutSettings",
   "/src/view/layout/tabs/index.vue": "HistoryComponent",
   "/src/view/login/index.vue": "Login",
+  "/src/view/notice/index.vue": "Index",
+  "/src/view/notice/notification/index.vue": "NotificationManagement",
+  "/src/view/notice/onlineUser/index.vue": "OnlineUserManagement",
+  "/src/view/notice/userCenter/index.vue": "UserNotificationCenter",
   "/src/view/person/person.vue": "Person",
   "/src/view/routerHolder.vue": "RouterHolder",
   "/src/view/superAdmin/api/api.vue": "Api",
@@ -75,6 +79,7 @@
   "/src/view/systemTools/pubPlug/pubPlug.vue": "PubPlug",
   "/src/view/systemTools/system/system.vue": "Config",
   "/src/view/systemTools/version/version.vue": "SysVersion",
+  "/src/view/userCenter/index.vue": "UserNotificationCenter",
   "/src/plugin/announcement/form/info.vue": "InfoForm",
   "/src/plugin/announcement/view/info.vue": "Info",
   "/src/plugin/email/view/index.vue": "Email"

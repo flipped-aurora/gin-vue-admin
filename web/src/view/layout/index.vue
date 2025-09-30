@@ -59,12 +59,21 @@
   import GvaTabs from './tabs/index.vue'
   import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
   import { emitter } from '@/utils/bus.js'
-  import { ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
+  import {
+    ref,
+    onMounted,
+    nextTick,
+    reactive,
+    watchEffect,
+    onUnmounted
+  } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
   import { useUserStore } from '@/pinia/modules/user'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
+  import { socketManager, initSocketConnection } from '@/utils/socket'
+
   import '@/style/transition.scss'
   const appStore = useAppStore()
   const { config, isDark, device } = storeToRefs(appStore)
@@ -91,6 +100,16 @@
     emitter.on('reload', reload)
     if (userStore.loadingInstance) {
       userStore.loadingInstance.close()
+    }
+
+    // 初始化 Socket.IO 连接
+    initSocketConnection(userStore)
+  })
+
+  onUnmounted(() => {
+    // 组件卸载时断开 Socket 连接
+    if (socketManager) {
+      socketManager.disconnect()
     }
   })
 

@@ -5,9 +5,10 @@ import packageInfo from '../../package.json'
 
 const greenText = (text) => `\x1b[32m${text}\x1b[0m`
 
-const config = {
+export const config = {
   appName: 'Gin-Vue-Admin',
   showViteLogo: true,
+  KeepAliveTabs: true,
   logs: []
 }
 

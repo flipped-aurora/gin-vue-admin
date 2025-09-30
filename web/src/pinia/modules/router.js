@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 import { ref, watchEffect } from 'vue'
 import pathInfo from '@/pathInfo.json'
 import {useRoute} from "vue-router";
+import {config} from "@/core/config.js";
 
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
@@ -55,24 +56,24 @@ export const useRouterStore = defineStore('router', () => {
     
     // 1. 首先添加原有的keepAlive配置
     keepArrTemp.push(...keepAliveRoutersArr)
-    
-    history.forEach((item) => {
-      // 2. 为所有history中的路由强制启用keep-alive
-      // 通过routeMap获取路由信息，然后通过pathInfo获取组件名
-      const routeInfo = routeMap[item.name]
-      if (routeInfo && routeInfo.meta && routeInfo.meta.path) {
-        const componentName = pathInfo[routeInfo.meta.path]
-        if (componentName) {
-          keepArrTemp.push(componentName)
+    if (config.KeepAliveTabs) {
+      history.forEach((item) => {
+        // 2. 为所有history中的路由强制启用keep-alive
+        // 通过routeMap获取路由信息，然后通过pathInfo获取组件名
+        const routeInfo = routeMap[item.name]
+        if (routeInfo && routeInfo.meta && routeInfo.meta.path) {
+          const componentName = pathInfo[routeInfo.meta.path]
+          if (componentName) {
+            keepArrTemp.push(componentName)
+          }
         }
-      }
-      
-      // 3. 如果子路由在tabs中打开，父路由也需要keepAlive
-      if (nameMap[item.name]) {
-        keepArrTemp.push(nameMap[item.name])
-      }
-    })
-    
+        
+        // 3. 如果子路由在tabs中打开，父路由也需要keepAlive
+        if (nameMap[item.name]) {
+          keepArrTemp.push(nameMap[item.name])
+        }
+      })
+    }
     keepAliveRouters.value = Array.from(new Set(keepArrTemp))
   }
 

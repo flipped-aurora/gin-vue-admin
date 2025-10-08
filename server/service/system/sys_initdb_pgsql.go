@@ -13,7 +13,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/gofrs/uuid/v5"
+	"github.com/google/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -32,7 +32,7 @@ func (h PgsqlInitHandler) WriteConfig(ctx context.Context) error {
 	}
 	global.GVA_CONFIG.System.DbType = "pgsql"
 	global.GVA_CONFIG.Pgsql = c
-	global.GVA_CONFIG.JWT.SigningKey = uuid.Must(uuid.NewV4()).String()
+	global.GVA_CONFIG.JWT.SigningKey = uuid.New().String()
 	cs := utils.StructToMap(global.GVA_CONFIG)
 	for k, v := range cs {
 		global.GVA_VP.Set(k, v)
@@ -54,7 +54,12 @@ func (h PgsqlInitHandler) EnsureDB(ctx context.Context, conf *request.InitDB) (n
 	} // 如果没有数据库名, 则跳出初始化数据
 
 	dsn := conf.PgsqlEmptyDsn()
-	createSql := fmt.Sprintf("CREATE DATABASE %s;", c.Dbname)
+	var createSql string
+	if conf.Template != "" {
+		createSql = fmt.Sprintf("CREATE DATABASE %s WITH TEMPLATE %s;", c.Dbname, conf.Template)
+	} else {
+		createSql = fmt.Sprintf("CREATE DATABASE %s;", c.Dbname)
+	}
 	if err = createDatabase(dsn, "pgx", createSql); err != nil {
 		return nil, err
 	} // 创建数据库

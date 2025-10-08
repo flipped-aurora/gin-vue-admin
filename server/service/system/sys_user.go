@@ -3,14 +3,15 @@ package system
 import (
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/gofrs/uuid/v5"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -31,7 +32,7 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 	}
 	// 否则 附加uuid 密码hash加密 注册
 	u.Password = utils.BcryptHash(u.Password)
-	u.UUID = uuid.Must(uuid.NewV4())
+	u.UUID = uuid.New()
 	err = global.GVA_DB.Create(&u).Error
 	return u, err
 }
@@ -63,20 +64,20 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 //@function: ChangePassword
 //@description: 修改用户密码
 //@param: u *model.SysUser, newPassword string
-//@return: userInter *model.SysUser,err error
+//@return: err error
 
-func (userService *UserService) ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
+func (userService *UserService) ChangePassword(u *system.SysUser, newPassword string) (err error) {
 	var user system.SysUser
-	if err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error; err != nil {
-		return nil, err
+	err = global.GVA_DB.Select("id, password").Where("id = ?", u.ID).First(&user).Error
+	if err != nil {
+		return err
 	}
 	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
-		return nil, errors.New("原密码错误")
+		return errors.New("原密码错误")
 	}
-	user.Password = utils.BcryptHash(newPassword)
-	err = global.GVA_DB.Save(&user).Error
-	return &user, err
-
+	pwd := utils.BcryptHash(newPassword)
+	err = global.GVA_DB.Model(&user).Update("password", pwd).Error
+	return err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -311,7 +312,7 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 //@param: ID uint
 //@return: err error
 
-func (userService *UserService) ResetPassword(ID uint) (err error) {
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
+func (userService *UserService) ResetPassword(ID uint, password string) (err error) {
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash(password)).Error
 	return err
 }

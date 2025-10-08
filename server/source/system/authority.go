@@ -34,7 +34,7 @@ func (i *initAuthority) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&sysModel.SysAuthority{})
 }
 
-func (i initAuthority) InitializerName() string {
+func (i *initAuthority) InitializerName() string {
 	return sysModel.SysAuthority{}.TableName()
 }
 

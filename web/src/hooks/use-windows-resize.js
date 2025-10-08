@@ -18,6 +18,6 @@ export const useWindowResize = (cb) => {
   useEventListener('resize', onResize, { passive: true })
   return {
     width,
-    height,
+    height
   }
 }

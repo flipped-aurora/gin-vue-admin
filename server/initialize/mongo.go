@@ -45,7 +45,7 @@ func (m *mongo) Initialization() error {
 		opts = internal.Mongo.GetClientOptions()
 	}
 	ctx := context.Background()
-	client, err := qmgo.Open(ctx, &qmgo.Config{
+	config := &qmgo.Config{
 		Uri:              global.GVA_CONFIG.Mongo.Uri(),
 		Coll:             global.GVA_CONFIG.Mongo.Coll,
 		Database:         global.GVA_CONFIG.Mongo.Database,
@@ -53,12 +53,16 @@ func (m *mongo) Initialization() error {
 		MaxPoolSize:      &global.GVA_CONFIG.Mongo.MaxPoolSize,
 		SocketTimeoutMS:  &global.GVA_CONFIG.Mongo.SocketTimeoutMs,
 		ConnectTimeoutMS: &global.GVA_CONFIG.Mongo.ConnectTimeoutMs,
-		Auth: &qmgo.Credential{
+	}
+	if global.GVA_CONFIG.Mongo.Username != "" && global.GVA_CONFIG.Mongo.Password != "" {
+		config.Auth = &qmgo.Credential{
 			Username:   global.GVA_CONFIG.Mongo.Username,
 			Password:   global.GVA_CONFIG.Mongo.Password,
 			AuthSource: global.GVA_CONFIG.Mongo.AuthSource,
-		},
-	}, opts...)
+		}
+	}
+	client, err := qmgo.Open(ctx, config, opts...)
+
 	if err != nil {
 		return errors.Wrap(err, "链接mongodb数据库失败!")
 	}

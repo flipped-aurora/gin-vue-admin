@@ -70,7 +70,7 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	response.OkWithMessage(fmt.Sprintf("打包成功,文件路径为:%s", zipPath), c)
 }
 
-// Packaged
+// InitMenu
 // @Tags      AutoCodePlugin
 // @Summary   打包插件
 // @Security  ApiKeyAuth
@@ -94,7 +94,7 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 	response.OkWithMessage("文件变更成功", c)
 }
 
-// Packaged
+// InitAPI
 // @Tags      AutoCodePlugin
 // @Summary   打包插件
 // @Security  ApiKeyAuth

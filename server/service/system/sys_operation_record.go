@@ -17,11 +17,6 @@ type OperationRecordService struct{}
 
 var OperationRecordServiceApp = new(OperationRecordService)
 
-func (operationRecordService *OperationRecordService) CreateSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Create(&sysOperationRecord).Error
-	return err
-}
-
 //@author: [granty1](https://github.com/granty1)
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteSysOperationRecordByIds

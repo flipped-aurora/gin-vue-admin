@@ -3,7 +3,7 @@ description: Suggest an idea for Gin-Vue-Admin
 title: "[Feature]: "
 labels: [feature]
 assignees:
-  - piexlmax
+  - pixelmaxQm
 body:
   - type: textarea
     id: desc

@@ -42,7 +42,7 @@ export const getSystemState = () => {
 }
 
 /**
- * 重启服务
+ * 重载服务
  * @param data
  * @returns {*}
  */
@@ -53,4 +53,3 @@ export const reloadSystem = (data) => {
     data
   })
 }
-

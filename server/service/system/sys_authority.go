@@ -224,7 +224,10 @@ func (authorityService *AuthorityService) GetStructAuthorityList(authorityID uin
 	if len(authorities) > 0 {
 		for k := range authorities {
 			list = append(list, authorities[k].AuthorityId)
-			_, err = authorityService.GetStructAuthorityList(authorities[k].AuthorityId)
+			childrenList, err := authorityService.GetStructAuthorityList(authorities[k].AuthorityId)
+			if err == nil {
+				list = append(list, childrenList...)
+			}
 		}
 	}
 	if *auth.ParentId == 0 {
@@ -323,5 +326,8 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 func (authorityService *AuthorityService) GetParentAuthorityID(authorityID uint) (parentID uint, err error) {
 	var authority system.SysAuthority
 	err = global.GVA_DB.Where("authority_id = ?", authorityID).First(&authority).Error
-	return *authority.ParentId, err
+	if err != nil {
+		return
+	}
+	return *authority.ParentId, nil
 }

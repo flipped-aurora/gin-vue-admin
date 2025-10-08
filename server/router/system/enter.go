@@ -19,6 +19,7 @@ type RouterGroup struct {
 	AuthorityBtnRouter
 	SysExportTemplateRouter
 	SysParamsRouter
+	SysVersionRouter
 }
 
 var (
@@ -41,4 +42,5 @@ var (
 	dictionaryDetailApi = api.ApiGroupApp.SystemApiGroup.DictionaryDetailApi
 	autoCodeTemplateApi = api.ApiGroupApp.SystemApiGroup.AutoCodeTemplateApi
 	exportTemplateApi   = api.ApiGroupApp.SystemApiGroup.SysExportTemplateApi
+	sysVersionApi       = api.ApiGroupApp.SystemApiGroup.SysVersionApi
 )

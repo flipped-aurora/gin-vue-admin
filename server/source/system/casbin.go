@@ -34,7 +34,7 @@ func (i *initCasbin) TableCreated(ctx context.Context) bool {
 	return db.Migrator().HasTable(&adapter.CasbinRule{})
 }
 
-func (i initCasbin) InitializerName() string {
+func (i *initCasbin) InitializerName() string {
 	var entity adapter.CasbinRule
 	return entity.TableName()
 }
@@ -130,6 +130,9 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/installPlugin", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/pubPlug", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/addFunc", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/mcp", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/mcpTest", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/mcpList", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},
@@ -185,6 +188,17 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysParams/findSysParams", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysParams/getSysParamsList", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysParams/getSysParam", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/attachmentCategory/getCategoryList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/attachmentCategory/addCategory", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/attachmentCategory/deleteCategory", V2: "POST"},
+
+		{Ptype: "p", V0: "888", V1: "/sysVersion/findSysVersion", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysVersion/getSysVersionList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysVersion/downloadVersionJson", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysVersion/exportVersion", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysVersion/importVersion", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysVersion/deleteSysVersion", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysVersion/deleteSysVersionByIds", V2: "DELETE"},
 
 		{Ptype: "p", V0: "8881", V1: "/user/admin_register", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},

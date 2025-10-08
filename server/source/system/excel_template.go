@@ -17,7 +17,7 @@ func init() {
 	system.RegisterInit(initOrderExcelTemplate, &initExcelTemplate{})
 }
 
-func (i initExcelTemplate) InitializerName() string {
+func (i *initExcelTemplate) InitializerName() string {
 	return "sys_export_templates"
 }
 

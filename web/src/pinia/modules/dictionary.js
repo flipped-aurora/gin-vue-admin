@@ -10,7 +10,7 @@ export const useDictionaryStore = defineStore('dictionary', () => {
     dictionaryMap.value = { ...dictionaryMap.value, ...dictionaryRes }
   }
 
-  const getDictionary = async(type) => {
+  const getDictionary = async (type) => {
     if (dictionaryMap.value[type] && dictionaryMap.value[type].length) {
       return dictionaryMap.value[type]
     } else {
@@ -18,13 +18,14 @@ export const useDictionaryStore = defineStore('dictionary', () => {
       if (res.code === 0) {
         const dictionaryRes = {}
         const dict = []
-        res.data.resysDictionary.sysDictionaryDetails && res.data.resysDictionary.sysDictionaryDetails.forEach(item => {
-          dict.push({
-            label: item.label,
-            value: item.value,
-            extend: item.extend
+        res.data.resysDictionary.sysDictionaryDetails &&
+          res.data.resysDictionary.sysDictionaryDetails.forEach((item) => {
+            dict.push({
+              label: item.label,
+              value: item.value,
+              extend: item.extend
+            })
           })
-        })
         dictionaryRes[res.data.resysDictionary.type] = dict
         setDictionaryMap(dictionaryRes)
         return dictionaryMap.value[type]

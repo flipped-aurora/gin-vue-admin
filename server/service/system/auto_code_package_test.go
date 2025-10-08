@@ -2,10 +2,11 @@ package system
 
 import (
 	"context"
-	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"reflect"
 	"testing"
+
+	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 )
 
 func Test_autoCodePackage_Create(t *testing.T) {
@@ -53,9 +54,10 @@ func Test_autoCodePackage_Create(t *testing.T) {
 
 func Test_autoCodePackage_templates(t *testing.T) {
 	type args struct {
-		ctx    context.Context
-		entity model.SysAutoCodePackage
-		info   request.AutoCode
+		ctx       context.Context
+		entity    model.SysAutoCodePackage
+		info      request.AutoCode
+		isPackage bool
 	}
 	tests := []struct {
 		name      string
@@ -78,6 +80,7 @@ func Test_autoCodePackage_templates(t *testing.T) {
 					Abbreviation:    "user",
 					HumpPackageName: "user",
 				},
+				isPackage: false,
 			},
 			wantErr: false,
 		},
@@ -85,7 +88,7 @@ func Test_autoCodePackage_templates(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &autoCodePackage{}
-			gotCode, gotEnter, gotCreates, err := s.templates(tt.args.ctx, tt.args.entity, tt.args.info)
+			gotCode, gotEnter, gotCreates, err := s.templates(tt.args.ctx, tt.args.entity, tt.args.info, tt.args.isPackage)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("templates() error = %v, wantErr %v", err, tt.wantErr)
 				return

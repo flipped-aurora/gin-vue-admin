@@ -1,0 +1,68 @@
+
+// 淡入淡出动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.header {
+  border-radius: 0 0 10px 10px;
+}
+
+.body {
+  height: calc(100% - 6rem);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+// 缩放动画
+.zoom-enter-active,
+.zoom-leave-active {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.zoom-enter-from,
+.zoom-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+
+/* fade-slide */
+.slide-leave-active,
+.slide-enter-active {
+  transition: all 0.3s;
+}
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}

@@ -143,7 +143,7 @@ func (a *AuthorityMenuApi) AddBaseMenu(c *gin.Context) {
 	err = menuService.AddBaseMenu(menu)
 	if err != nil {
 		global.GVA_LOG.Error("添加失败!", zap.Error(err))
-		response.FailWithMessage("添加失败", c)
+		response.FailWithMessage("添加失败："+err.Error(), c)
 		return
 	}
 	response.OkWithMessage("添加成功", c)

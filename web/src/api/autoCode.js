@@ -139,30 +139,50 @@ export const pubPlug = (params) => {
   })
 }
 
-
 export const llmAuto = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data:{...data,mode:'ai'},
+    data: { ...data, mode: 'ai' },
     timeout: 1000 * 60 * 10,
-    loadingOption:{
+    loadingOption: {
       lock: true,
-      fullscreen:true,
-      text: `小淼正在思考，请稍候...`,
+      fullscreen: true,
+      text: `小淼正在思考，请稍候...`
     }
   })
 }
-
 
 export const butler = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data:{...data,mode:'butler'},
-    timeout: 1000 * 60 * 10,
+    data: { ...data, mode: 'butler' },
+    timeout: 1000 * 60 * 10
   })
 }
+
+
+export const eye = (data) => {
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    data: { ...data, mode: 'eye' },
+    timeout: 1000 * 60 * 10
+  })
+}
+
+
+export const createWeb = (data) => {
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    data: { ...data, mode: 'painter' },
+    timeout: 1000 * 60 * 10
+  })
+}
+
+
 
 export const addFunc = (data) => {
   return service({
@@ -183,6 +203,32 @@ export const initMenu = (data) => {
 export const initAPI = (data) => {
   return service({
     url: '/autoCode/initAPI',
+    method: 'post',
+    data
+  })
+}
+
+export const mcp = (data) => {
+  return service({
+    url: '/autoCode/mcp',
+    method: 'post',
+    data
+  })
+}
+
+
+export const mcpList = (data) => {
+  return service({
+    url: '/autoCode/mcpList',
+    method: 'post',
+    data
+  })
+}
+
+
+export const mcpTest = (data) => {
+  return service({
+    url: '/autoCode/mcpTest',
     method: 'post',
     data
   })

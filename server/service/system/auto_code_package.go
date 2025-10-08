@@ -9,6 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/autocode"
 	"github.com/pkg/errors"
 	"go/token"
 	"gorm.io/gorm"
@@ -52,13 +53,13 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 			return errors.Wrap(err, "创建失败!")
 		}
 		code := info.AutoCode()
-		_, asts, creates, err := s.templates(ctx, create, code)
+		_, asts, creates, err := s.templates(ctx, create, code, true)
 		if err != nil {
 			return err
 		}
 		for key, value := range creates { // key 为 模版绝对路径
 			var files *template.Template
-			files, err = template.ParseFiles(key)
+			files, err = template.New(filepath.Base(key)).Funcs(autocode.GetTemplateFuncMap()).ParseFiles(key)
 			if err != nil {
 				return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", key)
 			}
@@ -113,6 +114,20 @@ func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error
 	return nil
 }
 
+// DeleteByNames
+// @author: [piexlmax](https://github.com/piexlmax)
+// @author: [SliverHorn](https://github.com/SliverHorn)
+func (s *autoCodePackage) DeleteByNames(ctx context.Context, names []string) error {
+	if len(names) == 0 {
+		return nil
+	}
+	err := global.GVA_DB.WithContext(ctx).Where("package_name IN ?", names).Delete(&model.SysAutoCodePackage{}).Error
+	if err != nil {
+		return errors.Wrap(err, "删除失败!")
+	}
+	return nil
+}
+
 // All 获取所有包
 // @author: [piexlmax](https://github.com/piexlmax)
 // @author: [SliverHorn](https://github.com/SliverHorn)
@@ -159,7 +174,7 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 			//dir目录需要包含所有的dirNameMap
 			for k := 0; k < len(dir); k++ {
 				if dir[k].IsDir() {
-					if _, ok := dirNameMap[dir[k].Name()]; ok {
+					if ok := dirNameMap[dir[k].Name()]; ok {
 						delete(dirNameMap, dir[k].Name())
 					}
 				}
@@ -232,13 +247,16 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 			if entries[i].Name() == "preview" {
 				continue
 			} // preview 为预览代码生成器的代码
+			if entries[i].Name() == "mcp" {
+				continue
+			} // preview 为mcp生成器的代码
 			templates = append(templates, entries[i].Name())
 		}
 	}
 	return templates, nil
 }
 
-func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode) (code map[string]string, asts map[string]ast.Ast, creates map[string]string, err error) {
+func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode, isPackage bool) (code map[string]string, asts map[string]ast.Ast, creates map[string]string, err error) {
 	code = make(map[string]string)
 	asts = make(map[string]ast.Ast)
 	creates = make(map[string]string)
@@ -251,6 +269,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 		second := filepath.Join(templateDir, templateDirs[i].Name())
 		switch templateDirs[i].Name() {
 		case "server":
+			if !info.GenerateServer && !isPackage {
+				break
+			}
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {
@@ -263,7 +284,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				three := filepath.Join(second, secondDirs[j].Name())
 				if !secondDirs[j].IsDir() {
 					ext := filepath.Ext(secondDirs[j].Name())
-					if ext != ".template" && ext != ".tpl" {
+					if ext != ".tpl" {
 						return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", three)
 					}
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
@@ -297,7 +318,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")
@@ -469,7 +490,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						gen := strings.Index(threeDirs[k].Name(), "gen")
@@ -553,7 +574,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", five)
 								}
 								ext := filepath.Ext(five)
-								if ext != ".template" && ext != ".tpl" {
+								if ext != ".tpl" {
 									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", five)
 								}
 								hasRequest := strings.Index(fourDirs[l].Name(), "request")
@@ -569,7 +590,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							continue
 						}
 						ext := filepath.Ext(threeDirs[k].Name())
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						hasModel := strings.Index(threeDirs[k].Name(), "model")
@@ -598,6 +619,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				}
 			}
 		case "web":
+			if !info.GenerateWeb && !isPackage {
+				break
+			}
 			var secondDirs []os.DirEntry
 			secondDirs, err = os.ReadDir(second)
 			if err != nil {
@@ -627,7 +651,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
 						}
 						ext := filepath.Ext(four)
-						if ext != ".template" && ext != ".tpl" {
+						if ext != ".tpl" {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版后缀!", four)
 						}
 						api := strings.Index(threeDirs[k].Name(), "api")

@@ -2,107 +2,103 @@
 
 # jwt configuration
 jwt:
-  signing-key: qmPlus
-  expires-time: 7d
-  buffer-time: 1d
-  issuer: qmPlus
+    signing-key: qmPlus
+    expires-time: 7d
+    buffer-time: 1d
+    issuer: qmPlus
 # zap logger configuration
 zap:
-  level: info
-  format: console
-  prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
-  director: log
-  show-line: true
-  encode-level: LowercaseColorLevelEncoder
-  stacktrace-key: stacktrace
-  log-in-console: true
+    level: info
+    format: console
+    prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
+    director: log
+    show-line: true
+    encode-level: LowercaseColorLevelEncoder
+    stacktrace-key: stacktrace
+    log-in-console: true
+    retention-day: -1
 
 # redis configuration
 redis:
-  db: 0
-  addr: 177.7.0.14:6379
-  password: ""
+    #是否使用redis集群模式
+    useCluster: false
+    #使用集群模式addr和db默认无效
+    addr: 177.7.0.14:6379
+    password: ""
+    db: 0
+    clusterAddrs:
+        - "177.7.0.14:7000"
+        - "177.7.0.15:7001"
+        - "177.7.0.13:7002"
+
+# redis-list configuration
+redis-list:
+    - name: cache           # 数据库的名称,注意: name 需要在 redis-list 中唯一
+      useCluster: false     # 是否使用redis集群模式
+      addr: 177.7.0.14:6379  # 使用集群模式addr和db默认无效
+      password: ""
+      db: 0
+      clusterAddrs:
+          - "177.7.0.14:7000"
+          - "177.7.0.15:7001"
+          - "177.7.0.13:7002"
 
 # mongo configuration
 mongo:
-  coll: ''
-  options: ''
-  database: ''
-  username: ''
-  password: ''
-  min-pool-size: 0
-  max-pool-size: 100
-  socket-timeout-ms: 0
-  connect-timeout-ms: 0
-  is-zap: false
-  hosts:
-    - host: ''
-      port: ''
+    coll: ''
+    options: ''
+    database: ''
+    username: ''
+    password: ''
+    auth-source: ''
+    min-pool-size: 0
+    max-pool-size: 100
+    socket-timeout-ms: 0
+    connect-timeout-ms: 0
+    is-zap: false
+    hosts:
+        - host: ''
+          port: ''
 
 # email configuration
 email:
-  to: xxx@qq.com
-  port: 465
-  from: xxx@163.com
-  host: smtp.163.com
-  is-ssl: true
-  secret: xxx
-  nickname: test
+    to: xxx@qq.com
+    port: 465
+    from: xxx@163.com
+    host: smtp.163.com
+    is-ssl: true
+    secret: xxx
+    nickname: test
 
 # system configuration
 system:
-  env: public  # Change to "develop" to skip authentication for development mode
-  addr: 8888
-  db-type: mysql
-  oss-type: local    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
-  use-redis: false     # 使用redis
-  use-mongo: false     # 使用mongo
-  use-multipoint: false
-  # IP限制次数 一个小时15000次
-  iplimit-count: 15000
-  #  IP限制一个小时
-  iplimit-time: 3600
+    env: local # 修改为public可以关闭路由日志输出
+    addr: 8888
+    db-type: mysql
+    oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+    use-redis: false # 使用redis
+    use-mongo: false     # 使用mongo
+    use-multipoint: false
+    # IP限制次数 一个小时15000次
+    iplimit-count: 15000
+    #  IP限制一个小时
+    iplimit-time: 3600
+    #  路由全局前缀
+    router-prefix: ""
+    #  严格角色模式 打开后权限将会存在上下级关系
+    use-strict-auth: false
 
 # captcha configuration
 captcha:
-  key-long: 6
-  img-width: 240
-  img-height: 80
-  open-captcha: 0 # 0代表一直开启，大于0代表限制次数
-  open-captcha-timeout: 3600 # open-captcha大于0时才生效
+    key-long: 6
+    img-width: 240
+    img-height: 80
+    open-captcha: 0 # 0代表一直开启，大于0代表限制次数
+    open-captcha-timeout: 3600 # open-captcha大于0时才生效
 
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-
-# pgsql connect configuration
-# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
-pgsql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-
-db-list:
-  - disable: true # 是否禁用
-    type: "" # 数据库的类型,目前支持mysql、pgsql
-    alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
     path: ""
     port: ""
     config: ""
@@ -114,107 +110,174 @@ db-list:
     log-mode: ""
     log-zap: false
 
+# pgsql connect configuration
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
+pgsql:
+    path: ""
+    port: ""
+    config: ""
+    db-name: ""
+    username: ""
+    password: ""
+    max-idle-conns: 10
+    max-open-conns: 100
+    log-mode: ""
+    log-zap: false
+oracle:
+    path: ""
+    port: ""
+    config: ""
+    db-name: ""
+    username: ""
+    password: ""
+    max-idle-conns: 10
+    max-open-conns: 100
+    log-mode: ""
+    log-zap: false
+mssql:
+    path: ""
+    port: ""
+    config: ""
+    db-name: ""
+    username: ""
+    password: ""
+    max-idle-conns: 10
+    max-open-conns: 100
+    log-mode: ""
+    log-zap: false
+sqlite:
+    path: ""
+    port: ""
+    config: ""
+    db-name: ""
+    username: ""
+    password: ""
+    max-idle-conns: 10
+    max-open-conns: 100
+    log-mode: ""
+    log-zap: false
+db-list:
+    - disable: true # 是否禁用
+      type: "" # 数据库的类型,目前支持mysql、pgsql、mssql、oracle
+      alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
+      path: ""
+      port: ""
+      config: ""
+      db-name: ""
+      username: ""
+      password: ""
+      max-idle-conns: 10
+      max-open-conns: 100
+      log-mode: ""
+      log-zap: false
 
 # local configuration
 local:
-  path: uploads/file
-  store-path: uploads/file
+    path: uploads/file
+    store-path: uploads/file
 
 # autocode configuration
 autocode:
-  transfer-restart: true
-  # root 自动适配项目根目录
-  # 请不要手动配置,他会在项目加载的时候识别出根路径
-  root: ""
-  server: /server
-  server-plug: /plugin/%s
-  server-api: /api/v1/%s
-  server-initialize: /initialize
-  server-model: /model/%s
-  server-request: /model/%s/request/
-  server-router: /router/%s
-  server-service: /service/%s
-  web: /web/src
-  web-api: /api
-  web-form: /view
-  web-table: /view
+    web: web/src
+    root: "" # root 自动适配项目根目录, 请不要手动配置,他会在项目加载的时候识别出根路径
+    server: server
+    module: 'github.com/flipped-aurora/gin-vue-admin/server'
+    ai-path: ""  # AI服务路径
 
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:
-  zone: ZoneHuaDong
-  bucket: ""
-  img-path: ""
-  use-https: false
-  access-key: ""
-  secret-key: ""
-  use-cdn-domains: false
+    zone: ZoneHuaDong
+    bucket: ""
+    img-path: ""
+    use-https: false
+    access-key: ""
+    secret-key: ""
+    use-cdn-domains: false
+
+# minio oss configuration
+minio:
+    endpoint: yourEndpoint
+    access-key-id: yourAccessKeyId
+    access-key-secret: yourAccessKeySecret
+    bucket-name: yourBucketName
+    use-ssl: false
+    base-path: ""
+    bucket-url: "http://host:9000/yourBucketName"
 
 # aliyun oss configuration
 aliyun-oss:
-  endpoint: yourEndpoint
-  access-key-id: yourAccessKeyId
-  access-key-secret: yourAccessKeySecret
-  bucket-name: yourBucketName
-  bucket-url: yourBucketUrl
-  base-path: yourBasePath
+    endpoint: yourEndpoint
+    access-key-id: yourAccessKeyId
+    access-key-secret: yourAccessKeySecret
+    bucket-name: yourBucketName
+    bucket-url: yourBucketUrl
+    base-path: yourBasePath
 
 # tencent cos configuration
 tencent-cos:
-  bucket: xxxxx-10005608
-  region: ap-shanghai
-  secret-id: your-secret-id
-  secret-key: your-secret-key
-  base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+    bucket: xxxxx-10005608
+    region: ap-shanghai
+    secret-id: your-secret-id
+    secret-key: your-secret-key
+    base-url: https://gin.vue.admin
+    path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 
 # aws s3 configuration (minio compatible)
 aws-s3:
-  bucket: xxxxx-10005608
-  region: ap-shanghai
-  endpoint: ""
-  s3-force-path-style: false
-  disable-ssl: false
-  secret-id: your-secret-id
-  secret-key: your-secret-key
-  base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+    bucket: xxxxx-10005608
+    region: ap-shanghai
+    endpoint: ""
+    s3-force-path-style: false
+    disable-ssl: false
+    secret-id: your-secret-id
+    secret-key: your-secret-key
+    base-url: https://gin.vue.admin
+    path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+
+# cloudflare r2 configuration
+cloudflare-r2:
+    bucket: xxxx0bucket
+    base-url: https://gin.vue.admin.com
+    path: uploads
+    account-id: xxx_account_id
+    access-key-id: xxx_key_id
+    secret-access-key: xxx_secret_key
 
 # huawei obs configuration
 hua-wei-obs:
-  path: you-path
-  bucket: you-bucket
-  endpoint: you-endpoint
-  access-key: you-access-key
-  secret-key: you-secret-key
+    path: you-path
+    bucket: you-bucket
+    endpoint: you-endpoint
+    access-key: you-access-key
+    secret-key: you-secret-key
 
 # excel configuration
 excel:
-  dir: ./resource/excel/
+    dir: ./resource/excel/
 
-# timer task db clear table
-Timer:
-  start: true
-  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
-  detail:
-    - tableName: sys_operation_records
-      compareField: created_at
-      interval: 2160h
-    - tableName: jwt_blacklists
-      compareField: created_at
-      interval: 168h
+# disk usage configuration
+disk-list:
+    - mount-point: "/"
 
 # 跨域配置
 # 需要配合 server/initialize/router.go -> `Router.Use(middleware.CorsByRules())` 使用
 cors:
-  mode: whitelist # 放行模式: allow-all, 放行全部; whitelist, 白名单模式, 来自白名单内域名的请求添加 cors 头; strict-whitelist 严格白名单模式, 白名单外的请求一律拒绝
-  whitelist:
-    - allow-origin: example1.com
-      allow-headers: content-type
-      allow-methods: GET, POST
-      expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
-      allow-credentials: true # 布尔值
-    - allow-origin: example2.com
-      allow-headers: content-type
-      allow-methods: GET, POST
-      expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
-      allow-credentials: true # 布尔值
+    mode: strict-whitelist # 放行模式: allow-all, 放行全部; whitelist, 白名单模式, 来自白名单内域名的请求添加 cors 头; strict-whitelist 严格白名单模式, 白名单外的请求一律拒绝
+    whitelist:
+        - allow-origin: example1.com
+          allow-headers: Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id
+          allow-methods: POST, GET
+          expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
+
+          allow-credentials: true # 布尔值
+        - allow-origin: example2.com
+          allow-headers: content-type
+          allow-methods: GET, POST
+          expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
+          allow-credentials: true # 布尔值
+mcp:
+    name: GVA_MCP
+    version: v1.0.0
+    sse_path: /sse
+    message_path: /message
+    url_prefix: ''

@@ -1,0 +1,3 @@
+[submodule "server/third_party/go-sms-protocol"]
+	path = server/third_party/go-sms-protocol
+	url = https://github.com/hujm2023/go-sms-protocol

@@ -225,6 +225,40 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 		entities = append(entities, createEntity...)
 	}
 
+	// 处理数据库存在但实体文件不存在的情况 - 删除数据库中对应的数据
+	existingPackageNames := make(map[string]bool)
+	// 收集所有存在的包名
+	for i := 0; i < len(server); i++ {
+		existingPackageNames[server[i].PackageName] = true
+	}
+	for i := 0; i < len(plugin); i++ {
+		existingPackageNames[plugin[i].PackageName] = true
+	}
+
+	// 找出需要删除的数据库记录
+	deleteEntityIDs := []uint{}
+	for i := 0; i < len(entities); i++ {
+		if !existingPackageNames[entities[i].PackageName] {
+			deleteEntityIDs = append(deleteEntityIDs, entities[i].ID)
+		}
+	}
+
+	// 删除数据库中不存在文件的记录
+	if len(deleteEntityIDs) > 0 {
+		err = global.GVA_DB.WithContext(ctx).Delete(&model.SysAutoCodePackage{}, deleteEntityIDs).Error
+		if err != nil {
+			return nil, errors.Wrap(err, "删除不存在的包记录失败!")
+		}
+		// 从返回结果中移除已删除的记录
+		filteredEntities := []model.SysAutoCodePackage{}
+		for i := 0; i < len(entities); i++ {
+			if existingPackageNames[entities[i].PackageName] {
+				filteredEntities = append(filteredEntities, entities[i])
+			}
+		}
+		entities = filteredEntities
+	}
+
 	return entities, nil
 }
 

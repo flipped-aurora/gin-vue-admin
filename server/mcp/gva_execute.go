@@ -88,14 +88,14 @@ func (g *GVAExecutor) New() mcp.Tool {
 重要：ExecutionPlan结构体格式要求（支持批量创建）：
 {
   "packageName": "包名(string)",
-  "packageType": "package或plugin(string)，如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
+  "packageType": "package或plugin(string)，如果用户提到了使用插件则创建plugin，如果用户没有特定说明则一律选用package。",
   "needCreatedPackage": "是否需要创建包(bool)",
   "needCreatedModules": "是否需要创建模块(bool)",
   "needCreatedDictionaries": "是否需要创建字典(bool)",
   "packageInfo": {
     "desc": "描述(string)",
     "label": "展示名(string)", 
-    "template": "package或plugin(string)，如果是可以复用的业务就选择plugin，如果是特定业务流程则选用package。",
+    "template": "package或plugin(string)，如果用户提到了使用插件则创建plugin，如果用户没有特定说明则一律选用package。",
     "packageName": "包名(string)"
   },
   "modulesInfo": [{
@@ -171,7 +171,7 @@ func (g *GVAExecutor) New() mcp.Tool {
 3. needCreatedDictionaries=true时dictionariesInfo必需
 4. dictionariesInfo中的options字段可选，如果不提供将根据fieldDesc自动生成默认选项
 5. 字典创建会在模块创建之前执行，确保模块字段可以正确引用字典类型
-6. packageType只能是"package"或"plugin"
+6. packageType只能是"package"或"plugin,如果用户提到了使用插件则创建plugin，如果用户没有特定说明则一律选用package。"
 7. 字段类型支持：string（字符串）,richtext（富文本）,int（整型）,bool（布尔值）,float64（浮点型）,time.Time（时间）,enum（枚举）,picture（单图片，字符串）,pictures（多图片，json字符串）,video（视频，字符串）,file（文件，json字符串）,json（JSON）,array（数组）
 8. 搜索类型支持：=,!=,>,>=,<,<=,NOT BETWEEN/LIKE/BETWEEN/IN/NOT IN
 9. gvaModel=true时自动包含ID,CreatedAt,UpdatedAt,DeletedAt字段
@@ -271,20 +271,9 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 		return nil, fmt.Errorf("序列化结果失败: %v", err)
 	}
 
-	// 添加权限分配提醒
-	permissionReminder := "\n\n⚠️ 重要提醒：\n" +
-		"模块创建完成后，请前往【系统管理】->【角色管理】中为相关角色分配新创建的API和菜单权限，" +
-		"以确保用户能够正常访问新功能。\n" +
-		"具体步骤：\n" +
-		"1. 进入角色管理页面\n" +
-		"2. 选择需要授权的角色\n" +
-		"3. 在API权限中勾选新创建的API接口\n" +
-		"4. 在菜单权限中勾选新创建的菜单项\n" +
-		"5. 保存权限配置"
-
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{
-			mcp.NewTextContent(fmt.Sprintf("执行结果：\n\n%s%s%s", string(responseJSON), reviewMessage, permissionReminder)),
+			mcp.NewTextContent(fmt.Sprintf("执行结果：\n\n%s%s", string(responseJSON), reviewMessage)),
 		},
 	}, nil
 }

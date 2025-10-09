@@ -139,6 +139,11 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "系统字典详情", Method: "GET", Path: "/sysDictionaryDetail/findSysDictionaryDetail", Description: "根据ID获取字典内容"},
 		{ApiGroup: "系统字典详情", Method: "GET", Path: "/sysDictionaryDetail/getSysDictionaryDetailList", Description: "获取字典内容列表"},
 
+		{ApiGroup: "系统字典详情", Method: "GET", Path: "/sysDictionaryDetail/getDictionaryTreeList", Description: "获取字典数列表"},
+		{ApiGroup: "系统字典详情", Method: "GET", Path: "/sysDictionaryDetail/getDictionaryTreeListByType", Description: "根据分类获取字典数列表"},
+		{ApiGroup: "系统字典详情", Method: "GET", Path: "/sysDictionaryDetail/getDictionaryDetailsByParent", Description: "根据父级ID获取字典详情"},
+		{ApiGroup: "系统字典详情", Method: "GET", Path: "/sysDictionaryDetail/getDictionaryPath", Description: "获取字典详情的完整路径"},
+
 		{ApiGroup: "系统字典", Method: "POST", Path: "/sysDictionary/createSysDictionary", Description: "新增字典"},
 		{ApiGroup: "系统字典", Method: "DELETE", Path: "/sysDictionary/deleteSysDictionary", Description: "删除字典"},
 		{ApiGroup: "系统字典", Method: "PUT", Path: "/sysDictionary/updateSysDictionary", Description: "更新字典"},

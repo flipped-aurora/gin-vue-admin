@@ -139,6 +139,10 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/createSysDictionaryDetail", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/getSysDictionaryDetailList", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/deleteSysDictionaryDetail", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/getDictionaryTreeList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/getDictionaryTreeListByType", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/getDictionaryDetailsByParent", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/getDictionaryPath", V2: "GET"},
 
 		{Ptype: "p", V0: "888", V1: "/sysDictionary/findSysDictionary", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionary/updateSysDictionary", V2: "PUT"},

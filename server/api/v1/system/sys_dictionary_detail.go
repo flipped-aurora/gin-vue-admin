@@ -1,6 +1,8 @@
 package system
 
 import (
+	"strconv"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -145,4 +147,121 @@ func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c *gin.Context) {
 		Page:     pageInfo.Page,
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
+}
+
+// GetDictionaryTreeList
+// @Tags      SysDictionaryDetail
+// @Summary   获取字典详情树形结构
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     sysDictionaryID  query     int                                                true  "字典ID"
+// @Success   200              {object}  response.Response{data=[]system.SysDictionaryDetail,msg=string}  "获取字典详情树形结构"
+// @Router    /sysDictionaryDetail/getDictionaryTreeList [get]
+func (s *DictionaryDetailApi) GetDictionaryTreeList(c *gin.Context) {
+	sysDictionaryID := c.Query("sysDictionaryID")
+	if sysDictionaryID == "" {
+		response.FailWithMessage("字典ID不能为空", c)
+		return
+	}
+
+	var id uint
+	if idUint64, err := strconv.ParseUint(sysDictionaryID, 10, 32); err != nil {
+		response.FailWithMessage("字典ID格式错误", c)
+		return
+	} else {
+		id = uint(idUint64)
+	}
+	
+	list, err := dictionaryDetailService.GetDictionaryTreeList(id)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"list": list}, "获取成功", c)
+}
+
+// GetDictionaryTreeListByType
+// @Tags      SysDictionaryDetail
+// @Summary   根据字典类型获取字典详情树形结构
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     type  query     string                                                true  "字典类型"
+// @Success   200   {object}  response.Response{data=[]system.SysDictionaryDetail,msg=string}  "获取字典详情树形结构"
+// @Router    /sysDictionaryDetail/getDictionaryTreeListByType [get]
+func (s *DictionaryDetailApi) GetDictionaryTreeListByType(c *gin.Context) {
+	dictType := c.Query("type")
+	if dictType == "" {
+		response.FailWithMessage("字典类型不能为空", c)
+		return
+	}
+	
+	list, err := dictionaryDetailService.GetDictionaryTreeListByType(dictType)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"list": list}, "获取成功", c)
+}
+
+// GetDictionaryDetailsByParent
+// @Tags      SysDictionaryDetail
+// @Summary   根据父级ID获取字典详情
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     request.GetDictionaryDetailsByParentRequest                true  "查询参数"
+// @Success   200   {object}  response.Response{data=[]system.SysDictionaryDetail,msg=string}  "获取字典详情列表"
+// @Router    /sysDictionaryDetail/getDictionaryDetailsByParent [get]
+func (s *DictionaryDetailApi) GetDictionaryDetailsByParent(c *gin.Context) {
+	var req request.GetDictionaryDetailsByParentRequest
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	
+	list, err := dictionaryDetailService.GetDictionaryDetailsByParent(req)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"list": list}, "获取成功", c)
+}
+
+// GetDictionaryPath
+// @Tags      SysDictionaryDetail
+// @Summary   获取字典详情的完整路径
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     id  query     uint                                                true  "字典详情ID"
+// @Success   200 {object}  response.Response{data=[]system.SysDictionaryDetail,msg=string}  "获取字典详情路径"
+// @Router    /sysDictionaryDetail/getDictionaryPath [get]
+func (s *DictionaryDetailApi) GetDictionaryPath(c *gin.Context) {
+	idStr := c.Query("id")
+	if idStr == "" {
+		response.FailWithMessage("字典详情ID不能为空", c)
+		return
+	}
+	
+	var id uint
+	if idUint64, err := strconv.ParseUint(idStr, 10, 32); err != nil {
+		response.FailWithMessage("字典详情ID格式错误", c)
+		return
+	} else {
+		id = uint(idUint64)
+	}
+	
+	path, err := dictionaryDetailService.GetDictionaryPath(id)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"path": path}, "获取成功", c)
 }

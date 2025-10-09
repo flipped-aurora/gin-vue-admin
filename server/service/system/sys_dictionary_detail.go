@@ -83,7 +83,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Order("sort").Find(&sysDictionaryDetails).Error
+	err = db.Limit(limit).Offset(offset).Order("sort").Order("id").Find(&sysDictionaryDetails).Error
 	return sysDictionaryDetails, total, err
 }
 

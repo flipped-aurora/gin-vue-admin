@@ -88,7 +88,7 @@ system:
     #  严格角色模式 打开后权限将会存在上下级关系
     use-strict-auth: false
     #  自动迁移数据库表结构，生产环境建议设为false，手动迁移
-    auto-migrate: false
+    auto-migrate: true
 
 # captcha configuration
 captcha:

@@ -32,3 +32,11 @@ func GetJSONKeys(jsonStr string) (keys []string, err error) {
 	}
 	return keys, nil
 }
+
+func MarshalToString(v interface{}) string {
+	s, err := json.Marshal(v)
+	if err != nil {
+		return ""
+	}
+	return string(s)
+}

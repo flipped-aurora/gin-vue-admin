@@ -3,7 +3,6 @@ package mcpTool
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -19,11 +18,11 @@ func init() {
 
 // MenuListResponse 菜单列表响应结构
 type MenuListResponse struct {
-	Success     bool                  `json:"success"`
-	Message     string                `json:"message"`
-	Menus       []system.SysBaseMenu  `json:"menus"`
-	TotalCount  int                   `json:"totalCount"`
-	Description string                `json:"description"`
+	Success     bool                 `json:"success"`
+	Message     string               `json:"message"`
+	Menus       []system.SysBaseMenu `json:"menus"`
+	TotalCount  int                  `json:"totalCount"`
+	Description string               `json:"description"`
 }
 
 // MenuLister 菜单列表工具
@@ -55,15 +54,7 @@ func (m *MenuLister) Handle(_ context.Context, _ mcp.CallToolRequest) (*mcp.Call
 	allMenus, err := m.getAllMenus()
 	if err != nil {
 		global.GVA_LOG.Error("获取菜单列表失败", zap.Error(err))
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				mcp.TextContent{
-					Type: "text",
-					Text: fmt.Sprintf("获取菜单列表失败: %v", err),
-				},
-			},
-			IsError: true,
-		}, nil
+		return mcp.NewToolResultErrorf("获取菜单列表失败: %v", err), nil
 	}
 
 	// 构建返回结果
@@ -79,25 +70,10 @@ func (m *MenuLister) Handle(_ context.Context, _ mcp.CallToolRequest) (*mcp.Call
 	responseJSON, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
 		global.GVA_LOG.Error("序列化菜单响应失败", zap.Error(err))
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				mcp.TextContent{
-					Type: "text",
-					Text: fmt.Sprintf("序列化响应失败: %v", err),
-				},
-			},
-			IsError: true,
-		}, nil
+		return mcp.NewToolResultErrorf("序列化响应失败: %v", err), nil
 	}
 
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: string(responseJSON),
-			},
-		},
-	}, nil
+	return mcp.NewToolResultText(string(responseJSON)), nil
 }
 
 // getAllMenus 获取所有基础菜单
@@ -109,4 +85,3 @@ func (m *MenuLister) getAllMenus() ([]system.SysBaseMenu, error) {
 	}
 	return menus, nil
 }
-

@@ -23,11 +23,11 @@ type DictionaryOptionsGenerator struct{}
 
 // DictionaryGenerateRequest 字典生成请求
 type DictionaryGenerateRequest struct {
-	DictType    string             `json:"dictType"`    // 字典类型
-	FieldDesc   string             `json:"fieldDesc"`   // 字段描述
-	Options     []DictionaryOption `json:"options"`     // AI生成的字典选项
-	DictName    string             `json:"dictName"`    // 字典名称（可选）
-	Description string             `json:"description"` // 字典描述（可选）
+	DictType    string             `json:"dictType" jsonschema_description:"字典类型，用于标识字典的唯一性"`                   // 字典类型
+	FieldDesc   string             `json:"fieldDesc" jsonschema_description:"字段描述，用于生成字典名称和理解字典用途"`             // 字段描述
+	Options     []DictionaryOption `json:"options" jsonschema_description:"AI生成的字典选项数组"`                        // AI生成的字典选项
+	DictName    string             `json:"dictName,omitempty" jsonschema_description:"字典名称，可选，默认根据fieldDesc生成"` // 字典名称（可选）
+	Description string             `json:"description,omitempty" jsonschema_description:"字典描述"`                 // 字典描述（可选）
 }
 
 // DictionaryGenerateResponse 字典生成响应
@@ -42,24 +42,7 @@ type DictionaryGenerateResponse struct {
 func (d *DictionaryOptionsGenerator) New() mcp.Tool {
 	return mcp.NewTool("generate_dictionary_options",
 		mcp.WithDescription("智能生成字典选项并自动创建字典和字典详情"),
-		mcp.WithString("dictType",
-			mcp.Required(),
-			mcp.Description("字典类型，用于标识字典的唯一性"),
-		),
-		mcp.WithString("fieldDesc",
-			mcp.Required(),
-			mcp.Description("字段描述，用于AI理解字段含义"),
-		),
-		mcp.WithString("options",
-			mcp.Required(),
-			mcp.Description("字典选项JSON字符串，格式：[{\"label\":\"显示名\",\"value\":\"值\",\"sort\":1}]"),
-		),
-		mcp.WithString("dictName",
-			mcp.Description("字典名称，如果不提供将自动生成"),
-		),
-		mcp.WithString("description",
-			mcp.Description("字典描述"),
-		),
+		mcp.WithInputSchema[DictionaryGenerateRequest](),
 	)
 }
 
@@ -73,16 +56,6 @@ func (d *DictionaryOptionsGenerator) Description() string {
 	return `字典选项生成工具 - 让AI生成并创建字典选项
 
 此工具允许AI根据字典类型和字段描述生成合适的字典选项，并自动创建字典和字典详情。
-
-参数说明：
-- dictType: 字典类型（必填）
-- fieldDesc: 字段描述（必填）
-- options: AI生成的字典选项数组（必填）
-  - label: 选项标签
-  - value: 选项值
-  - sort: 排序号
-- dictName: 字典名称（可选，默认根据fieldDesc生成）
-- description: 字典描述（可选）
 
 使用场景：
 1. 在创建模块时，如果字段需要字典类型，AI可以根据字段描述智能生成合适的选项
@@ -102,99 +75,27 @@ func (d *DictionaryOptionsGenerator) Description() string {
 }`
 }
 
-// InputSchema 返回输入参数的JSON Schema
-func (d *DictionaryOptionsGenerator) InputSchema() map[string]interface{} {
-	return map[string]interface{}{
-		"type": "object",
-		"properties": map[string]interface{}{
-			"dictType": map[string]interface{}{
-				"type":        "string",
-				"description": "字典类型，用于标识字典的唯一性",
-			},
-			"fieldDesc": map[string]interface{}{
-				"type":        "string",
-				"description": "字段描述，用于生成字典名称和理解字典用途",
-			},
-			"options": map[string]interface{}{
-				"type":        "array",
-				"description": "AI生成的字典选项数组",
-				"items": map[string]interface{}{
-					"type": "object",
-					"properties": map[string]interface{}{
-						"label": map[string]interface{}{
-							"type":        "string",
-							"description": "选项标签，显示给用户的文本",
-						},
-						"value": map[string]interface{}{
-							"type":        "string",
-							"description": "选项值，存储在数据库中的值",
-						},
-						"sort": map[string]interface{}{
-							"type":        "integer",
-							"description": "排序号，用于控制选项显示顺序",
-						},
-					},
-					"required": []string{"label", "value", "sort"},
-				},
-			},
-			"dictName": map[string]interface{}{
-				"type":        "string",
-				"description": "字典名称，可选，默认根据fieldDesc生成",
-			},
-			"description": map[string]interface{}{
-				"type":        "string",
-				"description": "字典描述，可选",
-			},
-		},
-		"required": []string{"dictType", "fieldDesc", "options"},
-	}
-}
-
 // Handle 处理工具调用
 func (d *DictionaryOptionsGenerator) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	// 解析请求参数
-	args := request.GetArguments()
-
-	dictType, ok := args["dictType"].(string)
-	if !ok || dictType == "" {
-		return nil, errors.New("dictType 参数是必需的")
+	args := DictionaryGenerateRequest{}
+	if err := request.BindArguments(&args); err != nil {
+		return mcp.NewToolResultError(fmt.Sprintf("参数格式错误: %v", err)), nil
 	}
 
-	fieldDesc, ok := args["fieldDesc"].(string)
-	if !ok || fieldDesc == "" {
-		return nil, errors.New("fieldDesc 参数是必需的")
+	if args.DictType == "" {
+		return mcp.NewToolResultError("dictType 参数是必需的"), nil
 	}
 
-	optionsStr, ok := args["options"].(string)
-	if !ok || optionsStr == "" {
-		return nil, errors.New("options 参数是必需的")
+	if args.FieldDesc == "" {
+		return mcp.NewToolResultError("fieldDesc 参数是必需的"), nil
 	}
 
-	// 解析options JSON字符串
-	var options []DictionaryOption
-	if err := json.Unmarshal([]byte(optionsStr), &options); err != nil {
-		return nil, fmt.Errorf("options 参数格式错误: %v", err)
+	if len(args.Options) == 0 {
+		return mcp.NewToolResultError("options 参数是必需的"), nil
 	}
-
-	if len(options) == 0 {
-		return nil, errors.New("options 不能为空")
-	}
-
-	// 可选参数
-	dictName, _ := args["dictName"].(string)
-	description, _ := args["description"].(string)
-
-	// 构建请求对象
-	req := &DictionaryGenerateRequest{
-		DictType:    dictType,
-		FieldDesc:   fieldDesc,
-		Options:     options,
-		DictName:    dictName,
-		Description: description,
-	}
-
 	// 创建字典
-	response, err := d.createDictionaryWithOptions(ctx, req)
+	response, err := d.createDictionaryWithOptions(ctx, &args)
 	if err != nil {
 		return nil, err
 	}
@@ -202,17 +103,10 @@ func (d *DictionaryOptionsGenerator) Handle(ctx context.Context, request mcp.Cal
 	// 构建响应
 	resultJSON, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
-		return nil, fmt.Errorf("序列化结果失败: %v", err)
+		return mcp.NewToolResultErrorf("序列化结果失败: %v", err), nil
 	}
 
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: fmt.Sprintf("字典选项生成结果：\n\n%s", string(resultJSON)),
-			},
-		},
-	}, nil
+	return mcp.NewToolResultText(fmt.Sprintf("字典选项生成结果：\n\n%s", string(resultJSON))), nil
 }
 
 // createDictionaryWithOptions 创建字典和字典选项

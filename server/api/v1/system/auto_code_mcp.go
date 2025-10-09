@@ -2,8 +2,8 @@ package system
 
 import (
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/mcp/client"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
@@ -49,16 +49,10 @@ func (a *AutoCodeTemplateApi) MCPList(c *gin.Context) {
 
 	baseUrl := fmt.Sprintf("http://127.0.0.1:%d%s", global.GVA_CONFIG.System.Addr, global.GVA_CONFIG.MCP.SSEPath)
 
-	testClient, err := client.NewClient(baseUrl, "testClient", "v1.0.0", global.GVA_CONFIG.MCP.Name)
-	defer testClient.Close()
-	toolsRequest := mcp.ListToolsRequest{}
-
-	list, err := testClient.ListTools(c.Request.Context(), toolsRequest)
-
-	if err != nil {
-		response.FailWithMessage("创建失败", c)
-		global.GVA_LOG.Error(err.Error())
-		return
+	tools := global.GVA_MCP_SERVER.ListTools()
+	var list mcp.ListToolsResult
+	for _, tool := range tools {
+		list.Tools = append(list.Tools, tool.Tool)
 	}
 
 	mcpServerConfig := map[string]interface{}{
@@ -96,49 +90,25 @@ func (a *AutoCodeTemplateApi) MCPTest(c *gin.Context) {
 		return
 	}
 
-	// 创建MCP客户端
-	baseUrl := fmt.Sprintf("http://127.0.0.1:%d%s", global.GVA_CONFIG.System.Addr, global.GVA_CONFIG.MCP.SSEPath)
-	testClient, err := client.NewClient(baseUrl, "testClient", "v1.0.0", global.GVA_CONFIG.MCP.Name)
-	if err != nil {
-		response.FailWithMessage("创建MCP客户端失败:"+err.Error(), c)
+	tool := global.GVA_MCP_SERVER.GetTool(testRequest.Name)
+	if tool == nil {
+		response.FailWithMessage("工具不存在:"+testRequest.Name, c)
 		return
 	}
-	defer testClient.Close()
-
-	ctx := c.Request.Context()
-
-	// 初始化MCP连接
-	initRequest := mcp.InitializeRequest{}
-	initRequest.Params.ProtocolVersion = mcp.LATEST_PROTOCOL_VERSION
-	initRequest.Params.ClientInfo = mcp.Implementation{
-		Name:    "testClient",
-		Version: "v1.0.0",
-	}
-
-	_, err = testClient.Initialize(ctx, initRequest)
-	if err != nil {
-		response.FailWithMessage("初始化MCP连接失败:"+err.Error(), c)
-		return
-	}
-
-	// 构建工具调用请求
-	request := mcp.CallToolRequest{}
-	request.Params.Name = testRequest.Name
-	request.Params.Arguments = testRequest.Arguments
-
-	// 调用工具
-	result, err := testClient.CallTool(ctx, request)
+	req := mcp.CallToolRequest{}
+	req.Params.Name = testRequest.Name
+	req.Params.Arguments = testRequest.Arguments
+	handler, err := tool.Handler(c, req)
 	if err != nil {
 		response.FailWithMessage("工具调用失败:"+err.Error(), c)
 		return
 	}
-
 	// 处理响应结果
-	if len(result.Content) == 0 {
+	if len(handler.Content) == 0 {
 		response.FailWithMessage("工具未返回任何内容", c)
 		return
 	}
 
 	// 返回结果
-	response.OkWithData(result.Content, c)
+	response.OkWithData(handler.Content, c)
 }

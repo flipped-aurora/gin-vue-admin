@@ -20,8 +20,6 @@ type RequirementAnalysisRequest struct {
 	UserRequirement string `json:"userRequirement"`
 }
 
-
-
 // RequirementAnalysisResponse 需求分析响应
 type RequirementAnalysisResponse struct {
 	AIPrompt string `json:"aiPrompt"` // 给AI的提示词
@@ -87,11 +85,7 @@ func (t *RequirementAnalyzer) Handle(ctx context.Context, request mcp.CallToolRe
 		return nil, fmt.Errorf("序列化响应失败: %v", err)
 	}
 
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.NewTextContent(string(responseData)),
-		},
-	}, nil
+	return mcp.NewToolResultText(string(responseData)), nil
 }
 
 // analyzeRequirement 分析用户需求 - 专注于AI需求传递

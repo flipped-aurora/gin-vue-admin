@@ -1529,9 +1529,9 @@ func (t *AutomationModuleAnalyzer) createDefaultDictionaryDetails(ctx context.Co
 
 // DictionaryOption 字典选项结构
 type DictionaryOption struct {
-	Label string `json:"label"`
-	Value string `json:"value"`
-	Sort  int    `json:"sort"`
+	Label string `json:"label" jsonschema_description:"选项标签，显示给用户的文本"`
+	Value string `json:"value" jsonschema_description:"选项值，存储在数据库中的值"`
+	Sort  int    `json:"sort" jsonschema_description:"排序号，用于控制选项显示顺序"`
 }
 
 // generateSmartDictionaryOptions 通过MCP调用让AI生成字典选项

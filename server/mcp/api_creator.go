@@ -3,7 +3,6 @@ package mcpTool
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -19,11 +18,15 @@ func init() {
 }
 
 // ApiCreateRequest API创建请求结构
-type ApiCreateRequest struct {
-	Path        string `json:"path"`        // API路径
-	Description string `json:"description"` // API中文描述
-	ApiGroup    string `json:"apiGroup"`    // API组
-	Method      string `json:"method"`      // HTTP方法
+type ApiCreateRequest struct { // HTTP方法
+	Apis []Apis `json:"apis" jsonschema_description:"创建API的JSON字符串"`
+}
+
+type Apis struct {
+	Path        string `json:"path" jsonschema_description:"API中文描述，如：创建用户"`                     // API路径
+	Description string `json:"description" jsonschema_description:"API中文描述，如：创建用户"`              // API中文描述
+	ApiGroup    string `json:"apiGroup" jsonschema_description:"API组名称，用于分类管理，如：用户管理"`           // API组
+	Method      string `json:"method" jsonschema_description:"HTTP方法" jsonschema:"default=POST"` // HTTP方法
 }
 
 // ApiCreateResponse API创建响应结构
@@ -42,75 +45,22 @@ type ApiCreator struct{}
 func (a *ApiCreator) New() mcp.Tool {
 	return mcp.NewTool("create_api",
 		mcp.WithDescription(`创建后端API记录，用于AI编辑器自动添加API接口时自动创建对应的API权限记录。
-
 **重要限制：**
 - 当使用gva_auto_generate工具且needCreatedModules=true时，模块创建会自动生成API权限，不应调用此工具
 - 仅在以下情况使用：1) 单独创建API（不涉及模块创建）；2) AI编辑器自动添加API；3) router下的文件产生路径变化时`),
-		mcp.WithString("path",
-			mcp.Required(),
-			mcp.Description("API路径，如：/user/create"),
-		),
-		mcp.WithString("description",
-			mcp.Required(),
-			mcp.Description("API中文描述，如：创建用户"),
-		),
-		mcp.WithString("apiGroup",
-			mcp.Required(),
-			mcp.Description("API组名称，用于分类管理，如：用户管理"),
-		),
-		mcp.WithString("method",
-			mcp.Description("HTTP方法"),
-			mcp.DefaultString("POST"),
-		),
-		mcp.WithString("apis",
-			mcp.Description("批量创建API的JSON字符串，格式：[{\"path\":\"/user/create\",\"description\":\"创建用户\",\"apiGroup\":\"用户管理\",\"method\":\"POST\"}]"),
-		),
+		mcp.WithInputSchema[ApiCreateRequest](),
 	)
 }
 
 // Handle 处理API创建请求
 func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	args := request.GetArguments()
-
-	var apis []ApiCreateRequest
-
-	// 检查是否是批量创建
-	if apisStr, ok := args["apis"].(string); ok && apisStr != "" {
-		if err := json.Unmarshal([]byte(apisStr), &apis); err != nil {
-			return nil, fmt.Errorf("apis 参数格式错误: %v", err)
-		}
-	} else {
-		// 单个API创建
-		path, ok := args["path"].(string)
-		if !ok || path == "" {
-			return nil, errors.New("path 参数是必需的")
-		}
-
-		description, ok := args["description"].(string)
-		if !ok || description == "" {
-			return nil, errors.New("description 参数是必需的")
-		}
-
-		apiGroup, ok := args["apiGroup"].(string)
-		if !ok || apiGroup == "" {
-			return nil, errors.New("apiGroup 参数是必需的")
-		}
-
-		method := "POST"
-		if val, ok := args["method"].(string); ok && val != "" {
-			method = val
-		}
-
-		apis = append(apis, ApiCreateRequest{
-			Path:        path,
-			Description: description,
-			ApiGroup:    apiGroup,
-			Method:      method,
-		})
+	var args ApiCreateRequest
+	if err := request.BindArguments(&args); err != nil {
+		return mcp.NewToolResultError(fmt.Sprintf("apis 参数格式错误: %v", err)), nil
 	}
 
-	if len(apis) == 0 {
-		return nil, errors.New("没有要创建的API")
+	if len(args.Apis) == 0 {
+		return mcp.NewToolResultError(fmt.Sprintf("没有要创建的API")), nil
 	}
 
 	// 创建API记录
@@ -118,7 +68,7 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 	var responses []ApiCreateResponse
 	successCount := 0
 
-	for _, apiReq := range apis {
+	for _, apiReq := range args.Apis {
 		api := system.SysApi{
 			Path:        apiReq.Path,
 			Description: apiReq.Description,
@@ -160,18 +110,18 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 
 	// 构建总体响应
 	var resultMessage string
-	if len(apis) == 1 {
+	if len(args.Apis) == 1 {
 		resultMessage = responses[0].Message
 	} else {
-		resultMessage = fmt.Sprintf("批量创建API完成，成功 %d 个，失败 %d 个", successCount, len(apis)-successCount)
+		resultMessage = fmt.Sprintf("批量创建API完成，成功 %d 个，失败 %d 个", successCount, len(args.Apis)-successCount)
 	}
 
 	result := map[string]interface{}{
 		"success":      successCount > 0,
 		"message":      resultMessage,
-		"totalCount":   len(apis),
+		"totalCount":   len(args.Apis),
 		"successCount": successCount,
-		"failedCount":  len(apis) - successCount,
+		"failedCount":  len(args.Apis) - successCount,
 		"details":      responses,
 	}
 
@@ -190,12 +140,5 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 		"3. 在API权限中勾选新创建的API接口\n" +
 		"4. 保存权限配置"
 
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: fmt.Sprintf("API创建结果：\n\n%s%s", string(resultJSON), permissionReminder),
-			},
-		},
-	}, nil
+	return mcp.NewToolResultText(fmt.Sprintf("API创建结果：\n\n%s%s", string(resultJSON), permissionReminder)), nil
 }

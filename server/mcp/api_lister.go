@@ -7,6 +7,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/mark3labs/mcp-go/mcp"
 	"go.uber.org/zap"
 )
@@ -19,21 +20,21 @@ func init() {
 
 // ApiInfo API信息结构
 type ApiInfo struct {
-	ID          uint   `json:"id,omitempty"`          // 数据库ID（仅数据库API有）
-	Path        string `json:"path"`                  // API路径
-	Description string `json:"description,omitempty"` // API描述
-	ApiGroup    string `json:"apiGroup,omitempty"`    // API组
-	Method      string `json:"method"`                // HTTP方法
-	Source      string `json:"source"`                // 来源：database 或 gin
+	ID          uint   `json:"id,omitempty" jsonschema_description:"数据库ID（仅数据库API有")` // 数据库ID（仅数据库API有）
+	Path        string `json:"path" jsonschema_description:"API路径"`                   // API路径
+	Description string `json:"description,omitempty" jsonschema_description:"API描述"`  // API描述
+	ApiGroup    string `json:"apiGroup,omitempty" jsonschema_description:"API组"`      // API组
+	Method      string `json:"method" jsonschema_description:"HTTP方法"`                // HTTP方法
+	Source      string `json:"source" jsonschema_description:"来源：database 或 gin"`     // 来源：database 或 gin
 }
 
 // ApiListResponse API列表响应结构
 type ApiListResponse struct {
-	Success      bool      `json:"success"`
-	Message      string    `json:"message"`
-	DatabaseApis []ApiInfo `json:"databaseApis"` // 数据库中的API
-	GinApis      []ApiInfo `json:"ginApis"`      // gin框架中的API
-	TotalCount   int       `json:"totalCount"`   // 总数量
+	Success      bool      `json:"success" jsonschema_description:"是否成功"`          // 是否成功
+	Message      string    `json:"message" jsonschema_description:"响应消息"`          // 响应消息
+	DatabaseApis []ApiInfo `json:"databaseApis" jsonschema_description:"数据库中的API"` // 数据库中的API
+	GinApis      []ApiInfo `json:"ginApis" jsonschema_description:"gin框架中的API"`    // gin框架中的API
+	TotalCount   int       `json:"totalCount" jsonschema_description:"总数量"`        // 总数量
 }
 
 // ApiLister API列表工具
@@ -66,15 +67,7 @@ func (a *ApiLister) Handle(_ context.Context, _ mcp.CallToolRequest) (*mcp.CallT
 			Success: false,
 			Message: "获取数据库API失败: " + err.Error(),
 		}
-		resultJSON, _ := json.Marshal(errorResponse)
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				mcp.TextContent{
-					Type: "text",
-					Text: string(resultJSON),
-				},
-			},
-		}, nil
+		return mcp.NewToolResultError(utils.MarshalToString(errorResponse)), nil
 	}
 
 	// 获取gin路由中的API
@@ -85,15 +78,7 @@ func (a *ApiLister) Handle(_ context.Context, _ mcp.CallToolRequest) (*mcp.CallT
 			Success: false,
 			Message: "获取gin路由API失败: " + err.Error(),
 		}
-		resultJSON, _ := json.Marshal(errorResponse)
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				mcp.TextContent{
-					Type: "text",
-					Text: string(resultJSON),
-				},
-			},
-		}, nil
+		return mcp.NewToolResultError(utils.MarshalToString(errorResponse)), nil
 	}
 
 	// 构建响应
@@ -115,14 +100,7 @@ func (a *ApiLister) Handle(_ context.Context, _ mcp.CallToolRequest) (*mcp.CallT
 		return nil, fmt.Errorf("序列化结果失败: %v", err)
 	}
 
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: string(resultJSON),
-			},
-		},
-	}, nil
+	return mcp.NewToolResultText(string(resultJSON)), nil
 }
 
 // getDatabaseApis 获取数据库中的所有API

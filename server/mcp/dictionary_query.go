@@ -3,11 +3,11 @@ package mcpTool
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/mark3labs/mcp-go/mcp"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -20,11 +20,11 @@ func init() {
 
 // DictionaryInfo 字典信息结构
 type DictionaryInfo struct {
-	ID     uint   `json:"id"`
-	Name   string `json:"name"`   // 字典名（中）
-	Type   string `json:"type"`   // 字典名（英）
-	Status *bool  `json:"status"` // 状态
-	Desc   string `json:"desc"`   // 描述
+	ID      uint                   `json:"id"`
+	Name    string                 `json:"name"`    // 字典名（中）
+	Type    string                 `json:"type"`    // 字典名（英）
+	Status  *bool                  `json:"status"`  // 状态
+	Desc    string                 `json:"desc"`    // 描述
 	Details []DictionaryDetailInfo `json:"details"` // 字典详情
 }
 
@@ -40,9 +40,9 @@ type DictionaryDetailInfo struct {
 
 // DictionaryQueryResponse 字典查询响应结构
 type DictionaryQueryResponse struct {
-	Success     bool             `json:"success"`
-	Message     string           `json:"message"`
-	Total       int              `json:"total"`
+	Success      bool             `json:"success"`
+	Message      string           `json:"message"`
+	Total        int              `json:"total"`
 	Dictionaries []DictionaryInfo `json:"dictionaries"`
 }
 
@@ -68,46 +68,42 @@ func (d *DictionaryQuery) New() mcp.Tool {
 // Handle 处理字典查询请求
 func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	args := request.GetArguments()
-	
+
 	// 获取参数
 	dictType := ""
 	if val, ok := args["dictType"].(string); ok {
 		dictType = val
 	}
-	
+
 	includeDisabled := false
 	if val, ok := args["includeDisabled"].(bool); ok {
 		includeDisabled = val
 	}
-	
+
 	detailsOnly := false
 	if val, ok := args["detailsOnly"].(bool); ok {
 		detailsOnly = val
 	}
-	
+
 	// 获取字典服务
 	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
-	
+
 	var dictionaries []DictionaryInfo
 	var err error
-	
+
 	if dictType != "" {
 		// 查询指定类型的字典
 		var status *bool
 		if !includeDisabled {
 			status = &[]bool{true}[0]
 		}
-		
+
 		sysDictionary, err := dictionaryService.GetSysDictionary(dictType, 0, status)
 		if err != nil {
 			global.GVA_LOG.Error("查询字典失败", zap.Error(err))
-			return &mcp.CallToolResult{
-				Content: []mcp.Content{
-					mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "查询字典失败: %v", "total": 0, "dictionaries": []}`, err.Error())),
-				},
-			}, nil
+			return mcp.NewToolResultErrorf(`{"success": false, "message": "查询字典失败: %v", "total": 0, "dictionaries": []}`, err.Error()), nil
 		}
-		
+
 		// 转换为响应格式
 		dictInfo := DictionaryInfo{
 			ID:     sysDictionary.ID,
@@ -116,7 +112,7 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 			Status: sysDictionary.Status,
 			Desc:   sysDictionary.Desc,
 		}
-		
+
 		// 获取字典详情
 		for _, detail := range sysDictionary.SysDictionaryDetails {
 			if includeDisabled || (detail.Status != nil && *detail.Status) {
@@ -130,17 +126,17 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 				})
 			}
 		}
-		
+
 		dictionaries = append(dictionaries, dictInfo)
 	} else {
 		// 查询所有字典
 		var sysDictionaries []system.SysDictionary
 		db := global.GVA_DB.Model(&system.SysDictionary{})
-		
+
 		if !includeDisabled {
 			db = db.Where("status = ?", true)
 		}
-		
+
 		err = db.Preload("SysDictionaryDetails", func(db *gorm.DB) *gorm.DB {
 			if includeDisabled {
 				return db.Order("sort")
@@ -148,16 +144,12 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 				return db.Where("status = ?", true).Order("sort")
 			}
 		}).Find(&sysDictionaries).Error
-		
+
 		if err != nil {
 			global.GVA_LOG.Error("查询字典列表失败", zap.Error(err))
-			return &mcp.CallToolResult{
-				Content: []mcp.Content{
-					mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "查询字典列表失败: %v", "total": 0, "dictionaries": []}`, err.Error())),
-				},
-			}, nil
+			return mcp.NewToolResultErrorf(`{"success": false, "message": "查询字典列表失败: %v", "total": 0, "dictionaries": []}`, err.Error()), nil
 		}
-		
+
 		// 转换为响应格式
 		for _, dict := range sysDictionaries {
 			dictInfo := DictionaryInfo{
@@ -167,7 +159,7 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 				Status: dict.Status,
 				Desc:   dict.Desc,
 			}
-			
+
 			// 获取字典详情
 			for _, detail := range dict.SysDictionaryDetails {
 				if includeDisabled || (detail.Status != nil && *detail.Status) {
@@ -181,33 +173,28 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 					})
 				}
 			}
-			
+
 			dictionaries = append(dictionaries, dictInfo)
 		}
 	}
-	
+
 	// 如果只需要详情信息，则提取所有详情
 	if detailsOnly {
 		var allDetails []DictionaryDetailInfo
 		for _, dict := range dictionaries {
 			allDetails = append(allDetails, dict.Details...)
 		}
-		
+
 		response := map[string]interface{}{
 			"success": true,
 			"message": "查询字典详情成功",
 			"total":   len(allDetails),
 			"details": allDetails,
 		}
-		
-		responseJSON, _ := json.Marshal(response)
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				mcp.NewTextContent(string(responseJSON)),
-			},
-		}, nil
+
+		return mcp.NewToolResultText(utils.MarshalToString(response)), nil
 	}
-	
+
 	// 构建响应
 	response := DictionaryQueryResponse{
 		Success:      true,
@@ -215,20 +202,12 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 		Total:        len(dictionaries),
 		Dictionaries: dictionaries,
 	}
-	
+
 	responseJSON, err := json.Marshal(response)
 	if err != nil {
 		global.GVA_LOG.Error("序列化响应失败", zap.Error(err))
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				mcp.NewTextContent(fmt.Sprintf(`{"success": false, "message": "序列化响应失败: %v", "total": 0, "dictionaries": []}`, err.Error())),
-			},
-		}, nil
+		return mcp.NewToolResultErrorf(`{"success": false, "message": "序列化响应失败: %v", "total": 0, "dictionaries": []}`, err.Error()), nil
 	}
-	
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.NewTextContent(string(responseJSON)),
-		},
-	}, nil
+
+	return mcp.NewToolResultText(string(responseJSON)), nil
 }

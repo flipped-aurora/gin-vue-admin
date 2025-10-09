@@ -282,3 +282,5 @@ mcp:
     sse_path: /sse
     message_path: /message
     url_prefix: ''
+    addr: 8889
+    separate: false

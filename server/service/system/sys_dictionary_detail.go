@@ -166,7 +166,7 @@ func (dictionaryDetailService *DictionaryDetailService) updateChildrenLevelAndPa
 //@return: sysDictionaryDetail system.SysDictionaryDetail, err error
 
 func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetail(id uint) (sysDictionaryDetail system.SysDictionaryDetail, err error) {
-	err = global.GVA_DB.Preload("Children").Where("id = ?", id).First(&sysDictionaryDetail).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&sysDictionaryDetail).Error
 	return
 }
 
@@ -205,14 +205,14 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 	if err != nil {
 		return
 	}
-	err = db.Preload("Children").Limit(limit).Offset(offset).Order("sort").Find(&sysDictionaryDetails).Error
+	err = db.Limit(limit).Offset(offset).Order("sort").Find(&sysDictionaryDetails).Error
 	return sysDictionaryDetails, total, err
 }
 
 // 按照字典id获取字典全部内容的方法
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryList(dictionaryID uint) (list []system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetails []system.SysDictionaryDetail
-	err = global.GVA_DB.Preload("Children").Find(&sysDictionaryDetails, "sys_dictionary_id = ?", dictionaryID).Error
+	err = global.GVA_DB.Find(&sysDictionaryDetails, "sys_dictionary_id = ?", dictionaryID).Error
 	return sysDictionaryDetails, err
 }
 
@@ -265,11 +265,21 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryDetailsByPa
 		db = db.Where("parent_id IS NULL")
 	}
 
-	if req.IncludeChildren {
-		db = db.Preload("Children")
+	err = db.Order("sort").Find(&list).Error
+	if err != nil {
+		return list, err
 	}
 
-	err = db.Order("sort").Find(&list).Error
+	// 如果需要包含子级数据，使用递归方式加载所有层级的子项
+	if req.IncludeChildren {
+		for i := range list {
+			err = dictionaryDetailService.loadChildren(&list[i])
+			if err != nil {
+				return list, err
+			}
+		}
+	}
+
 	return list, err
 }
 
@@ -277,7 +287,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryDetailsByPa
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryListByType(t string) (list []system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetails []system.SysDictionaryDetail
 	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
-	err = db.Debug().Preload("Children").Find(&sysDictionaryDetails, "type = ?", t).Error
+	err = db.Find(&sysDictionaryDetails, "type = ?", t).Error
 	return sysDictionaryDetails, err
 }
 
@@ -308,7 +318,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryTreeListByT
 // 按照字典id+字典内容value获取单条字典内容
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByValue(dictionaryID uint, value string) (detail system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetail system.SysDictionaryDetail
-	err = global.GVA_DB.Preload("Children").First(&sysDictionaryDetail, "sys_dictionary_id = ? and value = ?", dictionaryID, value).Error
+	err = global.GVA_DB.First(&sysDictionaryDetail, "sys_dictionary_id = ? and value = ?", dictionaryID, value).Error
 	return sysDictionaryDetail, err
 }
 
@@ -316,7 +326,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByValue
 func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByTypeValue(t string, value string) (detail system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetails system.SysDictionaryDetail
 	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
-	err = db.Preload("Children").First(&sysDictionaryDetails, "sys_dictionaries.type = ? and sys_dictionary_details.value = ?", t, value).Error
+	err = db.First(&sysDictionaryDetails, "sys_dictionaries.type = ? and sys_dictionary_details.value = ?", t, value).Error
 	return sysDictionaryDetails, err
 }
 

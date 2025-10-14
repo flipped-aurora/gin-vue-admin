@@ -19,8 +19,27 @@ function isExternalUrl(val) {
   return typeof val === 'string' && /^(https?:)?\/\//.test(val)
 }
 
-// 将 n 级菜单扁平化为：一级 layout + 二级页面组件
-function addRouteByChildren(route, segments = []) {
+// 工具函数：统一路径归一化
+function normalizeAbsolutePath(p) {
+  const s = '/' + String(p || '')
+  return s.replace(/\/+/g, '/')
+}
+
+function normalizeRelativePath(p) {
+  return String(p || '').replace(/^\/+/, '')
+}
+
+// 安全注册：仅在路由名未存在时注册顶级路由
+function addTopLevelIfAbsent(r) {
+  if (!router.hasRoute(r.name)) {
+    router.addRoute(r)
+  }
+}
+
+// 将 n 级菜单扁平化为：
+// - 常规：一级 layout + 二级页面组件
+// - 若某节点 meta.defaultMenu === true：该节点为顶级（不包裹在 layout 下），其子节点作为该顶级的二级页面组件
+function addRouteByChildren(route, segments = [], parentName = null) {
   // 跳过外链根节点
   if (isExternalUrl(route?.path) || isExternalUrl(route?.name) || isExternalUrl(route?.component)) {
     return
@@ -28,26 +47,54 @@ function addRouteByChildren(route, segments = []) {
 
   // 顶层 layout 仅用于承载，不参与路径拼接
   if (route?.name === 'layout') {
-    route.children?.forEach((child) => addRouteByChildren(child, []))
+    route.children?.forEach((child) => addRouteByChildren(child, [], null))
+    return
+  }
+
+  // 如果标记为 defaultMenu，则该路由应作为顶级路由（不包裹在 layout 下）
+  if (route?.meta?.defaultMenu === true && parentName === null) {
+    const fullPath = [...segments, route.path].filter(Boolean).join('/')
+    const children = route.children ? [...route.children] : []
+    const newRoute = { ...route, path: fullPath }
+    delete newRoute.children
+    delete newRoute.parent
+    // 顶级路由使用绝对路径
+    newRoute.path = normalizeAbsolutePath(newRoute.path)
+
+    // 若已存在同名路由则整体跳过（之前应已处理过其子节点）
+    if (router.hasRoute(newRoute.name)) return
+    addTopLevelIfAbsent(newRoute)
+
+    // 若该 defaultMenu 节点仍有子节点，继续递归处理其子节点（挂载到该顶级路由下）
+    if (children.length) {
+      // 重置片段，使其成为顶级下的二级相对路径
+      children.forEach((child) => addRouteByChildren(child, [], newRoute.name))
+    }
     return
   }
 
   // 还有子节点，继续向下收集路径片段（忽略外链片段）
   if (route?.children && route.children.length) {
     const nextSegments = isExternalUrl(route.path) ? segments : [...segments, route.path]
-    route.children.forEach((child) => addRouteByChildren(child, nextSegments))
+    route.children.forEach((child) => addRouteByChildren(child, nextSegments, parentName))
     return
   }
 
-  // 叶子节点：注册为 layout 的二级子路由
+  // 叶子节点：注册为其父（defaultMenu 顶级或 layout）的二级子路由
   const fullPath = [...segments, route.path].filter(Boolean).join('/')
   const newRoute = { ...route, path: fullPath }
   delete newRoute.children
   delete newRoute.parent
   // 子路由使用相对路径，避免 /layout/layout/... 的问题
-  newRoute.path = newRoute.path.replace(/^\/+/, '')
+  newRoute.path = normalizeRelativePath(newRoute.path)
 
-  router.addRoute('layout', newRoute)
+  if (parentName) {
+    // 挂载到 defaultMenu 顶级路由下
+    router.addRoute(parentName, newRoute)
+  } else {
+    // 常规：挂载到 layout 下
+    router.addRoute('layout', newRoute)
+  }
 }
 
 // 处理路由加载
@@ -60,7 +107,8 @@ const setupRouter = async (userStore) => {
     const baseRouters = routerStore.asyncRouters || []
     const layoutRoute = baseRouters[0]
     if (layoutRoute?.name === 'layout' && !router.hasRoute('layout')) {
-      router.addRoute(layoutRoute)
+      const bareLayout = { ...layoutRoute, children: [] }
+      router.addRoute(bareLayout)
     }
 
     // 扁平化：将 layout.children 与其余顶层异步路由一并作为二级子路由注册到 layout 下
@@ -73,7 +121,7 @@ const setupRouter = async (userStore) => {
         if (r?.name !== 'layout') toRegister.push(r)
       })
     }
-    toRegister.forEach((r) => addRouteByChildren(r, []))
+  toRegister.forEach((r) => addRouteByChildren(r, [], null))
     return true
   } catch (error) {
     console.error('Setup router failed:', error)

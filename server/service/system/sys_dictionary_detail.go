@@ -225,8 +225,15 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryTreeList(di
 		return nil, err
 	}
 
-	// 递归加载子项
+	// 递归加载子项并设置disabled属性
 	for i := range sysDictionaryDetails {
+		// 设置disabled属性：当status为false时，disabled为true
+		if sysDictionaryDetails[i].Status != nil {
+			sysDictionaryDetails[i].Disabled = !*sysDictionaryDetails[i].Status
+		} else {
+			sysDictionaryDetails[i].Disabled = false // 默认不禁用
+		}
+		
 		err = dictionaryDetailService.loadChildren(&sysDictionaryDetails[i])
 		if err != nil {
 			return nil, err
@@ -245,6 +252,13 @@ func (dictionaryDetailService *DictionaryDetailService) loadChildren(detail *sys
 	}
 
 	for i := range children {
+		// 设置disabled属性：当status为false时，disabled为true
+		if children[i].Status != nil {
+			children[i].Disabled = !*children[i].Status
+		} else {
+			children[i].Disabled = false // 默认不禁用
+		}
+		
 		err = dictionaryDetailService.loadChildren(&children[i])
 		if err != nil {
 			return err
@@ -268,6 +282,15 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryDetailsByPa
 	err = db.Order("sort").Find(&list).Error
 	if err != nil {
 		return list, err
+	}
+
+	// 设置disabled属性
+	for i := range list {
+		if list[i].Status != nil {
+			list[i].Disabled = !*list[i].Status
+		} else {
+			list[i].Disabled = false // 默认不禁用
+		}
 	}
 
 	// 如果需要包含子级数据，使用递归方式加载所有层级的子项
@@ -304,8 +327,15 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryTreeListByT
 		return nil, err
 	}
 
-	// 递归加载子项
+	// 递归加载子项并设置disabled属性
 	for i := range sysDictionaryDetails {
+		// 设置disabled属性：当status为false时，disabled为true
+		if sysDictionaryDetails[i].Status != nil {
+			sysDictionaryDetails[i].Disabled = !*sysDictionaryDetails[i].Status
+		} else {
+			sysDictionaryDetails[i].Disabled = false // 默认不禁用
+		}
+		
 		err = dictionaryDetailService.loadChildren(&sysDictionaryDetails[i])
 		if err != nil {
 			return nil, err

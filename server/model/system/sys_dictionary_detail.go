@@ -18,6 +18,7 @@ type SysDictionaryDetail struct {
 	Children        []SysDictionaryDetail `json:"children" gorm:"foreignKey:ParentID"`                                                 // 子字典详情
 	Level           int                   `json:"level" form:"level" gorm:"column:level;comment:层级深度"`                                 // 层级深度，从0开始
 	Path            string                `json:"path" form:"path" gorm:"column:path;comment:层级路径"`                                    // 层级路径，如 "1,2,3"
+	Disabled        bool                  `json:"disabled" gorm:"-"`                                                                   // 禁用状态，根据status字段动态计算
 }
 
 func (SysDictionaryDetail) TableName() string {

@@ -219,14 +219,9 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 		if field.FieldType == "array" {
 			multipleAttr = "multiple "
 		}
-		result += fmt.Sprintf(`  <el-select %sv-model="searchInfo.%s" clearable filterable placeholder="请选择" @clear="()=>{searchInfo.%s=undefined}">
+		result += fmt.Sprintf(`    <el-tree-select v-model="formData.%s" placeholder="请选择%s" :data="%sOptions" style="width:100%%" filterable :clearable="%v" check-strictly %s></el-tree-select>
 `,
-			multipleAttr, field.FieldJson, field.FieldJson)
-		result += fmt.Sprintf(`    <el-option v-for="(item,key) in %sOptions" :key="key" :label="item.label" :value="item.value" />
-`,
-			field.DictType)
-		result += `  </el-select>
-`
+			field.FieldJson, field.FieldDesc, field.DictType, field.Clearable, multipleAttr)
 	} else if field.CheckDataSource {
 		multipleAttr := ""
 		if field.DataSource.Association == 2 {
@@ -488,14 +483,9 @@ func GenerateFormItem(field systemReq.AutoCodeField) string {
 
 		case "string":
 			if field.DictType != "" {
-				result += fmt.Sprintf(`    <el-select v-model="formData.%s" placeholder="请选择%s" style="width:100%%" filterable :clearable="%v">
+				result += fmt.Sprintf(`    <el-tree-select v-model="formData.%s" placeholder="请选择%s" :data="%sOptions" style="width:100%%" filterable :clearable="%v" check-strictly></el-tree-select>
 `,
-					field.FieldJson, field.FieldDesc, field.Clearable)
-				result += fmt.Sprintf(`        <el-option v-for="(item,key) in %sOptions" :key="key" :label="item.label" :value="item.value" />
-`,
-					field.DictType)
-				result += `    </el-select>
-`
+					field.FieldJson, field.FieldDesc, field.DictType, field.Clearable)
 			} else {
 				result += fmt.Sprintf(`    <el-input v-model="formData.%s" :clearable="%v" placeholder="请输入%s" />
 `,

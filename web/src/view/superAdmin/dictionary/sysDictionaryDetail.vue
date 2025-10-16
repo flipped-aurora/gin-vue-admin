@@ -4,24 +4,6 @@
       <div class="gva-btn-list justify-between flex items-center">
         <span class="text font-bold">字典详细内容</span>
         <div class="flex items-center gap-2">
-          <!-- 层级视图切换按钮 -->
-          <el-button-group>
-            <el-button
-              :type="viewMode === 'table' ? 'primary' : 'default'"
-              @click="viewMode = 'table'"
-              size="small"
-            >
-              表格视图
-            </el-button>
-            <el-button
-              :type="viewMode === 'tree' ? 'primary' : 'default'"
-              @click="viewMode = 'tree'"
-              size="small"
-            >
-              层级视图
-            </el-button>
-          </el-button-group>
-
           <el-input
             placeholder="搜索展示值"
             v-model="searchName"
@@ -35,7 +17,7 @@
             <template #append>
               <el-button
                 :type="searchName ? 'primary' : 'info'"
-                @click="getTableData"
+                @click="getTreeData"
                 >搜索</el-button
               >
             </template>
@@ -47,16 +29,16 @@
       </div>
       <!-- 表格视图 -->
       <el-table
-        v-if="viewMode === 'table'"
-        ref="multipleTable"
-        :data="tableData"
+        :data="treeData"
         style="width: 100%"
         tooltip-effect="dark"
+        :tree-props="{ children: 'children'}"
         row-key="ID"
+        default-expand-all
       >
         <el-table-column type="selection" width="55" />
 
-        <el-table-column align="left" label="展示值" prop="label" />
+        <el-table-column align="left" label="展示值" prop="label" min-width="240"/>
 
         <el-table-column align="left" label="字典值" prop="value" />
 
@@ -69,20 +51,6 @@
         </el-table-column>
 
         <el-table-column align="left" label="层级" prop="level" width="80" />
-
-        <el-table-column
-          align="left"
-          label="父级字典项"
-          prop="parentID"
-          width="150"
-        >
-          <template #default="scope">
-            <span v-if="scope.row.parentID">
-              {{ getParentLabel(scope.row.parentID) }}
-            </span>
-            <span v-else class="text-gray-400">根级</span>
-          </template>
-        </el-table-column>
 
         <el-table-column
           align="left"
@@ -135,83 +103,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <!-- 层级树形视图 -->
-      <div v-if="viewMode === 'tree'" class="tree-view-container">
-        <el-tree
-          :data="treeData"
-          :props="treeProps"
-          node-key="ID"
-          :expand-on-click-node="false"
-          :default-expand-all="false"
-          class="dictionary-tree"
-        >
-          <template #default="{ data }">
-            <div class="tree-node-content">
-              <div class="node-info">
-                <span class="">{{ data.label }}</span>
-                <span class="node-value">（{{ data.value }}）</span>
-                <span v-if="data.extend" class="node-extend"
-                  >- {{ data.extend }}</span
-                >
-                <el-tag
-                  v-if="data.level !== undefined"
-                  size="small"
-                  class="ml-2"
-                >
-                  L{{ data.level }}
-                </el-tag>
-                <el-tag
-                  :type="data.status ? 'success' : 'danger'"
-                  size="small"
-                  class="ml-1"
-                >
-                  {{ data.status ? '启用' : '禁用' }}
-                </el-tag>
-              </div>
-              <div class="node-actions">
-                <el-button
-                  type="primary"
-                  link
-                  size="small"
-                  @click="addChildNode(data)"
-                >
-                  添加子项
-                </el-button>
-                <el-button
-                  type="primary"
-                  link
-                  size="small"
-                  @click="updateSysDictionaryDetailFunc(data)"
-                >
-                  编辑
-                </el-button>
-                <el-button
-                  type="danger"
-                  link
-                  size="small"
-                  @click="deleteSysDictionaryDetailFunc(data)"
-                >
-                  删除
-                </el-button>
-              </div>
-            </div>
-          </template>
-        </el-tree>
-      </div>
-
-      <!-- 分页 -->
-      <div v-if="viewMode === 'table'" class="gva-pagination">
-        <el-pagination
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
-      </div>
     </div>
 
     <el-drawer
@@ -240,8 +131,8 @@
         <el-form-item label="父级字典项" prop="parentID">
           <el-cascader
             v-model="formData.parentID"
-            :options="parentOptions"
-            :props="cascaderProps"
+            :options="[rootOption,...treeData]"
+            :props="cascadeProps"
             placeholder="请选择父级字典项（可选）"
             clearable
             filterable
@@ -297,7 +188,6 @@
     deleteSysDictionaryDetail,
     updateSysDictionaryDetail,
     findSysDictionaryDetail,
-    getSysDictionaryDetailList,
     getDictionaryTreeList
   } from '@/api/sysDictionaryDetail' // 此处请自行替换地址
   import { ref, watch } from 'vue'
@@ -312,7 +202,6 @@
 
   const appStore = useAppStore()
   const searchName = ref('')
-  const viewMode = ref('table') // 'table' 或 'tree'
 
   const props = defineProps({
     sysDictionaryID: {
@@ -353,70 +242,17 @@
     ]
   })
 
-  const page = ref(1)
-  const total = ref(0)
-  const pageSize = ref(10)
-  const tableData = ref([])
   const treeData = ref([])
-  const parentOptions = ref([])
-
-  // 树形组件配置
-  const treeProps = {
-    children: 'children',
-    label: 'label'
-  }
 
   // 级联选择器配置
-  const cascaderProps = {
-    value: 'value', // 修改为使用value字段
+  const cascadeProps = {
+    value: 'ID',
     label: 'label',
     children: 'children',
     checkStrictly: true, // 允许选择任意级别
     emitPath: false // 只返回选中节点的值
   }
 
-  // 分页
-  const handleSizeChange = (val) => {
-    pageSize.value = val
-    getTableData()
-  }
-
-  const handleCurrentChange = (val) => {
-    page.value = val
-    getTableData()
-  }
-
-  // 查询表格数据
-  const getTableData = async () => {
-    if (!props.sysDictionaryID) return
-
-    // 首先获取树形数据以便查找父级标签
-    try {
-      const treeRes = await getDictionaryTreeList({
-        sysDictionaryID: props.sysDictionaryID
-      })
-      if (treeRes.code === 0) {
-        treeData.value = treeRes.data || []
-        updateParentOptions(treeRes.data.list || [])
-      }
-    } catch (error) {
-      console.error('获取树形数据失败:', error)
-    }
-
-    // 然后获取表格数据
-    const table = await getSysDictionaryDetailList({
-      page: page.value,
-      pageSize: pageSize.value,
-      sysDictionaryID: props.sysDictionaryID,
-      label: searchName.value.trim()
-    })
-    if (table.code === 0) {
-      tableData.value = table.data.list
-      total.value = table.data.total
-      page.value = table.data.page
-      pageSize.value = table.data.pageSize
-    }
-  }
 
   // 获取树形数据
   const getTreeData = async () => {
@@ -427,8 +263,6 @@
       })
       if (res.code === 0) {
         treeData.value = res.data.list || []
-        // 同时更新父级选项
-        updateParentOptions(res.data.list || [])
       }
     } catch (error) {
       console.error('获取树形数据失败:', error)
@@ -436,74 +270,14 @@
     }
   }
 
-  // 更新父级选项
-  const updateParentOptions = (data) => {
-    const convertToOptions = (items) => {
-      return items.map((item) => ({
-        ID: item.ID,
-        label: item.label,
-        value: item.ID, // 使用ID作为value
-        children:
-          item.children && item.children.length > 0
-            ? convertToOptions(item.children)
-            : undefined
-      }))
-    }
-
-    // 添加根级选项（无父级）
-    const rootOption = {
-      ID: null,
-      label: '无父级（根级）',
-      value: null
-    }
-
-    parentOptions.value = [rootOption, ...convertToOptions(data)]
+  const rootOption = {
+    ID: null,
+    label: '无父级（根级）'
   }
 
-  // 根据父级ID获取父级标签
-  const getParentLabel = (parentID) => {
-    if (!parentID) return '根级'
-
-    // 从表格数据中查找父级项
-    const parentItem = tableData.value.find((item) => item.ID === parentID)
-    if (parentItem) {
-      return parentItem.label
-    }
-
-    // 从树形数据中递归查找父级项
-    const findInTree = (items) => {
-      for (const item of items) {
-        if (item.ID === parentID) {
-          return item.label
-        }
-        if (item.children && item.children.length > 0) {
-          const found = findInTree(item.children)
-          if (found) return found
-        }
-      }
-      return null
-    }
-
-    const treeResult = findInTree(treeData.value)
-    return treeResult || `ID: ${parentID}`
-  }
-
-  // 根据视图模式获取数据
-  const loadData = () => {
-    if (viewMode.value === 'table') {
-      getTableData()
-    } else {
-      getTreeData()
-    }
-  }
-
-  // 监听视图模式变化
-  watch(viewMode, () => {
-    loadData()
-  })
 
   // 初始加载
-  loadData()
+  getTreeData()
 
   const type = ref('')
   const drawerFormVisible = ref(false)
@@ -566,7 +340,7 @@
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
         }
-        loadData() // 重新加载数据
+        await getTreeData() // 重新加载数据
       }
     })
   }
@@ -594,7 +368,7 @@
           message: '创建/更改成功'
         })
         closeDrawer()
-        loadData() // 重新加载数据
+        await getTreeData() // 重新加载数据
       }
     })
   }
@@ -608,7 +382,7 @@
 
   const clearSearchInput = () => {
     searchName.value = ''
-    loadData()
+    getTreeData()
   }
 
   const handleCloseSearchInput = () => {
@@ -617,72 +391,18 @@
 
   const handleInputKeyDown = (e) => {
     if (e.key === 'Enter' && searchName.value.trim() !== '') {
-      loadData()
+      getTreeData()
     }
   }
 
   watch(
     () => props.sysDictionaryID,
     () => {
-      loadData()
+      getTreeData()
     }
   )
 </script>
 
 <style scoped>
-  .tree-view-container {
-    min-height: 400px;
-    border: 1px solid #e4e7ed;
-    border-radius: 4px;
-    padding: 16px;
-  }
 
-  .dictionary-tree {
-    width: 100%;
-  }
-
-  .tree-node-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 4px 8px;
-  }
-
-  .node-info {
-    display: flex;
-    align-items: center;
-    flex: 1;
-  }
-
-  .node-value {
-    color: #909399;
-    font-size: 12px;
-    margin-left: 8px;
-  }
-
-  .node-extend {
-    color: #606266;
-    font-size: 12px;
-    margin-left: 4px;
-  }
-
-  .node-actions {
-    display: flex;
-    gap: 8px;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .tree-node-content:hover .node-actions {
-    opacity: 1;
-  }
-
-  .ml-1 {
-    margin-left: 4px;
-  }
-
-  .ml-2 {
-    margin-left: 8px;
-  }
 </style>

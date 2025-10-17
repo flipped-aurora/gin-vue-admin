@@ -700,7 +700,7 @@ func GenerateSearchField(field systemReq.AutoCodeField) string {
 		// 生成普通搜索字段
 		if field.FieldType == "enum" || field.FieldType == "picture" ||
 			field.FieldType == "pictures" || field.FieldType == "video" ||
-			field.FieldType == "json" || field.FieldType == "richtext" || field.FieldType == "array" {
+			field.FieldType == "json" || field.FieldType == "richtext" || field.FieldType == "array" || field.FieldType == "file" {
 			result = fmt.Sprintf("%s  string `json:\"%s\" form:\"%s\"` ",
 				field.FieldName, field.FieldJson, field.FieldJson)
 		} else {

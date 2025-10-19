@@ -7,12 +7,11 @@
   <div class="flex items-center mx-4 gap-4">
     <el-tooltip class="" effect="dark" content="视频教程" placement="bottom">
       <el-dropdown @command="toDoc">
-        <el-icon
-          class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        >
+        <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
+          <el-icon>
           <Film />
         </el-icon>
-
+        </span>
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item
@@ -27,31 +26,37 @@
     </el-tooltip>
 
     <el-tooltip class="" effect="dark" content="搜索" placement="bottom">
-      <el-icon
-        @click="handleCommand"
-        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-      >
+        <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
+        <el-icon
+            @click="handleCommand"
+        >
         <Search />
       </el-icon>
+        </span>
+
     </el-tooltip>
 
     <el-tooltip class="" effect="dark" content="系统设置" placement="bottom">
-      <el-icon
-        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        @click="toggleSetting"
-      >
+        <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
+         <el-icon
+             @click="toggleSetting"
+         >
         <Setting />
       </el-icon>
+        </span>
+
     </el-tooltip>
 
     <el-tooltip class="" effect="dark" content="刷新" placement="bottom">
+      <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
       <el-icon
-        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        :class="showRefreshAnmite ? 'animate-spin' : ''"
-        @click="toggleRefresh"
+          :class="showRefreshAnmite ? 'animate-spin' : ''"
+          @click="toggleRefresh"
       >
         <Refresh />
       </el-icon>
+      </span>
+
     </el-tooltip>
     <el-tooltip
       class=""
@@ -59,20 +64,21 @@
       content="切换主题"
       placement="bottom"
     >
-      <el-icon
-        v-if="appStore.isDark"
-        class="w-8 h-8 p-2 shadow rounded-full border border-gray-600 cursor-pointer border-solid"
-        @click="appStore.toggleTheme(false)"
-      >
+      <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
+        <el-icon
+            v-if="appStore.isDark"
+            @click="appStore.toggleTheme(false)"
+        >
         <Sunny />
       </el-icon>
       <el-icon
-        v-else
-        class="w-8 h-8 p-2 shadow rounded-full border border-gray-200 cursor-pointer border-solid"
-        @click="appStore.toggleTheme(true)"
+          v-else
+          @click="appStore.toggleTheme(true)"
       >
         <Moon />
       </el-icon>
+      </span>
+
     </el-tooltip>
 
     <gva-setting v-model:drawer="showSettingDrawer"></gva-setting>

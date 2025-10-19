@@ -7,7 +7,6 @@ const greenText = (text) => `\x1b[32m${text}\x1b[0m`
 
 export const config = {
   appName: 'Gin-Vue-Admin',
-  appLogo: 'logo.png',
   showViteLogo: true,
   KeepAliveTabs: true,
   logs: []

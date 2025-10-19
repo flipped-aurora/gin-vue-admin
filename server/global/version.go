@@ -4,7 +4,7 @@ package global
 // 目前只有Version正式使用 其余为预留
 const (
 	// Version 当前版本号
-	Version = "v2.8.5"
+	Version = "v2.8.6"
 	// AppName 应用名称
 	AppName = "Gin-Vue-Admin"
 	// Description 应用描述

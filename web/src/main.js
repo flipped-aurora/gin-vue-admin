@@ -15,13 +15,13 @@ import auth from '@/directive/auth'
 import clickOutSide from '@/directive/clickOutSide'
 import { store } from '@/pinia'
 import App from './App.vue'
-import { initErrorHandler } from '@/core/error-handel'
+// import { initErrorHandler } from '@/core/error-handel'
 
 
 const app = createApp(App)
 
 // 注入错误处理捕获
-initErrorHandler(app)
+// initErrorHandler(app)
 app.config.productionTip = false
 
 app

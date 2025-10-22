@@ -3,10 +3,11 @@ package translate
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/nicksnyder/go-i18n/v2/i18n"
-	"golang.org/x/text/language"
 	"io/ioutil"
 	"sync"
+
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
 )
 
 type Translator struct {
@@ -35,7 +36,8 @@ func (t *Translator) InitTranslator(initLang string, langPath string) {
 
 	langFiles, err := ioutil.ReadDir(langPath)
 	if err != nil {
-		fmt.Printf("InitTranslator() Error: %v", err)
+		fmt.Printf("InitTranslator() Error reading language directory '%s': %v\n", langPath, err)
+		return
 	}
 
 	t.bundle = i18n.NewBundle(language.English)
@@ -51,6 +53,7 @@ func (t *Translator) InitTranslator(initLang string, langPath string) {
 
 	t.localizer = i18n.NewLocalizer(t.bundle, initLang) // should add additionl check here
 	t.IsInit = true
+	fmt.Printf("Translator initialized successfully with language: %s\n", initLang)
 	// end of adding
 }
 
@@ -58,7 +61,8 @@ func (t *Translator) InitTranslatorEx(initLang string, defaultLang string, langP
 
 	langFiles, err := ioutil.ReadDir(langPath)
 	if err != nil {
-		fmt.Printf("InitTranslator() Error: %v", err)
+		fmt.Printf("InitTranslatorEx() Error reading language directory '%s': %v\n", langPath, err)
+		return
 	}
 
 	t.bundle = i18n.NewBundle(language.English)
@@ -81,6 +85,7 @@ func (t *Translator) InitTranslatorEx(initLang string, defaultLang string, langP
 	}
 
 	t.IsInit = true
+	fmt.Printf("Translator initialized successfully with language: %s, default: %s\n", initLang, defaultLang)
 	// end of adding
 }
 
@@ -102,11 +107,27 @@ func (t *Translator) TranslateMessage(messageID string) string {
 	defaultLocalizer := t.defaultLocalizer
 	t.mu.RUnlock()
 
+	// 检查localizer是否已初始化
+	if localizer == nil {
+		fmt.Printf("Warning: localizer is not initialized, returning original message: %s\n", messageID)
+		return messageID
+	}
+
 	translatedMsg, err := localizer.LocalizeMessage(&i18n.Message{ID: messageID})
 	if err != nil || translatedMsg == "" { // if translation fail use default language transalator
-		fmt.Println(err.Error())
+		if err != nil {
+			fmt.Printf("Translation error for message '%s': %v\n", messageID, err)
+		}
+
+		// 检查defaultLocalizer是否已初始化
+		if defaultLocalizer == nil {
+			fmt.Printf("Warning: defaultLocalizer is not initialized, returning original message: %s\n", messageID)
+			return messageID
+		}
+
 		translatedMsg, err = defaultLocalizer.LocalizeMessage(&i18n.Message{ID: messageID})
 		if err != nil {
+			fmt.Printf("Default translation error for message '%s': %v\n", messageID, err)
 			return messageID
 		}
 	}

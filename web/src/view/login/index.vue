@@ -179,8 +179,7 @@
   // 获取验证码
   const loginVerify = async () => {
     const ele = await captcha()
-    const lengthFromServer = Number(ele.data?.captchaLength) || 0
-    captchaRequiredLength.value = Math.max(6, lengthFromServer)
+    captchaRequiredLength.value = Number(ele.data?.captchaLength) || 0
     picPath.value = ele.data?.picPath
     loginFormData.captchaId = ele.data?.captchaId
     loginFormData.openCaptcha = ele.data?.openCaptcha

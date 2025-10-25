@@ -1,31 +1,56 @@
 <template>
   <div>
     <div class="gva-table-box">
-      <div class="gva-btn-list justify-between">
+      <div class="gva-btn-list justify-between flex items-center">
         <span class="text font-bold">字典详细内容</span>
-        <el-button type="primary" icon="plus" @click="openDrawer">
-          新增字典项
-        </el-button>
+        <div class="flex items-center gap-2">
+          <el-input
+            placeholder="搜索展示值"
+            v-model="searchName"
+            clearable
+            class="!w-64"
+            @clear="clearSearchInput"
+            :prefix-icon="Search"
+            v-click-outside="handleCloseSearchInput"
+            @keydown="handleInputKeyDown"
+          >
+            <template #append>
+              <el-button
+                :type="searchName ? 'primary' : 'info'"
+                @click="getTreeData"
+                >搜索</el-button
+              >
+            </template>
+          </el-input>
+          <el-button type="primary" icon="plus" @click="openDrawer">
+            新增字典项
+          </el-button>
+        </div>
       </div>
+      <!-- 表格视图 -->
       <el-table
-        ref="multipleTable"
-        :data="tableData"
+        :data="treeData"
         style="width: 100%"
         tooltip-effect="dark"
+        :tree-props="{ children: 'children'}"
         row-key="ID"
+        default-expand-all
       >
         <el-table-column type="selection" width="55" />
+
+        <el-table-column align="left" label="展示值" prop="label" min-width="240"/>
+
+        <el-table-column align="left" label="字典值" prop="value" />
+
+        <el-table-column align="left" label="扩展值" prop="extend" />
+
         <el-table-column align="left" label="日期" width="180">
           <template #default="scope">
             {{ formatDate(scope.row.CreatedAt) }}
           </template>
         </el-table-column>
 
-        <el-table-column align="left" label="展示值" prop="label" />
-
-        <el-table-column align="left" label="字典值" prop="value" />
-
-        <el-table-column align="left" label="扩展值" prop="extend" />
+        <el-table-column align="left" label="层级" prop="level" width="80" />
 
         <el-table-column
           align="left"
@@ -45,8 +70,20 @@
           width="120"
         />
 
-        <el-table-column align="left" label="操作" :min-width="appStore.operateMinWith">
+        <el-table-column
+          align="left"
+          label="操作"
+          :min-width="appStore.operateMinWith"
+        >
           <template #default="scope">
+            <el-button
+              type="success"
+              link
+              icon="plus"
+              @click="addChildNode(scope.row)"
+            >
+              添加子项
+            </el-button>
             <el-button
               type="primary"
               link
@@ -66,18 +103,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <div class="gva-pagination">
-        <el-pagination
-          :current-page="page"
-          :page-size="pageSize"
-          :page-sizes="[10, 30, 50, 100]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
-      </div>
     </div>
 
     <el-drawer
@@ -103,6 +128,18 @@
         :rules="rules"
         label-width="110px"
       >
+        <el-form-item label="父级字典项" prop="parentID">
+          <el-cascader
+            v-model="formData.parentID"
+            :options="[rootOption,...treeData]"
+            :props="cascadeProps"
+            placeholder="请选择父级字典项（可选）"
+            clearable
+            filterable
+            :style="{ width: '100%' }"
+            @change="handleParentChange"
+          />
+        </el-form-item>
         <el-form-item label="展示值" prop="label">
           <el-input
             v-model="formData.label"
@@ -151,18 +188,20 @@
     deleteSysDictionaryDetail,
     updateSysDictionaryDetail,
     findSysDictionaryDetail,
-    getSysDictionaryDetailList
+    getDictionaryTreeList
   } from '@/api/sysDictionaryDetail' // 此处请自行替换地址
   import { ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { formatBoolean, formatDate } from '@/utils/format'
-  import { useAppStore } from "@/pinia";
+  import { useAppStore } from '@/pinia'
+  import { Search } from '@element-plus/icons-vue'
 
   defineOptions({
     name: 'SysDictionaryDetail'
   })
 
   const appStore = useAppStore()
+  const searchName = ref('')
 
   const props = defineProps({
     sysDictionaryID: {
@@ -175,8 +214,10 @@
     label: null,
     value: null,
     status: true,
-    sort: null
+    sort: null,
+    parentID: null
   })
+
   const rules = ref({
     label: [
       {
@@ -201,42 +242,46 @@
     ]
   })
 
-  const page = ref(1)
-  const total = ref(0)
-  const pageSize = ref(10)
-  const tableData = ref([])
+  const treeData = ref([])
 
-  // 分页
-  const handleSizeChange = (val) => {
-    pageSize.value = val
-    getTableData()
+  // 级联选择器配置
+  const cascadeProps = {
+    value: 'ID',
+    label: 'label',
+    children: 'children',
+    checkStrictly: true, // 允许选择任意级别
+    emitPath: false // 只返回选中节点的值
   }
 
-  const handleCurrentChange = (val) => {
-    page.value = val
-    getTableData()
-  }
 
-  // 查询
-  const getTableData = async () => {
+  // 获取树形数据
+  const getTreeData = async () => {
     if (!props.sysDictionaryID) return
-    const table = await getSysDictionaryDetailList({
-      page: page.value,
-      pageSize: pageSize.value,
-      sysDictionaryID: props.sysDictionaryID
-    })
-    if (table.code === 0) {
-      tableData.value = table.data.list
-      total.value = table.data.total
-      page.value = table.data.page
-      pageSize.value = table.data.pageSize
+    try {
+      const res = await getDictionaryTreeList({
+        sysDictionaryID: props.sysDictionaryID
+      })
+      if (res.code === 0) {
+        treeData.value = res.data.list || []
+      }
+    } catch (error) {
+      console.error('获取树形数据失败:', error)
+      ElMessage.error('获取层级数据失败')
     }
   }
 
-  getTableData()
+  const rootOption = {
+    ID: null,
+    label: '无父级（根级）'
+  }
+
+
+  // 初始加载
+  getTreeData()
 
   const type = ref('')
   const drawerFormVisible = ref(false)
+
   const updateSysDictionaryDetailFunc = async (row) => {
     drawerForm.value && drawerForm.value.clearValidate()
     const res = await findSysDictionaryDetail({ ID: row.ID })
@@ -247,6 +292,27 @@
     }
   }
 
+  // 添加子节点
+  const addChildNode = (parentNode) => {
+    console.log(parentNode)
+    type.value = 'create'
+    formData.value = {
+      label: null,
+      value: null,
+      status: true,
+      sort: null,
+      parentID: parentNode.ID,
+      sysDictionaryID: props.sysDictionaryID
+    }
+    drawerForm.value && drawerForm.value.clearValidate()
+    drawerFormVisible.value = true
+  }
+
+  // 处理父级选择变化
+  const handleParentChange = (value) => {
+    formData.value.parentID = value
+  }
+
   const closeDrawer = () => {
     drawerFormVisible.value = false
     formData.value = {
@@ -254,9 +320,11 @@
       value: null,
       status: true,
       sort: null,
+      parentID: null,
       sysDictionaryID: props.sysDictionaryID
     }
   }
+
   const deleteSysDictionaryDetailFunc = async (row) => {
     ElMessageBox.confirm('确定要删除吗?', '提示', {
       confirmButtonText: '确定',
@@ -272,7 +340,7 @@
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
         }
-        getTableData()
+        await getTreeData() // 重新加载数据
       }
     })
   }
@@ -300,22 +368,41 @@
           message: '创建/更改成功'
         })
         closeDrawer()
-        getTableData()
+        await getTreeData() // 重新加载数据
       }
     })
   }
+
   const openDrawer = () => {
     type.value = 'create'
+    formData.value.parentID = null
     drawerForm.value && drawerForm.value.clearValidate()
     drawerFormVisible.value = true
+  }
+
+  const clearSearchInput = () => {
+    searchName.value = ''
+    getTreeData()
+  }
+
+  const handleCloseSearchInput = () => {
+    // 处理搜索输入框关闭
+  }
+
+  const handleInputKeyDown = (e) => {
+    if (e.key === 'Enter' && searchName.value.trim() !== '') {
+      getTreeData()
+    }
   }
 
   watch(
     () => props.sysDictionaryID,
     () => {
-      getTableData()
+      getTreeData()
     }
   )
 </script>
 
-<style></style>
+<style scoped>
+
+</style>

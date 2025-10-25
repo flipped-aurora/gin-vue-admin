@@ -10,7 +10,7 @@ const createIconComponent = (name) => ({
   name: 'SvgIcon',
   render() {
     return h(svgIcon, {
-      name: name
+      localIcon: name
     })
   }
 })
@@ -21,6 +21,7 @@ const registerIcons = async (app) => {
     '@/plugin/**/assets/icons/**/*.svg'
   ) // 插件目录 svg 图标
   const mergedIconModules = Object.assign({}, iconModules, pluginIconModules) // 合并所有 svg 图标
+  let allKeys = []
   for (const path in mergedIconModules) {
     let pluginName = ''
     if (path.startsWith('/src/plugin/')) {
@@ -36,16 +37,19 @@ const registerIcons = async (app) => {
       continue
     }
     const key = `${pluginName}${iconName}`
-    // 开发模式下列出所有 svg 图标，方便开发者直接查找复制使用
-    import.meta.env.MODE == 'development' &&
-      console.log(`svg-icon-component: <${key} />`)
     const iconComponent = createIconComponent(key)
     config.logs.push({
       key: key,
       label: key
     })
     app.component(key, iconComponent)
+
+    // 开发模式下列出所有 svg 图标，方便开发者直接查找复制使用
+    allKeys.push(key)
   }
+
+  import.meta.env.MODE == 'development' &&
+    console.log(`所有可用的本地图标: ${allKeys.join(', ')}`)
 }
 
 export const register = (app) => {

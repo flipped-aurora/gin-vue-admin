@@ -47,6 +47,9 @@
           <el-form-item label="限流时间">
             <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
+          <el-form-item label="禁用自动迁移数据库表结构">
+            <el-switch v-model="config.system['disable-auto-migrate']" />
+          </el-form-item>
           <el-tooltip
             content="请修改完成后，注意一并修改前端env环境下的VITE_BASE_PATH"
             placement="top-start"

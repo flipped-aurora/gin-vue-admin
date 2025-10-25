@@ -3,50 +3,91 @@
     <warning-bar
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <div class="flex gap-4 p-2">
-      <div
-        class="flex-none w-52 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
-      >
-        <div class="flex justify-between items-center">
-          <span class="text font-bold">字典列表</span>
-          <el-button type="primary" @click="openDrawer"> 新增 </el-button>
-        </div>
-        <el-scrollbar class="mt-4" style="height: calc(100vh - 300px)">
-          <div
-            v-for="dictionary in dictionaryData"
-            :key="dictionary.ID"
-            class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 dark:hover:bg-blue-900 bg-gray-50 dark:bg-gray-800 gap-4"
-            :class="
-              selectID === dictionary.ID
-                ? 'text-active'
-                : 'text-slate-700 dark:text-slate-50'
-            "
-            @click="toDetail(dictionary)"
-          >
-            <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>
-            <div class="min-w-[40px]">
-              <el-icon
-                class="text-blue-500"
-                @click.stop="updateSysDictionaryFunc(dictionary)"
-              >
-                <Edit />
-              </el-icon>
-              <el-icon
-                class="ml-2 text-red-500"
-                @click="deleteSysDictionaryFunc(dictionary)"
-              >
-                <Delete />
-              </el-icon>
-            </div>
+    <el-splitter class="h-full">
+      <el-splitter-panel size="400px" min="200px" max="800px" collapsible>
+        <div
+          class="flex-none bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
+        >
+          <div class="flex justify-between items-center relative">
+            <span class="text font-bold">字典列表</span>
+            <el-input
+              class="!absolute top-0 left-0 z-2 ease-in-out animate-slide-left"
+              placeholder="搜索"
+              v-if="showSearchInput"
+              v-model="searchName"
+              clearable
+              :autofocus="showSearchInput"
+              @clear="clearSearchInput"
+              :prefix-icon="Search"
+              v-click-outside="handleCloseSearchInput"
+              @keydown="handleInputKeyDown"
+            >
+              <template #append>
+                <el-button
+                  :type="searchName ? 'primary' : 'info'"
+                  @click="getTableData"
+                  >搜索</el-button
+                >
+              </template>
+            </el-input>
+            <el-button
+              class="ml-auto"
+              :icon="Search"
+              @click="showSearchInputHandler"
+            ></el-button>
+            <el-button type="primary" @click="openDrawer" :icon="Plus">
+            </el-button>
           </div>
-        </el-scrollbar>
-      </div>
-      <div
-        class="flex-1 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900"
-      >
-        <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
-      </div>
-    </div>
+          <el-scrollbar class="mt-4" style="height: calc(100vh - 300px)">
+            <div
+              v-for="dictionary in dictionaryData"
+              :key="dictionary.ID"
+              class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 dark:hover:bg-blue-900 bg-gray-50 dark:bg-gray-800 gap-4"
+              :class="[
+                selectID === dictionary.ID
+                  ? 'text-active'
+                  : 'text-slate-700 dark:text-slate-50',
+                dictionary.parentID ? 'ml-4 border-l-2 border-blue-200' : ''
+              ]"
+              @click="toDetail(dictionary)"
+            >
+              <div class="max-w-[160px] truncate">
+                <span
+                  v-if="dictionary.parentID"
+                  class="text-xs text-gray-400 mr-1"
+                  >└─</span
+                >
+                {{ dictionary.name }}
+                <span class="mr-auto text-sm">（{{ dictionary.type }}）</span>
+              </div>
+
+              <div class="min-w-[40px]">
+                <el-icon
+                  class="text-blue-500"
+                  @click.stop="updateSysDictionaryFunc(dictionary)"
+                >
+                  <Edit />
+                </el-icon>
+                <el-icon
+                  class="ml-2 text-red-500"
+                  @click="deleteSysDictionaryFunc(dictionary)"
+                >
+                  <Delete />
+                </el-icon>
+              </div>
+            </div>
+          </el-scrollbar>
+        </div>
+      </el-splitter-panel>
+      <el-splitter-panel :min="200">
+        <div
+          class="flex-1 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900"
+        >
+          <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
+        </div>
+      </el-splitter-panel>
+    </el-splitter>
+
     <el-drawer
       v-model="drawerFormVisible"
       :size="appStore.drawerSize"
@@ -70,6 +111,22 @@
         :rules="rules"
         label-width="110px"
       >
+        <el-form-item label="父级字典" prop="parentID">
+          <el-select
+            v-model="formData.parentID"
+            placeholder="请选择父级字典（可选）"
+            clearable
+            filterable
+            :style="{ width: '100%' }"
+          >
+            <el-option
+              v-for="dict in availableParentDictionaries"
+              :key="dict.ID"
+              :label="`${dict.name}（${dict.type}）`"
+              :value="dict.ID"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="字典名（中）" prop="name">
           <el-input
             v-model="formData.name"
@@ -119,8 +176,8 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
-  import { Edit } from '@element-plus/icons-vue'
-  import { useAppStore } from "@/pinia";
+  import { Edit, Plus, Search } from '@element-plus/icons-vue'
+  import { useAppStore } from '@/pinia'
 
   defineOptions({
     name: 'SysDictionary'
@@ -134,8 +191,11 @@
     name: null,
     type: null,
     status: true,
-    desc: null
+    desc: null,
+    parentID: null
   })
+  const searchName = ref('')
+  const showSearchInput = ref(false)
   const rules = ref({
     name: [
       {
@@ -161,14 +221,45 @@
   })
 
   const dictionaryData = ref([])
+  const availableParentDictionaries = ref([])
 
   // 查询
   const getTableData = async () => {
-    const res = await getSysDictionaryList()
+    const res = await getSysDictionaryList({
+      name: searchName.value.trim()
+    })
     if (res.code === 0) {
       dictionaryData.value = res.data
       selectID.value = res.data[0].ID
+      // 更新可选父级字典列表
+      updateAvailableParentDictionaries()
     }
+  }
+
+  // 更新可选父级字典列表
+  const updateAvailableParentDictionaries = () => {
+    // 如果是编辑模式，排除当前字典及其子字典
+    if (type.value === 'update' && formData.value.ID) {
+      availableParentDictionaries.value = dictionaryData.value.filter(
+        (dict) => {
+          return (
+            dict.ID !== formData.value.ID &&
+            !isChildDictionary(dict.ID, formData.value.ID)
+          )
+        }
+      )
+    } else {
+      // 创建模式，显示所有字典
+      availableParentDictionaries.value = [...dictionaryData.value]
+    }
+  }
+
+  // 检查是否为子字典（防止循环引用）
+  const isChildDictionary = (dictId, parentId) => {
+    const dict = dictionaryData.value.find((d) => d.ID === dictId)
+    if (!dict || !dict.parentID) return false
+    if (dict.parentID === parentId) return true
+    return isChildDictionary(dict.parentID, parentId)
   }
 
   getTableData()
@@ -185,6 +276,8 @@
     if (res.code === 0) {
       formData.value = res.data.resysDictionary
       drawerFormVisible.value = true
+      // 更新可选父级字典列表
+      updateAvailableParentDictionaries()
     }
   }
   const closeDrawer = () => {
@@ -193,7 +286,8 @@
       name: null,
       type: null,
       status: true,
-      desc: null
+      desc: null,
+      parentID: null
     }
   }
   const deleteSysDictionaryFunc = async (row) => {
@@ -240,6 +334,29 @@
     type.value = 'create'
     drawerForm.value && drawerForm.value.clearValidate()
     drawerFormVisible.value = true
+    // 更新可选父级字典列表
+    updateAvailableParentDictionaries()
+  }
+
+  const clearSearchInput = () => {
+    if (!showSearchInput.value) return
+    searchName.value = ''
+    showSearchInput.value = false
+    getTableData()
+  }
+  const handleCloseSearchInput = () => {
+    if (!showSearchInput.value || searchName.value.trim() != '') return
+    showSearchInput.value = false
+  }
+
+  const showSearchInputHandler = () => {
+    showSearchInput.value = true
+  }
+
+  const handleInputKeyDown = (e) => {
+    if (e.key === 'Enter' && searchName.value.trim() !== '') {
+      getTableData()
+    }
   }
 </script>
 

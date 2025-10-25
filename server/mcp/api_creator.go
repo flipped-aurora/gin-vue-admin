@@ -180,21 +180,11 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 		return nil, fmt.Errorf("序列化结果失败: %v", err)
 	}
 
-	// 添加权限分配提醒
-	permissionReminder := "\n\n⚠️ 重要提醒：\n" +
-		"API创建完成后，请前往【系统管理】->【角色管理】中为相关角色分配新创建的API权限，" +
-		"以确保用户能够正常访问新接口。\n" +
-		"具体步骤：\n" +
-		"1. 进入角色管理页面\n" +
-		"2. 选择需要授权的角色\n" +
-		"3. 在API权限中勾选新创建的API接口\n" +
-		"4. 保存权限配置"
-
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{
 			mcp.TextContent{
 				Type: "text",
-				Text: fmt.Sprintf("API创建结果：\n\n%s%s", string(resultJSON), permissionReminder),
+				Text: fmt.Sprintf("API创建结果：\n\n%s", string(resultJSON)),
 			},
 		},
 	}, nil

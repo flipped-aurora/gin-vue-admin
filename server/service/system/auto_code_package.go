@@ -3,6 +3,12 @@ package system
 import (
 	"context"
 	"fmt"
+	"go/token"
+	"os"
+	"path/filepath"
+	"strings"
+	"text/template"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -11,12 +17,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/autocode"
 	"github.com/pkg/errors"
-	"go/token"
 	"gorm.io/gorm"
-	"os"
-	"path/filepath"
-	"strings"
-	"text/template"
 )
 
 var AutoCodePackage = new(autoCodePackage)
@@ -162,7 +163,6 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 				"api":        true,
 				"config":     true,
 				"initialize": true,
-				"model":      true,
 				"plugin":     true,
 				"router":     true,
 				"service":    true,
@@ -179,14 +179,25 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 					}
 				}
 			}
-			if len(dirNameMap) != 0 {
-				continue
+
+			var desc string
+			if len(dirNameMap) == 0 {
+				// 完全符合标准结构
+				desc = "系统自动读取" + pluginDir[i].Name() + "插件，使用前请确认是否为v2版本插件"
+			} else {
+				// 缺少某些结构，生成警告描述
+				var missingDirs []string
+				for dirName := range dirNameMap {
+					missingDirs = append(missingDirs, dirName)
+				}
+				desc = fmt.Sprintf("系统自动读取，但是缺少 %s 结构，不建议自动化和mcp使用", strings.Join(missingDirs, "、"))
 			}
+
 			pluginPackage := model.SysAutoCodePackage{
 				PackageName: pluginDir[i].Name(),
 				Template:    "plugin",
 				Label:       pluginDir[i].Name() + "插件",
-				Desc:        "系统自动读取" + pluginDir[i].Name() + "插件，使用前请确认是否为v2版本插件",
+				Desc:        desc,
 				Module:      global.GVA_CONFIG.AutoCode.Module,
 			}
 			plugin = append(plugin, pluginPackage)
@@ -223,6 +234,40 @@ func (s *autoCodePackage) All(ctx context.Context) (entities []model.SysAutoCode
 			return nil, errors.Wrap(err, "同步失败!")
 		}
 		entities = append(entities, createEntity...)
+	}
+
+	// 处理数据库存在但实体文件不存在的情况 - 删除数据库中对应的数据
+	existingPackageNames := make(map[string]bool)
+	// 收集所有存在的包名
+	for i := 0; i < len(server); i++ {
+		existingPackageNames[server[i].PackageName] = true
+	}
+	for i := 0; i < len(plugin); i++ {
+		existingPackageNames[plugin[i].PackageName] = true
+	}
+
+	// 找出需要删除的数据库记录
+	deleteEntityIDs := []uint{}
+	for i := 0; i < len(entities); i++ {
+		if !existingPackageNames[entities[i].PackageName] {
+			deleteEntityIDs = append(deleteEntityIDs, entities[i].ID)
+		}
+	}
+
+	// 删除数据库中不存在文件的记录
+	if len(deleteEntityIDs) > 0 {
+		err = global.GVA_DB.WithContext(ctx).Delete(&model.SysAutoCodePackage{}, deleteEntityIDs).Error
+		if err != nil {
+			return nil, errors.Wrap(err, "删除不存在的包记录失败!")
+		}
+		// 从返回结果中移除已删除的记录
+		filteredEntities := []model.SysAutoCodePackage{}
+		for i := 0; i < len(entities); i++ {
+			if existingPackageNames[entities[i].PackageName] {
+				filteredEntities = append(filteredEntities, entities[i])
+			}
+		}
+		entities = filteredEntities
 	}
 
 	return entities, nil

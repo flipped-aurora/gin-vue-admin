@@ -282,17 +282,35 @@ func (g *GVAAnalyzer) isPackageFolderEmpty(packageName, template string) (bool, 
 	} else if err != nil {
 		return false, err // 其他错误
 	}
+	// 递归检查是否有.go文件
+	return g.hasGoFilesRecursive(basePath)
+}
 
-	// 读取文件夹内容
-	entries, err := os.ReadDir(basePath)
+// hasGoFilesRecursive 递归检查目录及其子目录中是否有.go文件
+func (g *GVAAnalyzer) hasGoFilesRecursive(dirPath string) (bool, error) {
+	entries, err := os.ReadDir(dirPath)
 	if err != nil {
-		return false, err
+		return true, err // 读取失败，返回空
 	}
 
-	// 检查是否有.go文件
+	// 检查当前目录下的.go文件
 	for _, entry := range entries {
 		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".go") {
 			return false, nil // 找到.go文件，不为空
+		}
+	}
+
+	// 递归检查子目录
+	for _, entry := range entries {
+		if entry.IsDir() {
+			subDirPath := filepath.Join(dirPath, entry.Name())
+			isEmpty, err := g.hasGoFilesRecursive(subDirPath)
+			if err != nil {
+				continue // 忽略子目录的错误，继续检查其他目录
+			}
+			if !isEmpty {
+				return false, nil // 子目录中找到.go文件，不为空
+			}
 		}
 	}
 

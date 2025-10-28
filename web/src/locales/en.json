@@ -184,8 +184,8 @@
     "noOnlySpace": "Cannot input only spaces",
     "operations": "Operations",
     "order": "Order Mark",
-    "placeInputEndData": "Please enter the end date",
-    "placeInputStartData": "Please enter the start date",
+    "placeInputEndDate": "Please enter the end date",
+    "placeInputstartDate": "Please enter the start date",
     "pleaseEnter": "Please enter",
     "pleaseSelect": "Please select",
     "popUpOperation": "Popup Operation",
@@ -196,12 +196,11 @@
     "searchCriteria": "Search Criteria",
     "searchDesc": "The search range is from the start date (inclusive) to the end date (exclusive)",
     "selectAll": "Select All",
-    "selectData": "Select Date",
     "selectDataToDelete": "Please select the data to delete",
     "selectDate": "Select Date",
     "setupSuccess": "Setup successful",
-    "startData": "Start Date",
-    "startDataMustBeforeEndData": "The start date should be earlier than the end date",
+    "startDate": "Start Date",
+    "startDateMustBeforeEndDate": "The start date should be earlier than the end date",
     "undeleted": "Deletion canceled",
     "updateSuccess": "Updated successfully!",
     "warning": "Warning",
@@ -401,6 +400,17 @@
     }
   },
   "view": {
+    "person": {
+      "basicInfo": "Basic Information",
+      "accountPassword": "Account Password",
+      "isSet": "Is Set",
+      "notSet": "Not Set",
+      "modify": "Modify",
+      "modifyPassword": "Modify Password",
+      "originalPassword": "Original Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password"
+    },
     "about": {
       "flippedAuroraTeam": "Flipped-Aurora Team",
       "submitRecords": "Releases History"

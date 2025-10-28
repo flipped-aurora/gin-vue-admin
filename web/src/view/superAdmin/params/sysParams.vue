@@ -24,14 +24,14 @@
           <el-date-picker
             v-model="searchInfo.startCreatedAt"
             type="datetime"
-            :placeholder="t('general.startData')"
+            :placeholder="t('general.startDate')"
             :disabled-date="
               (time) =>
                 searchInfo.endCreatedAt
                   ? time.getTime() > searchInfo.endCreatedAt.getTime()
                   : false
             "
-          ></el-date-picker>
+          />
           —
           <el-date-picker
             v-model="searchInfo.endCreatedAt"
@@ -43,7 +43,7 @@
                   ? time.getTime() < searchInfo.startCreatedAt.getTime()
                   : false
             "
-          ></el-date-picker>
+          />
         </el-form-item>
 
         <el-form-item :label="t('view.superAdmin.params.paramName')" prop="name">
@@ -366,12 +366,12 @@
             searchInfo.value.startCreatedAt &&
             !searchInfo.value.endCreatedAt
           ) {
-            callback(new Error(t('general.placeInputEndData')))
+            callback(new Error(t('general.placeInputEndDate')))
           } else if (
             !searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt
           ) {
-            callback(new Error(t('general.placeInputStartData')))
+            callback(new Error(t('general.placeInputstartDate')))
           } else if (
             searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt &&
@@ -380,7 +380,7 @@
               searchInfo.value.startCreatedAt.getTime() >
                 searchInfo.value.endCreatedAt.getTime())
           ) {
-            callback(new Error(t('general.startDataMustBeforeEndData')))
+            callback(new Error(t('general.startDateMustBeforeEndData')))
           } else {
             callback()
           }

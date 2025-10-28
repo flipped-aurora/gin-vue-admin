@@ -25,7 +25,7 @@
           <el-date-picker
             v-model="searchInfo.startCreatedAt"
             type="datetime"
-            :placeholder="t('general.endData')"
+            :placeholder="t('general.startDate')"
             :disabled-date="
               (time) =>
                 searchInfo.endCreatedAt
@@ -37,7 +37,7 @@
           <el-date-picker
             v-model="searchInfo.endCreatedAt"
             type="datetime"
-            :placeholder="t('general.startData')"
+            :placeholder="t('general.endDate')"
             :disabled-date="
               (time) =>
                 searchInfo.startCreatedAt
@@ -698,12 +698,12 @@
             searchInfo.value.startCreatedAt &&
             !searchInfo.value.endCreatedAt
           ) {
-            callback(new Error(t('general.placeInputEndData')))
+            callback(new Error(t('general.placeInputEndDate')))
           } else if (
             !searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt
           ) {
-            callback(new Error(t('general.placeInputStartData')))
+            callback(new Error(t('general.placeInputstartDate')))
           } else if (
             searchInfo.value.startCreatedAt &&
             searchInfo.value.endCreatedAt &&
@@ -712,7 +712,7 @@
               searchInfo.value.startCreatedAt.getTime() >
                 searchInfo.value.endCreatedAt.getTime())
           ) {
-            callback(new Error(t('general.startDataMustBeforeEndData')))
+            callback(new Error(t('general.startDateMustBeforeEndData')))
           } else {
             callback()
           }

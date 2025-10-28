@@ -11,8 +11,8 @@
             "frontend": "Default front-end file running address",
             "copyright1": "--------------------------------------Copyright Statement--------------------------------------",
             "copyright2": "** Copyright: flipped-aurora open source team **",
-	        "copyright3": "** Copyright holder: Beijing Flip Aurora Technology Co., Ltd. **",
-	        "copyright4": "** To remove the authorization logo, you need to purchase a commercial license: https://gin-vue-admin.com/empower/index.html **"
+            "copyright3": "** Copyright holder: Beijing Flip Aurora Technology Co., Ltd. **",
+            "copyright4": "** To remove the authorization logo, you need to purchase a commercial license: https://gin-vue-admin.com/empower/index.html **"
         },
         "viper": {
             "modeGinEnvName": "You are using the gin mode with environment name %s, the config path is %s\n",
@@ -114,21 +114,18 @@
         "description": "Description",
         "displayName": "Display Name",
         "keywordNotice": "%s is a Go keyword!",
-
         "nonStandardPlugin": "Non-standard plugin, please migrate automatically according to the documentation",
         "autoPathExists": "autoPath already has a plugin with the same name, please install it manually",
         "duplicatePlugin": "A plugin with the same name already exists, please install it manually",
         "pluginNameRequired": "Plugin name cannot be empty",
         "webPathNotExist": "Web path does not exist",
         "serverPathNotExist": "Server path does not exist",
-
         "duplicateRoleId": "Duplicate role ID exists",
         "queryRoleDataFailed": "Failed to query role data",
         "roleNotExist": "This role does not exist",
         "roleInUse": "This role is currently in use by users and cannot be deleted",
         "roleHasSubRoles": "This role has sub-roles and cannot be deleted",
         "invalidRoleId": "The submitted role ID is invalid",
-
         "buttonInUse": "This button is currently in use and cannot be deleted",
         "menuHasSubMenu": "This menu has submenus and cannot be deleted",
         "recordNotFound": "Record does not exist",
@@ -281,6 +278,7 @@
                 "getSyncApi": "Get sync API",
                 "getTemplateFile": "Get the template file",
                 "getUploadFileList": "Get upload file list",
+                "importURL": "Import URL",
                 "getUsersList": "Get user list",
                 "ignoreApi": "Ignore API",
                 "importExcel": "Import Excel",
@@ -473,11 +471,9 @@
         "fileUploadFailed": "File upload failed!",
         "getHuaweiObjectFailedDuplicate": "Failed to get Huawei object storage object!",
         "deleteObjectFailed": "Failed to delete object (%s)! Output: %v",
-
         "fileOpenParseFailed": "[filepath:%s] Failed to open/parse the file!",
         "fileOpenFailed": "[filepath:%s] Failed to open the file!",
         "injectionFailed": "[filepath:%s] Injection failed!",
-
         "test_gva_user_injection": "Testing GvaUser struct injection",
         "test_gva_user_rollback": "Testing GvaUser rollback",
         "test_user_injection": "Testing &model.User{} injection",
@@ -499,21 +495,18 @@
         "exaCustomerRollback": "Test rollback of &example.ExaCustomer{}",
         "newExaFileUploadAndDownloadRollback": "Test rollback of new(example.ExaFileUploadAndDownload)",
         "newExaCustomerRollback": "Test rollback of new(example.ExaCustomer)",
-
         "fileUploadAndDownloadRouterRollback": "Test rollback of FileUploadAndDownloadRouter",
         "fileUploadAndDownloadApiRollback": "Test rollback of FileUploadAndDownloadApi",
         "fileUploadAndDownloadServiceRollback": "Test rollback of FileUploadAndDownloadService",
         "fileUploadAndDownloadRouterInjection": "Test injection of FileUploadAndDownloadRouter",
         "fileUploadAndDownloadApiInjection": "Test injection of FileUploadAndDownloadApi",
         "fileUploadAndDownloadServiceInjection": "Test injection of FileUploadAndDownloadService",
-
         "exampleApiGroupRollback": "Test rollback of ExampleApiGroup",
         "exampleRouterGroupRollback": "Test rollback of ExampleRouterGroup",
         "exampleServiceGroupRollback": "Test rollback of ExampleServiceGroup",
         "exampleApiGroupInjection": "Test injection of ExampleApiGroup",
         "exampleRouterGroupInjection": "Test injection of ExampleRouterGroup",
         "exampleServiceGroupInjection": "Test injection of ExampleServiceGroup",
-
         "gvaPluginUserApiInjection": "Test injection of Gva Plugin UserApi",
         "gvaPluginUserRouterInjection": "Test injection of Gva Plugin UserRouter",
         "gvaPluginUserServiceInjection": "Test injection of Gva Plugin UserService",
@@ -521,11 +514,9 @@
         "gvaPluginUserRouterRollback": "Test rollback of Gva Plugin UserRouter",
         "gvaPluginUserApiRollback": "Test rollback of Gva Plugin UserApi",
         "gvaPluginUserServiceRollback": "Test rollback of Gva Plugin UserService",
-
         "gvaPluginUserInjection": "Test injection of Gva Plugin User",
         "chineseInjection": "Test injection of Chinese",
         "gvaPluginUserRollback": "Test rollback of Gva Plugin User",
-
         "registrationError": "is already registered and cannot be registered again",
         "valueCannotBeEmpty": "cannot be empty",
         "formatValidationFailed": "format validation failed",
@@ -533,9 +524,7 @@
         "sysNoSupport": "The system does not support",
         "fileNameInvalid": "File name is invalid"
     },
-    "router": {
-
-    },
+    "router": {},
     "directory": {
         "fileExists": "File with the same name exists"
     },
@@ -564,4 +553,3 @@
         "deleteChildrenFirst": "Please delete children first"
     }
 }
-

@@ -148,7 +148,7 @@ go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
 cd server
 go generate -run "go env -w .*?"
 
-# 使用如下命令下载swag
+# Use the following command to download swag
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 

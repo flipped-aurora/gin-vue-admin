@@ -194,8 +194,8 @@
     "noOnlySpace": "不能只输入空格",
     "operations": "操作",
     "order": "排序标记",
-    "placeInputEndData": "请填写结束日期",
-    "placeInputStartData": "请填写开始日期",
+    "placeInputEndDate": "请填写结束日期",
+    "placeInputStartDate": "请填写开始日期",
     "pleaseEnter": "请输入",
     "pleaseSelect": "请选择",
     "popUpOperation": "弹窗操作",
@@ -206,12 +206,11 @@
     "searchCriteria": "搜索条件",
     "searchDesc": "搜索范围是开始日期（包含）至结束日期（不包含）",
     "selectAll": "全选",
-    "selectData": "选择日期",
     "selectDataToDelete": "请选择要删除的数据",
     "selectDate": "选择日期",
     "setupSuccess": "设置成功",
-    "startData": "开始日期",
-    "startDataMustBeforeEndData": "开始日期应当早于结束日期",
+    "startDate": "开始日期",
+    "startDateMustBeforeEndDate": "开始日期应当早于结束日期",
     "undeleted": "已取消删除",
     "updateSuccess": "更新成功!",
     "warning": "警告",
@@ -413,6 +412,17 @@
     }
   },
   "view": {
+    "person": { 
+      "basicInfo": "基本信息", 
+      "accountPassword": "账号密码",
+      "isSet": "已设置",
+      "notSet": "未设置",
+      "modify": "修改",
+      "modifyPassword": "修改密码",
+      "originalPassword": "原密码",
+      "newPassword": "新密码",
+      "confirmPassword": "确认密码"
+    },
     "about": {
       "flippedAuroraTeam": "flipped-aurora团队",
       "submitRecords": "提交记录"
@@ -1289,5 +1299,33 @@
       "extractComponentName": "从 .vue 文件内容中提取组件名称",
       "vitePluginDefinition": "Vite 插件定义"
     }
+  },
+  "iot": {
+    "exportExcel": "导出",
+    "exportExcelSuccess": "导出成功",
+    "exportExcelFail": "导出失败",
+    "type": "类型",
+    "iotDeviceCode": "设备编码",
+    "detectionResult": "检测结果",
+    "detectionTime": "检测时间",
+    "vehicleNum": "车牌号",
+    "tireNum": "轮胎号",
+    "temperature": "温度",
+    "pressure": "压力",
+    "numOfGroove": "沟槽数",
+    "detectionData": "胎纹数据",
+    "detectionDataAverage": "平均数据", 
+    "calibrationData": "校准数据",
+    "apperance": "外观",
+    "pictures": "外观照片"
+  },
+  "msg": {
+    "date": "日期",
+    "title": "标题",
+    "type": "类型",
+    "sender": "发信人",
+    "received": "已查收",
+    "operation": "操作"
+  
   }
 }

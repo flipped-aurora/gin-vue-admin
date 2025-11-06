@@ -57,7 +57,7 @@ type ExecutionPlan struct {
 
 // New 创建GVA代码生成执行器工具
 func (g *GVAExecutor) New() mcp.Tool {
-	return mcp.NewTool("gva_execute",
+    return mcp.NewTool("gva_execute",
 		mcp.WithDescription(`**GVA代码生成执行器：直接执行代码生成，无需确认步骤**
 
 **核心功能：**
@@ -194,10 +194,144 @@ func (g *GVAExecutor) New() mcp.Tool {
    - 当字段配置了dataSource且association=2（一对多关联）时，系统会自动将fieldType修改为'array'
    - 这确保了一对多关联数据的正确存储和处理
    - 修正操作会记录在日志中，便于开发者了解变更情况`),
-		mcp.WithObject("executionPlan",
-			mcp.Description("执行计划，包含包信息和模块信息"),
-			mcp.Required(),
-		),
+        mcp.WithObject("executionPlan",
+            mcp.Description("执行计划，包含包信息、模块与字典信息"),
+            mcp.Required(),
+            mcp.Properties(map[string]interface{}{
+                "packageName": map[string]interface{}{
+                    "type":        "string",
+                    "description": "包名（小写开头）",
+                },
+                "packageType": map[string]interface{}{
+                    "type":        "string",
+                    "description": "package 或 plugin",
+                    "enum":        []string{"package", "plugin"},
+                },
+                "needCreatedPackage": map[string]interface{}{
+                    "type":        "boolean",
+                    "description": "是否需要创建包",
+                },
+                "needCreatedModules": map[string]interface{}{
+                    "type":        "boolean",
+                    "description": "是否需要创建模块",
+                },
+                "needCreatedDictionaries": map[string]interface{}{
+                    "type":        "boolean",
+                    "description": "是否需要创建字典",
+                },
+                "packageInfo": map[string]interface{}{
+                    "type":        "object",
+                    "description": "包创建信息",
+                    "properties": map[string]interface{}{
+                        "desc":        map[string]interface{}{"type": "string", "description": "包描述"},
+                        "label":       map[string]interface{}{"type": "string", "description": "展示名"},
+                        "template":    map[string]interface{}{"type": "string", "description": "package 或 plugin", "enum": []string{"package", "plugin"}},
+                        "packageName": map[string]interface{}{"type": "string", "description": "包名"},
+                    },
+                },
+                "modulesInfo": map[string]interface{}{
+                    "type":        "array",
+                    "description": "模块配置列表",
+                    "items": map[string]interface{}{
+                        "type": "object",
+                        "properties": map[string]interface{}{
+                            "package":            map[string]interface{}{"type": "string", "description": "包名（小写开头）"},
+                            "tableName":          map[string]interface{}{"type": "string", "description": "数据库表名（蛇形命名）"},
+                            "businessDB":        map[string]interface{}{"type": "string", "description": "业务数据库（可留空表示默认）"},
+                            "structName":         map[string]interface{}{"type": "string", "description": "结构体名（大驼峰）"},
+                            "packageName":        map[string]interface{}{"type": "string", "description": "文件名称"},
+                            "description":        map[string]interface{}{"type": "string", "description": "中文描述"},
+                            "abbreviation":       map[string]interface{}{"type": "string", "description": "简称"},
+                            "humpPackageName":    map[string]interface{}{"type": "string", "description": "文件名称（小驼峰）"},
+                            "gvaModel":           map[string]interface{}{"type": "boolean", "description": "是否使用GVA模型（固定为true）"},
+                            "autoMigrate":        map[string]interface{}{"type": "boolean"},
+                            "autoCreateResource": map[string]interface{}{"type": "boolean"},
+                            "autoCreateApiToSql": map[string]interface{}{"type": "boolean"},
+                            "autoCreateMenuToSql": map[string]interface{}{"type": "boolean"},
+                            "autoCreateBtnAuth":  map[string]interface{}{"type": "boolean"},
+                            "onlyTemplate":       map[string]interface{}{"type": "boolean"},
+                            "isTree":             map[string]interface{}{"type": "boolean"},
+                            "treeJson":           map[string]interface{}{"type": "string"},
+                            "isAdd":              map[string]interface{}{"type": "boolean"},
+                            "generateWeb":        map[string]interface{}{"type": "boolean"},
+                            "generateServer":     map[string]interface{}{"type": "boolean"},
+                            "fields": map[string]interface{}{
+                                "type":  "array",
+                                "items": map[string]interface{}{
+                                    "type": "object",
+                                    "properties": map[string]interface{}{
+                                        "fieldName":        map[string]interface{}{"type": "string"},
+                                        "fieldDesc":        map[string]interface{}{"type": "string"},
+                                        "fieldType":        map[string]interface{}{"type": "string"},
+                                        "fieldJson":        map[string]interface{}{"type": "string"},
+                                        "dataTypeLong":     map[string]interface{}{"type": "string"},
+                                        "comment":          map[string]interface{}{"type": "string"},
+                                        "columnName":       map[string]interface{}{"type": "string"},
+                                        "fieldSearchType":  map[string]interface{}{"type": "string"},
+                                        "fieldSearchHide":  map[string]interface{}{"type": "boolean"},
+                                        "dictType":         map[string]interface{}{"type": "string"},
+                                        "form":             map[string]interface{}{"type": "boolean"},
+                                        "table":            map[string]interface{}{"type": "boolean"},
+                                        "desc":             map[string]interface{}{"type": "boolean"},
+                                        "excel":            map[string]interface{}{"type": "boolean"},
+                                        "require":          map[string]interface{}{"type": "boolean"},
+                                        "defaultValue":     map[string]interface{}{"type": "string"},
+                                        "errorText":        map[string]interface{}{"type": "string"},
+                                        "clearable":        map[string]interface{}{"type": "boolean"},
+                                        "sort":             map[string]interface{}{"type": "boolean"},
+                                        "primaryKey":       map[string]interface{}{"type": "boolean"},
+                                        "dataSource": map[string]interface{}{
+                                            "type":       "object",
+                                            "properties": map[string]interface{}{
+                                                "dbName":        map[string]interface{}{"type": "string"},
+                                                "table":         map[string]interface{}{"type": "string"},
+                                                "label":         map[string]interface{}{"type": "string"},
+                                                "value":         map[string]interface{}{"type": "string"},
+                                                "association":   map[string]interface{}{"type": "integer"},
+                                                "hasDeletedAt":  map[string]interface{}{"type": "boolean"},
+                                            },
+                                        },
+                                        "checkDataSource":   map[string]interface{}{"type": "boolean"},
+                                        "fieldIndexType":    map[string]interface{}{"type": "string"},
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                "paths": map[string]interface{}{
+                    "type":        "object",
+                    "description": "生成的文件路径映射",
+                    "additionalProperties": map[string]interface{}{"type": "string"},
+                },
+                "dictionariesInfo": map[string]interface{}{
+                    "type":        "array",
+                    "description": "字典创建信息",
+                    "items": map[string]interface{}{
+                        "type": "object",
+                        "properties": map[string]interface{}{
+                            "dictType":    map[string]interface{}{"type": "string"},
+                            "dictName":    map[string]interface{}{"type": "string"},
+                            "description": map[string]interface{}{"type": "string"},
+                            "status":      map[string]interface{}{"type": "boolean"},
+                            "fieldDesc":   map[string]interface{}{"type": "string"},
+                            "options": map[string]interface{}{
+                                "type":  "array",
+                                "items": map[string]interface{}{
+                                    "type": "object",
+                                    "properties": map[string]interface{}{
+                                        "label": map[string]interface{}{"type": "string"},
+                                        "value": map[string]interface{}{"type": "string"},
+                                        "sort":  map[string]interface{}{"type": "integer"},
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            }),
+            mcp.AdditionalProperties(false),
+        ),
 		mcp.WithString("requirement",
 			mcp.Description("原始需求描述（可选，用于日志记录）"),
 		),

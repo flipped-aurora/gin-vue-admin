@@ -46,6 +46,9 @@ func (m *MenuLister) New() mcp.Tool {
 - 菜单权限管理：了解系统中所有可用的菜单项
 - 导航组件开发：构建动态导航菜单
 - 系统架构分析：了解系统的菜单结构和页面组织`),
+mcp.WithString("_placeholder",
+			mcp.Description("占位符，防止json schema校验失败"),
+		),	
 	)
 }
 

@@ -49,7 +49,7 @@ func GetToken(c *gin.Context) string {
 			global.GVA_LOG.Error("重新写入cookie token失败,未能成功解析token,请检查请求头是否存在x-token且claims是否为规定结构")
 			return token
 		}
-		SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
+		SetToken(c, token, int(claims.ExpiresAt.Unix()-time.Now().Unix()))
 	}
 	return token
 }

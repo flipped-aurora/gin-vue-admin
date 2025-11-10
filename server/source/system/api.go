@@ -175,6 +175,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "导出模板", Method: "GET", Path: "/sysExportTemplate/getSysExportTemplateList", Description: "获取导出模板列表"},
 		{ApiGroup: "导出模板", Method: "GET", Path: "/sysExportTemplate/exportExcel", Description: "导出Excel"},
 		{ApiGroup: "导出模板", Method: "GET", Path: "/sysExportTemplate/exportTemplate", Description: "下载模板"},
+		{ApiGroup: "导出模板", Method: "GET", Path: "/sysExportTemplate/previewSQL", Description: "预览SQL"},
 		{ApiGroup: "导出模板", Method: "POST", Path: "/sysExportTemplate/importExcel", Description: "导入Excel"},
 
 		{ApiGroup: "公告", Method: "POST", Path: "/info/createInfo", Description: "新建公告"},

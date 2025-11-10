@@ -176,6 +176,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/getSysExportTemplateList", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/exportExcel", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/exportTemplate", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/previewSQL", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/importExcel", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/info/createInfo", V2: "POST"},

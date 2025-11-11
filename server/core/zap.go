@@ -50,18 +50,18 @@ func Zap() (logger *zap.Logger) {
 		// 尽可能携带来源与堆栈信息（使用 runtime 采集并过滤 zap 内部栈）
 		info := entry.Message
 		if entry.Caller.File != "" {
-			info = fmt.Sprintf("%s | caller=%s:%d", info, entry.Caller.File, entry.Caller.Line)
+			info = fmt.Sprintf("错误信息：%s", info)
 		}
 		stack := entry.Stack
 		if stack != "" {
-			info = fmt.Sprintf("%s | stack=%s", info, stack)
+			info = fmt.Sprintf("%s \n 调用栈：%s", info, stack)
 			// 解析最终业务调用方，并提取其方法源码
 			if frame, ok := stacktrace.FindFinalCaller(stack); ok {
 				fnName, fnSrc, sLine, eLine, exErr := astutil.ExtractFuncSourceByPosition(frame.File, frame.Line)
 				if exErr == nil {
-					info = fmt.Sprintf("%s | final_caller=%s:%d (%s lines %d-%d)\n----- 产生日志的方法代码如下 -----\n%s", info, frame.File, frame.Line, fnName, sLine, eLine, fnSrc)
+					info = fmt.Sprintf("%s \n 最终调用方法:%s:%d (%s lines %d-%d)\n----- 产生日志的方法代码如下 -----\n%s", info, frame.File, frame.Line, fnName, sLine, eLine, fnSrc)
 				} else {
-					info = fmt.Sprintf("%s | final_caller=%s:%d (%s) | extract_err=%v", info, frame.File, frame.Line, fnName, exErr)
+					info = fmt.Sprintf("%s \n 最终调用方法:%s:%d (%s) | extract_err=%v", info, frame.File, frame.Line, fnName, exErr)
 				}
 			}
 		}

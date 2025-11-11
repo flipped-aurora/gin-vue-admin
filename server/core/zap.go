@@ -8,6 +8,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	astutil "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/stacktrace"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
@@ -53,6 +55,15 @@ func Zap() (logger *zap.Logger) {
 		stack := entry.Stack
 		if stack != "" {
 			info = fmt.Sprintf("%s | stack=%s", info, stack)
+			// 解析最终业务调用方，并提取其方法源码
+			if frame, ok := stacktrace.FindFinalCaller(stack); ok {
+				fnName, fnSrc, sLine, eLine, exErr := astutil.ExtractFuncSourceByPosition(frame.File, frame.Line)
+				if exErr == nil {
+					info = fmt.Sprintf("%s | final_caller=%s:%d (%s lines %d-%d)\n----- 产生日志的方法代码如下 -----\n%s", info, frame.File, frame.Line, fnName, sLine, eLine, fnSrc)
+				} else {
+					info = fmt.Sprintf("%s | final_caller=%s:%d (%s) | extract_err=%v", info, frame.File, frame.Line, fnName, exErr)
+				}
+			}
 		}
 
 		// 使用后台上下文，避免依赖 gin.Context
@@ -65,12 +76,12 @@ func Zap() (logger *zap.Logger) {
 		return nil
 	})
 
-    logger = zap.New(zapcore.NewTee(cores...), dbHook)
-    // 启用 Error 及以上级别的堆栈捕捉，确保 entry.Stack 可用
-    opts := []zap.Option{zap.AddStacktrace(zapcore.ErrorLevel)}
-    if global.GVA_CONFIG.Zap.ShowLine {
-        opts = append(opts, zap.AddCaller())
-    }
-    logger = logger.WithOptions(opts...)
-    return logger
+	logger = zap.New(zapcore.NewTee(cores...), dbHook)
+	// 启用 Error 及以上级别的堆栈捕捉，确保 entry.Stack 可用
+	opts := []zap.Option{zap.AddStacktrace(zapcore.ErrorLevel)}
+	if global.GVA_CONFIG.Zap.ShowLine {
+		opts = append(opts, zap.AddCaller())
+	}
+	logger = logger.WithOptions(opts...)
+	return logger
 }

@@ -182,17 +182,17 @@
       :before-close="closeDetailShow"
       title="查看"
     >
-      <el-descriptions :column="1" border>
+      <el-descriptions :column="2" border direction="vertical">
         <el-descriptions-item label="错误来源">
           {{ detailForm.form }}
         </el-descriptions-item>
         <el-descriptions-item label="错误等级">
           {{ detailForm.level }}
         </el-descriptions-item>
-        <el-descriptions-item label="错误内容">
+        <el-descriptions-item label="错误内容" :span="2">
           <pre class="whitespace-pre-wrap break-words">{{ detailForm.info }}</pre>
         </el-descriptions-item>
-        <el-descriptions-item label="解决方案">
+        <el-descriptions-item label="解决方案" :span="2">
           <pre class="whitespace-pre-wrap break-words">{{ detailForm.solution }}</pre>
         </el-descriptions-item>
       </el-descriptions>

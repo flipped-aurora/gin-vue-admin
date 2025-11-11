@@ -17,7 +17,7 @@ function sendErrorTip(errorInfo) {
   
   window.addEventListener('unhandledrejection', (event) => {
     sendErrorTip({
-      type: 'Frontend',
+      type: '前端',
       message: `错误信息: ${event.reason}`,
       stack: `调用栈: ${event.reason?.stack || '没有调用栈信息'}`,
     });

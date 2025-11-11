@@ -179,6 +179,13 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/previewSQL", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/importExcel", V2: "POST"},
 
+		{Ptype: "p", V0: "888", V1: "/sysError/createSysError", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysError/deleteSysError", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysError/deleteSysErrorByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysError/updateSysError", V2: "PUT"},
+		{Ptype: "p", V0: "888", V1: "/sysError/findSysError", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysError/getSysErrorList", V2: "GET"},
+
 		{Ptype: "p", V0: "888", V1: "/info/createInfo", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/info/deleteInfo", V2: "DELETE"},
 		{Ptype: "p", V0: "888", V1: "/info/deleteInfoByIds", V2: "DELETE"},

@@ -47,5 +47,5 @@ var (
 	autoCodeHistoryService  = service.ServiceGroupApp.SystemServiceGroup.AutoCodeHistory
 	autoCodeTemplateService = service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
 	sysVersionService       = service.ServiceGroupApp.SystemServiceGroup.SysVersionService
-	sysErrprService         = service.ServiceGroupApp.SystemServiceGroup.SysErrorService
+	sysErrorService         = service.ServiceGroupApp.SystemServiceGroup.SysErrorService
 )

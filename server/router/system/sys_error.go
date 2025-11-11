@@ -9,19 +9,19 @@ type SysErrorRouter struct{}
 
 // InitSysErrorRouter 初始化 错误日志 路由信息
 func (s *SysErrorRouter) InitSysErrorRouter(Router *gin.RouterGroup, PublicRouter *gin.RouterGroup) {
-	sysErrprRouter := Router.Group("sysErrpr").Use(middleware.OperationRecord())
-	sysErrprRouterWithoutRecord := Router.Group("sysErrpr")
-	sysErrprRouterWithoutAuth := PublicRouter.Group("sysErrpr")
+	sysErrorRouter := Router.Group("sysError").Use(middleware.OperationRecord())
+	sysErrorRouterWithoutRecord := Router.Group("sysError")
+	sysErrorRouterWithoutAuth := PublicRouter.Group("sysError")
 	{
-		sysErrprRouter.DELETE("deleteSysError", sysErrprApi.DeleteSysError)           // 删除错误日志
-		sysErrprRouter.DELETE("deleteSysErrorByIds", sysErrprApi.DeleteSysErrorByIds) // 批量删除错误日志
-		sysErrprRouter.PUT("updateSysError", sysErrprApi.UpdateSysError)              // 更新错误日志
+		sysErrorRouter.DELETE("deleteSysError", sysErrorApi.DeleteSysError)           // 删除错误日志
+		sysErrorRouter.DELETE("deleteSysErrorByIds", sysErrorApi.DeleteSysErrorByIds) // 批量删除错误日志
+		sysErrorRouter.PUT("updateSysError", sysErrorApi.UpdateSysError)              // 更新错误日志
 	}
 	{
-		sysErrprRouterWithoutRecord.GET("findSysError", sysErrprApi.FindSysError)       // 根据ID获取错误日志
-		sysErrprRouterWithoutRecord.GET("getSysErrorList", sysErrprApi.GetSysErrorList) // 获取错误日志列表
+		sysErrorRouterWithoutRecord.GET("findSysError", sysErrorApi.FindSysError)       // 根据ID获取错误日志
+		sysErrorRouterWithoutRecord.GET("getSysErrorList", sysErrorApi.GetSysErrorList) // 获取错误日志列表
 	}
 	{
-		sysErrprRouterWithoutAuth.POST("createSysError", sysErrprApi.CreateSysError) // 新建错误日志
+		sysErrorRouterWithoutAuth.POST("createSysError", sysErrorApi.CreateSysError) // 新建错误日志
 	}
 }

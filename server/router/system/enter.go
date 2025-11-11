@@ -44,5 +44,5 @@ var (
 	autoCodeTemplateApi = api.ApiGroupApp.SystemApiGroup.AutoCodeTemplateApi
 	exportTemplateApi   = api.ApiGroupApp.SystemApiGroup.SysExportTemplateApi
 	sysVersionApi       = api.ApiGroupApp.SystemApiGroup.SysVersionApi
-	sysErrprApi         = api.ApiGroupApp.SystemApiGroup.SysErrorApi
+	sysErrorApi         = api.ApiGroupApp.SystemApiGroup.SysErrorApi
 )

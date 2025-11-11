@@ -19,18 +19,18 @@ type SysErrorApi struct{}
 // @Produce application/json
 // @Param data body system.SysError true "创建错误日志"
 // @Success 200 {object} response.Response{msg=string} "创建成功"
-// @Router /sysErrpr/createSysError [post]
-func (sysErrprApi *SysErrorApi) CreateSysError(c *gin.Context) {
+// @Router /sysError/createSysError [post]
+func (sysErrorApi *SysErrorApi) CreateSysError(c *gin.Context) {
 	// 创建业务用Context
 	ctx := c.Request.Context()
 
-	var sysErrpr system.SysError
-	err := c.ShouldBindJSON(&sysErrpr)
+	var sysError system.SysError
+	err := c.ShouldBindJSON(&sysError)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = sysErrprService.CreateSysError(ctx, &sysErrpr)
+	err = sysErrorService.CreateSysError(ctx, &sysError)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败:"+err.Error(), c)
@@ -47,13 +47,13 @@ func (sysErrprApi *SysErrorApi) CreateSysError(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysError true "删除错误日志"
 // @Success 200 {object} response.Response{msg=string} "删除成功"
-// @Router /sysErrpr/deleteSysError [delete]
-func (sysErrprApi *SysErrorApi) DeleteSysError(c *gin.Context) {
+// @Router /sysError/deleteSysError [delete]
+func (sysErrorApi *SysErrorApi) DeleteSysError(c *gin.Context) {
 	// 创建业务用Context
 	ctx := c.Request.Context()
 
 	ID := c.Query("ID")
-	err := sysErrprService.DeleteSysError(ctx, ID)
+	err := sysErrorService.DeleteSysError(ctx, ID)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败:"+err.Error(), c)
@@ -69,13 +69,13 @@ func (sysErrprApi *SysErrorApi) DeleteSysError(c *gin.Context) {
 // @Accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{msg=string} "批量删除成功"
-// @Router /sysErrpr/deleteSysErrorByIds [delete]
-func (sysErrprApi *SysErrorApi) DeleteSysErrorByIds(c *gin.Context) {
+// @Router /sysError/deleteSysErrorByIds [delete]
+func (sysErrorApi *SysErrorApi) DeleteSysErrorByIds(c *gin.Context) {
 	// 创建业务用Context
 	ctx := c.Request.Context()
 
 	IDs := c.QueryArray("IDs[]")
-	err := sysErrprService.DeleteSysErrorByIds(ctx, IDs)
+	err := sysErrorService.DeleteSysErrorByIds(ctx, IDs)
 	if err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败:"+err.Error(), c)
@@ -92,18 +92,18 @@ func (sysErrprApi *SysErrorApi) DeleteSysErrorByIds(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysError true "更新错误日志"
 // @Success 200 {object} response.Response{msg=string} "更新成功"
-// @Router /sysErrpr/updateSysError [put]
-func (sysErrprApi *SysErrorApi) UpdateSysError(c *gin.Context) {
+// @Router /sysError/updateSysError [put]
+func (sysErrorApi *SysErrorApi) UpdateSysError(c *gin.Context) {
 	// 从ctx获取标准context进行业务行为
 	ctx := c.Request.Context()
 
-	var sysErrpr system.SysError
-	err := c.ShouldBindJSON(&sysErrpr)
+	var sysError system.SysError
+	err := c.ShouldBindJSON(&sysError)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = sysErrprService.UpdateSysError(ctx, sysErrpr)
+	err = sysErrorService.UpdateSysError(ctx, sysError)
 	if err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败:"+err.Error(), c)
@@ -120,19 +120,19 @@ func (sysErrprApi *SysErrorApi) UpdateSysError(c *gin.Context) {
 // @Produce application/json
 // @Param ID query uint true "用id查询错误日志"
 // @Success 200 {object} response.Response{data=system.SysError,msg=string} "查询成功"
-// @Router /sysErrpr/findSysError [get]
-func (sysErrprApi *SysErrorApi) FindSysError(c *gin.Context) {
+// @Router /sysError/findSysError [get]
+func (sysErrorApi *SysErrorApi) FindSysError(c *gin.Context) {
 	// 创建业务用Context
 	ctx := c.Request.Context()
 
 	ID := c.Query("ID")
-	resysErrpr, err := sysErrprService.GetSysError(ctx, ID)
+	resysError, err := sysErrorService.GetSysError(ctx, ID)
 	if err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败:"+err.Error(), c)
 		return
 	}
-	response.OkWithData(resysErrpr, c)
+	response.OkWithData(resysError, c)
 }
 
 // GetSysErrorList 分页获取错误日志列表
@@ -143,8 +143,8 @@ func (sysErrprApi *SysErrorApi) FindSysError(c *gin.Context) {
 // @Produce application/json
 // @Param data query systemReq.SysErrorSearch true "分页获取错误日志列表"
 // @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
-// @Router /sysErrpr/getSysErrorList [get]
-func (sysErrprApi *SysErrorApi) GetSysErrorList(c *gin.Context) {
+// @Router /sysError/getSysErrorList [get]
+func (sysErrorApi *SysErrorApi) GetSysErrorList(c *gin.Context) {
 	// 创建业务用Context
 	ctx := c.Request.Context()
 
@@ -154,7 +154,7 @@ func (sysErrprApi *SysErrorApi) GetSysErrorList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := sysErrprService.GetSysErrorInfoList(ctx, pageInfo)
+	list, total, err := sysErrorService.GetSysErrorInfoList(ctx, pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败:"+err.Error(), c)

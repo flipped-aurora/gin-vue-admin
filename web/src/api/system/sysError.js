@@ -6,10 +6,10 @@ import service from '@/utils/request'
 // @Produce application/json
 // @Param data body model.SysError true "创建错误日志"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /sysErrpr/createSysError [post]
+// @Router /sysError/createSysError [post]
 export const createSysError = (data) => {
   return service({
-    url: '/sysErrpr/createSysError',
+    url: '/sysError/createSysError',
     method: 'post',
     data
   })
@@ -22,10 +22,10 @@ export const createSysError = (data) => {
 // @Produce application/json
 // @Param data body model.SysError true "删除错误日志"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /sysErrpr/deleteSysError [delete]
+// @Router /sysError/deleteSysError [delete]
 export const deleteSysError = (params) => {
   return service({
-    url: '/sysErrpr/deleteSysError',
+    url: '/sysError/deleteSysError',
     method: 'delete',
     params
   })
@@ -38,10 +38,10 @@ export const deleteSysError = (params) => {
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除错误日志"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /sysErrpr/deleteSysError [delete]
+// @Router /sysError/deleteSysError [delete]
 export const deleteSysErrorByIds = (params) => {
   return service({
-    url: '/sysErrpr/deleteSysErrorByIds',
+    url: '/sysError/deleteSysErrorByIds',
     method: 'delete',
     params
   })
@@ -54,10 +54,10 @@ export const deleteSysErrorByIds = (params) => {
 // @Produce application/json
 // @Param data body model.SysError true "更新错误日志"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /sysErrpr/updateSysError [put]
+// @Router /sysError/updateSysError [put]
 export const updateSysError = (data) => {
   return service({
-    url: '/sysErrpr/updateSysError',
+    url: '/sysError/updateSysError',
     method: 'put',
     data
   })
@@ -70,10 +70,10 @@ export const updateSysError = (data) => {
 // @Produce application/json
 // @Param data query model.SysError true "用id查询错误日志"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /sysErrpr/findSysError [get]
+// @Router /sysError/findSysError [get]
 export const findSysError = (params) => {
   return service({
-    url: '/sysErrpr/findSysError',
+    url: '/sysError/findSysError',
     method: 'get',
     params
   })
@@ -86,10 +86,10 @@ export const findSysError = (params) => {
 // @Produce application/json
 // @Param data query request.PageInfo true "分页获取错误日志列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /sysErrpr/getSysErrorList [get]
+// @Router /sysError/getSysErrorList [get]
 export const getSysErrorList = (params) => {
   return service({
-    url: '/sysErrpr/getSysErrorList',
+    url: '/sysError/getSysErrorList',
     method: 'get',
     params
   })
@@ -101,10 +101,10 @@ export const getSysErrorList = (params) => {
 // @Produce application/json
 // @Param data query systemReq.SysErrorSearch true "分页获取错误日志列表"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
-// @Router /sysErrpr/getSysErrorPublic [get]
+// @Router /sysError/getSysErrorPublic [get]
 export const getSysErrorPublic = () => {
   return service({
-    url: '/sysErrpr/getSysErrorPublic',
+    url: '/sysError/getSysErrorPublic',
     method: 'get',
   })
 }

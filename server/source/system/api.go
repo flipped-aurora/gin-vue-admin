@@ -184,6 +184,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "错误日志", Method: "PUT", Path: "/sysError/updateSysError", Description: "更新错误日志"},
 		{ApiGroup: "错误日志", Method: "GET", Path: "/sysError/findSysError", Description: "根据ID获取错误日志"},
 		{ApiGroup: "错误日志", Method: "GET", Path: "/sysError/getSysErrorList", Description: "获取错误日志列表"},
+		{ApiGroup: "错误日志", Method: "GET", Path: "/sysError/getSysErrorSolution", Description: "触发错误处理(异步)"},
 
 		{ApiGroup: "公告", Method: "POST", Path: "/info/createInfo", Description: "新建公告"},
 		{ApiGroup: "公告", Method: "DELETE", Path: "/info/deleteInfo", Description: "删除公告"},

@@ -167,3 +167,33 @@ func (sysErrorApi *SysErrorApi) GetSysErrorList(c *gin.Context) {
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }
+
+// GetSysErrorSolution 触发错误日志的异步处理
+// @Tags SysError
+// @Summary 根据ID触发处理：标记为处理中，1分钟后自动改为处理完成
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param id query string true "错误日志ID"
+// @Success 200 {object} response.Response{msg=string} "处理已提交"
+// @Router /sysError/getSysErrorSolution [get]
+func (sysErrorApi *SysErrorApi) GetSysErrorSolution(c *gin.Context) {
+	// 创建业务用Context
+	ctx := c.Request.Context()
+
+	// 兼容 id 与 ID 两种参数
+	ID := c.Query("id")
+	if ID == "" {
+		response.FailWithMessage("缺少参数: id", c)
+		return
+	}
+
+	err := sysErrorService.GetSysErrorSolution(ctx, ID)
+	if err != nil {
+		global.GVA_LOG.Error("处理触发失败!", zap.Error(err))
+		response.FailWithMessage("处理触发失败:"+err.Error(), c)
+		return
+	}
+
+	response.OkWithMessage("已提交至AI处理", c)
+}

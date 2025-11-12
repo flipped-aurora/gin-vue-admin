@@ -108,3 +108,19 @@ export const getSysErrorPublic = () => {
     method: 'get',
   })
 }
+
+// @Tags SysError
+// @Summary 触发错误处理（异步）
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param id query string true "错误日志ID"
+// @Success 200 {string} string "{\"success\":true,\"data\":{},\"msg\":\"处理已提交\"}"
+// @Router /sysError/getSysErrorSolution [get]
+export const getSysErrorSolution = (params) => {
+  return service({
+    url: '/sysError/getSysErrorSolution',
+    method: 'get',
+    params
+  })
+}

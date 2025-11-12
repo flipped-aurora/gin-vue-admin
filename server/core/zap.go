@@ -1,19 +1,13 @@
 package core
 
 import (
-	"context"
-	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	astutil "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/stacktrace"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"os"
-	"strings"
+    "fmt"
+    "github.com/flipped-aurora/gin-vue-admin/server/core/internal"
+    "github.com/flipped-aurora/gin-vue-admin/server/global"
+    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+    "go.uber.org/zap"
+    "go.uber.org/zap/zapcore"
+    "os"
 )
 
 // Zap 获取 zap.Logger
@@ -30,53 +24,8 @@ func Zap() (logger *zap.Logger) {
 		core := internal.NewZapCore(levels[i])
 		cores = append(cores, core)
 	}
-	// 通过 Hooks 捕捉 Error 及以上级别日志，写入系统错误表
-	dbHook := zap.Hooks(func(entry zapcore.Entry) error {
-		// 仅处理 Error 及以上级别
-		if entry.Level < zapcore.ErrorLevel {
-			return nil
-		}
-		// 避免与 GORM zap 写入互相递归：跳过由 gorm logger writer 触发的日志
-		if strings.Contains(entry.Caller.File, "gorm_logger_writer.go") {
-			return nil
-		}
-		// 避免重复记录 panic 恢复日志，panic 由 GinRecovery 单独捕捉入库
-		if strings.Contains(entry.Message, "[Recovery from panic]") {
-			return nil
-		}
-
-		form := "后端"
-		level := entry.Level.String()
-		// 尽可能携带来源与堆栈信息（使用 runtime 采集并过滤 zap 内部栈）
-		info := entry.Message
-		if entry.Caller.File != "" {
-			info = fmt.Sprintf("错误信息：%s", info)
-		}
-		stack := entry.Stack
-		if stack != "" {
-			info = fmt.Sprintf("%s \n 调用栈：%s", info, stack)
-			// 解析最终业务调用方，并提取其方法源码
-			if frame, ok := stacktrace.FindFinalCaller(stack); ok {
-				fnName, fnSrc, sLine, eLine, exErr := astutil.ExtractFuncSourceByPosition(frame.File, frame.Line)
-				if exErr == nil {
-					info = fmt.Sprintf("%s \n 最终调用方法:%s:%d (%s lines %d-%d)\n----- 产生日志的方法代码如下 -----\n%s", info, frame.File, frame.Line, fnName, sLine, eLine, fnSrc)
-				} else {
-					info = fmt.Sprintf("%s \n 最终调用方法:%s:%d (%s) | extract_err=%v", info, frame.File, frame.Line, fnName, exErr)
-				}
-			}
-		}
-
-		// 使用后台上下文，避免依赖 gin.Context
-		ctx := context.Background()
-		_ = service.ServiceGroupApp.SystemServiceGroup.SysErrorService.CreateSysError(ctx, &system.SysError{
-			Form:  &form,
-			Info:  &info,
-			Level: level,
-		})
-		return nil
-	})
-
-	logger = zap.New(zapcore.NewTee(cores...), dbHook)
+    // 构建基础 logger（错误级别的入库逻辑已在自定义 ZapCore 中处理）
+    logger = zap.New(zapcore.NewTee(cores...))
 	// 启用 Error 及以上级别的堆栈捕捉，确保 entry.Stack 可用
 	opts := []zap.Option{zap.AddStacktrace(zapcore.ErrorLevel)}
 	if global.GVA_CONFIG.Zap.ShowLine {

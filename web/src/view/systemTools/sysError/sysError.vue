@@ -114,6 +114,13 @@
 
         <el-table-column
           align="left"
+          label="处理状态"
+          prop="status"
+          width="120"
+        />
+
+        <el-table-column
+          align="left"
           label="错误内容"
           prop="info"
           show-overflow-tooltip
@@ -136,10 +143,11 @@
         >
           <template #default="scope">
             <el-button
+              v-if="scope.row.status !== '处理中'"
               type="primary"
               link
               class="table-button"
-              @click="getDetails(scope.row)"
+              @click="getSolution(scope.row.ID)"
               ><el-icon><ai-gva /></el-icon
               >方案</el-button
             >
@@ -189,6 +197,9 @@
         <el-descriptions-item label="错误等级">
           {{ detailForm.level }}
         </el-descriptions-item>
+        <el-descriptions-item label="处理状态">
+          {{ detailForm.status || '未处理' }}
+        </el-descriptions-item>
         <el-descriptions-item label="错误内容" :span="2">
           <pre class="whitespace-pre-wrap break-words">{{ detailForm.info }}</pre>
         </el-descriptions-item>
@@ -205,7 +216,8 @@
     deleteSysError,
     deleteSysErrorByIds,
     findSysError,
-    getSysErrorList
+    getSysErrorList,
+    getSysErrorSolution
   } from '@/api/system/sysError'
 
   import { formatDate } from '@/utils/format'
@@ -236,6 +248,14 @@
     getTableData()
   }
 
+  const getSolution = (id) =>{
+    getSysErrorSolution({ id }).then((res) => {
+      if (res.code === 0) {
+        ElMessage({ type: 'success', message: res.msg || '处理已提交，1分钟后完成' })
+        getTableData()
+      }
+    })
+  }
   // 搜索
   const onSubmit = () => {
     elSearchFormRef.value?.validate(async (valid) => {

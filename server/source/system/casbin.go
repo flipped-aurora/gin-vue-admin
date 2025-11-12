@@ -185,6 +185,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysError/updateSysError", V2: "PUT"},
 		{Ptype: "p", V0: "888", V1: "/sysError/findSysError", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysError/getSysErrorList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysError/getSysErrorSolution", V2: "GET"},
 
 		{Ptype: "p", V0: "888", V1: "/info/createInfo", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/info/deleteInfo", V2: "DELETE"},

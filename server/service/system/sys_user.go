@@ -250,6 +250,7 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 func (userService *UserService) SetSelfInfo(req system.SysUser) error {
 	return global.GVA_DB.Model(&system.SysUser{}).
 		Where("id=?", req.ID).
+	    Select("HeaderImg", "NickName").
 		Updates(req).Error
 }
 

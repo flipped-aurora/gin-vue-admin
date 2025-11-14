@@ -110,14 +110,32 @@
           label="错误等级"
           prop="level"
           width="120"
-        />
+        >
+          <template #default="scope">
+            <el-tag
+              effect="dark"
+              :type="levelTagMap[scope.row.level] || 'info'"
+            >
+              {{ levelLabelMap[scope.row.level] || defaultLevelLabel }}
+            </el-tag>
+          </template>
+        </el-table-column>
 
         <el-table-column
           align="left"
           label="处理状态"
           prop="status"
-          width="120"
-        />
+          width="140"
+        >
+          <template #default="scope">
+            <el-tag
+              effect="light"
+              :type="statusTagMap[scope.row.status] || 'info'"
+            >
+              {{ statusLabelMap[scope.row.status] || defaultStatusLabel }}
+            </el-tag>
+          </template>
+        </el-table-column>
 
         <el-table-column
           align="left"
@@ -148,9 +166,9 @@
               link
               class="table-button"
               @click="getSolution(scope.row.ID)"
-              ><el-icon><ai-gva /></el-icon
-              >方案</el-button
             >
+              <el-icon><ai-gva /></el-icon>方案
+            </el-button>
             <el-button
               type="primary"
               link
@@ -195,10 +213,20 @@
           {{ detailForm.form }}
         </el-descriptions-item>
         <el-descriptions-item label="错误等级">
-          {{ detailForm.level }}
+          <el-tag
+            effect="dark"
+            :type="levelTagMap[detailForm.level] || 'info'"
+          >
+            {{ levelLabelMap[detailForm.level] || defaultLevelLabel }}
+          </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="处理状态">
-          {{ detailForm.status || '未处理' }}
+          <el-tag
+            effect="light"
+            :type="statusTagMap[detailForm.status] || 'info'"
+          >
+            {{ statusLabelMap[detailForm.status] || defaultStatusLabel }}
+          </el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="错误内容" :span="2">
           <pre class="whitespace-pre-wrap break-words">{{ detailForm.info }}</pre>
@@ -248,13 +276,22 @@
     getTableData()
   }
 
-  const getSolution = (id) =>{
-    getSysErrorSolution({ id }).then((res) => {
-      if (res.code === 0) {
-        ElMessage({ type: 'success', message: res.msg || '处理已提交，1分钟后完成' })
-        getTableData()
+  const getSolution = async (id) => {
+    const confirmed = await ElMessageBox.confirm(
+      '日志将通过 AI-PATH 传输至 GVA AI 用于错误分析，并在 GVA 官方平台短暂存储作为 AI 上下文。是否确认进行 AI 处理？（此功能仅向授权用户开放）',
+      '提示(Beta)',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
       }
-    })
+    ).catch(() => false)
+    if (!confirmed) return
+    const res = await getSysErrorSolution({ id })
+    if (res.code === 0) {
+      ElMessage({ type: 'success', message: res.msg || '处理已提交，1分钟后完成' })
+      getTableData()
+    }
   }
   // 搜索
   const onSubmit = () => {
@@ -393,6 +430,28 @@
     detailShow.value = false
     detailForm.value = {}
   }
-</script>
 
-<style></style>
+  const statusLabelMap = {
+    未处理: '未处理',
+    处理中: '处理中',
+    处理完成: '处理完成',
+    处理失败: '处理失败'
+  }
+  const statusTagMap = {
+    未处理: 'info',
+    处理中: 'warning',
+    处理完成: 'success',
+    处理失败: 'danger'
+  }
+  const defaultStatusLabel = '未处理'
+
+  const levelLabelMap = {
+    fatal: '致命错误',
+    error: '一般错误'
+  }
+  const levelTagMap = {
+    fatal: 'danger',
+    error: 'warning'
+  }
+  const defaultLevelLabel = '一般错误'
+</script>

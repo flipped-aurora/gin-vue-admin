@@ -85,6 +85,7 @@ import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
 import { useRouter } from 'vue-router'
 import { useUserStore } from "@/pinia";
+import {isImageMime} from "@/utils/image.js";
 
 defineOptions({
   name: 'scanUpload'
@@ -138,9 +139,9 @@ const fixedRatio = ref(false)
 
 // 文件处理
 const handleFileChange = (file) => {
-  const isImage = file.raw.type.includes('image')
+  const isImage = isImageMime(file.type)
   if (!isImage) {
-    ElMessage.error('请选择图片文件')
+    ElMessage.error('上传图片只能是 jpg、png、svg、webp 格式')
     return
   }
 

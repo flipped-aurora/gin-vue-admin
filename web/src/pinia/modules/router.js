@@ -56,7 +56,7 @@ export const useRouterStore = defineStore('router', () => {
     
     // 1. 首先添加原有的keepAlive配置
     keepArrTemp.push(...keepAliveRoutersArr)
-    if (config.KeepAliveTabs) {
+    if (config.keepAliveTabs) {
       history.forEach((item) => {
         // 2. 为所有history中的路由强制启用keep-alive
         // 通过routeMap获取路由信息，然后通过pathInfo获取组件名

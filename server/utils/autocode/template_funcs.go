@@ -219,7 +219,7 @@ func GenerateSearchFormItem(field systemReq.AutoCodeField) string {
 		if field.FieldType == "array" {
 			multipleAttr = "multiple "
 		}
-		result += fmt.Sprintf(`    <el-tree-select v-model="formData.%s" placeholder="请选择%s" :data="%sOptions" style="width:100%%" filterable :clearable="%v" check-strictly %s></el-tree-select>
+		result += fmt.Sprintf(`    <el-tree-select v-model="searchInfo.%s" placeholder="请选择%s" :data="%sOptions" style="width:100%%" filterable :clearable="%v" check-strictly %s></el-tree-select>
 `,
 			field.FieldJson, field.FieldDesc, field.DictType, field.Clearable, multipleAttr)
 	} else if field.CheckDataSource {

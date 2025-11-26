@@ -35,6 +35,8 @@
               :icon="Search"
               @click="showSearchInputHandler"
             ></el-button>
+            <el-button type="success" @click="openImportDialog" :icon="Upload">
+            </el-button>
             <el-button type="primary" @click="openDrawer" :icon="Plus">
             </el-button>
           </div>
@@ -61,7 +63,14 @@
                 <span class="mr-auto text-sm">（{{ dictionary.type }}）</span>
               </div>
 
-              <div class="min-w-[40px]">
+              <div class="min-w-[60px] flex items-center gap-2">
+                <el-icon
+                  class="text-green-500"
+                  @click.stop="exportDictionary(dictionary)"
+                  title="导出字典"
+                >
+                  <Download />
+                </el-icon>
                 <el-icon
                   class="text-blue-500"
                   @click.stop="updateSysDictionaryFunc(dictionary)"
@@ -160,6 +169,76 @@
         </el-form-item>
       </el-form>
     </el-drawer>
+
+    <!-- 导入字典对话框 -->
+    <el-dialog
+      v-model="importDialogVisible"
+      title="导入字典JSON"
+      width="70%"
+      :close-on-click-modal="false"
+    >
+      <div class="import-dialog-content">
+        <div class="mb-4">
+          <el-alert
+            title="请粘贴或编辑字典JSON数据，支持包含字典详情的完整数据结构"
+            type="info"
+            :closable="false"
+            show-icon
+          />
+        </div>
+        <div class="json-editor-container">
+          <el-input
+            v-model="importJsonText"
+            type="textarea"
+            :rows="20"
+            placeholder='请输入JSON数据，例如：
+{
+  "name": "性别",
+  "type": "gender",
+  "status": true,
+  "desc": "性别字典",
+  "details": [
+    {
+      "label": "男",
+      "value": "1",
+      "status": true,
+      "sort": 1
+    },
+    {
+      "label": "女",
+      "value": "2",
+      "status": true,
+      "sort": 2
+    }
+  ]
+}'
+            class="json-textarea"
+          />
+        </div>
+        <div class="mt-4" v-if="jsonPreviewError">
+          <el-alert
+            :title="jsonPreviewError"
+            type="error"
+            :closable="false"
+            show-icon
+          />
+        </div>
+        <div class="mt-4" v-if="jsonPreview && !jsonPreviewError">
+          <el-divider content-position="left">JSON预览</el-divider>
+          <div class="json-preview">
+            <pre>{{ jsonPreviewFormatted }}</pre>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeImportDialog">取 消</el-button>
+          <el-button type="primary" @click="handleImport" :loading="importing">
+            确认导入
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -169,14 +248,16 @@
     deleteSysDictionary,
     updateSysDictionary,
     findSysDictionary,
-    getSysDictionaryList
+    getSysDictionaryList,
+    exportSysDictionary,
+    importSysDictionary
   } from '@/api/sysDictionary' // 此处请自行替换地址
   import WarningBar from '@/components/warningBar/warningBar.vue'
-  import { ref } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
-  import { Edit, Plus, Search } from '@element-plus/icons-vue'
+  import { Edit, Plus, Search, Download, Upload } from '@element-plus/icons-vue'
   import { useAppStore } from '@/pinia'
 
   defineOptions({
@@ -222,6 +303,35 @@
 
   const dictionaryData = ref([])
   const availableParentDictionaries = ref([])
+
+  // 导入相关
+  const importDialogVisible = ref(false)
+  const importJsonText = ref('')
+  const importing = ref(false)
+  const jsonPreviewError = ref('')
+  const jsonPreview = ref(null)
+
+  // 监听JSON文本变化，实时预览
+  watch(importJsonText, (newVal) => {
+    if (!newVal.trim()) {
+      jsonPreview.value = null
+      jsonPreviewError.value = ''
+      return
+    }
+    try {
+      jsonPreview.value = JSON.parse(newVal)
+      jsonPreviewError.value = ''
+    } catch (e) {
+      jsonPreviewError.value = 'JSON格式错误: ' + e.message
+      jsonPreview.value = null
+    }
+  })
+
+  // 格式化JSON预览
+  const jsonPreviewFormatted = computed(() => {
+    if (!jsonPreview.value) return ''
+    return JSON.stringify(jsonPreview.value, null, 2)
+  })
 
   // 查询
   const getTableData = async () => {
@@ -358,9 +468,76 @@
       getTableData()
     }
   }
+
+  // 导出字典
+  const exportDictionary = async (row) => {
+    try {
+      const res = await exportSysDictionary({ ID: row.ID })
+      if (res.code === 0) {
+        // 将JSON数据转换为字符串并下载
+        const jsonStr = JSON.stringify(res.data, null, 2)
+        const blob = new Blob([jsonStr], { type: 'application/json' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `${row.type}_${row.name}_dictionary.json`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+        ElMessage.success('导出成功')
+      }
+    } catch (error) {
+      ElMessage.error('导出失败: ' + error.message)
+    }
+  }
+
+  // 打开导入对话框
+  const openImportDialog = () => {
+    importDialogVisible.value = true
+    importJsonText.value = ''
+    jsonPreview.value = null
+    jsonPreviewError.value = ''
+  }
+
+  // 关闭导入对话框
+  const closeImportDialog = () => {
+    importDialogVisible.value = false
+    importJsonText.value = ''
+    jsonPreview.value = null
+    jsonPreviewError.value = ''
+  }
+
+  // 处理导入
+  const handleImport = async () => {
+    if (!importJsonText.value.trim()) {
+      ElMessage.warning('请输入JSON数据')
+      return
+    }
+
+    if (jsonPreviewError.value) {
+      ElMessage.error('JSON格式错误，请检查后重试')
+      return
+    }
+
+    try {
+      importing.value = true
+      const jsonData = JSON.parse(importJsonText.value)
+      const res = await importSysDictionary(jsonData)
+      if (res.code === 0) {
+        ElMessage.success('导入成功')
+        closeImportDialog()
+        getTableData()
+      }
+    } catch (error) {
+      ElMessage.error('导入失败: ' + error.message)
+    } finally {
+      importing.value = false
+    }
+  }
 </script>
 
-<style>
+<style scoped>
   .dict-box {
     height: calc(100vh - 240px);
   }
@@ -368,5 +545,45 @@
   .active {
     background-color: var(--el-color-primary) !important;
     color: #fff;
+  }
+
+  .import-dialog-content {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .json-editor-container {
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .json-textarea :deep(.el-textarea__inner) {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .json-preview {
+    background-color: #f5f7fa;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    padding: 16px;
+    max-height: 400px;
+    overflow: auto;
+  }
+
+  .json-preview pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .dark .json-preview {
+    background-color: #1d1e1f;
+    border-color: #414243;
   }
 </style>

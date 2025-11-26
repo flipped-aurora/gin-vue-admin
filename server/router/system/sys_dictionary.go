@@ -14,6 +14,8 @@ func (s *DictionaryRouter) InitSysDictionaryRouter(Router *gin.RouterGroup) {
 		sysDictionaryRouter.POST("createSysDictionary", dictionaryApi.CreateSysDictionary)   // 新建SysDictionary
 		sysDictionaryRouter.DELETE("deleteSysDictionary", dictionaryApi.DeleteSysDictionary) // 删除SysDictionary
 		sysDictionaryRouter.PUT("updateSysDictionary", dictionaryApi.UpdateSysDictionary)    // 更新SysDictionary
+		sysDictionaryRouter.POST("importSysDictionary", dictionaryApi.ImportSysDictionary)   // 导入SysDictionary
+		sysDictionaryRouter.GET("exportSysDictionary", dictionaryApi.ExportSysDictionary)    // 导出SysDictionary
 	}
 	{
 		sysDictionaryRouterWithoutRecord.GET("findSysDictionary", dictionaryApi.FindSysDictionary)       // 根据ID获取SysDictionary

@@ -4,7 +4,7 @@
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
     <el-splitter class="h-full">
-      <el-splitter-panel size="400px" min="200px" max="800px" collapsible>
+      <el-splitter-panel size="300px" min="200px" max="800px" collapsible>
         <div
           class="flex-none bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
         >
@@ -170,34 +170,70 @@
       </el-form>
     </el-drawer>
 
-    <!-- 导入字典对话框 -->
-    <el-dialog
-      v-model="importDialogVisible"
-      title="导入字典JSON"
-      width="70%"
-      :close-on-click-modal="false"
+    <!-- 导入字典抽屉 -->
+    <el-drawer
+      v-model="importDrawerVisible"
+      :size="appStore.drawerSize"
+      :show-close="false"
+      :before-close="closeImportDrawer"
     >
-      <div class="import-dialog-content">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">导入字典JSON</span>
+          <div>
+            <el-button @click="closeImportDrawer"> 取 消 </el-button>
+            <el-button type="primary" @click="handleImport" :loading="importing">
+              确认导入
+            </el-button>
+          </div>
+        </div>
+      </template>
+      
+      <div class="import-drawer-content">
         <div class="mb-4">
           <el-alert
-            title="请粘贴或编辑字典JSON数据，支持包含字典详情的完整数据结构"
+            title="请粘贴、编辑或拖拽JSON文件到下方区域"
             type="info"
             :closable="false"
             show-icon
           />
         </div>
-        <div class="json-editor-container">
+
+        <!-- 拖拽上传区域 -->
+        <div
+          class="drag-upload-area"
+          :class="{ 'is-dragging': isDragging }"
+          @drop.prevent="handleDrop"
+          @dragover.prevent="handleDragOver"
+          @dragleave.prevent="handleDragLeave"
+          @click="triggerFileInput"
+        >
+          <el-icon class="upload-icon"><Upload /></el-icon>
+          <div class="upload-text">
+            <p>将 JSON 文件拖到此处，或点击选择文件</p>
+            <p class="upload-hint">也可以在下方文本框直接编辑</p>
+          </div>
+          <input
+            ref="fileInputRef"
+            type="file"
+            accept=".json,application/json"
+            style="display: none"
+            @change="handleFileSelect"
+          />
+        </div>
+
+        <div class="json-editor-container mt-4">
           <el-input
             v-model="importJsonText"
             type="textarea"
-            :rows="20"
+            :rows="15"
             placeholder='请输入JSON数据，例如：
 {
   "name": "性别",
   "type": "gender",
   "status": true,
   "desc": "性别字典",
-  "details": [
+  "sysDictionaryDetails": [
     {
       "label": "男",
       "value": "1",
@@ -215,6 +251,7 @@
             class="json-textarea"
           />
         </div>
+
         <div class="mt-4" v-if="jsonPreviewError">
           <el-alert
             :title="jsonPreviewError"
@@ -223,22 +260,10 @@
             show-icon
           />
         </div>
-        <div class="mt-4" v-if="jsonPreview && !jsonPreviewError">
-          <el-divider content-position="left">JSON预览</el-divider>
-          <div class="json-preview">
-            <pre>{{ jsonPreviewFormatted }}</pre>
-          </div>
-        </div>
+
+    
       </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeImportDialog">取 消</el-button>
-          <el-button type="primary" @click="handleImport" :loading="importing">
-            确认导入
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -305,11 +330,13 @@
   const availableParentDictionaries = ref([])
 
   // 导入相关
-  const importDialogVisible = ref(false)
+  const importDrawerVisible = ref(false)
   const importJsonText = ref('')
   const importing = ref(false)
   const jsonPreviewError = ref('')
   const jsonPreview = ref(null)
+  const isDragging = ref(false)
+  const fileInputRef = ref(null)
 
   // 监听JSON文本变化，实时预览
   watch(importJsonText, (newVal) => {
@@ -332,6 +359,7 @@
     if (!jsonPreview.value) return ''
     return JSON.stringify(jsonPreview.value, null, 2)
   })
+
 
   // 查询
   const getTableData = async () => {
@@ -492,20 +520,85 @@
     }
   }
 
-  // 打开导入对话框
+  // 打开导入抽屉
   const openImportDialog = () => {
-    importDialogVisible.value = true
+    importDrawerVisible.value = true
     importJsonText.value = ''
     jsonPreview.value = null
     jsonPreviewError.value = ''
+    isDragging.value = false
   }
 
-  // 关闭导入对话框
-  const closeImportDialog = () => {
-    importDialogVisible.value = false
+  // 关闭导入抽屉
+  const closeImportDrawer = () => {
+    importDrawerVisible.value = false
     importJsonText.value = ''
     jsonPreview.value = null
     jsonPreviewError.value = ''
+    isDragging.value = false
+  }
+
+  // 处理拖拽进入
+  const handleDragOver = (e) => {
+    isDragging.value = true
+  }
+
+  // 处理拖拽离开
+  const handleDragLeave = (e) => {
+    isDragging.value = false
+  }
+  // 处理文件拖拽
+  const handleDrop = (e) => {
+    isDragging.value = false
+    const files = e.dataTransfer.files
+    if (files.length === 0) return
+
+    const file = files[0]
+    readJsonFile(file)
+  }
+
+  // 触发文件选择
+  const triggerFileInput = () => {
+    fileInputRef.value?.click()
+  }
+
+  // 处理文件选择
+  const handleFileSelect = (e) => {
+    const files = e.target.files
+    if (files.length === 0) return
+
+    const file = files[0]
+    readJsonFile(file)
+    
+    // 清空input，以便可以重复选择同一文件
+    e.target.value = ''
+  }
+
+  // 读取JSON文件
+  const readJsonFile = (file) => {
+    // 检查文件类型
+    if (!file.name.endsWith('.json')) {
+      ElMessage.warning('请上传 JSON 文件')
+      return
+    }
+
+    // 读取文件内容
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const content = event.target.result
+        // 验证是否为有效的 JSON
+        JSON.parse(content)
+        importJsonText.value = content
+        ElMessage.success('文件读取成功')
+      } catch (error) {
+        ElMessage.error('文件内容不是有效的 JSON 格式')
+      }
+    }
+    reader.onerror = () => {
+      ElMessage.error('文件读取失败')
+    }
+    reader.readAsText(file)
   }
 
   // 处理导入
@@ -522,11 +615,10 @@
 
     try {
       importing.value = true
-      const jsonData = JSON.parse(importJsonText.value)
-      const res = await importSysDictionary(jsonData)
+      const res = await importSysDictionary({ json: importJsonText.value })
       if (res.code === 0) {
         ElMessage.success('导入成功')
-        closeImportDialog()
+        closeImportDrawer()
         getTableData()
       }
     } catch (error) {
@@ -547,9 +639,53 @@
     color: #fff;
   }
 
-  .import-dialog-content {
-    max-height: 70vh;
-    overflow-y: auto;
+  .import-drawer-content {
+    padding: 0 4px;
+  }
+
+  /* 拖拽上传区域 */
+  .drag-upload-area {
+    border: 2px dashed #dcdfe6;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .drag-upload-area:hover {
+    border-color: #409eff;
+    background-color: #ecf5ff;
+  }
+
+  .drag-upload-area.is-dragging {
+    border-color: #409eff;
+    background-color: #ecf5ff;
+    transform: scale(1.02);
+  }
+
+  .upload-icon {
+    font-size: 48px;
+    color: #8c939d;
+    margin-bottom: 16px;
+  }
+
+  .drag-upload-area.is-dragging .upload-icon {
+    color: #409eff;
+  }
+
+  .upload-text {
+    color: #606266;
+  }
+
+  .upload-text p {
+    margin: 4px 0;
+  }
+
+  .upload-hint {
+    font-size: 12px;
+    color: #909399;
   }
 
   .json-editor-container {
@@ -580,6 +716,17 @@
     line-height: 1.5;
     white-space: pre-wrap;
     word-wrap: break-word;
+  }
+
+  .dark .drag-upload-area {
+    background-color: #1d1e1f;
+    border-color: #414243;
+  }
+
+  .dark .drag-upload-area:hover,
+  .dark .drag-upload-area.is-dragging {
+    background-color: #1a3a52;
+    border-color: #409eff;
   }
 
   .dark .json-preview {

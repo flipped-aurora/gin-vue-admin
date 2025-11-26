@@ -171,17 +171,17 @@ func (s *DictionaryApi) ExportSysDictionary(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      map[string]interface{}                 true  "字典JSON数据"
+// @Param     data  body      request.ImportSysDictionaryRequest     true  "字典JSON数据"
 // @Success   200   {object}  response.Response{msg=string}          "导入字典"
 // @Router    /sysDictionary/importSysDictionary [post]
 func (s *DictionaryApi) ImportSysDictionary(c *gin.Context) {
-	var importData map[string]interface{}
-	err := c.ShouldBindJSON(&importData)
+	var req request.ImportSysDictionaryRequest
+	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryService.ImportSysDictionary(importData)
+	err = dictionaryService.ImportSysDictionary(req.Json)
 	if err != nil {
 		global.GVA_LOG.Error("导入失败!", zap.Error(err))
 		response.FailWithMessage("导入失败: "+err.Error(), c)

@@ -273,13 +273,42 @@
       width="520px"
       :before-close="closeAiDialog"
     >
-      <el-input
-        v-model="aiPrompt"
-        type="textarea"
-        :rows="6"
-        placeholder="请输入生成字典的描述，例如：生成一个用户状态字典（启用/禁用）"
-        @keydown.ctrl.enter="handleAiGenerate"
-      />
+      <div class="relative">
+        <el-input
+          v-model="aiPrompt"
+          type="textarea"
+          :rows="6"
+          :maxlength="2000"
+          placeholder="请输入生成字典的描述，例如：生成一个用户状态字典（启用/禁用）\n支持粘贴或上传图片后识图生成。"
+          resize="none"
+          @keydown.ctrl.enter="handleAiGenerate"
+          @paste="handlePaste"
+          @focus="handleFocus"
+          @blur="handleBlur"
+        />
+
+        <input
+          ref="imageFileInputRef"
+          type="file"
+          accept="image/*"
+          style="display:none"
+          @change="handleImageSelect"
+        />
+
+        <div class="flex absolute right-2 bottom-2">
+          <el-tooltip effect="light">
+            <template #content>
+              <div>粘贴或上传图片后，识别图片内容生成字典。</div>
+            </template>
+            <el-button type="primary" @click="eyeFunc">
+                <el-icon size="18">
+                <ai-gva />
+              </el-icon>
+              识图
+            </el-button>
+          </el-tooltip>
+        </div>
+      </div>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeAiDialog">取 消</el-button>
@@ -302,7 +331,7 @@
     exportSysDictionary,
     importSysDictionary
   } from '@/api/sysDictionary' // 此处请自行替换地址
-  import { butler } from '@/api/autoCode'
+  import { butler, eye } from '@/api/autoCode'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import { ref, computed, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
@@ -368,6 +397,66 @@
   const aiDialogVisible = ref(false)
   const aiPrompt = ref('')
   const aiGenerating = ref(false)
+
+  // 图片上传/识别相关
+  const imageFileInputRef = ref(null)
+  const focused = ref(false)
+
+  const handleFocus = () => {
+    focused.value = true
+  }
+  const handleBlur = () => {
+    focused.value = false
+  }
+
+  // 触发图片选择
+  const triggerImageSelect = () => {
+    imageFileInputRef.value?.click()
+  }
+
+  const handlePaste = (event) => {
+    const items = event.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload =async (e) => {
+          const base64String = e.target.result;
+          const res = await eye({ picture: base64String,command: 'dictEye' })
+          if (res.code === 0) {
+            aiPrompt.value = res.data
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
+
+  const eyeFunc = async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64String = e.target.result;
+
+          const res = await eye({ picture: base64String,command: 'dictEye' })
+          if (res.code === 0) {
+            aiPrompt.value = res.data
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    input.click();
+  }
+
+
 
   // 监听JSON文本变化，实时预览
   watch(importJsonText, (newVal) => {

@@ -1,9 +1,9 @@
 <template>
-  <div class="grid grid-cols-2 gap-6 font-inter px-6">
+  <div class="grid grid-cols-2 gap-6 gva-theme-font px-6">
     <div
       v-for="layout in layoutModes"
       :key="layout.value"
-      class="bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl p-6 cursor-pointer transition-all duration-150 ease-in-out hover:transform hover:-translate-y-1 hover:shadow-xl"
+      class="gva-theme-layout-card"
       :class="{
         'ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-900 transform -translate-y-1 shadow-xl': modelValue === layout.value
       }"
@@ -43,7 +43,7 @@
       </div>
 
       <div class="text-center">
-        <span class="block text-base font-semibold text-gray-900 dark:text-white mb-2" :class="{ 'text-current': modelValue === layout.value }" :style="modelValue === layout.value ? { color: primaryColor } : {}">{{ layout.label }}</span>
+        <span class="block text-base font-semibold gva-theme-text-main mb-2" :class="{ 'text-current': modelValue === layout.value }" :style="modelValue === layout.value ? { color: primaryColor } : {}">{{ layout.label }}</span>
         <span class="block text-sm text-gray-500 dark:text-gray-400">{{ layout.description }}</span>
       </div>
     </div>
@@ -163,18 +163,8 @@ const getHeaderStyle = (layout) => {
   }
 }
 
-const getContentStyle = (layout) => {
+const getContentStyle = () => {
   return { backgroundColor: lightestPrimaryColor.value, opacity: '0.5' }
-}
-
-const getRightSidebarStyle = (layout) => {
-  if (layout.primaryElement === 'rightSidebar') {
-    return { backgroundColor: primaryColor.value, opacity: '0.95' }
-  } else if (layout.secondaryElement === 'rightSidebar') {
-    return { backgroundColor: lighterPrimaryColor.value, opacity: '0.85' }
-  } else {
-    return { backgroundColor: lightestPrimaryColor.value, opacity: '0.6' }
-  }
 }
 
 const handleLayoutChange = (layout) => {
@@ -183,10 +173,6 @@ const handleLayoutChange = (layout) => {
 </script>
 
 <style scoped>
-.font-inter {
-  font-family: 'Inter', sans-serif;
-}
-
 .flex-col {
   flex-direction: column;
 }

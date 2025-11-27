@@ -72,7 +72,7 @@
         >
           <template #default="scope">
             <el-button
-              type="success"
+              type="primary"
               link
               icon="plus"
               @click="addChildNode(scope.row)"

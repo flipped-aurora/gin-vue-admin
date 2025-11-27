@@ -30,16 +30,36 @@
                 >
               </template>
             </el-input>
-            <el-button
-              class="ml-auto"
-              :icon="Search"
-              @click="showSearchInputHandler"
-            ></el-button>
-            <el-button type="success" @click="openImportDialog" :icon="Upload">
-            </el-button>
-            <el-button type="warning" @click="openAiDialog">AI</el-button>
-            <el-button type="primary" @click="openDrawer" :icon="Plus">
-            </el-button>
+            <el-button-group class="ml-auto">
+              <el-tooltip content="搜索" placement="top">
+                <el-button
+                  :icon="Search"
+                  @click="showSearchInputHandler"
+                />
+              </el-tooltip>
+              <el-tooltip content="导入字典" placement="top">
+                <el-button
+                  type="success"
+                  :icon="Upload"
+                  @click="openImportDialog"
+                />
+              </el-tooltip>
+              <el-tooltip content="AI 生成字典" placement="top">
+                <el-button
+                  type="warning"
+                  @click="openAiDialog"
+                >
+                  AI
+                </el-button>
+              </el-tooltip>
+              <el-tooltip content="新建字典" placement="top">
+                <el-button
+                  type="primary"
+                  :icon="Plus"
+                  @click="openDrawer"
+                />
+              </el-tooltip>
+            </el-button-group>
           </div>
           <el-scrollbar class="mt-4" style="height: calc(100vh - 300px)">
             <div
@@ -66,20 +86,20 @@
 
               <div class="min-w-[60px] flex items-center gap-2">
                 <el-icon
-                  class="text-green-500"
+                  class="!text-green-500"
                   @click.stop="exportDictionary(dictionary)"
                   title="导出字典"
                 >
                   <Download />
                 </el-icon>
                 <el-icon
-                  class="text-blue-500"
+                  class="!text-blue-500"
                   @click.stop="updateSysDictionaryFunc(dictionary)"
                 >
                   <Edit />
                 </el-icon>
                 <el-icon
-                  class="ml-2 text-red-500"
+                  class="!text-red-500"
                   @click="deleteSysDictionaryFunc(dictionary)"
                 >
                   <Delete />

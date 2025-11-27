@@ -37,6 +37,7 @@
             ></el-button>
             <el-button type="success" @click="openImportDialog" :icon="Upload">
             </el-button>
+            <el-button type="warning" @click="openAiDialog">AI</el-button>
             <el-button type="primary" @click="openDrawer" :icon="Plus">
             </el-button>
           </div>
@@ -264,6 +265,30 @@
     
       </div>
     </el-drawer>
+
+    <!-- AI 对话框 -->
+    <el-dialog
+      v-model="aiDialogVisible"
+      title="AI 生成字典"
+      width="520px"
+      :before-close="closeAiDialog"
+    >
+      <el-input
+        v-model="aiPrompt"
+        type="textarea"
+        :rows="6"
+        placeholder="请输入生成字典的描述，例如：生成一个用户状态字典（启用/禁用）"
+        @keydown.ctrl.enter="handleAiGenerate"
+      />
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeAiDialog">取 消</el-button>
+          <el-button type="primary" @click="handleAiGenerate" :loading="aiGenerating">
+            确 定
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -277,6 +302,7 @@
     exportSysDictionary,
     importSysDictionary
   } from '@/api/sysDictionary' // 此处请自行替换地址
+  import { butler } from '@/api/autoCode'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import { ref, computed, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
@@ -337,6 +363,11 @@
   const jsonPreview = ref(null)
   const isDragging = ref(false)
   const fileInputRef = ref(null)
+
+  // AI 相关
+  const aiDialogVisible = ref(false)
+  const aiPrompt = ref('')
+  const aiGenerating = ref(false)
 
   // 监听JSON文本变化，实时预览
   watch(importJsonText, (newVal) => {
@@ -625,6 +656,56 @@
       ElMessage.error('导入失败: ' + error.message)
     } finally {
       importing.value = false
+    }
+  }
+
+  // 打开 AI 对话框
+  const openAiDialog = () => {
+    aiDialogVisible.value = true
+    aiPrompt.value = ''
+  }
+
+  // 关闭 AI 对话框
+  const closeAiDialog = () => {
+    aiDialogVisible.value = false
+    aiPrompt.value = ''
+  }
+
+  // 处理 AI 生成
+  const handleAiGenerate = async () => {
+    if (!aiPrompt.value.trim()) {
+      ElMessage.warning('请输入描述内容')
+      return
+    }
+    try {
+      aiGenerating.value = true
+      const aiRes = await butler({
+        prompt: aiPrompt.value,
+        command: 'dict'
+      })
+      if (aiRes && aiRes.code === 0) {
+        ElMessage.success('AI 生成成功')
+        try {
+          // 将 AI 返回的数据填充到导入文本框（支持字符串或对象）
+          if (typeof aiRes.data === 'string') {
+            importJsonText.value = aiRes.data
+          } else {
+            importJsonText.value = JSON.stringify(aiRes.data, null, 2)
+          }
+          // 清除可能的解析错误并打开导入抽屉
+          jsonPreviewError.value = ''
+          importDrawerVisible.value = true
+          closeAiDialog()
+        } catch (e) {
+          ElMessage.error('处理 AI 返回结果失败: ' + (e.message || e))
+        }
+      } else {
+        ElMessage.error(aiRes.msg || 'AI 生成失败')
+      }
+    } catch (err) {
+      ElMessage.error('AI 调用失败: ' + (err.message || err))
+    } finally {
+      aiGenerating.value = false
     }
   }
 </script>

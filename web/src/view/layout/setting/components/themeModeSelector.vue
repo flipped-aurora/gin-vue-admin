@@ -1,10 +1,10 @@
 <template>
   <div class="flex justify-center">
-    <div class="inline-flex bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 gap-1">
+    <div class="gva-theme-mode-selector">
       <div
         v-for="mode in themeModes"
         :key="mode.value"
-        class="flex flex-col items-center justify-center px-4 py-3 rounded-md cursor-pointer transition-all duration-150 ease-in-out min-w-[64px]"
+        class="gva-theme-mode-item"
         :class="[
           modelValue === mode.value
             ? 'text-white shadow-sm transform -translate-y-0.5'
@@ -32,7 +32,7 @@ defineOptions({
   name: 'ThemeModeSelector'
 })
 
-const props = defineProps({
+defineProps({
   modelValue: {
     type: String,
     default: 'auto'

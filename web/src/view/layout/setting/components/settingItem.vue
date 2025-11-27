@@ -1,7 +1,7 @@
 <template>
-  <div class="flex items-center justify-between py-4 font-inter border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+  <div class="gva-theme-setting-item">
     <div class="flex items-center gap-2">
-      <span class="text-sm font-medium text-gray-900 dark:text-white">{{ label }}</span>
+      <span class="gva-theme-setting-label">{{ label }}</span>
       <slot name="suffix"></slot>
     </div>
     <div class="flex items-center setting-controls">
@@ -34,9 +34,7 @@ const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
 </script>
 
 <style scoped>
-.font-inter {
-  font-family: 'Inter', sans-serif;
-}
+
 
 .setting-controls {
   ::v-deep(.el-switch) {

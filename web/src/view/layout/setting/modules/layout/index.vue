@@ -1,13 +1,13 @@
 <template>
-  <div class="font-inter">
+  <div class="gva-theme-font">
     <div class="mb-10">
-      <div class="flex items-center justify-center mb-6">
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">布局模式</span>
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+      <div class="gva-theme-section-header">
+        <div class="gva-theme-divider"></div>
+        <span class="gva-theme-section-title">布局模式</span>
+        <div class="gva-theme-divider"></div>
       </div>
 
-      <div class="section-content">
+      <div class="gva-theme-section-content">
         <LayoutModeCard
           v-model="config.side_mode"
           @update:modelValue="appStore.toggleSideMode"
@@ -16,14 +16,14 @@
     </div>
 
     <div class="mb-10">
-      <div class="flex items-center justify-center mb-6">
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">界面配置</span>
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+      <div class="gva-theme-section-header">
+        <div class="gva-theme-divider"></div>
+        <span class="gva-theme-section-title">界面配置</span>
+        <div class="gva-theme-divider"></div>
       </div>
 
-      <div class="section-content">
-        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+      <div class="gva-theme-section-content">
+        <div class="gva-theme-card-bg">
           <SettingItem label="显示标签页">
             <template #suffix>
               <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">页面标签导航</span>
@@ -55,19 +55,19 @@
     </div>
 
     <div class="mb-10">
-      <div class="flex items-center justify-center mb-6">
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">尺寸配置</span>
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+      <div class="gva-theme-section-header">
+        <div class="gva-theme-divider"></div>
+        <span class="gva-theme-section-title">尺寸配置</span>
+        <div class="gva-theme-divider"></div>
       </div>
 
-      <div class="section-content">
-        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
-          <div class="space-y-6">
-            <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5">
+      <div class="gva-theme-section-content">
+        <div class="gva-theme-card-bg">
+          <div class="space-y-4">
+            <div class="gva-theme-card-white">
               <div class="flex items-center justify-between">
                 <div>
-                  <h4 class="text-sm font-medium text-gray-900 dark:text-white">侧边栏展开宽度</h4>
+                  <h4 class="text-sm font-medium gva-theme-text-main">侧边栏展开宽度</h4>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">侧边栏完全展开时的宽度</p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -84,10 +84,10 @@
               </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5">
+            <div class="gva-theme-card-white">
               <div class="flex items-center justify-between">
                 <div>
-                  <h4 class="text-sm font-medium text-gray-900 dark:text-white">侧边栏收缩宽度</h4>
+                  <h4 class="text-sm font-medium gva-theme-text-main">侧边栏收缩宽度</h4>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">侧边栏收缩时的最小宽度</p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -103,10 +103,10 @@
               </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5">
+            <div class="gva-theme-card-white">
               <div class="flex items-center justify-between">
                 <div>
-                  <h4 class="text-sm font-medium text-gray-900 dark:text-white">菜单项高度</h4>
+                  <h4 class="text-sm font-medium gva-theme-text-main">菜单项高度</h4>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">侧边栏菜单项的行高</p>
                 </div>
                 <div class="flex items-center gap-2">
@@ -142,23 +142,4 @@ const appStore = useAppStore()
 const { config } = storeToRefs(appStore)
 </script>
 
-<style scoped>
-.font-inter {
-  font-family: 'Inter', sans-serif;
-}
 
-.section-content {
-  animation: fadeInUp 0.3s ease;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

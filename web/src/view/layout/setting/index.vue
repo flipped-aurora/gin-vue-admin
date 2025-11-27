@@ -5,11 +5,11 @@
     direction="rtl"
     :size="width"
     :show-close="false"
-    class="theme-config-drawer"
+    class="gva-theme-drawer"
   >
     <template #header>
       <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white font-inter">系统配置</h2>
+        <h2 class="text-xl font-semibold gva-theme-text-main gva-theme-font">系统配置</h2>
         <el-button
           type="primary"
           size="small"
@@ -22,14 +22,14 @@
       </div>
     </template>
 
-    <div class="bg-white dark:bg-gray-900">
-      <div class="px-8 pt-4 pb-6 border-b border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-gray-900 px-6">
+      <div class="px-8 pt-4 pb-6">
         <div class="flex justify-center">
           <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1.5 border border-gray-200 dark:border-gray-700 shadow-sm">
             <div
               v-for="tab in tabs"
               :key="tab.key"
-              class="px-6 py-3 text-base text-center cursor-pointer font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
+              class="px-4 py-2 text-base text-center cursor-pointer font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
               :class="[
                 activeTab === tab.key
                   ? 'text-white shadow-md transform -translate-y-0.5'
@@ -106,57 +106,100 @@
   }, { deep: true });
 </script>
 
-<style lang="scss" scoped>
-.theme-config-drawer {
+<style lang="scss">
+.gva-theme-drawer {
+  .el-drawer {
+    @apply bg-white dark:bg-gray-900;
+  }
+
+  .el-drawer__header {
+    @apply p-0 border-0;
+  }
+
+  .el-drawer__body {
+    @apply p-0;
+  }
+}
+
+.gva-theme-font {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-
-  ::v-deep(.el-drawer) {
-    background: white;
-  }
-
-  ::v-deep(.el-drawer__header) {
-    padding: 0;
-    border: 0;
-  }
-
-  ::v-deep(.el-drawer__body) {
-    padding: 0;
-  }
 }
 
-.dark .theme-config-drawer {
-  ::v-deep(.el-drawer) {
-    background: #111827;
+.gva-theme-card-bg {
+  @apply bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm;
+}
+
+.gva-theme-card-white {
+  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5;
+}
+
+.gva-theme-section-header {
+  @apply flex items-center justify-center mb-6;
+}
+
+.gva-theme-section-title {
+  @apply px-6 text-lg font-semibold text-gray-700 dark:text-gray-300;
+}
+
+.gva-theme-divider {
+  @apply h-px bg-gray-200 dark:bg-gray-700 flex-1;
+}
+
+.gva-theme-text-main {
+  @apply text-gray-900 dark:text-white;
+}
+
+.gva-theme-text-sub {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.gva-theme-section-content {
+  animation: fadeInUp 0.3s ease;
+}
+
+.gva-theme-setting-item {
+  @apply flex items-center justify-between py-4 gva-theme-font border-b border-gray-100 dark:border-gray-700 last:border-b-0;
+}
+
+.gva-theme-setting-label {
+  @apply text-sm font-medium gva-theme-text-main;
+}
+
+.gva-theme-mode-selector {
+  @apply inline-flex bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 gap-1;
+}
+
+.gva-theme-mode-item {
+  @apply flex flex-col items-center justify-center px-3 py-2 rounded-md cursor-pointer transition-all duration-150 ease-in-out min-w-[64px];
+}
+
+.gva-theme-layout-card {
+  @apply bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl p-3 cursor-pointer transition-all duration-150 ease-in-out hover:-translate-y-1 hover:shadow-xl;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-}
 
-.font-inter {
-  font-family: 'Inter', sans-serif;
-}
-
-.reset-btn {
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: all 150ms ease-in-out;
-
-  &:hover {
-    transform: translateY(-2px);
-    filter: brightness(0.9);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 /* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
+.gva-theme-drawer ::-webkit-scrollbar {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
+.gva-theme-drawer ::-webkit-scrollbar-track {
   background: #f3f4f6;
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb {
+.gva-theme-drawer ::-webkit-scrollbar-thumb {
   background: #d1d5db;
   border-radius: 3px;
 
@@ -165,15 +208,21 @@
   }
 }
 
-.dark ::-webkit-scrollbar-track {
+.dark .gva-theme-drawer ::-webkit-scrollbar-track {
   background: #1f2937;
 }
 
-.dark ::-webkit-scrollbar-thumb {
+.dark .gva-theme-drawer ::-webkit-scrollbar-thumb {
   background: #4b5563;
 
   &:hover {
     background: #6b7280;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.reset-btn {
+  @apply rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5 hover:brightness-90 hover:shadow-lg;
 }
 </style>

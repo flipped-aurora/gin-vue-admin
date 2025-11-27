@@ -3,7 +3,7 @@
     id="app"
     class="bg-gray-50 text-slate-700 !dark:text-slate-500 dark:bg-slate-800"
   >
-    <el-config-provider :locale="zhCn">
+    <el-config-provider :locale="zhCn" :size="appStore.config.global_size">
       <router-view />
       <Application />
     </el-config-provider>
@@ -15,7 +15,7 @@
   import Application from '@/components/application/index.vue'
   import { useAppStore } from '@/pinia'
 
-  useAppStore()
+  const appStore = useAppStore()
   defineOptions({
     name: 'App'
   })

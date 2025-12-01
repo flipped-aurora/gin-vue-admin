@@ -135,6 +135,11 @@ func (b *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	// 路径穿越拦截
+	if strings.Contains(file.FilePath, "..") || strings.Contains(file.FilePath, "../") || strings.Contains(file.FilePath, "./") || strings.Contains(file.FilePath, ".\\") {
+		response.FailWithMessage("非法路径，禁止删除", c)
+		return
+	}
 	err = utils.RemoveChunk(file.FileMd5)
 	if err != nil {
 		global.GVA_LOG.Error("缓存切片删除失败!", zap.Error(err))

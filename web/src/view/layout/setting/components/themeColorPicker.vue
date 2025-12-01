@@ -1,13 +1,13 @@
 <template>
-  <div class="font-inter">
-    <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-8 shadow-sm">
-      <div class="mb-8">
-        <p class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-5">精选色彩</p>
+  <div class="gva-theme-font">
+    <div class="gva-theme-card-bg p-4">
+      <div class="mb-4">
+        <p class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-4">精选色彩</p>
         <div class="grid grid-cols-3 gap-4">
           <div
             v-for="colorItem in presetColors"
             :key="colorItem.color"
-            class="flex items-center gap-4 p-4 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer transition-all duration-150 ease-in-out hover:transform hover:-translate-y-1 hover:shadow-lg"
+            class="flex items-center gap-4 p-2 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer transition-all duration-150 ease-in-out hover:transform hover:-translate-y-1 hover:shadow-lg"
             :class="{
               'ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-800 transform -translate-y-1 shadow-lg': modelValue === colorItem.color
             }"
@@ -32,15 +32,15 @@
               </div>
             </div>
             <div class="min-w-0 flex-1">
-              <span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ colorItem.name }}</span>
+              <span class="block text-sm font-semibold gva-theme-text-main">{{ colorItem.name }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="flex items-center justify-between p-5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl mb-6 shadow-sm">
+      <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl mb-6 shadow-sm">
         <div class="flex-1">
-          <h4 class="text-base font-semibold text-gray-900 dark:text-white">自定义颜色</h4>
+          <h4 class="text-base font-semibold gva-theme-text-main">自定义颜色</h4>
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">选择任意颜色作为主题色</p>
         </div>
         <el-color-picker
@@ -52,7 +52,7 @@
         />
       </div>
 
-      <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-5 shadow-sm">
+      <div class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-4 shadow-sm">
         <div class="flex items-center justify-between">
           <span class="text-base font-semibold text-gray-700 dark:text-gray-300">当前主题色</span>
           <div class="flex items-center gap-3">
@@ -122,9 +122,7 @@ watch(() => props.modelValue, (newValue) => {
 </script>
 
 <style scoped>
-.font-inter {
-  font-family: 'Inter', sans-serif;
-}
+
 
 .custom-color-picker {
   ::v-deep(.el-color-picker__trigger) {

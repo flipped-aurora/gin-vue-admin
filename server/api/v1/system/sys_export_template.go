@@ -50,6 +50,34 @@ type SysExportTemplateApi struct {
 
 var sysExportTemplateService = service.ServiceGroupApp.SystemServiceGroup.SysExportTemplateService
 
+// PreviewSQL 预览最终生成的SQL
+// @Tags     SysExportTemplate
+// @Summary  预览最终生成的SQL（不执行查询，仅返回SQL字符串）
+// @Security ApiKeyAuth
+// @accept   application/json
+// @Produce  application/json
+// @Param    templateID query string true  "导出模板ID"
+// @Param    params     query string false "查询参数编码字符串，参考 ExportExcel 组件"
+// @Success  200  {object}  response.Response{data=map[string]string} "获取成功"
+// @Router   /sysExportTemplate/previewSQL [get]
+func (sysExportTemplateApi *SysExportTemplateApi) PreviewSQL(c *gin.Context) {
+    templateID := c.Query("templateID")
+    if templateID == "" {
+        response.FailWithMessage("模板ID不能为空", c)
+        return
+    }
+
+    // 直接复用导出接口的参数组织方式：使用 URL Query，其中 params 为内部编码的查询字符串
+    queryParams := c.Request.URL.Query()
+
+    if sqlPreview, err := sysExportTemplateService.PreviewSQL(templateID, queryParams); err != nil {
+        global.GVA_LOG.Error("获取失败!", zap.Error(err))
+        response.FailWithMessage("获取失败", c)
+    } else {
+        response.OkWithData(gin.H{"sql": sqlPreview}, c)
+    }
+}
+
 // CreateSysExportTemplate 创建导出模板
 // @Tags SysExportTemplate
 // @Summary 创建导出模板

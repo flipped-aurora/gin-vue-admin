@@ -26,6 +26,7 @@ func (s *SysExportTemplateRouter) InitSysExportTemplateRouter(Router *gin.Router
 		sysExportTemplateRouterWithoutRecord.GET("getSysExportTemplateList", exportTemplateApi.GetSysExportTemplateList) // 获取导出模板列表
 		sysExportTemplateRouterWithoutRecord.GET("exportExcel", exportTemplateApi.ExportExcel)                           // 获取导出token
 		sysExportTemplateRouterWithoutRecord.GET("exportTemplate", exportTemplateApi.ExportTemplate)                     // 导出表格模板
+        sysExportTemplateRouterWithoutRecord.GET("previewSQL", exportTemplateApi.PreviewSQL)                         // 预览SQL
 	}
 	{
 		sysExportTemplateRouterWithoutAuth.GET("exportExcelByToken", exportTemplateApi.ExportExcelByToken)       // 通过token导出表格

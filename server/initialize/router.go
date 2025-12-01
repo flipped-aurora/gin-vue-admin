@@ -34,11 +34,12 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 // 初始化总路由
 
 func Routers() *gin.Engine {
-	Router := gin.New()
-	Router.Use(gin.Recovery())
-	if gin.Mode() == gin.DebugMode {
-		Router.Use(gin.Logger())
-	}
+    Router := gin.New()
+    // 使用自定义的 Recovery 中间件，记录 panic 并入库
+    Router.Use(middleware.GinRecovery(true))
+    if gin.Mode() == gin.DebugMode {
+        Router.Use(gin.Logger())
+    }
 
 	if !global.GVA_CONFIG.MCP.Separate {
 
@@ -107,6 +108,7 @@ func Routers() *gin.Engine {
 		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)             // 按钮权限管理
 		systemRouter.InitSysExportTemplateRouter(PrivateGroup, PublicGroup) // 导出模板
 		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)         // 参数管理
+		systemRouter.InitSysErrorRouter(PrivateGroup, PublicGroup)          // 错误日志
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
 		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类

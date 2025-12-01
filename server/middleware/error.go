@@ -1,12 +1,12 @@
 package middleware
 
 import (
-	"net"
-	"net/http"
-	"net/http/httputil"
-	"os"
-	"runtime/debug"
-	"strings"
+    "net"
+    "net/http"
+    "net/http/httputil"
+    "os"
+    "runtime/debug"
+    "strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/gin-gonic/gin"

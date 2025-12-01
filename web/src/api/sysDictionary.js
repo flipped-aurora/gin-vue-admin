@@ -78,3 +78,35 @@ export const getSysDictionaryList = (params) => {
     params
   })
 }
+
+// @Tags SysDictionary
+// @Summary 导出字典JSON（包含字典详情）
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query model.SysDictionary true "字典ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"导出成功"}"
+// @Router /sysDictionary/exportSysDictionary [get]
+export const exportSysDictionary = (params) => {
+  return service({
+    url: '/sysDictionary/exportSysDictionary',
+    method: 'get',
+    params
+  })
+}
+
+// @Tags SysDictionary
+// @Summary 导入字典JSON（包含字典详情）
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body object true "字典JSON数据"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"导入成功"}"
+// @Router /sysDictionary/importSysDictionary [post]
+export const importSysDictionary = (data) => {
+  return service({
+    url: '/sysDictionary/importSysDictionary',
+    method: 'post',
+    data
+  })
+}

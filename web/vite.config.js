@@ -99,7 +99,7 @@ export default ({ mode }) => {
     optimizeDeps,
     plugins: [
       process.env.VITE_POSITION === 'open' &&
-        vueDevTools({ launchEditor: process.env.VITE_EDITOR }),
+      vueDevTools({ launchEditor: process.env.VITE_EDITOR }),
       legacyPlugin({
         targets: [
           'Android > 39',

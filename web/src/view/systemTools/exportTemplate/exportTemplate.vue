@@ -139,7 +139,7 @@
               icon="edit-pen"
               class="table-button"
               @click="showCode(scope.row)"
-              >代码</el-button
+              >代码和SQL预览</el-button
             >
             <el-button
               type="primary"
@@ -401,28 +401,79 @@
       </el-form>
     </el-drawer>
 
+    <!-- 合并：代码模板 + SQL预览 抽屉 -->
     <el-drawer
-      v-model="codeVisible"
-      size="60%"
-      :before-close="closeDialog"
-      :title="type === 'create' ? '添加' : '修改'"
-      :show-close="false"
+      v-model="drawerVisible"
+      size="70%"
+      :title="'模板与预览'"
+      :show-close="true"
       destroy-on-close
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">模板</span>
+          <span class="text-lg">模板与预览</span>
           <div>
-            <el-button type="primary" @click="closeDialog">确 定</el-button>
+            <el-button @click="drawerVisible = false">关 闭</el-button>
+            <el-button v-if="activeTab === 'sql'" type="primary" @click="runPreview">生 成</el-button>
           </div>
         </div>
       </template>
-      <v-ace-editor
-        v-model:value="webCode"
-        lang="vue"
-        theme="github_dark"
-        class="h-full"
-      />
+      <el-tabs v-model="activeTab" type="border-card">
+        <el-tab-pane label="代码模板" name="code">
+          <v-ace-editor
+            v-model:value="webCode"
+            lang="vue"
+            theme="github_dark"
+            class="w-full h-96"
+            :options="{ showPrintMargin: false, fontSize: 14 }"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="SQL预览" name="sql">
+          <div class="flex flex-col gap-4">
+            <div class="w-full">
+              <el-form :model="previewForm" label-width="120px">
+                <el-form-item label="过滤已删除">
+                  <el-switch v-model="previewForm.filterDeleted" />
+                </el-form-item>
+                <el-form-item label="默认排序">
+                  <el-input v-model="previewForm.order" placeholder="例如: id desc" />
+                </el-form-item>
+                <el-form-item label="限制条数">
+                  <el-input-number v-model="previewForm.limit" :min="0" />
+                </el-form-item>
+                <el-form-item label="偏移量">
+                  <el-input-number v-model="previewForm.offset" :min="0" />
+                </el-form-item>
+
+                <el-divider content-position="left">查询条件</el-divider>
+                <div v-if="previewConditions.length === 0" class="text-gray">该模板暂无条件</div>
+                <template v-for="(cond, idx) in previewConditions" :key="idx">
+                  <el-form-item :label="cond.column + ' ' + cond.operator">
+                    <template v-if="cond.operator === 'BETWEEN'">
+                      <div class="flex gap-2 w-full">
+                        <el-input v-model="previewForm['start' + cond.from]" placeholder="开始值: start{{cond.from}}" />
+                        <el-input v-model="previewForm['end' + cond.from]" placeholder="结束值: end{{cond.from}}" />
+                      </div>
+                    </template>
+                    <template v-else>
+                      <el-input v-model="previewForm[cond.from]" :placeholder="'变量: ' + cond.from" />
+                    </template>
+                  </el-form-item>
+                </template>
+              </el-form>
+            </div>
+            <div class="w-full">
+              <v-ace-editor
+                v-model:value="previewSQLCode"
+                lang="sql"
+                theme="github_dark"
+                class="w-full h-96"
+                :options="aceOptions"
+              />
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </el-drawer>
   </div>
 </template>
@@ -436,6 +487,7 @@
     findSysExportTemplate,
     getSysExportTemplateList
   } from '@/api/exportTemplate.js'
+  import { previewSQL } from '@/api/exportTemplate.js'
 
   // 全量引入格式化工具 请按需保留
   import { formatDate } from '@/utils/format'
@@ -448,6 +500,7 @@
 
   import 'ace-builds/src-noconflict/mode-vue'
   import 'ace-builds/src-noconflict/theme-github_dark'
+  import 'ace-builds/src-noconflict/mode-sql'
 
   defineOptions({
     name: 'ExportTemplate'
@@ -903,7 +956,8 @@ JOINS模式下不支持导入
       getTableData()
     }
   }
-  const codeVisible = ref(false)
+  const drawerVisible = ref(false)
+  const activeTab = ref('code')
   // 弹窗控制标记
   const dialogFormVisible = ref(false)
 
@@ -911,7 +965,56 @@ JOINS模式下不支持导入
 
   const showCode = (row) => {
     webCode.value = getCode(row.templateID)
-    codeVisible.value = true
+    activeTab.value = 'code'
+    drawerVisible.value = true
+  }
+
+  // 预览 SQL
+  const previewForm = ref({ filterDeleted: true, order: '', limit: 0, offset: 0 })
+  const previewSQLCode = ref('')
+  const previewTemplate = ref(null)
+  const previewConditions = ref([])
+  const aceOptions = { wrap: true, showPrintMargin: false, fontSize: 14 }
+
+  const openPreview = async (row) => {
+    // 获取模板完整信息以展示条件输入项
+    const res = await findSysExportTemplate({ ID: row.ID })
+    if (res.code === 0) {
+      previewTemplate.value = res.data.resysExportTemplate
+      previewConditions.value = (previewTemplate.value.conditions || []).map((c) => ({
+        from: c.from,
+        column: c.column,
+        operator: c.operator
+      }))
+      // 预填默认的排序与限制
+      previewForm.value.order = previewTemplate.value.order || ''
+      previewForm.value.limit = previewTemplate.value.limit || 0
+      previewForm.value.offset = 0
+      previewSQLCode.value = ''
+      activeTab.value = 'sql'
+      drawerVisible.value = true
+    }
+  }
+
+  const runPreview = async () => {
+    if (!previewTemplate.value) return
+    // 组装 params，与导出组件保持一致
+    const paramsCopy = JSON.parse(JSON.stringify(previewForm.value))
+    // 将布尔与数值等按照导出组件规则编码
+    if (paramsCopy.filterDeleted) paramsCopy.filterDeleted = 'true'
+    const entries = Object.entries(paramsCopy).filter(([key, v]) => {
+      if (v === '' || v === null || v === undefined) return false
+      if ((key === 'limit' || key === 'offset') && Number(v) === 0) return false
+      return true
+    })
+    const params = entries
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&')
+
+    const res = await previewSQL({ templateID: previewTemplate.value.templateID, params })
+    if (res.code === 0) {
+      previewSQLCode.value = res.data.sql || ''
+    }
   }
 
   // 打开弹窗
@@ -922,7 +1025,6 @@ JOINS模式下不支持导入
 
   // 关闭弹窗
   const closeDialog = () => {
-    codeVisible.value = false
     dialogFormVisible.value = false
     formData.value = {
       name: '',

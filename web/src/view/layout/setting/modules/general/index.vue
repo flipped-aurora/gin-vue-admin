@@ -1,38 +1,38 @@
 <template>
-  <div class="font-inter">
+  <div class="gva-theme-font">
     <div class="mb-10">
-      <div class="flex items-center justify-center mb-6">
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">系统信息</span>
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+      <div class="gva-theme-section-header">
+        <div class="gva-theme-divider"></div>
+        <span class="gva-theme-section-title">系统信息</span>
+        <div class="gva-theme-divider"></div>
       </div>
 
-      <div class="section-content">
-        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+      <div class="gva-theme-section-content">
+        <div class="gva-theme-card-bg">
           <div class="grid grid-cols-2 gap-4 text-sm">
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">版本</span>
-              <span class="font-mono text-gray-900 dark:text-white font-semibold">v2.7.4</span>
+              <span class="gva-theme-text-sub font-medium">版本</span>
+              <span class="font-mono gva-theme-text-main font-semibold">v2.7.4</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">前端框架</span>
-              <span class="font-mono text-gray-900 dark:text-white font-semibold">Vue 3</span>
+              <span class="gva-theme-text-sub font-medium">前端框架</span>
+              <span class="font-mono gva-theme-text-main font-semibold">Vue 3</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">UI 组件库</span>
-              <span class="font-mono text-gray-900 dark:text-white font-semibold">Element Plus</span>
+              <span class="gva-theme-text-sub font-medium">UI 组件库</span>
+              <span class="font-mono gva-theme-text-main font-semibold">Element Plus</span>
             </div>
             <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">构建工具</span>
-              <span class="font-mono text-gray-900 dark:text-white font-semibold">Vite</span>
+              <span class="gva-theme-text-sub font-medium">构建工具</span>
+              <span class="font-mono gva-theme-text-main font-semibold">Vite</span>
             </div>
             <div class="flex justify-between items-center py-3">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">浏览器</span>
-              <span class="font-mono text-gray-900 dark:text-white font-semibold">{{ browserInfo }}</span>
+              <span class="gva-theme-text-sub font-medium">浏览器</span>
+              <span class="font-mono gva-theme-text-main font-semibold">{{ browserInfo }}</span>
             </div>
             <div class="flex justify-between items-center py-3">
-              <span class="text-gray-600 dark:text-gray-400 font-medium">屏幕分辨率</span>
-              <span class="font-mono text-gray-900 dark:text-white font-semibold">{{ screenResolution }}</span>
+              <span class="gva-theme-text-sub font-medium">屏幕分辨率</span>
+              <span class="font-mono gva-theme-text-main font-semibold">{{ screenResolution }}</span>
             </div>
           </div>
         </div>
@@ -40,24 +40,24 @@
     </div>
 
     <div class="mb-10">
-      <div class="flex items-center justify-center mb-6">
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">配置管理</span>
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+      <div class="gva-theme-section-header">
+        <div class="gva-theme-divider"></div>
+        <span class="gva-theme-section-title">配置管理</span>
+        <div class="gva-theme-divider"></div>
       </div>
 
-      <div class="section-content">
-        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+      <div class="gva-theme-section-content">
+        <div class="gva-theme-card-bg">
           <div class="space-y-5">
             <div
-              class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 flex items-center justify-between hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5">
+              class="gva-theme-card-white flex items-center justify-between">
               <div class="flex items-center gap-4">
                 <div
                   class="w-12 h-12 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center justify-center text-red-600 dark:text-red-400 text-xl">
                   🔄
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">重置配置</h4>
+                  <h4 class="text-sm font-semibold gva-theme-text-main">重置配置</h4>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">将所有设置恢复为默认值</p>
                 </div>
               </div>
@@ -69,14 +69,14 @@
             </div>
 
             <div
-              class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 flex items-center justify-between hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5">
+              class="gva-theme-card-white flex items-center justify-between">
               <div class="flex items-center gap-4">
                 <div
                   class="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 text-xl">
                   📤
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">导出配置</h4>
+                  <h4 class="text-sm font-semibold gva-theme-text-main">导出配置</h4>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">导出当前配置为 JSON 文件</p>
                 </div>
               </div>
@@ -89,14 +89,14 @@
             </div>
 
             <div
-              class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 flex items-center justify-between hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5">
+              class="gva-theme-card-white flex items-center justify-between">
               <div class="flex items-center gap-4">
                 <div
                   class="w-12 h-12 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-center justify-center text-green-600 dark:text-green-400 text-xl">
                   📥
                 </div>
                 <div>
-                  <h4 class="text-sm font-semibold text-gray-900 dark:text-white">导入配置</h4>
+                  <h4 class="text-sm font-semibold gva-theme-text-main">导入配置</h4>
                   <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">从 JSON 文件导入配置</p>
                 </div>
               </div>
@@ -114,22 +114,22 @@
     </div>
 
     <div class="mb-10">
-      <div class="flex items-center justify-center mb-6">
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
-        <span class="px-6 text-lg font-semibold text-gray-700 dark:text-gray-300">关于项目</span>
-        <div class="h-px bg-gray-200 dark:bg-gray-700 flex-1"></div>
+      <div class="gva-theme-section-header">
+        <div class="gva-theme-divider"></div>
+        <span class="gva-theme-section-title">关于项目</span>
+        <div class="gva-theme-divider"></div>
       </div>
 
-      <div class="section-content">
-        <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+      <div class="gva-theme-section-content">
+        <div class="gva-theme-card-bg">
           <div class="flex items-start gap-5">
             <div
               class="w-16 h-16 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
               <Logo />
             </div>
             <div class="flex-1">
-              <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Gin-Vue-Admin</h4>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 leading-relaxed">
+              <h4 class="text-xl font-semibold gva-theme-text-main mb-3">Gin-Vue-Admin</h4>
+              <p class="text-sm gva-theme-text-sub mb-5 leading-relaxed">
                 基于 Vue3 + Gin 的全栈开发基础平台，提供完整的后台管理解决方案
               </p>
               <div class="flex items-center gap-3 text-sm">
@@ -244,24 +244,4 @@ const handleImportConfig = (file) => {
 }
 </script>
 
-<style scoped>
-.font-inter {
-  font-family: 'Inter', sans-serif;
-}
 
-.section-content {
-  animation: fadeInUp 0.3s ease;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

@@ -5,6 +5,7 @@ import (
 	"io"
 	"mime/multipart"
 	"strconv"
+	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 
@@ -133,6 +134,11 @@ func (b *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
 	err := c.ShouldBindJSON(&file)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	// 路径穿越拦截
+	if strings.Contains(file.FilePath, "..") || strings.Contains(file.FilePath, "../") || strings.Contains(file.FilePath, "./") || strings.Contains(file.FilePath, ".\\") {
+		response.FailWithMessage("非法路径，禁止删除", c)
 		return
 	}
 	err = utils.RemoveChunk(file.FileMd5)

@@ -62,6 +62,7 @@ func RegisterTables() {
 		system.JoinTemplate{},
 		system.SysParams{},
 		system.SysVersion{},
+		system.SysError{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

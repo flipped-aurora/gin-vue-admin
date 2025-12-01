@@ -96,7 +96,8 @@
     </el-drawer>
 
     <!-- 导出版本抽屉 -->
-    <el-drawer v-model="exportDialogVisible" title="创建发版" direction="rtl" size="80%" :before-close="closeExportDialog" :show-close="false">
+    <el-drawer v-model="exportDialogVisible" title="创建发版" direction="rtl" size="80%" :before-close="closeExportDialog"
+      :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">创建发版</span>
@@ -119,14 +120,14 @@
         <el-form-item label="发版信息">
           <div class="flex gap-3 w-full">
             <!-- 菜单选择 -->
-            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/3">
-              <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
-                <span class="m-0 text-gray-800 text-base font-medium">选择菜单</span>
+            <div class="card-col card-vertical">
+              <div class="card-header">
+                <span class="card-title">选择菜单</span>
               </div>
-              <div class="px-4 py-3 border-b border-gray-300 bg-gray-50">
+              <div class="card-filter">
                 <el-input v-model="menuFilterText" placeholder="输入关键字进行过滤" clearable size="small" />
               </div>
-              <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+              <div class="card-body">
                 <el-tree ref="menuTreeRef" :data="menuTreeData" :default-checked-keys="selectedMenuIds"
                   :props="menuTreeProps" default-expand-all highlight-current node-key="ID" show-checkbox
                   :filter-node-method="filterMenuNode" @check="onMenuCheck" class="menu-tree">
@@ -140,16 +141,16 @@
             </div>
 
             <!-- API选择 -->
-            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/3">
-              <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
-                <span class="m-0 text-gray-800 text-base font-medium">选择API</span>
+            <div class="card-col card-vertical">
+              <div class="card-header">
+                <span class="card-title">选择API</span>
               </div>
-              <div class="px-4 py-3 border-b border-gray-300 bg-gray-50">
+              <div class="card-filter">
                 <el-input v-model="apiFilterTextName" placeholder="按名称过滤" clearable size="small"
                   style="margin-bottom: 8px" />
                 <el-input v-model="apiFilterTextPath" placeholder="按路径过滤" clearable size="small" />
               </div>
-              <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+              <div class="card-body">
                 <el-tree ref="apiTreeRef" :data="apiTreeData" :default-checked-keys="selectedApiIds"
                   :props="apiTreeProps" default-expand-all highlight-current node-key="onlyId" show-checkbox
                   :filter-node-method="filterApiNode" @check="onApiCheck" class="api-tree">
@@ -157,7 +158,8 @@
                     <div class="flex items-center justify-between w-full pr-1">
                       <span>{{ data.description }}</span>
                       <el-tooltip :content="data.path">
-                        <span class="max-w-[240px] break-all overflow-ellipsis overflow-hidden">
+                        <span
+                          class="max-w-[240px] break-all overflow-ellipsis overflow-hidden text-gray-500 dark:text-gray-400">
                           {{ data.path }}
                         </span>
                       </el-tooltip>
@@ -168,14 +170,14 @@
             </div>
 
             <!-- 字典选择 -->
-            <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full flex-1 w-1/3">
-              <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
-                <span class="m-0 text-gray-800 text-base font-medium">选择字典</span>
+            <div class="card-col card-vertical">
+              <div class="card-header">
+                <span class="card-title">选择字典</span>
               </div>
-              <div class="px-4 py-3 border-b border-gray-300 bg-gray-50">
+              <div class="card-filter">
                 <el-input v-model="dictFilterText" placeholder="输入关键字进行过滤" clearable size="small" />
               </div>
-              <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
+              <div class="card-body">
                 <el-tree ref="dictTreeRef" :data="dictTreeData" :default-checked-keys="selectedDictIds"
                   :props="dictTreeProps" default-expand-all highlight-current node-key="ID" show-checkbox
                   :filter-node-method="filterDictNode" @check="onDictCheck" class="dict-tree">
@@ -183,7 +185,7 @@
                     <div class="flex items-center justify-between w-full pr-1">
                       <span>{{ data.name || data.label }}</span>
                       <el-tooltip :content="data.desc || (data.value ? `值: ${data.value}` : '')">
-                        <span class="text-gray-500 text-xs ml-2">
+                        <span class="text-gray-500 dark:text-gray-400 text-xs ml-2">
                           {{ data.type || (data.value ? `值: ${data.value}` : '') }}
                         </span>
                       </el-tooltip>
@@ -198,7 +200,8 @@
     </el-drawer>
 
     <!-- 导入版本抽屉 -->
-    <el-drawer v-model="importDialogVisible" title="导入版本" direction="rtl" size="80%" :before-close="closeImportDialog" :show-close="false">
+    <el-drawer v-model="importDialogVisible" title="导入版本" direction="rtl" size="80%" :before-close="closeImportDialog"
+      :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">导入版本</span>
@@ -211,16 +214,8 @@
       </template>
       <el-form label-width="100px">
         <el-form-item label="上传文件">
-          <el-upload
-            ref="uploadRef"
-            :auto-upload="false"
-            :show-file-list="true"
-            :limit="1"
-            accept=".json"
-            :on-change="handleFileChange"
-            :on-remove="handleFileRemove"
-            drag
-          >
+          <el-upload ref="uploadRef" :auto-upload="false" :show-file-list="true" :limit="1" accept=".json"
+            :on-change="handleFileChange" :on-remove="handleFileRemove" drag>
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text">
               将JSON文件拖到此处，或<em>点击上传</em>
@@ -237,77 +232,60 @@
             @input="handleJsonContentChange" />
         </el-form-item>
         <el-form-item label="预览内容" v-if="importPreviewData">
-          <div class="flex flex-col flex-1 gap-4 border border-gray-300 rounded p-4 bg-gray-50">
+          <div class="preview-wrap">
             <div class="flex gap-3 w-full">
-              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/3">
-                <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
-                  <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
-                    <h3 class="m-0 text-gray-800 text-base font-medium">菜单 ({{ getTotalMenuCount() }}项)</h3>
+              <div class="card-col">
+                <div class="card-vertical">
+                  <div class="card-header">
+                    <h3 class="card-title">菜单 ({{ getTotalMenuCount() }}项)</h3>
                   </div>
-                  <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
-                    <el-tree
-                      :data="previewMenuTreeData"
-                      :props="menuTreeProps"
-                      node-key="name"
-                      :expand-on-click-node="false"
-                      :check-on-click-node="false"
-                      :show-checkbox="false"
-                      default-expand-all
-                    >
+                  <div class="card-body">
+                    <el-tree :data="previewMenuTreeData" :props="menuTreeProps" node-key="name"
+                      :expand-on-click-node="false" :check-on-click-node="false" :show-checkbox="false"
+                      default-expand-all>
                       <template #default="{ data }">
                         <div class="flex-1 flex items-center justify-between text-sm pr-2">
                           <span>{{ data.meta?.title || data.title }}</span>
-                          <span class="text-gray-500 text-xs ml-2">{{ data.path }}</span>
+                          <span class="text-gray-500 dark:text-gray-400 text-xs ml-2">{{ data.path }}</span>
                         </div>
                       </template>
                     </el-tree>
                   </div>
                 </div>
               </div>
-              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/3">
-                <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
-                  <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
-                    <h3 class="m-0 text-gray-800 text-base font-medium">API ({{ importPreviewData.apis?.length || 0 }}项)</h3>
+              <div class="card-col">
+                <div class="card-vertical">
+                  <div class="card-header">
+                    <h3 class="card-title">API ({{ importPreviewData.apis?.length || 0 }}项)</h3>
                   </div>
-                  <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
-                    <el-tree
-                      :data="previewApiTreeData"
-                      :props="apiTreeProps"
-                      node-key="ID"
-                      :expand-on-click-node="false"
-                      :check-on-click-node="false"
-                      :show-checkbox="false"
-                      default-expand-all
-                    >
+                  <div class="card-body">
+                    <el-tree :data="previewApiTreeData" :props="apiTreeProps" node-key="ID"
+                      :expand-on-click-node="false" :check-on-click-node="false" :show-checkbox="false"
+                      default-expand-all>
                       <template #default="{ data }">
                         <div class="flex-1 flex items-center justify-between text-sm pr-2">
                           <span>{{ data.description }}</span>
-                          <span class="text-gray-500 text-xs ml-2">{{ data.path }} [{{ data.method }}]</span>
+                          <span class="text-gray-500 dark:text-gray-400 text-xs ml-2">{{ data.path }} [{{ data.method
+                            }}]</span>
                         </div>
                       </template>
                     </el-tree>
                   </div>
                 </div>
               </div>
-              <div class="border border-gray-300 rounded overflow-hidden flex-1 w-1/3">
-                <div class="flex flex-col border border-gray-300 rounded overflow-hidden h-full">
-                  <div class="flex justify-between items-center px-4 py-3 bg-gray-50 border-b border-gray-300">
-                    <h3 class="m-0 text-gray-800 text-base font-medium">字典 ({{ importPreviewData.dictionaries?.length || 0 }}项)</h3>
+              <div class="card-col">
+                <div class="card-vertical">
+                  <div class="card-header">
+                    <h3 class="card-title">字典 ({{ importPreviewData.dictionaries?.length || 0 }}项)</h3>
                   </div>
-                  <div class="flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto">
-                    <el-tree
-                      :data="previewDictTreeData"
-                      :props="dictTreeProps"
-                      node-key="ID"
-                      :expand-on-click-node="false"
-                      :check-on-click-node="false"
-                      :show-checkbox="false"
-                      default-expand-all
-                    >
+                  <div class="card-body">
+                    <el-tree :data="previewDictTreeData" :props="dictTreeProps" node-key="ID"
+                      :expand-on-click-node="false" :check-on-click-node="false" :show-checkbox="false"
+                      default-expand-all>
                       <template #default="{ data }">
                         <div class="flex-1 flex items-center justify-between text-sm pr-2">
                           <span>{{ data.name || data.label }}</span>
-                          <span class="text-gray-500 text-xs ml-2">
+                          <span class="text-gray-500 dark:text-gray-400 text-xs ml-2">
                             {{ data.type || (data.value ? `值: ${data.value}` : '') }}
                           </span>
                         </div>
@@ -661,11 +639,11 @@ const filterDictNode = (value, data) => {
   const desc = data.desc || ''
   const label = data.label || ''
   const dataValue = data.value || ''
-  return name.indexOf(value) !== -1 || 
-         type.indexOf(value) !== -1 || 
-         desc.indexOf(value) !== -1 || 
-         label.indexOf(value) !== -1 || 
-         dataValue.indexOf(value) !== -1
+  return name.indexOf(value) !== -1 ||
+    type.indexOf(value) !== -1 ||
+    desc.indexOf(value) !== -1 ||
+    label.indexOf(value) !== -1 ||
+    dataValue.indexOf(value) !== -1
 }
 
 const onMenuCheck = (data, checked) => {
@@ -789,14 +767,14 @@ const closeImportDialog = () => {
 // 文件上传处理函数
 const handleFileChange = (file) => {
   if (!file.raw) return
-  
+
   // 验证文件类型
   if (!file.name.toLowerCase().endsWith('.json')) {
     ElMessage.error('只能上传JSON文件')
     uploadRef.value.clearFiles()
     return
   }
-  
+
   // 读取文件内容
   const reader = new FileReader()
   reader.onload = (e) => {
@@ -825,7 +803,7 @@ const handleFileRemove = () => {
 // 计算菜单总数（递归计算所有菜单项）
 const getTotalMenuCount = () => {
   if (!importPreviewData.value?.menus) return 0
-  
+
   const countMenus = (menus) => {
     let count = 0
     menus.forEach(menu => {
@@ -836,7 +814,7 @@ const getTotalMenuCount = () => {
     })
     return count
   }
-  
+
   return countMenus(importPreviewData.value.menus)
 }
 
@@ -971,6 +949,35 @@ const downloadJson = async (row) => {
 </script>
 
 <style scoped>
+/* 复用卡片样式（支持暗色） */
+.card-col {
+  @apply border border-gray-300 dark:border-gray-600 rounded overflow-hidden flex-1 bg-white dark:bg-gray-900;
+}
+
+.card-vertical {
+  @apply flex flex-col h-full;
+}
+
+.card-header {
+  @apply flex justify-between items-center px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600;
+}
+
+.card-title {
+  @apply m-0 text-gray-800 dark:text-gray-200 text-base font-medium;
+}
+
+.card-filter {
+  @apply px-4 py-3 border-b border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800;
+}
+
+.card-body {
+  @apply flex-1 p-2 min-h-[300px] max-h-[400px] overflow-y-auto;
+}
+
+.preview-wrap {
+  @apply flex flex-col flex-1 gap-4 border border-gray-300 dark:border-gray-600 rounded p-4 bg-gray-50 dark:bg-gray-900;
+}
+
 /* Element Plus 树形组件样式优化 */
 :deep(.el-tree) {
   background-color: transparent;

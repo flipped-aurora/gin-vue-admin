@@ -38,17 +38,11 @@
       >
         <el-table-column type="selection" width="55" />
 
-        <el-table-column align="left" label="展示值" prop="label" min-width="240"/>
+        <el-table-column align="left" label="展示值" prop="label" min-width="100"/>
 
         <el-table-column align="left" label="字典值" prop="value" />
 
         <el-table-column align="left" label="扩展值" prop="extend" />
-
-        <el-table-column align="left" label="日期" width="180">
-          <template #default="scope">
-            {{ formatDate(scope.row.CreatedAt) }}
-          </template>
-        </el-table-column>
 
         <el-table-column align="left" label="层级" prop="level" width="80" />
 
@@ -56,7 +50,7 @@
           align="left"
           label="启用状态"
           prop="status"
-          width="120"
+          width="100"
         >
           <template #default="scope">
             {{ formatBoolean(scope.row.status) }}
@@ -67,17 +61,18 @@
           align="left"
           label="排序标记"
           prop="sort"
-          width="120"
+          width="100"
         />
 
         <el-table-column
           align="left"
           label="操作"
           :min-width="appStore.operateMinWith"
+          fixed="right"
         >
           <template #default="scope">
             <el-button
-              type="success"
+              type="primary"
               link
               icon="plus"
               @click="addChildNode(scope.row)"

@@ -312,10 +312,6 @@ import ImportExcel from '@/components/exportExcel/importExcel.vue'
 // 导出模板组件
 import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
 {{- end}}
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
-
-
 
 defineOptions({
     name: '{{.StructName}}'

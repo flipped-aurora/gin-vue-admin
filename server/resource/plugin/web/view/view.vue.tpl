@@ -254,6 +254,7 @@ getDataSourceFunc()
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import {
   {{- if .HasDataSource }}
     get{{.StructName}}DataSource,
@@ -266,7 +267,6 @@ import {
   get{{.StructName}}List
 } from '@/plugin/{{.Package}}/api/{{.PackageName}}'
 
-const { t } = useI18n()
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'

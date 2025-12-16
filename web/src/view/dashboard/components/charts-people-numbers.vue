@@ -38,7 +38,7 @@
       style: {
         text: '',
         textAlign: 'center',
-        fill: '#4E5969',
+        fill: appStore.isDark ? '#FFFFFF' : '#000000',
         fontSize: 12
       }
     }

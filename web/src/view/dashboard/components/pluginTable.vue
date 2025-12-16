@@ -9,9 +9,11 @@
       <el-table-column prop="ranking" label="排名" width="80" align="center" />
       <el-table-column prop="title" label="插件标题" show-overflow-tooltip>
         <template #default="{ row }">
-          <a class="text-active" :href="row.link" target="_blank">{{
-            row.title
-          }}</a>
+          <a
+            class="text-black dark:text-white underline underline-offset-4 decoration-black/20 dark:decoration-white/20 hover:text-active"
+            :href="row.link"
+            target="_blank"
+          >{{ row.title }}</a>
         </template>
       </el-table-column>
       <el-table-column prop="click_num" label="关注度" width="100" />
@@ -59,6 +61,13 @@
       click_num: 173,
       hot: 110,
       link: 'https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=28'
+    },
+    {
+      ranking: 6,
+      title: '线上版本更新智能检测【自动版】',
+      click_num: 236,
+      hot: 132,
+      link: 'https://plugin.gin-vue-admin.com/details/112'
     }
   ]
 </script>

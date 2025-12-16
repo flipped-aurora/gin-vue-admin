@@ -1439,16 +1439,47 @@
         res.data.columns.forEach((item) => {
           if (needAppend(item)) {
             const fbHump = toHump(item.columnName)
+            
+            // 判断是否为枚举类型
+            let fieldType = fdMap.value[item.dataType] || 'string'
+            let dataTypeLong = ''
+            
+            // 如果存在枚举值，自动设置为枚举类型（enumType 可能为空字符串）
+            if (item.enumValues && item.enumValues.trim()) {
+              fieldType = 'enum'
+              // 格式化枚举值：确保每个值都用单引号包裹，用逗号分隔
+              const enumValues = item.enumValues.split(',').map(val => {
+                const trimmed = val.trim()
+                // 如果已经有引号，去掉后重新添加
+                const cleanVal = trimmed.replace(/^['"]|['"]$/g, '')
+                return `'${cleanVal}'`
+              }).join(',')
+              dataTypeLong = enumValues
+            } else if (item.dataTypeLong) {
+              // 非枚举类型，使用字段长度
+              dataTypeLong = item.dataTypeLong.split(',')[0]
+            }
+            
+            // 自动标记索引类型
+            let fieldIndexType = ''
+            if (item.indexName && item.indexType) {
+              const indexTypeUpper = item.indexType.toUpperCase()
+              if (indexTypeUpper === 'INDEX' || indexTypeUpper === 'NORMAL' || indexTypeUpper === 'BTREE') {
+                fieldIndexType = 'index'
+              } else if (indexTypeUpper === 'UNIQUE INDEX' || indexTypeUpper === 'UNIQUE' || indexTypeUpper === 'UNIQUEINDEX') {
+                fieldIndexType = 'uniqueIndex'
+              }
+            }
+            
             form.value.fields.push({
               onlyNumber: getOnlyNumber(),
               fieldName: toUpperCase(fbHump),
               fieldDesc: item.columnComment || fbHump + '字段',
-              fieldType: fdMap.value[item.dataType],
+              fieldType: fieldType,
               dataType: item.dataType,
               fieldJson: fbHump,
               primaryKey: item.primaryKey,
-              dataTypeLong:
-                item.dataTypeLong && item.dataTypeLong.split(',')[0],
+              dataTypeLong: dataTypeLong,
               columnName:
                 dbtype === 'oracle'
                   ? item.columnName.toUpperCase()
@@ -1458,7 +1489,7 @@
               errorText: '',
               clearable: true,
               fieldSearchType: '',
-              fieldIndexType: '',
+              fieldIndexType: fieldIndexType,
               dictType: '',
               form: true,
               table: true,

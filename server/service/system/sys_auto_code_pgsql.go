@@ -44,33 +44,24 @@ func (a *autoCodePgsql) GetTables(businessDB string, dbName string) (data []resp
 // Author [piexlmax](https://github.com/piexlmax)
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (a *autoCodePgsql) GetColumn(businessDB string, tableName string, dbName string) (data []response.Column, err error) {
-	// todo 数据获取不全, 待完善sql
 	sql := `
 SELECT
     psc.COLUMN_NAME AS COLUMN_NAME,
     psc.udt_name AS data_type,
     CASE
-        psc.udt_name
-        WHEN 'text' THEN
-            concat_ws ( '', '', psc.CHARACTER_MAXIMUM_LENGTH )
-        WHEN 'varchar' THEN
-            concat_ws ( '', '', psc.CHARACTER_MAXIMUM_LENGTH )
-        WHEN 'smallint' THEN
-            concat_ws ( ',', psc.NUMERIC_PRECISION, psc.NUMERIC_SCALE )
-        WHEN 'decimal' THEN
-            concat_ws ( ',', psc.NUMERIC_PRECISION, psc.NUMERIC_SCALE )
-        WHEN 'integer' THEN
-            concat_ws ( '', '', psc.NUMERIC_PRECISION )
-        WHEN 'int4' THEN
-            concat_ws ( '', '', psc.NUMERIC_PRECISION )
-        WHEN 'int8' THEN
-            concat_ws ( '', '', psc.NUMERIC_PRECISION )
-        WHEN 'bigint' THEN
-            concat_ws ( '', '', psc.NUMERIC_PRECISION )
-        WHEN 'timestamp' THEN
-            concat_ws ( '', '', psc.datetime_precision )
+        WHEN psc.udt_name IN ('text', 'varchar', 'char', 'character', 'character varying') THEN
+            COALESCE(CAST(psc.CHARACTER_MAXIMUM_LENGTH AS TEXT), '')
+        WHEN psc.udt_name IN ('smallint', 'integer', 'int', 'int4', 'bigint', 'int8', 'numeric', 'decimal') THEN
+            CASE 
+                WHEN psc.NUMERIC_SCALE IS NOT NULL AND psc.NUMERIC_SCALE > 0 THEN
+                    CONCAT_WS(',', psc.NUMERIC_PRECISION, psc.NUMERIC_SCALE)
+                ELSE
+                    COALESCE(CAST(psc.NUMERIC_PRECISION AS TEXT), '')
+            END
+        WHEN psc.udt_name IN ('timestamp', 'timestamp without time zone', 'timestamp with time zone', 'time', 'time without time zone', 'time with time zone') THEN
+            COALESCE(CAST(psc.datetime_precision AS TEXT), '')
         ELSE ''
-        END AS data_type_long,
+    END AS data_type_long,
     (
         SELECT
             pd.description
@@ -112,6 +103,59 @@ SELECT
               AND attname = psc.column_name
         )]
     ) > 0 AS primary_key,
+    CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM pg_type t 
+            JOIN pg_enum e ON t.oid = e.enumtypid 
+            WHERE t.typname = psc.udt_name
+        ) THEN 'enum'
+        ELSE ''
+    END AS enum_type,
+    CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM pg_type t 
+            JOIN pg_enum e ON t.oid = e.enumtypid 
+            WHERE t.typname = psc.udt_name
+        ) THEN (
+            SELECT string_agg(quote_literal(e.enumlabel), ',')
+            FROM pg_type t 
+            JOIN pg_enum e ON t.oid = e.enumtypid 
+            WHERE t.typname = psc.udt_name
+            ORDER BY e.enumsortorder
+        )
+        ELSE ''
+    END AS enum_values,
+    COALESCE((
+        SELECT string_agg(DISTINCT i.relname, ',' ORDER BY i.relname)
+        FROM pg_index idx
+        JOIN pg_class i ON i.oid = idx.indexrelid
+        JOIN pg_class t ON t.oid = idx.indrelid
+        JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = ANY(idx.indkey)
+        WHERE t.relname = psc.table_name
+          AND a.attname = psc.column_name
+    ), '') AS index_name,
+    COALESCE((
+        SELECT string_agg(DISTINCT 
+            CASE 
+                WHEN i.relname LIKE '%_pkey' THEN 'PRIMARY'
+                WHEN idx.indisunique THEN 'UNIQUE'
+                ELSE 'INDEX'
+            END, ',' ORDER BY 
+            CASE 
+                WHEN i.relname LIKE '%_pkey' THEN 'PRIMARY'
+                WHEN idx.indisunique THEN 'UNIQUE'
+                ELSE 'INDEX'
+            END
+        )
+        FROM pg_index idx
+        JOIN pg_class i ON i.oid = idx.indexrelid
+        JOIN pg_class t ON t.oid = idx.indrelid
+        JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = ANY(idx.indkey)
+        WHERE t.relname = psc.table_name
+          AND a.attname = psc.column_name
+    ), '') AS index_type,
     psc.ordinal_position
 FROM
     INFORMATION_SCHEMA.COLUMNS psc
@@ -123,8 +167,6 @@ ORDER BY
     psc.ordinal_position;
 `
 	var entities []response.Column
-	//sql = strings.ReplaceAll(sql, "@table_catalog", dbName)
-	//sql = strings.ReplaceAll(sql, "@table_name", tableName)
 	db := global.GVA_DB
 	if businessDB != "" {
 		db = global.GVA_DBList[businessDB]

@@ -49,11 +49,50 @@ func (s *autoCodeMssql) GetColumn(businessDB string, tableName string, dbName st
 SELECT
     sc.name AS column_name,
     st.name AS data_type,
-    sc.max_length AS data_type_long,
+    CASE
+        WHEN st.name IN ('varchar', 'nvarchar', 'char', 'nchar', 'text', 'ntext') THEN
+            CASE 
+                WHEN sc.max_length = -1 THEN 'max'
+                ELSE CAST(sc.max_length AS VARCHAR)
+            END
+        WHEN st.name IN ('decimal', 'numeric', 'float', 'real', 'money', 'smallmoney') THEN
+            CONCAT(CAST(sc.precision AS VARCHAR), ',', CAST(sc.scale AS VARCHAR))
+        WHEN st.name IN ('tinyint', 'smallint', 'int', 'bigint') THEN
+            CAST(sc.precision AS VARCHAR)
+        ELSE
+            CASE 
+                WHEN sc.max_length = -1 THEN ''
+                ELSE CAST(sc.max_length AS VARCHAR)
+            END
+    END AS data_type_long,
+    ep.value AS column_comment,
     CASE
         WHEN pk.object_id IS NOT NULL THEN 1
         ELSE 0
     END AS primary_key,
+    '' AS enum_type,
+    '' AS enum_values,
+    (SELECT STUFF((
+        SELECT ',' + i.name
+        FROM %s.sys.indexes i
+        INNER JOIN %s.sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+        WHERE i.object_id = sc.object_id
+          AND ic.column_id = sc.column_id
+        FOR XML PATH('')
+    ), 1, 1, '')) AS index_name,
+    (SELECT STUFF((
+        SELECT ',' + 
+            CASE 
+                WHEN i.is_primary_key = 1 THEN 'PRIMARY'
+                WHEN i.is_unique = 1 THEN 'UNIQUE'
+                ELSE 'INDEX'
+            END
+        FROM %s.sys.indexes i
+        INNER JOIN %s.sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+        WHERE i.object_id = sc.object_id
+          AND ic.column_id = sc.column_id
+        FOR XML PATH('')
+    ), 1, 1, '')) AS index_type,
     sc.column_id
 FROM
     %s.sys.columns sc
@@ -67,11 +106,15 @@ LEFT JOIN
     %s.sys.index_columns sic ON sic.object_id = si.object_id AND sic.index_id = si.index_id AND sic.column_id = sc.column_id
 LEFT JOIN
     %s.sys.key_constraints pk ON pk.object_id = si.object_id
+LEFT JOIN
+    %s.sys.extended_properties ep ON ep.major_id = sc.object_id 
+        AND ep.minor_id = sc.column_id 
+        AND ep.name = 'MS_Description'
 WHERE
     st.is_user_defined=0 AND sc.object_id = so.object_id
 ORDER BY
     sc.column_id
-`, dbName, dbName, tableName, dbName, dbName, dbName)
+`, dbName, dbName, tableName, dbName, dbName, dbName, dbName)
 
 	if businessDB == "" {
 		err = global.GVA_DB.Raw(sql).Scan(&entities).Error

@@ -110,7 +110,7 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 	if noSave == "0" {
 		// 检查是否已存在相同key的记录
 		var existingFile example.ExaFileUploadAndDownload
-		err = global.GVA_DB.Where("`key` = ?", key).First(&existingFile).Error
+		err = global.GVA_DB.Where(&example.ExaFileUploadAndDownload{Key: key}).First(&existingFile).Error
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return f, e.Upload(f)
 		}

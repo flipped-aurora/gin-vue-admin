@@ -8,13 +8,15 @@
     <div
       v-for="(item, index) in notices"
       :key="index"
-      class="flex items-center mb-1.5 gap-3"
+      class="flex items-center gap-3 py-1"
     >
-      <el-tag :type="item.type" size="small">
+      <div
+        class="shrink-0 rounded-full border border-black/10 px-2 py-0.5 text-[11px] leading-4 text-black/70 dark:border-white/10 dark:text-white/70"
+      >
         {{ item.typeTitle }}
-      </el-tag>
+      </div>
       <el-tooltip effect="light" :content="item.title" placement="top">
-        <div class="text-xs text-gray-700 dark:text-gray-300 line-clamp-1">
+        <div class="min-w-0 text-xs text-black/70 dark:text-white/70 line-clamp-1">
           {{ item.title }}
         </div>
       </el-tooltip>

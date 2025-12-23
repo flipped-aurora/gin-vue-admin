@@ -24,8 +24,11 @@
       default: '128px'
     }
   })
+  const axisTextColor = computed(() => {
+    return appStore.isDark ? 'rgba(255,255,255,0.70)' : 'rgba(0,0,0,0.70)'
+  })
   const dotColor = computed(() => {
-    return appStore.isDark ? '#333' : '#E5E8EF'
+    return appStore.isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'
   })
   const graphicFactory = (side) => {
     return {
@@ -35,7 +38,7 @@
       style: {
         text: '',
         textAlign: 'center',
-        fill: '#4E5969',
+        fill: axisTextColor.value,
         fontSize: 12
       }
     }
@@ -69,7 +72,7 @@
         data: xAxis.value,
         boundaryGap: false,
         axisLabel: {
-          color: '#4E5969',
+          color: axisTextColor.value,
           formatter(value, idx) {
             if (idx === 0) return ''
             if (idx === xAxis.value.length - 1) return ''

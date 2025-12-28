@@ -101,40 +101,79 @@
   const menuTreeData = ref([])
   const menuTreeIds = ref([])
   const needConfirm = ref(false)
+  const menuTree = ref(null)
   const menuDefaultProps = ref({
     children: 'children',
     label: function (data) {
       return data.meta.title
     },
     disabled: function (data) {
-      return props.row.defaultRouter === data.name
+      if (props.row.defaultRouter !== data.name) return false
+      // 只在该节点已勾选时禁用，避免出现“默认首页未勾选却无法勾选”的死锁状态
+      const checkedKeys = menuTree.value?.getCheckedKeys?.() || menuTreeIds.value
+      return checkedKeys.includes(Number(data.ID))
     }
   })
 
   const menuOptions = ref([])
 
-  const flattenMenus = (menus) => {
-    let result = []
-    menus.forEach(item => {
-      if (item.children && item.children.length > 0) {
-        result = result.concat(flattenMenus(item.children))
-      } else {
-        if (!item.name?.startsWith('http://') && !item.name?.startsWith('https://')) {
-          result.push({
-            label: item.meta.title,
-            value: item.name
-          })
-        }
+  const isExternalRoute = (name) => {
+    if (!name) return false
+    return name.startsWith('http://') || name.startsWith('https://')
+  }
+
+  const findMenuByName = (menus, name) => {
+    for (const item of menus || []) {
+      if (item?.name === name) return item
+      if (item?.children?.length) {
+        const found = findMenuByName(item.children, name)
+        if (found) return found
       }
-    })
-    return result
+    }
+    return null
+  }
+
+  const buildOptionsFromCheckedLeafMenus = () => {
+    const checkedLeafMenus = menuTree.value
+      ? menuTree.value.getCheckedNodes(false, true)
+      : []
+    const options = checkedLeafMenus
+      .filter((item) => item?.name && !isExternalRoute(item.name))
+      .map((item) => ({
+        label: item?.meta?.title || item.name,
+        value: item.name
+      }))
+
+    // 确保当前默认首页能正常显示（即使历史数据不一致）
+    if (props.row.defaultRouter && !options.some(o => o.value === props.row.defaultRouter)) {
+      const found = findMenuByName(menuTreeData.value, props.row.defaultRouter)
+      if (found && !isExternalRoute(found.name)) {
+        options.push({
+          label: found?.meta?.title || found.name,
+          value: found.name
+        })
+      }
+    }
+
+    return options
+  }
+
+  const refreshDefaultRouterOptions = () => {
+    menuOptions.value = buildOptionsFromCheckedLeafMenus()
+  }
+
+  const isDefaultRouterAllowed = (routeName) => {
+    if (!routeName) return false
+    const checkedLeafMenus = menuTree.value
+      ? menuTree.value.getCheckedNodes(false, true)
+      : []
+    return checkedLeafMenus.some((item) => item?.name === routeName)
   }
 
   const init = async () => {
     // 获取所有菜单树
     const res = await getBaseMenuTree()
     menuTreeData.value = res.data.menus
-    menuOptions.value = flattenMenus(res.data.menus)
     const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
     const menus = res1.data.menus
     const arr = []
@@ -145,6 +184,14 @@
       }
     })
     menuTreeIds.value = arr
+
+    // 确保异步数据加载后，树的勾选状态与选项同步
+    await nextTick()
+    if (menuTree.value?.setCheckedKeys) {
+      menuTree.value.setCheckedKeys(menuTreeIds.value)
+      await nextTick()
+    }
+    refreshDefaultRouterOptions()
   }
 
   init()
@@ -163,18 +210,23 @@
   }
 
   const handleDefaultRouterChange = (val) => {
+    // 兜底校验：未勾选菜单不允许被设置为默认首页
+    if (!isDefaultRouterAllowed(val)) {
+      ElMessage.warning('未勾选的菜单不可设置为默认首页，请先勾选后再选择')
+      return
+    }
     setDefault({ name: val })
   }
 
   const nodeChange = () => {
     needConfirm.value = true
+    refreshDefaultRouterOptions()
   }
   // 暴露给外层使用的切换拦截统一方法
   const enterAndNext = () => {
     relation()
   }
   // 关联树 确认方法
-  const menuTree = ref(null)
   const relation = async () => {
     const checkArr = menuTree.value.getCheckedNodes(false, true)
     const res = await addMenuAuthority({
@@ -186,6 +238,8 @@
         type: 'success',
         message: '菜单设置成功!'
       })
+
+      refreshDefaultRouterOptions()
     }
   }
 

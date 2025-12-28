@@ -1,10 +1,27 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10">
-      <el-input v-model="filterText" class="w-3/5" placeholder="筛选" />
-      <el-button class="float-right" type="primary" @click="relation"
-        >确 定</el-button
-      >
+    <div class="sticky top-0.5 z-10 bg-white pb-2">
+      <div class="flex gap-2 items-center mb-2">
+        <el-input v-model="filterText" class="flex-1" placeholder="筛选" />
+        <el-button type="primary" @click="relation">确 定</el-button>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="whitespace-nowrap">默认首页：</span>
+        <el-select
+          :model-value="row.defaultRouter"
+          filterable
+          placeholder="请选择默认首页"
+          class="flex-1"
+          @change="handleDefaultRouterChange"
+        >
+          <el-option
+            v-for="item in menuOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
     </div>
     <div class="tree-content clear-both">
       <el-scrollbar>
@@ -21,27 +38,15 @@
           @check="nodeChange"
         >
           <template #default="{ node, data }">
-            <span class="custom-tree-node">
+            <div class="flex items-center gap-2">
               <span>{{ node.label }}</span>
-              <span v-if="node.checked && !data.name?.startsWith('http://') && !data.name?.startsWith('https://')">
-                <el-button
-                  type="primary"
-                  link
-                  :style="{
-                    color:
-                      row.defaultRouter === data.name ? '#E6A23C' : '#85ce61'
-                  }"
-                  @click.stop="() => setDefault(data)"
-                >
-                  {{ row.defaultRouter === data.name ? '首页' : '设为首页' }}
-                </el-button>
-              </span>
+                <SvgIcon v-if="row.defaultRouter === data.name" icon="ant-design:home-filled" class="inline text-lg text-active" />
               <span v-if="data.menuBtn.length">
                 <el-button type="primary" link @click.stop="() => OpenBtn(data)">
                   分配按钮
                 </el-button>
               </span>
-            </span>
+            </div>
           </template>
         </el-tree>
       </el-scrollbar>
@@ -106,10 +111,30 @@
     }
   })
 
+  const menuOptions = ref([])
+
+  const flattenMenus = (menus) => {
+    let result = []
+    menus.forEach(item => {
+      if (item.children && item.children.length > 0) {
+        result = result.concat(flattenMenus(item.children))
+      } else {
+        if (!item.name?.startsWith('http://') && !item.name?.startsWith('https://')) {
+          result.push({
+            label: item.meta.title,
+            value: item.name
+          })
+        }
+      }
+    })
+    return result
+  }
+
   const init = async () => {
     // 获取所有菜单树
     const res = await getBaseMenuTree()
     menuTreeData.value = res.data.menus
+    menuOptions.value = flattenMenus(res.data.menus)
     const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
     const menus = res1.data.menus
     const arr = []
@@ -136,6 +161,11 @@
       emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
     }
   }
+
+  const handleDefaultRouterChange = (val) => {
+    setDefault({ name: val })
+  }
+
   const nodeChange = () => {
     needConfirm.value = true
   }
@@ -223,11 +253,3 @@
     menuTree.value.filter(val)
   })
 </script>
-
-<style lang="scss" scoped>
-  .custom-tree-node {
-    span + span {
-      @apply ml-3;
-    }
-  }
-</style>

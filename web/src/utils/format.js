@@ -164,6 +164,12 @@ export const setBodyPrimaryColor = (primaryColor, darkMode) => {
     `--el-menu-hover-bg-color`,
     addOpacityToColor(primaryColor, 0.2)
   )
+ 
+  // 暗黑模式-菜单背景颜色
+  document.documentElement.style.setProperty(
+    '--el-menu-bg-color',
+      'rgba(255, 255, 255, 0)'
+    )
 }
 
 const baseUrl = ref(import.meta.env.VITE_BASE_API)

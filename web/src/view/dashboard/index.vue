@@ -1,15 +1,8 @@
 <template>
   <div
-    class="h-full gva-container2 overflow-auto bg-white text-black dark:bg-black dark:text-white"
+    class="h-full gva-container2 overflow-auto bg-white text-black dark:bg-slate-800 dark:text-white"
   >
     <div class="p-4 lg:p-6">
-      <div class="mb-5 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div class="text-lg font-semibold tracking-tight">仪表盘</div>
-          <div class="text-xs text-black/60 dark:text-white/60">概览 · {{ today }}</div>
-        </div>
-      </div>
-
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <gva-card>
           <gva-chart :type="1" title="访问人数" />

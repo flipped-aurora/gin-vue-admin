@@ -5,7 +5,7 @@
 
 <template>
   <div
-    class="rounded-xl border border-black/10 bg-white text-black/80 dark:border-white/10 dark:bg-black dark:text-white/80"
+    class="rounded-xl border border-black/10 bg-white text-black/80 dark:text-slate-400 dark:bg-slate-900 dark:text-white/80"
     :class="[customClass || '', withoutPadding ? 'p-0' : 'p-4']"
   >
     <div v-if="title" class="flex justify-between items-center">

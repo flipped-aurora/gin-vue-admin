@@ -179,8 +179,6 @@
       v-model="addUserDialog"
       :size="appStore.drawerSize"
       :show-close="false"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
     >
       <template #header>
         <div class="flex justify-between items-center">

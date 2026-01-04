@@ -160,7 +160,7 @@ func createDatabase(dsn string, driver string, createSql string) error {
 // createTables 创建表（默认 dbInitHandler.initTables 行为）
 func createTables(ctx context.Context, inits initSlice) error {
 	next, cancel := context.WithCancel(ctx)
-	defer func(c func()) { c() }(cancel)
+	defer cancel()
 	for _, init := range inits {
 		if init.TableCreated(next) {
 			continue

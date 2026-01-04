@@ -69,7 +69,7 @@ func (h SqliteInitHandler) InitTables(ctx context.Context, inits initSlice) erro
 
 func (h SqliteInitHandler) InitData(ctx context.Context, inits initSlice) error {
 	next, cancel := context.WithCancel(ctx)
-	defer func(c func()) { c() }(cancel)
+	defer cancel()
 	for _, init := range inits {
 		if init.DataInserted(next) {
 			color.Info.Printf(InitDataExist, Sqlite, init.InitializerName())

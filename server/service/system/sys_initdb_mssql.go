@@ -73,7 +73,7 @@ func (h MssqlInitHandler) InitTables(ctx context.Context, inits initSlice) error
 
 func (h MssqlInitHandler) InitData(ctx context.Context, inits initSlice) error {
 	next, cancel := context.WithCancel(ctx)
-	defer func(c func()) { c() }(cancel)
+	defer cancel()
 	for _, init := range inits {
 		if init.DataInserted(next) {
 			color.Info.Printf(InitDataExist, Mssql, init.InitializerName())

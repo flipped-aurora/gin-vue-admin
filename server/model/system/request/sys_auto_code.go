@@ -280,6 +280,11 @@ type InitApi struct {
 	APIs     []uint `json:"apis"`
 }
 
+type InitDictionary struct {
+	PlugName     string `json:"plugName"`
+	Dictionaries []uint `json:"dictionaries"`
+}
+
 type LLMAutoCode struct {
 	Prompt string `json:"prompt" form:"prompt" gorm:"column:prompt;comment:提示语;type:text;"` //提示语
 	Mode   string `json:"mode" form:"mode" gorm:"column:mode;comment:模式;type:text;"`        //模式

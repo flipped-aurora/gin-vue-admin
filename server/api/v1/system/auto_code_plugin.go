@@ -117,3 +117,27 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 	}
 	response.OkWithMessage("文件变更成功", c)
 }
+
+// InitDictionary
+// @Tags      AutoCodePlugin
+// @Summary   打包插件
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
+// @Router    /autoCode/initDictionary [post]
+func (a *AutoCodePluginApi) InitDictionary(c *gin.Context) {
+	var dictInfo request.InitDictionary
+	err := c.ShouldBindJSON(&dictInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = autoCodePluginService.InitDictionary(dictInfo)
+	if err != nil {
+		global.GVA_LOG.Error("创建初始化Dictionary失败!", zap.Error(err))
+		response.FailWithMessage("创建初始化Dictionary失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("文件变更成功", c)
+}

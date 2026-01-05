@@ -48,6 +48,11 @@ func (c GeneralDB) LogLevel() logger.LogLevel {
 type SpecializedDB struct {
 	Type      string `mapstructure:"type" json:"type" yaml:"type"`
 	AliasName string `mapstructure:"alias-name" json:"alias-name" yaml:"alias-name"`
+	// GeneralDB 嵌入字段，通过 yaml:",inline" 和 mapstructure:",squash" 标签实现字段压平
+	// - yaml:",inline": 在 YAML 序列化/反序列化时，将 GeneralDB 的字段内联到父结构体中，而不是作为嵌套对象
+	// - mapstructure:",squash": 在使用 mapstructure 库从 map 转换时，将嵌入结构体的字段压平到父结构体中
+	// 这样设计的好处：在配置文件中，SpecializedDB 的所有字段（包括从 GeneralDB 继承的）都位于同一层级
+	// 例如配置文件中可以直接写：type: mysql, alias-name: db1, prefix: gva_, port: "3306" 等，而不需要嵌套在 general-db 对象中
 	GeneralDB `yaml:",inline" mapstructure:",squash"`
 	Disable   bool `mapstructure:"disable" json:"disable" yaml:"disable"`
 }

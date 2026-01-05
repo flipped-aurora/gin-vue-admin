@@ -1,14 +1,382 @@
 package mcpTool
 
+/*
+================================================================================
+performAnalysis 函数详细说明
+================================================================================
+
+【功能概述】
+performAnalysis 是 GVA 分析器的核心函数，用于全面分析系统当前状态，包括：
+1. 扫描并清理空包（没有实际代码文件的包）
+2. 扫描预设计模块（已存在但未注册的模块）
+3. 获取系统字典信息
+4. 返回完整的系统分析结果
+
+【执行流程】
+函数按照以下步骤执行：
+
+步骤1: 获取数据库中的包信息
+  - 从 sys_auto_code_packages 表获取所有包记录
+  - 这些包可能是 package 类型或 plugin 类型
+
+步骤2: 获取历史记录
+  - 从 sys_auto_code_histories 表获取所有代码生成历史记录
+  - 用于关联包和模块的关系
+
+步骤3: 检查并清理空包
+  - 遍历每个包，检查其文件夹是否为空（没有 .go 文件）
+  - 如果为空包：
+    * 删除空包文件夹（plugin 类型删除单个目录，package 类型删除多个目录）
+    * 删除数据库中的包记录
+    * 收集相关的历史记录ID和模块名称
+
+步骤4: 清理脏历史记录
+  - 删除与空包相关的历史记录
+  - 清理相关的API和菜单记录（目前只记录日志，具体清理逻辑待实现）
+
+步骤5: 扫描预设计模块
+  - 扫描 plugin 目录下的模块（在 plugin/{name}/model/ 下查找 .go 文件）
+  - 扫描 model 目录下的模块（在 model/{package}/ 下查找 .go 文件）
+  - 这些模块是已存在但可能未在数据库中注册的模块
+
+步骤6: 过滤已删除包的模块
+  - 从预设计模块列表中移除属于已删除包的模块
+
+步骤7: 构建清理消息
+  - 如果有清理操作，生成清理信息消息
+
+步骤8: 转换包信息
+  - 将数据库模型转换为响应结构体
+
+步骤9: 获取字典信息
+  - 从 sys_dictionaries 表获取所有未删除的字典
+
+步骤10: 构建并返回响应
+  - 组装所有信息到 AnalyzeResponse 结构体
+
+【Demo 示例】
+
+示例1: 正常分析场景 - 发现并清理空包
+----------------------------------------
+场景描述:
+  系统中有3个包，其中一个是空包（没有实际代码文件），需要清理。
+
+输入:
+  requirement: "我需要创建一个用户管理模块"
+
+执行前状态:
+  数据库中有3个包记录：
+  - system (package类型) - 有实际代码文件
+  - example (package类型) - 有实际代码文件
+  - empty_pkg (package类型) - 空包，没有.go文件
+
+  文件系统状态：
+  - server/api/v1/empty_pkg/ 存在但为空（没有.go文件）
+  - server/model/empty_pkg/ 存在但为空
+  - server/router/empty_pkg/ 存在但为空
+  - server/service/empty_pkg/ 存在但为空
+
+执行过程:
+  1. 查询数据库，获取3个包记录
+  2. 查询历史记录，发现 empty_pkg 有1条历史记录（关联模块：empty_module）
+  3. 检查 empty_pkg 包：
+     - 调用 isPackageFolderEmpty("empty_pkg", "package")
+     - 检查 server/api/v1/empty_pkg/ 目录
+     - 递归检查所有子目录，未发现任何.go文件
+     - 判定为空包
+  4. 执行清理操作：
+     - 删除 server/api/v1/empty_pkg/ 目录
+     - 删除 server/model/empty_pkg/ 目录
+     - 删除 server/router/empty_pkg/ 目录
+     - 删除 server/service/empty_pkg/ 目录
+     - 从数据库删除 empty_pkg 包记录
+     - 收集相关历史记录ID和模块名称
+  5. 删除脏历史记录：
+     - 删除 empty_pkg 相关的历史记录
+     - 记录清理日志
+  6. 扫描预设计模块：
+     - 扫描 plugin 目录，发现2个模块
+     - 扫描 model 目录，发现3个模块
+  7. 过滤模块：移除属于 empty_pkg 的模块
+  8. 获取字典信息：查询到10个字典
+
+输出结果:
+  {
+    "existingPackages": [
+      {
+        "packageName": "system",
+        "template": "package",
+        "label": "系统管理",
+        "desc": "系统相关功能模块",
+        "module": "system",
+        "isEmpty": false
+      },
+      {
+        "packageName": "example",
+        "template": "package",
+        "label": "示例模块",
+        "desc": "示例功能演示",
+        "module": "example",
+        "isEmpty": false
+      }
+    ],
+    "predesignedModules": [
+      {
+        "moduleName": "sys_user",
+        "packageName": "system",
+        "template": "package",
+        "filePaths": ["/root/server/model/system/sys_user.go"],
+        "description": "system模块中的sys_user"
+      },
+      {
+        "moduleName": "exa_customer",
+        "packageName": "example",
+        "template": "package",
+        "filePaths": ["/root/server/model/example/exa_customer.go"],
+        "description": "example模块中的exa_customer"
+      }
+    ],
+    "dictionaries": [
+      {
+        "id": 1,
+        "name": "性别",
+        "type": "gender",
+        ...
+      }
+    ],
+    "cleanupInfo": {
+      "deletedPackages": ["empty_pkg"],
+      "deletedModules": ["empty_module"],
+      "cleanupMessage": "**系统清理完成**\n\n- 删除了 1 个空包: empty_pkg\n- 删除了 1 个相关模块: empty_module\n\n"
+    }
+  }
+
+示例2: 无空包场景 - 正常分析
+----------------------------------------
+场景描述:
+  系统中所有包都有实际代码，无需清理。
+
+输入:
+  requirement: "查看当前系统状态"
+
+执行前状态:
+  数据库中有2个包记录：
+  - system (package类型) - 有实际代码
+  - example (package类型) - 有实际代码
+
+执行过程:
+  1. 查询数据库，获取2个包记录
+  2. 检查每个包：
+     - system: 发现 server/api/v1/system/sys_user.go 等文件，不为空
+     - example: 发现 server/api/v1/example/exa_customer.go 等文件，不为空
+  3. 无需清理操作
+  4. 扫描预设计模块，发现5个模块
+  5. 获取字典信息，发现8个字典
+
+输出结果:
+  {
+    "existingPackages": [
+      {
+        "packageName": "system",
+        "template": "package",
+        "label": "系统管理",
+        "desc": "系统相关功能",
+        "module": "system",
+        "isEmpty": false
+      },
+      {
+        "packageName": "example",
+        "template": "package",
+        "label": "示例",
+        "desc": "示例功能",
+        "module": "example",
+        "isEmpty": false
+      }
+    ],
+    "predesignedModules": [
+      {
+        "moduleName": "sys_user",
+        "packageName": "system",
+        "template": "package",
+        "filePaths": ["/root/server/model/system/sys_user.go"],
+        "description": "system模块中的sys_user"
+      }
+    ],
+    "dictionaries": [...],
+    "cleanupInfo": null
+  }
+
+示例3: Plugin 类型包清理
+----------------------------------------
+场景描述:
+  发现一个 plugin 类型的空包，需要清理。
+
+输入:
+  requirement: "分析插件模块"
+
+执行前状态:
+  数据库中有1个 plugin 类型包：
+  - test_plugin (plugin类型) - 空包
+
+  文件系统状态：
+  - server/plugin/test_plugin/ 目录存在但为空
+
+执行过程:
+  1. 查询数据库，获取 test_plugin 包记录
+  2. 检查 test_plugin 包：
+     - 调用 isPackageFolderEmpty("test_plugin", "plugin")
+     - 检查 server/plugin/test_plugin/ 目录
+     - 递归检查，未发现任何.go文件
+     - 判定为空包
+  3. 执行清理操作：
+     - 删除整个 server/plugin/test_plugin/ 目录（plugin类型只需删除一个目录）
+     - 从数据库删除 test_plugin 包记录
+  4. 扫描预设计模块（无）
+  5. 获取字典信息
+
+输出结果:
+  {
+    "existingPackages": [],
+    "predesignedModules": [],
+    "dictionaries": [...],
+    "cleanupInfo": {
+      "deletedPackages": ["test_plugin"],
+      "deletedModules": [],
+      "cleanupMessage": "**系统清理完成**\n\n- 删除了 1 个空包: test_plugin\n\n"
+    }
+  }
+
+示例4: 递归检查空包 - 深层目录结构
+----------------------------------------
+场景描述:
+  包目录存在，有子目录结构，但所有目录都没有.go文件。
+
+执行前状态:
+  数据库中有1个包：
+  - test_pkg (package类型)
+
+  文件系统状态：
+  - server/api/v1/test_pkg/
+    - subdir1/
+    - subdir2/
+      - nested/
+  （所有目录都只有空文件夹，没有任何.go文件）
+
+执行过程:
+  1. 检查 test_pkg 包：
+     - 检查 server/api/v1/test_pkg/ 目录
+     - 递归检查 subdir1/，未发现.go文件
+     - 递归检查 subdir2/，未发现.go文件
+     - 递归检查 subdir2/nested/，未发现.go文件
+     - 判定为空包（hasGoFilesRecursive 返回 true）
+  2. 执行清理操作：
+     - 删除所有相关目录
+     - 删除数据库记录
+
+输出结果:
+  {
+    "existingPackages": [],
+    "predesignedModules": [...],
+    "dictionaries": [...],
+    "cleanupInfo": {
+      "deletedPackages": ["test_pkg"],
+      "deletedModules": [],
+      "cleanupMessage": "**系统清理完成**\n\n- 删除了 1 个空包: test_pkg\n\n"
+    }
+  }
+
+示例5: 混合场景 - 多个空包和有效包
+----------------------------------------
+场景描述:
+  系统中有多个包，部分为空包，需要清理。
+
+执行前状态:
+  数据库中有5个包：
+  - system (package) - 有效
+  - example (package) - 有效
+  - empty1 (package) - 空包
+  - empty2 (package) - 空包
+  - test_plugin (plugin) - 空包
+
+执行过程:
+  1. 检查所有包，发现3个空包
+  2. 逐个清理空包：
+     - empty1: 删除4个目录 + 数据库记录
+     - empty2: 删除4个目录 + 数据库记录
+     - test_plugin: 删除1个目录 + 数据库记录
+  3. 清理相关历史记录
+  4. 扫描预设计模块
+  5. 过滤已删除包的模块
+
+输出结果:
+  {
+    "existingPackages": [
+      {
+        "packageName": "system",
+        "template": "package",
+        ...
+      },
+      {
+        "packageName": "example",
+        "template": "package",
+        ...
+      }
+    ],
+    "predesignedModules": [...],
+    "dictionaries": [...],
+    "cleanupInfo": {
+      "deletedPackages": ["empty1", "empty2", "test_plugin"],
+      "deletedModules": ["module1", "module2"],
+      "cleanupMessage": "**系统清理完成**\n\n- 删除了 3 个空包: empty1, empty2, test_plugin\n- 删除了 2 个相关模块: module1, module2\n\n"
+    }
+  }
+
+示例6: 错误处理场景 - 部分操作失败
+----------------------------------------
+场景描述:
+  清理过程中部分操作失败，但函数继续执行。
+
+执行过程:
+  1. 检查 empty_pkg 包，判定为空包
+  2. 尝试删除文件夹：
+     - 删除 server/api/v1/empty_pkg/ 成功
+     - 删除 server/model/empty_pkg/ 失败（权限问题）
+     - 记录警告日志，继续执行
+  3. 尝试删除数据库记录：成功
+  4. 继续执行后续步骤
+  5. 最终返回结果（包含部分清理信息）
+
+说明:
+  即使部分清理操作失败，函数也会继续执行并返回结果。
+  失败的操作会记录在日志中，但不会中断整个流程。
+
+【注意事项】
+1. 函数会实际删除文件和数据库记录，请谨慎使用
+2. 清理操作失败不会中断整个流程，只会记录警告日志
+3. 预设计模块扫描失败不会影响主流程，会返回空列表
+4. 字典信息获取失败也不会影响主流程
+5. Package 类型的包会删除多个目录（api/v1, model, router, service）
+6. Plugin 类型的包只删除单个目录（plugin/{name}）
+
+【相关函数说明】
+- isPackageFolderEmpty: 检查包文件夹是否为空（递归检查 .go 文件）
+- removeEmptyPackageFolder: 删除空包文件夹（根据类型删除不同路径）
+- scanPredesignedModules: 扫描预设计模块（plugin 和 model 目录）
+- cleanupRelatedApiAndMenus: 清理相关API和菜单（目前只记录日志）
+
+================================================================================
+*/
+
 import (
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"os"
 	"path/filepath"
 	"strings"
+
+	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -115,6 +483,184 @@ func (g *GVAAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}, nil
 }
 
+/*
+================================================================================
+performAnalysis 函数详细说明
+================================================================================
+
+【函数概述】
+performAnalysis 是 GVA 分析器的核心函数，负责全面分析系统当前状态。
+该函数会扫描系统中的包、模块和字典信息，同时自动清理空包（没有实际代码文件的包），
+确保系统整洁，并返回完整的分析结果供后续使用。
+
+【函数签名】
+func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (*AnalyzeResponse, error)
+
+【参数说明】
+- ctx: 上下文对象，用于控制函数执行的生命周期和取消操作
+- req: 分析请求，包含用户的需求描述（虽然当前实现中未直接使用，但保留用于未来扩展）
+
+【返回值说明】
+- *AnalyzeResponse: 分析结果，包含：
+  * ExistingPackages: 现有有效包列表（已过滤空包）
+  * PredesignedModules: 预设计模块列表（已存在但可能未注册的模块）
+  * Dictionaries: 系统字典列表
+  * CleanupInfo: 清理信息（如果有清理操作）
+- error: 如果执行过程中出现严重错误则返回
+
+【执行流程详解】
+
+步骤1: 获取数据库中的包信息
+----------------------------------------
+从 sys_auto_code_packages 表查询所有包记录。
+这些包可能是两种类型：
+- "package" 类型：标准包，会在多个目录下创建文件（api/v1, model, router, service）
+- "plugin" 类型：插件包，只在一个目录下创建文件（plugin/{name}）
+
+代码示例：
+  var packages []model.Sy /s/AutoCodePackage
+  global.GVA_DB.Find(&packages)÷
+
+步骤2: 获取历史记录
+----------------------------------------
+从 sys_auto_code_histories 表查询所有代码生成历史记录。
+这些历史记录用于：
+- 关联包和模块的关系
+- 识别哪些模块属于哪个包
+- 清理空包时，同时清理相关的历史记录
+
+代码示例：
+  var histories []model.SysAutoCodeHistory
+  global.GVA_DB.Find(&histories)
+
+步骤3: 检查并清理空包（核心逻辑）
+----------------------------------------
+遍历每个包，执行以下检查：
+
+3.1 检查包文件夹是否为空
+  - 调用 isPackageFolderEmpty() 函数
+  - 对于 "plugin" 类型：检查 server/plugin/{packageName}/ 目录
+  - 对于 "package" 类型：检查 server/api/v1/{packageName}/ 目录
+  - 递归检查目录及其子目录中是否有 .go 文件
+  - 如果文件夹不存在或没有任何 .go 文件，则判定为空包
+
+3.2 如果发现空包，执行清理操作：
+  a) 删除空包文件夹
+     - Plugin 类型：删除 server/plugin/{packageName}/ 整个目录
+     - Package 类型：删除以下4个目录：
+       * server/api/v1/{packageName}/
+       * server/model/{packageName}/
+       * server/router/{packageName}/
+       * server/service/{packageName}/
+
+  b) 删除数据库中的包记录
+     - 从 sys_auto_code_packages 表中删除该包记录
+
+  c) 收集相关的历史记录ID和模块名称
+     - 遍历所有历史记录，找出属于该包的历史记录
+     - 收集这些历史记录的ID和对应的模块名称（StructName）
+
+3.3 如果包不为空，则加入有效包列表
+
+步骤4: 清理脏历史记录
+----------------------------------------
+4.1 识别脏历史记录
+  - 遍历所有历史记录
+  - 找出属于已删除空包的历史记录ID
+  - 这些历史记录被称为"脏历史记录"
+
+4.2 删除脏历史记录
+  - 从 sys_auto_code_histories 表中批量删除这些历史记录
+  - 使用 SQL: DELETE FROM sys_auto_code_histories WHERE id IN (dirtyHistoryIDs)
+
+4.3 清理相关的API和菜单记录
+  - 调用 cleanupRelatedApiAndMenus() 函数
+  - 目前只记录日志，具体清理逻辑待实现
+  - 未来可以调用 service 层的方法清理相关的 API 和菜单
+
+步骤5: 扫描预设计模块
+----------------------------------------
+扫描文件系统中已存在但可能未在数据库中注册的模块。
+
+5.1 扫描 Plugin 模块
+  - 扫描 server/plugin/ 目录下的所有插件
+  - 对每个插件，查找其 model/ 目录
+  - 扫描 model/ 目录下的所有 .go 文件
+  - 每个 .go 文件对应一个模块
+
+5.2 扫描 Model 模块
+  - 扫描 server/model/ 目录下的所有包目录
+  - 对每个包目录，扫描其中的所有 .go 文件
+  - 每个 .go 文件对应一个模块
+
+5.3 构建预设计模块信息
+  - 模块名称：文件名（去掉 .go 后缀）
+  - 包名：所属的包或插件名称
+  - 模板类型："plugin" 或 "package"
+  - 文件路径：.go 文件的完整路径
+  - 描述：自动生成的描述信息
+
+步骤6: 过滤已删除包的模块
+----------------------------------------
+从预设计模块列表中移除属于已删除包的模块。
+这样可以确保返回的模块列表只包含有效的模块。
+
+步骤7: 构建清理消息
+----------------------------------------
+如果有清理操作（删除了空包或模块），则构建清理消息：
+- 显示删除了多少个空包
+- 显示删除了多少个相关模块
+- 消息格式为 Markdown 格式，便于显示
+
+步骤8: 转换包信息
+----------------------------------------
+将数据库模型（model.SysAutoCodePackage）转换为响应结构体（PackageInfo）。
+所有返回的包都标记为 IsEmpty: false（因为空包已经被过滤掉）。
+
+步骤9: 获取字典信息
+----------------------------------------
+从 sys_dictionaries 表查询所有未删除的字典记录。
+查询条件：deleted_at IS NULL（软删除机制）
+
+步骤10: 构建并返回响应
+----------------------------------------
+将所有收集到的信息组装到 AnalyzeResponse 结构体中：
+- ExistingPackages: 有效包列表
+- PredesignedModules: 过滤后的预设计模块列表
+- Dictionaries: 字典列表
+- CleanupInfo: 清理信息（如果有清理操作）
+
+【错误处理策略】
+1. 数据库查询失败：返回错误，中断执行
+2. 检查包是否为空失败：记录警告日志，跳过该包，继续处理其他包
+3. 删除空包文件夹失败：记录警告日志，继续执行
+4. 删除数据库记录失败：记录警告日志，继续执行
+5. 扫描预设计模块失败：记录警告日志，返回空列表，不影响主流程
+6. 获取字典信息失败：记录警告日志，返回空列表，不影响主流程
+
+这种错误处理策略确保了即使部分操作失败，函数也能尽可能完成主要任务。
+
+【性能考虑】
+1. 数据库查询：使用 Find() 一次性查询所有记录，避免多次查询
+2. 文件系统操作：递归检查目录，但会在找到第一个 .go 文件时立即返回
+3. 批量删除：使用 IN 子句批量删除历史记录，而不是逐条删除
+
+【使用场景】
+1. 系统初始化时，清理历史遗留的空包
+2. 代码生成前，分析当前系统状态
+3. 系统维护时，检查并清理无效的包和模块
+4. 获取系统概览信息，用于展示给用户
+
+【注意事项】
+⚠️ 重要：此函数会实际删除文件和数据库记录，请谨慎使用！
+1. 删除操作不可逆，建议在执行前备份
+2. 空包的判定标准是：目录不存在或没有任何 .go 文件
+3. Package 类型和 Plugin 类型的包处理方式不同
+4. 清理操作失败不会中断整个流程，只会记录警告日志
+5. 预设计模块扫描失败不会影响主流程
+
+================================================================================
+*/
 // performAnalysis 执行分析逻辑
 func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (*AnalyzeResponse, error) {
 	// 1. 获取数据库中的包信息

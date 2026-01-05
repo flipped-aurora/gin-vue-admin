@@ -161,7 +161,7 @@
 
   const pubPlugin = async () => {
     ElMessageBox.confirm(
-      `请检查server下的/plugin/${plugName.value}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?`,
+      `请检查server下的/plugin/${plugName.value}/plugin.go是否已放开需要的 initialize.Api(ctx), initialize.Menu(ctx) 和 initialize.Dictionary(ctx)?`,
       '打包',
       {
         confirmButtonText: '打包',

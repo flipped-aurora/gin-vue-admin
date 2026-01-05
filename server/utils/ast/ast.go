@@ -323,8 +323,16 @@ func CreateDictionaryStructAst(dictionaries []system.SysDictionary) *[]ast.Expr 
 				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Type)},
 			},
 			&ast.KeyValueExpr{
-				Key:   &ast.Ident{Name: "Status"},
-				Value: &ast.UnaryExpr{Op: token.AND, X: &ast.Ident{Name: statusStr}},
+				Key: &ast.Ident{Name: "Status"},
+				Value: &ast.CallExpr{
+					Fun: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "utils"},
+						Sel: &ast.Ident{Name: "Pointer"},
+					},
+					Args: []ast.Expr{
+						&ast.Ident{Name: statusStr},
+					},
+				},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Desc"},
@@ -359,8 +367,16 @@ func CreateDictionaryStructAst(dictionaries []system.SysDictionary) *[]ast.Expr 
 							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Extend)},
 						},
 						&ast.KeyValueExpr{
-							Key:   &ast.Ident{Name: "Status"},
-							Value: &ast.UnaryExpr{Op: token.AND, X: &ast.Ident{Name: detailStatusStr}},
+							Key: &ast.Ident{Name: "Status"},
+							Value: &ast.CallExpr{
+								Fun: &ast.SelectorExpr{
+									X:   &ast.Ident{Name: "utils"},
+									Sel: &ast.Ident{Name: "Pointer"},
+								},
+								Args: []ast.Expr{
+									&ast.Ident{Name: detailStatusStr},
+								},
+							},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Sort"},

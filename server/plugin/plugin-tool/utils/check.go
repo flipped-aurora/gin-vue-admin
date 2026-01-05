@@ -9,7 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 )
 
-func RegisterApis( apis ...system.SysApi) {
+func RegisterApis(apis ...system.SysApi) {
 	err := global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		for _, api := range apis {
 			err := tx.Model(system.SysApi{}).Where("path = ? AND method = ? AND api_group = ? ", api.Path, api.Method, api.ApiGroup).FirstOrCreate(&api).Error
@@ -25,7 +25,7 @@ func RegisterApis( apis ...system.SysApi) {
 	}
 }
 
-func RegisterMenus( menus ...system.SysBaseMenu) {
+func RegisterMenus(menus ...system.SysBaseMenu) {
 	parentMenu := menus[0]
 	otherMenus := menus[1:]
 	err := global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -50,4 +50,34 @@ func RegisterMenus( menus ...system.SysBaseMenu) {
 		zap.L().Error("注册菜单失败", zap.Error(err))
 	}
 
+}
+
+func RegisterDictionaries(dictionaries ...system.SysDictionary) {
+	err := global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		for _, dict := range dictionaries {
+			details := dict.SysDictionaryDetails
+			dict.SysDictionaryDetails = nil
+			err := tx.Model(system.SysDictionary{}).Where("type = ?", dict.Type).FirstOrCreate(&dict).Error
+			if err != nil {
+				zap.L().Error("注册字典失败", zap.Error(err), zap.String("type", dict.Type))
+				return err
+			}
+			for _, detail := range details {
+				detail.SysDictionaryID = int(dict.ID)
+				err = tx.Model(system.SysDictionaryDetail{}).Where("sys_dictionary_id = ? AND value = ?", dict.ID, detail.Value).FirstOrCreate(&detail).Error
+				if err != nil {
+					zap.L().Error("注册字典详情失败", zap.Error(err), zap.String("value", detail.Value))
+					return err
+				}
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		zap.L().Error("注册字典失败", zap.Error(err))
+	}
+}
+
+func Pointer[T any](in T) *T {
+	return &in
 }

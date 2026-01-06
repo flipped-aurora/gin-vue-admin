@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
@@ -79,10 +80,13 @@ func (c *Cutter) Write(bytes []byte) (n int, err error) {
 	if err != nil {
 		return 0, err
 	}
-	err = removeNDaysFolders(c.director, c.retentionDay)
-	if err != nil {
-		return 0, err
-	}
+	defer func() {
+		err := removeNDaysFolders(c.director, c.retentionDay)
+		if err != nil {
+			fmt.Println("清理过期日志失败", err)
+		}
+	}()
+
 	c.file, err = os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return 0, err

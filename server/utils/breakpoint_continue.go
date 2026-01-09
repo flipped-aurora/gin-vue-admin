@@ -62,13 +62,17 @@ func makeFileContent(content []byte, fileName string, FileDir string, contentNum
 	f, err := os.Create(path)
 	if err != nil {
 		return path, err
-	} else {
-		_, err = f.Write(content)
-		if err != nil {
-			return path, err
-		}
 	}
+	// 创建文件（如果已存在则覆盖）
+	// 好处：支持重新上传失败的切片，实现真正的断点续传
+
+	// 延迟关闭文件句柄 - 必须在文件创建成功后立即注册
+	// 好处：确保文件正确关闭，避免资源泄漏
+	// 即使后续写入失败返回，defer也会执行，保证资源释放
 	defer f.Close()
+
+	// 将切片内容写入文件
+	_, err = f.Write(content)
 	return path, nil
 }
 

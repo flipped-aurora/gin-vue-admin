@@ -24,6 +24,9 @@ const (
 //@return: error, string
 
 func BreakPointContinue(content []byte, fileName string, contentNumber int, contentTotal int, fileMd5 string) (string, error) {
+	if strings.Contains(fileName, "..") || strings.Contains(fileMd5, "..") {
+		return "", errors.New("文件名或路径不合法")
+	}
 	path := breakpointDir + fileMd5 + "/"
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
@@ -79,6 +82,9 @@ func makeFileContent(content []byte, fileName string, FileDir string, contentNum
 //@return: error, string
 
 func MakeFile(fileName string, FileMd5 string) (string, error) {
+	if strings.Contains(fileName, "..") || strings.Contains(FileMd5, "..") {
+		return "", errors.New("文件名或路径不合法")
+	}
 	rd, err := os.ReadDir(breakpointDir + FileMd5)
 	if err != nil {
 		return finishDir + fileName, err
@@ -107,6 +113,9 @@ func MakeFile(fileName string, FileMd5 string) (string, error) {
 //@return: error
 
 func RemoveChunk(FileMd5 string) error {
+	if strings.Contains(FileMd5, "..") {
+		return errors.New("路径不合法")
+	}
 	err := os.RemoveAll(breakpointDir + FileMd5)
 	return err
 }

@@ -101,7 +101,7 @@
     {
       icon: Reading,
       title: '授权购买',
-      path: 'https://gin-vue-admin.com/empower/index.html'
+      path: 'https://plugin.gin-vue-admin.com/license'
     },
     {
       icon: Document,

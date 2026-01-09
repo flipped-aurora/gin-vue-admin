@@ -22,7 +22,7 @@ export default {
        --------------------------------------版权声明--------------------------------------
        ** 版权所有方：flipped-aurora开源团队 **
        ** 版权持有公司：北京翻转极光科技有限责任公司 **
-       ** 剔除授权标识需购买商用授权：https://gin-vue-admin.com/empower/index.html **
+       ** 剔除授权标识需购买商用授权：https://plugin.gin-vue-admin.com/license **
        ** 感谢您对Gin-Vue-Admin的支持与关注 合法授权使用更有利于项目的长久发展**
     `)
   }

@@ -27,7 +27,7 @@
   const banners = [
     {
       img: banner,
-      link: 'https://gin-vue-admin.com/empower/index.html'
+      link: 'https://plugin.gin-vue-admin.com/license'
     },
     {
       img: banner2,

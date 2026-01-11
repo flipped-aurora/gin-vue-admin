@@ -52,7 +52,7 @@
   }
 
   const getTableData = async() => {
-    const res = await getShopPluginList({ page: page.value, pageSize: pageSize.value})
+    const res = await getShopPluginList({ page: page.value, pageSize: pageSize.value ,updatedAt: 1})
     if (res.code === 0) {
       tableData.value = res.data.list
       total.value = res.data.total

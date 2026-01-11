@@ -398,7 +398,7 @@
                 v-model="formData.sql"
                 type="textarea"
                 :rows="10"
-                placeholder="请输入导出SQL语句，支持GORM命名参数模式，例如：SELECT * FROM users WHERE id = @id"
+                placeholder="请输入导出SQL语句，支持GORM命名参数模式，例如：SELECT * FROM sys_apis WHERE id = @id"
               />
             </el-form-item>
             <el-form-item label="导入SQL:" prop="importSql">
@@ -406,7 +406,7 @@
                 v-model="formData.importSql"
                 type="textarea"
                 :rows="10"
-                placeholder="请输入导入SQL语句，支持GORM命名参数模式，例如：INSERT INTO users (name, age) VALUES (@name, @age)。参数名对应模板信息中的key。"
+                placeholder="请输入导入SQL语句，支持GORM命名参数模式，例如：INSERT INTO sys_apis (path, description ,api_group, method) VALUES (@path, @description, @api_group, @method)。参数名对应模板信息中的key。"
               />
             </el-form-item>
             <el-form-item label="导出条件:">

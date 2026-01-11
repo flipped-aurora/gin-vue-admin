@@ -1,8 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <div
     class="rounded-xl border border-black/10 bg-white text-black/80 dark:text-slate-400 dark:bg-slate-900 dark:text-white/80"

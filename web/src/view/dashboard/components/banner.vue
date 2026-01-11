@@ -1,8 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <el-carousel class="-mt-2">
     <el-carousel-item

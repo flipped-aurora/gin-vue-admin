@@ -1,7 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
 <template>
   <div class="mt-4 w-full">
     <div class="text-xs tracking-wide text-black/60 dark:text-white/60">快捷入口</div>

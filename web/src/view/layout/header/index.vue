@@ -1,8 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/7
-!-->
-
 <template>
   <div
     class="flex justify-between fixed top-0 left-0 right-0 z-10 h-16 bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700 items-center px-2"

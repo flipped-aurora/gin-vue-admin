@@ -1,7 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/7
-!-->
 <template>
   <div class="gva-tabs">
     <el-tabs

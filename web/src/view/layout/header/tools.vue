@@ -1,8 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/7
-!-->
-
 <template>
   <div class="flex items-center mx-4 gap-4">
     <el-tooltip class="" effect="dark" content="视频教程" placement="bottom">

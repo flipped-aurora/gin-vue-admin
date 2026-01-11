@@ -1,8 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <div class="grid grid-cols-2 gap-2">
     <a

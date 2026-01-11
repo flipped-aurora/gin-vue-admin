@@ -24,7 +24,7 @@ func (e *FileUploadAndDownloadService) FindOrCreateFile(fileMd5 string, fileName
 	cfile.FileName = fileName
 	cfile.ChunkTotal = chunkTotal
 
-	if errors.Is(global.GVA_DB.Where("file_md5 = ? AND is_finish = ?", fileMd5, true).First(&file).Error, gorm.ErrRecordNotFound) {
+	if errors.Is(global.GVA_DB.Where("file_md5 = ? AND file_name = ? AND is_finish = ?", fileMd5, fileName, true).First(&file).Error, gorm.ErrRecordNotFound) {
 		err = global.GVA_DB.Where("file_md5 = ? AND file_name = ?", fileMd5, fileName).Preload("ExaFileChunk").FirstOrCreate(&file, cfile).Error
 		return file, err
 	}

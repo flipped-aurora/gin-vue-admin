@@ -4,6 +4,15 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"go/parser"
+	"go/printer"
+	"go/token"
+	"io"
+	"mime/multipart"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -13,14 +22,6 @@ import (
 	cp "github.com/otiai10/copy"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
-	"go/parser"
-	"go/printer"
-	"go/token"
-	"io"
-	"mime/multipart"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 var AutoCodePlugin = new(autoCodePlugin)
@@ -42,13 +43,27 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 	}
 	defer src.Close()
 
+	// 在临时目录创建目标文件
+	// 使用完整路径拼接的好处：明确文件位置，避免路径混乱
 	out, err := os.Create(GVAPLUGPINATH + file.Filename)
 	if err != nil {
 		return -1, -1, err
 	}
-	defer out.Close()
 
+	// 将上传的文件内容复制到临时文件
+	// 使用io.Copy的好处：高效处理大文件，自动管理缓冲区，避免内存溢出
 	_, err = io.Copy(out, src)
+	if err != nil {
+		out.Close()
+		return -1, -1, err
+	}
+
+	// 立即关闭文件，确保数据写入磁盘并释放文件句柄
+	// 必须在解压前关闭，否则在Windows系统上会导致文件被占用无法解压
+	err = out.Close()
+	if err != nil {
+		return -1, -1, err
+	}
 
 	paths, err := utils.Unzip(GVAPLUGPINATH+file.Filename, GVAPLUGPINATH)
 	paths = filterFile(paths)

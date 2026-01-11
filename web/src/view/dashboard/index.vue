@@ -46,7 +46,7 @@
           </gva-card>
           <gva-card
             without-padding
-            custom-class="overflow-hidden h-44 sm:h-52 xl:h-56"
+            custom-class="overflow-hidden"
           >
             <gva-banner />
           </gva-card>

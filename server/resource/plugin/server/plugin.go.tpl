@@ -19,6 +19,8 @@ type plugin struct{}
 // initialize.Api(ctx)
 // 安装插件时候自动注册的api数据请到下方法.Menu方法中实现并添加如下方法
 // initialize.Menu(ctx)
+// 安装插件时候自动注册的api数据请到下方法.Dictionary方法中实现并添加如下方法
+// initialize.Dictionary(ctx)
 func (p *plugin) Register(group *gin.Engine) {
 	ctx := context.Background() 
 	initialize.Gorm(ctx)

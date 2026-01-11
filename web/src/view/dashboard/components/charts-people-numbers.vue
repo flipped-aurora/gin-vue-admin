@@ -1,11 +1,3 @@
-<!--
-    本组件参考 arco-pro 的实现 将 ts 改为 js 写法
-    https://github.com/arco-design/arco-design-pro-vue/blob/main/arco-design-pro-vite/src/views/dashboard/workplace/components/content-chart.vue
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-    @desc: 人数统计图表
-!-->
-
 <template>
   <Chart :height="height" :option="chartOption" />
 </template>
@@ -38,7 +30,7 @@
       style: {
         text: '',
         textAlign: 'center',
-        fill: '#4E5969',
+        fill: appStore.isDark ? '#FFFFFF' : '#000000',
         fontSize: 12
       }
     }

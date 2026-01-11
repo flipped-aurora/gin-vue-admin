@@ -2,7 +2,7 @@
   <div class="flex h-full">
     <!-- 一级菜单常驻侧边栏 -->
     <div
-      class="relative !h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700"
+      class="relative !h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700"
       :style="{
         width: config.layout_side_collapsed_width + 'px'
       }"
@@ -64,7 +64,7 @@
 
     <!-- 二级菜单并列显示 -->
     <div
-      class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700 px-2"
+      class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700 px-2"
       :style="{
         width: layoutSideWidth + 'px'
       }"

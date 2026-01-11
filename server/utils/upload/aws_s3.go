@@ -42,6 +42,7 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 		Bucket: aws.String(global.GVA_CONFIG.AwsS3.Bucket),
 		Key:    aws.String(filename),
 		Body:   f,
+		ContentType: aws.String(file.Header.Get("Content-Type")),
 	})
 	if err != nil {
 		global.GVA_LOG.Error("function uploader.Upload() failed", zap.Any("err", err.Error()))

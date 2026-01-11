@@ -1,20 +1,17 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <el-scrollbar>
     <div
       v-for="(item, index) in notices"
       :key="index"
-      class="flex items-center mb-1.5 gap-3"
+      class="flex items-center gap-3 py-1"
     >
-      <el-tag :type="item.type" size="small">
+      <div
+        class="shrink-0 rounded-full border border-black/10 px-2 py-0.5 text-[11px] leading-4 text-black/70 dark:border-white/10 dark:text-white/70"
+      >
         {{ item.typeTitle }}
-      </el-tag>
+      </div>
       <el-tooltip effect="light" :content="item.title" placement="top">
-        <div class="text-xs text-gray-700 dark:text-gray-300 line-clamp-1">
+        <div class="min-w-0 text-xs text-black/70 dark:text-white/70 line-clamp-1">
           {{ item.title }}
         </div>
       </el-tooltip>
@@ -24,11 +21,6 @@
 
 <script setup>
   const notices = [
-    {
-      type: 'primary',
-      typeTitle: '公告',
-      title: '授权费将在从六月一日起结束第一价格梯度，进入第二价格梯度。'
-    },
     {
       type: 'success',
       typeTitle: '通知',

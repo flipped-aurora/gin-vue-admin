@@ -11,8 +11,8 @@ const props = defineProps({
   }
 })
 
-import darkLogoPath from "/public/logo.png";  // 系统没有暗黑模式logo，如果需要暗黑模式logo请自行修改文件路径。
-import lightLogoPath from "/public/logo.png";
+const darkLogoPath = "/logo.png";  // 系统没有暗黑模式logo，如果需要暗黑模式logo请自行修改文件路径。
+const lightLogoPath = "/logo.png";
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);

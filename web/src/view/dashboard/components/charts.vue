@@ -1,23 +1,18 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <div class="">
     <div class="flex items-center justify-between mb-2">
-      <div v-if="title" class="font-bold">
+      <div v-if="title" class="text-sm font-semibold tracking-tight text-black dark:text-white">
         {{ title }}
       </div>
       <slot v-else name="title" />
     </div>
     <div class="w-full relative">
       <div v-if="type !== 4">
-        <div class="mt-4 text-gray-600 text-3xl font-mono">
+        <div class="mt-4 text-3xl font-mono text-black dark:text-white">
           <el-statistic :value="268500" />
         </div>
-        <div class="mt-2 text-green-600 text-sm font-bold font-mono">
-          +80% <el-icon><TopRight /></el-icon>
+        <div class="mt-2 text-xs font-mono text-black/60 dark:text-white/60">
+          +80% <el-icon class="align-middle"><TopRight /></el-icon>
         </div>
       </div>
       <div class="absolute top-0 right-2 w-[50%] h-20">

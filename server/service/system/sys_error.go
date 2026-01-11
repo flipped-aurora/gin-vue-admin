@@ -14,6 +14,9 @@ type SysErrorService struct{}
 // CreateSysError 创建错误日志记录
 // Author [yourname](https://github.com/yourname)
 func (sysErrorService *SysErrorService) CreateSysError(ctx context.Context, sysError *system.SysError) (err error) {
+	if global.GVA_DB == nil {
+		return nil
+	}
 	err = global.GVA_DB.Create(sysError).Error
 	return err
 }

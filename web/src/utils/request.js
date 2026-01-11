@@ -5,7 +5,6 @@ import { emitter } from '@/utils/bus'
 import router from '@/router/index'
 
 const service = axios.create({
-  baseURL: import.meta.env.VITE_BASE_API,
   timeout: 99999
 })
 let activeAxios = 0
@@ -102,6 +101,7 @@ service.interceptors.request.use(
     if (!config.donNotShowLoading) {
       showLoading(config.loadingOption)
     }
+    config.baseURL = config.baseURL || import.meta.env.VITE_BASE_API
     const userStore = useUserStore()
     config.headers = {
       'Content-Type': 'application/json',

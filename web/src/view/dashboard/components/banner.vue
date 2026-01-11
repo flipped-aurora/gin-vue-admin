@@ -1,8 +1,3 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <el-carousel class="-mt-2">
     <el-carousel-item
@@ -27,7 +22,7 @@
   const banners = [
     {
       img: banner,
-      link: 'https://gin-vue-admin.com/empower/index.html'
+      link: 'https://plugin.gin-vue-admin.com/license'
     },
     {
       img: banner2,

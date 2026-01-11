@@ -1,39 +1,38 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
 <template>
-  <div class="mt-8 w-full">
-    <div class="grid grid-cols-2 md:grid-cols-3 3xl:grid-cols-4">
+  <div class="mt-4 w-full">
+    <div class="text-xs tracking-wide text-black/60 dark:text-white/60">快捷入口</div>
+    <div class="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4">
       <div
         v-for="(item, index) in shortcuts"
         :key="index"
-        class="flex flex-col items-center mb-3 group cursor-pointer"
+        class="flex flex-col items-center group cursor-pointer"
         @click="toPath(item)"
       >
         <div
-          class="w-8 h-8 rounded bg-gray-200 dark:bg-slate-500 flex items-center justify-center group-hover:bg-blue-400 group-hover:text-white"
+          class="w-10 h-10 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center text-black/70 dark:text-white/70 group-hover:bg-[var(--el-color-primary)] group-hover:text-white transition-colors"
         >
           <el-icon><component :is="item.icon" /></el-icon>
         </div>
-        <div class="text-xs mt-2 text-gray-700 dark:text-gray-300">
+        <div class="mt-2 text-[11px] text-black/70 dark:text-white/70">
           {{ item.title }}
         </div>
       </div>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 mt-8">
+
+    <div class="mt-6 text-xs tracking-wide text-black/60 dark:text-white/60">最近访问</div>
+    <div class="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4">
       <div
         v-for="(item, index) in recentVisits"
         :key="index"
-        class="flex flex-col items-center mb-3 group cursor-pointer"
+        class="flex flex-col items-center group cursor-pointer"
         @click="openLink(item)"
       >
         <div
-          class="w-8 h-8 rounded bg-gray-200 dark:bg-slate-500 flex items-center justify-center group-hover:bg-blue-400 group-hover:text-white"
+          class="w-10 h-10 rounded-lg border border-black/10 dark:border-white/10 flex items-center justify-center text-black/70 dark:text-white/70 group-hover:bg-[var(--el-color-primary)] group-hover:text-white transition-colors"
         >
           <el-icon><component :is="item.icon" /></el-icon>
         </div>
-        <div class="text-xs mt-2 text-gray-700 dark:text-gray-300">
+        <div class="mt-2 text-[11px] text-black/70 dark:text-white/70">
           {{ item.title }}
         </div>
       </div>
@@ -98,7 +97,7 @@
     {
       icon: Reading,
       title: '授权购买',
-      path: 'https://gin-vue-admin.com/empower/index.html'
+      path: 'https://plugin.gin-vue-admin.com/license'
     },
     {
       icon: Document,

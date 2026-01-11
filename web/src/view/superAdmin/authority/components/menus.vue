@@ -1,10 +1,27 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10">
-      <el-input v-model="filterText" class="w-3/5" placeholder="筛选" />
-      <el-button class="float-right" type="primary" @click="relation"
-        >确 定</el-button
-      >
+    <div class="sticky top-0.5 z-10 pb-2">
+      <div class="flex gap-2 items-center mb-2">
+        <el-input v-model="filterText" class="flex-1" placeholder="筛选" />
+        <el-button type="primary" @click="relation">确 定</el-button>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="whitespace-nowrap">默认首页：</span>
+        <el-select
+          :model-value="row.defaultRouter"
+          filterable
+          placeholder="请选择默认首页"
+          class="flex-1"
+          @change="handleDefaultRouterChange"
+        >
+          <el-option
+            v-for="item in menuOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
     </div>
     <div class="tree-content clear-both">
       <el-scrollbar>
@@ -21,27 +38,15 @@
           @check="nodeChange"
         >
           <template #default="{ node, data }">
-            <span class="custom-tree-node">
+            <div class="flex items-center gap-2">
               <span>{{ node.label }}</span>
-              <span v-if="node.checked && !data.name?.startsWith('http://') && !data.name?.startsWith('https://')">
-                <el-button
-                  type="primary"
-                  link
-                  :style="{
-                    color:
-                      row.defaultRouter === data.name ? '#E6A23C' : '#85ce61'
-                  }"
-                  @click.stop="() => setDefault(data)"
-                >
-                  {{ row.defaultRouter === data.name ? '首页' : '设为首页' }}
-                </el-button>
-              </span>
+                <SvgIcon v-if="row.defaultRouter === data.name" icon="ant-design:home-filled" class="inline text-lg text-active" />
               <span v-if="data.menuBtn.length">
                 <el-button type="primary" link @click.stop="() => OpenBtn(data)">
                   分配按钮
                 </el-button>
               </span>
-            </span>
+            </div>
           </template>
         </el-tree>
       </el-scrollbar>
@@ -96,15 +101,74 @@
   const menuTreeData = ref([])
   const menuTreeIds = ref([])
   const needConfirm = ref(false)
+  const menuTree = ref(null)
   const menuDefaultProps = ref({
     children: 'children',
     label: function (data) {
       return data.meta.title
     },
     disabled: function (data) {
-      return props.row.defaultRouter === data.name
+      if (props.row.defaultRouter !== data.name) return false
+      // 只在该节点已勾选时禁用，避免出现“默认首页未勾选却无法勾选”的死锁状态
+      const checkedKeys = menuTree.value?.getCheckedKeys?.() || menuTreeIds.value
+      return checkedKeys.includes(Number(data.ID))
     }
   })
+
+  const menuOptions = ref([])
+
+  const isExternalRoute = (name) => {
+    if (!name) return false
+    return name.startsWith('http://') || name.startsWith('https://')
+  }
+
+  const findMenuByName = (menus, name) => {
+    for (const item of menus || []) {
+      if (item?.name === name) return item
+      if (item?.children?.length) {
+        const found = findMenuByName(item.children, name)
+        if (found) return found
+      }
+    }
+    return null
+  }
+
+  const buildOptionsFromCheckedLeafMenus = () => {
+    const checkedLeafMenus = menuTree.value
+      ? menuTree.value.getCheckedNodes(false, true)
+      : []
+    const options = checkedLeafMenus
+      .filter((item) => item?.name && !isExternalRoute(item.name))
+      .map((item) => ({
+        label: item?.meta?.title || item.name,
+        value: item.name
+      }))
+
+    // 确保当前默认首页能正常显示（即使历史数据不一致）
+    if (props.row.defaultRouter && !options.some(o => o.value === props.row.defaultRouter)) {
+      const found = findMenuByName(menuTreeData.value, props.row.defaultRouter)
+      if (found && !isExternalRoute(found.name)) {
+        options.push({
+          label: found?.meta?.title || found.name,
+          value: found.name
+        })
+      }
+    }
+
+    return options
+  }
+
+  const refreshDefaultRouterOptions = () => {
+    menuOptions.value = buildOptionsFromCheckedLeafMenus()
+  }
+
+  const isDefaultRouterAllowed = (routeName) => {
+    if (!routeName) return false
+    const checkedLeafMenus = menuTree.value
+      ? menuTree.value.getCheckedNodes(false, true)
+      : []
+    return checkedLeafMenus.some((item) => item?.name === routeName)
+  }
 
   const init = async () => {
     // 获取所有菜单树
@@ -120,6 +184,14 @@
       }
     })
     menuTreeIds.value = arr
+
+    // 确保异步数据加载后，树的勾选状态与选项同步
+    await nextTick()
+    if (menuTree.value?.setCheckedKeys) {
+      menuTree.value.setCheckedKeys(menuTreeIds.value)
+      await nextTick()
+    }
+    refreshDefaultRouterOptions()
   }
 
   init()
@@ -136,15 +208,25 @@
       emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
     }
   }
+
+  const handleDefaultRouterChange = (val) => {
+    // 兜底校验：未勾选菜单不允许被设置为默认首页
+    if (!isDefaultRouterAllowed(val)) {
+      ElMessage.warning('未勾选的菜单不可设置为默认首页，请先勾选后再选择')
+      return
+    }
+    setDefault({ name: val })
+  }
+
   const nodeChange = () => {
     needConfirm.value = true
+    refreshDefaultRouterOptions()
   }
   // 暴露给外层使用的切换拦截统一方法
   const enterAndNext = () => {
     relation()
   }
   // 关联树 确认方法
-  const menuTree = ref(null)
   const relation = async () => {
     const checkArr = menuTree.value.getCheckedNodes(false, true)
     const res = await addMenuAuthority({
@@ -156,6 +238,8 @@
         type: 'success',
         message: '菜单设置成功!'
       })
+
+      refreshDefaultRouterOptions()
     }
   }
 
@@ -223,11 +307,3 @@
     menuTree.value.filter(val)
   })
 </script>
-
-<style lang="scss" scoped>
-  .custom-tree-node {
-    span + span {
-      @apply ml-3;
-    }
-  }
-</style>

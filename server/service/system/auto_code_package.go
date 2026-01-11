@@ -547,10 +547,11 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						router := strings.Index(threeDirs[k].Name(), "router")
 						hasGorm := strings.Index(threeDirs[k].Name(), "gorm")
 						response := strings.Index(threeDirs[k].Name(), "response")
-						if gen != -1 && api != -1 && menu != -1 && viper != -1 && plugin != -1 && config != -1 && router != -1 && hasGorm != -1 && response != -1 {
+						dictionary := strings.Index(threeDirs[k].Name(), "dictionary")
+						if gen != -1 && api != -1 && menu != -1 && viper != -1 && plugin != -1 && config != -1 && router != -1 && hasGorm != -1 && response != -1 && dictionary != -1 {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
 						}
-						if api != -1 || menu != -1 || viper != -1 || response != -1 || plugin != -1 || config != -1 {
+						if api != -1 || menu != -1 || viper != -1 || response != -1 || plugin != -1 || config != -1 || dictionary != -1 {
 							creates[four] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
 						}
 						if gen != -1 {

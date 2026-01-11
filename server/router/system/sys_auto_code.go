@@ -39,7 +39,8 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 	}
 	{
 		publicAutoCodeRouter.POST("llmAuto", autoCodeApi.LLMAuto)
-		publicAutoCodeRouter.POST("initMenu", autoCodePluginApi.InitMenu) // 同步插件菜单
-		publicAutoCodeRouter.POST("initAPI", autoCodePluginApi.InitAPI)   // 同步插件API
+		publicAutoCodeRouter.POST("initMenu", autoCodePluginApi.InitMenu)             // 同步插件菜单
+		publicAutoCodeRouter.POST("initAPI", autoCodePluginApi.InitAPI)               // 同步插件API
+		publicAutoCodeRouter.POST("initDictionary", autoCodePluginApi.InitDictionary) // 同步插件字典
 	}
 }

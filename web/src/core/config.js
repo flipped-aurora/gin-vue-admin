@@ -45,7 +45,7 @@ export const viteLogo = (env) => {
     console.log(greenText(`** 版权持有公司：北京翻转极光科技有限责任公司 **`))
     console.log(
       greenText(
-        `** 剔除授权标识需购买商用授权：https://gin-vue-admin.com/empower/index.html **`
+        `** 剔除授权标识需购买商用授权：https://plugin.gin-vue-admin.com/license **`
       )
     )
     console.log('\n')

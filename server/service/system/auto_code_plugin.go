@@ -264,3 +264,28 @@ func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
 	os.WriteFile(apiPath, bf.Bytes(), 0666)
 	return nil
 }
+
+func (s *autoCodePlugin) InitDictionary(dictInfo request.InitDictionary) (err error) {
+	dictPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", dictInfo.PlugName, "initialize", "dictionary.go")
+	src, err := os.ReadFile(dictPath)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, "", src, 0)
+	arrayAst := ast.FindArray(astFile, "model", "SysDictionary")
+	var dictionaries []system.SysDictionary
+	err = global.GVA_DB.Preload("SysDictionaryDetails").Find(&dictionaries, "id in (?)", dictInfo.Dictionaries).Error
+	if err != nil {
+		return err
+	}
+	dictExpr := ast.CreateDictionaryStructAst(dictionaries)
+	arrayAst.Elts = *dictExpr
+
+	var out []byte
+	bf := bytes.NewBuffer(out)
+	printer.Fprint(bf, fileSet, astFile)
+
+	os.WriteFile(dictPath, bf.Bytes(), 0666)
+	return nil
+}

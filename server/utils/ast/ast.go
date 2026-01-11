@@ -304,3 +304,106 @@ func VariableExistsInBlock(block *ast.BlockStmt, varName string) bool {
 	})
 	return exists
 }
+
+func CreateDictionaryStructAst(dictionaries []system.SysDictionary) *[]ast.Expr {
+	var dictElts []ast.Expr
+	for i := range dictionaries {
+		statusStr := "true"
+		if dictionaries[i].Status != nil && !*dictionaries[i].Status {
+			statusStr = "false"
+		}
+
+		elts := []ast.Expr{
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Name"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Name)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Type"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Type)},
+			},
+			&ast.KeyValueExpr{
+				Key: &ast.Ident{Name: "Status"},
+				Value: &ast.CallExpr{
+					Fun: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "utils"},
+						Sel: &ast.Ident{Name: "Pointer"},
+					},
+					Args: []ast.Expr{
+						&ast.Ident{Name: statusStr},
+					},
+				},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Desc"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Desc)},
+			},
+		}
+
+		if len(dictionaries[i].SysDictionaryDetails) > 0 {
+			var detailElts []ast.Expr
+			for _, detail := range dictionaries[i].SysDictionaryDetails {
+				detailStatusStr := "true"
+				if detail.Status != nil && !*detail.Status {
+					detailStatusStr = "false"
+				}
+
+				detailElts = append(detailElts, &ast.CompositeLit{
+					Type: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "model"},
+						Sel: &ast.Ident{Name: "SysDictionaryDetail"},
+					},
+					Elts: []ast.Expr{
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Label"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Label)},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Value"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Value)},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Extend"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Extend)},
+						},
+						&ast.KeyValueExpr{
+							Key: &ast.Ident{Name: "Status"},
+							Value: &ast.CallExpr{
+								Fun: &ast.SelectorExpr{
+									X:   &ast.Ident{Name: "utils"},
+									Sel: &ast.Ident{Name: "Pointer"},
+								},
+								Args: []ast.Expr{
+									&ast.Ident{Name: detailStatusStr},
+								},
+							},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Sort"},
+							Value: &ast.BasicLit{Kind: token.INT, Value: fmt.Sprintf("%d", detail.Sort)},
+						},
+					},
+				})
+			}
+			elts = append(elts, &ast.KeyValueExpr{
+				Key: &ast.Ident{Name: "SysDictionaryDetails"},
+				Value: &ast.CompositeLit{
+					Type: &ast.ArrayType{Elt: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "model"},
+						Sel: &ast.Ident{Name: "SysDictionaryDetail"},
+					}},
+					Elts: detailElts,
+				},
+			})
+		}
+
+		dictElts = append(dictElts, &ast.CompositeLit{
+			Type: &ast.SelectorExpr{
+				X:   &ast.Ident{Name: "model"},
+				Sel: &ast.Ident{Name: "SysDictionary"},
+			},
+			Elts: elts,
+		})
+	}
+	return &dictElts
+}

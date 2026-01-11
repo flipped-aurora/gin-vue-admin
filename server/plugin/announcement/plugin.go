@@ -19,8 +19,10 @@ func (p *plugin) Register(group *gin.Engine) {
 	// initialize.Viper()
 	// 安装插件时候自动注册的api数据请到下方法.Api方法中实现
 	initialize.Api(ctx)
-	// 安装插件时候自动注册的api数据请到下方法.Menu方法中实现
+	// 安装插件时候自动注册的Menu数据请到下方法.Menu方法中实现
 	initialize.Menu(ctx)
+	// 安装插件时候自动注册的Dictionary数据请到下方法.Dictionary方法中实现
+	initialize.Dictionary(ctx)
 	initialize.Gorm(ctx)
 	initialize.Router(group)
 }

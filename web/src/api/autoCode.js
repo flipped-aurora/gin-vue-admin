@@ -207,6 +207,14 @@ export const initAPI = (data) => {
   })
 }
 
+export const initDictionary = (data) => {
+  return service({
+    url: '/autoCode/initDictionary',
+    method: 'post',
+    data
+  })
+}
+
 export const mcp = (data) => {
   return service({
     url: '/autoCode/mcp',

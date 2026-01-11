@@ -1,15 +1,10 @@
-<!--
-    @auther: bypanghu<bypanghu@163.com>
-    @date: 2024/5/8
-!-->
-
 <template>
   <div class="grid grid-cols-2 gap-2">
     <a
       v-for="item in wikis"
       :key="item.url"
       :href="item.url"
-      class="text-sm text-gray-700 dark:text-gray-300 no-underline hover:text-active"
+      class="text-sm text-black/70 dark:text-white/70 no-underline hover:text-[var(--el-color-primary)] dark:hover:text-white"
       target="_blank"
     >
       {{ item.title }}

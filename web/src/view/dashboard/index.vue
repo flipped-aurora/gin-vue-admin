@@ -1,64 +1,63 @@
 <template>
   <div
-    class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 py-2 gap-4 md:gap-2 gva-container2"
+    class="h-full gva-container2 overflow-auto bg-white text-black dark:bg-slate-800 dark:text-white"
   >
-    <gva-card custom-class="col-span-1 lg:col-span-2 ">
-      <gva-chart :type="1" title="访问人数" />
-    </gva-card>
-    <gva-card custom-class="col-span-1 lg:col-span-2  ">
-      <gva-chart :type="2" title="新增客户" />
-    </gva-card>
-    <gva-card custom-class="col-span-1 lg:col-span-2 ">
-      <gva-chart :type="3" title="解决数量" />
-    </gva-card>
-    <gva-card
-      title="快捷功能"
-      show-action
-      custom-class="col-start-1 md:col-start-3 lg:col-start-7 row-span-2 "
-    >
-      <gva-quick-link />
-    </gva-card>
-    <gva-card
-      title="内容数据"
-      custom-class="col-span-1 md:col-span-2 md:row-start-2 lg:col-span-6 col-start-1 row-span-2"
-    >
-      <gva-chart :type="4" />
-    </gva-card>
-    <gva-card
-      title="文档"
-      show-action
-      custom-class="md:row-start-8 md:col-start-3 lg:row-start-3 lg:col-start-7"
-    >
-      <gva-wiki />
-    </gva-card>
+    <div class="p-4 lg:p-6">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <gva-card>
+          <gva-chart :type="1" title="访问人数" />
+        </gva-card>
+        <gva-card>
+          <gva-chart :type="2" title="新增客户" />
+        </gva-card>
+        <gva-card>
+          <gva-chart :type="3" title="解决数量" />
+        </gva-card>
+      </div>
 
-    <gva-card
-      title="最新更新"
-      custom-class="col-span-1 md:col-span-3 row-span-2"
-    >
-      <gva-table />
-    </gva-card>
-    <gva-card
-      title="最新插件"
-      custom-class="col-span-1 md:col-span-3 row-span-2"
-    >
-      <gva-plugin-table />
-    </gva-card>
+      <div class="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-12 items-start">
+        <div class="grid grid-cols-1 gap-4 xl:col-span-8 self-start content-start">
+          <gva-card title="内容数据">
+            <gva-chart :type="4" />
+          </gva-card>
 
-    <gva-card title="公告" show-action custom-class="col-span-1 lg:col-start-7">
-      <gva-notice />
-    </gva-card>
+          <div class="grid grid-cols-1 gap-4">
+            <gva-card title="最新插件">
+              <gva-plugin-table />
+            </gva-card>
+          </div>
 
-    <gva-card
-      without-padding
-      custom-class="overflow-hidden lg:h-40 col-span-1 md:col-start-2 md:col-span-1 lg:col-start-7"
-    >
-      <gva-banner />
-    </gva-card>
+          <div class="grid grid-cols-1 gap-4">
+            <gva-card title="最新更新">
+              <gva-table />
+            </gva-card>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 xl:col-span-4 self-start content-start">
+          <gva-card title="快捷功能" show-action>
+            <gva-quick-link />
+          </gva-card>
+          <gva-card title="公告" show-action>
+            <gva-notice />
+          </gva-card>
+          <gva-card title="文档" show-action>
+            <gva-wiki />
+          </gva-card>
+          <gva-card
+            without-padding
+            custom-class="overflow-hidden"
+          >
+            <gva-banner />
+          </gva-card>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+  import { computed } from 'vue'
   import {
     GvaPluginTable,
     GvaTable,
@@ -69,6 +68,19 @@
     GvaCard,
     GvaBanner
   } from './components'
+
+  const today = computed(() => {
+    try {
+      const d = new Date()
+      return d.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+    } catch (e) {
+      return new Date().toISOString().slice(0, 10)
+    }
+  })
   defineOptions({
     name: 'Dashboard'
   })

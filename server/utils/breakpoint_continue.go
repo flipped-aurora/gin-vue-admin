@@ -62,13 +62,13 @@ func makeFileContent(content []byte, fileName string, FileDir string, contentNum
 	f, err := os.Create(path)
 	if err != nil {
 		return path, err
-	} else {
-		_, err = f.Write(content)
-		if err != nil {
-			return path, err
-		}
 	}
 	defer f.Close()
+	_, err = f.Write(content)
+	if err != nil {
+		return path, err
+	}
+
 	return path, nil
 }
 

@@ -75,6 +75,22 @@ function addRouteByChildren(route, segments = [], parentName = null) {
 
   // 还有子节点，继续向下收集路径片段（忽略外链片段）
   if (route?.children && route.children.length) {
+    if(!parentName){
+      const firstChild = route.children[0]
+      if (firstChild) {
+         const fullParentPath = [...segments, route.path].filter(Boolean).join('/')
+         const redirectPath = normalizeRelativePath(
+           [fullParentPath, firstChild.path].filter(Boolean).join('/')
+         )
+         const parentRoute = {
+           path: normalizeRelativePath(fullParentPath),
+           name: route.name, // 保留父级名称，以便 defaultRouter 可以指向它
+           meta: route.meta,
+           redirect: "/layout/" + redirectPath,
+         }
+         router.addRoute('layout', parentRoute)
+       }
+    }
     const nextSegments = isExternalUrl(route.path) ? segments : [...segments, route.path]
     route.children.forEach((child) => addRouteByChildren(child, nextSegments, parentName))
     return
@@ -157,13 +173,6 @@ const handleKeepAlive = async (to) => {
   }
 }
 
-// 处理路由重定向
-const handleRedirect = (to, userStore) => {
-  if (router.hasRoute(userStore.userInfo.authority.defaultRouter)) {
-    return { ...to, replace: true }
-  }
-  return { path: '/layout/404' }
-}
 
 // 路由守卫
 router.beforeEach(async (to, from) => {
@@ -176,10 +185,8 @@ router.beforeEach(async (to, from) => {
   // 处理元数据和缓存
   to.meta.matched = [...to.matched]
   await handleKeepAlive(to)
-
   // 设置页面标题
   document.title = getPageTitle(to.meta.title, to)
-
   if (to.meta.client) {
     return true
   }
@@ -208,15 +215,7 @@ router.beforeEach(async (to, from) => {
     // 处理异步路由
     if (!routerStore.asyncRouterFlag && !WHITE_LIST.includes(from.name)) {
       const setupSuccess = await setupRouter(userStore)
-
-      if (setupSuccess && userStore.token) {
-        return handleRedirect(to, userStore)
-      }
-
-      return {
-        name: 'Login',
-        query: { redirect: to.fullPath }
-      }
+      return to
     }
 
     return to.matched.length ? true : { path: '/layout/404' }

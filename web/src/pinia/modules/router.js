@@ -77,6 +77,28 @@ export const useRouterStore = defineStore('router', () => {
     keepAliveRouters.value = Array.from(new Set(keepArrTemp))
   }
 
+  // 处理组件缓存
+  const handleKeepAlive = async (to) => {
+    if (!to.matched.some((item) => item.meta.keepAlive)) return
+
+    if (to.matched?.length > 2) {
+      for (let i = 1; i < to.matched.length; i++) {
+        const element = to.matched[i - 1]
+
+        if (element.name === 'layout') {
+          to.matched.splice(i, 1)
+          await handleKeepAlive(to)
+          continue
+        }
+
+        if (typeof element.components.default === 'function') {
+          await element.components.default()
+          await handleKeepAlive(to)
+        }
+      }
+    }
+  }
+
 
   const route = useRoute()
 
@@ -179,6 +201,7 @@ export const useRouterStore = defineStore('router', () => {
     keepAliveRouters,
     asyncRouterFlag,
     SetAsyncRouter,
-    routeMap
+    routeMap,
+    handleKeepAlive
   }
 })

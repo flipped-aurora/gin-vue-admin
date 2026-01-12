@@ -151,28 +151,6 @@ const removeLoading = () => {
   element?.remove()
 }
 
-// 处理组件缓存
-const handleKeepAlive = async (to) => {
-  if (!to.matched.some((item) => item.meta.keepAlive)) return
-
-  if (to.matched?.length > 2) {
-    for (let i = 1; i < to.matched.length; i++) {
-      const element = to.matched[i - 1]
-
-      if (element.name === 'layout') {
-        to.matched.splice(i, 1)
-        await handleKeepAlive(to)
-        continue
-      }
-
-      if (typeof element.components.default === 'function') {
-        await element.components.default()
-        await handleKeepAlive(to)
-      }
-    }
-  }
-}
-
 
 // 路由守卫
 router.beforeEach(async (to, from) => {
@@ -184,7 +162,7 @@ router.beforeEach(async (to, from) => {
 
   // 处理元数据和缓存
   to.meta.matched = [...to.matched]
-  await handleKeepAlive(to)
+  await routerStore.handleKeepAlive(to)
   // 设置页面标题
   document.title = getPageTitle(to.meta.title, to)
   if (to.meta.client) {
@@ -214,7 +192,7 @@ router.beforeEach(async (to, from) => {
 
     // 处理异步路由
     if (!routerStore.asyncRouterFlag && !WHITE_LIST.includes(from.name)) {
-      const setupSuccess = await setupRouter(userStore)
+      await setupRouter(userStore)
       return to
     }
 

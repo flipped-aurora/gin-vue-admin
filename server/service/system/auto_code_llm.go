@@ -22,7 +22,7 @@ func (s *AutoCodeService) LLMAuto(ctx context.Context, llm common.JSONMap) (inte
 
 	// 构建调用路径：{AiPath} 中的 {FUNC} 由 mode 替换
 	mode := fmt.Sprintf("%v", llm["mode"]) // 统一转字符串，避免 nil 造成路径异常
-	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", fmt.Sprintf("api/chat/%s", mode))
+	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", mode)
 
 	res, err := request.HttpRequest(
 		path,

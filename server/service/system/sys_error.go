@@ -106,16 +106,15 @@ func (sysErrorService *SysErrorService) GetSysErrorSolution(ctx context.Context,
 		}
 
 		llmReq := common.JSONMap{
-			"mode":    "solution",
-			"command": "solution",
-			"info":    info,
-			"form":    form,
+			"mode": "solution",
+			"info": info,
+			"form": form,
 		}
 
 		// 调用服务层 LLMAuto，忽略错误但尽量写入方案
 		var solution string
 		if data, err := (&AutoCodeService{}).LLMAuto(context.Background(), llmReq); err == nil {
-			solution = fmt.Sprintf("%v", data)
+			solution = fmt.Sprintf("%v", data.(map[string]interface{})["text"])
 			_ = global.GVA_DB.Model(&system.SysError{}).Where("id = ?", id).Updates(map[string]interface{}{"status": "处理完成", "solution": solution}).Error
 		} else {
 			// 即使生成失败也标记为完成，避免任务卡住

@@ -933,7 +933,8 @@
     }
 
     const res = await llmAuto({
-      prompt: flag ? '结构体名称为' + form.value.structName : prompt.value
+      prompt: flag ? '结构体名称为' + form.value.structName : prompt.value,
+      mode: "ai"
     })
     if (res.code === 0) {
       form.value.fields = []

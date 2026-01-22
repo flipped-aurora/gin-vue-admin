@@ -143,7 +143,7 @@ export const llmAuto = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data: { ...data, mode: 'ai' },
+    data: { ...data },
     timeout: 1000 * 60 * 10,
     loadingOption: {
       lock: true,

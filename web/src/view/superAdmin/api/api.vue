@@ -799,7 +799,7 @@
     const routerPaths = syncApiData.value.newApis
       .filter((item) => !item.apiGroup || !item.description)
       .map((item) => item.path)
-    const res = await butler({ data: routerPaths, command: 'apiCompletion' })
+    const res = await butler({ data: routerPaths, mode: 'apiCompletion' })
     apiCompletionLoading.value = false
     if (res.code === 0) {
       try {

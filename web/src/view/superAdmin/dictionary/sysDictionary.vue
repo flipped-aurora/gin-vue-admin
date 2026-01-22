@@ -351,7 +351,7 @@
     exportSysDictionary,
     importSysDictionary
   } from '@/api/sysDictionary' // 此处请自行替换地址
-  import { butler, eye } from '@/api/autoCode'
+  import { llmAuto } from '@/api/autoCode'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import { ref, computed, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
@@ -442,9 +442,9 @@
         const reader = new FileReader();
         reader.onload =async (e) => {
           const base64String = e.target.result;
-          const res = await eye({ picture: base64String,command: 'dictEye' })
+          const res = await llmAuto({ _file_path: base64String, mode:"dictEye" })
           if (res.code === 0) {
-            aiPrompt.value = res.data
+            aiPrompt.value = res.data.text
           }
         };
         reader.readAsDataURL(file);
@@ -464,9 +464,9 @@
         reader.onload = async (e) => {
           const base64String = e.target.result;
 
-          const res = await eye({ picture: base64String,command: 'dictEye' })
+          const res = await llmAuto({ _file_path: base64String, mode:"dictEye" })
           if (res.code === 0) {
-            aiPrompt.value = res.data
+            aiPrompt.value = res.data.text
           }
         };
         reader.readAsDataURL(file);
@@ -788,9 +788,9 @@
     }
     try {
       aiGenerating.value = true
-      const aiRes = await butler({
+      const aiRes = await llmAuto({
         prompt: aiPrompt.value,
-        command: 'dict'
+        mode: 'dict'
       })
       if (aiRes && aiRes.code === 0) {
         ElMessage.success('AI 生成成功')

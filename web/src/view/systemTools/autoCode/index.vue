@@ -822,7 +822,7 @@
     preview,
     getMeta,
     getPackageApi,
-    llmAuto, butler, eye
+    llmAuto
   } from '@/api/autoCode'
   import { getDict } from '@/utils/dictionary'
   import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
@@ -860,9 +860,9 @@
         const reader = new FileReader();
         reader.onload =async (e) => {
           const base64String = e.target.result;
-          const res = await eye({ picture: base64String,command: 'eye' })
+          const res = await llmAuto({ _file_path: base64String,mode:"eye" })
           if (res.code === 0) {
-            prompt.value = res.data
+            prompt.value = res.data.text
             llmAutoFunc()
           }
         };
@@ -893,9 +893,9 @@
         reader.onload = async (e) => {
           const base64String = e.target.result;
 
-          const res = await eye({ picture: base64String,command: 'eye' })
+          const res = await llmAuto({ _file_path: base64String,mode:'eye' })
           if (res.code === 0) {
-            prompt.value = res.data
+            prompt.value = res.data.text
             llmAutoFunc()
           }
         };
@@ -937,7 +937,7 @@
     })
     if (res.code === 0) {
       form.value.fields = []
-      const json = JSON.parse(res.data)
+      const json = JSON.parse(res.data.text)
       json.fields?.forEach((item) => {
         item.fieldName = toUpperCase(item.fieldName)
       })

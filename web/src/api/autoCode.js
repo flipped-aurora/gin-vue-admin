@@ -153,36 +153,6 @@ export const llmAuto = (data) => {
   })
 }
 
-export const butler = (data) => {
-  return service({
-    url: '/autoCode/llmAuto',
-    method: 'post',
-    data: { ...data, mode: 'butler' },
-    timeout: 1000 * 60 * 10
-  })
-}
-
-export const eye = (data) => {
-  return service({
-    url: '/autoCode/llmAuto',
-    method: 'post',
-    data: { ...data, mode: 'eye' },
-    timeout: 1000 * 60 * 10
-  })
-}
-
-
-export const createWeb = (data) => {
-  return service({
-    url: '/autoCode/llmAuto',
-    method: 'post',
-    data: { ...data, mode: 'painter' },
-    timeout: 1000 * 60 * 10
-  })
-}
-
-
-
 export const addFunc = (data) => {
   return service({
     url: '/autoCode/addFunc',

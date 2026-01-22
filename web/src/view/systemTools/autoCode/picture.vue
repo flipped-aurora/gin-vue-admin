@@ -184,7 +184,7 @@
 </template>
 
 <script setup>
-import { createWeb } from '@/api/autoCode'
+import { llmAuto } from '@/api/autoCode'
 import { ref, reactive, markRaw } from 'vue'
 import * as Vue from "vue";
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -412,13 +412,13 @@ const llmAutoFunc = async () => {
     fullPrompt += `\n详细描述: ${prompt.value}`
   }
   
-  const res = await createWeb({web: fullPrompt, command: 'createWeb'})
+  const res = await llmAuto({web: fullPrompt, mode: 'createWeb'})
   if (res.code === 0) {
     outPut.value = true
     // 添加返回的Vue组件代码到数组
-    htmlFromLLM.value = res.data
+    htmlFromLLM.value = res.data.text
     // 加载新生成的组件
-    await loadVueComponent(res.data)
+    await loadVueComponent(res.data.text)
   }
 }
 

@@ -747,7 +747,7 @@ JOINS模式下不支持导入
       prompt: prompt.value,
       businessDB: formData.value.dbName || '',
       tableMap: tableMap,
-      command: 'autoExportTemplate'
+      mode: 'autoExportTemplate'
     })
     aiLoading.value = false
     if (aiRes.code === 0) {
@@ -802,7 +802,7 @@ JOINS模式下不支持导入
       if (aiFLag) {
         const aiRes = await butler({
           data: res.data.columns,
-          command: 'exportCompletion'
+          mode: 'exportCompletion'
         })
         if (aiRes.code === 0) {
           const aiData = JSON.parse(aiRes.data)

@@ -520,7 +520,7 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { ref, reactive } from 'vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
-  import { getDB, getTable, getColumn, butler } from '@/api/autoCode'
+  import { getDB, getTable, getColumn, llmAuto } from '@/api/autoCode'
   import { getCode } from './code'
   import { VAceEditor } from 'vue3-ace-editor'
 
@@ -743,10 +743,9 @@ JOINS模式下不支持导入
     }
     aiLoading.value = true
     const tableMap = await getTablesCloumn()
-    const aiRes = await butler({
+    const aiRes = await llmAuto({
       prompt: prompt.value,
-      businessDB: formData.value.dbName || '',
-      tableMap: tableMap,
+      tableMap: JSON.stringify(tableMap),
       mode: 'autoExportTemplate'
     })
     aiLoading.value = false
@@ -800,8 +799,8 @@ JOINS模式下不支持导入
     })
     if (res.code === 0) {
       if (aiFLag) {
-        const aiRes = await butler({
-          data: res.data.columns,
+        const aiRes = await llmAuto({
+          data: JSON.stringify(res.data.columns),
           mode: 'exportCompletion'
         })
         if (aiRes.code === 0) {

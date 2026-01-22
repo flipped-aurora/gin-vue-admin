@@ -808,9 +808,7 @@
         } catch (e) {
           ElMessage.error('处理 AI 返回结果失败: ' + (e.message || e))
         }
-      } else {
-        ElMessage.error(aiRes.msg || 'AI 生成失败')
-      }
+      } 
     } catch (err) {
       ElMessage.error('AI 调用失败: ' + (err.message || err))
     } finally {

@@ -58,8 +58,10 @@ func Routers() *gin.Engine {
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
-	// VUE_APP_BASE_API = /
-	// VUE_APP_BASE_PATH = http://localhost
+	// VITE_BASE_API = /
+	// VITE_FILE_API = /
+	// VITE_BASE_PATH = http://localhost
+	// VITE_SERVER_PORT = 8888
 	// 然后执行打包命令 npm run build。在打开下面3行注释
 	// Router.StaticFile("/favicon.ico", "./dist/favicon.ico")
 	// Router.Static("/assets", "./dist/assets")   // dist里面的静态资源

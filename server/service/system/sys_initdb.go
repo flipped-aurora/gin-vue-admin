@@ -5,10 +5,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"sort"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"gorm.io/gorm"
-	"sort"
 )
 
 const (
@@ -16,6 +17,7 @@ const (
 	Pgsql           = "pgsql"
 	Sqlite          = "sqlite"
 	Mssql           = "mssql"
+	Oracle          = "oracle"
 	InitSuccess     = "\n[%v] --> 初始数据成功!\n"
 	InitDataExist   = "\n[%v] --> %v 的初始数据已存在!\n"
 	InitDataFailed  = "\n[%v] --> %v 初始数据失败! \nerr: %+v\n"
@@ -111,6 +113,9 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) (err error) {
 	case "mssql":
 		initHandler = NewMssqlInitHandler()
 		ctx = context.WithValue(ctx, "dbtype", "mssql")
+	case "oracle":
+		initHandler = NewOracleInitHandler()
+		ctx = context.WithValue(ctx, "dbtype", "oracle")
 	default:
 		initHandler = NewMysqlInitHandler()
 		ctx = context.WithValue(ctx, "dbtype", "mysql")

@@ -22,6 +22,7 @@ type RouterGroup struct {
 	SysVersionRouter
 	SysErrorRouter
 	LoginLogRouter
+	ApiTokenRouter
 }
 
 var (

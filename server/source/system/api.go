@@ -51,6 +51,10 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "登录日志", Method: "GET", Path: "/sysLoginLog/findLoginLog", Description: "根据ID获取登录日志"},
 		{ApiGroup: "登录日志", Method: "GET", Path: "/sysLoginLog/getLoginLogList", Description: "获取登录日志列表"},
 
+		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/createApiToken", Description: "签发API Token"},
+		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/getApiTokenList", Description: "获取API Token列表"},
+		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/deleteApiToken", Description: "作废API Token"},
+
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/admin_register", Description: "用户注册"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/getUserList", Description: "获取用户列表"},

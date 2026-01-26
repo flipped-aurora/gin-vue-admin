@@ -24,4 +24,5 @@ type ServiceGroup struct {
 	AutoCodeTemplate autoCodeTemplate
 	SysErrorService
 	LoginLogService
+    ApiTokenService
 }

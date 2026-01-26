@@ -13,6 +13,11 @@ var Plugin = new(plugin)
 
 type plugin struct{}
 
+func init() {
+	interfaces.Register(Plugin)
+}
+
+
 // 如果需要配置文件，请到config.Config中填充配置结构，且到下方发放中填入其在config.yaml中的key并添加如下方法
 // initialize.Viper()
 // 安装插件时候自动注册的api数据请到下方法.Api方法中实现并添加如下方法

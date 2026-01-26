@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	goast "go/ast"
 	"go/parser"
 	"go/printer"
 	"go/token"
@@ -71,6 +72,8 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 	var serverIndex = -1
 	webPlugin := ""
 	serverPlugin := ""
+	serverPackage := ""
+	serverRootName := ""
 
 	for i := range paths {
 		paths[i] = filepath.ToSlash(paths[i])
@@ -80,8 +83,16 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 		if ln < 4 {
 			continue
 		}
-		if pathArr[2]+"/"+pathArr[3] == `server/plugin` && len(serverPlugin) == 0 {
-			serverPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
+		if pathArr[2]+"/"+pathArr[3] == `server/plugin` {
+			if len(serverPlugin) == 0 {
+				serverPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
+			}
+			if serverRootName == "" && ln > 1 && pathArr[1] != "" {
+				serverRootName = pathArr[1]
+			}
+			if ln > 4 && serverPackage == "" && pathArr[4] != "" {
+				serverPackage = pathArr[4]
+			}
 		}
 		if pathArr[2]+"/"+pathArr[3] == `web/plugin` && len(webPlugin) == 0 {
 			webPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
@@ -93,7 +104,14 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 	}
 
 	if len(serverPlugin) != 0 {
+		if serverPackage == "" {
+			serverPackage = serverRootName
+		}
 		err = installation(serverPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+		if err != nil {
+			return webIndex, serverIndex, err
+		}
+		err = ensurePluginRegisterImport(serverPackage)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
@@ -125,6 +143,64 @@ func installation(path string, formPath string, toPath string) error {
 		return errors.New(toPath + "已存在同名插件，请自行手动安装")
 	}
 	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+}
+
+func ensurePluginRegisterImport(packageName string) error {
+	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
+	if module == "" {
+		return errors.New("autocode module is empty")
+	}
+	if packageName == "" {
+		return errors.New("plugin package is empty")
+	}
+
+	registerPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go")
+	src, err := os.ReadFile(registerPath)
+	if err != nil {
+		return err
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, registerPath, src, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+
+	importPath := fmt.Sprintf("%s/plugin/%s", module, packageName)
+	if ast.CheckImport(astFile, importPath) {
+		return nil
+	}
+
+	importSpec := &goast.ImportSpec{
+		Name: goast.NewIdent("_"),
+		Path: &goast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("%q", importPath)},
+	}
+	var importDecl *goast.GenDecl
+	for _, decl := range astFile.Decls {
+		genDecl, ok := decl.(*goast.GenDecl)
+		if !ok {
+			continue
+		}
+		if genDecl.Tok == token.IMPORT {
+			importDecl = genDecl
+			break
+		}
+	}
+	if importDecl == nil {
+		astFile.Decls = append([]goast.Decl{
+			&goast.GenDecl{
+				Tok:   token.IMPORT,
+				Specs: []goast.Spec{importSpec},
+			},
+		}, astFile.Decls...)
+	} else {
+		importDecl.Specs = append(importDecl.Specs, importSpec)
+	}
+
+	var out []byte
+	bf := bytes.NewBuffer(out)
+	printer.Fprint(bf, fileSet, astFile)
+
+	return os.WriteFile(registerPath, bf.Bytes(), 0666)
 }
 
 func filterFile(paths []string) []string {

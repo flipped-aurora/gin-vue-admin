@@ -13,6 +13,10 @@ var Plugin = new(plugin)
 
 type plugin struct{}
 
+func init() {
+	interfaces.Register(Plugin)
+}
+
 func (p *plugin) Register(group *gin.Engine) {
 	ctx := context.Background()
 	// 如果需要配置文件，请到config.Config中填充配置结构，且到下方发放中填入其在config.yaml中的key

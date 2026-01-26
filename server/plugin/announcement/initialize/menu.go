@@ -9,7 +9,7 @@ import (
 func Menu(ctx context.Context) {
 	entities := []model.SysBaseMenu{
 		{
-			ParentId:  24,
+			ParentId:  9,
 			Path:      "anInfo",
 			Name:      "anInfo",
 			Hidden:    false,

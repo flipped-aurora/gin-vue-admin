@@ -210,3 +210,33 @@ export const mcpTest = (data) => {
     data
   })
 }
+
+// @Tags SysApi
+// @Summary 获取插件列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /autoCode/getPluginList [get]
+export const getPluginList = (params) => {
+  return service({
+    url: '/autoCode/getPluginList',
+    method: 'get',
+    params
+  })
+}
+
+// @Tags SysApi
+// @Summary 删除插件
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /autoCode/removePlugin [post]
+export const removePlugin = (params) => {
+  return service({
+    url: '/autoCode/removePlugin',
+    method: 'post',
+    params
+  })
+}

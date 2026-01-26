@@ -35,7 +35,8 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 	{
 		autoCodeRouter.POST("pubPlug", autoCodePluginApi.Packaged)      // 打包插件
 		autoCodeRouter.POST("installPlugin", autoCodePluginApi.Install) // 自动安装插件
-
+		autoCodeRouter.POST("removePlugin", autoCodePluginApi.Remove)   // 自动删除插件
+		autoCodeRouter.GET("getPluginList", autoCodePluginApi.GetPluginList) // 获取插件列表
 	}
 	{
 		publicAutoCodeRouter.POST("llmAuto", autoCodeApi.LLMAuto)

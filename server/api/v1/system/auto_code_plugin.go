@@ -2,9 +2,14 @@ package system
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -140,4 +145,82 @@ func (a *AutoCodePluginApi) InitDictionary(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("文件变更成功", c)
+}
+
+type PluginInfo struct {
+	PluginName   string                 `json:"pluginName"`
+	PluginType   string                 `json:"pluginType"` // web, server, full
+	Apis         []system.SysApi        `json:"apis"`
+	Menus        []system.SysBaseMenu   `json:"menus"`
+	Dictionaries []system.SysDictionary `json:"dictionaries"`
+}
+
+// GetPluginList
+// @Tags      AutoCodePlugin
+// @Summary   获取插件列表
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Success   200   {object}  response.Response{data=[]PluginInfo}  "获取插件列表成功"
+// @Router    /autoCode/getPluginList [get]
+func (a *AutoCodePluginApi) GetPluginList(c *gin.Context) {
+	serverDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin")
+	webDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin")
+
+	serverEntries, _ := os.ReadDir(serverDir)
+	webEntries, _ := os.ReadDir(webDir)
+
+	configMap := make(map[string]string)
+
+	for _, entry := range serverEntries {
+		if entry.IsDir() {
+			configMap[entry.Name()] = "server"
+		}
+	}
+
+	for _, entry := range webEntries {
+		if entry.IsDir() {
+			if val, ok := configMap[entry.Name()]; ok {
+				if val == "server" {
+					configMap[entry.Name()] = "full"
+				}
+			} else {
+				configMap[entry.Name()] = "web"
+			}
+		}
+	}
+
+	var list []PluginInfo
+	for k, v := range configMap {
+		apis, menus, dicts := utils.GetPluginData(k)
+		list = append(list, PluginInfo{
+			PluginName:   k,
+			PluginType:   v,
+			Apis:         apis,
+			Menus:        menus,
+			Dictionaries: dicts,
+		})
+	}
+
+	response.OkWithDetailed(list, "获取成功", c)
+}
+
+// Remove
+// @Tags      AutoCodePlugin
+// @Summary   删除插件
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     pluginName  query    string  true  "插件名称"
+// @Param     pluginType  query    string  true  "插件类型"
+// @Success   200   {object}  response.Response{msg=string}  "删除插件成功"
+// @Router    /autoCode/removePlugin [post]
+func (a *AutoCodePluginApi) Remove(c *gin.Context) {
+	pluginName := c.Query("pluginName")
+	pluginType := c.Query("pluginType")
+	err := autoCodePluginService.Remove(pluginName, pluginType)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
 }

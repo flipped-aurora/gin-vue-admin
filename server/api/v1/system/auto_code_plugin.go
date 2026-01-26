@@ -7,8 +7,8 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -147,20 +147,12 @@ func (a *AutoCodePluginApi) InitDictionary(c *gin.Context) {
 	response.OkWithMessage("文件变更成功", c)
 }
 
-type PluginInfo struct {
-	PluginName   string                 `json:"pluginName"`
-	PluginType   string                 `json:"pluginType"` // web, server, full
-	Apis         []system.SysApi        `json:"apis"`
-	Menus        []system.SysBaseMenu   `json:"menus"`
-	Dictionaries []system.SysDictionary `json:"dictionaries"`
-}
-
 // GetPluginList
 // @Tags      AutoCodePlugin
 // @Summary   获取插件列表
 // @Security  ApiKeyAuth
 // @Produce   application/json
-// @Success   200   {object}  response.Response{data=[]PluginInfo}  "获取插件列表成功"
+// @Success   200   {object}  response.Response{data=[]systemRes.PluginInfo}  "获取插件列表成功"
 // @Router    /autoCode/getPluginList [get]
 func (a *AutoCodePluginApi) GetPluginList(c *gin.Context) {
 	serverDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin")
@@ -189,10 +181,10 @@ func (a *AutoCodePluginApi) GetPluginList(c *gin.Context) {
 		}
 	}
 
-	var list []PluginInfo
+	var list []systemRes.PluginInfo
 	for k, v := range configMap {
 		apis, menus, dicts := utils.GetPluginData(k)
-		list = append(list, PluginInfo{
+		list = append(list, systemRes.PluginInfo{
 			PluginName:   k,
 			PluginType:   v,
 			Apis:         apis,

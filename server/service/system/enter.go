@@ -23,4 +23,5 @@ type ServiceGroup struct {
 	AutoCodeHistory  autoCodeHistory
 	AutoCodeTemplate autoCodeTemplate
 	SysErrorService
+	LoginLogService
 }

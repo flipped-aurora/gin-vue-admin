@@ -24,6 +24,7 @@ type ApiGroup struct {
 	SysParamsApi
 	SysVersionApi
 	SysErrorApi
+	LoginLogApi
 }
 
 var (
@@ -48,4 +49,5 @@ var (
 	autoCodeTemplateService = service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
 	sysVersionService       = service.ServiceGroupApp.SystemServiceGroup.SysVersionService
 	sysErrorService         = service.ServiceGroupApp.SystemServiceGroup.SysErrorService
+	loginLogService         = service.ServiceGroupApp.SystemServiceGroup.LoginLogService
 )

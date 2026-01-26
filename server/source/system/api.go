@@ -46,6 +46,11 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 	entities := []sysModel.SysApi{
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: "jwt加入黑名单(退出，必选)"},
 
+		{ApiGroup: "登录日志", Method: "DELETE", Path: "/sysLoginLog/deleteLoginLog", Description: "删除登录日志"},
+		{ApiGroup: "登录日志", Method: "DELETE", Path: "/sysLoginLog/deleteLoginLogByIds", Description: "批量删除登录日志"},
+		{ApiGroup: "登录日志", Method: "GET", Path: "/sysLoginLog/findLoginLog", Description: "根据ID获取登录日志"},
+		{ApiGroup: "登录日志", Method: "GET", Path: "/sysLoginLog/getLoginLogList", Description: "获取登录日志列表"},
+
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/admin_register", Description: "用户注册"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/getUserList", Description: "获取用户列表"},

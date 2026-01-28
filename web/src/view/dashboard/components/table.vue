@@ -10,11 +10,22 @@
 </template>
 
 <script setup>
-  import { Commits } from '@/api/github'
   import { formatTimeToStr } from '@/utils/date'
   import { ref, onMounted } from 'vue'
+  import axios from 'axios'
+
+  const service = axios.create()
 
   const tableData = ref([])
+
+  const Commits =(page) => {
+   return service({
+    url:
+      'https://api.github.com/repos/flipped-aurora/gin-vue-admin/commits?page=' +
+      page,
+    method: 'get'
+  })
+}
 
   const loadCommits = async () => {
     const { data } = await Commits(1)

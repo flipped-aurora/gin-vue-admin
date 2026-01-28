@@ -1,7 +1,7 @@
 <template>
   <div>
     <warning-bar
-        href="https://www.gin-vue-admin.com/empower/"
+        href="https://plugin.gin-vue-admin.com/license"
         title="此功能只针对授权用户开放，点我【购买授权】"
     />
     <div class="gva-search-box">
@@ -126,7 +126,7 @@
               <div>
                 此功能仅针对授权用户开放，前往<a
                   class="text-blue-600"
-                  href="https://www.gin-vue-admin.com/empower/"
+                  href="https://plugin.gin-vue-admin.com/license"
                   target="_blank"
               >购买授权</a
               >

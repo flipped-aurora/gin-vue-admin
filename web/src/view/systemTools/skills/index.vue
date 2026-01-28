@@ -1,67 +1,91 @@
 <template>
-  <div class="skills-page">
-    <el-row :gutter="12">
-      <el-col :xs="24" :sm="8" :md="6" :lg="5">
-        <el-card class="panel">
-          <div class="panel-title">AI 工具</div>
-          <el-menu :default-active="activeTool" @select="handleToolSelect">
-            <el-menu-item v-for="tool in tools" :key="tool.key" :index="tool.key">
+  <div class="h-full">
+    <el-row :gutter="12" class="h-full">
+      <el-col :xs="24" :sm="8" :md="6" :lg="5" class="flex flex-col gap-4 h-full">
+        <el-card shadow="never" class="!border-none shrink-0">
+          <div class="font-bold mb-2">AI 工具</div>
+          <div class="flex flex-wrap gap-2">
+            <div
+              v-for="tool in tools"
+              :key="tool.key"
+              class="px-3 py-1.5 rounded-md text-sm cursor-pointer transition-all border select-none"
+              :class="activeTool === tool.key
+                ? 'bg-[var(--el-color-primary)] text-white border-[var(--el-color-primary)] shadow-sm'
+                : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'"
+              @click="handleToolSelect(tool.key)"
+            >
               {{ tool.label }}
-            </el-menu-item>
-          </el-menu>
+            </div>
+          </div>
         </el-card>
 
-        <el-card class="panel mt-3">
-          <div class="panel-header">
-            <span>Skills</span>
-            <el-button type="primary" size="small" @click="openCreateDialog">新增</el-button>
+        <el-card shadow="never" class="!border-none flex-1 mt-2 flex flex-col min-h-0">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold">Skills</span>
+            <el-button type="primary" link icon="Plus" @click="openCreateDialog">新增</el-button>
           </div>
           <el-input
             v-model="skillFilter"
             size="small"
             clearable
             placeholder="搜索技能"
-            class="mt-2 mb-2"
+            class="mb-2"
+            prefix-icon="Search"
           />
-          <el-scrollbar class="skill-list">
-            <el-menu :default-active="activeSkill" @select="handleSkillSelect">
-              <el-menu-item v-for="skill in filteredSkills" :key="skill" :index="skill">
-                {{ skill }}
+          <el-scrollbar class="h-[calc(100vh-380px)]">
+            <el-menu :default-active="activeSkill" class="!border-none" @select="handleSkillSelect">
+              <el-menu-item
+                v-for="skill in filteredSkills"
+                :key="skill"
+                :index="skill"
+                class="!h-10 !leading-10 !my-1 !mx-1 !rounded-[4px]"
+              >
+                <el-icon><Document /></el-icon>
+                <span class="truncate" :title="skill">{{ skill }}</span>
               </el-menu-item>
             </el-menu>
           </el-scrollbar>
         </el-card>
       </el-col>
 
-      <el-col :xs="24" :sm="16" :md="18" :lg="19">
-        <el-card class="panel">
+      <el-col :xs="24" :sm="16" :md="18" :lg="19" class="h-full">
+        <el-card shadow="never" class="!border-none h-full flex flex-col">
           <template v-if="!activeSkill">
-            <el-empty description="请选择或新建一个技能" />
+            <div class="h-full flex items-center justify-center">
+              <el-empty description="请选择或新建一个技能" />
+            </div>
           </template>
           <template v-else>
-            <div class="flex justify-between items-center mb-3">
-              <div class="text-lg font-medium">当前技能：{{ activeSkill }}</div>
-              <el-button type="primary" @click="saveCurrentSkill">保存</el-button>
+            <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-100 dark:border-gray-800">
+              <div class="text-lg font-bold flex items-center gap-2">
+                <span>{{ activeSkill }}</span>
+                <el-tag size="small" type="info">Skill</el-tag>
+              </div>
+              <el-button type="primary" icon="Check" @click="saveCurrentSkill">保存配置</el-button>
             </div>
 
-            <el-tabs v-model="activeTab">
+            <el-tabs v-model="activeTab" class="h-full">
               <el-tab-pane label="技能配置" name="config">
-                <el-form :model="form" label-width="120px">
+                <el-form :model="form" label-width="160px" class="mt-4">
                   <el-form-item>
                     <template #label>
-                      Name
-                      <el-tooltip content="技能的名称，例如: pr-summary" placement="top">
-                        <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
-                      </el-tooltip>
+                      <div class="flex items-center">
+                        Name
+                        <el-tooltip content="技能的名称，例如: pr-summary" placement="top">
+                          <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </div>
                     </template>
                     <el-input v-model="form.name" placeholder="例如: pr-summary" />
                   </el-form-item>
                   <el-form-item>
                     <template #label>
-                      Description
-                      <el-tooltip content="技能的简要描述，例如: Summarize changes in a pull request" placement="top">
-                        <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
-                      </el-tooltip>
+                      <div class="flex items-center">
+                        Description
+                        <el-tooltip content="技能的简要描述，例如: Summarize changes in a pull request" placement="top">
+                          <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </div>
                     </template>
                     <el-input
                       v-model="form.description"
@@ -70,40 +94,48 @@
                   </el-form-item>
                   <el-form-item>
                     <template #label>
-                      Allowed Tools
-                      <el-tooltip content="该技能允许使用的工具，例如: Bash(gh *)" placement="top">
-                        <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
-                      </el-tooltip>
+                      <div class="flex items-center">
+                        Allowed Tools
+                        <el-tooltip content="该技能允许使用的工具，例如: Bash(gh *)" placement="top">
+                          <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </div>
                     </template>
                     <el-input v-model="form.allowedTools" placeholder="可选，例如: Bash(gh *)" />
-                    <div class="form-hint">可选字段，留空后保存会移除</div>
+                    <div class="text-xs text-gray-400 mt-1">可选字段，留空后保存会移除</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
-                      Context
-                      <el-tooltip content="技能执行的上下文，例如: fork" placement="top">
-                        <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
-                      </el-tooltip>
+                      <div class="flex items-center">
+                        Context
+                        <el-tooltip content="技能执行的上下文，例如: fork" placement="top">
+                          <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </div>
                     </template>
                     <el-input v-model="form.context" placeholder="可选，例如: fork" />
-                    <div class="form-hint">可选字段，留空后保存会移除</div>
+                    <div class="text-xs text-gray-400 mt-1">可选字段，留空后保存会移除</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
-                      Agent
-                      <el-tooltip content="指定执行该技能的 Agent，例如: Explore" placement="top">
-                        <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
-                      </el-tooltip>
+                      <div class="flex items-center">
+                        Agent
+                        <el-tooltip content="指定执行该技能的 Agent，例如: Explore" placement="top">
+                          <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </div>
                     </template>
                     <el-input v-model="form.agent" placeholder="可选，例如: Explore" />
-                    <div class="form-hint">可选字段，留空后保存会移除</div>
+                    <div class="text-xs text-gray-400 mt-1">可选字段，留空后保存会移除</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
-                      Markdown 内容
-                      <el-tooltip content="SKILL.md 的具体内容，定义技能的详细逻辑" placement="top">
-                        <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
-                      </el-tooltip>
+                      <div class="flex items-center">
+                        Markdown 内容
+                        <el-tooltip content="SKILL.md 的具体内容，定义技能的详细逻辑" placement="top">
+                          <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </div>
                     </template>
                     <div class="mb-2 flex flex-wrap gap-2">
                       <el-button
@@ -119,24 +151,31 @@
                     <el-input
                       v-model="form.markdown"
                       type="textarea"
-                      :rows="14"
+                      :rows="20"
                       :placeholder="markdownPlaceholder"
                     />
-                    <div class="form-hint">这里是 SKILL.md 的正文内容，可自由编辑。</div>
+                    <div class="text-xs text-gray-400 mt-1">这里是 SKILL.md 的正文内容，可自由编辑。</div>
                   </el-form-item>
                 </el-form>
               </el-tab-pane>
 
-              <el-tab-pane label="脚本" name="scripts">
-                <div class="flex justify-between items-center mb-3">
-                  <div class="text-sm text-gray">脚本存放在 scripts/ 下</div>
-                  <el-button type="primary" size="small" @click="openScriptDialog">创建脚本</el-button>
+              <el-tab-pane label="脚本" name="scripts" class="mt-4">
+                <div class="flex justify-between items-center mb-4">
+                  <div class="text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded">路径: scripts/</div>
+                  <el-button type="primary" icon="Plus" size="small" @click="openScriptDialog">创建脚本</el-button>
                 </div>
-                <el-table :data="scriptRows" size="small" style="width: 100%">
-                  <el-table-column prop="name" label="文件名" />
+                <el-table :data="scriptRows" style="width: 100%">
+                  <el-table-column prop="name" label="文件名">
+                    <template #default="scope">
+                      <div class="flex items-center gap-2">
+                        <el-icon><Document /></el-icon>
+                        <span>{{ scope.row.name }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column label="操作" width="120">
                     <template #default="scope">
-                      <el-button type="text" @click="openScriptEditor(scope.row.name)">编辑</el-button>
+                      <el-button type="primary" link icon="Edit" @click="openScriptEditor(scope.row.name)">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -144,15 +183,22 @@
               </el-tab-pane>
 
               <el-tab-pane label="资源" name="resources">
-                <div class="flex justify-between items-center mb-3">
-                  <div class="text-sm text-gray">资源存放在 resources/ 下</div>
-                  <el-button type="primary" size="small" @click="openResourceDialog">创建资源</el-button>
+                <div class="flex justify-between items-center mb-4 mt-4">
+                  <div class="text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded">路径: resources/</div>
+                  <el-button type="primary" icon="Plus" size="small" @click="openResourceDialog">创建资源</el-button>
                 </div>
-                <el-table :data="resourceRows" size="small" style="width: 100%">
-                  <el-table-column prop="name" label="文件名" />
+                <el-table :data="resourceRows" style="width: 100%">
+                  <el-table-column prop="name" label="文件名">
+                    <template #default="scope">
+                      <div class="flex items-center gap-2">
+                        <el-icon><Document /></el-icon>
+                        <span>{{ scope.row.name }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
                   <el-table-column label="操作" width="120">
                     <template #default="scope">
-                      <el-button type="text" @click="openResourceEditor(scope.row.name)">编辑</el-button>
+                      <el-button type="primary" link icon="Edit" @click="openResourceEditor(scope.row.name)">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -210,23 +256,28 @@
       </template>
     </el-dialog>
 
-    <el-drawer v-model="editorVisible" size="70%" destroy-on-close>
-      <template #header>
-        <div class="flex justify-between items-center w-full">
-          <span>{{ editorTitle }}</span>
-          <div>
-            <el-button @click="editorVisible = false">关闭</el-button>
-            <el-button type="primary" @click="saveEditor">保存</el-button>
+    <el-drawer v-model="editorVisible" size="70%" destroy-on-close :with-header="false">
+      <div class="h-full flex flex-col p-4">
+        <div class="flex justify-between items-center mb-4">
+          <div class="text-lg font-bold flex items-center gap-2">
+            <el-icon><Edit /></el-icon>
+            {{ editorTitle }}
+          </div>
+          <div class="flex gap-2">
+            <el-button @click="editorVisible = false">取消</el-button>
+            <el-button type="primary" icon="Check" @click="saveEditor">保存内容</el-button>
           </div>
         </div>
-      </template>
-      <v-ace-editor
-        v-model:value="editorContent"
-        :lang="editorLang"
-        theme="github_dark"
-        class="w-full h-96"
-        :options="{ showPrintMargin: false, fontSize: 14 }"
-      />
+        <div class="flex-1 overflow-hidden border border-gray-200 dark:border-gray-700 rounded-md shadow-inner">
+          <v-ace-editor
+            v-model:value="editorContent"
+            :lang="editorLang"
+            theme="github_dark"
+            class="w-full h-full"
+            :options="{ showPrintMargin: false, fontSize: 14 }"
+          />
+        </div>
+      </div>
     </el-drawer>
   </div>
 </template>
@@ -234,7 +285,7 @@
 <script setup>
   import { computed, onMounted, reactive, ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { QuestionFilled } from '@element-plus/icons-vue'
+  import { QuestionFilled, Document, Plus, Search, Check, Edit } from '@element-plus/icons-vue'
   import {
     getSkillTools,
     getSkillList,
@@ -658,37 +709,3 @@
   }
 </script>
 
-<style scoped>
-  .skills-page {
-    min-height: 100%;
-  }
-
-  .panel {
-    min-height: 200px;
-  }
-
-  .panel-title {
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .skill-list {
-    max-height: 420px;
-  }
-
-  .form-hint {
-    font-size: 12px;
-    color: #909399;
-    margin-top: 4px;
-  }
-
-  .text-gray {
-    color: #909399;
-  }
-</style>

@@ -18,11 +18,12 @@ type ServiceGroup struct {
 	SysExportTemplateService
 	SysParamsService
 	SysVersionService
+	SkillsService
 	AutoCodePlugin   autoCodePlugin
 	AutoCodePackage  autoCodePackage
 	AutoCodeHistory  autoCodeHistory
 	AutoCodeTemplate autoCodeTemplate
 	SysErrorService
 	LoginLogService
-    ApiTokenService
+	ApiTokenService
 }

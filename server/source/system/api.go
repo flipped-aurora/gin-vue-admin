@@ -114,6 +114,17 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "系统服务", Method: "POST", Path: "/system/getSystemConfig", Description: "获取配置文件内容"},
 		{ApiGroup: "系统服务", Method: "POST", Path: "/system/setSystemConfig", Description: "设置配置文件内容"},
 
+		{ApiGroup: "skills", Method: "GET", Path: "/skills/getTools", Description: "获取技能工具列表"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillList", Description: "获取技能列表"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillDetail", Description: "获取技能详情"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveSkill", Description: "保存技能定义"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/createScript", Description: "创建技能脚本"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getScript", Description: "读取技能脚本"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveScript", Description: "保存技能脚本"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/createResource", Description: "创建技能资源"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getResource", Description: "读取技能资源"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveResource", Description: "保存技能资源"},
+
 		{ApiGroup: "客户", Method: "PUT", Path: "/customer/customer", Description: "更新客户"},
 		{ApiGroup: "客户", Method: "POST", Path: "/customer/customer", Description: "创建客户"},
 		{ApiGroup: "客户", Method: "DELETE", Path: "/customer/customer", Description: "删除客户"},

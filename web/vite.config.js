@@ -8,6 +8,7 @@ import vuePlugin from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import VueFilePathPlugin from './vitePlugin/componentName/index.js'
 import { svgBuilder } from 'vite-auto-import-svg'
+import vueRootValidator from 'vite-check-multiple-dom';
 import { AddSecret } from './vitePlugin/secret'
 import UnoCSS from '@unocss/vite'
 
@@ -79,7 +80,7 @@ export default ({ mode }) => {
           rewrite: (path) =>
             path.replace(new RegExp('^' + process.env.VITE_BASE_API), '')
         },
-         "/plugin": {
+        "/plugin": {
           // 需要代理的路径   例如 '/api'
           target: `https://plugin.gin-vue-admin.com/api/`, // 代理到 目标路径
           changeOrigin: true,
@@ -118,10 +119,11 @@ export default ({ mode }) => {
         ]
       }),
       vuePlugin(),
-      svgBuilder(['./src/plugin/','./src/assets/icons/'],base, outDir,'assets', NODE_ENV),
+      svgBuilder(['./src/plugin/', './src/assets/icons/'], base, outDir, 'assets', NODE_ENV),
       [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
       VueFilePathPlugin('./src/pathInfo.json'),
-      UnoCSS()
+      UnoCSS(),
+      vueRootValidator()
     ]
   }
   return config

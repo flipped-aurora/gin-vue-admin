@@ -44,3 +44,8 @@ type SkillFileSaveRequest struct {
 	FileName string `json:"fileName"`
 	Content  string `json:"content"`
 }
+
+type SkillGlobalConstraintSaveRequest struct {
+	Tool    string `json:"tool"`
+	Content string `json:"content"`
+}

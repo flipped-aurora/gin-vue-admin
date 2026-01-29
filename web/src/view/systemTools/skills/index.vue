@@ -23,6 +23,14 @@
           </div>
         </el-card>
 
+        <el-card shadow="never" class="!border-none shrink-0">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold">全局约束</span>
+            <el-button type="primary" link icon="Edit" @click="openGlobalConstraint">编辑</el-button>
+          </div>
+          <div class="text-xs text-gray-500">路径: {{ globalConstraintPath }}</div>
+        </el-card>
+
         <el-card shadow="never" class="!border-none flex-1 mt-2 flex flex-col min-h-0">
           <div class="flex justify-between items-center mb-2">
             <span class="font-bold">Skills</span>
@@ -301,7 +309,9 @@
     saveSkillScript,
     createSkillResource,
     getSkillResource,
-    saveSkillResource
+    saveSkillResource,
+    getGlobalConstraint,
+    saveGlobalConstraint
   } from '@/api/skills'
   import { VAceEditor } from 'vue3-ace-editor'
   import 'ace-builds/src-noconflict/mode-javascript'
@@ -326,6 +336,21 @@
   const activeSkill = ref('')
   const skillFilter = ref('')
   const activeTab = ref('config')
+  const globalConstraintExists = ref(false)
+
+  const toolDirMap = {
+    copilot: '.aone_copilot',
+    claude: '.claude',
+    cursor: '.cursor',
+    trae: '.trae',
+    codex: '.codex'
+  }
+
+  const globalConstraintPath = computed(() => {
+    if (!activeTool.value) return 'skills/README.md'
+    const toolDir = toolDirMap[activeTool.value] || `.${activeTool.value}`
+    return `${toolDir}/skills/README.md`
+  })
 
   const form = reactive({
     name: '',
@@ -379,8 +404,13 @@
   const editorLang = ref('text')
 
   const editorTitle = computed(() => {
-    if (!editorFileName.value) return '文件编辑'
-    return `${editorType.value === 'script' ? '脚本' : '资源'}：${editorFileName.value}`
+    if (!editorFileName.value) {
+      return editorType.value === 'constraint' ? '全局约束' : '文件编辑'
+    }
+    if (editorType.value === 'script') return `脚本：${editorFileName.value}`
+    if (editorType.value === 'resource') return `资源：${editorFileName.value}`
+    if (editorType.value === 'constraint') return `全局约束：${editorFileName.value}`
+    return `文件编辑：${editorFileName.value}`
   })
 
   const filteredSkills = computed(() => {
@@ -440,6 +470,25 @@
     }
   }
 
+  async function openGlobalConstraint() {
+    if (!activeTool.value) {
+      ElMessage.warning('请先选择工具')
+      return
+    }
+    try {
+      const res = await getGlobalConstraint({ tool: activeTool.value })
+      if (res.code === 0) {
+        globalConstraintExists.value = !!res.data?.exists
+        if (!globalConstraintExists.value) {
+          ElMessage.info('未检测到 README.md，保存后将创建该文件')
+        }
+        openEditor('constraint', 'README.md', res.data?.content || '')
+      }
+    } catch (e) {
+      ElMessage.error('读取全局约束失败')
+    }
+  }
+
   function resetDetail() {
     activeSkill.value = ''
     form.name = ''
@@ -456,6 +505,7 @@
   function handleToolSelect(key) {
     activeTool.value = key
     resetDetail()
+    globalConstraintExists.value = false
     loadSkills()
   }
 
@@ -673,7 +723,7 @@
         if (res.code === 0) {
           ElMessage.success('保存成功')
         }
-      } else {
+      } else if (editorType.value === 'resource') {
         const res = await saveSkillResource({
           tool: activeTool.value,
           skill: activeSkill.value,
@@ -681,6 +731,15 @@
           content: editorContent.value
         })
         if (res.code === 0) {
+          ElMessage.success('保存成功')
+        }
+      } else if (editorType.value === 'constraint') {
+        const res = await saveGlobalConstraint({
+          tool: activeTool.value,
+          content: editorContent.value
+        })
+        if (res.code === 0) {
+          globalConstraintExists.value = true
           ElMessage.success('保存成功')
         }
       }
@@ -713,4 +772,3 @@
     return (list || []).map((name) => ({ name }))
   }
 </script>
-

@@ -16,7 +16,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const skillFileName = "SKILL.md"
+const (
+	skillFileName            = "SKILL.md"
+	globalConstraintFileName = "README.md"
+)
 
 var skillToolOrder = []string{"copilot", "claude", "cursor", "trae", "codex"}
 
@@ -39,6 +42,8 @@ var skillToolLabels = map[string]string{
 const defaultSkillMarkdown = "## 技能用途\n请在这里描述技能的目标、适用场景与限制条件。\n\n## 输入\n- 请补充输入格式与示例。\n\n## 输出\n- 请补充输出格式与示例。\n\n## 关键步骤\n1. 第一步\n2. 第二步\n\n## 示例\n在此补充一到两个典型示例。\n"
 
 const defaultResourceMarkdown = "# 资源说明\n请在这里补充资源内容。\n"
+
+const defaultGlobalConstraintMarkdown = "# 全局约束\n请在这里补充该工具的统一约束与使用规范。\n"
 
 type SkillsService struct{}
 
@@ -216,6 +221,34 @@ func (s *SkillsService) GetResource(_ context.Context, req request.SkillFileRequ
 
 func (s *SkillsService) SaveResource(_ context.Context, req request.SkillFileSaveRequest) error {
 	return s.writeSkillFile(req.Tool, req.Skill, "resources", req.FileName, req.Content)
+}
+
+func (s *SkillsService) GetGlobalConstraint(_ context.Context, tool string) (string, bool, error) {
+	skillsDir, err := s.toolSkillsDir(tool)
+	if err != nil {
+		return "", false, err
+	}
+	filePath := filepath.Join(skillsDir, globalConstraintFileName)
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return defaultGlobalConstraintMarkdown, false, nil
+		}
+		return "", false, err
+	}
+	return string(content), true, nil
+}
+
+func (s *SkillsService) SaveGlobalConstraint(_ context.Context, tool, content string) error {
+	skillsDir, err := s.toolSkillsDir(tool)
+	if err != nil {
+		return err
+	}
+	filePath := filepath.Join(skillsDir, globalConstraintFileName)
+	if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
+		return err
+	}
+	return os.WriteFile(filePath, []byte(content), 0644)
 }
 
 func (s *SkillsService) toolSkillsDir(tool string) (string, error) {

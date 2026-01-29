@@ -124,6 +124,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/createResource", Description: "创建技能资源"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getResource", Description: "读取技能资源"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveResource", Description: "保存技能资源"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getGlobalConstraint", Description: "读取全局约束"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveGlobalConstraint", Description: "保存全局约束"},
 
 		{ApiGroup: "客户", Method: "PUT", Path: "/customer/customer", Description: "更新客户"},
 		{ApiGroup: "客户", Method: "POST", Path: "/customer/customer", Description: "创建客户"},

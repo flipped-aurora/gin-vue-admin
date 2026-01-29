@@ -124,3 +124,26 @@ func (s *SkillsApi) SaveResource(c *gin.Context) {
 	}
 	response.OkWithMessage("保存成功", c)
 }
+
+func (s *SkillsApi) GetGlobalConstraint(c *gin.Context) {
+	var req request.SkillToolRequest
+	_ = c.ShouldBindJSON(&req)
+	content, exists, err := skillsService.GetGlobalConstraint(c.Request.Context(), req.Tool)
+	if err != nil {
+		global.GVA_LOG.Error("读取全局约束失败", zap.Error(err))
+		response.FailWithMessage("读取全局约束失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"content": content, "exists": exists}, "获取成功", c)
+}
+
+func (s *SkillsApi) SaveGlobalConstraint(c *gin.Context) {
+	var req request.SkillGlobalConstraintSaveRequest
+	_ = c.ShouldBindJSON(&req)
+	if err := skillsService.SaveGlobalConstraint(c.Request.Context(), req.Tool, req.Content); err != nil {
+		global.GVA_LOG.Error("保存全局约束失败", zap.Error(err))
+		response.FailWithMessage("保存全局约束失败", c)
+		return
+	}
+	response.OkWithMessage("保存成功", c)
+}

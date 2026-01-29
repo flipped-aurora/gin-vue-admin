@@ -78,3 +78,19 @@ export const saveSkillResource = (data) => {
     data
   })
 }
+
+export const getGlobalConstraint = (data) => {
+  return service({
+    url: '/skills/getGlobalConstraint',
+    method: 'post',
+    data
+  })
+}
+
+export const saveGlobalConstraint = (data) => {
+  return service({
+    url: '/skills/saveGlobalConstraint',
+    method: 'post',
+    data
+  })
+}

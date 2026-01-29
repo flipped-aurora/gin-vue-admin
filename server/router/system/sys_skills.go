@@ -17,5 +17,7 @@ func (s *SkillsRouter) InitSkillsRouter(Router *gin.RouterGroup) {
 		skillsRouter.POST("createResource", skillsApi.CreateResource)
 		skillsRouter.POST("getResource", skillsApi.GetResource)
 		skillsRouter.POST("saveResource", skillsApi.SaveResource)
+		skillsRouter.POST("getGlobalConstraint", skillsApi.GetGlobalConstraint)
+		skillsRouter.POST("saveGlobalConstraint", skillsApi.SaveGlobalConstraint)
 	}
 }

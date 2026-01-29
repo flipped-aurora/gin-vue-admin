@@ -734,14 +734,33 @@
           ElMessage.success('保存成功')
         }
       } else if (editorType.value === 'constraint') {
+        let syncTools = []
+        if (tools.value.length > 1) {
+          try {
+            await ElMessageBox.confirm('是否同步到其他 AI 客户端工具？', '同步提示', {
+              confirmButtonText: '同步',
+              cancelButtonText: '仅当前',
+              type: 'warning'
+            })
+            syncTools = tools.value
+              .map((item) => item.key)
+              .filter((key) => key && key !== activeTool.value)
+          } catch (e) {
+            syncTools = []
+          }
+        }
+
         const res = await saveGlobalConstraint({
           tool: activeTool.value,
-          content: editorContent.value
+          content: editorContent.value,
+          syncTools
         })
-        if (res.code === 0) {
-          globalConstraintExists.value = true
-          ElMessage.success('保存成功')
+        if (res.code !== 0) {
+          ElMessage.error('保存失败')
+          return
         }
+        globalConstraintExists.value = true
+        ElMessage.success(syncTools.length ? '保存并同步成功' : '保存成功')
       }
     } catch (e) {
       ElMessage.error('保存失败')

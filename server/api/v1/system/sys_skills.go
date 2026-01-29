@@ -140,7 +140,7 @@ func (s *SkillsApi) GetGlobalConstraint(c *gin.Context) {
 func (s *SkillsApi) SaveGlobalConstraint(c *gin.Context) {
 	var req request.SkillGlobalConstraintSaveRequest
 	_ = c.ShouldBindJSON(&req)
-	if err := skillsService.SaveGlobalConstraint(c.Request.Context(), req.Tool, req.Content); err != nil {
+	if err := skillsService.SaveGlobalConstraint(c.Request.Context(), req); err != nil {
 		global.GVA_LOG.Error("保存全局约束失败", zap.Error(err))
 		response.FailWithMessage("保存全局约束失败", c)
 		return

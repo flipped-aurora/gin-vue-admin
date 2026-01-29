@@ -239,16 +239,36 @@ func (s *SkillsService) GetGlobalConstraint(_ context.Context, tool string) (str
 	return string(content), true, nil
 }
 
-func (s *SkillsService) SaveGlobalConstraint(_ context.Context, tool, content string) error {
-	skillsDir, err := s.toolSkillsDir(tool)
-	if err != nil {
+func (s *SkillsService) SaveGlobalConstraint(_ context.Context, req request.SkillGlobalConstraintSaveRequest) error {
+	if strings.TrimSpace(req.Tool) == "" {
+		return errors.New("工具类型不能为空")
+	}
+	writeConstraint := func(tool, content string) error {
+		skillsDir, err := s.toolSkillsDir(tool)
+		if err != nil {
+			return err
+		}
+		filePath := filepath.Join(skillsDir, globalConstraintFileName)
+		if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
+			return err
+		}
+		return os.WriteFile(filePath, []byte(content), 0644)
+	}
+	if err := writeConstraint(req.Tool, req.Content); err != nil {
 		return err
 	}
-	filePath := filepath.Join(skillsDir, globalConstraintFileName)
-	if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
-		return err
+	if len(req.SyncTools) == 0 {
+		return nil
 	}
-	return os.WriteFile(filePath, []byte(content), 0644)
+	for _, tool := range req.SyncTools {
+		if tool == "" || tool == req.Tool {
+			continue
+		}
+		if err := writeConstraint(tool, req.Content); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (s *SkillsService) toolSkillsDir(tool string) (string, error) {

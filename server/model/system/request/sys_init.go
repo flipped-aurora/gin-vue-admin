@@ -2,8 +2,9 @@ package request
 
 import (
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"os"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/config"
 )
 
 type InitDB struct {
@@ -111,6 +112,24 @@ func (i *InitDB) ToMssqlConfig() config.Mssql {
 	return config.Mssql{
 		GeneralDB: config.GeneralDB{
 			Path:         i.DBPath,
+			Port:         i.Port,
+			Dbname:       i.DBName,
+			Username:     i.UserName,
+			Password:     i.Password,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogMode:      "error",
+			Config:       "",
+		},
+	}
+}
+
+// ToOracleConfig 转换 config.Oracle
+// Author [gin-vue-admin](https://github.com/flipped-aurora/gin-vue-admin)
+func (i *InitDB) ToOracleConfig() config.Oracle {
+	return config.Oracle{
+		GeneralDB: config.GeneralDB{
+			Path:         i.Host,
 			Port:         i.Port,
 			Dbname:       i.DBName,
 			Username:     i.UserName,

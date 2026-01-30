@@ -316,7 +316,7 @@
     rollback,
     delSysHistory,
     addFunc,
-    butler
+    llmAuto
   } from '@/api/autoCode.js'
   import { useRouter } from 'vue-router'
   import { ElMessage, ElMessageBox } from 'element-plus'
@@ -574,11 +574,11 @@
       return
     }
 
-    const aiRes = await butler({
+    const aiRes = await llmAuto({
       structInfo: activeInfo.value,
       template: JSON.stringify(res.data),
       prompt: autoFunc.value.prompt,
-      command: 'addFunc'
+      mode: 'addFunc'
     })
     aiLoading.value = false
     if (aiRes.code === 0) {
@@ -600,9 +600,9 @@
 
   const autoComplete = async () => {
     aiLoading.value = true
-    const aiRes = await butler({
+    const aiRes = await llmAuto({
       prompt: autoFunc.value.funcDesc,
-      command: 'autoCompleteFunc'
+      mode: 'autoCompleteFunc'
     })
     aiLoading.value = false
     if (aiRes.code === 0) {

@@ -47,6 +47,15 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 	entities := []adapter.CasbinRule{
 		{Ptype: "p", V0: "888", V1: "/user/admin_register", V2: "POST"},
 
+		{Ptype: "p", V0: "888", V1: "/sysLoginLog/deleteLoginLog", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysLoginLog/deleteLoginLogByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysLoginLog/findLoginLog", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysLoginLog/getLoginLogList", V2: "GET"},
+
+		{Ptype: "p", V0: "888", V1: "/sysApiToken/createApiToken", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysApiToken/getApiTokenList", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysApiToken/deleteApiToken", V2: "POST"},
+
 		{Ptype: "p", V0: "888", V1: "/api/createApi", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiById", V2: "POST"},
@@ -107,6 +116,19 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/system/setSystemConfig", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/system/getServerInfo", V2: "POST"},
 
+		{Ptype: "p", V0: "888", V1: "/skills/getTools", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/skills/getSkillList", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/getSkillDetail", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/saveSkill", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/createScript", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/getScript", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/saveScript", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/createResource", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/getResource", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/saveResource", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/getGlobalConstraint", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/saveGlobalConstraint", V2: "POST"},
+
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "PUT"},
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "POST"},
@@ -129,6 +151,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPlug", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/installPlugin", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/pubPlug", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/removePlugin", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/getPluginList", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/addFunc", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/mcp", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/mcpTest", V2: "POST"},

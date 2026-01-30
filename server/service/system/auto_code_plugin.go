@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	goast "go/ast"
 	"go/parser"
 	"go/printer"
 	"go/token"
@@ -16,8 +17,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	pluginUtils "github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	ast "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/mholt/archives"
 	cp "github.com/otiai10/copy"
 	"github.com/pkg/errors"
@@ -71,6 +73,8 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 	var serverIndex = -1
 	webPlugin := ""
 	serverPlugin := ""
+	serverPackage := ""
+	serverRootName := ""
 
 	for i := range paths {
 		paths[i] = filepath.ToSlash(paths[i])
@@ -80,8 +84,16 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 		if ln < 4 {
 			continue
 		}
-		if pathArr[2]+"/"+pathArr[3] == `server/plugin` && len(serverPlugin) == 0 {
-			serverPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
+		if pathArr[2]+"/"+pathArr[3] == `server/plugin` {
+			if len(serverPlugin) == 0 {
+				serverPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
+			}
+			if serverRootName == "" && ln > 1 && pathArr[1] != "" {
+				serverRootName = pathArr[1]
+			}
+			if ln > 4 && serverPackage == "" && pathArr[4] != "" {
+				serverPackage = pathArr[4]
+			}
 		}
 		if pathArr[2]+"/"+pathArr[3] == `web/plugin` && len(webPlugin) == 0 {
 			webPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
@@ -93,7 +105,14 @@ func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, e
 	}
 
 	if len(serverPlugin) != 0 {
+		if serverPackage == "" {
+			serverPackage = serverRootName
+		}
 		err = installation(serverPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+		if err != nil {
+			return webIndex, serverIndex, err
+		}
+		err = ensurePluginRegisterImport(serverPackage)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
@@ -125,6 +144,64 @@ func installation(path string, formPath string, toPath string) error {
 		return errors.New(toPath + "已存在同名插件，请自行手动安装")
 	}
 	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+}
+
+func ensurePluginRegisterImport(packageName string) error {
+	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
+	if module == "" {
+		return errors.New("autocode module is empty")
+	}
+	if packageName == "" {
+		return errors.New("plugin package is empty")
+	}
+
+	registerPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go")
+	src, err := os.ReadFile(registerPath)
+	if err != nil {
+		return err
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, registerPath, src, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+
+	importPath := fmt.Sprintf("%s/plugin/%s", module, packageName)
+	if ast.CheckImport(astFile, importPath) {
+		return nil
+	}
+
+	importSpec := &goast.ImportSpec{
+		Name: goast.NewIdent("_"),
+		Path: &goast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("%q", importPath)},
+	}
+	var importDecl *goast.GenDecl
+	for _, decl := range astFile.Decls {
+		genDecl, ok := decl.(*goast.GenDecl)
+		if !ok {
+			continue
+		}
+		if genDecl.Tok == token.IMPORT {
+			importDecl = genDecl
+			break
+		}
+	}
+	if importDecl == nil {
+		astFile.Decls = append([]goast.Decl{
+			&goast.GenDecl{
+				Tok:   token.IMPORT,
+				Specs: []goast.Spec{importSpec},
+			},
+		}, astFile.Decls...)
+	} else {
+		importDecl.Specs = append(importDecl.Specs, importSpec)
+	}
+
+	var out []byte
+	bf := bytes.NewBuffer(out)
+	printer.Fprint(bf, fileSet, astFile)
+
+	return os.WriteFile(registerPath, bf.Bytes(), 0666)
 }
 
 func filterFile(paths []string) []string {
@@ -288,4 +365,148 @@ func (s *autoCodePlugin) InitDictionary(dictInfo request.InitDictionary) (err er
 
 	os.WriteFile(dictPath, bf.Bytes(), 0666)
 	return nil
+}
+
+func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error) {
+	// 1. 删除前端代码
+	if pluginType == "web" || pluginType == "full" {
+		webDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", pluginName)
+		err = os.RemoveAll(webDir)
+		if err != nil {
+			return errors.Wrap(err, "删除前端插件目录失败")
+		}
+	}
+
+	// 2. 删除后端代码
+	if pluginType == "server" || pluginType == "full" {
+		serverDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", pluginName)
+		err = os.RemoveAll(serverDir)
+		if err != nil {
+			return errors.Wrap(err, "删除后端插件目录失败")
+		}
+
+		// 移除注册
+		removePluginRegisterImport(pluginName)
+	}
+
+	// 通过utils 获取 api 菜单 字典
+	apis, menus, dicts := pluginUtils.GetPluginData(pluginName)
+
+	// 3. 删除菜单 (递归删除)
+	if len(menus) > 0 {
+		for _, menu := range menus {
+			var dbMenu system.SysBaseMenu
+			if err := global.GVA_DB.Where("name = ?", menu.Name).First(&dbMenu).Error; err == nil {
+				// 获取该菜单及其所有子菜单的ID
+				var menuIds []int
+				GetMenuIds(dbMenu, &menuIds)
+				// 逆序删除，先删除子菜单
+				for i := len(menuIds) - 1; i >= 0; i-- {
+					err := BaseMenuServiceApp.DeleteBaseMenu(menuIds[i])
+					if err != nil {
+						zap.L().Error("删除菜单失败", zap.Int("id", menuIds[i]), zap.Error(err))
+					}
+				}
+			}
+		}
+	}
+
+	// 4. 删除API
+	if len(apis) > 0 {
+		for _, api := range apis {
+			var dbApi system.SysApi
+			if err := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&dbApi).Error; err == nil {
+				err := ApiServiceApp.DeleteApi(dbApi)
+				if err != nil {
+					zap.L().Error("删除API失败", zap.String("path", api.Path), zap.Error(err))
+				}
+			}
+		}
+	}
+
+	// 5. 删除字典
+	if len(dicts) > 0 {
+		for _, dict := range dicts {
+			var dbDict system.SysDictionary
+			if err := global.GVA_DB.Where("type = ?", dict.Type).First(&dbDict).Error; err == nil {
+				err := DictionaryServiceApp.DeleteSysDictionary(dbDict)
+				if err != nil {
+					zap.L().Error("删除字典失败", zap.String("type", dict.Type), zap.Error(err))
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func GetMenuIds(menu system.SysBaseMenu, ids *[]int) {
+	*ids = append(*ids, int(menu.ID))
+	var children []system.SysBaseMenu
+	global.GVA_DB.Where("parent_id = ?", menu.ID).Find(&children)
+	for _, child := range children {
+        // 先递归收集子菜单
+		GetMenuIds(child, ids)
+	}
+}
+
+func removePluginRegisterImport(packageName string) error {
+	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
+	if module == "" {
+		return errors.New("autocode module is empty")
+	}
+	if packageName == "" {
+		return errors.New("plugin package is empty")
+	}
+
+	registerPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go")
+	src, err := os.ReadFile(registerPath)
+	if err != nil {
+		return err
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, registerPath, src, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+
+	importPath := fmt.Sprintf("%s/plugin/%s", module, packageName)
+    importLit := fmt.Sprintf("%q", importPath)
+
+    // 移除 import
+	var newDecls []goast.Decl
+	for _, decl := range astFile.Decls {
+		genDecl, ok := decl.(*goast.GenDecl)
+		if !ok {
+			newDecls = append(newDecls, decl)
+			continue
+		}
+		if genDecl.Tok == token.IMPORT {
+			var newSpecs []goast.Spec
+			for _, spec := range genDecl.Specs {
+				importSpec, ok := spec.(*goast.ImportSpec)
+				if !ok {
+					newSpecs = append(newSpecs, spec)
+					continue
+				}
+				if importSpec.Path.Value != importLit {
+					newSpecs = append(newSpecs, spec)
+				}
+			}
+            // 如果还有其他import，保留该 decl
+			if len(newSpecs) > 0 {
+				genDecl.Specs = newSpecs
+				newDecls = append(newDecls, genDecl)
+			}
+		} else {
+			newDecls = append(newDecls, decl)
+		}
+	}
+	astFile.Decls = newDecls
+
+	var out []byte
+	bf := bytes.NewBuffer(out)
+	printer.Fprint(bf, fileSet, astFile)
+
+	return os.WriteFile(registerPath, bf.Bytes(), 0666)
 }

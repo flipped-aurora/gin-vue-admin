@@ -143,7 +143,7 @@ export const llmAuto = (data) => {
   return service({
     url: '/autoCode/llmAuto',
     method: 'post',
-    data: { ...data, mode: 'ai' },
+    data: { ...data },
     timeout: 1000 * 60 * 10,
     loadingOption: {
       lock: true,
@@ -152,36 +152,6 @@ export const llmAuto = (data) => {
     }
   })
 }
-
-export const butler = (data) => {
-  return service({
-    url: '/autoCode/llmAuto',
-    method: 'post',
-    data: { ...data, mode: 'butler' },
-    timeout: 1000 * 60 * 10
-  })
-}
-
-export const eye = (data) => {
-  return service({
-    url: '/autoCode/llmAuto',
-    method: 'post',
-    data: { ...data, mode: 'eye' },
-    timeout: 1000 * 60 * 10
-  })
-}
-
-
-export const createWeb = (data) => {
-  return service({
-    url: '/autoCode/llmAuto',
-    method: 'post',
-    data: { ...data, mode: 'painter' },
-    timeout: 1000 * 60 * 10
-  })
-}
-
-
 
 export const addFunc = (data) => {
   return service({
@@ -238,5 +208,35 @@ export const mcpTest = (data) => {
     url: '/autoCode/mcpTest',
     method: 'post',
     data
+  })
+}
+
+// @Tags SysApi
+// @Summary 获取插件列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /autoCode/getPluginList [get]
+export const getPluginList = (params) => {
+  return service({
+    url: '/autoCode/getPluginList',
+    method: 'get',
+    params
+  })
+}
+
+// @Tags SysApi
+// @Summary 删除插件
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /autoCode/removePlugin [post]
+export const removePlugin = (params) => {
+  return service({
+    url: '/autoCode/removePlugin',
+    method: 'post',
+    params
   })
 }

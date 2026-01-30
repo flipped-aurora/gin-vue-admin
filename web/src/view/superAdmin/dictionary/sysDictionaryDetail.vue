@@ -332,9 +332,6 @@
           type: 'success',
           message: '删除成功'
         })
-        if (tableData.value.length === 1 && page.value > 1) {
-          page.value--
-        }
         await getTreeData() // 重新加载数据
       }
     })

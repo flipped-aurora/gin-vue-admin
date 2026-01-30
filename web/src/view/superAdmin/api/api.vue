@@ -419,7 +419,7 @@
   import ExportExcel from '@/components/exportExcel/exportExcel.vue'
   import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
   import ImportExcel from '@/components/exportExcel/importExcel.vue'
-  import { butler } from '@/api/autoCode'
+  import { llmAuto } from '@/api/autoCode'
   import { useAppStore } from "@/pinia";
 
   defineOptions({
@@ -799,7 +799,7 @@
     const routerPaths = syncApiData.value.newApis
       .filter((item) => !item.apiGroup || !item.description)
       .map((item) => item.path)
-    const res = await butler({ data: routerPaths, command: 'apiCompletion' })
+    const res = await llmAuto({ data: String(routerPaths), mode: 'apiCompletion' })
     apiCompletionLoading.value = false
     if (res.code === 0) {
       try {

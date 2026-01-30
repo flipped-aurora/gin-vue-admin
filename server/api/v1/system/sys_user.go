@@ -51,6 +51,14 @@ func (b *BaseApi) Login(c *gin.Context) {
 		// 验证码次数+1
 		global.BlackCache.Increment(key, 1)
 		response.FailWithMessage("验证码错误", c)
+		// 记录登录失败日志
+		loginLogService.CreateLoginLog(system.SysLoginLog{
+			Username:     l.Username,
+			Ip:           c.ClientIP(),
+			Agent:        c.Request.UserAgent(),
+			Status:       false,
+			ErrorMessage: "验证码错误",
+		})
 		return
 	}
 
@@ -61,6 +69,14 @@ func (b *BaseApi) Login(c *gin.Context) {
 		// 验证码次数+1
 		global.BlackCache.Increment(key, 1)
 		response.FailWithMessage("用户名不存在或者密码错误", c)
+		// 记录登录失败日志
+		loginLogService.CreateLoginLog(system.SysLoginLog{
+			Username:     l.Username,
+			Ip:           c.ClientIP(),
+			Agent:        c.Request.UserAgent(),
+			Status:       false,
+			ErrorMessage: "用户名不存在或者密码错误",
+		})
 		return
 	}
 	if user.Enable != 1 {
@@ -68,6 +84,15 @@ func (b *BaseApi) Login(c *gin.Context) {
 		// 验证码次数+1
 		global.BlackCache.Increment(key, 1)
 		response.FailWithMessage("用户被禁止登录", c)
+		// 记录登录失败日志
+		loginLogService.CreateLoginLog(system.SysLoginLog{
+			Username:     l.Username,
+			Ip:           c.ClientIP(),
+			Agent:        c.Request.UserAgent(),
+			Status:       false,
+			ErrorMessage: "用户被禁止登录",
+			UserID:       user.ID,
+		})
 		return
 	}
 	b.TokenNext(c, *user)
@@ -81,6 +106,15 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.FailWithMessage("获取token失败", c)
 		return
 	}
+	// 记录登录成功日志
+	loginLogService.CreateLoginLog(system.SysLoginLog{
+		Username: user.Username,
+		Ip:       c.ClientIP(),
+		Agent:    c.Request.UserAgent(),
+		Status:   true,
+		UserID:   user.ID,
+		ErrorMessage: "登录成功",
+	})
 	if !global.GVA_CONFIG.System.UseMultipoint {
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{

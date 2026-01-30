@@ -46,6 +46,15 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 	entities := []sysModel.SysApi{
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: "jwt加入黑名单(退出，必选)"},
 
+		{ApiGroup: "登录日志", Method: "DELETE", Path: "/sysLoginLog/deleteLoginLog", Description: "删除登录日志"},
+		{ApiGroup: "登录日志", Method: "DELETE", Path: "/sysLoginLog/deleteLoginLogByIds", Description: "批量删除登录日志"},
+		{ApiGroup: "登录日志", Method: "GET", Path: "/sysLoginLog/findLoginLog", Description: "根据ID获取登录日志"},
+		{ApiGroup: "登录日志", Method: "GET", Path: "/sysLoginLog/getLoginLogList", Description: "获取登录日志列表"},
+
+		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/createApiToken", Description: "签发API Token"},
+		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/getApiTokenList", Description: "获取API Token列表"},
+		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/deleteApiToken", Description: "作废API Token"},
+
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/admin_register", Description: "用户注册"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/getUserList", Description: "获取用户列表"},
@@ -105,6 +114,19 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "系统服务", Method: "POST", Path: "/system/getSystemConfig", Description: "获取配置文件内容"},
 		{ApiGroup: "系统服务", Method: "POST", Path: "/system/setSystemConfig", Description: "设置配置文件内容"},
 
+		{ApiGroup: "skills", Method: "GET", Path: "/skills/getTools", Description: "获取技能工具列表"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillList", Description: "获取技能列表"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillDetail", Description: "获取技能详情"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveSkill", Description: "保存技能定义"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/createScript", Description: "创建技能脚本"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getScript", Description: "读取技能脚本"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveScript", Description: "保存技能脚本"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/createResource", Description: "创建技能资源"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getResource", Description: "读取技能资源"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveResource", Description: "保存技能资源"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/getGlobalConstraint", Description: "读取全局约束"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveGlobalConstraint", Description: "保存全局约束"},
+
 		{ApiGroup: "客户", Method: "PUT", Path: "/customer/customer", Description: "更新客户"},
 		{ApiGroup: "客户", Method: "POST", Path: "/customer/customer", Description: "创建客户"},
 		{ApiGroup: "客户", Method: "DELETE", Path: "/customer/customer", Description: "删除客户"},
@@ -118,6 +140,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "代码生成器", Method: "GET", Path: "/autoCode/getColumn", Description: "获取所选table的所有字段"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/installPlugin", Description: "安装插件"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/pubPlug", Description: "打包插件"},
+		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/removePlugin", Description: "卸载插件"},
+		{ApiGroup: "代码生成器", Method: "GET", Path: "/autoCode/getPluginList", Description: "获取已安装插件"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcp", Description: "自动生成 MCP Tool 模板"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpTest", Description: "MCP Tool 测试"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpList", Description: "获取 MCP ToolList"},

@@ -21,6 +21,9 @@ type RouterGroup struct {
 	SysParamsRouter
 	SysVersionRouter
 	SysErrorRouter
+	LoginLogRouter
+	ApiTokenRouter
+	SkillsRouter
 }
 
 var (
@@ -45,4 +48,5 @@ var (
 	exportTemplateApi   = api.ApiGroupApp.SystemApiGroup.SysExportTemplateApi
 	sysVersionApi       = api.ApiGroupApp.SystemApiGroup.SysVersionApi
 	sysErrorApi         = api.ApiGroupApp.SystemApiGroup.SysErrorApi
+	skillsApi           = api.ApiGroupApp.SystemApiGroup.SkillsApi
 )

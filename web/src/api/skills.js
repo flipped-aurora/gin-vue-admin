@@ -79,6 +79,54 @@ export const saveSkillResource = (data) => {
   })
 }
 
+export const createSkillReference = (data) => {
+  return service({
+    url: '/skills/createReference',
+    method: 'post',
+    data
+  })
+}
+
+export const getSkillReference = (data) => {
+  return service({
+    url: '/skills/getReference',
+    method: 'post',
+    data
+  })
+}
+
+export const saveSkillReference = (data) => {
+  return service({
+    url: '/skills/saveReference',
+    method: 'post',
+    data
+  })
+}
+
+export const createSkillTemplate = (data) => {
+  return service({
+    url: '/skills/createTemplate',
+    method: 'post',
+    data
+  })
+}
+
+export const getSkillTemplate = (data) => {
+  return service({
+    url: '/skills/getTemplate',
+    method: 'post',
+    data
+  })
+}
+
+export const saveSkillTemplate = (data) => {
+  return service({
+    url: '/skills/saveTemplate',
+    method: 'post',
+    data
+  })
+}
+
 export const getGlobalConstraint = (data) => {
   return service({
     url: '/skills/getGlobalConstraint',

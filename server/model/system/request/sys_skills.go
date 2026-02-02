@@ -32,6 +32,18 @@ type SkillResourceCreateRequest struct {
 	FileName string `json:"fileName"`
 }
 
+type SkillReferenceCreateRequest struct {
+	Tool     string `json:"tool"`
+	Skill    string `json:"skill"`
+	FileName string `json:"fileName"`
+}
+
+type SkillTemplateCreateRequest struct {
+	Tool     string `json:"tool"`
+	Skill    string `json:"skill"`
+	FileName string `json:"fileName"`
+}
+
 type SkillFileRequest struct {
 	Tool     string `json:"tool"`
 	Skill    string `json:"skill"`

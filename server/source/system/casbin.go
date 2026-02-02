@@ -126,6 +126,12 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/skills/createResource", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/getResource", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/saveResource", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/createReference", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/getReference", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/saveReference", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/createTemplate", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/getTemplate", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/saveTemplate", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/getGlobalConstraint", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/saveGlobalConstraint", V2: "POST"},
 

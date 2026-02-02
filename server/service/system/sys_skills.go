@@ -43,6 +43,10 @@ const defaultSkillMarkdown = "## 技能用途\n请在这里描述技能的目标
 
 const defaultResourceMarkdown = "# 资源说明\n请在这里补充资源内容。\n"
 
+const defaultReferenceMarkdown = "# 参考资料\n请在这里补充参考资料内容。\n"
+
+const defaultTemplateMarkdown = "# 模板\n请在这里补充模板内容。\n"
+
 const defaultGlobalConstraintMarkdown = "# 全局约束\n请在这里补充该工具的统一约束与使用规范。\n"
 
 type SkillsService struct{}
@@ -113,6 +117,8 @@ func (s *SkillsService) Detail(_ context.Context, tool, skill string) (system.Sk
 
 	detail.Scripts = listFiles(filepath.Join(skillDir, "scripts"))
 	detail.Resources = listFiles(filepath.Join(skillDir, "resources"))
+	detail.References = listFiles(filepath.Join(skillDir, "references"))
+	detail.Templates = listFiles(filepath.Join(skillDir, "templates"))
 	return detail, nil
 }
 
@@ -190,29 +196,7 @@ func (s *SkillsService) SaveScript(_ context.Context, req request.SkillFileSaveR
 }
 
 func (s *SkillsService) CreateResource(_ context.Context, req request.SkillResourceCreateRequest) (string, string, error) {
-	if !isSafeName(req.Skill) {
-		return "", "", errors.New("技能名称不合法")
-	}
-	fileName, err := buildResourceFileName(req.FileName)
-	if err != nil {
-		return "", "", err
-	}
-	skillDir, err := s.ensureSkillDir(req.Tool, req.Skill)
-	if err != nil {
-		return "", "", err
-	}
-	filePath := filepath.Join(skillDir, "resources", fileName)
-	if _, err := os.Stat(filePath); err == nil {
-		return "", "", errors.New("资源已存在")
-	}
-	if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
-		return "", "", err
-	}
-	content := defaultResourceMarkdown
-	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
-		return "", "", err
-	}
-	return fileName, content, nil
+	return s.createMarkdownFile(req.Tool, req.Skill, "resources", req.FileName, defaultResourceMarkdown, "资源")
 }
 
 func (s *SkillsService) GetResource(_ context.Context, req request.SkillFileRequest) (string, error) {
@@ -221,6 +205,30 @@ func (s *SkillsService) GetResource(_ context.Context, req request.SkillFileRequ
 
 func (s *SkillsService) SaveResource(_ context.Context, req request.SkillFileSaveRequest) error {
 	return s.writeSkillFile(req.Tool, req.Skill, "resources", req.FileName, req.Content)
+}
+
+func (s *SkillsService) CreateReference(_ context.Context, req request.SkillReferenceCreateRequest) (string, string, error) {
+	return s.createMarkdownFile(req.Tool, req.Skill, "references", req.FileName, defaultReferenceMarkdown, "参考")
+}
+
+func (s *SkillsService) GetReference(_ context.Context, req request.SkillFileRequest) (string, error) {
+	return s.readSkillFile(req.Tool, req.Skill, "references", req.FileName)
+}
+
+func (s *SkillsService) SaveReference(_ context.Context, req request.SkillFileSaveRequest) error {
+	return s.writeSkillFile(req.Tool, req.Skill, "references", req.FileName, req.Content)
+}
+
+func (s *SkillsService) CreateTemplate(_ context.Context, req request.SkillTemplateCreateRequest) (string, string, error) {
+	return s.createMarkdownFile(req.Tool, req.Skill, "templates", req.FileName, defaultTemplateMarkdown, "模板")
+}
+
+func (s *SkillsService) GetTemplate(_ context.Context, req request.SkillFileRequest) (string, error) {
+	return s.readSkillFile(req.Tool, req.Skill, "templates", req.FileName)
+}
+
+func (s *SkillsService) SaveTemplate(_ context.Context, req request.SkillFileSaveRequest) error {
+	return s.writeSkillFile(req.Tool, req.Skill, "templates", req.FileName, req.Content)
 }
 
 func (s *SkillsService) GetGlobalConstraint(_ context.Context, tool string) (string, bool, error) {
@@ -307,6 +315,35 @@ func (s *SkillsService) ensureSkillDir(tool, skill string) (string, error) {
 		return "", err
 	}
 	return skillDir, nil
+}
+
+func (s *SkillsService) createMarkdownFile(tool, skill, subDir, fileName, defaultContent, label string) (string, string, error) {
+	if !isSafeName(skill) {
+		return "", "", errors.New("技能名称不合法")
+	}
+	cleanName, err := buildResourceFileName(fileName)
+	if err != nil {
+		return "", "", err
+	}
+	skillDir, err := s.ensureSkillDir(tool, skill)
+	if err != nil {
+		return "", "", err
+	}
+	filePath := filepath.Join(skillDir, subDir, cleanName)
+	if _, err := os.Stat(filePath); err == nil {
+		if label == "" {
+			label = "文件"
+		}
+		return "", "", fmt.Errorf("%s已存在", label)
+	}
+	if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
+		return "", "", err
+	}
+	content := defaultContent
+	if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
+		return "", "", err
+	}
+	return cleanName, content, nil
 }
 
 func (s *SkillsService) readSkillFile(tool, skill, subDir, fileName string) (string, error) {

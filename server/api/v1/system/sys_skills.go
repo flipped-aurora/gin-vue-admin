@@ -125,6 +125,76 @@ func (s *SkillsApi) SaveResource(c *gin.Context) {
 	response.OkWithMessage("保存成功", c)
 }
 
+func (s *SkillsApi) CreateReference(c *gin.Context) {
+	var req request.SkillReferenceCreateRequest
+	_ = c.ShouldBindJSON(&req)
+	fileName, content, err := skillsService.CreateReference(c.Request.Context(), req)
+	if err != nil {
+		global.GVA_LOG.Error("创建参考失败", zap.Error(err))
+		response.FailWithMessage("创建参考失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"fileName": fileName, "content": content}, "创建成功", c)
+}
+
+func (s *SkillsApi) GetReference(c *gin.Context) {
+	var req request.SkillFileRequest
+	_ = c.ShouldBindJSON(&req)
+	content, err := skillsService.GetReference(c.Request.Context(), req)
+	if err != nil {
+		global.GVA_LOG.Error("读取参考失败", zap.Error(err))
+		response.FailWithMessage("读取参考失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"content": content}, "获取成功", c)
+}
+
+func (s *SkillsApi) SaveReference(c *gin.Context) {
+	var req request.SkillFileSaveRequest
+	_ = c.ShouldBindJSON(&req)
+	if err := skillsService.SaveReference(c.Request.Context(), req); err != nil {
+		global.GVA_LOG.Error("保存参考失败", zap.Error(err))
+		response.FailWithMessage("保存参考失败", c)
+		return
+	}
+	response.OkWithMessage("保存成功", c)
+}
+
+func (s *SkillsApi) CreateTemplate(c *gin.Context) {
+	var req request.SkillTemplateCreateRequest
+	_ = c.ShouldBindJSON(&req)
+	fileName, content, err := skillsService.CreateTemplate(c.Request.Context(), req)
+	if err != nil {
+		global.GVA_LOG.Error("创建模板失败", zap.Error(err))
+		response.FailWithMessage("创建模板失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"fileName": fileName, "content": content}, "创建成功", c)
+}
+
+func (s *SkillsApi) GetTemplate(c *gin.Context) {
+	var req request.SkillFileRequest
+	_ = c.ShouldBindJSON(&req)
+	content, err := skillsService.GetTemplate(c.Request.Context(), req)
+	if err != nil {
+		global.GVA_LOG.Error("读取模板失败", zap.Error(err))
+		response.FailWithMessage("读取模板失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"content": content}, "获取成功", c)
+}
+
+func (s *SkillsApi) SaveTemplate(c *gin.Context) {
+	var req request.SkillFileSaveRequest
+	_ = c.ShouldBindJSON(&req)
+	if err := skillsService.SaveTemplate(c.Request.Context(), req); err != nil {
+		global.GVA_LOG.Error("保存模板失败", zap.Error(err))
+		response.FailWithMessage("保存模板失败", c)
+		return
+	}
+	response.OkWithMessage("保存成功", c)
+}
+
 func (s *SkillsApi) GetGlobalConstraint(c *gin.Context) {
 	var req request.SkillToolRequest
 	_ = c.ShouldBindJSON(&req)

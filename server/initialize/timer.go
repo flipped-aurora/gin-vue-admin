@@ -26,12 +26,15 @@ func Timer() {
 
 		// 其他定时任务定在这里 参考上方使用方法
 
-		//_, err := global.GVA_Timer.AddTaskByFunc("定时任务标识", "corn表达式", func() {
-		//	具体执行内容...
-		//  ......
-		//}, option...)
-		//if err != nil {
-		//	fmt.Println("add timer error:", err)
-		//}
+		// 证书监控定时任务：每天凌晨2点更新所有域名证书状态
+		_, err = global.GVA_Timer.AddTaskByFunc("UpdateAllCertificates", "0 0 2 * * *", func() {
+			err := task.UpdateAllCertificates()
+			if err != nil {
+				fmt.Println("timer error:", err)
+			}
+		}, "定时更新所有域名证书状态", option...)
+		if err != nil {
+			fmt.Println("add timer error:", err)
+		}
 	}()
 }

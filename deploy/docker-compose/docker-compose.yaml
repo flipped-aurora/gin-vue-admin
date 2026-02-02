@@ -37,6 +37,8 @@ services:
     restart: always
     ports:
       - '8888:8888'
+    volumes:
+    - ../../server/config.docker.yaml:/go/src/github.com/flipped-aurora/gin-vue-admin/server/config.docker.yaml
     depends_on:
       mysql:
         condition: service_healthy
@@ -57,7 +59,7 @@ services:
     ports:
       - "13306:3306"  # host物理直接映射端口为13306
     environment:
-      #MYSQL_ROOT_PASSWORD: 'Aa@6447985' # root管理员用户密码
+      MYSQL_ROOT_PASSWORD: 'Aa@6447985' # root管理员用户密码
       MYSQL_DATABASE: 'qmPlus' # 初始化启动时要创建的数据库的名称
       MYSQL_USER: 'gva'
       MYSQL_PASSWORD: 'Aa@6447985'

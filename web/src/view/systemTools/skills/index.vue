@@ -78,49 +78,62 @@
 
             <el-tabs v-model="activeTab" class="h-full">
               <el-tab-pane label="技能配置" name="config">
-                <el-form :model="form" label-width="160px" class="mt-4">
+                <div
+                  class="mt-4 mb-4 rounded-md border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30 p-3 text-xs text-gray-600 dark:text-gray-300"
+                >
+                  <div class="font-medium text-gray-700 dark:text-gray-200 mb-2">填写指引</div>
+                  <ul class="list-disc pl-4 space-y-1">
+                    <li>Name 用小写+连字符（kebab-case），作为技能目录名与 /slash 命令。</li>
+                    <li>Description 写清触发条件与关键词，这是自动匹配的核心。</li>
+                    <li>正文建议按 Instructions / Examples / Guidelines 组织，写清输入、输出与约束。</li>
+                    <li>需要模板/规范/脚本时，在正文中引用 templates/...、references/...、scripts/...</li>
+                  </ul>
+                </div>
+                <el-form :model="form" label-width="160px">
                   <el-form-item>
                     <template #label>
                       <div class="flex items-center">
                         Name
-                        <el-tooltip content="技能的名称，例如: pr-summary" placement="top">
+                        <el-tooltip content="唯一标识，建议小写+连字符（kebab-case）" placement="top">
                           <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </div>
                     </template>
-                    <el-input v-model="form.name" placeholder="例如: pr-summary" />
+                    <el-input v-model="form.name" placeholder="例如: code-comment-expert" />
+                    <div class="text-xs text-gray-400 mt-1">建议 2-4 个单词，避免空格与中文。</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
                       <div class="flex items-center">
                         Description
-                        <el-tooltip content="技能的简要描述，例如: Summarize changes in a pull request" placement="top">
+                        <el-tooltip content="写清使用时机/触发条件与关键字，这是最重要的一行" placement="top">
                           <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </div>
                     </template>
                     <el-input
                       v-model="form.description"
-                      placeholder="例如: Summarize changes in a pull request"
+                      placeholder="例如: 为代码添加双语注释，适合代码审查/重构/可读性改进"
                     />
+                    <div class="text-xs text-gray-400 mt-1">建议包含：任务类型、触发场景、关键词。</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
                       <div class="flex items-center">
                         Allowed Tools
-                        <el-tooltip content="该技能允许使用的工具，例如: Bash(gh *)" placement="top">
+                        <el-tooltip content="限制可用工具范围，例如: Bash(gh *), Read, Write" placement="top">
                           <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </div>
                     </template>
-                    <el-input v-model="form.allowedTools" placeholder="可选，例如: Bash(gh *)" />
+                    <el-input v-model="form.allowedTools" placeholder="可选，例如: Bash(gh *), Read, Write" />
                     <div class="text-xs text-gray-400 mt-1">可选字段，留空后保存会移除</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
                       <div class="flex items-center">
                         Context
-                        <el-tooltip content="技能执行的上下文，例如: fork" placement="top">
+                        <el-tooltip content="fork 表示独立上下文，适合复杂任务" placement="top">
                           <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </div>
@@ -132,19 +145,19 @@
                     <template #label>
                       <div class="flex items-center">
                         Agent
-                        <el-tooltip content="指定执行该技能的 Agent，例如: Explore" placement="top">
+                        <el-tooltip content="context=fork 时可指定子代理，例如: Explore" placement="top">
                           <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </div>
                     </template>
-                    <el-input v-model="form.agent" placeholder="可选，例如: Explore" />
+                    <el-input v-model="form.agent" placeholder="可选，例如: Explore / Build" />
                     <div class="text-xs text-gray-400 mt-1">可选字段，留空后保存会移除</div>
                   </el-form-item>
                   <el-form-item>
                     <template #label>
                       <div class="flex items-center">
                         Markdown 内容
-                        <el-tooltip content="SKILL.md 的具体内容，定义技能的详细逻辑" placement="top">
+                        <el-tooltip content="正文建议精简，复杂细节可拆到 templates/references/scripts" placement="top">
                           <el-icon class="ml-1 cursor-pointer"><QuestionFilled /></el-icon>
                         </el-tooltip>
                       </div>
@@ -166,7 +179,9 @@
                       :rows="20"
                       :placeholder="markdownPlaceholder"
                     />
-                    <div class="text-xs text-gray-400 mt-1">这里是 SKILL.md 的正文内容，可自由编辑。</div>
+                    <div class="text-xs text-gray-400 mt-1">
+                      建议精简正文，把细节放到 templates/references/scripts，并在正文中通过相对路径引用。
+                    </div>
                   </el-form-item>
                 </el-form>
               </el-tab-pane>
@@ -175,6 +190,9 @@
                 <div class="flex justify-between items-center mb-4">
                   <div class="text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded">路径: scripts/</div>
                   <el-button type="primary" icon="Plus" size="small" @click="openScriptDialog">创建脚本</el-button>
+                </div>
+                <div class="text-xs text-gray-500 mb-3">
+                  适合放可执行逻辑或校验流程，在正文中引用 <span class="font-mono">scripts/文件名</span> 使用（运行需启用 code execution）。
                 </div>
                 <el-table :data="scriptRows" style="width: 100%">
                   <el-table-column prop="name" label="文件名">
@@ -185,9 +203,10 @@
                       </div>
                     </template>
                   </el-table-column>
-                  <el-table-column label="操作" width="120">
+                  <el-table-column label="操作" width="180">
                     <template #default="scope">
                       <el-button type="primary" link icon="Edit" @click="openScriptEditor(scope.row.name)">编辑</el-button>
+                      <el-button type="primary" link @click="insertFileSnippet('script', scope.row.name)">调用</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -199,6 +218,9 @@
                   <div class="text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded">路径: resources/</div>
                   <el-button type="primary" icon="Plus" size="small" @click="openResourceDialog">创建资源</el-button>
                 </div>
+                <div class="text-xs text-gray-500 mb-3">
+                  适合补充背景资料或术语表，在正文中引用 <span class="font-mono">resources/文件名</span> 提示模型按需查阅。
+                </div>
                 <el-table :data="resourceRows" style="width: 100%">
                   <el-table-column prop="name" label="文件名">
                     <template #default="scope">
@@ -208,13 +230,68 @@
                       </div>
                     </template>
                   </el-table-column>
-                  <el-table-column label="操作" width="120">
+                  <el-table-column label="操作" width="180">
                     <template #default="scope">
                       <el-button type="primary" link icon="Edit" @click="openResourceEditor(scope.row.name)">编辑</el-button>
+                      <el-button type="primary" link @click="insertFileSnippet('resource', scope.row.name)">引用</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
                 <el-empty v-if="resourceRows.length === 0" description="暂无资源" />
+              </el-tab-pane>
+
+              <el-tab-pane label="References" name="references">
+                <div class="flex justify-between items-center mb-4 mt-4">
+                  <div class="text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded">路径: references/</div>
+                  <el-button type="primary" icon="Plus" size="small" @click="openReferenceDialog">创建参考</el-button>
+                </div>
+                <div class="text-xs text-gray-500 mb-3">
+                  适合放规范、规则或权威资料，在正文中引用 <span class="font-mono">references/文件名</span> 指定遵循来源。
+                </div>
+                <el-table :data="referenceRows" style="width: 100%">
+                  <el-table-column prop="name" label="文件名">
+                    <template #default="scope">
+                      <div class="flex items-center gap-2">
+                        <el-icon><Document /></el-icon>
+                        <span>{{ scope.row.name }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="180">
+                    <template #default="scope">
+                      <el-button type="primary" link icon="Edit" @click="openReferenceEditor(scope.row.name)">编辑</el-button>
+                      <el-button type="primary" link @click="insertFileSnippet('reference', scope.row.name)">引用</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-empty v-if="referenceRows.length === 0" description="暂无参考" />
+              </el-tab-pane>
+
+              <el-tab-pane label="Templates" name="templates">
+                <div class="flex justify-between items-center mb-4 mt-4">
+                  <div class="text-sm text-gray-500 bg-gray-50 dark:bg-gray-800 px-3 py-1 rounded">路径: templates/</div>
+                  <el-button type="primary" icon="Plus" size="small" @click="openTemplateDialog">创建模板</el-button>
+                </div>
+                <div class="text-xs text-gray-500 mb-3">
+                  适合放输出结构或代码骨架，在正文中引用 <span class="font-mono">templates/文件名</span> 作为格式约束。
+                </div>
+                <el-table :data="templateRows" style="width: 100%">
+                  <el-table-column prop="name" label="文件名">
+                    <template #default="scope">
+                      <div class="flex items-center gap-2">
+                        <el-icon><Document /></el-icon>
+                        <span>{{ scope.row.name }}</span>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" width="180">
+                    <template #default="scope">
+                      <el-button type="primary" link icon="Edit" @click="openTemplateEditor(scope.row.name)">编辑</el-button>
+                      <el-button type="primary" link @click="insertFileSnippet('template', scope.row.name)">引用</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-empty v-if="templateRows.length === 0" description="暂无模板" />
               </el-tab-pane>
             </el-tabs>
           </template>
@@ -225,10 +302,12 @@
     <el-dialog v-model="createDialogVisible" title="新增 Skill" width="420px">
       <el-form :model="newSkill" label-width="100px">
         <el-form-item label="Skill 名称">
-          <el-input v-model="newSkill.name" placeholder="例如: pr-summary" />
+          <el-input v-model="newSkill.name" placeholder="例如: code-comment-expert" />
+          <div class="text-xs text-gray-400 mt-1">仅小写字母/数字/连字符（kebab-case）。</div>
         </el-form-item>
         <el-form-item label="描述">
-          <el-input v-model="newSkill.description" placeholder="可选" />
+          <el-input v-model="newSkill.description" placeholder="例如: 代码注释与可读性优化，适合审查/重构" />
+          <div class="text-xs text-gray-400 mt-1">写清触发条件与关键词，越具体越好。</div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -247,7 +326,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="文件名">
-          <el-input v-model="newScript.name" placeholder="例如: run" />
+          <el-input v-model="newScript.name" placeholder="例如: lint" />
+          <div class="text-xs text-gray-400 mt-1">无需扩展名，会按类型自动补全。</div>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -259,12 +339,39 @@
     <el-dialog v-model="resourceDialogVisible" title="创建资源" width="420px">
       <el-form :model="newResource" label-width="100px">
         <el-form-item label="文件名">
-          <el-input v-model="newResource.name" placeholder="例如: usage" />
+          <el-input v-model="newResource.name" placeholder="例如: glossary" />
+          <div class="text-xs text-gray-400 mt-1">自动补全 .md。</div>
         </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="resourceDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="createResource">创建</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="referenceDialogVisible" title="创建参考" width="420px">
+      <el-form :model="newReference" label-width="100px">
+        <el-form-item label="文件名">
+          <el-input v-model="newReference.name" placeholder="例如: style-guide" />
+          <div class="text-xs text-gray-400 mt-1">自动补全 .md。</div>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="referenceDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="createReference">创建</el-button>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="templateDialogVisible" title="创建模板" width="420px">
+      <el-form :model="newTemplate" label-width="100px">
+        <el-form-item label="文件名">
+          <el-input v-model="newTemplate.name" placeholder="例如: output-structure" />
+          <div class="text-xs text-gray-400 mt-1">自动补全 .md。</div>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="templateDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="createTemplate">创建</el-button>
       </template>
     </el-dialog>
 
@@ -310,6 +417,12 @@
     createSkillResource,
     getSkillResource,
     saveSkillResource,
+    createSkillReference,
+    getSkillReference,
+    saveSkillReference,
+    createSkillTemplate,
+    getSkillTemplate,
+    saveSkillTemplate,
     getGlobalConstraint,
     saveGlobalConstraint
   } from '@/api/skills'
@@ -362,26 +475,36 @@
   })
 
   const markdownPlaceholder =
-    '建议包含：技能用途、输入、输出、步骤与示例。\n\n示例：\n## 技能用途\n请描述技能的目标与限制。\n\n## 输入\n- 输入1...\n\n## 输出\n- 输出1...\n'
+    '建议结构：# Skill Title -> ## Instructions -> ## Examples -> ## Guidelines。\n' +
+    '在正文中引用 templates/...、references/...、scripts/... 可按需加载。\n\n' +
+    '示例：\n# Code Comment Expert\n## Instructions\n- 说明目标、输入、输出与步骤。\n\n## Examples\n- 输入: ...\n- 输出: ...\n\n## Guidelines\n- 约束、格式与质量标准。\n'
 
   const quickBlocks = [
-    { label: '用途', content: '\n## 技能用途\n请描述技能目标与适用场景。\n' },
-    { label: '输入', content: '\n## 输入\n- 输入字段与格式说明。\n' },
-    { label: '输出', content: '\n## 输出\n- 输出字段与格式说明。\n' },
-    { label: '步骤', content: '\n## 关键步骤\n1. 第一步\n2. 第二步\n' },
-    { label: '示例', content: '\n## 示例\n在此补充示例。\n' },
-    { label: '注意事项', content: '\n## 注意事项\n- 需要注意的限制或风险。\n' }
+    { label: '标题', content: '\n# Skill Title\n' },
+    { label: '指令', content: '\n## Instructions\n- 描述该技能要做什么、如何做。\n' },
+    { label: '示例', content: '\n## Examples\n- 输入: ...\n- 输出: ...\n' },
+    { label: '指南', content: '\n## Guidelines\n- 约束、质量标准与注意事项。\n' },
+    { label: '输出格式', content: '\n## Output Format\n1. ...\n2. ...\n' },
+    { label: '引用模板', content: '\n需要结构时参考 templates/your-template.md。\n' },
+    { label: '引用参考', content: '\n如需规范/术语，参考 references/your-reference.md。\n' },
+    { label: '调用脚本', content: '\n如需自动化，执行 scripts/your-script.py "{输入}"。\n' }
   ]
 
   const scripts = ref([])
   const resources = ref([])
+  const references = ref([])
+  const templates = ref([])
 
   const scriptRows = computed(() => skillsFilesToRows(scripts.value))
   const resourceRows = computed(() => skillsFilesToRows(resources.value))
+  const referenceRows = computed(() => skillsFilesToRows(references.value))
+  const templateRows = computed(() => skillsFilesToRows(templates.value))
 
   const createDialogVisible = ref(false)
   const scriptDialogVisible = ref(false)
   const resourceDialogVisible = ref(false)
+  const referenceDialogVisible = ref(false)
+  const templateDialogVisible = ref(false)
 
   const newSkill = reactive({
     name: '',
@@ -397,6 +520,14 @@
     name: ''
   })
 
+  const newReference = reactive({
+    name: ''
+  })
+
+  const newTemplate = reactive({
+    name: ''
+  })
+
   const editorVisible = ref(false)
   const editorContent = ref('')
   const editorFileName = ref('')
@@ -409,6 +540,8 @@
     }
     if (editorType.value === 'script') return `脚本：${editorFileName.value}`
     if (editorType.value === 'resource') return `资源：${editorFileName.value}`
+    if (editorType.value === 'reference') return `参考：${editorFileName.value}`
+    if (editorType.value === 'template') return `模板：${editorFileName.value}`
     if (editorType.value === 'constraint') return `全局约束：${editorFileName.value}`
     return `文件编辑：${editorFileName.value}`
   })
@@ -464,6 +597,8 @@
         form.markdown = detail?.markdown || ''
         scripts.value = detail?.scripts || []
         resources.value = detail?.resources || []
+        references.value = detail?.references || []
+        templates.value = detail?.templates || []
       }
     } catch (e) {
       ElMessage.error('获取技能详情失败')
@@ -499,6 +634,8 @@
     form.markdown = ''
     scripts.value = []
     resources.value = []
+    references.value = []
+    templates.value = []
     activeTab.value = 'config'
   }
 
@@ -598,6 +735,31 @@
 
   function appendMarkdown(content) {
     form.markdown = `${form.markdown || ''}${content}`
+  }
+
+  function insertFileSnippet(kind, fileName) {
+    if (!fileName) return
+    let snippet = ''
+    switch (kind) {
+      case 'script':
+        snippet = `如需自动化处理，可执行 scripts/${fileName} "{输入}"。`
+        break
+      case 'resource':
+        snippet = `背景资料见 resources/${fileName}。`
+        break
+      case 'reference':
+        snippet = `请遵循 references/${fileName} 的规范。`
+        break
+      case 'template':
+        snippet = `输出结构参考 templates/${fileName}。`
+        break
+      default:
+        snippet = ''
+    }
+    if (!snippet) return
+    appendMarkdown(`\n${snippet}\n`)
+    ElMessage.success('已插入到 SKILL.md')
+    activeTab.value = 'config'
   }
 
   function insertFullTemplate() {
@@ -702,6 +864,98 @@
     }
   }
 
+  function openReferenceDialog() {
+    if (!activeSkill.value) {
+      ElMessage.warning('请先选择技能')
+      return
+    }
+    newReference.name = ''
+    referenceDialogVisible.value = true
+  }
+
+  async function createReference() {
+    if (!newReference.name.trim()) {
+      ElMessage.warning('请输入参考文件名')
+      return
+    }
+    try {
+      const res = await createSkillReference({
+        tool: activeTool.value,
+        skill: activeSkill.value,
+        fileName: newReference.name.trim()
+      })
+      if (res.code === 0) {
+        referenceDialogVisible.value = false
+        await loadSkillDetail(activeSkill.value)
+        openEditor('reference', res.data.fileName, res.data.content)
+      }
+    } catch (e) {
+      ElMessage.error('创建参考失败')
+    }
+  }
+
+  async function openReferenceEditor(fileName) {
+    if (!fileName) return
+    try {
+      const res = await getSkillReference({
+        tool: activeTool.value,
+        skill: activeSkill.value,
+        fileName
+      })
+      if (res.code === 0) {
+        openEditor('reference', fileName, res.data.content)
+      }
+    } catch (e) {
+      ElMessage.error('读取参考失败')
+    }
+  }
+
+  function openTemplateDialog() {
+    if (!activeSkill.value) {
+      ElMessage.warning('请先选择技能')
+      return
+    }
+    newTemplate.name = ''
+    templateDialogVisible.value = true
+  }
+
+  async function createTemplate() {
+    if (!newTemplate.name.trim()) {
+      ElMessage.warning('请输入模板文件名')
+      return
+    }
+    try {
+      const res = await createSkillTemplate({
+        tool: activeTool.value,
+        skill: activeSkill.value,
+        fileName: newTemplate.name.trim()
+      })
+      if (res.code === 0) {
+        templateDialogVisible.value = false
+        await loadSkillDetail(activeSkill.value)
+        openEditor('template', res.data.fileName, res.data.content)
+      }
+    } catch (e) {
+      ElMessage.error('创建模板失败')
+    }
+  }
+
+  async function openTemplateEditor(fileName) {
+    if (!fileName) return
+    try {
+      const res = await getSkillTemplate({
+        tool: activeTool.value,
+        skill: activeSkill.value,
+        fileName
+      })
+      if (res.code === 0) {
+        openEditor('template', fileName, res.data.content)
+      }
+    } catch (e) {
+      ElMessage.error('读取模板失败')
+    }
+  }
+
   function openEditor(type, fileName, content) {
     editorType.value = type
     editorFileName.value = fileName
@@ -725,6 +979,26 @@
         }
       } else if (editorType.value === 'resource') {
         const res = await saveSkillResource({
+          tool: activeTool.value,
+          skill: activeSkill.value,
+          fileName: editorFileName.value,
+          content: editorContent.value
+        })
+        if (res.code === 0) {
+          ElMessage.success('保存成功')
+        }
+      } else if (editorType.value === 'reference') {
+        const res = await saveSkillReference({
+          tool: activeTool.value,
+          skill: activeSkill.value,
+          fileName: editorFileName.value,
+          content: editorContent.value
+        })
+        if (res.code === 0) {
+          ElMessage.success('保存成功')
+        }
+      } else if (editorType.value === 'template') {
+        const res = await saveSkillTemplate({
           tool: activeTool.value,
           skill: activeSkill.value,
           fileName: editorFileName.value,
@@ -779,11 +1053,11 @@
 
   function defaultSkillTemplate() {
     return (
-      '## 技能用途\n请在这里描述技能的目标、适用场景与限制条件。\n\n' +
-      '## 输入\n- 请补充输入格式与示例。\n\n' +
-      '## 输出\n- 请补充输出格式与示例。\n\n' +
-      '## 关键步骤\n1. 第一步\n2. 第二步\n\n' +
-      '## 示例\n在此补充一到两个典型示例。\n'
+      '# Skill Title\n' +
+      '## Instructions\n- 说明目标、输入、输出与步骤。\n\n' +
+      '## Examples\n- 输入: ...\n- 输出: ...\n\n' +
+      '## Guidelines\n- 约束、格式与质量标准。\n\n' +
+      '## Output Format\n1. ...\n2. ...\n'
     )
   }
 

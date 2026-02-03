@@ -286,6 +286,13 @@ web/
 - **职责**: 作为插件的唯一入口，实现 GVA 的插件接口，让框架能够识别和加载本插件。
     
 - **接口实现**: **必须**定义一个结构体并实现 `system.Plugin` 接口。
+
+- **插件注册**: **必须**调用 ```
+func init() {
+	interfaces.Register(Plugin)
+}
+```
+方法，让插件自动注册到本体中
     
 - **`Register`方法**: 实现 `Register` 方法，该方法接收一个 `*gin.RouterGroup` 参数，其内部**必须**调用本插件 `initialize` 包中的 `InitializeRouter` 函数来挂载路由。
     
@@ -296,6 +303,11 @@ web/
 - Router层引用API层：在路由函数中使用 `api.ApiGroupApp.XxxApi.XxxMethod`
 - Initialize/Router引用Router层：通过 `router.RouterGroupApp.XxxRouter.InitXxxRouter`
 - 各模块通过enter.go文件组织和暴露功能，避免循环引用
+
+### 插件默认注册功能
+
+`plugin/register.go` 文件下用 `	_ "github.com/flipped-aurora/gin-vue-admin/server/plugin/插件"
+` 的方式匿名引用用于激活插件本体的init
 
 ### 代码组织示例：
 

@@ -17,7 +17,7 @@
             <template #append>
               <el-button
                 :type="searchName ? 'primary' : 'info'"
-                @click="getTreeData"
+                @click="applySearch"
                 >搜索</el-button
               >
             </template>
@@ -29,7 +29,7 @@
       </div>
       <!-- 表格视图 -->
       <el-table
-        :data="treeData"
+        :data="displayTreeData"
         style="width: 100%"
         tooltip-effect="dark"
         :tree-props="{ children: 'children'}"
@@ -238,6 +238,7 @@
   })
 
   const treeData = ref([])
+  const displayTreeData = ref([])
 
   // 级联选择器配置
   const cascadeProps = {
@@ -249,6 +250,34 @@
   }
 
 
+  const normalizeSearch = (value) => (value ?? '').toString().toLowerCase()
+
+  const filterTree = (nodes, keyword) => {
+    const trimmed = normalizeSearch(keyword).trim()
+    if (!trimmed) {
+      return nodes
+    }
+    const walk = (list) => {
+      const result = []
+      for (const node of list) {
+        const label = normalizeSearch(node.label)
+        const children = Array.isArray(node.children) ? walk(node.children) : []
+        if (label.includes(trimmed) || children.length > 0) {
+          result.push({
+            ...node,
+            children
+          })
+        }
+      }
+      return result
+    }
+    return walk(nodes)
+  }
+
+  const applySearch = () => {
+    displayTreeData.value = filterTree(treeData.value, searchName.value)
+  }
+
   // 获取树形数据
   const getTreeData = async () => {
     if (!props.sysDictionaryID) return
@@ -258,6 +287,7 @@
       })
       if (res.code === 0) {
         treeData.value = res.data.list || []
+        applySearch()
       }
     } catch (error) {
       console.error('获取树形数据失败:', error)
@@ -374,7 +404,7 @@
 
   const clearSearchInput = () => {
     searchName.value = ''
-    getTreeData()
+    applySearch()
   }
 
   const handleCloseSearchInput = () => {
@@ -382,8 +412,8 @@
   }
 
   const handleInputKeyDown = (e) => {
-    if (e.key === 'Enter' && searchName.value.trim() !== '') {
-      getTreeData()
+    if (e.key === 'Enter') {
+      applySearch()
     }
   }
 

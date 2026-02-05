@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"fmt"
 	"go/ast"
 	"io"
 )
@@ -31,12 +30,6 @@ func (a *PluginInitializeV2) Parse(filename string, writer io.Writer) (file *ast
 }
 
 func (a *PluginInitializeV2) Injection(file *ast.File) error {
-	if !CheckImport(file, a.ImportPath) {
-		NewImport(a.ImportPath).Injection(file)
-		funcDecl := FindFunction(file, "bizPluginV2")
-		stmt := CreateStmt(fmt.Sprintf("PluginInitV2(engine, %s.Plugin)", a.PackageName))
-		funcDecl.Body.List = append(funcDecl.Body.List, stmt)
-	}
 	return nil
 }
 

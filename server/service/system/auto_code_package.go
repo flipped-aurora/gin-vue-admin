@@ -337,7 +337,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						pluginInitialize := &ast.PluginInitializeV2{
 							Type:        ast.TypePluginInitializeV2,
 							Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
-							PluginPath:  filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
+							PluginPath:  filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go"),
 							ImportPath:  fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
 							PackageName: entity.PackageName,
 						}

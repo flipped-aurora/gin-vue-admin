@@ -43,7 +43,7 @@ const (
 	TypePluginGen                 = "PluginGen"                 // server/plugin/{package}/gen/main.go
 	TypePluginApiEnter            = "PluginApiEnter"            // server/plugin/{package}/enter.go
 	TypePluginInitializeV1        = "PluginInitializeV1"        // server/initialize/plugin_biz_v1.go
-	TypePluginInitializeV2        = "PluginInitializeV2"        // server/initialize/plugin_biz_v2.go
+	TypePluginInitializeV2        = "PluginInitializeV2"        // server/plugin/register.go
 	TypePluginRouterEnter         = "PluginRouterEnter"         // server/plugin/{package}/enter.go
 	TypePluginServiceEnter        = "PluginServiceEnter"        // server/plugin/{package}/enter.go
 	TypePluginInitializeApi       = "PluginInitializeApi"       // server/plugin/{package}/initialize/api.go

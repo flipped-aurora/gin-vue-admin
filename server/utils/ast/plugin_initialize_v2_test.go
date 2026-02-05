@@ -22,8 +22,8 @@ func TestPluginInitialize_Injection(t *testing.T) {
 			name: "测试 Gva插件 注册注入",
 			fields: fields{
 				Type:       TypePluginInitializeV2,
-				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go"),
 				ImportPath: `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva"`,
 			},
 			wantErr: false,
@@ -37,12 +37,12 @@ func TestPluginInitialize_Injection(t *testing.T) {
 				PluginPath: tt.fields.PluginPath,
 				ImportPath: tt.fields.ImportPath,
 			}
-			file, err := a.Parse(a.Path, nil)
+			file, err := a.Parse("", nil)
 			if err != nil {
 				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			a.Injection(file)
-			err = a.Format(a.Path, nil, file)
+			err = a.Format("", nil, file)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Injection() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -69,8 +69,8 @@ func TestPluginInitialize_Rollback(t *testing.T) {
 			name: "测试 Gva插件 回滚",
 			fields: fields{
 				Type:       TypePluginInitializeV2,
-				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go"),
 				ImportPath: `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva"`,
 			},
 			wantErr: false,
@@ -86,12 +86,12 @@ func TestPluginInitialize_Rollback(t *testing.T) {
 				StructName:  "Plugin",
 				PackageName: "gva",
 			}
-			file, err := a.Parse(a.Path, nil)
+			file, err := a.Parse("", nil)
 			if err != nil {
 				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			a.Rollback(file)
-			err = a.Format(a.Path, nil, file)
+			err = a.Format("", nil, file)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Rollback() error = %v, wantErr %v", err, tt.wantErr)
 			}

@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-solid border-gray-100 h-full">
+  <div class="richtext-wrapper border border-solid border-gray-100 h-full">
     <Editor
       v-model="valueHtml"
       class="overflow-y-hidden mt-0.5"
@@ -55,4 +55,77 @@
   )
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .richtext-wrapper {
+    :deep(.w-e-text-container [data-slate-editor]) {
+      h1 {
+        font-size: 2em;
+        font-weight: 700;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        font-weight: 700;
+      }
+
+      h3 {
+        font-size: 1.17em;
+        font-weight: 700;
+      }
+
+      h4 {
+        font-size: 1em;
+        font-weight: 700;
+      }
+
+      h5 {
+        font-size: 0.83em;
+        font-weight: 700;
+      }
+
+      h6 {
+        font-size: 0.67em;
+        font-weight: 700;
+      }
+
+      ul,
+      ol {
+        margin: 1em 0;
+        padding-left: 2em;
+      }
+
+      ul {
+        list-style-type: disc;
+      }
+
+      ol {
+        list-style-type: decimal;
+      }
+
+      li {
+        margin: 0.25em 0;
+      }
+
+      a {
+        color: var(--el-color-primary, #409eff);
+        text-decoration: underline;
+      }
+    }
+
+    :deep(.w-e-text-container [data-slate-editor] ul ul) {
+      list-style-type: circle;
+    }
+
+    :deep(.w-e-text-container [data-slate-editor] ul ul ul) {
+      list-style-type: square;
+    }
+
+    :deep(.w-e-text-container [data-slate-editor] ol ol) {
+      list-style-type: lower-alpha;
+    }
+
+    :deep(.w-e-text-container [data-slate-editor] ol ol ol) {
+      list-style-type: lower-roman;
+    }
+  }
+</style>

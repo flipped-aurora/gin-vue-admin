@@ -21,8 +21,8 @@ export const useUserStore = defineStore('user', () => {
     authority: {}
   })
   const token = useStorage('token', '')
-  const xToken = useCookies('x-token')
-  const currentToken = computed(() => token.value || xToken.value || '')
+  const xToken = useCookies()
+  const currentToken = computed(() => token.value || xToken.get('x-token') || '')
 
   const setUserInfo = (val) => {
     userInfo.value = val

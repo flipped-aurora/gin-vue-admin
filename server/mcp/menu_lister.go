@@ -32,20 +32,9 @@ type MenuLister struct{}
 // New 创建菜单列表工具
 func (m *MenuLister) New() mcp.Tool {
 	return mcp.NewTool("list_all_menus",
-		mcp.WithDescription(`获取系统中所有菜单信息，包括菜单树结构、路由信息、组件路径等，用于前端编写vue-router时正确跳转
+		mcp.WithDescription(`获取系统所有菜单信息，包括菜单树结构、路由信息、组件路径，用于前端vue-router跳转。
 
-**功能说明：**
-- 返回完整的菜单树形结构
-- 包含路由配置信息（path、name、component）
-- 包含菜单元数据（title、icon、keepAlive等）
-- 包含菜单参数和按钮配置
-- 支持父子菜单关系展示
-
-**使用场景：**
-- 前端路由配置：获取所有菜单信息用于配置vue-router
-- 菜单权限管理：了解系统中所有可用的菜单项
-- 导航组件开发：构建动态导航菜单
-- 系统架构分析：了解系统的菜单结构和页面组织`),
+**详细说明**: /gva-helper/lister`),
 mcp.WithString("_placeholder",
 			mcp.Description("占位符，防止json schema校验失败"),
 		),	

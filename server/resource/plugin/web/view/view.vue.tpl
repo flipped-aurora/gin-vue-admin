@@ -224,7 +224,7 @@ getDataSourceFunc()
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="t('general.view')">
+    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" :title="t('general.detail')">
             <el-descriptions :column="1" border>
             {{- if .IsTree }}
             <el-descriptions-item :label="t('general.parentNode')">

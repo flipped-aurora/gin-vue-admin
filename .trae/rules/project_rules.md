@@ -194,6 +194,8 @@ web/
 
    - 结构体应继承 `global.GVA_MODEL` 以包含 `ID`, `CreatedAt`, `UpdatedAt` 等基础字段。
 
+   - 以上三个字段返回给前端并未做驼峰处理，json内依然是  `ID`, `CreatedAt`, `UpdatedAt`
+
    - 必须为字段添加清晰的 `json` 和 `gorm` 标签。
 
    - **⚠️ 重要提醒：数据类型一致性**
@@ -622,6 +624,130 @@ src/plugin/[插件名]/
    - **必须**对大列表进行虚拟滚动优化
    - **必须**合理使用缓存机制
    - **必须**优化图片和资源加载
+
+---
+
+## **⚠️ 前端工具库使用规范（强制）**
+
+> **核心原则：在开发任何前端功能时，必须优先检查并使用 `src/utils/` 目录下已封装好的工具函数，严禁重复造轮子。**
+
+`src/utils/` 目录提供了项目级别的通用工具集，涵盖 HTTP 请求、日期处理、格式转换、字符串操作、图片处理等多个方面。以下是各工具文件的功能说明：
+
+### **工具文件清单**
+
+#### `request.js` — HTTP 请求封装（核心）
+- 基于 Axios 封装的统一 HTTP 请求实例，内置全局 Loading 状态管理、JWT Token 自动注入、统一错误处理和响应拦截
+- **所有 API 请求必须且只能通过此模块发送，禁止直接使用 axios**
+- 用法：`import service from '@/utils/request'`
+
+#### `date.js` — 日期格式化
+- 扩展了 `Date.prototype.Format` 方法，支持自定义格式如 `yyyy-MM-dd hh:mm:ss`
+- 导出 `formatTimeToStr(times, pattern)` 将时间戳或日期对象格式化为字符串
+- **需要格式化日期时，优先使用此工具，禁止自行手写日期格式化逻辑**
+- 用法：`import { formatTimeToStr } from '@/utils/date'`
+
+#### `format.js` — 数据展示格式化（综合工具）
+- `formatBoolean(bool)` — 将布尔值转为 "是"/"否" 中文展示
+- `formatDate(time)` — 将时间转为 `yyyy-MM-dd hh:mm:ss` 格式字符串
+- `filterDict(value, options)` — 在字典选项数组（支持多级树形）中根据 value 查找对应的 label
+- `filterDataSource(dataSource, value)` — 在数据源（支持多级树形）中根据 value 查找 label，支持数组批量查找
+- `getDictFunc(type)` — 异步获取指定类型的字典数据
+- `ReturnArrImg(arr)` — 将图片路径（单个或数组）转为完整 URL，自动补全服务器前缀
+- `onDownloadFile(url)` — 触发文件下载
+- `setBodyPrimaryColor(primaryColor, darkMode)` — 动态设置主题色相关的 CSS 变量（支持亮/暗模式）
+- `CreateUUID()` — 生成 UUID v4 字符串
+- `getBaseUrl()` — 获取当前环境的 API BaseURL
+- **以上所有格式化场景优先使用此文件中的工具函数**
+- 用法：`import { formatBoolean, formatDate, filterDict, CreateUUID, ... } from '@/utils/format'`
+
+#### `dictionary.js` — 字典数据获取
+- `getDict(type, options)` — 异步获取字典数据，支持 `depth`（深度）和 `value`（指定节点）参数，内置 Pinia store 缓存，避免重复请求
+- **凡是需要字典下拉数据、字典树形数据的场景，必须使用此工具**
+- 用法：`import { getDict } from '@/utils/dictionary'`
+
+#### `stringFun.js` — 字符串处理
+- `toUpperCase(str)` — 首字母转大写
+- `toLowerCase(str)` — 首字母转小写
+- `toSQLLine(str)` — 驼峰命名转下划线（snake_case），如 `userName` → `user_name`
+- `toHump(name)` — 下划线命名转驼峰，如 `user_name` → `userName`
+- **进行命名格式转换时必须使用此工具，禁止使用正则手写**
+- 用法：`import { toUpperCase, toSQLLine, toHump } from '@/utils/stringFun'`
+
+#### `params.js` — 系统参数获取
+- `getParams(key)` — 异步从 Pinia store 中获取系统参数，内置缓存
+- **获取系统配置参数时，优先使用此工具**
+- 用法：`import { getParams } from '@/utils/params'`
+
+#### `bus.js` — 全局事件总线
+- 基于 `mitt` 封装的全局事件总线实例 `emitter`，用于跨组件通信
+- **跨层级组件通信优先使用此事件总线，避免滥用 Pinia**
+- 用法：`import { emitter } from '@/utils/bus'`
+
+#### `closeThisPage.js` — 关闭当前标签页
+- `closeThisPage()` — 触发关闭当前多标签页的操作（通过事件总线发送 `closeThisPage` 事件）
+- **在需要程序化关闭当前页面时，必须使用此工具**
+- 用法：`import { closeThisPage } from '@/utils/closeThisPage'`
+
+#### `downloadImg.js` — 图片下载
+- `downloadImage(imgsrc, name)` — 通过 Canvas 将图片转为 base64 后触发下载，支持跨域
+- **需要下载图片时，优先使用此工具**
+- 用法：`import { downloadImage } from '@/utils/downloadImg'`
+
+#### `image.js` — 图片压缩
+- 导出 `ImageCompress` 类，支持图片等比压缩至指定最大宽高，并可限制文件大小
+- **上传图片前需要做压缩处理时，使用此工具**
+- 用法：`import ImageCompress from '@/utils/image'`
+
+#### `event.js` — DOM 事件监听管理
+- `addEventListen(target, event, handler, capture)` — 安全地添加 DOM 事件监听
+- `removeEventListen(target, event, handler, capture)` — 安全地移除 DOM 事件监听
+- **手动操作 DOM 事件时，使用此工具以确保安全性**
+- 用法：`import { addEventListen, removeEventListen } from '@/utils/event'`
+
+#### `env.js` — 环境判断
+- `isDev` — 是否为开发环境（Boolean）
+- `isProd` — 是否为生产环境（Boolean）
+- **需要区分运行环境时，使用此工具，禁止直接读取 `import.meta.env`**
+- 用法：`import { isDev, isProd } from '@/utils/env'`
+
+#### `doc.js` — 外部文档跳转
+- `toDoc(url)` — 在新标签页打开指定 URL
+- 用法：`import { toDoc } from '@/utils/doc'`
+
+#### `fmtRouterTitle.js` — 路由标题格式化
+- `fmtTitle(title, route)` — 解析路由标题中的动态参数插值（如 `${id}` 替换为路由 params/query 值）
+- 用法：`import { fmtTitle } from '@/utils/fmtRouterTitle'`
+
+#### `page.js` — 页面标题生成
+- `getPageTitle(pageTitle, route)` — 根据页面标题和路由生成完整的浏览器 Tab 标题（格式：`页面名 - 应用名`）
+- 用法：`import getPageTitle from '@/utils/page'`
+
+#### `asyncRouter.js` — 异步路由处理
+- `asyncRouterHandle(asyncRouter)` — 将后端返回的路由配置（字符串 component 路径）动态转换为 Vue 组件的 import 函数，支持 `view/` 和 `plugin/` 目录
+- **动态路由相关逻辑已由此工具处理，不需要也不应该手动实现**
+- 用法：`import { asyncRouterHandle } from '@/utils/asyncRouter'`
+
+#### `btnAuth.js` — 按钮权限
+- `useBtnAuth()` — Composition API Hook，返回当前路由挂载的按钮权限对象（来自 `route.meta.btns`），用于控制操作按钮的显示
+- **实现按钮级别权限控制时，必须使用此 Hook**
+- 用法：`import { useBtnAuth } from '@/utils/btnAuth'`
+
+### **使用强制要求**
+
+| 场景 | 必须使用的工具 |
+|------|----------------|
+| 发送 HTTP 请求 | `@/utils/request` |
+| 格式化日期时间 | `@/utils/date` 或 `@/utils/format` 中的 `formatDate` |
+| 获取字典数据 | `@/utils/dictionary` 中的 `getDict` |
+| 布尔值/字典值展示转换 | `@/utils/format` 中的 `formatBoolean` / `filterDict` |
+| 生成 UUID | `@/utils/format` 中的 `CreateUUID` |
+| 驼峰/下划线命名转换 | `@/utils/stringFun` |
+| 获取系统参数 | `@/utils/params` 中的 `getParams` |
+| 按钮权限判断 | `@/utils/btnAuth` 中的 `useBtnAuth` |
+| 跨组件事件通信 | `@/utils/bus` 中的 `emitter` |
+| 图片下载 | `@/utils/downloadImg` 中的 `downloadImage` |
+| 图片上传压缩 | `@/utils/image` 中的 `ImageCompress` |
+| 关闭当前 Tab 页 | `@/utils/closeThisPage` 中的 `closeThisPage` |
 
 ---
 

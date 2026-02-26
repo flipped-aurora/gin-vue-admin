@@ -97,7 +97,7 @@ getDataSourceFunc()
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
       {{- if .GvaModel }}
-      <el-form-item label="{{"{{"}} t('general.createdDate') {{"}}"}}" prop="createdAtRange">
+      <el-form-item :label="t('general.createdDate')" prop="createdAtRange">
       <template #label>
         <span>
           {{"{{"}} t('general.createdDate') {{"}}"}}
@@ -110,9 +110,9 @@ getDataSourceFunc()
                   v-model="searchInfo.createdAtRange"
                   class="!w-380px"
                   type="datetimerange"
-                  range-separator="{{"{{"}} t('general.to') {{"}}"}}"
-                  start-placeholder="{{"{{"}} t('general.startTime') {{"}}"}}"
-                  end-placeholder="{{"{{"}} t('general.endTime') {{"}}"}}"
+                  range-separator="t('general.to')"
+                  start-placeholder="t('general.startTime')"
+                  end-placeholder="t('general.endTime')"
                 />
        </el-form-item>
       {{ end -}}
@@ -158,7 +158,7 @@ getDataSourceFunc()
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column sortable align="left" label="{{"{{"}} t('general.date') {{"}}"}}" prop="CreatedAt" {{- if .IsTree }} min-{{- end }}width="180">
+        <el-table-column sortable align="left" :label="t('general.date')" prop="CreatedAt" {{- if .IsTree }} min-{{- end }}width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -203,7 +203,7 @@ getDataSourceFunc()
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
           {{- if .IsTree }}
-            <el-form-item label="{{"{{"}} t('general.parentNode') {{"}}"}}:" prop="parentID" >
+            <el-form-item :label="t('general.parentNode'):" prop="parentID" >
                 <el-tree-select
                     v-model="formData.parentID"
                     :data="[rootNode,...tableData]"
@@ -212,7 +212,7 @@ getDataSourceFunc()
                     :props="defaultProps"
                     clearable
                     style="width: 240px"
-                    placeholder="{{"{{"}} t('general.rootNode') {{"}}"}}"
+                    placeholder="t('general.rootNode')"
                 />
             </el-form-item>
           {{- end }}
@@ -224,10 +224,10 @@ getDataSourceFunc()
           </el-form>
     </el-drawer>
 
-    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="{{"{{"}} t('general.view') {{"}}"}}">
+    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow" title="t('general.view')">
             <el-descriptions :column="1" border>
             {{- if .IsTree }}
-            <el-descriptions-item label="{{"{{"}} t('general.parentNode') {{"}}"}}">
+            <el-descriptions-item :label="t('general.parentNode')">
                 <el-tree-select
                   v-model="detailForm.parentID"
                   :data="[rootNode,...tableData]"
@@ -237,7 +237,7 @@ getDataSourceFunc()
                   :props="defaultProps"
                   clearable
                   style="width: 240px"
-                  placeholder="{{"{{"}} t('general.rootNode') {{"}}"}}"
+                  placeholder="t('general.rootNode')"
                 />
             </el-descriptions-item>
             {{- end }}

@@ -167,12 +167,12 @@ getDataSourceFunc()
             {{ GenerateTableColumn . }}
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="{{"{{"}} t('general.operations') {{"}}"}}" fixed="right" min-width="240">
+        <el-table-column align="left" :label="t('general.operations')" fixed="right" min-width="240">
             <template #default="scope">
             {{- if .IsTree }}
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" link class="table-button" @click="openDialog(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}} t('general.addChild') {{"}}"}}</el-button>
             {{- end }}
-            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}} t('general.view') {{"}}"}}</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}} t('general.detail') {{"}}"}}</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{"{{"}} t('general.edit') {{"}}"}}</el-button>
             <el-button {{ if .IsTree }}v-if="!scope.row.children?.length"{{ end }} {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">{{"{{"}} t('general.delete') {{"}}"}}</el-button>
             </template>

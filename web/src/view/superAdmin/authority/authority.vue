@@ -178,11 +178,13 @@
         v-loading="assignLoading"
         :data="userTableData"
         row-key="ID"
+        :default-sort="{ prop: 'ID', order: 'descending' }"
+        @sort-change="sortChange"
         @select="handleSelect"
         @select-all="handleSelectAll"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column label="ID" prop="ID" width="80" />
+        <el-table-column label="ID" prop="ID" width="80" sortable="custom" />
         <el-table-column label="用户名" prop="userName" min-width="120" />
         <el-table-column label="昵称" prop="nickName" min-width="120" />
       </el-table>
@@ -221,6 +223,7 @@
   import { ref, nextTick } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { useAppStore } from "@/pinia"
+  import { toSQLLine } from '@/utils/stringFun'
 
   defineOptions({
     name: 'Authority'
@@ -476,7 +479,7 @@
   const assignRow = ref({})
   const userTableData = ref([])
   const userTotal = ref(0)
-  const userSearchInfo = ref({ page: 1, pageSize: 10, username: '', nickName: '' })
+  const userSearchInfo = ref({ page: 1, pageSize: 10, username: '', nickName: '', orderKey: 'id', desc: true })
   const assignLoading = ref(false)
   const assignSubmitting = ref(false)
   const userTableRef = ref(null)
@@ -526,6 +529,14 @@
         selectedUserIds.value.delete(user.ID)
       }
     })
+  }
+
+  const sortChange = ({ prop, order }) => {
+    if (prop) {
+      userSearchInfo.value.orderKey = prop === 'ID' ? 'id' : toSQLLine(prop)
+      userSearchInfo.value.desc = order === 'descending'
+    }
+    getUserData()
   }
 
   const searchUserData = () => {

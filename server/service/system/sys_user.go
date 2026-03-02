@@ -109,7 +109,25 @@ func (userService *UserService) GetUserInfoList(info systemReq.GetUserList) (lis
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
+
+	orderStr := "id desc"
+	if info.OrderKey != "" {
+		allowedOrders := map[string]bool{
+			"id":        true,
+			"username":  true,
+			"nick_name": true,
+			"phone":     true,
+			"email":     true,
+		}
+		if allowedOrders[info.OrderKey] {
+			orderStr = info.OrderKey
+			if info.Desc {
+				orderStr = info.OrderKey + " desc"
+			}
+		}
+	}
+
+	err = db.Limit(limit).Offset(offset).Order(orderStr).Preload("Authorities").Preload("Authority").Find(&userList).Error
 	return userList, total, err
 }
 

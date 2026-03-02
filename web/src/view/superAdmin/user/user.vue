@@ -29,13 +29,13 @@
           >新增用户</el-button
         >
       </div>
-      <el-table :data="tableData" row-key="ID">
+      <el-table :data="tableData" row-key="ID" :default-sort="{ prop: 'ID', order: 'descending' }" @sort-change="sortChange">
         <el-table-column align="left" label="头像" min-width="75">
           <template #default="scope">
             <CustomPic style="margin-top: 8px" :pic-src="scope.row.headerImg" />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="ID" min-width="50" prop="ID" />
+        <el-table-column align="left" label="ID" min-width="50" prop="ID" sortable="custom" />
         <el-table-column
           align="left"
           label="用户名"
@@ -267,6 +267,7 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import SelectImage from '@/components/selectImage/selectImage.vue'
   import { useAppStore } from "@/pinia";
+  import { toSQLLine } from '@/utils/stringFun'
 
   defineOptions({
     name: 'User'
@@ -293,6 +294,8 @@
       phone: '',
       email: ''
     }
+    orderKey.value = 'id'
+    desc.value = true
     getTableData()
   }
   // 初始化相关
@@ -321,6 +324,16 @@
   const total = ref(0)
   const pageSize = ref(10)
   const tableData = ref([])
+  const orderKey = ref('id')
+  const desc = ref(true)
+
+  const sortChange = ({ prop, order }) => {
+    if (prop) {
+      orderKey.value = prop === 'ID' ? 'id' : toSQLLine(prop)
+      desc.value = order === 'descending'
+    }
+    getTableData()
+  }
   // 分页
   const handleSizeChange = (val) => {
     pageSize.value = val
@@ -337,6 +350,8 @@
     const table = await getUserList({
       page: page.value,
       pageSize: pageSize.value,
+      orderKey: orderKey.value,
+      desc: desc.value,
       ...searchInfo.value
     })
     if (table.code === 0) {

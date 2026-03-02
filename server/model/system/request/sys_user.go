@@ -67,3 +67,9 @@ type GetUserList struct {
 	Phone    string `json:"phone" form:"phone"`
 	Email    string `json:"email" form:"email"`
 }
+
+// SetRoleUsers 通过角色ID全量覆盖关联用户列表
+type SetRoleUsers struct {
+	AuthorityId uint   `json:"authorityId" form:"authorityId"` // 角色ID
+	UserIds     []uint `json:"userIds" form:"userIds"`         // 用户ID列表
+}

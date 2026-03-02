@@ -331,3 +331,82 @@ func (authorityService *AuthorityService) GetParentAuthorityID(authorityID uint)
 	}
 	return *authority.ParentId, nil
 }
+
+// GetUserIdsByAuthorityId 获取拥有指定角色的所有用户ID
+func (authorityService *AuthorityService) GetUserIdsByAuthorityId(authorityId uint) (userIds []uint, err error) {
+	var records []system.SysUserAuthority
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&records).Error
+	if err != nil {
+		return nil, err
+	}
+	for _, r := range records {
+		userIds = append(userIds, r.SysUserId)
+	}
+	return userIds, nil
+}
+
+// SetRoleUsers 全量覆盖某角色关联的用户列表
+// 入参：角色ID + 目标用户ID列表，保存时将该角色的关联关系完全替换为传入列表
+func (authorityService *AuthorityService) SetRoleUsers(authorityId uint, userIds []uint) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		// 1. 查出当前拥有该角色的所有用户ID
+		var existingRecords []system.SysUserAuthority
+		if err := tx.Where("sys_authority_authority_id = ?", authorityId).Find(&existingRecords).Error; err != nil {
+			return err
+		}
+
+		currentSet := make(map[uint]struct{})
+		for _, r := range existingRecords {
+			currentSet[r.SysUserId] = struct{}{}
+		}
+
+		targetSet := make(map[uint]struct{})
+		for _, id := range userIds {
+			targetSet[id] = struct{}{}
+		}
+
+		// 2. 删除该角色所有已有的用户关联
+		if err := tx.Delete(&system.SysUserAuthority{}, "sys_authority_authority_id = ?", authorityId).Error; err != nil {
+			return err
+		}
+
+		// 3. 对被移除的用户：若该角色是其主角色，则将主角色切换为其剩余的其他角色
+		for userId := range currentSet {
+			if _, ok := targetSet[userId]; ok {
+				continue // 仍在目标列表中，不处理
+			}
+			var user system.SysUser
+			if err := tx.First(&user, "id = ?", userId).Error; err != nil {
+				continue
+			}
+			if user.AuthorityId == authorityId {
+				// 从剩余关联（已删除当前角色后）中找另一个角色作为主角色
+				var another system.SysUserAuthority
+				if err := tx.Where("sys_user_id = ?", userId).First(&another).Error; err != nil {
+					// 没有其他角色，主角色保持不变，不做处理
+					continue
+				}
+				if err := tx.Model(&system.SysUser{}).Where("id = ?", userId).
+					Update("authority_id", another.SysAuthorityAuthorityId).Error; err != nil {
+					return err
+				}
+			}
+		}
+
+		// 4. 批量插入新的关联记录
+		if len(userIds) > 0 {
+			newRecords := make([]system.SysUserAuthority, 0, len(userIds))
+			for _, userId := range userIds {
+				newRecords = append(newRecords, system.SysUserAuthority{
+					SysUserId:               userId,
+					SysAuthorityAuthorityId: authorityId,
+				})
+			}
+			if err := tx.Create(&newRecords).Error; err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
+}

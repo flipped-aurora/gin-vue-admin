@@ -21,12 +21,13 @@
           </el-form-item>
           <el-form-item label="Oss类型">
             <el-select v-model="config.system['oss-type']" class="w-full">
-              <el-option value="local">本地</el-option>
-              <el-option value="qiniu">七牛</el-option>
-              <el-option value="tencent-cos">腾讯云COS</el-option>
-              <el-option value="aliyun-oss">阿里云OSS</el-option>
-              <el-option value="huawei-obs">华为云OBS</el-option>
-              <el-option value="cloudflare-r2">cloudflare R2</el-option>
+              <el-option value="local" label="本地" />
+              <el-option value="qiniu" label="七牛" />
+              <el-option value="tencent-cos" label="腾讯云COS" />
+              <el-option value="aliyun-oss" label="阿里云OSS" />
+              <el-option value="huawei-obs" label="华为云OBS" />
+              <el-option value="cloudflare-r2" label="cloudflare R2" />
+              <el-option value="minio">MinIO</el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="多点登录拦截">
@@ -857,6 +858,48 @@
               />
             </el-form-item>
           </template>
+          <template v-if="config.system['oss-type'] === 'minio'">
+            <h2>MinIO上传配置</h2>
+            <el-form-item label="Endpoint">
+              <el-input
+                v-model.trim="config.minio.endpoint"
+                placeholder="请输入Endpoint，如 127.0.0.1:9000"
+              />
+            </el-form-item>
+            <el-form-item label="Access Key ID">
+              <el-input
+                v-model.trim="config.minio['access-key-id']"
+                placeholder="请输入Access Key ID"
+              />
+            </el-form-item>
+            <el-form-item label="Access Key Secret">
+              <el-input
+                v-model.trim="config.minio['access-key-secret']"
+                placeholder="请输入Access Key Secret"
+              />
+            </el-form-item>
+            <el-form-item label="存储桶名称">
+              <el-input
+                v-model.trim="config.minio['bucket-name']"
+                placeholder="请输入存储桶名称"
+              />
+            </el-form-item>
+            <el-form-item label="访问域名">
+              <el-input
+                v-model.trim="config.minio['bucket-url']"
+                placeholder="请输入访问域名"
+              />
+            </el-form-item>
+            <el-form-item label="Base Path">
+              <el-input
+                v-model.trim="config.minio['base-path']"
+                placeholder="请输入Base Path"
+              />
+            </el-form-item>
+            <el-form-item label="开启SSL">
+              <el-switch v-model="config.minio['use-ssl']" />
+            </el-form-item>
+          </template>
         </el-tab-pane>
         <el-tab-pane label="Excel上传配置" name="11" class="mt-3.5">
           <el-form-item label="合成目标地址">
@@ -999,6 +1042,7 @@
     'aliyun-oss': {},
     'hua-wei-obs': {},
     'cloudflare-r2': {},
+    minio: {},
     captcha: {},
     zap: {},
     local: {},

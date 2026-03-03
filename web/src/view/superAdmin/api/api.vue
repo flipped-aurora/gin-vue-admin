@@ -113,6 +113,14 @@
               编辑
             </el-button>
             <el-button
+              icon="user"
+              type="primary"
+              link
+              @click="openAssignRoleDrawer(scope.row)"
+            >
+              分配角色
+            </el-button>
+            <el-button
               icon="delete"
               type="primary"
               link
@@ -395,6 +403,35 @@
         </el-form-item>
       </el-form>
     </el-drawer>
+
+    <!-- 分配给角色抽屉 -->
+    <el-drawer
+      v-model="assignRoleDrawerVisible"
+      :size="appStore.drawerSize"
+      :show-close="false"
+      destroy-on-close
+    >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">分配角色 - {{ assignApiRow.description }}</span>
+          <div>
+            <el-button @click="assignRoleDrawerVisible = false">取 消</el-button>
+            <el-button type="primary" :loading="assignRoleSubmitting" @click="confirmAssignRole">确 定</el-button>
+          </div>
+        </div>
+      </template>
+      <warning-bar title="注：保存时将全量覆盖该API的角色关联关系，并自动刷新Casbin缓存" />
+      <el-tree
+        ref="roleTreeRef"
+        v-loading="assignRoleLoading"
+        :data="authorityTreeData"
+        :props="{ label: 'authorityName', children: 'children' }"
+        node-key="authorityId"
+        show-checkbox
+        check-strictly
+        default-expand-all
+      />
+    </el-drawer>
   </div>
 </template>
 
@@ -410,11 +447,14 @@
     syncApi,
     getApiGroups,
     ignoreApi,
-    enterSyncApi
+    enterSyncApi,
+    getApiRoles,
+    setApiRoles
   } from '@/api/api'
+  import { getAuthorityList } from '@/api/authority'
   import { toSQLLine } from '@/utils/stringFun'
   import WarningBar from '@/components/warningBar/warningBar.vue'
-  import { ref } from 'vue'
+  import { ref, nextTick } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import ExportExcel from '@/components/exportExcel/exportExcel.vue'
   import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
@@ -822,6 +862,52 @@
         })
       }
     }
+  }
+
+  // 分配给角色
+  const assignRoleDrawerVisible = ref(false)
+  const assignApiRow = ref({})
+  const authorityTreeData = ref([])
+  const assignRoleLoading = ref(false)
+  const assignRoleSubmitting = ref(false)
+  const roleTreeRef = ref(null)
+
+  const openAssignRoleDrawer = async (row) => {
+    assignApiRow.value = row
+    assignRoleDrawerVisible.value = true
+    assignRoleLoading.value = true
+    const [authRes, rolesRes] = await Promise.all([
+      getAuthorityList(),
+      getApiRoles(row.path, row.method)
+    ])
+    if (authRes.code === 0) {
+      authorityTreeData.value = authRes.data
+    }
+    if (rolesRes.code === 0 && rolesRes.data) {
+      nextTick(() => {
+        roleTreeRef.value?.setCheckedKeys(rolesRes.data)
+      })
+    }
+    assignRoleLoading.value = false
+  }
+
+  const confirmAssignRole = async () => {
+    assignRoleSubmitting.value = true
+    try {
+      const checkedKeys = roleTreeRef.value?.getCheckedKeys(false) || []
+      const res = await setApiRoles({
+        path: assignApiRow.value.path,
+        method: assignApiRow.value.method,
+        authorityIds: checkedKeys
+      })
+      if (res.code === 0) {
+        ElMessage({ type: 'success', message: '分配成功!' })
+        assignRoleDrawerVisible.value = false
+      }
+    } catch {
+      ElMessage({ type: 'error', message: '分配失败，请重试' })
+    }
+    assignRoleSubmitting.value = false
   }
 </script>
 

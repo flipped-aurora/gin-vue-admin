@@ -314,6 +314,65 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 	return menus, err
 }
 
+// GetAuthoritiesByMenuId 获取拥有指定菜单的所有角色ID
+func (menuService *MenuService) GetAuthoritiesByMenuId(menuId uint) (authorityIds []uint, err error) {
+	var records []system.SysAuthorityMenu
+	err = global.GVA_DB.Where("sys_base_menu_id = ?", menuId).Find(&records).Error
+	if err != nil {
+		return nil, err
+	}
+	for _, r := range records {
+		id, e := strconv.Atoi(r.AuthorityId)
+		if e == nil {
+			authorityIds = append(authorityIds, uint(id))
+		}
+	}
+	return authorityIds, nil
+}
+
+// GetDefaultRouterAuthorityIds 获取将指定菜单设为首页的角色ID列表
+func (menuService *MenuService) GetDefaultRouterAuthorityIds(menuId uint) (authorityIds []uint, err error) {
+	var menu system.SysBaseMenu
+	err = global.GVA_DB.First(&menu, menuId).Error
+	if err != nil {
+		return nil, err
+	}
+	var authorities []system.SysAuthority
+	err = global.GVA_DB.Where("default_router = ?", menu.Name).Find(&authorities).Error
+	if err != nil {
+		return nil, err
+	}
+	for _, auth := range authorities {
+		authorityIds = append(authorityIds, auth.AuthorityId)
+	}
+	return authorityIds, nil
+}
+
+// SetMenuAuthorities 全量覆盖某菜单关联的角色列表
+func (menuService *MenuService) SetMenuAuthorities(menuId uint, authorityIds []uint) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		// 1. 删除该菜单所有已有的角色关联
+		if err := tx.Where("sys_base_menu_id = ?", menuId).Delete(&system.SysAuthorityMenu{}).Error; err != nil {
+			return err
+		}
+		// 2. 批量插入新的关联记录
+		if len(authorityIds) > 0 {
+			menuIdStr := strconv.Itoa(int(menuId))
+			newRecords := make([]system.SysAuthorityMenu, 0, len(authorityIds))
+			for _, authorityId := range authorityIds {
+				newRecords = append(newRecords, system.SysAuthorityMenu{
+					MenuId:      menuIdStr,
+					AuthorityId: strconv.Itoa(int(authorityId)),
+				})
+			}
+			if err := tx.Create(&newRecords).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
 // UserAuthorityDefaultRouter 用户角色默认路由检查
 //
 //	Author [SliverHorn](https://github.com/SliverHorn)

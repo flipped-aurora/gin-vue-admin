@@ -7,7 +7,7 @@ import vuePlugin from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import VueFilePathPlugin from './vitePlugin/componentName/index.js'
 import { svgBuilder } from 'vite-auto-import-svg'
-import vueRootValidator from 'vite-check-multiple-dom';
+import vueRootValidator from 'vite-check-multiple-dom'
 import { AddSecret } from './vitePlugin/secret'
 import UnoCSS from '@unocss/vite'
 
@@ -15,7 +15,6 @@ import UnoCSS from '@unocss/vite'
 export default ({ mode }) => {
   AddSecret('')
   const env = loadEnv(mode, process.cwd())
-
   viteLogo(env)
 
   const timestamp = Date.parse(new Date())
@@ -37,9 +36,9 @@ export default ({ mode }) => {
     }
   }
 
-  const base = "/"
-  const root = "./"
-  const outDir = "dist"
+  const base = '/'
+  const root = './'
+  const outDir = 'dist'
 
   const config = {
     base: base, // 编译后js导入的资源路径
@@ -47,9 +46,6 @@ export default ({ mode }) => {
     publicDir: 'public', // 静态资源文件夹
     resolve: {
       alias
-    },
-    define: {
-      'process.env': {}
     },
     css: {
       preprocessorOptions: {
@@ -72,12 +68,12 @@ export default ({ mode }) => {
           rewrite: (path) =>
             path.replace(new RegExp('^' + env.VITE_BASE_API), '')
         },
-        "/plugin": {
+        '/plugin': {
           // 需要代理的路径   例如 '/api'
           target: `https://plugin.gin-vue-admin.com/api/`, // 代理到 目标路径
           changeOrigin: true,
           rewrite: (path) =>
-            path.replace(new RegExp("^/plugin"), '')
+            path.replace(new RegExp('^/plugin'), '')
         }
       }
     },

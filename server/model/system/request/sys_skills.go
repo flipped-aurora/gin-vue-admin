@@ -11,6 +11,16 @@ type SkillDetailRequest struct {
 	Skill string `json:"skill"`
 }
 
+type SkillDeleteRequest struct {
+	Tool  string `json:"tool"`
+	Skill string `json:"skill"`
+}
+
+type SkillPackageRequest struct {
+	Tool  string `json:"tool"`
+	Skill string `json:"skill"`
+}
+
 type SkillSaveRequest struct {
 	Tool      string           `json:"tool"`
 	Skill     string           `json:"skill"`
@@ -61,4 +71,10 @@ type SkillGlobalConstraintSaveRequest struct {
 	Tool      string   `json:"tool"`
 	Content   string   `json:"content"`
 	SyncTools []string `json:"syncTools"`
+}
+
+type DownloadOnlineSkillReq struct {
+	Tool    string `json:"tool" binding:"required"`
+	ID      uint   `json:"id" binding:"required"`
+	Version string `json:"version" binding:"required"`
 }

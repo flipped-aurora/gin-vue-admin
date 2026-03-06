@@ -85,6 +85,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "角色", Method: "PUT", Path: "/authority/updateAuthority", Description: "更新角色信息"},
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/getAuthorityList", Description: "获取角色列表"},
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/setDataAuthority", Description: "设置角色资源权限"},
+		{ApiGroup: "角色", Method: "GET", Path: "/authority/getUsersByAuthority", Description: "获取角色关联用户ID列表"},
+		{ApiGroup: "角色", Method: "POST", Path: "/authority/setRoleUsers", Description: "全量覆盖角色关联用户"},
 
 		{ApiGroup: "casbin", Method: "POST", Path: "/casbin/updateCasbin", Description: "更改角色api权限"},
 		{ApiGroup: "casbin", Method: "POST", Path: "/casbin/getPolicyPathByAuthorityId", Description: "获取权限列表"},
@@ -118,6 +120,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillList", Description: "获取技能列表"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillDetail", Description: "获取技能详情"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveSkill", Description: "保存技能定义"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/deleteSkill", Description: "删除技能"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/createScript", Description: "创建技能脚本"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getScript", Description: "读取技能脚本"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveScript", Description: "保存技能脚本"},
@@ -132,6 +135,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveTemplate", Description: "保存技能模板"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getGlobalConstraint", Description: "读取全局约束"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveGlobalConstraint", Description: "保存全局约束"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/packageSkill", Description: "打包技能"},
 
 		{ApiGroup: "客户", Method: "PUT", Path: "/customer/customer", Description: "更新客户"},
 		{ApiGroup: "客户", Method: "POST", Path: "/customer/customer", Description: "创建客户"},

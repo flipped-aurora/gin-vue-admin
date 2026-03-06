@@ -171,3 +171,45 @@ func (casbinService *CasbinService) FreshCasbin() (err error) {
 	err = e.LoadPolicy()
 	return err
 }
+
+// GetAuthoritiesByApi 获取拥有指定API权限的所有角色ID
+func (casbinService *CasbinService) GetAuthoritiesByApi(path, method string) (authorityIds []uint, err error) {
+	var rules []gormadapter.CasbinRule
+	err = global.GVA_DB.Where("ptype = 'p' AND v1 = ? AND v2 = ?", path, method).Find(&rules).Error
+	if err != nil {
+		return nil, err
+	}
+	for _, r := range rules {
+		id, e := strconv.Atoi(r.V0)
+		if e == nil {
+			authorityIds = append(authorityIds, uint(id))
+		}
+	}
+	return authorityIds, nil
+}
+
+// SetApiAuthorities 全量覆盖某API关联的角色列表
+func (casbinService *CasbinService) SetApiAuthorities(path, method string, authorityIds []uint) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		// 1. 删除该API所有已有的角色关联
+		if err := tx.Where("ptype = 'p' AND v1 = ? AND v2 = ?", path, method).Delete(&gormadapter.CasbinRule{}).Error; err != nil {
+			return err
+		}
+		// 2. 批量插入新的关联记录
+		if len(authorityIds) > 0 {
+			newRules := make([]gormadapter.CasbinRule, 0, len(authorityIds))
+			for _, authorityId := range authorityIds {
+				newRules = append(newRules, gormadapter.CasbinRule{
+					Ptype: "p",
+					V0:    strconv.Itoa(int(authorityId)),
+					V1:    path,
+					V2:    method,
+				})
+			}
+			if err := tx.Create(&newRules).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}

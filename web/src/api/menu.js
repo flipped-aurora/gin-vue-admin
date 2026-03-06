@@ -111,3 +111,31 @@ export const getBaseMenuById = (data) => {
     data
   })
 }
+
+/**
+ * 获取拥有指定菜单的角色ID列表
+ * @param {number} menuId 菜单ID
+ * @returns {Promise<number[]>} 角色ID数组
+ */
+export const getMenuRoles = (menuId) => {
+  return service({
+    url: '/menu/getMenuRoles',
+    method: 'get',
+    params: { menuId }
+  })
+}
+
+/**
+ * 全量覆盖某菜单关联的角色列表
+ * @param {Object} data
+ * @param {number} data.menuId 菜单ID
+ * @param {number[]} data.authorityIds 角色ID列表
+ * @returns {Promise}
+ */
+export const setMenuRoles = (data) => {
+  return service({
+    url: '/menu/setMenuRoles',
+    method: 'post',
+    data
+  })
+}

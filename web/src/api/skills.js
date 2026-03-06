@@ -31,6 +31,14 @@ export const saveSkill = (data) => {
   })
 }
 
+export const deleteSkill = (data) => {
+  return service({
+    url: '/skills/deleteSkill',
+    method: 'post',
+    data
+  })
+}
+
 export const createSkillScript = (data) => {
   return service({
     url: '/skills/createScript',
@@ -138,6 +146,23 @@ export const getGlobalConstraint = (data) => {
 export const saveGlobalConstraint = (data) => {
   return service({
     url: '/skills/saveGlobalConstraint',
+    method: 'post',
+    data
+  })
+}
+
+export const packageSkill = (data) => {
+  return service({
+    url: '/skills/packageSkill',
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}
+
+export const downloadOnlineSkill = (data) => {
+  return service({
+    url: '/skills/downloadOnlineSkill',
     method: 'post',
     data
   })

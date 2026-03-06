@@ -93,6 +93,14 @@
             <el-button
               type="primary"
               link
+              icon="user"
+              @click="openAssignRoleDrawer(scope.row)"
+            >
+              分配角色
+            </el-button>
+            <el-button
+              type="primary"
+              link
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >
@@ -508,6 +516,35 @@
              </el-table>
        </div>
     </el-drawer>
+
+    <!-- 分配给角色抽屉 -->
+    <el-drawer
+      v-model="assignRoleDrawerVisible"
+      :size="appStore.drawerSize"
+      :show-close="false"
+      destroy-on-close
+    >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">分配角色 - {{ assignMenuRow.meta?.title }}</span>
+          <div>
+            <el-button @click="assignRoleDrawerVisible = false">取 消</el-button>
+            <el-button type="primary" :loading="assignRoleSubmitting" @click="confirmAssignRole">确 定</el-button>
+          </div>
+        </div>
+      </template>
+      <warning-bar title="注：保存时将全量覆盖该菜单的角色关联关系；作为角色首页的菜单不可取消勾选" />
+      <el-tree
+        ref="roleTreeRef"
+        v-loading="assignRoleLoading"
+        :data="authorityTreeData"
+        :props="{ label: 'authorityName', children: 'children', disabled: isRoleDisabled }"
+        node-key="authorityId"
+        show-checkbox
+        check-strictly
+        default-expand-all
+      />
+    </el-drawer>
   </div>
 </template>
 
@@ -517,12 +554,15 @@
     getMenuList,
     addBaseMenu,
     deleteBaseMenu,
-    getBaseMenuById
+    getBaseMenuById,
+    getMenuRoles,
+    setMenuRoles
   } from '@/api/menu'
+  import { getAuthorityList } from '@/api/authority'
   import icon from '@/view/superAdmin/menu/icon.vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, nextTick } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { QuestionFilled, InfoFilled, Delete } from '@element-plus/icons-vue'
   import { toDoc } from '@/utils/doc'
@@ -770,6 +810,63 @@
     isEdit.value = true
     setOptions()
     dialogFormVisible.value = true
+  }
+
+  // 分配给角色
+  const assignRoleDrawerVisible = ref(false)
+  const assignMenuRow = ref({})
+  const authorityTreeData = ref([])
+  const assignRoleLoading = ref(false)
+  const assignRoleSubmitting = ref(false)
+  const roleTreeRef = ref(null)
+  const defaultRouterAuthorityIds = ref(new Set())
+
+  const isRoleDisabled = (data) => {
+    return defaultRouterAuthorityIds.value.has(data.authorityId)
+  }
+
+  const openAssignRoleDrawer = async (row) => {
+    assignMenuRow.value = row
+    defaultRouterAuthorityIds.value = new Set()
+    assignRoleDrawerVisible.value = true
+    assignRoleLoading.value = true
+    // 并行加载角色树和当前菜单已分配的角色
+    const [authRes, rolesRes] = await Promise.all([
+      getAuthorityList(),
+      getMenuRoles(row.ID)
+    ])
+    if (authRes.code === 0) {
+      authorityTreeData.value = authRes.data
+    }
+    if (rolesRes.code === 0 && rolesRes.data) {
+      if (rolesRes.data.defaultRouterAuthorityIds) {
+        defaultRouterAuthorityIds.value = new Set(rolesRes.data.defaultRouterAuthorityIds)
+      }
+      nextTick(() => {
+        roleTreeRef.value?.setCheckedKeys(rolesRes.data.authorityIds || [])
+      })
+    }
+    assignRoleLoading.value = false
+  }
+
+  const confirmAssignRole = async () => {
+    assignRoleSubmitting.value = true
+    try {
+      const checkedKeys = roleTreeRef.value?.getCheckedKeys(false) || []
+      const halfCheckedKeys = roleTreeRef.value?.getHalfCheckedKeys() || []
+      const authorityIds = [...checkedKeys, ...halfCheckedKeys]
+      const res = await setMenuRoles({
+        menuId: assignMenuRow.value.ID,
+        authorityIds
+      })
+      if (res.code === 0) {
+        ElMessage({ type: 'success', message: '分配成功!' })
+        assignRoleDrawerVisible.value = false
+      }
+    } catch {
+      ElMessage({ type: 'error', message: '分配失败，请重试' })
+    }
+    assignRoleSubmitting.value = false
   }
 </script>
 

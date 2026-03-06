@@ -83,3 +83,31 @@ export const updateAuthority = (data) => {
     data
   })
 }
+
+/**
+ * 获取拥有指定角色的用户ID列表
+ * @param {number} authorityId 角色ID
+ * @returns {Promise<number[]>} 用户ID数组
+ */
+export const getUsersByAuthorityId = (authorityId) => {
+  return service({
+    url: '/authority/getUsersByAuthority',
+    method: 'get',
+    params: { authorityId }
+  })
+}
+
+/**
+ * 全量覆盖某角色关联的用户列表
+ * @param {Object} data
+ * @param {number} data.authorityId 角色ID
+ * @param {number[]} data.userIds 用户ID列表
+ * @returns {Promise}
+ */
+export const setRoleUsers = (data) => {
+  return service({
+    url: '/authority/setRoleUsers',
+    method: 'post',
+    data
+  })
+}

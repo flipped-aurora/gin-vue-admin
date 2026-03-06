@@ -1,6 +1,6 @@
-<template>
+﻿<template>
   <div
-    class="rounded-xl border border-black/10 bg-white text-black/80 dark:text-slate-400 dark:bg-slate-900 dark:text-white/80"
+    class="rounded-lg border border-black/10 bg-white text-black/80 dark:text-slate-400 dark:bg-slate-900 dark:text-white/80"
     :class="[customClass || '', withoutPadding ? 'p-0' : 'p-4']"
   >
     <div v-if="title" class="flex justify-between items-center">
@@ -11,7 +11,7 @@
         v-if="showAction"
         class="text-xs text-black/60 dark:text-white/60 hover:text-active cursor-pointer"
       >
-        查看更多
+        更多
       </div>
     </div>
     <div :class="title ? 'mt-3' : ''">
@@ -42,3 +42,4 @@
 </script>
 
 <style scoped lang="scss"></style>
+

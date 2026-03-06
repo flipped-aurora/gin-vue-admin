@@ -1,6 +1,8 @@
 package system
 
 import (
+	"net/http"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -53,6 +55,17 @@ func (s *SkillsApi) SaveSkill(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("保存成功", c)
+}
+
+func (s *SkillsApi) DeleteSkill(c *gin.Context) {
+	var req request.SkillDeleteRequest
+	_ = c.ShouldBindJSON(&req)
+	if err := skillsService.Delete(c.Request.Context(), req); err != nil {
+		global.GVA_LOG.Error("删除技能失败", zap.Error(err))
+		response.FailWithMessage("删除技能失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
 }
 
 func (s *SkillsApi) CreateScript(c *gin.Context) {
@@ -216,4 +229,35 @@ func (s *SkillsApi) SaveGlobalConstraint(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("保存成功", c)
+}
+
+func (s *SkillsApi) PackageSkill(c *gin.Context) {
+	var req request.SkillPackageRequest
+	_ = c.ShouldBindJSON(&req)
+
+	fileName, data, err := skillsService.Package(c.Request.Context(), req)
+	if err != nil {
+		global.GVA_LOG.Error("打包技能失败", zap.Error(err))
+		response.FailWithMessage("打包技能失败: "+err.Error(), c)
+		return
+	}
+
+	c.Header("Content-Type", "application/zip")
+	c.Header("Content-Disposition", "attachment; filename=\""+fileName+"\"")
+	c.Data(http.StatusOK, "application/zip", data)
+}
+
+func (s *SkillsApi) DownloadOnlineSkill(c *gin.Context) {
+	var req request.DownloadOnlineSkillReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage("参数错误", c)
+		return
+	}
+
+	if err := skillsService.DownloadOnlineSkill(c.Request.Context(), req); err != nil {
+		global.GVA_LOG.Error("下载在线技能失败", zap.Error(err))
+		response.FailWithMessage("下载在线技能失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("下载成功", c)
 }

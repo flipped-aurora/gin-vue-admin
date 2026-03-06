@@ -1,18 +1,19 @@
 package upload
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"mime/multipart"
+	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"go.uber.org/zap"
 )
 
@@ -21,13 +22,13 @@ type AwsS3 struct{}
 //@author: [WqyJh](https://github.com/WqyJh)
 //@object: *AwsS3
 //@function: UploadFile
-//@description: Upload file to Aws S3 using aws-sdk-go. See https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/s3-example-basic-bucket-operations.html#s3-examples-bucket-ops-upload-file-to-bucket
+//@description: Upload file to Aws S3 using aws-sdk-go-v2. See https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/s3-example-basic-bucket-operations.html
 //@param: file *multipart.FileHeader
 //@return: string, string, error
 
 func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
-	session := newSession()
-	uploader := s3manager.NewUploader(session)
+	client := newS3Client()
+	uploader := manager.NewUploader(client)
 
 	fileKey := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename)
 	filename := global.GVA_CONFIG.AwsS3.PathPrefix + "/" + fileKey
@@ -38,10 +39,10 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	}
 	defer f.Close() // 创建文件 defer 关闭
 
-	_, err := uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(global.GVA_CONFIG.AwsS3.Bucket),
-		Key:    aws.String(filename),
-		Body:   f,
+	_, err := uploader.Upload(context.TODO(), &s3.PutObjectInput{
+		Bucket:      aws.String(global.GVA_CONFIG.AwsS3.Bucket),
+		Key:         aws.String(filename),
+		Body:        f,
 		ContentType: aws.String(file.Header.Get("Content-Type")),
 	})
 	if err != nil {
@@ -55,44 +56,59 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 //@author: [WqyJh](https://github.com/WqyJh)
 //@object: *AwsS3
 //@function: DeleteFile
-//@description: Delete file from Aws S3 using aws-sdk-go. See https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/s3-example-basic-bucket-operations.html#s3-examples-bucket-ops-delete-bucket-item
-//@param: file *multipart.FileHeader
-//@return: string, string, error
+//@description: Delete file from Aws S3 using aws-sdk-go-v2. See https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/s3-example-basic-bucket-operations.html
+//@param: key string
+//@return: error
 
 func (*AwsS3) DeleteFile(key string) error {
-	session := newSession()
-	svc := s3.New(session)
+	client := newS3Client()
 	filename := global.GVA_CONFIG.AwsS3.PathPrefix + "/" + key
 	bucket := global.GVA_CONFIG.AwsS3.Bucket
 
-	_, err := svc.DeleteObject(&s3.DeleteObjectInput{
+	_, err := client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(filename),
 	})
 	if err != nil {
-		global.GVA_LOG.Error("function svc.DeleteObject() failed", zap.Any("err", err.Error()))
-		return errors.New("function svc.DeleteObject() failed, err:" + err.Error())
+		global.GVA_LOG.Error("function client.DeleteObject() failed", zap.Any("err", err.Error()))
+		return errors.New("function client.DeleteObject() failed, err:" + err.Error())
 	}
 
-	_ = svc.WaitUntilObjectNotExists(&s3.HeadObjectInput{
+	waiter := s3.NewObjectNotExistsWaiter(client)
+	_ = waiter.Wait(context.TODO(), &s3.HeadObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(filename),
-	})
+	}, 30*time.Second)
+
 	return nil
 }
 
-// newSession Create S3 session
-func newSession() *session.Session {
-	sess, _ := session.NewSession(&aws.Config{
-		Region:           aws.String(global.GVA_CONFIG.AwsS3.Region),
-		Endpoint:         aws.String(global.GVA_CONFIG.AwsS3.Endpoint), //minio在这里设置地址,可以兼容
-		S3ForcePathStyle: aws.Bool(global.GVA_CONFIG.AwsS3.S3ForcePathStyle),
-		DisableSSL:       aws.Bool(global.GVA_CONFIG.AwsS3.DisableSSL),
-		Credentials: credentials.NewStaticCredentials(
-			global.GVA_CONFIG.AwsS3.SecretID,
-			global.GVA_CONFIG.AwsS3.SecretKey,
+// newS3Client creates an S3 v2 client with static credentials and optional custom endpoint.
+// minio在这里设置Endpoint地址,可以兼容
+func newS3Client() *s3.Client {
+	cfg := global.GVA_CONFIG.AwsS3
+
+	awsCfg, _ := config.LoadDefaultConfig(context.TODO(),
+		config.WithRegion(cfg.Region),
+		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
+			cfg.SecretID,
+			cfg.SecretKey,
 			"",
-		),
+		)),
+	)
+
+	return s3.NewFromConfig(awsCfg, func(o *s3.Options) {
+		if cfg.Endpoint != "" {
+			endpoint := cfg.Endpoint
+			if !strings.HasPrefix(endpoint, "http://") && !strings.HasPrefix(endpoint, "https://") {
+				if cfg.DisableSSL {
+					endpoint = "http://" + endpoint
+				} else {
+					endpoint = "https://" + endpoint
+				}
+			}
+			o.BaseEndpoint = aws.String(endpoint)
+		}
+		o.UsePathStyle = cfg.S3ForcePathStyle
 	})
-	return sess
 }

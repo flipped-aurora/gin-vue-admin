@@ -487,12 +487,6 @@
         <el-table-column label="简介" prop="resume" min-width="240" show-overflow-tooltip />
         <el-table-column label="版本" prop="actVersion" width="100" />
         <el-table-column label="下载量" prop="downloadCount" width="90" />
-        <el-table-column label="价格" width="80">
-          <template #default="{ row }">
-            <el-tag v-if="row.money === 0" type="success" size="small">免费</el-tag>
-            <el-tag v-else type="warning" size="small">￥{{ row.money }}</el-tag>
-          </template>
-        </el-table-column>
         <el-table-column label="操作" width="120" fixed="right">
           <template #default="{ row }">
             <el-button
@@ -1347,7 +1341,7 @@
     const res = await getShopPluginList({
       page: onlineSearchInfo.page,
       pageSize: onlineSearchInfo.pageSize,
-      type: 6,
+      category: 6,
       name: onlineSearchInfo.name || undefined,
       updateTime: 1
     })

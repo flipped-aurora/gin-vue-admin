@@ -59,7 +59,7 @@ func (sysParamsService *SysParamsService) GetSysParamsInfoList(info systemReq.Sy
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
 	if info.Key != "" {
-		db = db.Where("key LIKE ?", "%"+info.Key+"%")
+		db = db.Where("`key` LIKE ?", "%"+info.Key+"%")
 	}
 	err = db.Count(&total).Error
 	if err != nil {

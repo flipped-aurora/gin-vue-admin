@@ -74,6 +74,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/authority/deleteAuthority", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authority/getAuthorityList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authority/setDataAuthority", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/authority/getUsersByAuthority", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/authority/setRoleUsers", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/menu/getMenu", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/menu/getMenuList", V2: "POST"},
@@ -256,6 +258,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "8881", V1: "/authority/deleteAuthority", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/authority/getAuthorityList", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/authority/setDataAuthority", V2: "POST"},
+		{Ptype: "p", V0: "8881", V1: "/authority/getUsersByAuthority", V2: "GET"},
+		{Ptype: "p", V0: "8881", V1: "/authority/setRoleUsers", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/menu/getMenu", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/menu/getMenuList", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/menu/addBaseMenu", V2: "POST"},
@@ -297,6 +301,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "9528", V1: "/authority/deleteAuthority", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/authority/getAuthorityList", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/authority/setDataAuthority", V2: "POST"},
+		{Ptype: "p", V0: "9528", V1: "/authority/getUsersByAuthority", V2: "GET"},
+		{Ptype: "p", V0: "9528", V1: "/authority/setRoleUsers", V2: "POST"},
 
 		{Ptype: "p", V0: "9528", V1: "/menu/getMenu", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/menu/getMenuList", V2: "POST"},

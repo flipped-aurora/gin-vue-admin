@@ -244,6 +244,76 @@ func (a *AuthorityMenuApi) GetBaseMenuById(c *gin.Context) {
 	response.OkWithDetailed(systemRes.SysBaseMenuResponse{Menu: menu}, "获取成功", c)
 }
 
+// GetMenuRoles
+// @Tags      AuthorityMenu
+// @Summary   获取拥有指定菜单的角色ID列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     menuId  query     uint                                                         true  "菜单ID"
+// @Success   200     {object}  response.Response{data=map[string]interface{},msg=string}    "获取成功"
+// @Router    /menu/getMenuRoles [get]
+func (a *AuthorityMenuApi) GetMenuRoles(c *gin.Context) {
+	var req systemReq.SetMenuAuthorities
+	if err := c.ShouldBindQuery(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if req.MenuId == 0 {
+		response.FailWithMessage("菜单ID不能为空", c)
+		return
+	}
+	authorityIds, err := menuService.GetAuthoritiesByMenuId(req.MenuId)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败"+err.Error(), c)
+		return
+	}
+	if authorityIds == nil {
+		authorityIds = []uint{}
+	}
+	defaultRouterAuthorityIds, err := menuService.GetDefaultRouterAuthorityIds(req.MenuId)
+	if err != nil {
+		global.GVA_LOG.Error("获取首页角色失败!", zap.Error(err))
+		response.FailWithMessage("获取失败"+err.Error(), c)
+		return
+	}
+	if defaultRouterAuthorityIds == nil {
+		defaultRouterAuthorityIds = []uint{}
+	}
+	response.OkWithDetailed(gin.H{
+		"authorityIds":              authorityIds,
+		"defaultRouterAuthorityIds": defaultRouterAuthorityIds,
+	}, "获取成功", c)
+}
+
+// SetMenuRoles
+// @Tags      AuthorityMenu
+// @Summary   全量覆盖某菜单关联的角色列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetMenuAuthorities   true  "菜单ID和角色ID列表"
+// @Success   200   {object}  response.Response{msg=string}  "设置成功"
+// @Router    /menu/setMenuRoles [post]
+func (a *AuthorityMenuApi) SetMenuRoles(c *gin.Context) {
+	var req systemReq.SetMenuAuthorities
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if req.MenuId == 0 {
+		response.FailWithMessage("菜单ID不能为空", c)
+		return
+	}
+	if err := menuService.SetMenuAuthorities(req.MenuId, req.AuthorityIds); err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
+
 // GetMenuList
 // @Tags      Menu
 // @Summary   分页获取基础menu列表

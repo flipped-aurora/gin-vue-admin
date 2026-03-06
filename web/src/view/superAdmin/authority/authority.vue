@@ -20,7 +20,7 @@
           min-width="180"
           prop="authorityName"
         />
-        <el-table-column align="left" label="操作" width="460">
+        <el-table-column align="left" label="操作" width="560">
           <template #default="scope">
             <el-button
               icon="setting"
@@ -28,6 +28,13 @@
               link
               @click="openDrawer(scope.row)"
               >设置权限</el-button
+            >
+            <el-button
+              icon="user"
+              type="primary"
+              link
+              @click="openAssignDrawer(scope.row)"
+              >分配给用户</el-button
             >
             <el-button
               icon="plus"
@@ -134,6 +141,65 @@
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
+
+    <!-- 分配给用户抽屉 -->
+    <el-drawer
+      v-model="assignDrawerVisible"
+      :size="appStore.drawerSize"
+      :show-close="false"
+      destroy-on-close
+    >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">分配用户 - {{ assignRow.authorityName }}</span>
+          <div>
+            <el-button @click="assignDrawerVisible = false">取 消</el-button>
+            <el-button type="primary" :loading="assignSubmitting" @click="confirmAssign">确 定</el-button>
+          </div>
+        </div>
+      </template>
+      <warning-bar title="注：保存时将全量覆盖该角色的用户关联关系；若用户仅剩此一个角色，移除后其主角色保持不变" />
+      <div class="gva-search-box">
+        <el-form :inline="true" :model="userSearchInfo">
+          <el-form-item label="用户名">
+            <el-input v-model="userSearchInfo.username" placeholder="请输入用户名" />
+          </el-form-item>
+          <el-form-item label="昵称">
+            <el-input v-model="userSearchInfo.nickName" placeholder="请输入昵称" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="search" @click="searchUserData">查 询</el-button>
+            <el-button icon="refresh" @click="resetUserSearch">重 置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <el-table
+        ref="userTableRef"
+        v-loading="assignLoading"
+        :data="userTableData"
+        row-key="ID"
+        :default-sort="{ prop: 'ID', order: 'descending' }"
+        @sort-change="sortChange"
+        @select="handleSelect"
+        @select-all="handleSelectAll"
+      >
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="ID" prop="ID" width="80" sortable="custom" />
+        <el-table-column label="用户名" prop="userName" min-width="120" />
+        <el-table-column label="昵称" prop="nickName" min-width="120" />
+      </el-table>
+      <div class="flex justify-center mt-4">
+        <el-pagination
+          :current-page="userSearchInfo.page"
+          :page-size="userSearchInfo.pageSize"
+          :page-sizes="[10, 20, 50]"
+          :total="userTotal"
+          layout="total, sizes, prev, pager, next"
+          @current-change="handleUserPageChange"
+          @size-change="handleUserSizeChange"
+        />
+      </div>
+    </el-drawer>
   </div>
 </template>
 
@@ -143,17 +209,21 @@
     deleteAuthority,
     createAuthority,
     updateAuthority,
-    copyAuthority
+    copyAuthority,
+    getUsersByAuthorityId,
+    setRoleUsers
   } from '@/api/authority'
+  import { getUserList } from '@/api/user'
 
   import Menus from '@/view/superAdmin/authority/components/menus.vue'
   import Apis from '@/view/superAdmin/authority/components/apis.vue'
   import Datas from '@/view/superAdmin/authority/components/datas.vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
 
-  import { ref } from 'vue'
+  import { ref, nextTick } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { useAppStore } from "@/pinia"
+  import { toSQLLine } from '@/utils/stringFun'
 
   defineOptions({
     name: 'Authority'
@@ -402,6 +472,109 @@
     setOptions()
     authorityForm.value && authorityForm.value.clearValidate()
     authorityFormVisible.value = true
+  }
+
+  // 分配给用户
+  const assignDrawerVisible = ref(false)
+  const assignRow = ref({})
+  const userTableData = ref([])
+  const userTotal = ref(0)
+  const userSearchInfo = ref({ page: 1, pageSize: 10, username: '', nickName: '', orderKey: 'id', desc: true })
+  const assignLoading = ref(false)
+  const assignSubmitting = ref(false)
+  const userTableRef = ref(null)
+
+  const selectedUserIds = ref(new Set())
+
+  const openAssignDrawer = async (row) => {
+    assignRow.value = row
+    userSearchInfo.value = { page: 1, pageSize: 10, username: '', nickName: '' }
+    selectedUserIds.value = new Set()
+    assignDrawerVisible.value = true
+    const res = await getUsersByAuthorityId(row.authorityId)
+    if (res.code === 0 && res.data) {
+      selectedUserIds.value = new Set(res.data)
+    }
+    getUserData()
+  }
+
+  const getUserData = async () => {
+    assignLoading.value = true
+    const res = await getUserList(userSearchInfo.value)
+    if (res.code === 0) {
+      userTableData.value = res.data.list
+      userTotal.value = res.data.total
+      await nextTick()
+      userTableData.value.forEach((user) => {
+        userTableRef.value && userTableRef.value.toggleRowSelection(user, selectedUserIds.value.has(user.ID))
+      })
+    }
+    assignLoading.value = false
+  }
+
+  const handleSelect = (selection, row) => {
+    if (selection.some(u => u.ID === row.ID)) {
+      selectedUserIds.value.add(row.ID)
+    } else {
+      selectedUserIds.value.delete(row.ID)
+    }
+  }
+
+  const handleSelectAll = (selection) => {
+    const selectedIds = new Set(selection.map(u => u.ID))
+    userTableData.value.forEach((user) => {
+      if (selectedIds.has(user.ID)) {
+        selectedUserIds.value.add(user.ID)
+      } else {
+        selectedUserIds.value.delete(user.ID)
+      }
+    })
+  }
+
+  const sortChange = ({ prop, order }) => {
+    if (prop) {
+      userSearchInfo.value.orderKey = prop === 'ID' ? 'id' : toSQLLine(prop)
+      userSearchInfo.value.desc = order === 'descending'
+    }
+    getUserData()
+  }
+
+  const searchUserData = () => {
+    userSearchInfo.value.page = 1
+    getUserData()
+  }
+
+  const resetUserSearch = () => {
+    userSearchInfo.value = { page: 1, pageSize: 10, username: '', nickName: '' }
+    getUserData()
+  }
+
+  const handleUserPageChange = (page) => {
+    userSearchInfo.value.page = page
+    getUserData()
+  }
+
+  const handleUserSizeChange = (size) => {
+    userSearchInfo.value.pageSize = size
+    userSearchInfo.value.page = 1
+    getUserData()
+  }
+
+  const confirmAssign = async () => {
+    assignSubmitting.value = true
+    try {
+      const res = await setRoleUsers({
+        authorityId: assignRow.value.authorityId,
+        userIds: [...selectedUserIds.value]
+      })
+      if (res.code === 0) {
+        ElMessage({ type: 'success', message: '分配成功!' })
+        assignDrawerVisible.value = false
+      }
+    } catch {
+      ElMessage({ type: 'error', message: '分配失败，请重试' })
+    }
+    assignSubmitting.value = false
   }
 </script>
 

@@ -66,4 +66,12 @@ type GetUserList struct {
 	NickName string `json:"nickName" form:"nickName"`
 	Phone    string `json:"phone" form:"phone"`
 	Email    string `json:"email" form:"email"`
+	OrderKey string `json:"orderKey" form:"orderKey"` // 排序
+	Desc     bool   `json:"desc" form:"desc"`         // 排序方式:升序false(默认)|降序true
+}
+
+// SetRoleUsers 通过角色ID全量覆盖关联用户列表
+type SetRoleUsers struct {
+	AuthorityId uint   `json:"authorityId" form:"authorityId"` // 角色ID
+	UserIds     []uint `json:"userIds" form:"userIds"`         // 用户ID列表
 }

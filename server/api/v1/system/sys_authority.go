@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
@@ -194,6 +195,60 @@ func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
 	adminAuthorityID := utils.GetUserAuthorityId(c)
 	err = authorityService.SetDataAuthority(adminAuthorityID, auth)
 	if err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
+
+// GetUsersByAuthority
+// @Tags      Authority
+// @Summary   获取拥有指定角色的用户ID列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     authorityId  query     uint                                                        true  "角色ID"
+// @Success   200          {object}  response.Response{data=[]uint,msg=string}                   "获取成功"
+// @Router    /authority/getUsersByAuthority [get]
+func (a *AuthorityApi) GetUsersByAuthority(c *gin.Context) {
+	var req systemReq.SetRoleUsers
+	if err := c.ShouldBindQuery(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	userIds, err := authorityService.GetUserIdsByAuthorityId(req.AuthorityId)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败"+err.Error(), c)
+		return
+	}
+	if userIds == nil {
+		userIds = []uint{}
+	}
+	response.OkWithDetailed(userIds, "获取成功", c)
+}
+
+// SetRoleUsers
+// @Tags      Authority
+// @Summary   全量覆盖某角色关联的用户列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetRoleUsers         true  "角色ID和用户ID列表"
+// @Success   200   {object}  response.Response{msg=string}  "设置成功"
+// @Router    /authority/setRoleUsers [post]
+func (a *AuthorityApi) SetRoleUsers(c *gin.Context) {
+	var req systemReq.SetRoleUsers
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if req.AuthorityId == 0 {
+		response.FailWithMessage("角色ID不能为空", c)
+		return
+	}
+	if err := authorityService.SetRoleUsers(req.AuthorityId, req.UserIds); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return

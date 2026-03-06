@@ -85,6 +85,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "角色", Method: "PUT", Path: "/authority/updateAuthority", Description: "更新角色信息"},
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/getAuthorityList", Description: "获取角色列表"},
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/setDataAuthority", Description: "设置角色资源权限"},
+		{ApiGroup: "角色", Method: "GET", Path: "/authority/getUsersByAuthority", Description: "获取角色关联用户ID列表"},
+		{ApiGroup: "角色", Method: "POST", Path: "/authority/setRoleUsers", Description: "全量覆盖角色关联用户"},
 
 		{ApiGroup: "casbin", Method: "POST", Path: "/casbin/updateCasbin", Description: "更改角色api权限"},
 		{ApiGroup: "casbin", Method: "POST", Path: "/casbin/getPolicyPathByAuthorityId", Description: "获取权限列表"},

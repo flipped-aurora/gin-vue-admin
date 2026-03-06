@@ -321,3 +321,61 @@ func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
 	}
 	response.OkWithMessage("刷新成功", c)
 }
+
+// GetApiRoles
+// @Tags      SysApi
+// @Summary   获取拥有指定API权限的角色ID列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     path    query     string                                                    true  "API路径"
+// @Param     method  query     string                                                    true  "请求方法"
+// @Success   200     {object}  response.Response{data=map[string]interface{},msg=string}  "获取成功"
+// @Router    /api/getApiRoles [get]
+func (s *SystemApiApi) GetApiRoles(c *gin.Context) {
+	path := c.Query("path")
+	method := c.Query("method")
+	if path == "" || method == "" {
+		response.FailWithMessage("API路径和请求方法不能为空", c)
+		return
+	}
+	authorityIds, err := casbinService.GetAuthoritiesByApi(path, method)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败"+err.Error(), c)
+		return
+	}
+	if authorityIds == nil {
+		authorityIds = []uint{}
+	}
+	response.OkWithDetailed(authorityIds, "获取成功", c)
+}
+
+// SetApiRoles
+// @Tags      SysApi
+// @Summary   全量覆盖某API关联的角色列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetApiAuthorities    true  "API路径、请求方法和角色ID列表"
+// @Success   200   {object}  response.Response{msg=string}  "设置成功"
+// @Router    /api/setApiRoles [post]
+func (s *SystemApiApi) SetApiRoles(c *gin.Context) {
+	var req systemReq.SetApiAuthorities
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if req.Path == "" || req.Method == "" {
+		response.FailWithMessage("API路径和请求方法不能为空", c)
+		return
+	}
+	if err := casbinService.SetApiAuthorities(req.Path, req.Method, req.AuthorityIds); err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败"+err.Error(), c)
+		return
+	}
+	// 刷新casbin缓存使策略立即生效
+	_ = casbinService.FreshCasbin()
+	response.OkWithMessage("设置成功", c)
+}

@@ -120,6 +120,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillList", Description: "获取技能列表"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getSkillDetail", Description: "获取技能详情"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveSkill", Description: "保存技能定义"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/deleteSkill", Description: "删除技能"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/createScript", Description: "创建技能脚本"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getScript", Description: "读取技能脚本"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveScript", Description: "保存技能脚本"},
@@ -134,6 +135,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveTemplate", Description: "保存技能模板"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/getGlobalConstraint", Description: "读取全局约束"},
 		{ApiGroup: "skills", Method: "POST", Path: "/skills/saveGlobalConstraint", Description: "保存全局约束"},
+		{ApiGroup: "skills", Method: "POST", Path: "/skills/packageSkill", Description: "打包技能"},
 
 		{ApiGroup: "客户", Method: "PUT", Path: "/customer/customer", Description: "更新客户"},
 		{ApiGroup: "客户", Method: "POST", Path: "/customer/customer", Description: "创建客户"},

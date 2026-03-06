@@ -122,6 +122,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/skills/getSkillList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/getSkillDetail", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/saveSkill", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/deleteSkill", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/createScript", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/getScript", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/saveScript", V2: "POST"},
@@ -136,6 +137,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/skills/saveTemplate", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/getGlobalConstraint", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/skills/saveGlobalConstraint", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/skills/packageSkill", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "PUT"},

@@ -1,10 +1,15 @@
 package system
 
 import (
+	"archive/zip"
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sort"
@@ -158,6 +163,107 @@ func (s *SkillsService) Save(_ context.Context, req request.SkillSaveRequest) er
 	return nil
 }
 
+func (s *SkillsService) Delete(_ context.Context, req request.SkillDeleteRequest) error {
+	if strings.TrimSpace(req.Tool) == "" {
+		return errors.New("工具类型不能为空")
+	}
+	if !isSafeName(req.Skill) {
+		return errors.New("技能名称不合法")
+	}
+	skillDir, err := s.skillDir(req.Tool, req.Skill)
+	if err != nil {
+		return err
+	}
+	info, err := os.Stat(skillDir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return errors.New("技能不存在")
+		}
+		return err
+	}
+	if !info.IsDir() {
+		return errors.New("技能目录异常")
+	}
+	return os.RemoveAll(skillDir)
+}
+
+func (s *SkillsService) Package(_ context.Context, req request.SkillPackageRequest) (string, []byte, error) {
+	if strings.TrimSpace(req.Tool) == "" {
+		return "", nil, errors.New("工具类型不能为空")
+	}
+	if !isSafeName(req.Skill) {
+		return "", nil, errors.New("技能名称不合法")
+	}
+
+	skillDir, err := s.skillDir(req.Tool, req.Skill)
+	if err != nil {
+		return "", nil, err
+	}
+	info, err := os.Stat(skillDir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return "", nil, errors.New("技能不存在")
+		}
+		return "", nil, err
+	}
+	if !info.IsDir() {
+		return "", nil, errors.New("技能目录异常")
+	}
+
+	buf := bytes.NewBuffer(nil)
+	zw := zip.NewWriter(buf)
+
+	walkErr := filepath.WalkDir(skillDir, func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		rel, err := filepath.Rel(skillDir, path)
+		if err != nil {
+			return err
+		}
+		if rel == "." {
+			return nil
+		}
+		zipName := filepath.ToSlash(rel)
+		if d.IsDir() {
+			_, err = zw.Create(strings.TrimSuffix(zipName, "/") + "/")
+			return err
+		}
+
+		fileInfo, err := d.Info()
+		if err != nil {
+			return err
+		}
+		header, err := zip.FileInfoHeader(fileInfo)
+		if err != nil {
+			return err
+		}
+		header.Name = zipName
+		header.Method = zip.Deflate
+
+		writer, err := zw.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		_, err = writer.Write(content)
+		return err
+	})
+	if walkErr != nil {
+		_ = zw.Close()
+		return "", nil, walkErr
+	}
+
+	if err = zw.Close(); err != nil {
+		return "", nil, err
+	}
+
+	return req.Skill + ".zip", buf.Bytes(), nil
+}
+
 func (s *SkillsService) CreateScript(_ context.Context, req request.SkillScriptCreateRequest) (string, string, error) {
 	if !isSafeName(req.Skill) {
 		return "", "", errors.New("技能名称不合法")
@@ -276,6 +382,136 @@ func (s *SkillsService) SaveGlobalConstraint(_ context.Context, req request.Skil
 			return err
 		}
 	}
+	return nil
+}
+
+func (s *SkillsService) DownloadOnlineSkill(_ context.Context, req request.DownloadOnlineSkillReq) error {
+	skillsDir, err := s.toolSkillsDir(req.Tool)
+	if err != nil {
+		return err
+	}
+
+	body, err := json.Marshal(map[string]interface{}{
+		"plugin_id": req.ID,
+		"version":   req.Version,
+	})
+	if err != nil {
+		return fmt.Errorf("构建下载请求失败: %w", err)
+	}
+
+	downloadReq, err := http.NewRequest(http.MethodPost, "https://plugin.gin-vue-admin.com/api/shopPlugin/downloadSkill", bytes.NewReader(body))
+	if err != nil {
+		return fmt.Errorf("构建下载请求失败: %w", err)
+	}
+	downloadReq.Header.Set("Content-Type", "application/json")
+
+	downloadResp, err := http.DefaultClient.Do(downloadReq)
+	if err != nil {
+		return fmt.Errorf("下载技能失败: %w", err)
+	}
+	defer downloadResp.Body.Close()
+
+	if downloadResp.StatusCode != http.StatusOK {
+		return fmt.Errorf("下载技能失败, HTTP状态码: %d", downloadResp.StatusCode)
+	}
+
+	metaBody, err := io.ReadAll(downloadResp.Body)
+	if err != nil {
+		return fmt.Errorf("读取下载结果失败: %w", err)
+	}
+
+	var meta struct {
+		Data struct {
+			URL string `json:"url"`
+		} `json:"data"`
+	}
+	if err = json.Unmarshal(metaBody, &meta); err != nil {
+		return fmt.Errorf("解析下载结果失败: %w", err)
+	}
+
+	realDownloadURL := strings.TrimSpace(meta.Data.URL)
+	if realDownloadURL == "" {
+		return errors.New("下载结果缺少 url")
+	}
+
+	zipResp, err := http.Get(realDownloadURL)
+	if err != nil {
+		return fmt.Errorf("下载压缩包失败: %w", err)
+	}
+	defer zipResp.Body.Close()
+
+	if zipResp.StatusCode != http.StatusOK {
+		return fmt.Errorf("下载压缩包失败, HTTP状态码: %d", zipResp.StatusCode)
+	}
+
+	tmpFile, err := os.CreateTemp("", "gva-skill-*.zip")
+	if err != nil {
+		return fmt.Errorf("创建临时文件失败: %w", err)
+	}
+	tmpPath := tmpFile.Name()
+	defer os.Remove(tmpPath)
+
+	if _, err = io.Copy(tmpFile, zipResp.Body); err != nil {
+		tmpFile.Close()
+		return fmt.Errorf("保存技能包失败: %w", err)
+	}
+	tmpFile.Close()
+
+	if err = extractZipToDir(tmpPath, skillsDir); err != nil {
+		return fmt.Errorf("解压技能包失败: %w", err)
+	}
+
+	return nil
+}
+
+func extractZipToDir(zipPath, destDir string) error {
+	r, err := zip.OpenReader(zipPath)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	for _, f := range r.File {
+		name := filepath.FromSlash(f.Name)
+		if strings.Contains(name, "..") {
+			continue
+		}
+
+		target := filepath.Join(destDir, name)
+		if !strings.HasPrefix(filepath.Clean(target), filepath.Clean(destDir)) {
+			continue
+		}
+
+		if f.FileInfo().IsDir() {
+			if err := os.MkdirAll(target, os.ModePerm); err != nil {
+				return err
+			}
+			continue
+		}
+
+		if err := os.MkdirAll(filepath.Dir(target), os.ModePerm); err != nil {
+			return err
+		}
+
+		rc, err := f.Open()
+		if err != nil {
+			return err
+		}
+
+		out, err := os.OpenFile(target, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+		if err != nil {
+			rc.Close()
+			return err
+		}
+
+		_, err = io.Copy(out, rc)
+		rc.Close()
+		out.Close()
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

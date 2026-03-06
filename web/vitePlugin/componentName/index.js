@@ -34,7 +34,7 @@ const extractComponentName = (fileContent) => {
 // Vite 插件定义
 const vueFilePathPlugin = (outputFilePath) => {
   let root
-
+  let isDev = false
   const generatePathNameMap = () => {
     const vueFiles = [
       ...getAllVueFiles(path.join(root, 'src/view')),
@@ -70,12 +70,15 @@ const vueFilePathPlugin = (outputFilePath) => {
     name: 'vue-file-path-plugin',
     configResolved(resolvedConfig) {
       root = resolvedConfig.root
+      if (resolvedConfig.mode === 'development') {
+        isDev = true
+      }
     },
     buildStart() {
       generatePathNameMap()
     },
     buildEnd() {
-      if (process.env.NODE_ENV === 'development') {
+      if (isDev) {
         watchDirectoryChanges()
       }
     }

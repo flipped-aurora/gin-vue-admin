@@ -20,7 +20,7 @@
 
 ## 支持claw生态
 
-[GvaClaw](https://plugin.gin-vue-admin.com/details/159)
+[🦞GvaClaw](https://plugin.gin-vue-admin.com/details/159)
 
 ## ✨一分钟生成前后端基础代码
 

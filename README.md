@@ -18,6 +18,10 @@
 
 [English](./README-en.md) | 简体中文
 
+## 支持claw生态
+
+[GvaClaw](https://plugin.gin-vue-admin.com/details/159)
+
 ## ✨一分钟生成前后端基础代码
 
 <table>

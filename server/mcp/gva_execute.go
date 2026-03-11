@@ -57,20 +57,19 @@ type ExecutionPlan struct {
 
 // New 创建GVA代码生成执行器工具
 func (g *GVAExecutor) New() mcp.Tool {
-    return mcp.NewTool("gva_execute",
-		mcp.WithDescription(`**GVA代码生成执行器：直接执行代码生成，无需确认步骤**
+	return mcp.NewTool("gva_execute",
+		mcp.WithDescription(`GVA代码生成器，根据ExecutionPlan自动生成后端和前端代码。
 
-**核心功能：**
-根据需求分析和当前的包信息判断是否调用，直接生成代码。支持批量创建多个模块、自动创建包、模块、字典等。
+**调用流程**: requirement_analyzer → gva_analyze → gva_execute
 
-**使用场景：**
-在gva_analyze获取了当前的包信息和字典信息之后，如果已经包含了可以使用的包和模块，那就不要调用本mcp。根据分析结果直接生成代码，适用于自动化代码生成流程。
+**重要限制**:
+- 先调用gva_analyze获取现有包信息，已存在则不要调用本工具
+- needCreatedModules=true时API和菜单自动生成，不要再调用api_creator/menu_creator
+- gvaModel=true时系统自动创建ID主键，字段不要设置primaryKey=true
+- gvaModel=false时必须有一个字段primaryKey=true
+- packageType只能是package或plugin，默认用package
 
-**重要提示：**
-- 当needCreatedModules=true时，模块创建会自动生成API和菜单，不应再调用api_creator和menu_creator工具
-- 字段使用字典类型时，系统会自动检查并创建字典
-- 字典创建会在模块创建之前执行
-- 当字段配置了dataSource且association=2（一对多关联）时，系统会自动将fieldType修改为'array'`),
+**参数结构**: 详见 /gva-helper/gva-execute skill`),
         mcp.WithObject("executionPlan",
             mcp.Description("执行计划，包含包信息、模块与字典信息"),
             mcp.Required(),
@@ -81,97 +80,95 @@ func (g *GVAExecutor) New() mcp.Tool {
                 },
                 "packageType": map[string]interface{}{
                     "type":        "string",
-                    "description": "package 或 plugin，如果用户提到了使用插件则创建plugin，如果用户没有特定说明则一律选用package",
+                    "description": "package 或 plugin",
                     "enum":        []string{"package", "plugin"},
                 },
                 "needCreatedPackage": map[string]interface{}{
                     "type":        "boolean",
-                    "description": "是否需要创建包，为true时packageInfo必需",
+                    "description": "是否需要创建包",
                 },
                 "needCreatedModules": map[string]interface{}{
                     "type":        "boolean",
-                    "description": "是否需要创建模块，为true时modulesInfo必需",
+                    "description": "是否需要创建模块",
                 },
                 "needCreatedDictionaries": map[string]interface{}{
                     "type":        "boolean",
-                    "description": "是否需要创建字典，为true时dictionariesInfo必需",
+                    "description": "是否需要创建字典",
                 },
                 "packageInfo": map[string]interface{}{
                     "type":        "object",
-                    "description": "包创建信息，当needCreatedPackage=true时必需",
+                    "description": "包创建信息",
                     "properties": map[string]interface{}{
                         "desc":        map[string]interface{}{"type": "string", "description": "包描述"},
                         "label":       map[string]interface{}{"type": "string", "description": "展示名"},
-                        "template":    map[string]interface{}{"type": "string", "description": "package 或 plugin，如果用户提到了使用插件则创建plugin，如果用户没有特定说明则一律选用package", "enum": []string{"package", "plugin"}},
+                        "template":    map[string]interface{}{"type": "string", "description": "package 或 plugin", "enum": []string{"package", "plugin"}},
                         "packageName": map[string]interface{}{"type": "string", "description": "包名"},
                     },
                 },
                 "modulesInfo": map[string]interface{}{
                     "type":        "array",
-                    "description": "模块配置列表，支持批量创建多个模块",
+                    "description": "模块配置列表",
                     "items": map[string]interface{}{
                         "type": "object",
                         "properties": map[string]interface{}{
-                            "package":            map[string]interface{}{"type": "string", "description": "包名（小写开头，示例: userInfo）"},
-                            "tableName":          map[string]interface{}{"type": "string", "description": "数据库表名（蛇形命名法,示例:user_info）"},
-                            "businessDB":         map[string]interface{}{"type": "string", "description": "业务数据库（可留空表示默认）"},
-                            "structName":         map[string]interface{}{"type": "string", "description": "结构体名（大驼峰示例:UserInfo）"},
+                            "package":            map[string]interface{}{"type": "string", "description": "包名（小写开头）"},
+                            "tableName":          map[string]interface{}{"type": "string", "description": "数据库表名（蛇形命名）"},
+                            "businessDB":        map[string]interface{}{"type": "string", "description": "业务数据库（可留空表示默认）"},
+                            "structName":         map[string]interface{}{"type": "string", "description": "结构体名（大驼峰）"},
                             "packageName":        map[string]interface{}{"type": "string", "description": "文件名称"},
                             "description":        map[string]interface{}{"type": "string", "description": "中文描述"},
                             "abbreviation":       map[string]interface{}{"type": "string", "description": "简称"},
-                            "humpPackageName":    map[string]interface{}{"type": "string", "description": "文件名称（小驼峰），一般是结构体名的小驼峰示例:userInfo"},
-                            "gvaModel":           map[string]interface{}{"type": "boolean", "description": "是否使用GVA模型（固定为true），自动包含ID、CreatedAt、UpdatedAt、DeletedAt字段"},
-                            "autoMigrate":        map[string]interface{}{"type": "boolean", "description": "是否自动迁移数据库"},
-                            "autoCreateResource": map[string]interface{}{"type": "boolean", "description": "是否创建资源（默认为false）"},
-                            "autoCreateApiToSql": map[string]interface{}{"type": "boolean", "description": "是否创建API（默认为true）"},
-                            "autoCreateMenuToSql": map[string]interface{}{"type": "boolean", "description": "是否创建菜单（默认为true）"},
-                            "autoCreateBtnAuth":  map[string]interface{}{"type": "boolean", "description": "是否创建按钮权限（默认为false）"},
-                            "onlyTemplate":       map[string]interface{}{"type": "boolean", "description": "是否仅模板（默认为false）"},
-                            "isTree":             map[string]interface{}{"type": "boolean", "description": "是否树形结构（默认为false）"},
-                            "treeJson":           map[string]interface{}{"type": "string", "description": "树形JSON字段"},
-                            "isAdd":              map[string]interface{}{"type": "boolean", "description": "是否新增（固定为false）"},
-                            "generateWeb":        map[string]interface{}{"type": "boolean", "description": "是否生成前端代码"},
-                            "generateServer":     map[string]interface{}{"type": "boolean", "description": "是否生成后端代码"},
+                            "humpPackageName":    map[string]interface{}{"type": "string", "description": "文件名称（小驼峰）"},
+                            "gvaModel":           map[string]interface{}{"type": "boolean", "description": "是否使用GVA模型（固定为true）"},
+                            "autoMigrate":        map[string]interface{}{"type": "boolean"},
+                            "autoCreateResource": map[string]interface{}{"type": "boolean"},
+                            "autoCreateApiToSql": map[string]interface{}{"type": "boolean"},
+                            "autoCreateMenuToSql": map[string]interface{}{"type": "boolean"},
+                            "autoCreateBtnAuth":  map[string]interface{}{"type": "boolean"},
+                            "onlyTemplate":       map[string]interface{}{"type": "boolean"},
+                            "isTree":             map[string]interface{}{"type": "boolean"},
+                            "treeJson":           map[string]interface{}{"type": "string"},
+                            "isAdd":              map[string]interface{}{"type": "boolean"},
+                            "generateWeb":        map[string]interface{}{"type": "boolean"},
+                            "generateServer":     map[string]interface{}{"type": "boolean"},
                             "fields": map[string]interface{}{
-                                "type":        "array",
-                                "description": "字段列表",
+                                "type":  "array",
                                 "items": map[string]interface{}{
                                     "type": "object",
                                     "properties": map[string]interface{}{
-                                        "fieldName":   map[string]interface{}{"type": "string", "description": "字段名（必须大写开头示例:UserName）"},
-                                        "fieldDesc":   map[string]interface{}{"type": "string", "description": "字段描述"},
-                                        "fieldType":   map[string]interface{}{"type": "string", "description": "字段类型：string（字符串）、richtext（富文本）、int（整型）、bool（布尔值）、float64（浮点型）、time.Time（时间）、enum（枚举）、picture（单图片）、pictures（多图片）、video（视频）、file（文件）、json（JSON）、array（数组）"},
-                                        "fieldJson":   map[string]interface{}{"type": "string", "description": "JSON标签,示例: userName"},
-                                        "dataTypeLong": map[string]interface{}{"type": "string", "description": "数据长度"},
-                                        "comment":     map[string]interface{}{"type": "string", "description": "注释"},
-                                        "columnName":  map[string]interface{}{"type": "string", "description": "数据库列名,示例: user_name"},
-                                        "fieldSearchType": map[string]interface{}{"type": "string", "description": "搜索类型：=、!=、>、>=、<、<=、LIKE、BETWEEN、IN、NOT IN、NOT BETWEEN"},
-                                        "fieldSearchHide": map[string]interface{}{"type": "boolean", "description": "是否隐藏搜索"},
-                                        "dictType":        map[string]interface{}{"type": "string", "description": "字典类型，使用字典类型时系统会自动检查并创建字典"},
-                                        "form":            map[string]interface{}{"type": "boolean", "description": "表单显示"},
-                                        "table":           map[string]interface{}{"type": "boolean", "description": "表格显示"},
-                                        "desc":            map[string]interface{}{"type": "boolean", "description": "详情显示"},
-                                        "excel":           map[string]interface{}{"type": "boolean", "description": "导入导出"},
-                                        "require":         map[string]interface{}{"type": "boolean", "description": "是否必填"},
-                                        "defaultValue":    map[string]interface{}{"type": "string", "description": "默认值"},
-                                        "errorText":       map[string]interface{}{"type": "string", "description": "错误提示"},
-                                        "clearable":       map[string]interface{}{"type": "boolean", "description": "是否可清空"},
-                                        "sort":            map[string]interface{}{"type": "boolean", "description": "是否排序"},
-                                        "primaryKey":      map[string]interface{}{"type": "boolean", "description": "是否主键（gvaModel=false时必须有一个字段为true）"},
+                                        "fieldName":        map[string]interface{}{"type": "string"},
+                                        "fieldDesc":        map[string]interface{}{"type": "string"},
+                                        "fieldType":        map[string]interface{}{"type": "string"},
+                                        "fieldJson":        map[string]interface{}{"type": "string"},
+                                        "dataTypeLong":     map[string]interface{}{"type": "string"},
+                                        "comment":          map[string]interface{}{"type": "string"},
+                                        "columnName":       map[string]interface{}{"type": "string"},
+                                        "fieldSearchType":  map[string]interface{}{"type": "string"},
+                                        "fieldSearchHide":  map[string]interface{}{"type": "boolean"},
+                                        "dictType":         map[string]interface{}{"type": "string"},
+                                        "form":             map[string]interface{}{"type": "boolean"},
+                                        "table":            map[string]interface{}{"type": "boolean"},
+                                        "desc":             map[string]interface{}{"type": "boolean"},
+                                        "excel":            map[string]interface{}{"type": "boolean"},
+                                        "require":          map[string]interface{}{"type": "boolean"},
+                                        "defaultValue":     map[string]interface{}{"type": "string"},
+                                        "errorText":        map[string]interface{}{"type": "string"},
+                                        "clearable":        map[string]interface{}{"type": "boolean"},
+                                        "sort":             map[string]interface{}{"type": "boolean"},
+                                        "primaryKey":       map[string]interface{}{"type": "boolean"},
                                         "dataSource": map[string]interface{}{
-                                            "type":        "object",
-                                            "description": "数据源配置，用于配置字段的关联表信息。获取表名提示：可在 server/model 和 plugin/xxx/model 目录下查看对应模块的 TableName() 接口实现获取实际表名（如 SysUser 的表名为 sys_users）。获取数据库名提示：主数据库通常使用 gva（默认数据库标识），多数据库可在 config.yaml 的 db-list 配置中查看可用数据库的 alias-name 字段，如果用户未提及关联多数据库信息则使用默认数据库，默认数据库的情况下 dbName填写为空",
+                                            "type":       "object",
                                             "properties": map[string]interface{}{
-                                                "dbName":       map[string]interface{}{"type": "string", "description": "关联的数据库名称（默认数据库留空）"},
-                                                "table":        map[string]interface{}{"type": "string", "description": "关联的表名"},
-                                                "label":        map[string]interface{}{"type": "string", "description": "用于显示的字段名（如name、title等）"},
-                                                "value":        map[string]interface{}{"type": "string", "description": "用于存储的值字段名（通常是id）"},
-                                                "association":  map[string]interface{}{"type": "integer", "description": "关联关系类型：1=一对一关联，2=一对多关联。一对一和一对多的前面的一是当前的实体，如果他只能关联另一个实体的一个则选用一对一，如果他需要关联多个他的关联实体则选用一对多"},
-                                                "hasDeletedAt": map[string]interface{}{"type": "boolean", "description": "关联表是否有软删除字段"},
+                                                "dbName":        map[string]interface{}{"type": "string"},
+                                                "table":         map[string]interface{}{"type": "string"},
+                                                "label":         map[string]interface{}{"type": "string"},
+                                                "value":         map[string]interface{}{"type": "string"},
+                                                "association":   map[string]interface{}{"type": "integer"},
+                                                "hasDeletedAt":  map[string]interface{}{"type": "boolean"},
                                             },
                                         },
-                                        "checkDataSource": map[string]interface{}{"type": "boolean", "description": "是否检查数据源，启用后会验证关联表的存在性"},
-                                        "fieldIndexType":  map[string]interface{}{"type": "string", "description": "索引类型"},
+                                        "checkDataSource":   map[string]interface{}{"type": "boolean"},
+                                        "fieldIndexType":    map[string]interface{}{"type": "string"},
                                     },
                                 },
                             },
@@ -185,24 +182,23 @@ func (g *GVAExecutor) New() mcp.Tool {
                 },
                 "dictionariesInfo": map[string]interface{}{
                     "type":        "array",
-                    "description": "字典创建信息，字典创建会在模块创建之前执行",
+                    "description": "字典创建信息",
                     "items": map[string]interface{}{
                         "type": "object",
                         "properties": map[string]interface{}{
-                            "dictType":    map[string]interface{}{"type": "string", "description": "字典类型，用于标识字典的唯一性"},
-                            "dictName":    map[string]interface{}{"type": "string", "description": "字典名称，必须生成，字典的中文名称"},
-                            "description": map[string]interface{}{"type": "string", "description": "字典描述，字典的用途说明"},
-                            "status":      map[string]interface{}{"type": "boolean", "description": "字典状态：true启用，false禁用"},
-                            "fieldDesc":   map[string]interface{}{"type": "string", "description": "字段描述，用于AI理解字段含义并生成合适的选项"},
+                            "dictType":    map[string]interface{}{"type": "string"},
+                            "dictName":    map[string]interface{}{"type": "string"},
+                            "description": map[string]interface{}{"type": "string"},
+                            "status":      map[string]interface{}{"type": "boolean"},
+                            "fieldDesc":   map[string]interface{}{"type": "string"},
                             "options": map[string]interface{}{
-                                "type":        "array",
-                                "description": "字典选项列表（可选，如果不提供将根据fieldDesc自动生成默认选项）",
+                                "type":  "array",
                                 "items": map[string]interface{}{
                                     "type": "object",
                                     "properties": map[string]interface{}{
-                                        "label": map[string]interface{}{"type": "string", "description": "显示名称，用户看到的选项名"},
-                                        "value": map[string]interface{}{"type": "string", "description": "选项值，实际存储的值"},
-                                        "sort":  map[string]interface{}{"type": "integer", "description": "排序号，数字越小越靠前"},
+                                        "label": map[string]interface{}{"type": "string"},
+                                        "value": map[string]interface{}{"type": "string"},
+                                        "sort":  map[string]interface{}{"type": "integer"},
                                     },
                                 },
                             },

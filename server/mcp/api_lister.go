@@ -42,16 +42,9 @@ type ApiLister struct{}
 // New 创建API列表工具
 func (a *ApiLister) New() mcp.Tool {
 	return mcp.NewTool("list_all_apis",
-		mcp.WithDescription(`获取系统中所有的API接口，分为两组：
+		mcp.WithDescription(`获取系统所有API接口。返回databaseApis(数据库API)和ginApis(gin路由)两组数据。
 
-**功能说明：**
-- 返回数据库中已注册的API列表
-- 返回gin框架中实际注册的路由API列表
-- 帮助前端判断是使用现有API还是需要创建新的API,如果api在前端未使用且需要前端调用的时候，请到api文件夹下对应模块的js中添加方法并暴露给当前业务调用
-
-**返回数据结构：**
-- databaseApis: 数据库中的API记录（包含ID、描述、分组等完整信息）
-- ginApis: gin路由中的API（仅包含路径和方法），需要AI根据路径自行揣摩路径的业务含义，例如：/api/user/:id 表示根据用户ID获取用户信息`),
+**详细说明**: /gva-helper/lister`),
 		mcp.WithString("_placeholder",
 			mcp.Description("占位符，防止json schema校验失败"),
 		),	

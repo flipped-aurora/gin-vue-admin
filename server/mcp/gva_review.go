@@ -35,37 +35,9 @@ type ReviewResponse struct {
 // New 创建GVA代码审查工具
 func (g *GVAReviewer) New() mcp.Tool {
 	return mcp.NewTool("gva_review",
-		mcp.WithDescription(`**GVA代码审查工具 - 在gva_execute调用后使用**
+		mcp.WithDescription(`代码审查工具，在gva_execute后验证生成代码是否满足需求。检查关联关系、交互功能，提供调整建议。
 
-**核心功能：**
-- 接收经过requirement_analyze处理的用户需求和gva_execute生成的文件列表
-- 分析生成的代码是否满足用户的原始需求
-- 检查是否涉及到关联、交互等复杂功能
-- 如果代码不满足需求，提供调整建议和新的prompt
-
-**使用场景：**
-- 在gva_execute成功执行后调用
-- 用于验证生成的代码是否完整满足用户需求
-- 检查模块间的关联关系是否正确实现
-- 发现缺失的交互功能或业务逻辑
-
-**工作流程：**
-1. 接收用户原始需求和生成的文件列表
-2. 分析需求中的关键功能点
-3. 检查生成的文件是否覆盖所有功能
-4. 识别缺失的关联关系、交互功能等
-5. 生成调整建议和新的开发prompt
-
-**输出内容：**
-- 审查结果和是否需要调整
-- 详细的缺失功能分析
-- 针对性的代码调整建议
-- 可直接使用的开发prompt
-
-**重要提示：**
-- 本工具专门用于代码质量审查，不执行实际的代码修改
-- 重点关注模块间关联、用户交互、业务流程完整性
-- 提供的调整建议应该具体可执行`),
+**详细说明**: /gva-helper/gva-review`),
 		mcp.WithString("userRequirement",
 			mcp.Description("经过requirement_analyze处理后的用户需求描述，包含详细的功能要求和字段信息"),
 			mcp.Required(),

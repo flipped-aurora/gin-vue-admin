@@ -1,6 +1,7 @@
 import { formatTimeToStr } from '@/utils/date'
 import { getDict } from '@/utils/dictionary'
 import { ref } from 'vue'
+import { getUrl } from './image'
 
 export const formatBoolean = (bool) => {
   if (bool !== null) {
@@ -78,25 +79,15 @@ export const getDictFunc = async (type) => {
   return dicts
 }
 
-const path = import.meta.env.VITE_FILE_API
 export const ReturnArrImg = (arr) => {
   const imgArr = []
   if (arr instanceof Array) {
     // 如果是数组类型
     for (const arrKey in arr) {
-      if (arr[arrKey].slice(0, 4) !== 'http') {
-        imgArr.push(path + arr[arrKey])
-      } else {
-        imgArr.push(arr[arrKey])
-      }
+        imgArr.push(getUrl(arr[arrKey]))
     }
   } else {
-    // 如果不是数组类型
-    if (arr?.slice(0, 4) !== 'http') {
-      imgArr.push(path + arr)
-    } else {
-      imgArr.push(arr)
-    }
+    imgArr.push(getUrl(arr))
   }
   return imgArr
 }
@@ -104,7 +95,7 @@ export const ReturnArrImg = (arr) => {
 export const returnArrImg = ReturnArrImg
 
 export const onDownloadFile = (url) => {
-  window.open(path + url)
+  window.open(getUrl(url))
 }
 const colorToHex = (u) => {
   let e = u.replace('#', '').match(/../g)

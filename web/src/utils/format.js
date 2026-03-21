@@ -78,8 +78,7 @@ export const getDictFunc = async (type) => {
   return dicts
 }
 
-const path =
-  import.meta.env.VITE_BASE_PATH + ':' + import.meta.env.VITE_SERVER_PORT + '/'
+const path = import.meta.env.VITE_FILE_API
 export const ReturnArrImg = (arr) => {
   const imgArr = []
   if (arr instanceof Array) {

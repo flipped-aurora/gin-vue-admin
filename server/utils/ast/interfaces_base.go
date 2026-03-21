@@ -14,14 +14,16 @@ import (
 	"strings"
 )
 
-type Base struct{}
+type Base struct {
+	FileSet *token.FileSet
+}
 
 func (a *Base) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
-	fileSet := token.NewFileSet()
+	a.FileSet = token.NewFileSet()
 	if writer != nil {
-		file, err = parser.ParseFile(fileSet, filename, nil, parser.ParseComments)
+		file, err = parser.ParseFile(a.FileSet, filename, nil, parser.ParseComments)
 	} else {
-		file, err = parser.ParseFile(fileSet, filename, writer, parser.ParseComments)
+		file, err = parser.ParseFile(a.FileSet, filename, writer, parser.ParseComments)
 	}
 	if err != nil {
 		return nil, errors.Wrapf(err, "[filepath:%s]打开/解析文件失败!", filename)
@@ -38,7 +40,10 @@ func (a *Base) Injection(file *ast.File) error {
 }
 
 func (a *Base) Format(filename string, writer io.Writer, file *ast.File) error {
-	fileSet := token.NewFileSet()
+	fileSet := a.FileSet
+	if fileSet == nil {
+		fileSet = token.NewFileSet()
+	}
 	if writer == nil {
 		open, err := os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC, 0666)
 		defer open.Close()

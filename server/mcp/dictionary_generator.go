@@ -6,38 +6,30 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/mark3labs/mcp-go/mcp"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
 func init() {
 	RegisterTool(&DictionaryOptionsGenerator{})
 }
 
-// DictionaryOptionsGenerator 字典选项生成器
 type DictionaryOptionsGenerator struct{}
 
-// DictionaryOption 字典选项结构
 type DictionaryOption struct {
 	Label string `json:"label"`
 	Value string `json:"value"`
 	Sort  int    `json:"sort"`
 }
 
-// DictionaryGenerateRequest 字典生成请求
 type DictionaryGenerateRequest struct {
-	DictType    string             `json:"dictType"`    // 字典类型
-	FieldDesc   string             `json:"fieldDesc"`   // 字段描述
-	Options     []DictionaryOption `json:"options"`     // AI生成的字典选项
-	DictName    string             `json:"dictName"`    // 字典名称（可选）
-	Description string             `json:"description"` // 字典描述（可选）
+	DictType    string             `json:"dictType"`
+	FieldDesc   string             `json:"fieldDesc"`
+	Options     []DictionaryOption `json:"options"`
+	DictName    string             `json:"dictName"`
+	Description string             `json:"description"`
 }
 
-// DictionaryGenerateResponse 字典生成响应
 type DictionaryGenerateResponse struct {
 	Success      bool   `json:"success"`
 	Message      string `json:"message"`
@@ -45,7 +37,6 @@ type DictionaryGenerateResponse struct {
 	OptionsCount int    `json:"optionsCount"`
 }
 
-// New 返回工具注册信息
 func (d *DictionaryOptionsGenerator) New() mcp.Tool {
 	return mcp.NewTool("generate_dictionary_options",
 		mcp.WithDescription("智能生成字典选项并自动创建字典和字典详情"),
@@ -70,79 +61,52 @@ func (d *DictionaryOptionsGenerator) New() mcp.Tool {
 	)
 }
 
-// Handle 处理工具调用
 func (d *DictionaryOptionsGenerator) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// 解析请求参数
 	args := request.GetArguments()
 
 	dictType, ok := args["dictType"].(string)
 	if !ok || dictType == "" {
 		return nil, errors.New("dictType 参数是必需的")
 	}
-
 	fieldDesc, ok := args["fieldDesc"].(string)
 	if !ok || fieldDesc == "" {
 		return nil, errors.New("fieldDesc 参数是必需的")
 	}
-
 	optionsStr, ok := args["options"].(string)
 	if !ok || optionsStr == "" {
 		return nil, errors.New("options 参数是必需的")
 	}
 
-	// 解析options JSON字符串
 	var options []DictionaryOption
 	if err := json.Unmarshal([]byte(optionsStr), &options); err != nil {
 		return nil, fmt.Errorf("options 参数格式错误: %v", err)
 	}
-
 	if len(options) == 0 {
 		return nil, errors.New("options 不能为空")
 	}
 
-	dictName, _ := args["dictName"].(string)
-	description, _ := args["description"].(string)
-
-	// 构建请求对象
 	req := &DictionaryGenerateRequest{
 		DictType:    dictType,
 		FieldDesc:   fieldDesc,
 		Options:     options,
-		DictName:    dictName,
-		Description: description,
+		DictName:    stringValue(args["dictName"]),
+		Description: stringValue(args["description"]),
 	}
 
-	// 创建字典
-	response, err := d.createDictionaryWithOptions(ctx, req)
+	result, err := d.createDictionaryWithOptions(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	// 构建响应
-	resultJSON, err := json.MarshalIndent(response, "", "  ")
-	if err != nil {
-		return nil, fmt.Errorf("序列化结果失败: %v", err)
-	}
-
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: fmt.Sprintf("字典选项生成结果：\n\n%s", string(resultJSON)),
-			},
-		},
-	}, nil
+	return textResultWithJSON("字典选项生成结果：", result)
 }
 
-// createDictionaryWithOptions 创建字典和字典选项
 func (d *DictionaryOptionsGenerator) createDictionaryWithOptions(ctx context.Context, req *DictionaryGenerateRequest) (*DictionaryGenerateResponse, error) {
-	// 检查字典是否已存在
-	exists, err := d.checkDictionaryExists(req.DictType)
+	existingDict, err := findDictionaryByType(ctx, req.DictType)
 	if err != nil {
 		return nil, fmt.Errorf("检查字典是否存在失败: %v", err)
 	}
-
-	if exists {
+	if existingDict != nil {
 		return &DictionaryGenerateResponse{
 			Success:      false,
 			Message:      fmt.Sprintf("字典 %s 已存在，跳过创建", req.DictType),
@@ -151,50 +115,38 @@ func (d *DictionaryOptionsGenerator) createDictionaryWithOptions(ctx context.Con
 		}, nil
 	}
 
-	// 生成字典名称
 	dictName := req.DictName
 	if dictName == "" {
 		dictName = d.generateDictionaryName(req.DictType, req.FieldDesc)
 	}
 
-	// 创建字典
-	dictionaryService := service.ServiceGroupApp.SystemServiceGroup.DictionaryService
-	dictionary := system.SysDictionary{
+	if err := createDictionary(ctx, system.SysDictionary{
 		Name:   dictName,
 		Type:   req.DictType,
-		Status: &[]bool{true}[0], // 默认启用
+		Status: enabledBoolPointer(),
 		Desc:   req.Description,
-	}
-
-	err = dictionaryService.CreateSysDictionary(dictionary)
-	if err != nil {
+	}); err != nil {
 		return nil, fmt.Errorf("创建字典失败: %v", err)
 	}
 
-	// 获取刚创建的字典ID
-	var createdDict system.SysDictionary
-	err = global.GVA_DB.Where("type = ?", req.DictType).First(&createdDict).Error
+	createdDict, err := findDictionaryByType(ctx, req.DictType)
 	if err != nil {
 		return nil, fmt.Errorf("获取创建的字典失败: %v", err)
 	}
+	if createdDict == nil {
+		return nil, fmt.Errorf("获取创建的字典失败")
+	}
 
-	// 创建字典详情项
-	dictionaryDetailService := service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 	successCount := 0
-
 	for _, option := range req.Options {
-		dictionaryDetail := system.SysDictionaryDetail{
+		err := createDictionaryDetail(ctx, system.SysDictionaryDetail{
 			Label:           option.Label,
 			Value:           option.Value,
-			Status:          &[]bool{true}[0], // 默认启用
+			Status:          enabledBoolPointer(),
 			Sort:            option.Sort,
 			SysDictionaryID: int(createdDict.ID),
-		}
-
-		err = dictionaryDetailService.CreateSysDictionaryDetail(dictionaryDetail)
-		if err != nil {
-			global.GVA_LOG.Warn("创建字典详情项失败", zap.Error(err))
-		} else {
+		})
+		if err == nil {
 			successCount++
 		}
 	}
@@ -207,23 +159,16 @@ func (d *DictionaryOptionsGenerator) createDictionaryWithOptions(ctx context.Con
 	}, nil
 }
 
-// checkDictionaryExists 检查字典是否存在
-func (d *DictionaryOptionsGenerator) checkDictionaryExists(dictType string) (bool, error) {
-	var dictionary system.SysDictionary
-	err := global.GVA_DB.Where("type = ?", dictType).First(&dictionary).Error
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, nil // 字典不存在
-		}
-		return false, err // 其他错误
-	}
-	return true, nil // 字典存在
-}
-
-// generateDictionaryName 生成字典名称
 func (d *DictionaryOptionsGenerator) generateDictionaryName(dictType, fieldDesc string) string {
 	if fieldDesc != "" {
 		return fmt.Sprintf("%s字典", fieldDesc)
 	}
 	return fmt.Sprintf("%s字典", dictType)
+}
+
+func stringValue(value any) string {
+	if str, ok := value.(string); ok {
+		return str
+	}
+	return ""
 }

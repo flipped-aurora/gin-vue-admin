@@ -28,36 +28,11 @@ type RequirementAnalysisResponse struct {
 // New 返回工具注册信息
 func (t *RequirementAnalyzer) New() mcp.Tool {
 	return mcp.NewTool("requirement_analyzer",
-		mcp.WithDescription(`** 智能需求分析与模块设计工具 - 首选入口工具（最高优先级）**
+		mcp.WithDescription(`智能需求分析器，作为GVA工具链首选入口。分析用户需求，设计模块架构和字段。
 
-** 重要提示：这是所有MCP工具的首选入口，请优先使用！**
+**调用流程**: requirement_analyzer → gva_analyze → gva_execute
 
-** 核心能力：**
-作为资深系统架构师，智能分析用户需求并自动设计完整的模块架构
-
-** 核心功能：**
-1. **智能需求解构**：深度分析用户需求，识别核心业务实体、业务流程、数据关系
-2. **自动模块设计**：基于需求分析，智能确定需要多少个模块及各模块功能
-3. **字段智能推导**：为每个模块自动设计详细字段，包含数据类型、关联关系、字典需求
-4. **架构优化建议**：提供模块拆分、关联设计、扩展性等专业建议
-
-** 输出内容：**
-- 模块数量和架构设计
-- 每个模块的详细字段清单
-- 数据类型和关联关系设计
-- 字典需求和类型定义
-- 模块间关系图和扩展建议
-
-** 适用场景：**
-- 用户需求描述不完整，需要智能补全
-- 复杂业务系统的模块架构设计
-- 需要专业的数据库设计建议
-- 想要快速搭建生产级业务系统
-
-** 推荐工作流：**
- requirement_analyzer → gva_analyze → gva_execute → 其他辅助工具
- 
- `),
+**详细说明**: /gva-helper/requirement-analyzer`),
 		mcp.WithString("userRequirement",
 			mcp.Required(),
 			mcp.Description("用户的需求描述，支持自然语言，如：'我要做一个猫舍管理系统，用来录入猫的信息，并且记录每只猫每天的活动信息'"),

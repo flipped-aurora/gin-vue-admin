@@ -349,16 +349,7 @@ func (g *GVAAnalyzer) removeDirectoryIfExists(dirPath string) error {
 		return err // 其他错误
 	}
 
-	// 检查目录中是否包含go文件
-	noGoFiles, err := g.hasGoFilesRecursive(dirPath)
-	if err != nil {
-		return err
-	}
-	// hasGoFilesRecursive 返回 false 表示发现了 go 文件
-	if noGoFiles {
-		return os.RemoveAll(dirPath)
-	}
-	return nil
+	return os.RemoveAll(dirPath)
 }
 
 // cleanupRelatedApiAndMenus 清理相关的API和菜单记录

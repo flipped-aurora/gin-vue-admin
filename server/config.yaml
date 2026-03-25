@@ -279,8 +279,5 @@ cors:
 mcp:
     name: GVA_MCP
     version: v1.0.0
-    sse_path: /sse
-    message_path: /message
-    url_prefix: ''
     addr: 8889
     separate: false

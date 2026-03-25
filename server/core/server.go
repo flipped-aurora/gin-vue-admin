@@ -6,6 +6,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	mcpTool "github.com/flipped-aurora/gin-vue-admin/server/mcp"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"go.uber.org/zap"
 )
@@ -30,6 +31,7 @@ func RunServer() {
 
 	Router := initialize.Routers()
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
+	mcpBaseURL := mcpTool.ResolveMCPServiceURL()
 
 	fmt.Printf(`
 	欢迎使用 gin-vue-admin
@@ -40,7 +42,7 @@ func RunServer() {
 	MCP 独立服务请手动启动: go run ./cmd/mcp -config ./cmd/mcp/config.yaml
 	默认MCP StreamHTTP地址:%s
 	默认前端文件运行地址:http://127.0.0.1:8080
-`, global.Version, address, global.GVA_CONFIG.MCP.BaseURL)
+`, global.Version, address, mcpBaseURL)
 
 	initServer(address, Router, 10*time.Minute, 10*time.Minute)
 }

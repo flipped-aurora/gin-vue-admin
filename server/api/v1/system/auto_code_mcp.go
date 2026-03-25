@@ -1,6 +1,8 @@
 package system
 
 import (
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	mcpTool "github.com/flipped-aurora/gin-vue-admin/server/mcp"
 	"github.com/flipped-aurora/gin-vue-admin/server/mcp/client"
@@ -26,35 +28,69 @@ func (a *AutoCodeTemplateApi) MCP(c *gin.Context) {
 	response.OkWithMessage("创建成功,MCP Tool路径:"+toolFilePath, c)
 }
 
+func (a *AutoCodeTemplateApi) MCPStatus(c *gin.Context) {
+	response.OkWithData(gin.H{
+		"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+		"mcpServerConfig": buildMCPServerConfig(),
+	}, c)
+}
+
+func (a *AutoCodeTemplateApi) MCPStart(c *gin.Context) {
+	status, err := mcpTool.StartManagedStandalone(c.Request.Context())
+	if err != nil {
+		response.FailWithDetailed(gin.H{
+			"status":          status,
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, err.Error(), c)
+		return
+	}
+
+	response.OkWithDetailed(gin.H{
+		"status":          status,
+		"mcpServerConfig": buildMCPServerConfig(),
+	}, "MCP独立服务已启动", c)
+}
+
+func (a *AutoCodeTemplateApi) MCPStop(c *gin.Context) {
+	status, err := mcpTool.StopManagedStandalone(c.Request.Context())
+	if err != nil {
+		response.FailWithDetailed(gin.H{
+			"status":          status,
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, err.Error(), c)
+		return
+	}
+
+	response.OkWithDetailed(gin.H{
+		"status":          status,
+		"mcpServerConfig": buildMCPServerConfig(),
+	}, "MCP独立服务已停用", c)
+}
+
 func (a *AutoCodeTemplateApi) MCPList(c *gin.Context) {
 	baseURL := mcpTool.ResolveMCPServiceURL()
-	testClient, err := client.NewClient(baseURL, "testClient", "v1.0.0", global.GVA_CONFIG.MCP.Name, incomingMCPHeaders(c))
+	testClient, err := client.NewClient(baseURL, "testClient", "v1.0.0", mcpServerName(), incomingMCPHeaders(c))
 	if err != nil {
-		response.FailWithMessage("连接MCP服务失败:"+err.Error(), c)
+		response.FailWithDetailed(gin.H{
+			"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, "连接MCP服务失败:"+err.Error(), c)
 		return
 	}
 	defer testClient.Close()
 
 	list, err := testClient.ListTools(c.Request.Context(), mcp.ListToolsRequest{})
 	if err != nil {
-		response.FailWithMessage("获取工具列表失败:"+err.Error(), c)
+		response.FailWithDetailed(gin.H{
+			"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, "获取工具列表失败:"+err.Error(), c)
 		return
 	}
 
-	authHeader := mcpTool.ConfiguredAuthHeader()
-	mcpServerConfig := map[string]interface{}{
-		"mcpServers": map[string]interface{}{
-			global.GVA_CONFIG.MCP.Name: map[string]interface{}{
-				"url": baseURL,
-				"headers": map[string]string{
-					authHeader: "${YOUR_GVA_TOKEN}",
-				},
-			},
-		},
-	}
-
 	response.OkWithData(gin.H{
-		"mcpServerConfig": mcpServerConfig,
+		"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+		"mcpServerConfig": buildMCPServerConfig(),
 		"list":            list,
 	}, c)
 }
@@ -76,7 +112,7 @@ func (a *AutoCodeTemplateApi) MCPTest(c *gin.Context) {
 	}
 
 	baseURL := mcpTool.ResolveMCPServiceURL()
-	testClient, err := client.NewClient(baseURL, "testClient", "v1.0.0", global.GVA_CONFIG.MCP.Name, incomingMCPHeaders(c))
+	testClient, err := client.NewClient(baseURL, "testClient", "v1.0.0", mcpServerName(), incomingMCPHeaders(c))
 	if err != nil {
 		response.FailWithMessage("连接MCP服务失败:"+err.Error(), c)
 		return
@@ -110,4 +146,28 @@ func incomingMCPHeaders(c *gin.Context) map[string]string {
 	return map[string]string{
 		headerName: headerValue,
 	}
+}
+
+func buildMCPServerConfig() map[string]interface{} {
+	baseURL := mcpTool.ResolveMCPServiceURL()
+	authHeader := mcpTool.ConfiguredAuthHeader()
+	serverName := mcpServerName()
+
+	return map[string]interface{}{
+		"mcpServers": map[string]interface{}{
+			serverName: map[string]interface{}{
+				"url": baseURL,
+				"headers": map[string]string{
+					authHeader: "${YOUR_GVA_TOKEN}",
+				},
+			},
+		},
+	}
+}
+
+func mcpServerName() string {
+	if name := strings.TrimSpace(global.GVA_CONFIG.MCP.Name); name != "" {
+		return name
+	}
+	return "gva"
 }

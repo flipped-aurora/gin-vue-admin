@@ -1,4 +1,4 @@
-package mcpTool
+﻿package mcpTool
 
 import (
 	"context"
@@ -13,65 +13,65 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-// 娉ㄥ唽宸ュ叿
+// 注册工具
 func init() {
 	RegisterTool(&GVAAnalyzer{})
 }
 
-// GVAAnalyzer GVA鍒嗘瀽鍣?- 鐢ㄤ簬鍒嗘瀽褰撳墠鍔熻兘鏄惁闇€瑕佸垱寤虹嫭绔嬬殑package鍜宮odule
+// GVAAnalyzer GVA分析器 - 用于分析当前功能是否需要创建独立的package和module
 type GVAAnalyzer struct{}
 
-// AnalyzeRequest 鍒嗘瀽璇锋眰缁撴瀯浣?
+// AnalyzeRequest 分析请求结构体
 type AnalyzeRequest struct {
-	Requirement string `json:"requirement" binding:"required"` // 鐢ㄦ埛闇€姹傛弿杩?
+	Requirement string `json:"requirement" binding:"required"` // 用户需求描述
 }
 
-// AnalyzeResponse 鍒嗘瀽鍝嶅簲缁撴瀯浣?
+// AnalyzeResponse 分析响应结构体
 type AnalyzeResponse struct {
-	ExistingPackages   []PackageInfo           `json:"existingPackages"`   // 鐜版湁鍖呬俊鎭?
-	PredesignedModules []PredesignedModuleInfo `json:"predesignedModules"` // 棰勮璁℃ā鍧椾俊鎭?
-	Dictionaries       []DictionaryPre         `json:"dictionaries"`       // 瀛楀吀淇℃伅
-	CleanupInfo        *CleanupInfo            `json:"cleanupInfo"`        // 娓呯悊淇℃伅锛堝鏋滄湁锛?
+	ExistingPackages   []PackageInfo           `json:"existingPackages"`   // 现有包信息
+PredesignedModules []PredesignedModuleInfo `json:"predesignedModules"` // 预设计模块信息
+	Dictionaries       []DictionaryPre         `json:"dictionaries"`       // 字典信息
+	CleanupInfo        *CleanupInfo            `json:"cleanupInfo"`        // 清理信息（如果有）
 }
 
-// ModuleInfo 妯″潡淇℃伅
+// ModuleInfo 模块信息
 type ModuleInfo struct {
-	ModuleName  string   `json:"moduleName"`  // 妯″潡鍚嶇О
-	PackageName string   `json:"packageName"` // 鍖呭悕
-	Template    string   `json:"template"`    // 妯℃澘绫诲瀷
-	StructName  string   `json:"structName"`  // 缁撴瀯浣撳悕绉?
-	TableName   string   `json:"tableName"`   // 琛ㄥ悕
-	Description string   `json:"description"` // 鎻忚堪
-	FilePaths   []string `json:"filePaths"`   // 鐩稿叧鏂囦欢璺緞
+	ModuleName  string   `json:"moduleName"`  // 模块名称
+	PackageName string   `json:"packageName"` // 包名
+	Template    string   `json:"template"`    // 模板类型
+	StructName  string   `json:"structName"`  // 结构体名称
+	TableName   string   `json:"tableName"`   // 表名
+	Description string   `json:"description"` // 描述
+FilePaths   []string `json:"filePaths"`   // 相关文件路径
 }
 
-// PackageInfo 鍖呬俊鎭?
+// PackageInfo 包信息
 type PackageInfo struct {
-	PackageName string `json:"packageName"` // 鍖呭悕
-	Template    string `json:"template"`    // 妯℃澘绫诲瀷
-	Label       string `json:"label"`       // 鏍囩
-	Desc        string `json:"desc"`        // 鎻忚堪
-	Module      string `json:"module"`      // 妯″潡
-	IsEmpty     bool   `json:"isEmpty"`     // 鏄惁涓虹┖鍖?
+	PackageName string `json:"packageName"` // 包名
+Template    string `json:"template"`    // 模板类型
+	Label       string `json:"label"`       // 标签
+	Desc        string `json:"desc"`        // 描述
+	Module      string `json:"module"`      // 模块
+	IsEmpty     bool   `json:"isEmpty"`     // 是否为空包
 }
 
-// PredesignedModuleInfo 棰勮璁℃ā鍧椾俊鎭?
+// PredesignedModuleInfo 预设计模块信息
 type PredesignedModuleInfo struct {
-	ModuleName  string   `json:"moduleName"`  // 妯″潡鍚嶇О
-	PackageName string   `json:"packageName"` // 鍖呭悕
-	Template    string   `json:"template"`    // 妯℃澘绫诲瀷
-	FilePaths   []string `json:"filePaths"`   // 鏂囦欢璺緞鍒楄〃
-	Description string   `json:"description"` // 鎻忚堪
+	ModuleName  string   `json:"moduleName"`  // 模块名称
+	PackageName string   `json:"packageName"` // 包名
+Template    string   `json:"template"`    // 模板类型
+	FilePaths   []string `json:"filePaths"`   // 文件路径列表
+	Description string   `json:"description"` // 描述
 }
 
-// CleanupInfo 娓呯悊淇℃伅
+// CleanupInfo 清理信息
 type CleanupInfo struct {
-	DeletedPackages []string `json:"deletedPackages"` // 宸插垹闄ょ殑鍖?
-	DeletedModules  []string `json:"deletedModules"`  // 宸插垹闄ょ殑妯″潡
-	CleanupMessage  string   `json:"cleanupMessage"`  // 娓呯悊娑堟伅
+	DeletedPackages []string `json:"deletedPackages"` // 已删除的包
+	DeletedModules  []string `json:"deletedModules"`  // 已删除的模块
+	CleanupMessage  string   `json:"cleanupMessage"`  // 清理消息
 }
 
-// New 鍒涘缓GVA鍒嗘瀽鍣ㄥ伐鍏?
+// New 创建GVA分析器工具
 func (g *GVAAnalyzer) New() mcp.Tool {
 	return mcp.NewTool("gva_analyze",
 		mcp.WithDescription("返回当前系统中有效的包和模块信息，并分析用户需求是否需要创建新的包、模块和字典。同时检查并清理空包，确保系统整洁。"),
@@ -82,29 +82,29 @@ func (g *GVAAnalyzer) New() mcp.Tool {
 	)
 }
 
-// Handle 澶勭悊鍒嗘瀽璇锋眰
+// Handle 处理分析请求
 func (g *GVAAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// 瑙ｆ瀽璇锋眰鍙傛暟
+	// 解析请求参数
 	requirementStr, ok := request.GetArguments()["requirement"].(string)
 	if !ok || requirementStr == "" {
-		return nil, errors.New("鍙傛暟閿欒锛歳equirement 蹇呴』鏄潪绌哄瓧绗︿覆")
+		return nil, errors.New("参数错误：requirement 必须是非空字符串")
 	}
 
-	// 鍒涘缓鍒嗘瀽璇锋眰
+	// 创建分析请求
 	analyzeReq := AnalyzeRequest{
 		Requirement: requirementStr,
 	}
 
-	// 鎵ц鍒嗘瀽閫昏緫
+	// 执行分析逻辑
 	response, err := g.performAnalysis(ctx, analyzeReq)
 	if err != nil {
-		return nil, fmt.Errorf("鍒嗘瀽澶辫触: %v", err)
+		return nil, fmt.Errorf("分析失败: %v", err)
 	}
 
-	// 搴忓垪鍖栧搷搴?
+	// 序列化响应
 	responseJSON, err := json.Marshal(response)
 	if err != nil {
-		return nil, fmt.Errorf("搴忓垪鍖栧搷搴斿け璐? %v", err)
+		return nil, fmt.Errorf("序列化响应失败: %v", err)
 	}
 
 	return &mcp.CallToolResult{
@@ -114,18 +114,18 @@ func (g *GVAAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}, nil
 }
 
-// performAnalysis 鎵ц鍒嗘瀽閫昏緫
+// performAnalysis 执行分析逻辑
 func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (*AnalyzeResponse, error) {
 	_ = req
 
 	packages, err := fetchAutoCodePackages(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("鑾峰彇鍖呬俊鎭け璐? %v", err)
+		return nil, fmt.Errorf("获取包信息失败: %v", err)
 	}
 
 	histories, err := fetchAutoCodeHistories(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("鑾峰彇鍘嗗彶璁板綍澶辫触: %v", err)
+		return nil, fmt.Errorf("获取历史记录失败: %v", err)
 	}
 
 	cleanupInfo := &CleanupInfo{
@@ -139,19 +139,19 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	for _, pkg := range packages {
 		isEmpty, err := g.isPackageFolderEmpty(pkg.PackageName, pkg.Template)
 		if err != nil {
-			global.GVA_LOG.Warn(fmt.Sprintf("妫€鏌ュ寘 %s 鏄惁涓虹┖鏃跺嚭閿? %v", pkg.PackageName, err))
+global.GVA_LOG.Warn(fmt.Sprintf("检查包 %s 是否为空时出错: %v", pkg.PackageName, err))
 			continue
 		}
 
 		if isEmpty {
 			if err := g.removeEmptyPackageFolder(pkg.PackageName, pkg.Template); err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("鍒犻櫎绌哄寘鏂囦欢澶?%s 澶辫触: %v", pkg.PackageName, err))
+				global.GVA_LOG.Warn(fmt.Sprintf("删除空包文件夹 %s 失败: %v", pkg.PackageName, err))
 			} else {
 				cleanupInfo.DeletedPackages = append(cleanupInfo.DeletedPackages, pkg.PackageName)
 			}
 
 			if err := deleteAutoCodePackage(ctx, pkg.ID); err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("鍒犻櫎鍖呮暟鎹簱璁板綍 %s 澶辫触: %v", pkg.PackageName, err))
+				global.GVA_LOG.Warn(fmt.Sprintf("删除包数据库记录 %s 失败: %v", pkg.PackageName, err))
 			}
 
 			for _, history := range histories {
@@ -187,23 +187,23 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 		deletedCount := 0
 		for _, historyID := range dirtyHistoryIDs {
 			if err := deleteAutoCodeHistory(ctx, historyID); err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("鍒犻櫎鑴忓巻鍙茶褰曞け璐? %v", err))
+				global.GVA_LOG.Warn(fmt.Sprintf("删除脏历史记录失败: %v", err))
 				continue
 			}
 			deletedCount++
 		}
 		if deletedCount > 0 {
-			global.GVA_LOG.Info(fmt.Sprintf("鎴愬姛鍒犻櫎 %d 鏉¤剰鍘嗗彶璁板綍", deletedCount))
+			global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 条脏历史记录", deletedCount))
 		}
 
 		if err := g.cleanupRelatedApiAndMenus(dirtyHistoryIDs); err != nil {
-			global.GVA_LOG.Warn(fmt.Sprintf("娓呯悊鐩稿叧API鍜岃彍鍗曡褰曞け璐? %v", err))
+			global.GVA_LOG.Warn(fmt.Sprintf("清理相关API和菜单记录失败: %v", err))
 		}
 	}
 
 	predesignedModules, err := g.scanPredesignedModules()
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("鎵弿棰勮璁℃ā鍧楀け璐? %v", err))
+		global.GVA_LOG.Warn(fmt.Sprintf("扫描预设计模块失败: %v", err))
 		predesignedModules = []PredesignedModuleInfo{}
 	}
 
@@ -224,7 +224,7 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	dictionaries := []DictionaryPre{}
 	dictEntities, err := fetchDictionaryList(ctx, "")
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("鑾峰彇瀛楀吀淇℃伅澶辫触: %v", err))
+		global.GVA_LOG.Warn(fmt.Sprintf("获取字典信息失败: %v", err))
 	} else {
 		for _, dictionary := range dictEntities {
 			dictionaries = append(dictionaries, DictionaryPre{
@@ -237,12 +237,12 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	var cleanupResult *CleanupInfo
 	if len(cleanupInfo.DeletedPackages) > 0 || len(cleanupInfo.DeletedModules) > 0 {
 		var message strings.Builder
-		message.WriteString("**绯荤粺娓呯悊瀹屾垚**\n\n")
+		message.WriteString("**系统清理完成**\n\n")
 		if len(cleanupInfo.DeletedPackages) > 0 {
-			message.WriteString(fmt.Sprintf("- 鍒犻櫎浜?%d 涓┖鍖? %s\n", len(cleanupInfo.DeletedPackages), strings.Join(cleanupInfo.DeletedPackages, ", ")))
+message.WriteString(fmt.Sprintf("- 删除了 %d 个空包: %s\n", len(cleanupInfo.DeletedPackages), strings.Join(cleanupInfo.DeletedPackages, ", ")))
 		}
 		if len(cleanupInfo.DeletedModules) > 0 {
-			message.WriteString(fmt.Sprintf("- 鍒犻櫎浜?%d 涓浉鍏虫ā鍧? %s\n", len(cleanupInfo.DeletedModules), strings.Join(cleanupInfo.DeletedModules, ", ")))
+message.WriteString(fmt.Sprintf("- 删除了 %d 个相关模块: %s\n", len(cleanupInfo.DeletedModules), strings.Join(cleanupInfo.DeletedModules, ", ")))
 		}
 		cleanupInfo.CleanupMessage = message.String()
 		cleanupResult = cleanupInfo
@@ -258,9 +258,9 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	return response, nil
 }
 
-// isPackageFolderEmpty 妫€鏌ュ寘鏂囦欢澶规槸鍚︿负绌?
+// isPackageFolderEmpty 检查包文件夹是否为空
 func (g *GVAAnalyzer) isPackageFolderEmpty(packageName, template string) (bool, error) {
-	// 鏍规嵁妯℃澘绫诲瀷纭畾鍩虹璺緞
+	// 根据模板类型确定基础路径
 	var basePath string
 	if template == "plugin" {
 		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
@@ -268,54 +268,54 @@ func (g *GVAAnalyzer) isPackageFolderEmpty(packageName, template string) (bool, 
 		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", packageName)
 	}
 
-	// 妫€鏌ユ枃浠跺す鏄惁瀛樺湪
+	// 检查文件夹是否存在
 	if _, err := os.Stat(basePath); os.IsNotExist(err) {
-		return true, nil // 鏂囦欢澶逛笉瀛樺湪锛岃涓虹┖
+		return true, nil // 文件夹不存在，认为空
 	} else if err != nil {
-		return false, err // 鍏朵粬閿欒
+		return false, err // 其他错误
 	}
-	// 閫掑綊妫€鏌ユ槸鍚︽湁.go鏂囦欢
+	// 递归检查是否有.go文件
 	return g.hasGoFilesRecursive(basePath)
 }
 
-// hasGoFilesRecursive 閫掑綊妫€鏌ョ洰褰曞強鍏跺瓙鐩綍涓槸鍚︽湁.go鏂囦欢
+// hasGoFilesRecursive 递归检查目录及其子目录中是否有.go文件
 func (g *GVAAnalyzer) hasGoFilesRecursive(dirPath string) (bool, error) {
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
-		return true, err // 璇诲彇澶辫触锛岃繑鍥炵┖
+		return true, err // 读取失败，返回空
 	}
 
-	// 妫€鏌ュ綋鍓嶇洰褰曚笅鐨?go鏂囦欢
+	// 检查当前目录下的.go文件
 	for _, entry := range entries {
 		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".go") {
-			return false, nil // 鎵惧埌.go鏂囦欢锛屼笉涓虹┖
+			return false, nil // 找到.go文件，不为空
 		}
 	}
 
-	// 閫掑綊妫€鏌ュ瓙鐩綍
+	// 递归检查子目录
 	for _, entry := range entries {
 		if entry.IsDir() {
 			subDirPath := filepath.Join(dirPath, entry.Name())
 			isEmpty, err := g.hasGoFilesRecursive(subDirPath)
 			if err != nil {
-				continue // 蹇界暐瀛愮洰褰曠殑閿欒锛岀户缁鏌ュ叾浠栫洰褰?
+				continue // 忽略子目录的错误，继续检查其他目录
 			}
 			if !isEmpty {
-				return false, nil // 瀛愮洰褰曚腑鎵惧埌.go鏂囦欢锛屼笉涓虹┖
+				return false, nil // 子目录中找到.go文件，不为空
 			}
 		}
 	}
 
-	return true, nil // 娌℃湁鎵惧埌.go鏂囦欢锛屼负绌?
+	return true, nil // 没有找到.go文件，为空
 }
 
-// removeEmptyPackageFolder 鍒犻櫎绌哄寘鏂囦欢澶?
+// removeEmptyPackageFolder 删除空包文件夹
 func (g *GVAAnalyzer) removeEmptyPackageFolder(packageName, template string) error {
 	var basePath string
 	if template == "plugin" {
 		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
 	} else {
-		// 瀵逛簬package绫诲瀷锛岄渶瑕佸垹闄ゅ涓洰褰?
+		// 对于package类型，需要删除多个目录
 		paths := []string{
 			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", packageName),
 			filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "model", packageName),
@@ -333,65 +333,65 @@ func (g *GVAAnalyzer) removeEmptyPackageFolder(packageName, template string) err
 	return g.removeDirectoryIfExists(basePath)
 }
 
-// removeDirectoryIfExists 鍒犻櫎鐩綍锛堝鏋滃瓨鍦級
+// removeDirectoryIfExists 删除目录（如果存在）
 func (g *GVAAnalyzer) removeDirectoryIfExists(dirPath string) error {
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		return nil // 鐩綍涓嶅瓨鍦紝鏃犻渶鍒犻櫎
+		return nil // 目录不存在，无需删除
 	} else if err != nil {
-		return err // 鍏朵粬閿欒
+		return err // 其他错误
 	}
 
-	// 妫€鏌ョ洰褰曚腑鏄惁鍖呭惈go鏂囦欢
+	// 检查目录中是否包含go文件
 	noGoFiles, err := g.hasGoFilesRecursive(dirPath)
 	if err != nil {
 		return err
 	}
-	// hasGoFilesRecursive 杩斿洖 false 琛ㄧず鍙戠幇浜?go 鏂囦欢
+	// hasGoFilesRecursive 返回 false 表示发现了 go 文件
 	if noGoFiles {
 		return os.RemoveAll(dirPath)
 	}
 	return nil
 }
 
-// cleanupRelatedApiAndMenus 娓呯悊鐩稿叧鐨凙PI鍜岃彍鍗曡褰?
+// cleanupRelatedApiAndMenus 清理相关的API和菜单记录
 func (g *GVAAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) error {
 	if len(historyIDs) == 0 {
 		return nil
 	}
 
-	// 杩欓噷鍙互鏍规嵁闇€瑕佸疄鐜板叿浣撶殑API鍜岃彍鍗曟竻鐞嗛€昏緫
-	// 鐢变簬娑夊強鍒板叿浣撶殑涓氬姟閫昏緫锛岃繖閲屽彧鍋氭棩蹇楄褰?
+	// 这里可以根据需要实现具体的API和菜单清理逻辑
+	// 由于涉及到具体的业务逻辑，这里只做日志记录
 	global.GVA_LOG.Info(fmt.Sprintf("清理历史记录ID %v 相关的API和菜单记录", historyIDs))
 
-	// 鍙互璋冪敤service灞傜殑鐩稿叧鏂规硶杩涜娓呯悊
-	// 渚嬪锛歴ervice.ServiceGroupApp.SystemApiService.DeleteApisByIds(historyIDs)
-	// 渚嬪锛歴ervice.ServiceGroupApp.MenuService.DeleteMenusByIds(historyIDs)
+	// 可以调用service层的相关方法进行清理
+	// 例如：service.ServiceGroupApp.SystemApiService.DeleteApisByIds(historyIDs)
+	// 例如：service.ServiceGroupApp.MenuService.DeleteMenusByIds(historyIDs)
 
 	return nil
 }
 
-// scanPredesignedModules 鎵弿棰勮璁℃ā鍧?
+// scanPredesignedModules 扫描预设计模块
 func (g *GVAAnalyzer) scanPredesignedModules() ([]PredesignedModuleInfo, error) {
-	// 鑾峰彇autocode閰嶇疆璺緞
+	// 获取autocode配置路径
 	autocodeRoot := global.GVA_CONFIG.AutoCode.Root
 	if autocodeRoot == "" {
-		return nil, errors.New("autocode鏍硅矾寰勬湭閰嶇疆")
+		return nil, errors.New("autocode根路径未配置")
 	}
 
 	var modules []PredesignedModuleInfo
 
-	// 鎵弿plugin鐩綍
+	// 扫描plugin目录
 	pluginModules, err := g.scanPluginModules(filepath.Join(autocodeRoot, global.GVA_CONFIG.AutoCode.Server, "plugin"))
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("鎵弿plugin妯″潡澶辫触: %v", err))
+		global.GVA_LOG.Warn(fmt.Sprintf("扫描plugin模块失败: %v", err))
 	} else {
 		modules = append(modules, pluginModules...)
 	}
 
-	// 鎵弿model鐩綍
+	// 扫描model目录
 	modelModules, err := g.scanModelModules(filepath.Join(autocodeRoot, global.GVA_CONFIG.AutoCode.Server, "model"))
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("鎵弿model妯″潡澶辫触: %v", err))
+		global.GVA_LOG.Warn(fmt.Sprintf("扫描model模块失败: %v", err))
 	} else {
 		modules = append(modules, modelModules...)
 	}
@@ -399,12 +399,12 @@ func (g *GVAAnalyzer) scanPredesignedModules() ([]PredesignedModuleInfo, error) 
 	return modules, nil
 }
 
-// scanPluginModules 鎵弿鎻掍欢妯″潡
+// scanPluginModules 扫描插件模块
 func (g *GVAAnalyzer) scanPluginModules(pluginDir string) ([]PredesignedModuleInfo, error) {
 	var modules []PredesignedModuleInfo
 
 	if _, err := os.Stat(pluginDir); os.IsNotExist(err) {
-		return modules, nil // 鐩綍涓嶅瓨鍦紝杩斿洖绌哄垪琛?
+		return modules, nil // 目录不存在，返回空列表
 	}
 
 	entries, err := os.ReadDir(pluginDir)
@@ -417,13 +417,13 @@ func (g *GVAAnalyzer) scanPluginModules(pluginDir string) ([]PredesignedModuleIn
 			pluginName := entry.Name()
 			pluginPath := filepath.Join(pluginDir, pluginName)
 
-			// 鏌ユ壘model鐩綍
+			// 查找model目录
 			modelDir := filepath.Join(pluginPath, "model")
 			if _, err := os.Stat(modelDir); err == nil {
-				// 鎵弿model鐩綍涓嬬殑妯″潡
+				// 扫描model目录下的模块
 				pluginModules, err := g.scanModulesInDirectory(modelDir, pluginName, "plugin")
 				if err != nil {
-					global.GVA_LOG.Warn(fmt.Sprintf("鎵弿鎻掍欢 %s 鐨勬ā鍧楀け璐? %v", pluginName, err))
+					global.GVA_LOG.Warn(fmt.Sprintf("扫描插件 %s 的模块失败: %v", pluginName, err))
 					continue
 				}
 				modules = append(modules, pluginModules...)
@@ -434,12 +434,12 @@ func (g *GVAAnalyzer) scanPluginModules(pluginDir string) ([]PredesignedModuleIn
 	return modules, nil
 }
 
-// scanModelModules 鎵弿妯″瀷妯″潡
+// scanModelModules 扫描模型模块
 func (g *GVAAnalyzer) scanModelModules(modelDir string) ([]PredesignedModuleInfo, error) {
 	var modules []PredesignedModuleInfo
 
 	if _, err := os.Stat(modelDir); os.IsNotExist(err) {
-		return modules, nil // 鐩綍涓嶅瓨鍦紝杩斿洖绌哄垪琛?
+		return modules, nil // 目录不存在，返回空列表
 	}
 
 	entries, err := os.ReadDir(modelDir)
@@ -452,10 +452,10 @@ func (g *GVAAnalyzer) scanModelModules(modelDir string) ([]PredesignedModuleInfo
 			packageName := entry.Name()
 			packagePath := filepath.Join(modelDir, packageName)
 
-			// 鎵弿鍖呯洰褰曚笅鐨勬ā鍧?
+			// 扫描包目录下的模块
 			packageModules, err := g.scanModulesInDirectory(packagePath, packageName, "package")
 			if err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("鎵弿鍖?%s 鐨勬ā鍧楀け璐? %v", packageName, err))
+				global.GVA_LOG.Warn(fmt.Sprintf("扫描包 %s 的模块失败: %v", packageName, err))
 				continue
 			}
 			modules = append(modules, packageModules...)
@@ -465,7 +465,7 @@ func (g *GVAAnalyzer) scanModelModules(modelDir string) ([]PredesignedModuleInfo
 	return modules, nil
 }
 
-// scanModulesInDirectory 鎵弿鐩綍涓殑妯″潡
+// scanModulesInDirectory 扫描目录中的模块
 func (g *GVAAnalyzer) scanModulesInDirectory(dir, packageName, template string) ([]PredesignedModuleInfo, error) {
 	var modules []PredesignedModuleInfo
 
@@ -484,7 +484,7 @@ func (g *GVAAnalyzer) scanModulesInDirectory(dir, packageName, template string) 
 				PackageName: packageName,
 				Template:    template,
 				FilePaths:   []string{filePath},
-				Description: fmt.Sprintf("%s妯″潡涓殑%s", packageName, moduleName),
+				Description: fmt.Sprintf("%s模块中的%s", packageName, moduleName),
 			}
 			modules = append(modules, module)
 		}

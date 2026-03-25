@@ -27,6 +27,11 @@ func ResolveMCPServiceURL() string {
 		return strings.TrimRight(baseURL, "/")
 	}
 
+	addr := global.GVA_CONFIG.MCP.Addr
+	if addr <= 0 {
+		addr = 8889
+	}
+
 	path := strings.TrimSpace(global.GVA_CONFIG.MCP.Path)
 	if path == "" {
 		path = "/mcp"
@@ -35,7 +40,7 @@ func ResolveMCPServiceURL() string {
 		path = "/" + path
 	}
 
-	return fmt.Sprintf("http://127.0.0.1:%d%s", global.GVA_CONFIG.MCP.Addr, path)
+	return fmt.Sprintf("http://127.0.0.1:%d%s", addr, path)
 }
 
 func upstreamBaseURL() string {

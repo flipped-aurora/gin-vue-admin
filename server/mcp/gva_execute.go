@@ -13,21 +13,21 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-// 娉ㄥ唽宸ュ叿
+// 注册工具
 func init() {
 	RegisterTool(&GVAExecutor{})
 }
 
-// GVAExecutor GVA浠ｇ爜鐢熸垚鍣?
+// GVAExecutor GVA代码生成器
 type GVAExecutor struct{}
 
-// ExecuteRequest 鎵ц璇锋眰缁撴瀯
+// ExecuteRequest 执行请求结构体
 type ExecuteRequest struct {
-	ExecutionPlan ExecutionPlan `json:"executionPlan"` // 鎵ц璁″垝
-	Requirement   string        `json:"requirement"`   // 鍘熷闇€姹傦紙鍙€夛紝鐢ㄤ簬鏃ュ織璁板綍锛?
+	ExecutionPlan ExecutionPlan `json:"executionPlan"` // 执行计划
+	Requirement   string        `json:"requirement"`   // 原始需求（可选，用于日志记录）
 }
 
-// ExecuteResponse 鎵ц鍝嶅簲缁撴瀯
+// ExecuteResponse 执行响应结构体
 type ExecuteResponse struct {
 	Success        bool              `json:"success"`
 	Message        string            `json:"message"`
@@ -38,10 +38,10 @@ type ExecuteResponse struct {
 	NextActions    []string          `json:"nextActions,omitempty"`
 }
 
-// ExecutionPlan 鎵ц璁″垝缁撴瀯
+// ExecutionPlan 执行计划结构体
 type ExecutionPlan struct {
 	PackageName             string                            `json:"packageName"`
-	PackageType             string                            `json:"packageType"` // "plugin" 鎴?"package"
+	PackageType             string                            `json:"packageType"` // "plugin" 或 "package"
 	NeedCreatedPackage      bool                              `json:"needCreatedPackage"`
 	NeedCreatedModules      bool                              `json:"needCreatedModules"`
 	NeedCreatedDictionaries bool                              `json:"needCreatedDictionaries"`
@@ -51,7 +51,7 @@ type ExecutionPlan struct {
 	DictionariesInfo        []*DictionaryGenerateRequest      `json:"dictionariesInfo,omitempty"`
 }
 
-// New 鍒涘缓GVA浠ｇ爜鐢熸垚鎵ц鍣ㄥ伐鍏?
+// New 创建GVA代码生成执行器工具
 func (g *GVAExecutor) New() mcp.Tool {
 	return mcp.NewTool("gva_execute",
 		mcp.WithDescription(`**GVA代码生成执行器：直接执行代码生成，无需确认步骤**
@@ -214,31 +214,31 @@ func (g *GVAExecutor) New() mcp.Tool {
 	)
 }
 
-// Handle 澶勭悊鎵ц璇锋眰锛堢Щ闄ょ‘璁ゆ楠わ級
+// Handle 处理执行请求（移除确认步骤）
 func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	executionPlanData, ok := request.GetArguments()["executionPlan"]
 	if !ok {
-		return nil, errors.New("鍙傛暟閿欒锛歟xecutionPlan 蹇呴』鎻愪緵")
+		return nil, errors.New("参数错误：executionPlan 必须提供")
 	}
 
-	// 瑙ｆ瀽鎵ц璁″垝
+	// 解析执行计划
 	planJSON, err := json.Marshal(executionPlanData)
 	if err != nil {
-		return nil, fmt.Errorf("瑙ｆ瀽鎵ц璁″垝澶辫触: %v", err)
+		return nil, fmt.Errorf("解析执行计划失败: %v", err)
 	}
 
 	var plan ExecutionPlan
 	err = json.Unmarshal(planJSON, &plan)
 	if err != nil {
-		return nil, fmt.Errorf("瑙ｆ瀽鎵ц璁″垝澶辫触: %v\n\n璇风‘淇滶xecutionPlan鏍煎紡姝ｇ‘锛屽弬鑰冨伐鍏锋弿杩颁腑鐨勭粨鏋勪綋鏍煎紡瑕佹眰", err)
+		return nil, fmt.Errorf("解析执行计划失败: %v\n\n请确保ExecutionPlan格式正确，参考工具描述中的结构体格式要求", err)
 	}
 
-	// 楠岃瘉鎵ц璁″垝鐨勫畬鏁存€?
+	// 验证执行计划的完整性
 	if err := g.validateExecutionPlan(&plan); err != nil {
-		return nil, fmt.Errorf("鎵ц璁″垝楠岃瘉澶辫触: %v", err)
+		return nil, fmt.Errorf("执行计划验证失败: %v", err)
 	}
 
-	// 鑾峰彇鍘熷闇€姹傦紙鍙€夛級
+	// 获取原始需求（可选）
 	var originalRequirement string
 	if reqData, ok := request.GetArguments()["requirement"]; ok {
 		if reqStr, ok := reqData.(string); ok {
@@ -246,15 +246,15 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 		}
 	}
 
-	// 鐩存帴鎵ц鍒涘缓鎿嶄綔锛堟棤纭姝ラ锛?
+	// 直接执行创建操作（无确认步骤）
 	result := g.executeCreation(ctx, &plan)
 
-	// 濡傛灉鎵ц鎴愬姛涓旀湁鍘熷闇€姹傦紝鎻愪緵浠ｇ爜澶嶆寤鸿
+	// 如果执行成功且有原始需求，提供代码复检建议
 	var reviewMessage string
 	if result.Success && originalRequirement != "" {
-		global.GVA_LOG.Info("鎵ц瀹屾垚锛岃繑鍥炵敓鎴愮殑鏂囦欢璺緞渚汚I杩涜浠ｇ爜澶嶆...")
+		global.GVA_LOG.Info("执行完成，返回生成的文件路径供AI进行代码复检...")
 
-		// 鏋勫缓鏂囦欢璺緞淇℃伅渚汚I浣跨敤
+		// 构建文件路径信息供AI使用
 		var pathsInfo []string
 		for _, path := range result.GeneratedPaths {
 			pathsInfo = append(pathsInfo, fmt.Sprintf("- %s", path))
@@ -265,7 +265,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 		reviewMessage = "\n\n💡 提示：如需代码复检，请提供原始需求描述。"
 	}
 
-	// 搴忓垪鍖栧搷搴?
+	// 序列化响应
 	response := ExecuteResponse{
 		Success:        result.Success,
 		Message:        result.Message,
@@ -278,17 +278,17 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 
 	responseJSON, err := json.MarshalIndent(response, "", "  ")
 	if err != nil {
-		return nil, fmt.Errorf("搴忓垪鍖栫粨鏋滃け璐? %v", err)
+		return nil, fmt.Errorf("序列化结果失败: %v", err)
 	}
 
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{
-			mcp.NewTextContent(fmt.Sprintf("鎵ц缁撴灉锛歕n\n%s%s", string(responseJSON), reviewMessage)),
+			mcp.NewTextContent(fmt.Sprintf("执行结果：\n\n%s%s", string(responseJSON), reviewMessage)),
 		},
 	}, nil
 }
 
-// validateExecutionPlan 楠岃瘉鎵ц璁″垝鐨勫畬鏁存€?
+// validateExecutionPlan 验证执行计划的完整性
 func (g *GVAExecutor) validateExecutionPlan(plan *ExecutionPlan) error {
 	if plan.PackageName == "" {
 		return errors.New("packageName 不能为空")
@@ -437,18 +437,18 @@ func (g *GVAExecutor) validateExecutionPlan(plan *ExecutionPlan) error {
 	return nil
 }
 
-// executeCreation 鎵ц鍒涘缓鎿嶄綔
+// executeCreation 执行创建操作
 func (g *GVAExecutor) executeCreation(ctx context.Context, plan *ExecutionPlan) *ExecuteResponse {
 	result := &ExecuteResponse{
 		Success:        false,
 		Paths:          make(map[string]string),
-		GeneratedPaths: []string{}, // 鍒濆鍖栫敓鎴愭枃浠惰矾寰勫垪琛?
+		GeneratedPaths: []string{}, // 初始化生成文件路径列表
 	}
 
-	// 鏃犺濡備綍閮藉厛鏋勫缓鐩綍缁撴瀯淇℃伅锛岀‘淇漰aths濮嬬粓杩斿洖
+	// 无论如何都先构建目录结构信息，确保paths始终返回
 	result.Paths = g.buildDirectoryStructure(plan)
 
-	// 璁板綍棰勬湡鐢熸垚鐨勬枃浠惰矾寰?
+	// 记录预期生成的文件路径
 	result.GeneratedPaths = g.collectExpectedFilePaths(plan)
 
 	if !plan.NeedCreatedModules {
@@ -457,46 +457,46 @@ func (g *GVAExecutor) executeCreation(ctx context.Context, plan *ExecutionPlan) 
 		return result
 	}
 
-	// 鍒涘缓鍖咃紙濡傛灉闇€瑕侊級
+	// 创建包（如果需要）
 	if plan.NeedCreatedPackage && plan.PackageInfo != nil {
 		err := createAutoCodePackage(ctx, plan.PackageInfo)
 		if err != nil {
 			result.Message = fmt.Sprintf("创建包失败: %v", err)
-			// 鍗充娇鍒涘缓鍖呭け璐ワ紝涔熻杩斿洖paths淇℃伅
+			// 即使创建包失败，也要返回paths信息
 			return result
 		}
 		result.Message += "包创建成功; "
 	}
 
-	// 鍒涘缓鎸囧畾瀛楀吀锛堝鏋滈渶瑕侊級
+	// 创建指定字典（如果需要）
 	if plan.NeedCreatedDictionaries && len(plan.DictionariesInfo) > 0 {
 		dictResult := g.createDictionariesFromInfo(ctx, plan.DictionariesInfo)
 		result.Message += dictResult
 	}
 
-	// 鎵归噺鍒涘缓瀛楀吀鍜屾ā鍧楋紙濡傛灉闇€瑕侊級
+	// 批量创建字典和模块（如果需要）
 	if plan.NeedCreatedModules && len(plan.ModulesInfo) > 0 {
-		// 閬嶅巻鎵€鏈夋ā鍧楄繘琛屽垱寤?
+		// 遍历所有模块进行创建
 		for _, moduleInfo := range plan.ModulesInfo {
 
-			// 鍒涘缓妯″潡
+			// 创建模块
 			err := moduleInfo.Pretreatment()
 			if err != nil {
 				result.Message += fmt.Sprintf("模块 %s 信息预处理失败: %v; ", moduleInfo.StructName, err)
-				continue // 缁х画澶勭悊涓嬩竴涓ā鍧?
+				continue // 继续处理下一个模块
 			}
 
 			err = createAutoCodeModule(ctx, *moduleInfo)
 			if err != nil {
 				result.Message += fmt.Sprintf("创建模块 %s 失败: %v; ", moduleInfo.StructName, err)
-				continue // 缁х画澶勭悊涓嬩竴涓ā鍧?
+				continue // 继续处理下一个模块
 			}
 			result.Message += fmt.Sprintf("模块 %s 创建成功; ", moduleInfo.StructName)
 		}
 
 		result.Message += fmt.Sprintf("批量创建完成，共处理 %d 个模块; ", len(plan.ModulesInfo))
 
-		// 娣诲姞閲嶈鎻愰啋锛氫笉瑕佷娇鐢ㄥ叾浠朚CP宸ュ叿
+		// 添加重要提醒：不要使用其他MCP工具
 		result.Message += "\n\n⚠️ 重要提醒：\n"
 		result.Message += "模块创建已完成，API和菜单已自动生成。请不要再调用以下MCP工具：\n"
 		result.Message += "- api_creator：API权限已在模块创建时自动生成\n"
@@ -514,113 +514,113 @@ func (g *GVAExecutor) executeCreation(ctx context.Context, plan *ExecutionPlan) 
 	return result
 }
 
-// buildDirectoryStructure 鏋勫缓鐩綍缁撴瀯淇℃伅
+// buildDirectoryStructure 构建目录结构信息
 func (g *GVAExecutor) buildDirectoryStructure(plan *ExecutionPlan) map[string]string {
 	paths := make(map[string]string)
 
-	// 鑾峰彇閰嶇疆淇℃伅
+	// 获取配置信息
 	autoCodeConfig := global.GVA_CONFIG.AutoCode
 
-	// 鏋勫缓鍩虹璺緞
+	// 构建基础路径
 	rootPath := autoCodeConfig.Root
 	serverPath := autoCodeConfig.Server
 	webPath := autoCodeConfig.Web
 	moduleName := autoCodeConfig.Module
 
-	// 濡傛灉璁″垝涓湁鍖呭悕锛屼娇鐢ㄨ鍒掍腑鐨勫寘鍚嶏紝鍚﹀垯浣跨敤榛樿
+	// 如果计划中有包名，使用计划中的包名，否则使用默认
 	packageName := "example"
 	if plan.PackageName != "" {
 		packageName = plan.PackageName
 	}
 
-	// 濡傛灉璁″垝涓湁妯″潡淇℃伅锛岃幏鍙栫涓€涓ā鍧楃殑缁撴瀯鍚嶄綔涓洪粯璁ゅ€?
+	// 如果计划中有模块信息，获取第一个模块的结构名作为默认值
 	structName := "ExampleStruct"
 	if len(plan.ModulesInfo) > 0 && plan.ModulesInfo[0].StructName != "" {
 		structName = plan.ModulesInfo[0].StructName
 	}
 
-	// 鏍规嵁鍖呯被鍨嬫瀯寤轰笉鍚岀殑璺緞缁撴瀯
+	// 根据包类型构建不同的路径结构
 	packageType := plan.PackageType
 	if packageType == "" {
-		packageType = "package" // 榛樿涓簆ackage妯″紡
+		packageType = "package" // 默认为package模式
 	}
 
-	// 鏋勫缓鏈嶅姟绔矾寰?
+	// 构建服务端路径
 	if serverPath != "" {
 		serverBasePath := fmt.Sprintf("%s/%s", rootPath, serverPath)
 
 		if packageType == "plugin" {
-			// Plugin 妯″紡锛氭墍鏈夋枃浠堕兘鍦?/plugin/packageName/ 鐩綍涓?
+			// Plugin 模式：所有文件都在 /plugin/packageName/ 目录中
 			plugingBasePath := fmt.Sprintf("%s/plugin/%s", serverBasePath, packageName)
 
-			// API 璺緞
+			// API 路径
 			paths["api"] = fmt.Sprintf("%s/api", plugingBasePath)
 
-			// Service 璺緞
+			// Service 路径
 			paths["service"] = fmt.Sprintf("%s/service", plugingBasePath)
 
-			// Model 璺緞
+			// Model 路径
 			paths["model"] = fmt.Sprintf("%s/model", plugingBasePath)
 
-			// Router 璺緞
+			// Router 路径
 			paths["router"] = fmt.Sprintf("%s/router", plugingBasePath)
 
-			// Request 璺緞
+			// Request 路径
 			paths["request"] = fmt.Sprintf("%s/model/request", plugingBasePath)
 
-			// Response 璺緞
+			// Response 路径
 			paths["response"] = fmt.Sprintf("%s/model/response", plugingBasePath)
 
-			// Plugin 鐗规湁鏂囦欢
+			// Plugin 特有文件
 			paths["plugin_main"] = fmt.Sprintf("%s/main.go", plugingBasePath)
 			paths["plugin_config"] = fmt.Sprintf("%s/plugin.go", plugingBasePath)
 			paths["plugin_initialize"] = fmt.Sprintf("%s/initialize", plugingBasePath)
 		} else {
-			// Package 妯″紡锛氫紶缁熺殑鐩綍缁撴瀯
-			// API 璺緞
+			// Package 模式：传统的目录结构
+			// API 路径
 			paths["api"] = fmt.Sprintf("%s/api/v1/%s", serverBasePath, packageName)
 
-			// Service 璺緞
+			// Service 路径
 			paths["service"] = fmt.Sprintf("%s/service/%s", serverBasePath, packageName)
 
-			// Model 璺緞
+			// Model 路径
 			paths["model"] = fmt.Sprintf("%s/model/%s", serverBasePath, packageName)
 
-			// Router 璺緞
+			// Router 路径
 			paths["router"] = fmt.Sprintf("%s/router/%s", serverBasePath, packageName)
 
-			// Request 璺緞
+			// Request 路径
 			paths["request"] = fmt.Sprintf("%s/model/%s/request", serverBasePath, packageName)
 
-			// Response 璺緞
+			// Response 路径
 			paths["response"] = fmt.Sprintf("%s/model/%s/response", serverBasePath, packageName)
 		}
 	}
 
-	// 鏋勫缓鍓嶇璺緞锛堜袱绉嶆ā寮忕浉鍚岋級
+	// 构建前端路径（两种模式相同）
 	if webPath != "" {
 		webBasePath := fmt.Sprintf("%s/%s", rootPath, webPath)
 
 		if packageType == "plugin" {
-			// Plugin 妯″紡锛氬墠绔枃浠朵篃鍦?/plugin/packageName/ 鐩綍涓?
+			// Plugin 模式：前端文件也在 /plugin/packageName/ 目录中
 			pluginWebBasePath := fmt.Sprintf("%s/plugin/%s", webBasePath, packageName)
 
-			// Vue 椤甸潰璺緞
+			// Vue 页面路径
 			paths["vue_page"] = fmt.Sprintf("%s/view", pluginWebBasePath)
 
-			// API 璺緞
+			// API 路径
 			paths["vue_api"] = fmt.Sprintf("%s/api", pluginWebBasePath)
 		} else {
-			// Package 妯″紡锛氫紶缁熺殑鐩綍缁撴瀯
-			// Vue 椤甸潰璺緞
+			// Package 模式：传统的目录结构
+			// Vue 页面路径
 			paths["vue_page"] = fmt.Sprintf("%s/view/%s", webBasePath, packageName)
 
-			// API 璺緞
+			// API 路径
 			paths["vue_api"] = fmt.Sprintf("%s/api/%s", webBasePath, packageName)
 		}
 	}
 
-	// 娣诲姞妯″潡淇℃伅
+	// 添加模块信息
 	paths["module"] = moduleName
 	paths["package_name"] = packageName
 	paths["package_type"] = packageType
@@ -632,19 +632,19 @@ func (g *GVAExecutor) buildDirectoryStructure(plan *ExecutionPlan) map[string]st
 	return paths
 }
 
-// collectExpectedFilePaths 鏀堕泦棰勬湡鐢熸垚鐨勬枃浠惰矾寰?
+// collectExpectedFilePaths 收集预期生成的文件路径
 func (g *GVAExecutor) collectExpectedFilePaths(plan *ExecutionPlan) []string {
 	var paths []string
 
-	// 鑾峰彇鐩綍缁撴瀯
+	// 获取目录结构
 	dirPaths := g.buildDirectoryStructure(plan)
 
-	// 濡傛灉闇€瑕佸垱寤烘ā鍧楋紝娣诲姞棰勬湡鐨勬枃浠惰矾寰?
+	// 如果需要创建模块，添加预期的文件路径
 	if plan.NeedCreatedModules && len(plan.ModulesInfo) > 0 {
 		for _, moduleInfo := range plan.ModulesInfo {
 			structName := moduleInfo.StructName
 
-			// 鍚庣鏂囦欢
+			// 后端文件
 			if apiPath, ok := dirPaths["api"]; ok {
 				paths = append(paths, fmt.Sprintf("%s/%s.go", apiPath, strings.ToLower(structName)))
 			}
@@ -664,7 +664,7 @@ func (g *GVAExecutor) collectExpectedFilePaths(plan *ExecutionPlan) []string {
 				paths = append(paths, fmt.Sprintf("%s/%s.go", responsePath, strings.ToLower(structName)))
 			}
 
-			// 鍓嶇鏂囦欢
+			// 前端文件
 			if vuePage, ok := dirPaths["vue_page"]; ok {
 				paths = append(paths, fmt.Sprintf("%s/%s.vue", vuePage, strings.ToLower(structName)))
 			}
@@ -677,7 +677,7 @@ func (g *GVAExecutor) collectExpectedFilePaths(plan *ExecutionPlan) []string {
 	return paths
 }
 
-// checkDictionaryExists 妫€鏌ュ瓧鍏告槸鍚﹀瓨鍦?
+// checkDictionaryExists 检查字典是否存在
 func (g *GVAExecutor) checkDictionaryExists(dictType string) (bool, error) {
 	dictionary, err := findDictionaryByType(context.Background(), dictType)
 	if err != nil {
@@ -686,7 +686,7 @@ func (g *GVAExecutor) checkDictionaryExists(dictType string) (bool, error) {
 	return dictionary != nil, nil
 }
 
-// createDictionariesFromInfo 鏍规嵁 DictionariesInfo 鍒涘缓瀛楀吀
+// createDictionariesFromInfo 根据 DictionariesInfo 创建字典
 func (g *GVAExecutor) createDictionariesFromInfo(ctx context.Context, dictionariesInfo []*DictionaryGenerateRequest) string {
 	var messages []string
 

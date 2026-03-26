@@ -324,6 +324,23 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 	return &u, nil
 }
 
+func (userService *UserService) ResetPasswordByUsername(username, password string) (err error) {
+	if global.GVA_DB == nil {
+		return fmt.Errorf("db not init")
+	}
+
+	var user system.SysUser
+	err = global.GVA_DB.Select("id").Where("username = ?", username).First(&user).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.New("用户不存在")
+	}
+	if err != nil {
+		return err
+	}
+
+	return userService.ResetPassword(user.ID, password)
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: ResetPassword
 //@description: 修改用户密码

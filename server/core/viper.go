@@ -1,7 +1,6 @@
 package core
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -43,10 +42,8 @@ func Viper() *viper.Viper {
 
 // getConfigPath 获取配置文件路径, 优先级: 命令行 > 环境变量 > 默认值
 func getConfigPath() (config string) {
-	// `-c` flag parse
-	flag.StringVar(&config, "c", "", "choose config file.")
-	flag.Parse()
-	if config != "" { // 命令行参数不为空 将值赋值于config
+	if cliConfig, ok := lookupConfigPathArg(os.Args[1:]); ok && cliConfig != "" {
+		config = cliConfig
 		fmt.Printf("您正在使用命令行的 '-c' 参数传递的值, config 的路径为 %s\n", config)
 		return
 	}

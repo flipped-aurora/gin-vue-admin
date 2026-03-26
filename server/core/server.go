@@ -2,14 +2,16 @@ package core
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"go.uber.org/zap"
-	"time"
 )
 
-func RunServer() {
+func runHttpServer() {
 	if global.GVA_CONFIG.System.UseRedis {
 		// 初始化redis服务
 		initialize.Redis()
@@ -51,4 +53,16 @@ func RunServer() {
 	** 感谢您对Gin-Vue-Admin的支持与关注 合法授权使用更有利于项目的长久发展**
 `, global.Version, address, address, global.GVA_CONFIG.MCP.SSEPath, address, global.GVA_CONFIG.MCP.MessagePath)
 	initServer(address, Router, 10*time.Minute, 10*time.Minute)
+}
+
+func RunServer() {
+	if !hasCommandArgs(os.Args[1:]) {
+		runHttpServer()
+		return
+	}
+
+	if err := runCli(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

@@ -2183,7 +2183,6 @@ const runAnalysis = async () => {
         clientPageConstraints: analysisForm.clientPageConstraints
       },
       onProgress: (payload) =>{
-        console.log('analysis onProgress', payload)
         updateStreamMessage('analysis', streamAssistant, payload)
       }
     })
@@ -2245,7 +2244,6 @@ const runWorkflow = async () => {
         extraConstraints: workflowForm.extraConstraints
       },
       onProgress: (payload) =>{
-        console.log('workflow onProgress', payload) 
         updateStreamMessage('workflow', streamAssistant, payload)
       }
     })

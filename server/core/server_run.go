@@ -13,11 +13,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type server interface {
-	ListenAndServe() error
-	Shutdown(context.Context) error
-}
-
 // initServer 启动服务并实现优雅关闭
 func initServer(address string, router *gin.Engine, readTimeout, writeTimeout time.Duration) {
 	// 创建服务

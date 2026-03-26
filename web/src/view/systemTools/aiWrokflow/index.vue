@@ -1537,6 +1537,88 @@ const currentSessionDisplayMessages = computed(() =>
   }))
 )
 
+const STRUCTURED_RESULT_KEYS = [
+  'summary',
+  'overview',
+  'analysisSummary',
+  'workflowSummary',
+  'recommendedPackageType',
+  'packageType',
+  'targetType',
+  'modules',
+  'moduleList',
+  'entities',
+  'items',
+  'clientPages',
+  'client_pages',
+  'pages',
+  'missingInfo',
+  'missing_info',
+  'questions',
+  'clarifyQuestions',
+  'suggestions',
+  'recommendations',
+  'advice',
+  'tips',
+  'steps',
+  'workflow',
+  'prompts',
+  'promptFlow',
+  'promptList'
+]
+
+const hasStructuredResultShape = (value) =>
+  Boolean(
+    value &&
+      typeof value === 'object' &&
+      STRUCTURED_RESULT_KEYS.some((key) =>
+        Object.prototype.hasOwnProperty.call(value, key)
+      )
+  )
+
+const unwrapStructuredResult = (value, depth = 0) => {
+  if (depth > 4 || value == null) return null
+  if (typeof value === 'string') {
+    const parsed = extractJson(value)
+    return parsed?.payload && typeof parsed.payload === 'object'
+      ? parsed.payload
+      : parsed
+  }
+  if (Array.isArray(value)) return value
+  if (typeof value !== 'object') return null
+  if (hasStructuredResultShape(value)) return value
+
+  const candidates = [
+    value?.structured,
+    value?.payload,
+    value?.outputs,
+    value?.output,
+    value?.result,
+    value?.results,
+    value?.data?.outputs,
+    value?.data?.output,
+    value?.data?.result,
+    value?.data?.payload,
+    value?.data,
+    value?.answer,
+    value?.text,
+    value?.content
+  ]
+
+  for (const candidate of candidates) {
+    const resolved = unwrapStructuredResult(candidate, depth + 1)
+    if (resolved) return resolved
+  }
+
+  return null
+}
+
+const fallbackAnswerText = (value) => {
+  if (typeof value === 'string') return value
+  if (value && typeof value === 'object') return formatPayload(value)
+  return ''
+}
+
 const unwrap = (response) => {
   if (!response) return {}
   if (typeof response.code !== 'undefined') return response.data || {}
@@ -1550,14 +1632,18 @@ const unwrap = (response) => {
 
 const resolveChat = (response) => {
   const raw = unwrap(response)
-  const answerText = firstText(raw.answer, raw.text, raw.output, raw.content)
+  const structuredCandidate = unwrapStructuredResult(raw)
+  const answerText =
+    firstText(raw.answer, raw.text, raw.output, raw.content) ||
+    fallbackAnswerText(structuredCandidate)
   const parsed = extractJson(answerText)
+  const structuredFromText =
+    parsed?.payload && typeof parsed.payload === 'object'
+      ? parsed.payload
+      : parsed
   return {
     answerText,
-    structured:
-      parsed?.payload && typeof parsed.payload === 'object'
-        ? parsed.payload
-        : parsed,
+    structured: structuredFromText || structuredCandidate,
     conversationId: firstText(raw.conversation_id, raw.conversationId),
     messageId: firstText(raw.message_id, raw.messageId)
   }

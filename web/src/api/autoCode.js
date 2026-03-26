@@ -14,6 +14,8 @@ const mergeStreamText = (current, incoming) => {
   const next = String(incoming || '')
   if (!next) return current
   if (!current) return next
+  if (next === current) return current
+  if (next.length > current.length && next.startsWith(current)) return next
   return `${current}${next}`
 }
 

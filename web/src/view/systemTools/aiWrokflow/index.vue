@@ -3,11 +3,6 @@
     <el-card shadow="never">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div class="max-w-3xl">
-          <p
-            class="text-xs font-semibold uppercase tracking-[0.24em] text-sky-600"
-          >
-            Dify Chatflow
-          </p>
           <h1 class="mt-2 text-2xl font-semibold text-slate-900">
             AI 需求分析与 Prompt 工作流
           </h1>
@@ -19,9 +14,6 @@
         <div class="flex flex-wrap">
           <el-button :icon="MagicStick" @click="fillExample"
             >填入示例</el-button
-          >
-          <el-button type="primary" :icon="Promotion" @click="goAutoCode"
-            >打开代码生成器</el-button
           >
         </div>
       </div>

@@ -6,27 +6,23 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/mark3labs/mcp-go/mcp"
-	"go.uber.org/zap"
 )
 
-// 注册工具
 func init() {
 	RegisterTool(&ApiCreator{})
 }
 
-// ApiCreateRequest API创建请求结构
 type ApiCreateRequest struct {
-	Path        string `json:"path"`        // API路径
-	Description string `json:"description"` // API中文描述
-	ApiGroup    string `json:"apiGroup"`    // API组
-	Method      string `json:"method"`      // HTTP方法
+	Path        string `json:"path"`
+	Description string `json:"description"`
+	ApiGroup    string `json:"apiGroup"`
+	Method      string `json:"method"`
 }
 
-// ApiCreateResponse API创建响应结构
 type ApiCreateResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
@@ -35,10 +31,8 @@ type ApiCreateResponse struct {
 	Method  string `json:"method"`
 }
 
-// ApiCreator API创建工具
 type ApiCreator struct{}
 
-// New 创建API创建工具
 func (a *ApiCreator) New() mcp.Tool {
 	return mcp.NewTool("create_api",
 		mcp.WithDescription(`创建后端API记录，用于AI编辑器自动添加API接口时自动创建对应的API权限记录。
@@ -68,37 +62,31 @@ func (a *ApiCreator) New() mcp.Tool {
 	)
 }
 
-// Handle 处理API创建请求
 func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	args := request.GetArguments()
 
 	var apis []ApiCreateRequest
-
-	// 检查是否是批量创建
 	if apisStr, ok := args["apis"].(string); ok && apisStr != "" {
 		if err := json.Unmarshal([]byte(apisStr), &apis); err != nil {
-			return nil, fmt.Errorf("apis 参数格式错误: %v", err)
+			return nil, fmt.Errorf("apis 参数格式错误: %w", err)
 		}
 	} else {
-		// 单个API创建
 		path, ok := args["path"].(string)
 		if !ok || path == "" {
 			return nil, errors.New("path 参数是必需的")
 		}
-
 		description, ok := args["description"].(string)
 		if !ok || description == "" {
 			return nil, errors.New("description 参数是必需的")
 		}
-
 		apiGroup, ok := args["apiGroup"].(string)
 		if !ok || apiGroup == "" {
 			return nil, errors.New("apiGroup 参数是必需的")
 		}
 
 		method := "POST"
-		if val, ok := args["method"].(string); ok && val != "" {
-			method = val
+		if value, ok := args["method"].(string); ok && value != "" {
+			method = value
 		}
 
 		apis = append(apis, ApiCreateRequest{
@@ -113,79 +101,59 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 		return nil, errors.New("没有要创建的API")
 	}
 
-	// 创建API记录
-	apiService := service.ServiceGroupApp.SystemServiceGroup.ApiService
-	var responses []ApiCreateResponse
+	responses := make([]ApiCreateResponse, 0, len(apis))
 	successCount := 0
 
 	for _, apiReq := range apis {
-		api := system.SysApi{
+		_, err := postUpstream[map[string]any](ctx, "/api/createApi", system.SysApi{
 			Path:        apiReq.Path,
 			Description: apiReq.Description,
 			ApiGroup:    apiReq.ApiGroup,
 			Method:      apiReq.Method,
-		}
-
-		err := apiService.CreateApi(api)
+		})
 		if err != nil {
-			global.GVA_LOG.Warn("创建API失败",
-				zap.String("path", apiReq.Path),
-				zap.String("method", apiReq.Method),
-				zap.Error(err))
-
 			responses = append(responses, ApiCreateResponse{
 				Success: false,
 				Message: fmt.Sprintf("创建API失败: %v", err),
 				Path:    apiReq.Path,
 				Method:  apiReq.Method,
 			})
-		} else {
-			// 获取创建的API ID
-			var createdApi system.SysApi
-			err = global.GVA_DB.Where("path = ? AND method = ?", apiReq.Path, apiReq.Method).First(&createdApi).Error
-			if err != nil {
-				global.GVA_LOG.Warn("获取创建的API ID失败", zap.Error(err))
-			}
-
-			responses = append(responses, ApiCreateResponse{
-				Success: true,
-				Message: fmt.Sprintf("成功创建API %s %s", apiReq.Method, apiReq.Path),
-				ApiID:   createdApi.ID,
-				Path:    apiReq.Path,
-				Method:  apiReq.Method,
-			})
-			successCount++
+			continue
 		}
+
+		lookupResp, lookupErr := postUpstream[pageResultData[[]system.SysApi]](ctx, "/api/getApiList", systemReq.SearchApiParams{
+			SysApi: system.SysApi{
+				Path:   apiReq.Path,
+				Method: apiReq.Method,
+			},
+			PageInfo: commonReq.PageInfo{
+				Page:     1,
+				PageSize: 1,
+			},
+		})
+
+		var apiID uint
+		if lookupErr == nil && len(lookupResp.Data.List) > 0 {
+			apiID = lookupResp.Data.List[0].ID
+		}
+
+		responses = append(responses, ApiCreateResponse{
+			Success: true,
+			Message: fmt.Sprintf("成功创建API %s %s", apiReq.Method, apiReq.Path),
+			ApiID:   apiID,
+			Path:    apiReq.Path,
+			Method:  apiReq.Method,
+		})
+		successCount++
 	}
 
-	// 构建总体响应
-	var resultMessage string
-	if len(apis) == 1 {
-		resultMessage = responses[0].Message
-	} else {
-		resultMessage = fmt.Sprintf("批量创建API完成，成功 %d 个，失败 %d 个", successCount, len(apis)-successCount)
-	}
-
-	result := map[string]interface{}{
+	result := map[string]any{
 		"success":      successCount > 0,
-		"message":      resultMessage,
 		"totalCount":   len(apis),
 		"successCount": successCount,
 		"failedCount":  len(apis) - successCount,
 		"details":      responses,
 	}
 
-	resultJSON, err := json.MarshalIndent(result, "", "  ")
-	if err != nil {
-		return nil, fmt.Errorf("序列化结果失败: %v", err)
-	}
-
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: fmt.Sprintf("API创建结果：\n\n%s", string(resultJSON)),
-			},
-		},
-	}, nil
+	return textResultWithJSON("API创建结果：", result)
 }

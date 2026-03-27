@@ -19,10 +19,11 @@ type ServiceGroup struct {
 	SysParamsService
 	SysVersionService
 	SkillsService
-	AutoCodePlugin   autoCodePlugin
-	AutoCodePackage  autoCodePackage
-	AutoCodeHistory  autoCodeHistory
-	AutoCodeTemplate autoCodeTemplate
+	AIWorkflowSession aiWorkflowSession
+	AutoCodePlugin    autoCodePlugin
+	AutoCodePackage   autoCodePackage
+	AutoCodeHistory   autoCodeHistory
+	AutoCodeTemplate  autoCodeTemplate
 	SysErrorService
 	LoginLogService
 	ApiTokenService

@@ -6,50 +6,42 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/mark3labs/mcp-go/mcp"
-	"go.uber.org/zap"
 )
 
-// 注册工具
 func init() {
 	RegisterTool(&MenuCreator{})
 }
 
-// MenuCreateRequest 菜单创建请求结构
 type MenuCreateRequest struct {
-	ParentId    uint                   `json:"parentId"`    // 父菜单ID，0表示根菜单
-	Path        string                 `json:"path"`        // 路由path
-	Name        string                 `json:"name"`        // 路由name
-	Hidden      bool                   `json:"hidden"`      // 是否在列表隐藏
-	Component   string                 `json:"component"`   // 对应前端文件路径
-	Sort        int                    `json:"sort"`        // 排序标记
-	Title       string                 `json:"title"`       // 菜单名
-	Icon        string                 `json:"icon"`        // 菜单图标
-	KeepAlive   bool                   `json:"keepAlive"`   // 是否缓存
-	DefaultMenu bool                   `json:"defaultMenu"` // 是否是基础路由
-	CloseTab    bool                   `json:"closeTab"`    // 自动关闭tab
-	ActiveName  string                 `json:"activeName"`  // 高亮菜单
-	Parameters  []MenuParameterRequest `json:"parameters"`  // 路由参数
-	MenuBtn     []MenuButtonRequest    `json:"menuBtn"`     // 菜单按钮
+	ParentId    uint                   `json:"parentId"`
+	Path        string                 `json:"path"`
+	Name        string                 `json:"name"`
+	Hidden      bool                   `json:"hidden"`
+	Component   string                 `json:"component"`
+	Sort        int                    `json:"sort"`
+	Title       string                 `json:"title"`
+	Icon        string                 `json:"icon"`
+	KeepAlive   bool                   `json:"keepAlive"`
+	DefaultMenu bool                   `json:"defaultMenu"`
+	CloseTab    bool                   `json:"closeTab"`
+	ActiveName  string                 `json:"activeName"`
+	Parameters  []MenuParameterRequest `json:"parameters"`
+	MenuBtn     []MenuButtonRequest    `json:"menuBtn"`
 }
 
-// MenuParameterRequest 菜单参数请求结构
 type MenuParameterRequest struct {
-	Type  string `json:"type"`  // 参数类型：params或query
-	Key   string `json:"key"`   // 参数key
-	Value string `json:"value"` // 参数值
+	Type  string `json:"type"`
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
-// MenuButtonRequest 菜单按钮请求结构
 type MenuButtonRequest struct {
-	Name string `json:"name"` // 按钮名称
-	Desc string `json:"desc"` // 按钮描述
+	Name string `json:"name"`
+	Desc string `json:"desc"`
 }
 
-// MenuCreateResponse 菜单创建响应结构
 type MenuCreateResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
@@ -58,10 +50,8 @@ type MenuCreateResponse struct {
 	Path    string `json:"path"`
 }
 
-// MenuCreator 菜单创建工具
 type MenuCreator struct{}
 
-// New 创建菜单创建工具
 func (m *MenuCreator) New() mcp.Tool {
 	return mcp.NewTool("create_menu",
 		mcp.WithDescription(`创建前端菜单记录，用于AI编辑器自动添加前端页面时自动创建对应的菜单项。
@@ -121,75 +111,45 @@ func (m *MenuCreator) New() mcp.Tool {
 	)
 }
 
-// Handle 处理菜单创建请求
 func (m *MenuCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// 解析请求参数
 	args := request.GetArguments()
 
-	// 必需参数
 	path, ok := args["path"].(string)
 	if !ok || path == "" {
 		return nil, errors.New("path 参数是必需的")
 	}
-
 	name, ok := args["name"].(string)
 	if !ok || name == "" {
 		return nil, errors.New("name 参数是必需的")
 	}
-
 	component, ok := args["component"].(string)
 	if !ok || component == "" {
 		return nil, errors.New("component 参数是必需的")
 	}
-
 	title, ok := args["title"].(string)
 	if !ok || title == "" {
 		return nil, errors.New("title 参数是必需的")
 	}
 
-	// 可选参数
-	parentId := uint(0)
-	if val, ok := args["parentId"].(float64); ok {
-		parentId = uint(val)
+	parentID := uint(0)
+	if value, ok := args["parentId"].(float64); ok {
+		parentID = uint(value)
 	}
-
-	hidden := false
-	if val, ok := args["hidden"].(bool); ok {
-		hidden = val
-	}
-
+	hidden, _ := args["hidden"].(bool)
 	sort := 1
-	if val, ok := args["sort"].(float64); ok {
-		sort = int(val)
+	if value, ok := args["sort"].(float64); ok {
+		sort = int(value)
 	}
-
 	icon := "menu"
-	if val, ok := args["icon"].(string); ok && val != "" {
-		icon = val
+	if value, ok := args["icon"].(string); ok && value != "" {
+		icon = value
 	}
+	keepAlive, _ := args["keepAlive"].(bool)
+	defaultMenu, _ := args["defaultMenu"].(bool)
+	closeTab, _ := args["closeTab"].(bool)
+	activeName, _ := args["activeName"].(string)
 
-	keepAlive := false
-	if val, ok := args["keepAlive"].(bool); ok {
-		keepAlive = val
-	}
-
-	defaultMenu := false
-	if val, ok := args["defaultMenu"].(bool); ok {
-		defaultMenu = val
-	}
-
-	closeTab := false
-	if val, ok := args["closeTab"].(bool); ok {
-		closeTab = val
-	}
-
-	activeName := ""
-	if val, ok := args["activeName"].(string); ok {
-		activeName = val
-	}
-
-	// 解析参数和按钮
-	var parameters []system.SysBaseMenuParameter
+	parameters := make([]system.SysBaseMenuParameter, 0)
 	if parametersStr, ok := args["parameters"].(string); ok && parametersStr != "" {
 		var paramReqs []MenuParameterRequest
 		if err := json.Unmarshal([]byte(parametersStr), &paramReqs); err != nil {
@@ -204,23 +164,22 @@ func (m *MenuCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (
 		}
 	}
 
-	var menuBtn []system.SysBaseMenuBtn
+	menuBtns := make([]system.SysBaseMenuBtn, 0)
 	if menuBtnStr, ok := args["menuBtn"].(string); ok && menuBtnStr != "" {
-		var btnReqs []MenuButtonRequest
-		if err := json.Unmarshal([]byte(menuBtnStr), &btnReqs); err != nil {
+		var buttonReqs []MenuButtonRequest
+		if err := json.Unmarshal([]byte(menuBtnStr), &buttonReqs); err != nil {
 			return nil, fmt.Errorf("menuBtn 参数格式错误: %v", err)
 		}
-		for _, btn := range btnReqs {
-			menuBtn = append(menuBtn, system.SysBaseMenuBtn{
-				Name: btn.Name,
-				Desc: btn.Desc,
+		for _, button := range buttonReqs {
+			menuBtns = append(menuBtns, system.SysBaseMenuBtn{
+				Name: button.Name,
+				Desc: button.Desc,
 			})
 		}
 	}
 
-	// 构建菜单对象
 	menu := system.SysBaseMenu{
-		ParentId:  parentId,
+		ParentId:  parentID,
 		Path:      path,
 		Name:      name,
 		Hidden:    hidden,
@@ -235,43 +194,35 @@ func (m *MenuCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (
 			ActiveName:  activeName,
 		},
 		Parameters: parameters,
-		MenuBtn:    menuBtn,
+		MenuBtn:    menuBtns,
 	}
 
-	// 创建菜单
-	menuService := service.ServiceGroupApp.SystemServiceGroup.MenuService
-	err := menuService.AddBaseMenu(menu)
-	if err != nil {
+	if _, err := postUpstream[map[string]any](ctx, "/menu/addBaseMenu", menu); err != nil {
 		return nil, fmt.Errorf("创建菜单失败: %v", err)
 	}
 
-	// 获取创建的菜单ID
-	var createdMenu system.SysBaseMenu
-	err = global.GVA_DB.Where("name = ? AND path = ?", name, path).First(&createdMenu).Error
-	if err != nil {
-		global.GVA_LOG.Warn("获取创建的菜单ID失败", zap.Error(err))
+	menuID := uint(0)
+	if menuListResp, err := postUpstream[[]system.SysBaseMenu](ctx, "/menu/getMenuList", map[string]any{}); err == nil {
+		menuID = findMenuID(menuListResp.Data, name, path)
 	}
 
-	// 构建响应
-	response := &MenuCreateResponse{
+	return textResultWithJSON("菜单创建结果：", &MenuCreateResponse{
 		Success: true,
 		Message: fmt.Sprintf("成功创建菜单 %s", title),
-		MenuID:  createdMenu.ID,
+		MenuID:  menuID,
 		Name:    name,
 		Path:    path,
-	}
+	})
+}
 
-	resultJSON, err := json.MarshalIndent(response, "", "  ")
-	if err != nil {
-		return nil, fmt.Errorf("序列化结果失败: %v", err)
+func findMenuID(menus []system.SysBaseMenu, name, path string) uint {
+	for _, menu := range menus {
+		if menu.Name == name && menu.Path == path {
+			return menu.ID
+		}
+		if id := findMenuID(menu.Children, name, path); id != 0 {
+			return id
+		}
 	}
-
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.TextContent{
-				Type: "text",
-				Text: fmt.Sprintf("菜单创建结果：\n\n%s", string(resultJSON)),
-			},
-		},
-	}, nil
+	return 0
 }

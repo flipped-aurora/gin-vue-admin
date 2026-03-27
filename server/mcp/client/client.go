@@ -3,24 +3,28 @@ package client
 import (
 	"context"
 	"errors"
+
 	mcpClient "github.com/mark3labs/mcp-go/client"
+	"github.com/mark3labs/mcp-go/client/transport"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func NewClient(baseUrl, name, version, serverName string) (*mcpClient.Client, error) {
-	client, err := mcpClient.NewSSEMCPClient(baseUrl)
+func NewClient(baseURL, name, version, serverName string, headers ...map[string]string) (*mcpClient.Client, error) {
+	options := make([]transport.StreamableHTTPCOption, 0, 1)
+	if len(headers) > 0 && len(headers[0]) > 0 {
+		options = append(options, transport.WithHTTPHeaders(headers[0]))
+	}
+
+	client, err := mcpClient.NewStreamableHttpClient(baseURL, options...)
 	if err != nil {
 		return nil, err
 	}
 
 	ctx := context.Background()
-
-	// 启动client
 	if err := client.Start(ctx); err != nil {
 		return nil, err
 	}
 
-	// 初始化
 	initRequest := mcp.InitializeRequest{}
 	initRequest.Params.ProtocolVersion = mcp.LATEST_PROTOCOL_VERSION
 	initRequest.Params.ClientInfo = mcp.Implementation{
@@ -35,5 +39,6 @@ func NewClient(baseUrl, name, version, serverName string) (*mcpClient.Client, er
 	if result.ServerInfo.Name != serverName {
 		return nil, errors.New("server name mismatch")
 	}
+
 	return client, nil
 }

@@ -24,7 +24,7 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 	}
 
 	stat, err := f.Stat()
-	if stat.IsDir() {
+	if err == nil && stat.IsDir() {
 		return nil, os.ErrPermission
 	}
 
@@ -41,20 +41,6 @@ func Routers() *gin.Engine {
 		Router.Use(gin.Logger())
 	}
 
-	if !global.GVA_CONFIG.MCP.Separate {
-
-		sseServer := McpRun()
-
-		// 注册mcp服务
-		Router.GET(global.GVA_CONFIG.MCP.SSEPath, func(c *gin.Context) {
-			sseServer.SSEHandler().ServeHTTP(c.Writer, c.Request)
-		})
-
-		Router.POST(global.GVA_CONFIG.MCP.MessagePath, func(c *gin.Context) {
-			sseServer.MessageHandler().ServeHTTP(c.Writer, c.Request)
-		})
-	}
-
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
@@ -65,7 +51,8 @@ func Routers() *gin.Engine {
 	// Router.Static("/assets", "./dist/assets")   // dist里面的静态资源
 	// Router.StaticFile("/", "./dist/index.html") // 前端网页入口页面
 
-	Router.StaticFS(global.GVA_CONFIG.Local.StorePath, justFilesFilesystem{http.Dir(global.GVA_CONFIG.Local.StorePath)}) // Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
+	Router.StaticFS(global.GVA_CONFIG.Local.StorePath, justFilesFilesystem{http.Dir(global.GVA_CONFIG.Local.StorePath)})
+	// Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
 	// 跨域，如需跨域可以打开下面的注释
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
 	// Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
@@ -87,35 +74,34 @@ func Routers() *gin.Engine {
 		})
 	}
 	{
-		systemRouter.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
-		systemRouter.InitInitRouter(PublicGroup) // 自动初始化相关
+		systemRouter.InitBaseRouter(PublicGroup)               // 注册基础功能路由 不做鉴权
+		systemRouter.InitInitRouter(PublicGroup)               // 自动初始化相关
 	}
 
 	{
-		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)               // 注册功能api路由
-		systemRouter.InitJwtRouter(PrivateGroup)                            // jwt相关路由
-		systemRouter.InitUserRouter(PrivateGroup)                           // 注册用户路由
-		systemRouter.InitMenuRouter(PrivateGroup)                           // 注册menu路由
-		systemRouter.InitSystemRouter(PrivateGroup)                         // system相关路由
-		systemRouter.InitSysVersionRouter(PrivateGroup)                     // 发版相关路由
-		systemRouter.InitCasbinRouter(PrivateGroup)                         // 权限相关路由
-		systemRouter.InitAutoCodeRouter(PrivateGroup, PublicGroup)          // 创建自动化代码
-		systemRouter.InitAuthorityRouter(PrivateGroup)                      // 注册角色路由
-		systemRouter.InitSysDictionaryRouter(PrivateGroup)                  // 字典管理
-		systemRouter.InitAutoCodeHistoryRouter(PrivateGroup)                // 自动化代码历史
-		systemRouter.InitSysOperationRecordRouter(PrivateGroup)             // 操作记录
-		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)            // 字典详情管理
-		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)             // 按钮权限管理
-		systemRouter.InitSysExportTemplateRouter(PrivateGroup, PublicGroup) // 导出模板
-		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)         // 参数管理
-		systemRouter.InitSysErrorRouter(PrivateGroup, PublicGroup)          // 错误日志
-		systemRouter.InitLoginLogRouter(PrivateGroup)                       // 登录日志
-		systemRouter.InitApiTokenRouter(PrivateGroup)                       // apiToken签发
-		systemRouter.InitSkillsRouter(PrivateGroup,PublicGroup)                         // Skills 定义器
-		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
-		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
-		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类
-
+		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)                 // 注册功能api路由
+		systemRouter.InitJwtRouter(PrivateGroup)                              // jwt相关路由
+		systemRouter.InitUserRouter(PrivateGroup)                             // 注册用户路由
+		systemRouter.InitMenuRouter(PrivateGroup)                             // 注册menu路由
+		systemRouter.InitSystemRouter(PrivateGroup)                           // system相关路由
+		systemRouter.InitSysVersionRouter(PrivateGroup)                       // 发版相关路由
+		systemRouter.InitCasbinRouter(PrivateGroup)                           // 权限相关路由
+		systemRouter.InitAutoCodeRouter(PrivateGroup, PublicGroup)             // 创建自动化代码
+		systemRouter.InitAuthorityRouter(PrivateGroup)                        // 注册角色路由
+		systemRouter.InitSysDictionaryRouter(PrivateGroup)                    // 字典管理
+		systemRouter.InitAutoCodeHistoryRouter(PrivateGroup)                  // 自动化代码历史
+		systemRouter.InitSysOperationRecordRouter(PrivateGroup)               // 操作记录
+		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)              // 字典详情管理
+		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)               // 按钮权限管理
+		systemRouter.InitSysExportTemplateRouter(PrivateGroup, PublicGroup)    // 导出模板
+		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)            // 参数管理
+		systemRouter.InitSysErrorRouter(PrivateGroup, PublicGroup)             // 错误日志
+		systemRouter.InitLoginLogRouter(PrivateGroup)                         // 登录日志
+		systemRouter.InitApiTokenRouter(PrivateGroup)                         // apiToken签发
+		systemRouter.InitSkillsRouter(PrivateGroup, PublicGroup)              // Skills 定义器
+		exampleRouter.InitCustomerRouter(PrivateGroup)                        // 客户路由
+		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)            // 文件上传下载功能路由
+		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)         // 文件上传下载分类
 	}
 
 	//插件路由安装

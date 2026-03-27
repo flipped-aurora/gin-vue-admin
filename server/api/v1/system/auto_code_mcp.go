@@ -1,8 +1,10 @@
 package system
 
 import (
-	"fmt"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	mcpTool "github.com/flipped-aurora/gin-vue-admin/server/mcp"
 	"github.com/flipped-aurora/gin-vue-admin/server/mcp/client"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -10,19 +12,9 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-// Create
-// @Tags      mcp
-// @Summary   自动McpTool
-// @Security  ApiKeyAuth
-// @accept    application/json
-// @Produce   application/json
-// @Param     data  body      request.AutoMcpTool  true  "创建自动代码"
-// @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router    /autoCode/mcp [post]
 func (a *AutoCodeTemplateApi) MCP(c *gin.Context) {
 	var info request.AutoMcpTool
-	err := c.ShouldBindJSON(&info)
-	if err != nil {
+	if err := c.ShouldBindJSON(&info); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -36,109 +28,146 @@ func (a *AutoCodeTemplateApi) MCP(c *gin.Context) {
 	response.OkWithMessage("创建成功,MCP Tool路径:"+toolFilePath, c)
 }
 
-// Create
-// @Tags      mcp
-// @Summary   自动McpTool
-// @Security  ApiKeyAuth
-// @accept    application/json
-// @Produce   application/json
-// @Param     data  body      request.AutoMcpTool  true  "创建自动代码"
-// @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router    /autoCode/mcpList [post]
-func (a *AutoCodeTemplateApi) MCPList(c *gin.Context) {
+func (a *AutoCodeTemplateApi) MCPStatus(c *gin.Context) {
+	response.OkWithData(gin.H{
+		"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+		"mcpServerConfig": buildMCPServerConfig(),
+	}, c)
+}
 
-	baseUrl := fmt.Sprintf("http://127.0.0.1:%d%s", global.GVA_CONFIG.System.Addr, global.GVA_CONFIG.MCP.SSEPath)
-
-	testClient, err := client.NewClient(baseUrl, "testClient", "v1.0.0", global.GVA_CONFIG.MCP.Name)
-	defer testClient.Close()
-	toolsRequest := mcp.ListToolsRequest{}
-
-	list, err := testClient.ListTools(c.Request.Context(), toolsRequest)
-
+func (a *AutoCodeTemplateApi) MCPStart(c *gin.Context) {
+	status, err := mcpTool.StartManagedStandalone(c.Request.Context())
 	if err != nil {
-		response.FailWithMessage("创建失败", c)
-		global.GVA_LOG.Error(err.Error())
+		response.FailWithDetailed(gin.H{
+			"status":          status,
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, err.Error(), c)
 		return
 	}
 
-	mcpServerConfig := map[string]interface{}{
-		"mcpServers": map[string]interface{}{
-			global.GVA_CONFIG.MCP.Name: map[string]string{
-				"url": baseUrl,
-			},
-		},
+	response.OkWithDetailed(gin.H{
+		"status":          status,
+		"mcpServerConfig": buildMCPServerConfig(),
+	}, "MCP独立服务已启动", c)
+}
+
+func (a *AutoCodeTemplateApi) MCPStop(c *gin.Context) {
+	status, err := mcpTool.StopManagedStandalone(c.Request.Context())
+	if err != nil {
+		response.FailWithDetailed(gin.H{
+			"status":          status,
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, err.Error(), c)
+		return
 	}
+
+	response.OkWithDetailed(gin.H{
+		"status":          status,
+		"mcpServerConfig": buildMCPServerConfig(),
+	}, "MCP独立服务已停用", c)
+}
+
+func (a *AutoCodeTemplateApi) MCPList(c *gin.Context) {
+	baseURL := mcpTool.ResolveMCPServiceURL()
+	testClient, err := client.NewClient(baseURL, "testClient", "v1.0.0", mcpServerName(), incomingMCPHeaders(c))
+	if err != nil {
+		response.FailWithDetailed(gin.H{
+			"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, "连接MCP服务失败:"+err.Error(), c)
+		return
+	}
+	defer testClient.Close()
+
+	list, err := testClient.ListTools(c.Request.Context(), mcp.ListToolsRequest{})
+	if err != nil {
+		response.FailWithDetailed(gin.H{
+			"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+			"mcpServerConfig": buildMCPServerConfig(),
+		}, "获取工具列表失败:"+err.Error(), c)
+		return
+	}
+
 	response.OkWithData(gin.H{
-		"mcpServerConfig": mcpServerConfig,
+		"status":          mcpTool.GetManagedStandaloneStatus(c.Request.Context()),
+		"mcpServerConfig": buildMCPServerConfig(),
 		"list":            list,
 	}, c)
 }
 
-// Create
-// @Tags      mcp
-// @Summary   测试McpTool
-// @Security  ApiKeyAuth
-// @accept    application/json
-// @Produce   application/json
-// @Param     data  body      object  true  "调用MCP Tool的参数"
-// @Success   200   {object}  response.Response  "{"success":true,"data":{},"msg":"测试成功"}"
-// @Router    /autoCode/mcpTest [post]
-func (a *AutoCodeTemplateApi) MCPTest(c *gin.Context) {
-	// 定义接口请求结构
-	var testRequest struct {
-		Name      string                 `json:"name" binding:"required"`      // 工具名称
-		Arguments map[string]interface{} `json:"arguments" binding:"required"` // 工具参数
-	}
+func (a *AutoCodeTemplateApi) MCPRoutes(c *gin.Context) {
+	response.OkWithData(gin.H{
+		"routes": global.GVA_ROUTERS,
+	}, c)
+}
 
-	// 绑定JSON请求体
+func (a *AutoCodeTemplateApi) MCPTest(c *gin.Context) {
+	var testRequest struct {
+		Name      string                 `json:"name" binding:"required"`
+		Arguments map[string]interface{} `json:"arguments" binding:"required"`
+	}
 	if err := c.ShouldBindJSON(&testRequest); err != nil {
 		response.FailWithMessage("参数解析失败:"+err.Error(), c)
 		return
 	}
 
-	// 创建MCP客户端
-	baseUrl := fmt.Sprintf("http://127.0.0.1:%d%s", global.GVA_CONFIG.System.Addr, global.GVA_CONFIG.MCP.SSEPath)
-	testClient, err := client.NewClient(baseUrl, "testClient", "v1.0.0", global.GVA_CONFIG.MCP.Name)
+	baseURL := mcpTool.ResolveMCPServiceURL()
+	testClient, err := client.NewClient(baseURL, "testClient", "v1.0.0", mcpServerName(), incomingMCPHeaders(c))
 	if err != nil {
-		response.FailWithMessage("创建MCP客户端失败:"+err.Error(), c)
+		response.FailWithMessage("连接MCP服务失败:"+err.Error(), c)
 		return
 	}
 	defer testClient.Close()
 
-	ctx := c.Request.Context()
+	callRequest := mcp.CallToolRequest{}
+	callRequest.Params.Name = testRequest.Name
+	callRequest.Params.Arguments = testRequest.Arguments
 
-	// 初始化MCP连接
-	initRequest := mcp.InitializeRequest{}
-	initRequest.Params.ProtocolVersion = mcp.LATEST_PROTOCOL_VERSION
-	initRequest.Params.ClientInfo = mcp.Implementation{
-		Name:    "testClient",
-		Version: "v1.0.0",
-	}
-
-	_, err = testClient.Initialize(ctx, initRequest)
-	if err != nil {
-		response.FailWithMessage("初始化MCP连接失败:"+err.Error(), c)
-		return
-	}
-
-	// 构建工具调用请求
-	request := mcp.CallToolRequest{}
-	request.Params.Name = testRequest.Name
-	request.Params.Arguments = testRequest.Arguments
-
-	// 调用工具
-	result, err := testClient.CallTool(ctx, request)
+	result, err := testClient.CallTool(c.Request.Context(), callRequest)
 	if err != nil {
 		response.FailWithMessage("工具调用失败:"+err.Error(), c)
 		return
 	}
-
-	// 处理响应结果
 	if len(result.Content) == 0 {
 		response.FailWithMessage("工具未返回任何内容", c)
 		return
 	}
 
-	// 返回结果
 	response.OkWithData(result.Content, c)
+}
+
+func incomingMCPHeaders(c *gin.Context) map[string]string {
+	headerName := mcpTool.ConfiguredAuthHeader()
+	headerValue := c.GetHeader(headerName)
+	if headerValue == "" {
+		return nil
+	}
+
+	return map[string]string{
+		headerName: headerValue,
+	}
+}
+
+func buildMCPServerConfig() map[string]interface{} {
+	baseURL := mcpTool.ResolveMCPServiceURL()
+	authHeader := mcpTool.ConfiguredAuthHeader()
+	serverName := mcpServerName()
+
+	return map[string]interface{}{
+		"mcpServers": map[string]interface{}{
+			serverName: map[string]interface{}{
+				"url": baseURL,
+				"headers": map[string]string{
+					authHeader: "${YOUR_GVA_TOKEN}",
+				},
+			},
+		},
+	}
+}
+
+func mcpServerName() string {
+	if name := strings.TrimSpace(global.GVA_CONFIG.MCP.Name); name != "" {
+		return name
+	}
+	return "gva"
 }

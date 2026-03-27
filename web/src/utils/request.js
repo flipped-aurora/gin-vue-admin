@@ -1,80 +1,22 @@
-import axios from 'axios' // 引入axios
+import axios from 'axios'
 import { useUserStore } from '@/pinia/modules/user'
 import { ElLoading, ElMessage } from 'element-plus'
 import { emitter } from '@/utils/bus'
 import router from '@/router/index'
 
-const service = axios.create({
-  timeout: 99999
-})
+const DEFAULT_REQUEST_TIMEOUT = 1000 * 60 * 10
+const DEFAULT_LOADING_FORCE_CLOSE_DELAY = 30000
+
+const service = axios.create()
+
 let activeAxios = 0
-let timer
-let loadingInstance
+let persistentLoadingCount = 0
+let timer = null
+let forceCloseTimer = null
+let loadingInstance = null
 let isLoadingVisible = false
-let forceCloseTimer
 
-const showLoading = (
-  option = {
-    target: null
-  }
-) => {
-  const loadDom = document.getElementById('gva-base-load-dom')
-  activeAxios++
-
-  // 清除之前的定时器
-  if (timer) {
-    clearTimeout(timer)
-  }
-
-  // 清除强制关闭定时器
-  if (forceCloseTimer) {
-    clearTimeout(forceCloseTimer)
-  }
-
-  timer = setTimeout(() => {
-    // 再次检查activeAxios状态，防止竞态条件
-    if (activeAxios > 0 && !isLoadingVisible) {
-      if (!option.target) option.target = loadDom
-      loadingInstance = ElLoading.service(option)
-      isLoadingVisible = true
-
-      // 设置强制关闭定时器，防止loading永远不关闭（30秒超时）
-      forceCloseTimer = setTimeout(() => {
-        if (isLoadingVisible && loadingInstance) {
-          console.warn('Loading强制关闭：超时30秒')
-          loadingInstance.close()
-          isLoadingVisible = false
-          activeAxios = 0 // 重置计数器
-        }
-      }, 30000)
-    }
-  }, 400)
-}
-
-const closeLoading = () => {
-  activeAxios--
-  if (activeAxios <= 0) {
-    activeAxios = 0 // 确保不会变成负数
-    clearTimeout(timer)
-
-    if (forceCloseTimer) {
-      clearTimeout(forceCloseTimer)
-      forceCloseTimer = null
-    }
-
-    if (isLoadingVisible && loadingInstance) {
-      loadingInstance.close()
-      isLoadingVisible = false
-    }
-    loadingInstance = null
-  }
-}
-
-// 全局重置loading状态的函数，用于异常情况
-const resetLoading = () => {
-  activeAxios = 0
-  isLoadingVisible = false
-
+const clearLoadingTimers = () => {
   if (timer) {
     clearTimeout(timer)
     timer = null
@@ -84,24 +26,108 @@ const resetLoading = () => {
     clearTimeout(forceCloseTimer)
     forceCloseTimer = null
   }
-
-  if (loadingInstance) {
-    try {
-      loadingInstance.close()
-    } catch (e) {
-      console.warn('关闭loading时出错:', e)
-    }
-    loadingInstance = null
-  }
 }
 
-// http request 拦截器
+const closeLoadingInstance = () => {
+  if (isLoadingVisible && loadingInstance) {
+    loadingInstance.close()
+  }
+  loadingInstance = null
+  isLoadingVisible = false
+}
+
+const scheduleForceClose = () => {
+  if (!isLoadingVisible || activeAxios <= 0 || persistentLoadingCount > 0) {
+    return
+  }
+
+  forceCloseTimer = setTimeout(() => {
+    if (isLoadingVisible && loadingInstance) {
+      console.warn(
+        `Loading force closed after ${DEFAULT_LOADING_FORCE_CLOSE_DELAY}ms`
+      )
+      closeLoadingInstance()
+      activeAxios = 0
+      persistentLoadingCount = 0
+    }
+  }, DEFAULT_LOADING_FORCE_CLOSE_DELAY)
+}
+
+const showLoading = (
+  option = {
+    target: null
+  }
+) => {
+  const loadDom = document.getElementById('gva-base-load-dom')
+  const loadingOption = {
+    target: null,
+    ...option
+  }
+  const persistLoading = Boolean(loadingOption.persistLoading)
+
+  delete loadingOption.persistLoading
+
+  activeAxios++
+  if (persistLoading) {
+    persistentLoadingCount++
+  }
+
+  clearLoadingTimers()
+
+  timer = setTimeout(() => {
+    if (activeAxios > 0 && !isLoadingVisible) {
+      if (!loadingOption.target) {
+        loadingOption.target = loadDom
+      }
+      loadingInstance = ElLoading.service(loadingOption)
+      isLoadingVisible = true
+    }
+
+    scheduleForceClose()
+  }, 400)
+}
+
+const closeLoading = (option = {}) => {
+  activeAxios--
+  if (option?.persistLoading && persistentLoadingCount > 0) {
+    persistentLoadingCount--
+  }
+
+  if (activeAxios <= 0) {
+    activeAxios = 0
+    persistentLoadingCount = 0
+    clearLoadingTimers()
+    closeLoadingInstance()
+    return
+  }
+
+  if (forceCloseTimer) {
+    clearTimeout(forceCloseTimer)
+    forceCloseTimer = null
+  }
+
+  scheduleForceClose()
+}
+
+const resetLoading = () => {
+  activeAxios = 0
+  persistentLoadingCount = 0
+  clearLoadingTimers()
+  closeLoadingInstance()
+}
+
 service.interceptors.request.use(
   (config) => {
+    if (typeof config.timeout === 'undefined') {
+      config.timeout = DEFAULT_REQUEST_TIMEOUT
+    }
+
     if (!config.donNotShowLoading) {
       showLoading(config.loadingOption)
     }
+
     config.baseURL = config.baseURL || import.meta.env.VITE_BASE_API
+
     const userStore = useUserStore()
     config.headers = {
       'Content-Type': 'application/json',
@@ -109,59 +135,64 @@ service.interceptors.request.use(
       'x-user-id': userStore.userInfo.ID,
       ...config.headers
     }
+
     return config
   },
   (error) => {
-    if (!error.config.donNotShowLoading) {
-      closeLoading()
+    if (!error.config?.donNotShowLoading) {
+      closeLoading(error.config?.loadingOption)
     }
+
     emitter.emit('show-error', {
       code: 'request',
       message: error.message || '请求发送失败'
     })
+
     return error
   }
 )
 
 function getErrorMessage(error) {
-  // 优先级： 响应体中的 msg > statusText > 默认消息
   return error.response?.data?.msg || error.response?.statusText || '请求失败'
 }
 
-// http response 拦截器
 service.interceptors.response.use(
   (response) => {
     const userStore = useUserStore()
+
     if (!response.config.donNotShowLoading) {
-      closeLoading()
+      closeLoading(response.config.loadingOption)
     }
+
     if (response.headers['new-token']) {
       userStore.setToken(response.headers['new-token'])
     }
+
     if (typeof response.data.code === 'undefined') {
       return response
     }
+
     if (response.data.code === 0 || response.headers.success === 'true') {
       if (response.headers.msg) {
         response.data.msg = decodeURI(response.headers.msg)
       }
       return response.data
-    } else {
-      ElMessage({
-        showClose: true,
-        message: response.data.msg || decodeURI(response.headers.msg),
-        type: 'error'
-      })
-      return response.data.msg ? response.data : response
     }
+
+    ElMessage({
+      showClose: true,
+      message: response.data.msg || decodeURI(response.headers.msg),
+      type: 'error'
+    })
+
+    return response.data.msg ? response.data : response
   },
   (error) => {
-    if (!error.config.donNotShowLoading) {
-      closeLoading()
+    if (!error.config?.donNotShowLoading) {
+      closeLoading(error.config?.loadingOption)
     }
 
     if (!error.response) {
-      // 网络错误
       resetLoading()
       emitter.emit('show-error', {
         code: 'network',
@@ -170,7 +201,6 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
 
-    // HTTP 状态码错误
     if (error.response.status === 401) {
       emitter.emit('show-error', {
         code: '401',
@@ -192,12 +222,10 @@ service.interceptors.response.use(
   }
 )
 
-// 监听页面卸载事件，确保loading被正确清理
 if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', resetLoading)
   window.addEventListener('unload', resetLoading)
 }
 
-// 导出service和resetLoading函数
 export { resetLoading }
 export default service

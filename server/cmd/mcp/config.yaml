@@ -1,0 +1,14 @@
+mcp:
+  name: GVA_MCP
+  version: v1.0.0
+  path: /mcp
+  addr: 8889
+  base_url: http://127.0.0.1:8889/mcp
+  upstream_base_url: http://127.0.0.1:8888
+  auth_header: x-token
+  request_timeout: 15
+
+autocode:
+  root: ../../..
+  server: server
+  web: web/src

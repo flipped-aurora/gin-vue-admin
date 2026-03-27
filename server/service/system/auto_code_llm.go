@@ -4,48 +4,122 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	commonResp "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/request"
 	"github.com/goccy/go-json"
-	"io"
-	"strings"
 )
 
-// LLMAuto 调用大模型服务，返回生成结果数据
-// 入参为通用 JSONMap，需包含 mode（例如 ai/butler/eye/painter 等）以及业务 prompt/payload
 func (s *AutoCodeService) LLMAuto(ctx context.Context, llm common.JSONMap) (interface{}, error) {
-	if global.GVA_CONFIG.AutoCode.AiPath == "" {
-		return nil, errors.New("请先前往插件市场个人中心获取AiPath并填入config.yaml中")
+	path, err := buildLLMAutoPath(llm)
+	if err != nil {
+		return nil, err
 	}
 
-	// 构建调用路径：{AiPath} 中的 {FUNC} 由 mode 替换
-	mode := fmt.Sprintf("%v", llm["mode"]) // 统一转字符串，避免 nil 造成路径异常
-	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", mode)
-
-	res, err := request.HttpRequest(
+	res, err := request.HttpRequestWithContextAndTimeout(
+		ctx,
 		path,
-		"POST",
+		http.MethodPost,
 		nil,
 		nil,
 		llm,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("大模型生成失败: %w", err)
+		return nil, fmt.Errorf("调用上游大模型服务失败: %w", err)
 	}
 	defer res.Body.Close()
 
-	var resStruct commonResp.Response
-	b, err := io.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, fmt.Errorf("读取大模型响应失败: %w", err)
 	}
-	if err = json.Unmarshal(b, &resStruct); err != nil {
-		return nil, fmt.Errorf("解析大模型响应失败: %w", err)
+
+	bodyPreview := previewResponseBody(body)
+	contentType := res.Header.Get("Content-Type")
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return nil, fmt.Errorf("上游大模型服务返回非 2xx: status=%d content-type=%s body=%s", res.StatusCode, contentType, bodyPreview)
 	}
-	if resStruct.Code == 7 { // 业务约定：7 表示模型生成失败
-		return nil, fmt.Errorf("大模型生成失败: %s", resStruct.Msg)
+
+	var resStruct commonResp.Response
+	if err = json.Unmarshal(body, &resStruct); err != nil {
+		return nil, fmt.Errorf("解析大模型响应失败: status=%d content-type=%s body=%s err=%w", res.StatusCode, contentType, bodyPreview, err)
 	}
+
+	if resStruct.Code != commonResp.SUCCESS {
+		return nil, fmt.Errorf("大模型服务返回业务错误: code=%d msg=%s body=%s", resStruct.Code, resStruct.Msg, bodyPreview)
+	}
+
 	return resStruct.Data, nil
+}
+
+func (s *AutoCodeService) LLMAutoStream(ctx context.Context, llm common.JSONMap) (*http.Response, error) {
+	path, err := buildLLMAutoPath(llm)
+	if err != nil {
+		return nil, err
+	}
+
+	payload := cloneLLMAutoJSONMap(llm)
+	responseMode := strings.ToLower(strings.TrimSpace(fmt.Sprintf("%v", payload["response_mode"])))
+	if responseMode == "" {
+		payload["response_mode"] = "streaming"
+	}
+
+	res, err := request.HttpRequestWithContextAndTimeout(
+		ctx,
+		path,
+		http.MethodPost,
+		map[string]string{
+			"Accept":          "text/event-stream",
+			"Accept-Encoding": "identity", // 禁止 gzip，避免 SSE 流被压缩导致缓冲卡住
+			"Cache-Control":   "no-cache",
+		},
+		nil,
+		payload,
+		-1, // 不设置 client.Timeout，SSE 流的生命周期由 ctx 控制
+	)
+	if err != nil {
+		return nil, fmt.Errorf("调用上游大模型流式服务失败: %w", err)
+	}
+	return res, nil
+}
+
+func buildLLMAutoPath(llm common.JSONMap) (string, error) {
+	if global.GVA_CONFIG.AutoCode.AiPath == "" {
+		return "", errors.New("请先前往插件市场个人中心获取 AiPath 并填写到 config.yaml 中")
+	}
+
+	mode := strings.TrimSpace(fmt.Sprintf("%v", llm["mode"]))
+	if mode == "" {
+		return "", errors.New("llmAuto 缺少 mode 参数")
+	}
+
+	return strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", mode), nil
+}
+
+func cloneLLMAutoJSONMap(src common.JSONMap) common.JSONMap {
+	dst := make(common.JSONMap, len(src))
+	for key, value := range src {
+		dst[key] = value
+	}
+	return dst
+}
+
+func previewResponseBody(body []byte) string {
+	text := strings.TrimSpace(string(body))
+	text = strings.ReplaceAll(text, "\r", " ")
+	text = strings.ReplaceAll(text, "\n", " ")
+	text = strings.Join(strings.Fields(text), " ")
+	if text == "" {
+		return "<empty>"
+	}
+	runes := []rune(text)
+	if len(runes) > 300 {
+		return string(runes[:300]) + "..."
+	}
+	return text
 }

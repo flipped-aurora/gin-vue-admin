@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -547,76 +548,76 @@ func (g *GVAExecutor) buildDirectoryStructure(plan *ExecutionPlan) map[string]st
 
 	// 构建服务端路径
 	if serverPath != "" {
-		serverBasePath := fmt.Sprintf("%s/%s", rootPath, serverPath)
+		serverBasePath := filepath.Join(rootPath, serverPath)
 
 		if packageType == "plugin" {
 			// Plugin 模式：所有文件都在 /plugin/packageName/ 目录中
-			plugingBasePath := fmt.Sprintf("%s/plugin/%s", serverBasePath, packageName)
+			plugingBasePath := filepath.Join(serverBasePath, "plugin", packageName)
 
 			// API 路径
-			paths["api"] = fmt.Sprintf("%s/api", plugingBasePath)
+			paths["api"] = outputPath(filepath.Join(plugingBasePath, "api"))
 
 			// Service 路径
-			paths["service"] = fmt.Sprintf("%s/service", plugingBasePath)
+			paths["service"] = outputPath(filepath.Join(plugingBasePath, "service"))
 
 			// Model 路径
-			paths["model"] = fmt.Sprintf("%s/model", plugingBasePath)
+			paths["model"] = outputPath(filepath.Join(plugingBasePath, "model"))
 
 			// Router 路径
-			paths["router"] = fmt.Sprintf("%s/router", plugingBasePath)
+			paths["router"] = outputPath(filepath.Join(plugingBasePath, "router"))
 
 			// Request 路径
-			paths["request"] = fmt.Sprintf("%s/model/request", plugingBasePath)
+			paths["request"] = outputPath(filepath.Join(plugingBasePath, "model", "request"))
 
 			// Response 路径
-			paths["response"] = fmt.Sprintf("%s/model/response", plugingBasePath)
+			paths["response"] = outputPath(filepath.Join(plugingBasePath, "model", "response"))
 
 			// Plugin 特有文件
-			paths["plugin_main"] = fmt.Sprintf("%s/main.go", plugingBasePath)
-			paths["plugin_config"] = fmt.Sprintf("%s/plugin.go", plugingBasePath)
-			paths["plugin_initialize"] = fmt.Sprintf("%s/initialize", plugingBasePath)
+			paths["plugin_main"] = outputPath(filepath.Join(plugingBasePath, "main.go"))
+			paths["plugin_config"] = outputPath(filepath.Join(plugingBasePath, "plugin.go"))
+			paths["plugin_initialize"] = outputPath(filepath.Join(plugingBasePath, "initialize"))
 		} else {
 			// Package 模式：传统的目录结构
 			// API 路径
-			paths["api"] = fmt.Sprintf("%s/api/v1/%s", serverBasePath, packageName)
+			paths["api"] = outputPath(filepath.Join(serverBasePath, "api", "v1", packageName))
 
 			// Service 路径
-			paths["service"] = fmt.Sprintf("%s/service/%s", serverBasePath, packageName)
+			paths["service"] = outputPath(filepath.Join(serverBasePath, "service", packageName))
 
 			// Model 路径
-			paths["model"] = fmt.Sprintf("%s/model/%s", serverBasePath, packageName)
+			paths["model"] = outputPath(filepath.Join(serverBasePath, "model", packageName))
 
 			// Router 路径
-			paths["router"] = fmt.Sprintf("%s/router/%s", serverBasePath, packageName)
+			paths["router"] = outputPath(filepath.Join(serverBasePath, "router", packageName))
 
 			// Request 路径
-			paths["request"] = fmt.Sprintf("%s/model/%s/request", serverBasePath, packageName)
+			paths["request"] = outputPath(filepath.Join(serverBasePath, "model", packageName, "request"))
 
 			// Response 路径
-			paths["response"] = fmt.Sprintf("%s/model/%s/response", serverBasePath, packageName)
+			paths["response"] = outputPath(filepath.Join(serverBasePath, "model", packageName, "response"))
 		}
 	}
 
 	// 构建前端路径（两种模式相同）
 	if webPath != "" {
-		webBasePath := fmt.Sprintf("%s/%s", rootPath, webPath)
+		webBasePath := filepath.Join(rootPath, webPath)
 
 		if packageType == "plugin" {
 			// Plugin 模式：前端文件也在 /plugin/packageName/ 目录中
-			pluginWebBasePath := fmt.Sprintf("%s/plugin/%s", webBasePath, packageName)
+			pluginWebBasePath := filepath.Join(webBasePath, "plugin", packageName)
 
 			// Vue 页面路径
-			paths["vue_page"] = fmt.Sprintf("%s/view", pluginWebBasePath)
+			paths["vue_page"] = outputPath(filepath.Join(pluginWebBasePath, "view"))
 
 			// API 路径
-			paths["vue_api"] = fmt.Sprintf("%s/api", pluginWebBasePath)
+			paths["vue_api"] = outputPath(filepath.Join(pluginWebBasePath, "api"))
 		} else {
 			// Package 模式：传统的目录结构
 			// Vue 页面路径
-			paths["vue_page"] = fmt.Sprintf("%s/view/%s", webBasePath, packageName)
+			paths["vue_page"] = outputPath(filepath.Join(webBasePath, "view", packageName))
 
 			// API 路径
-			paths["vue_api"] = fmt.Sprintf("%s/api/%s", webBasePath, packageName)
+			paths["vue_api"] = outputPath(filepath.Join(webBasePath, "api", packageName))
 		}
 	}
 

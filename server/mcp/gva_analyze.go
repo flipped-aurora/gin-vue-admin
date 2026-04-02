@@ -477,7 +477,7 @@ func (g *GVAAnalyzer) scanModulesInDirectory(dir, packageName, template string) 
 	for _, entry := range entries {
 		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".go") {
 			moduleName := strings.TrimSuffix(entry.Name(), ".go")
-			filePath := filepath.Join(dir, entry.Name())
+			filePath := outputPath(filepath.Join(dir, entry.Name()))
 
 			module := PredesignedModuleInfo{
 				ModuleName:  moduleName,

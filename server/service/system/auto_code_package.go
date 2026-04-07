@@ -571,6 +571,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								Type:        ast.TypePluginInitializeGorm,
 								Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
 								ImportPath:  fmt.Sprintf(`"%s/plugin/%s/model"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+								Business:    info.BusinessDB,
 								StructName:  info.StructName,
 								PackageName: "model",
 								IsNew:       true,

@@ -60,7 +60,7 @@ func JWTAuth() gin.HandlerFunc {
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt.Unix(), 10))
-			utils.SetToken(c, newToken, int(dr.Seconds()/60))
+			utils.SetToken(c, newToken, int(dr.Seconds()))
 			if global.GVA_CONFIG.System.UseMultipoint {
 				// 记录新的活跃jwt
 				_ = utils.SetRedisJWT(newToken, newClaims.Username)

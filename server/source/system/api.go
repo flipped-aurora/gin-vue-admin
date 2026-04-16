@@ -78,6 +78,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "api", Method: "GET", Path: "/api/getApiGroups", Description: "获取路由组"},
 		{ApiGroup: "api", Method: "POST", Path: "/api/enterSyncApi", Description: "确认同步API"},
 		{ApiGroup: "api", Method: "POST", Path: "/api/ignoreApi", Description: "忽略API"},
+		{ApiGroup: "api", Method: "GET", Path: "/api/getApiRoles", Description: "获取指定API关联角色列表"},
+		{ApiGroup: "api", Method: "POST", Path: "/api/setApiRoles", Description: "全量覆盖API关联角色列表"},
 
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/copyAuthority", Description: "拷贝角色"},
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/createAuthority", Description: "创建角色"},
@@ -100,6 +102,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "菜单", Method: "POST", Path: "/menu/getBaseMenuTree", Description: "获取用户动态路由"},
 		{ApiGroup: "菜单", Method: "POST", Path: "/menu/getMenuAuthority", Description: "获取指定角色menu"},
 		{ApiGroup: "菜单", Method: "POST", Path: "/menu/addMenuAuthority", Description: "增加menu和角色关联关系"},
+		{ApiGroup: "菜单", Method: "GET", Path: "/menu/getMenuRoles", Description: "获取菜单关联角色列表"},
+		{ApiGroup: "菜单", Method: "POST", Path: "/menu/setMenuRoles", Description: "全量覆盖菜单关联角色列表"},
 
 		{ApiGroup: "分片上传", Method: "GET", Path: "/fileUploadAndDownload/findFile", Description: "寻找目标文件（秒传）"},
 		{ApiGroup: "分片上传", Method: "POST", Path: "/fileUploadAndDownload/breakpointContinue", Description: "断点续传"},

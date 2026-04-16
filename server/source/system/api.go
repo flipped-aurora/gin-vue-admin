@@ -160,6 +160,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpStatus", Description: "获取 MCP 独立服务状态"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpStart", Description: "启动 MCP 独立服务"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpStop", Description: "停用 MCP 独立服务"},
+		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpRoutes", Description: "获取 MCP 路由列表"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpTest", Description: "MCP Tool 管理"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/mcpList", Description: "获取 MCP ToolList"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/saveAIWorkflowSession", Description: "保存AI需求工作流会话"},

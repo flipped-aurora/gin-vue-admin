@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/golang-jwt/jwt/v5"
 
@@ -22,7 +23,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if isBlacklist(token) {
+		if isBlacklist(c, token) {
 			response.NoAuth("您的帐户异地登陆或令牌失效", c)
 			utils.ClearToken(c)
 			c.Abort()
@@ -78,12 +79,14 @@ func JWTAuth() gin.HandlerFunc {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: IsBlacklist
-//@description: 判断JWT是否在黑名单内部
-//@param: jwt string
+//@function: isBlacklist
+//@description: 判断JWT是否在黑名单内部（BlackCache L1 + Redis L2 分层查询）
+//@param: c *gin.Context, jwt string
 //@return: bool
 
-func isBlacklist(jwt string) bool {
-	_, ok := global.BlackCache.Get(jwt)
-	return ok
+// isBlacklist 接收 *gin.Context 是为了把 request context 串下去，
+// 让 Redis 查询能被 HTTP 超时 / 取消连带中断。
+// 具体分层策略见 service/system.JwtService.IsInBlacklist 的注释。
+func isBlacklist(c *gin.Context, jwt string) bool {
+	return service.ServiceGroupApp.SystemServiceGroup.JwtService.IsInBlacklist(c.Request.Context(), jwt)
 }

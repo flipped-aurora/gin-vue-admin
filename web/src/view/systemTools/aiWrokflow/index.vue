@@ -1,5 +1,9 @@
 <template>
   <div class="gva-table-box ai-workflow-page space-y-4">
+    <warning-bar
+      href="https://plugin.gin-vue-admin.com/license"
+      title="本功能由于算力不足限制，已调整为仅对授权用户开放。"
+    />
     <el-card shadow="never">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div class="max-w-3xl">
@@ -1000,6 +1004,7 @@ import {
   getAIWorkflowSessionList,
   saveAIWorkflowSession
 } from '@/api/autoCode'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { useUserStore } from '@/pinia/modules/user'
 
 defineOptions({ name: 'AIWorkflow' })

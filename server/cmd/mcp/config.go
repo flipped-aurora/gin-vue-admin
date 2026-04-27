@@ -109,6 +109,11 @@ func applyStandaloneDefaults(configPath string, cfg *standaloneConfig) {
 	if cfg.MCP.Addr == 0 {
 		cfg.MCP.Addr = 8889
 	}
+	if strings.TrimSpace(cfg.MCP.ListenHost) == "" {
+		// Default to loopback so an operator who forgets to set mcp.listen_host
+		// never accidentally exposes MCP tools to the public network.
+		cfg.MCP.ListenHost = "127.0.0.1"
+	}
 	if cfg.MCP.AuthHeader == "" {
 		cfg.MCP.AuthHeader = "x-token"
 	}

@@ -3,6 +3,12 @@ mcp:
   version: v1.0.0
   path: /mcp
   addr: 8889
+  # listen_host is the interface the standalone MCP binary binds to.
+  # Leave empty or set to 127.0.0.1 for loopback-only access (recommended).
+  # 0.0.0.0 / :: / * are refused at startup because MCP exposes code-gen
+  # and DB-execution tools. Set a specific private IP if remote access is
+  # required, and always put a reverse proxy in front.
+  listen_host: 127.0.0.1
   base_url: http://127.0.0.1:8889/mcp
   upstream_base_url: http://127.0.0.1:8888
   auth_header: x-token

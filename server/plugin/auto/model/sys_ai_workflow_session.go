@@ -24,10 +24,10 @@ type SysAIWorkflowSession struct {
 	ConversationID string              `json:"conversationId" gorm:"column:conversation_id;size:255;comment:Dify会话ID"`
 	MessageID      string              `json:"messageId" gorm:"column:message_id;size:255;comment:Dify消息ID"`
 	CurrentNodeID  string              `json:"currentNodeId" gorm:"column:current_node_id;size:64;comment:当前选中节点ID"`
-	Settings       common.JSONMap      `json:"settings" gorm:"column:settings;type:longtext;comment:页面设置"`
-	FormData       common.JSONMap      `json:"formData" gorm:"column:form_data;type:longtext;comment:表单数据"`
-	ResultData     common.JSONMap      `json:"resultData" gorm:"column:result_data;type:longtext;comment:当前展示结果"`
-	Messages       []AIWorkflowMessage `json:"messages" gorm:"column:messages;serializer:json;type:longtext;comment:会话消息"`
+	Settings       common.JSONMap      `json:"settings" gorm:"column:settings;type:text;comment:页面设置"`
+	FormData       common.JSONMap      `json:"formData" gorm:"column:form_data;type:text;comment:表单数据"`
+	ResultData     common.JSONMap      `json:"resultData" gorm:"column:result_data;type:text;comment:当前展示结果"`
+	Messages       []AIWorkflowMessage `json:"messages" gorm:"column:messages;serializer:json;type:text;comment:会话消息"`
 }
 
 func (s *SysAIWorkflowSession) TableName() string {

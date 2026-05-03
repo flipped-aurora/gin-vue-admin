@@ -107,7 +107,8 @@ func Menu(ctx context.Context) {
 			"component":    child.Component,
 			"sort":         child.Sort,
 			"hidden":       child.Hidden,
-			"meta":         child.Meta,
+			"title":        child.Meta.Title,
+			"icon":         child.Meta.Icon,
 			"keep_alive":   child.KeepAlive,
 			"default_menu": child.DefaultMenu,
 		})

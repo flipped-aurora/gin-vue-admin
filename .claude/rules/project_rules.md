@@ -22,3 +22,4 @@ structured_context: /aiDoc
 - 不要在这里扩写项目级规则
 - 项目级规则变更时，先更新 `/AGENT.MD` 与 `/aiDoc/`
 - 工具目录只保留薄适配层职责，不再保存独立 project rule 副本
+- 代码读取约束以 `/AGENT.MD` 为准，其中包括：无论什么情况，都不要直接读取 `node_modules/` 中的代码

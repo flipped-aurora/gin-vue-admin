@@ -3,7 +3,6 @@ package initialize
 import (
 	"context"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
 )
@@ -37,19 +36,43 @@ func Menu(ctx context.Context) {
 			Meta:      model.Meta{Title: "自动化包", Icon: "files"},
 		},
 		{
+			Path:      "formCreate",
+			Name:      "formCreate",
+			Hidden:    false,
+			Component: "view/systemTools/formCreate/index.vue",
+			Sort:      3,
+			Meta:      model.Meta{Title: "表单生成器", Icon: "magic-stick", KeepAlive: true},
+		},
+		{
 			Path:      "aiWorkflow",
 			Name:      "AIWorkflow",
 			Hidden:    false,
 			Component: "plugin/auto/view/aiWorkflow/index.vue",
-			Sort:      3,
+			Sort:      4,
 			Meta:      model.Meta{Title: "AI 工作流", Icon: "memo"},
+		},
+		{
+			Path:      "autoCodeEdit/:id",
+			Name:      "autoCodeEdit",
+			Hidden:    true,
+			Component: "view/systemTools/autoCode/index.vue",
+			Sort:      0,
+			Meta:      model.Meta{Title: "自动化代码-${id}", Icon: "magic-stick"},
+		},
+		{
+			Path:      "exportTemplate",
+			Name:      "exportTemplate",
+			Hidden:    false,
+			Component: "view/systemTools/exportTemplate/exportTemplate.vue",
+			Sort:      5,
+			Meta:      model.Meta{Title: "导出模板", Icon: "reading"},
 		},
 		{
 			Path:      "mcp",
 			Name:      "MCP",
 			Hidden:    false,
 			Component: "plugin/auto/view/autoCode/mcp.vue",
-			Sort:      4,
+			Sort:      6,
 			Meta:      model.Meta{Title: "MCP 工具", Icon: "monitor"},
 		},
 		{
@@ -85,6 +108,14 @@ func Menu(ctx context.Context) {
 			Meta:      model.Meta{Title: "技能管理", Icon: "edit-pen"},
 		},
 		{
+			Path:      "picture",
+			Name:      "picture",
+			Hidden:    false,
+			Component: "view/systemTools/autoCode/picture.vue",
+			Sort:      10,
+			Meta:      model.Meta{Title: "AI页面绘制", Icon: "picture-filled"},
+		},
+		{
 			Path:      "autoCodeAdmin",
 			Name:      "AutoCodeAdmin",
 			Hidden:    true,
@@ -94,22 +125,4 @@ func Menu(ctx context.Context) {
 		},
 	}
 	utils.RegisterMenus(entities...)
-
-	root := entities[0]
-	if err := global.GVA_DB.Where("name = ?", root.Name).First(&root).Error; err != nil {
-		return
-	}
-	for _, child := range entities[1:] {
-		child.ParentId = root.ID
-		global.GVA_DB.Model(&model.SysBaseMenu{}).Where("name = ?", child.Name).Updates(map[string]interface{}{
-			"parent_id":    child.ParentId,
-			"path":         child.Path,
-			"component":    child.Component,
-			"sort":         child.Sort,
-			"hidden":       child.Hidden,
-			"meta":         child.Meta,
-			"keep_alive":   child.KeepAlive,
-			"default_menu": child.DefaultMenu,
-		})
-	}
 }

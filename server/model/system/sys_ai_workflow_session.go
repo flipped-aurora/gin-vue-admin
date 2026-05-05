@@ -15,6 +15,8 @@ type AIWorkflowMessage struct {
 	CreatedAt      string         `json:"createdAt"`
 }
 
+type AIWorkflowMessages = common.JSONSlice[AIWorkflowMessage]
+
 type SysAIWorkflowSession struct {
 	global.GVA_MODEL
 	UserID         uint                `json:"userId" gorm:"column:user_id;index;comment:用户ID"`
@@ -24,10 +26,10 @@ type SysAIWorkflowSession struct {
 	ConversationID string              `json:"conversationId" gorm:"column:conversation_id;size:255;comment:Dify会话ID"`
 	MessageID      string              `json:"messageId" gorm:"column:message_id;size:255;comment:Dify消息ID"`
 	CurrentNodeID  string              `json:"currentNodeId" gorm:"column:current_node_id;size:64;comment:当前选中节点ID"`
-	Settings       common.JSONMap      `json:"settings" gorm:"column:settings;type:longtext;comment:页面设置"`
-	FormData       common.JSONMap      `json:"formData" gorm:"column:form_data;type:longtext;comment:表单数据"`
-	ResultData     common.JSONMap      `json:"resultData" gorm:"column:result_data;type:longtext;comment:当前展示结果"`
-	Messages       []AIWorkflowMessage `json:"messages" gorm:"column:messages;serializer:json;type:longtext;comment:会话消息"`
+	Settings       common.JSONMap      `json:"settings" gorm:"column:settings;comment:页面设置"`
+	FormData       common.JSONMap      `json:"formData" gorm:"column:form_data;comment:表单数据"`
+	ResultData     common.JSONMap      `json:"resultData" gorm:"column:result_data;comment:当前展示结果"`
+	Messages       AIWorkflowMessages  `json:"messages" gorm:"column:messages;comment:会话消息"`
 }
 
 func (s *SysAIWorkflowSession) TableName() string {

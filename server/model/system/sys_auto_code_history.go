@@ -20,7 +20,7 @@ type SysAutoCodeHistory struct {
 	BusinessDB       string             `json:"businessDb" gorm:"column:business_db;comment:业务库"`
 	Description      string             `json:"description" gorm:"column:description;comment:Struct中文名称"`
 	Templates        map[string]string  `json:"template" gorm:"serializer:json;type:text;column:templates;comment:模板信息"`
-	Injections       map[string]string  `json:"injections" gorm:"serializer:json;type:text;column:Injections;comment:注入路径"`
+	Injections       map[string]string  `json:"injections" gorm:"serializer:json;type:text;column:injections;comment:注入路径"`
 	Flag             int                `json:"flag" gorm:"column:flag;comment:[0:创建,1:回滚]"`
 	ApiIDs           []uint             `json:"apiIDs" gorm:"serializer:json;column:api_ids;comment:api表注册内容"`
 	MenuID           uint               `json:"menuId" gorm:"column:menu_id;comment:菜单ID"`

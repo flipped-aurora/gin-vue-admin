@@ -337,6 +337,9 @@ func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (stri
 }
 
 func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) error {
+	if !isSafeFileName(info.HumpPackageName) {
+		return fmt.Errorf("文件名包含非法字符，拒绝写入")
+	}
 	tPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", info.Package, info.HumpPackageName+".go")
 	funcName := fmt.Sprintf("Init%sRouter", info.StructName)
 
@@ -401,6 +404,9 @@ func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) err
 }
 
 func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) error {
+	if !isSafeFileName(info.HumpPackageName) || !isSafeFileName(info.PackageName) {
+		return fmt.Errorf("文件名包含非法字符，拒绝写入")
+	}
 	getTemplateStr, err := s.getTemplateStr(t, info)
 	if err != nil {
 		return err

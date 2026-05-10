@@ -2,7 +2,7 @@
   <div class="h-full gva-container2 overflow-auto bg-slate-50/60 dark:bg-slate-900">
     <div class="space-y-4 p-4 lg:p-6">
       <section
-        class="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white px-5 py-6 shadow-sm dark:border-slate-700 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900"
+        class="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white px-5 py-6 shadow-sm dark:border-slate-700 dark:bg-slate-800"
       >
         
         <div class="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

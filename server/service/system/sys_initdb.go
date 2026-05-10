@@ -11,6 +11,14 @@ import (
 	"sort"
 )
 
+// dbReadyCallback 数据库就绪回调函数，由 initialize 包注入
+var dbReadyCallback func()
+
+// SetDBReadyCallback 设置数据库就绪回调
+func SetDBReadyCallback(callback func()) {
+	dbReadyCallback = callback
+}
+
 const (
 	Mysql           = "mysql"
 	Pgsql           = "pgsql"
@@ -135,6 +143,12 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) (err error) {
 	}
 	initializers = initSlice{}
 	cache = map[string]*orderedInitializer{}
+
+	// 通知数据库已就绪，触发插件注册
+	if dbReadyCallback != nil {
+		dbReadyCallback()
+	}
+
 	return nil
 }
 

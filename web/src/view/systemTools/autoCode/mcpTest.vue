@@ -43,36 +43,36 @@
       </div>
 
       <div
-        class="mb-3 rounded border border-dashed border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-500"
+        class="mb-3 rounded border border-dashed border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
       >
         <div>
           服务地址：
-          <span class="break-all font-mono text-gray-700">{{
+          <span class="break-all font-mono text-gray-700 dark:text-slate-300">{{
             mcpServiceStatus.baseURL
           }}</span>
         </div>
         <div class="mt-1">
           健康检查：
-          <span class="break-all font-mono text-gray-700">{{
+          <span class="break-all font-mono text-gray-700 dark:text-slate-300">{{
             mcpServiceStatus.healthURL
           }}</span>
         </div>
         <div v-if="mcpServiceStatus.startedAt" class="mt-1">
           启动时间：
-          <span class="font-mono text-gray-700">{{
+          <span class="font-mono text-gray-700 dark:text-slate-300">{{
             formatTime(mcpServiceStatus.startedAt)
           }}</span>
         </div>
         <div v-if="mcpServiceStatus.lastError" class="mt-1">
           最近错误：
-          <span class="break-all text-red-600">{{
+          <span class="break-all text-red-600 dark:text-red-400">{{
             mcpServiceStatus.lastError
           }}</span>
         </div>
       </div>
 
       <pre
-        class="font-mono whitespace-pre-wrap break-words rounded bg-gray-100 p-2.5 text-gray-700"
+        class="font-mono whitespace-pre-wrap break-words rounded bg-gray-100 p-2.5 text-gray-700 dark:bg-slate-800 dark:text-slate-300"
       >{{ mcpServerConfig }}</pre>
     </el-card>
 

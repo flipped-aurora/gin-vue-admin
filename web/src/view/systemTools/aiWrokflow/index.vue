@@ -10,10 +10,10 @@
           <h1 class="mt-2 text-2xl font-semibold text-slate-900">
             AI 需求分析与 Prompt 工作流
           </h1>
-          <p class="mt-3 text-sm leading-6 text-slate-500">
-            会话会自动保存到后端。刷新页面后可以继续查看历史需求、按节点回看结果，并支持回滚到任意
-            Assistant 节点后重新续聊。
-          </p>
+<p class="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              会话会自动保存到后端。刷新页面后可以继续查看历史需求、按节点回看结果，并支持回滚到任意
+              Assistant 节点后重新续聊。
+            </p>
         </div>
         <div class="flex flex-wrap">
           <el-button :icon="MagicStick" @click="fillExample"
@@ -28,8 +28,8 @@
         <template #header>
           <div class="flex items-center justify-between gap-3">
             <div>
-              <p class="text-base font-semibold text-slate-800">输入与历史</p>
-              <p class="mt-1 text-xs text-slate-500">
+              <p class="text-base font-semibold text-slate-800 dark:text-slate-200">输入与历史</p>
+              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 {{
                   currentSession.id
                     ? `会话 #${currentSession.id}`
@@ -48,21 +48,21 @@
 
         <div class="space-y-4">
           <div
-            class="space-y-3 rounded border border-slate-200 bg-white p-3 shadow-sm"
+            class="space-y-3 rounded border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800"
           >
             <div
               class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div>
-                <p class="text-sm font-semibold text-slate-800">
+                <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
                   先选择当前工作模式
                 </p>
-                <p class="mt-1 text-xs text-slate-500">
+                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   很多用户会忽略这里，现在可以直接点下面的大卡片切换。
                 </p>
               </div>
               <span
-                class="w-fit shrink-0 whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500"
+                class="w-fit shrink-0 whitespace-nowrap rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-500 dark:bg-slate-700 dark:text-slate-400"
                 >可随时切换</span
               >
             </div>
@@ -70,12 +70,11 @@
               <button
                 type="button"
                 class="rounded border px-4 py-4 text-left transition"
-                :class="
+:class="
                   activeTab === 'analysis'
-                    ? 'border-sky-400 bg-sky-50 shadow-sm shadow-sky-100'
-                    : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'
+                    ? 'border-sky-400 bg-sky-50 shadow-sm shadow-sky-100 dark:border-sky-500 dark:bg-sky-900/30'
+                    : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600 dark:hover:bg-slate-700'
                 "
-                @click="switchTab('analysis')"
               >
                 <div class="flex items-center justify-between gap-3">
                   <div>
@@ -83,8 +82,8 @@
                       class="text-base font-semibold"
                       :class="
                         activeTab === 'analysis'
-                          ? 'text-sky-700'
-                          : 'text-slate-800'
+                          ? 'text-sky-700 dark:text-sky-400'
+                          : 'text-slate-800 dark:text-slate-200'
                       "
                     >
                       需求分析
@@ -93,8 +92,8 @@
                       class="mt-2 text-xs leading-5"
                       :class="
                         activeTab === 'analysis'
-                          ? 'text-sky-700/80'
-                          : 'text-slate-500'
+                          ? 'text-sky-700/80 dark:text-sky-400/80'
+                          : 'text-slate-500 dark:text-slate-400'
                       "
                     >
                       先把你的需求拆成模块、字段、待确认问题，再决定怎么落地。
@@ -105,7 +104,7 @@
                     :class="
                       activeTab === 'analysis'
                         ? 'bg-sky-600 text-white'
-                        : 'bg-white text-slate-500 border border-slate-200'
+                        : 'bg-white text-slate-500 border border-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600'
                     "
                   >
                     {{ activeTab === 'analysis' ? '当前模式' : '切换到这里' }}
@@ -116,21 +115,20 @@
               <button
                 type="button"
                 class="rounded border px-4 py-4 text-left transition"
-                :class="
-                  activeTab === 'workflow'
-                    ? 'border-emerald-400 bg-emerald-50 shadow-sm shadow-emerald-100'
-                    : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'
-                "
-                @click="switchTab('workflow')"
-              >
+:class="
+                      activeTab === 'workflow'
+                        ? 'border-emerald-400 bg-emerald-50 shadow-sm shadow-emerald-100 dark:border-emerald-500 dark:bg-emerald-900/30'
+                        : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600 dark:hover:bg-slate-700'
+                    "
+                  >
                 <div class="flex items-center justify-between gap-3">
                   <div>
                     <p
                       class="text-base font-semibold"
                       :class="
                         activeTab === 'workflow'
-                          ? 'text-emerald-700'
-                          : 'text-slate-800'
+                          ? 'text-emerald-700 dark:text-emerald-400'
+                          : 'text-slate-800 dark:text-slate-200'
                       "
                     >
                       工作流
@@ -139,8 +137,8 @@
                       class="mt-2 text-xs leading-5"
                       :class="
                         activeTab === 'workflow'
-                          ? 'text-emerald-700/80'
-                          : 'text-slate-500'
+                          ? 'text-emerald-700/80 dark:text-emerald-400/80'
+                          : 'text-slate-500 dark:text-slate-400'
                       "
                     >
                       基于需求或分析结果，直接生成分步骤 Prompt 和执行路线。
@@ -151,7 +149,7 @@
                     :class="
                       activeTab === 'workflow'
                         ? 'bg-emerald-600 text-white'
-                        : 'bg-white text-slate-500 border border-slate-200'
+                        : 'bg-white text-slate-500 border border-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600'
                     "
                   >
                     {{ activeTab === 'workflow' ? '当前模式' : '切换到这里' }}
@@ -162,7 +160,7 @@
           </div>
 
           <div
-            class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3"
+            class="space-y-3 rounded border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-900"
           >
             <div class="flex items-center">
               <el-input
@@ -198,25 +196,25 @@
                 class="cursor-pointer rounded border p-3"
                 :class="
                   isSessionActive(item)
-                    ? 'border-sky-300 bg-sky-50'
-                    : 'border-slate-200 bg-white'
+                    ? 'border-sky-300 bg-sky-50 dark:border-sky-600 dark:bg-sky-900/30'
+                    : 'border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800'
                 "
                 @click="openSession(item)"
               >
                 <div class="flex items-start justify-between gap-3">
                   <div class="min-w-0 flex-1">
                     <div class="flex flex-wrap items-center gap-2">
-                      <p class="truncate text-sm font-semibold text-slate-800">
+                      <p class="truncate text-sm font-semibold text-slate-800 dark:text-slate-200">
                         {{ item.title || '未命名需求' }}
                       </p>
                       <el-tag size="small" effect="plain">{{
                         item.tab === 'analysis' ? '分析' : '工作流'
                       }}</el-tag>
                     </div>
-                    <p class="mt-2 text-xs leading-5 text-slate-500">
+                    <p class="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
                       {{ item.summary || '暂无摘要' }}
                     </p>
-                    <p class="mt-2 text-[11px] text-slate-400">
+                    <p class="mt-2 text-[11px] text-slate-400 dark:text-slate-500">
                       更新时间：{{
                         formatTime(item.UpdatedAt || item.updatedAt)
                       }}
@@ -359,8 +357,8 @@
 
             <el-divider />
 
-            <div class="space-y-3 rounded bg-slate-50 p-3">
-              <div class="text-xs leading-6 text-slate-500">
+            <div class="space-y-3 rounded bg-slate-50 p-3 dark:bg-slate-900">
+              <div class="text-xs leading-6 text-slate-500 dark:text-slate-400">
                 当前会话会持久化到后端。点击历史需求即可恢复内容，刷新页面后也会自动加载最近一次会话。
               </div>
               <div class="flex flex-wrap">
@@ -380,19 +378,19 @@
                 >
               </div>
               <div
-                class="rounded-xl border border-dashed border-slate-300 bg-white px-3 py-2 text-xs text-slate-500"
+                class="rounded-xl border border-dashed border-slate-300 bg-white px-3 py-2 text-xs text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400"
               >
                 conversation_id:
-                <span class="break-all font-mono text-slate-700">{{
+                <span class="break-all font-mono text-slate-700 dark:text-slate-300">{{
                   currentSession.conversationId ||
                   '当前会话还没有 conversation_id'
                 }}</span>
               </div>
               <div
-                class="rounded-xl border border-dashed border-slate-300 bg-white px-3 py-2 text-xs text-slate-500"
+                class="rounded-xl border border-dashed border-slate-300 bg-white px-3 py-2 text-xs text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400"
               >
                 当前节点:
-                <span class="break-all font-mono text-slate-700">{{
+                <span class="break-all font-mono text-slate-700 dark:text-slate-300">{{
                   currentSession.currentNodeId || '默认显示最新 Assistant 节点'
                 }}</span>
               </div>
@@ -420,10 +418,10 @@
         <template #header>
           <div class="flex items-center justify-between gap-3">
             <div>
-              <p class="text-base font-semibold text-slate-800">
+              <p class="text-base font-semibold text-slate-800 dark:text-slate-200">
                 {{ activeTab === 'analysis' ? '需求分析结果' : '工作流结果' }}
               </p>
-              <p class="mt-1 text-xs text-slate-500">
+              <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 {{
                   activeTab === 'analysis'
                     ? '支持从会话节点回看任意版本的分析结果。'
@@ -479,9 +477,9 @@
             >{{ streamingPreviewText }}</pre>
             <div v-else class="text-xs text-sky-500">等待模型响应...</div>
           </div>
-          <div class="rounded border border-slate-200 bg-slate-50 p-4">
+          <div class="rounded border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900">
             <div class="mb-3 flex items-center justify-between">
-              <h3 class="text-sm font-semibold text-slate-800">会话记录</h3>
+              <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">会话记录</h3>
               <el-tag effect="plain"
                 >{{ currentSession.messages.length }} 条</el-tag
               >
@@ -497,10 +495,10 @@
                 class="rounded px-4 py-3"
                 :class="
                   item.role === 'user'
-                    ? 'bg-sky-600 text-white'
+                    ? 'bg-sky-600 text-white dark:bg-sky-700'
                     : item.isSelected
-                    ? 'border border-sky-300 bg-sky-50 text-slate-700'
-                    : 'border border-slate-200 bg-white text-slate-700'
+                    ? 'border border-sky-300 bg-sky-50 text-slate-700 dark:border-sky-600 dark:bg-sky-900/30 dark:text-slate-300'
+                    : 'border border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
                 "
               >
                 <div class="mb-2 flex items-start justify-between gap-3">
@@ -508,7 +506,7 @@
                     <div
                       class="text-xs font-semibold uppercase tracking-[0.2em]"
                       :class="
-                        item.role === 'user' ? 'text-sky-100' : 'text-slate-400'
+                        item.role === 'user' ? 'text-sky-100 dark:text-sky-300' : 'text-slate-400 dark:text-slate-500'
                       "
                     >
                       {{ item.role === 'user' ? 'User' : 'Assistant' }}
@@ -518,8 +516,8 @@
                       class="mt-1 text-[11px]"
                       :class="
                         item.role === 'user'
-                          ? 'text-sky-100/80'
-                          : 'text-slate-400'
+                          ? 'text-sky-100/80 dark:text-sky-300/80'
+                          : 'text-slate-400 dark:text-slate-500'
                       "
                     >
                       {{ formatTime(item.createdAt) }}
@@ -549,7 +547,7 @@
                 <div v-else class="space-y-3">
                   <template v-if="item.isStreaming">
                     <div
-                      class="rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs leading-5 text-sky-700"
+                      class="rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs leading-5 text-sky-700 dark:border-sky-600 dark:bg-sky-900/30 dark:text-sky-400"
                     >
                       正在流式返回，当前内容实时展开中...
                     </div>
@@ -560,7 +558,7 @@
                   </template>
                   <template v-else>
                   <div
-                    class="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-2 text-xs leading-5 text-slate-500"
+                    class="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-2 text-xs leading-5 text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400"
                   >
                     {{
                       item.display.preview ||
@@ -589,10 +587,10 @@
             <el-empty v-else description="当前会话还没有消息。" />
           </div>
 
-          <div class="rounded border border-slate-200 bg-white p-4">
+          <div class="rounded border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
             <div class="mb-3 flex items-center justify-between">
-              <h3 class="text-sm font-semibold text-slate-800">继续追问</h3>
-              <span class="text-xs text-slate-400">{{
+              <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200">继续追问</h3>
+              <span class="text-xs text-slate-400 dark:text-slate-500">{{
                 currentSession.conversationId
                   ? '会自动续用当前 conversation_id'
                   : '若已回滚，将基于当前节点结果重新开启会话'
@@ -624,14 +622,14 @@
 
           <template v-if="activeTab === 'analysis'">
             <template v-if="hasAnalysisResult">
-              <div class="rounded bg-slate-50 p-4">
+              <div class="rounded bg-slate-50 p-4 dark:bg-slate-900">
                 <p
-                  class="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600"
+                  class="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400"
                 >
                   Summary
                 </p>
                 <p
-                  class="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700"
+                  class="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-slate-300"
                 >
                   {{
                     analysisResult.summary || '未解析到摘要，将保留原始结果。'
@@ -687,7 +685,7 @@
                         :title="`${index + 1}. ${module.label || module.name || `模块 ${index + 1}`}`"
                       >
                         <div class="space-y-4">
-                          <p class="text-sm leading-6 text-slate-600">
+                          <p class="text-sm leading-6 text-slate-600 dark:text-slate-400">
                             {{ module.description || '暂无模块说明。' }}
                           </p>
                           <div
@@ -697,16 +695,16 @@
                             <div
                               v-for="field in module.fields"
                               :key="`${module.name}-${field.name}`"
-                              class="rounded-2xl border border-slate-200 bg-slate-50 p-3"
+                              class="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
                             >
                               <div
                                 class="flex flex-wrap items-center justify-between gap-2"
                               >
                                 <div>
-                                  <p class="text-sm font-semibold text-slate-800">
+                                  <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
                                     {{ field.label || field.name }}
                                   </p>
-                                  <p class="mt-1 text-xs text-slate-500">
+                                  <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                     {{ field.name }}
                                   </p>
                                 </div>
@@ -714,7 +712,7 @@
                                   {{ field.type || 'string' }}
                                 </el-tag>
                               </div>
-                              <p class="mt-3 text-sm leading-6 text-slate-600">
+                              <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
                                 {{ field.description || '暂无字段说明。' }}
                               </p>
                               <div class="mt-3 flex flex-wrap gap-2">
@@ -777,7 +775,7 @@
                               {{ moduleName }}
                             </el-tag>
                           </div>
-                          <p class="text-sm leading-6 text-slate-600">
+                          <p class="text-sm leading-6 text-slate-600 dark:text-slate-400">
                             {{ page.description || '暂无页面说明。' }}
                           </p>
                           <div
@@ -787,14 +785,14 @@
                             <div
                               v-for="field in page.fields"
                               :key="`${page.name}-${field.name}`"
-                              class="rounded-2xl border border-slate-200 bg-slate-50 p-3"
+                              class="rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800"
                             >
                               <div class="flex flex-wrap items-center justify-between gap-2">
                                 <div>
-                                  <p class="text-sm font-semibold text-slate-800">
+                                  <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">
                                     {{ field.label || field.name }}
                                   </p>
-                                  <p class="mt-1 text-xs text-slate-500">
+                                  <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
                                     {{ field.name }}
                                   </p>
                                 </div>
@@ -802,7 +800,7 @@
                                   {{ field.displayType || 'text' }}
                                 </el-tag>
                               </div>
-                              <p class="mt-3 text-sm leading-6 text-slate-600">
+                              <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
                                 {{ field.description || '暂无页面字段说明。' }}
                               </p>
                               <div class="mt-3 flex flex-wrap gap-2">
@@ -828,21 +826,21 @@
                             </div>
                           </div>
                           <div v-if="page.interactions.length" class="space-y-2">
-                            <h4 class="text-sm font-semibold text-slate-800">页面交互</h4>
+                            <h4 class="text-sm font-semibold text-slate-800 dark:text-slate-200">页面交互</h4>
                             <div
                               v-for="item in page.interactions"
                               :key="`${page.name}-${item}`"
-                              class="rounded border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600"
+                              class="rounded border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
                             >
                               {{ item }}
                             </div>
                           </div>
                           <div v-if="page.relations.length" class="space-y-2">
-                            <h4 class="text-sm font-semibold text-slate-800">字段映射关系</h4>
+                            <h4 class="text-sm font-semibold text-slate-800 dark:text-slate-200">字段映射关系</h4>
                             <div
                               v-for="item in page.relations"
                               :key="`${page.name}-${item}`"
-                              class="rounded border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600"
+                              class="rounded border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
                             >
                               {{ item }}
                             </div>
@@ -860,7 +858,7 @@
                     <div
                       v-for="item in analysisResult.suggestions"
                       :key="item"
-                      class="rounded border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600"
+                      class="rounded border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
                     >
                       {{ item }}
                     </div>
@@ -878,14 +876,14 @@
             <template
               v-if="workflowResult.steps.length || workflowResult.rawText"
             >
-              <div class="rounded bg-slate-50 p-4">
+              <div class="rounded bg-slate-50 p-4 dark:bg-slate-900">
                 <p
-                  class="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600"
+                  class="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400"
                 >
                   Workflow Summary
                 </p>
                 <p
-                  class="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700"
+                  class="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-slate-300"
                 >
                   {{ workflowResult.summary || '已生成 Prompt 工作流。' }}
                 </p>
@@ -899,7 +897,7 @@
                 <div
                   v-for="(step, index) in workflowResult.steps"
                   :key="`${step.title}-${index}`"
-                  class="rounded border border-slate-200 bg-white p-4 shadow-sm shadow-slate-100"
+                  class="rounded border border-slate-200 bg-white p-4 shadow-sm shadow-slate-100 dark:border-slate-700 dark:bg-slate-800"
                 >
                   <div class="flex flex-wrap items-start justify-between gap-3">
                     <div class="flex items-start gap-3">
@@ -909,10 +907,10 @@
                         {{ index + 1 }}
                       </div>
                       <div>
-                        <h3 class="text-base font-semibold text-slate-800">
+                        <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">
                           {{ step.title || `步骤 ${index + 1}` }}
                         </h3>
-                        <p class="mt-1 text-sm leading-6 text-slate-500">
+                        <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
                           {{ step.goal || '建议按顺序执行这一轮 Prompt。' }}
                         </p>
                       </div>
@@ -946,15 +944,15 @@
                   </div>
                   <div
                     v-if="step.expectedOutput"
-                    class="mt-4 rounded border border-dashed border-slate-300 bg-slate-50 p-4"
+                    class="mt-4 rounded border border-dashed border-slate-300 bg-slate-50 p-4 dark:border-slate-600 dark:bg-slate-900"
                   >
                     <div
-                      class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400"
+                      class="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500"
                     >
                       Expected Output
                     </div>
                     <p
-                      class="whitespace-pre-wrap text-sm leading-6 text-slate-600"
+                      class="whitespace-pre-wrap text-sm leading-6 text-slate-600 dark:text-slate-400"
                     >
                       {{ step.expectedOutput }}
                     </p>

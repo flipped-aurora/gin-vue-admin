@@ -4,20 +4,20 @@
         href="https://plugin.gin-vue-admin.com/license"
         title="此功能只针对授权用户开放，点我【购买授权】"
     />
-    <div class="gva-search-box">
-      <div class="text-xl mb-2 text-gray-600">
+<div class="gva-search-box">
+      <div class="text-xl mb-2 text-gray-600 dark:text-slate-300">
         AI前端工程师<a
-          class="text-blue-600 text-sm ml-4"
+          class="text-blue-600 text-sm ml-4 dark:text-blue-400"
           href="https://plugin.gin-vue-admin.com/#/layout/userInfo/center"
           target="_blank"
-      >获取AiPath</a
+        >获取AiPath</a
       >
       </div>
       
       <!-- 选项模式 -->
       <div class="mb-4">
         <div class="mb-3">
-          <div class="text-base font-medium mb-2">页面用途</div>
+          <div class="text-base font-medium mb-2 dark:text-slate-200">页面用途</div>
           <el-radio-group v-model="pageType" class="mb-2" @change="handlePageTypeChange">
             <el-radio label="企业官网">企业官网</el-radio>
             <el-radio label="电商页面">电商页面</el-radio>
@@ -30,7 +30,7 @@
         </div>
         
         <div class="mb-3">
-          <div class="text-base font-medium mb-2">主要内容板块</div>
+          <div class="text-base font-medium mb-2 dark:text-slate-200">主要内容板块</div>
           <el-checkbox-group v-model="contentBlocks" class="flex flex-wrap gap-2 mb-2">
             <el-checkbox label="Banner轮播图">Banner轮播图</el-checkbox>
             <el-checkbox label="产品/服务介绍">产品/服务介绍</el-checkbox>
@@ -57,7 +57,7 @@
         </div>
         
         <div class="mb-3">
-          <div class="text-base font-medium mb-2">风格偏好</div>
+          <div class="text-base font-medium mb-2 dark:text-slate-200">风格偏好</div>
           <el-radio-group v-model="stylePreference" class="mb-2">
             <el-radio label="简约">简约</el-radio>
             <el-radio label="科技感">科技感</el-radio>
@@ -72,7 +72,7 @@
         </div>
         
         <div class="mb-3">
-          <div class="text-base font-medium mb-2">设计布局</div>
+          <div class="text-base font-medium mb-2 dark:text-slate-200">设计布局</div>
           <el-radio-group v-model="layoutDesign" class="mb-2">
             <el-radio label="单栏布局">单栏布局</el-radio>
             <el-radio label="双栏布局">双栏布局</el-radio>
@@ -92,7 +92,7 @@
         </div>
         
         <div class="mb-3">
-          <div class="text-base font-medium mb-2">配色方案</div>
+          <div class="text-base font-medium mb-2 dark:text-slate-200">配色方案</div>
           <el-radio-group v-model="colorScheme" class="mb-2">
             <el-radio label="蓝色系">蓝色系</el-radio>
             <el-radio label="绿色系">绿色系</el-radio>
@@ -109,7 +109,7 @@
       
       <!-- 详细描述输入框 -->
       <div class="relative">
-        <div class="text-base font-medium mb-2">详细描述（可选）</div>
+        <div class="text-base font-medium mb-2 dark:text-slate-200">详细描述（可选）</div>
         <el-input
             v-model="prompt"
             :maxlength="2000"
@@ -152,8 +152,8 @@
       <div v-if="outPut && htmlFromLLM">
         <el-tabs type="border-card">
           <el-tab-pane label="页面预览">
-            <div class="h-[500px] overflow-auto bg-gray-50 p-4 rounded">
-              <div v-if="!loadedComponents" class="text-gray-500 text-center py-4">
+            <div class="h-[500px] overflow-auto bg-gray-50 p-4 rounded dark:bg-slate-900">
+              <div v-if="!loadedComponents" class="text-gray-500 text-center py-4 dark:text-slate-400">
                 组件加载中...
               </div>
               <component
@@ -164,7 +164,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="源代码">
-            <div class="relative h-[500px] overflow-auto bg-gray-50 p-4 rounded">
+            <div class="relative h-[500px] overflow-auto bg-gray-50 p-4 rounded dark:bg-slate-900">
               <el-button 
                 type="primary" 
                 :icon="DocumentCopy" 

@@ -4,6 +4,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
+	"time"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -38,6 +40,7 @@ func initPgSqlDatabase(p config.Pgsql) *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(p.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(p.MaxOpenConns)
+		sqlDB.SetConnMaxLifetime(time.Duration(p.ConnMaxLifetime) * time.Second)
 		return db
 	}
 }

@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"time"
+
 	oracle "github.com/dzwvip/gorm-oracle"
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -32,6 +34,7 @@ func initOracleDatabase(m config.Oracle) *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		sqlDB.SetConnMaxLifetime(time.Duration(m.ConnMaxLifetime) * time.Second)
 		return db
 	}
 }

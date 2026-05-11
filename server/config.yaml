@@ -109,6 +109,7 @@ mysql:
     password: ""
     max-idle-conns: 10
     max-open-conns: 100
+    conn-max-lifetime: 0
     log-mode: ""
     log-zap: false
 
@@ -123,6 +124,7 @@ pgsql:
     password: ""
     max-idle-conns: 10
     max-open-conns: 100
+    conn-max-lifetime: 0
     log-mode: ""
     log-zap: false
 oracle:
@@ -134,6 +136,7 @@ oracle:
     password: ""
     max-idle-conns: 10
     max-open-conns: 100
+    conn-max-lifetime: 0
     log-mode: ""
     log-zap: false
 mssql:
@@ -145,6 +148,7 @@ mssql:
     password: ""
     max-idle-conns: 10
     max-open-conns: 100
+    conn-max-lifetime: 0
     log-mode: ""
     log-zap: false
 sqlite:
@@ -156,6 +160,7 @@ sqlite:
     password: ""
     max-idle-conns: 10
     max-open-conns: 100
+    conn-max-lifetime: 0
     log-mode: ""
     log-zap: false
 db-list:
@@ -170,6 +175,7 @@ db-list:
       password: ""
       max-idle-conns: 10
       max-open-conns: 100
+      conn-max-lifetime: 0
       log-mode: ""
       log-zap: false
 

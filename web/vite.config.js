@@ -1,4 +1,3 @@
-import legacyPlugin from '@vitejs/plugin-legacy'
 import { viteLogo } from './src/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
@@ -19,21 +18,9 @@ export default ({ mode }) => {
 
   const timestamp = Date.parse(new Date())
 
-  const optimizeDeps = {}
-
   const alias = {
-    '@': path.resolve(__dirname, './src'),
+    '@': path.resolve(import.meta.dirname, './src'),
     vue$: 'vue/dist/vue.runtime.esm-bundler.js'
-  }
-
-  const esbuild = {}
-
-  const rollupOptions = {
-    output: {
-      entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
-      chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
-      assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]'
-    }
   }
 
   const base = '/'
@@ -78,34 +65,26 @@ export default ({ mode }) => {
       }
     },
     build: {
-      minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
       outDir: outDir, // 产出目录
-      terserOptions: {
-        compress: {
-          //生产环境时移除console
-          drop_console: true,
-          drop_debugger: true
+      target: 'es2015',
+      rolldownOptions: {
+        output: {
+          minify: {
+            compress: {
+              dropConsole: true,   // 删除所有 console.*
+            }
+          },
+          entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
+          chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
+          assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]'
         }
-      },
-      rollupOptions
+      }
     },
-    esbuild,
-    optimizeDeps,
     plugins: [
       env.VITE_POSITION === 'open' &&
       vueDevTools({ launchEditor: env.VITE_EDITOR }),
-      legacyPlugin({
-        targets: [
-          'Android > 39',
-          'Chrome >= 60',
-          'Safari >= 10.1',
-          'iOS >= 10.3',
-          'Firefox >= 54',
-          'Edge >= 15'
-        ]
-      }),
       vuePlugin(),
       svgBuilder(['./src/plugin/', './src/assets/icons/'], base, outDir, 'assets', mode),
       [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],

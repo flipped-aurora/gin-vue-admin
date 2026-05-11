@@ -551,7 +551,7 @@
   ]
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   .profile-container {
     @apply p-4 lg:p-6 min-h-screen bg-gray-50 dark:bg-slate-900;
 

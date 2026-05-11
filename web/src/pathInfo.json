@@ -82,5 +82,14 @@
   "/src/view/systemTools/version/version.vue": "SysVersion",
   "/src/plugin/announcement/form/info.vue": "InfoForm",
   "/src/plugin/announcement/view/info.vue": "Info",
+  "/src/plugin/auto/view/aiWorkflow/index.vue": "Index",
+  "/src/plugin/auto/view/autoCode/index.vue": "Index",
+  "/src/plugin/auto/view/autoCode/mcp.vue": "Mcp",
+  "/src/plugin/auto/view/autoCode/mcpTest.vue": "McpTest",
+  "/src/plugin/auto/view/autoCodeAdmin/index.vue": "Index",
+  "/src/plugin/auto/view/autoPkg/autoPkg.vue": "AutoPkg",
+  "/src/plugin/auto/view/installPlugin/index.vue": "Index",
+  "/src/plugin/auto/view/pubPlug/pubPlug.vue": "PubPlug",
+  "/src/plugin/auto/view/skills/index.vue": "Index",
   "/src/plugin/email/view/index.vue": "Email"
 }

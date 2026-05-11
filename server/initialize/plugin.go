@@ -24,6 +24,8 @@ func InstallPlugin(PrivateGroup *gin.RouterGroup, PublicRouter *gin.RouterGroup,
 			if params != nil {
 				bizPluginV1(params.PrivateGroup, params.PublicRouter)
 				bizPluginV2(params.Engine)
+				// 重新同步全局路由表，包含插件注册的路由
+				global.GVA_ROUTERS = params.Engine.Routes()
 				global.GVA_LOG.Info("插件注册完成")
 			}
 		})

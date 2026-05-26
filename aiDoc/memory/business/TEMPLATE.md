@@ -6,6 +6,7 @@
 - 当前状态：`active` / `done`
 - 需求类型：
 - 优先级：
+- 需求文件：`aiDoc/memory/business/active/<slug>.md` 或 `aiDoc/memory/business/done/<slug>.md`
 
 ## 用户原始意图摘要
 
@@ -36,3 +37,9 @@
 ## 后续待办
 
 - 
+
+## 更新规则
+
+- 同一需求始终维护在同一个文件中
+- 新信息优先补充到对应段落，不要另起一份重复记录
+- 只有需求状态变化时，才在 `active/` 与 `done/` 之间移动文件

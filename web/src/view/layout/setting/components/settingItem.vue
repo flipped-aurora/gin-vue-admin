@@ -1,5 +1,5 @@
 <template>
-  <div class="gva-theme-setting-item">
+  <div class="gva-theme-setting-item" :style="themeStyleVars">
     <div class="flex items-center gap-2">
       <span class="gva-theme-setting-label">{{ label }}</span>
       <slot name="suffix"></slot>
@@ -29,8 +29,10 @@ defineProps({
 const appStore = useAppStore()
 const { config } = storeToRefs(appStore)
 
-const primaryColor = computed(() => config.value.primaryColor)
-const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
+const themeStyleVars = computed(() => ({
+  '--setting-primary-color': config.value.primaryColor,
+  '--setting-primary-color-opacity': config.value.primaryColor + '40'
+}))
 </script>
 
 <style scoped>
@@ -38,7 +40,7 @@ const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
 
 .setting-controls {
   ::v-deep(.el-switch) {
-    --el-switch-on-color: v-bind(primaryColor);
+    --el-switch-on-color: var(--setting-primary-color);
     --el-switch-off-color: #d1d5db;
   }
 
@@ -49,14 +51,14 @@ const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
       transition: all 150ms ease-in-out;
 
       &:hover {
-        border-color: v-bind(primaryColor);
+        border-color: var(--setting-primary-color);
         transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
       &.is-focus {
-        border-color: v-bind(primaryColor);
-        box-shadow: 0 0 0 2px v-bind(primaryColorWithOpacity);
+        border-color: var(--setting-primary-color);
+        box-shadow: 0 0 0 2px var(--setting-primary-color-opacity);
       }
     }
   }
@@ -68,14 +70,14 @@ const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
       transition: all 150ms ease-in-out;
 
       &:hover {
-        border-color: v-bind(primaryColor);
+        border-color: var(--setting-primary-color);
         transform: translateY(-1px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
       &.is-focus {
-        border-color: v-bind(primaryColor);
-        box-shadow: 0 0 0 2px v-bind(primaryColorWithOpacity);
+        border-color: var(--setting-primary-color);
+        box-shadow: 0 0 0 2px var(--setting-primary-color-opacity);
       }
     }
   }
@@ -92,7 +94,7 @@ const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
       background-color: #374151;
 
       &:hover {
-        border-color: v-bind(primaryColor);
+        border-color: var(--setting-primary-color);
       }
     }
   }
@@ -103,7 +105,7 @@ const primaryColorWithOpacity = computed(() => config.value.primaryColor + '40')
       background-color: #374151;
 
       &:hover {
-        border-color: v-bind(primaryColor);
+        border-color: var(--setting-primary-color);
       }
     }
   }

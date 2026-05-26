@@ -71,11 +71,6 @@ export default ({ mode }) => {
       target: 'es2015',
       rolldownOptions: {
         output: {
-          minify: {
-            compress: {
-              dropConsole: true,   // 删除所有 console.*
-            }
-          },
           entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
           chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
           assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]'

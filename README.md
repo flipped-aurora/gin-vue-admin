@@ -196,9 +196,9 @@ swag init
 
 ![系统架构图](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
-### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
+### 4.2 项目设计图 
 
-![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
+![项目设计图](http://qmplusimg.henrongyi.top/naotu.png)
 
 ### 4.3 目录结构
 

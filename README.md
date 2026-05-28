@@ -65,7 +65,7 @@
 
 3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)
 
-4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，以及日志和代码中所包含的版权声明信息。所需保留信息均为文案性质，不会影响任何业务内容，如决定商用【产生收益的商业行为均在商用行列】或者必须剔除请[购买授权](https://plugin.gin-vue-admin.com/license)
+4.本项目采用BSL 1.1授权。非商用、学习、评估等用途请遵循仓库许可证；如将此项目用于商用或生产环境，或需要移除版权与署名信息，请[购买授权](https://plugin.gin-vue-admin.com/license)。您需保留仓库、日志和代码中的版权声明信息。
 \
 <img src="https://qmplusimg.henrongyi.top/openSource/login.jpg" width="1000">
 
@@ -385,5 +385,5 @@ fmt.Println(decodeBytes, err)
 
 ## 10. 注意事项
 
-请严格遵守Apache 2.0协议并保留作品声明，去除版权信息请务必[获取授权](https://plugin.gin-vue-admin.com/license)  
-未授权去除版权信息将依法追究法律责任
+请遵守 BSL 1.1 许可证要求并保留作品声明；商用、生产使用或去除版权信息请务必[获取授权](https://plugin.gin-vue-admin.com/license)  
+未授权超出许可范围使用将依法追究法律责任

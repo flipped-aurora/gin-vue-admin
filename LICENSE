@@ -1,201 +1,244 @@
-                                 Apache License
-                           Version 2.0, January 2004
-                        http://www.apache.org/licenses/
+Business Source License 1.1
 
-   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+Licensed Work:       gin-vue-admin
+Licensor:            北京翻转极光科技有限责任公司
 
-   1. Definitions.
+Additional Use Grant:
 
-      "License" shall mean the terms and conditions for use, reproduction,
-      and distribution as defined by Sections 1 through 9 of this document.
+The following uses are permitted without a commercial license:
 
-      "Licensor" shall mean the copyright owner or entity authorized by
-      the copyright owner that is granting the License.
+(a) Personal Use: use by a natural person solely on their
+    own behalf, for personal or non-commercial purposes,
+    on infrastructure owned and funded entirely by that
+    individual, provided that all of the following
+    conditions are satisfied simultaneously:
+    (i)  such use is not conducted in the individual's
+         capacity as an employee, contractor, agent, or
+         representative of any Legal Entity;
+    (ii) such use does not occur on equipment provided,
+         funded, reimbursed, or authorized by any Legal
+         Entity; and
+    (iii)such use is not conducted at the direction of,
+         or for the benefit of, any Legal Entity.
+    Personal Use includes individual personal projects
+    accessible via public internet, provided all
+    conditions above are satisfied.
 
-      "Legal Entity" shall mean the union of the acting entity and all
-      other entities that control, are controlled by, or are under common
-      control with that entity. For the purposes of this definition,
-      "control" means (i) the power, direct or indirect, to cause the
-      direction or management of such entity, whether by contract or
-      otherwise, or (ii) ownership of fifty percent (50%) or more of the
-      outstanding shares, or (iii) beneficial ownership of such entity.
+(b) Evaluation and Development Use: use solely for
+    internal technical evaluation, testing, or development
+    purposes, provided that all of the following
+    conditions are satisfied simultaneously:
+    (i)  the Licensed Work does not process real user
+         data or real business data;
+    (ii) the Licensed Work is not used to support any
+         actual business operations or workflows;
+    (iii)the Licensed Work is not deployed or delivered
+         to any third party; and
+    (iv) the Licensed Work is not accessible via public
+         internet.
 
-      "You" (or "Your") shall mean an individual or Legal Entity
-      exercising permissions granted by this License.
+(c) Educational Use: use by educational institutions or
+    individuals for non-commercial teaching, research,
+    or academic purposes, provided such use is not
+    conducted on behalf of or for the benefit of any
+    commercial Legal Entity.
 
-      "Source" form shall mean the preferred form for making modifications,
-      including but not limited to software source code, documentation
-      source, and configuration files.
+Any use not expressly described in (a), (b), or (c)
+above constitutes Production Use and requires a
+commercial license.
 
-      "Object" form shall mean any form resulting from mechanical
-      transformation or translation of a Source form, including but
-      not limited to compiled object code, generated documentation,
-      and conversions to other media types.
+Change Date: The Change Date for each version is the
+date falling three (3) years after the date on which
+that version was first publicly released. The release
+date of each version shall be determined by reference
+to the version release records published by the
+Licensor in the official code repository or on the
+official website.
 
-      "Work" shall mean the work of authorship, whether in Source or
-      Object form, made available under the License, as indicated by a
-      copyright notice that is included in or attached to the work
-      (an example is provided in the Appendix below).
+Change License: Apache License, Version 2.0
 
-      "Derivative Works" shall mean any work, whether in Source or Object
-      form, that is based on (or derived from) the Work and for which the
-      editorial revisions, annotations, elaborations, or other modifications
-      represent, as a whole, an original work of authorship. For the purposes
-      of this License, Derivative Works shall not include works that remain
-      separable from, or merely link (or bind by name) to the interfaces of,
-      the Work and Derivative Works thereof.
+------------------------------------------------------------------------
 
-      "Contribution" shall mean any work of authorship, including
-      the original version of the Work and any modifications or additions
-      to that Work or Derivative Works thereof, that is intentionally
-      submitted to Licensor for inclusion in the Work by the copyright owner
-      or by an individual or Legal Entity authorized to submit on behalf of
-      the copyright owner. For the purposes of this definition, "submitted"
-      means any form of electronic, verbal, or written communication sent
-      to the Licensor or its representatives, including but not limited to
-      communication on electronic mailing lists, source code control systems,
-      and issue tracking systems that are managed by, or on behalf of, the
-      Licensor for the purpose of discussing and improving the Work, but
-      excluding communication that is conspicuously marked or otherwise
-      designated in writing by the copyright owner as "Not a Contribution."
+Definitions
 
-      "Contributor" shall mean Licensor and any individual or Legal Entity
-      on behalf of whom a Contribution has been received by Licensor and
-      subsequently incorporated within the Work.
+"Licensed Work" means the software and associated
+documentation files made available under this License.
 
-   2. Grant of Copyright License. Subject to the terms and conditions of
-      this License, each Contributor hereby grants to You a perpetual,
-      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-      copyright license to reproduce, prepare Derivative Works of,
-      publicly display, publicly perform, sublicense, and distribute the
-      Work and such Derivative Works in Source or Object form.
+"Licensor" means the copyright holder(s) of the
+Licensed Work.
 
-   3. Grant of Patent License. Subject to the terms and conditions of
-      this License, each Contributor hereby grants to You a perpetual,
-      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
-      (except as stated in this section) patent license to make, have made,
-      use, offer to sell, sell, import, and otherwise transfer the Work,
-      where such license applies only to those patent claims licensable
-      by such Contributor that are necessarily infringed by their
-      Contribution(s) alone or by combination of their Contribution(s)
-      with the Work to which such Contribution(s) was submitted. If You
-      institute patent litigation against any entity (including a
-      cross-claim or counterclaim in a lawsuit) alleging that the Work
-      or a Contribution incorporated within the Work constitutes direct
-      or contributory patent infringement, then any patent licenses
-      granted to You under this License for that Work shall terminate
-      as of the date such litigation is filed.
+"Legal Entity" means any corporation, partnership,
+limited liability company, sole proprietorship,
+individually registered business, or other organization
+recognized as a legal entity under applicable law,
+including any entity engaged in commercial activity
+regardless of profit motive.
 
-   4. Redistribution. You may reproduce and distribute copies of the
-      Work or Derivative Works thereof in any medium, with or without
-      modifications, and in Source or Object form, provided that You
-      meet the following conditions:
+"Production Use" means any of the following:
 
-      (a) You must give any other recipients of the Work or
-          Derivative Works a copy of this License; and
+(a) Deployment for External Parties: deploying,
+    installing, hosting, configuring, integrating, or
+    otherwise making the Licensed Work available to any
+    third party — whether or not for compensation,
+    whether or not under a separate agreement, and
+    whether or not the deployment is accessible via
+    public internet — including but not limited to
+    providing the Licensed Work as part of a service,
+    product, solution, or deliverable to any client,
+    customer, or other party;
 
-      (b) You must cause any modified files to carry prominent notices
-          stating that You changed the files; and
+(b) Organizational Deployment: any installation,
+    execution, or operation of the Licensed Work in
+    any of the following ways:
+    (i)  running on infrastructure owned, leased,
+         managed, or controlled by a Legal Entity,
+         including but not limited to servers, virtual
+         machines, containers, cloud instances, or
+         shared computing resources; or
+    (ii) by an individual acting in their capacity as
+         an employee, contractor, agent, or
+         representative of a Legal Entity, where such
+         use occurs on equipment provided by, or under
+         the direction or authorization of, such Legal
+         Entity; or
+    (iii)in a manner that is funded by, reimbursed by,
+         or conducted at the expense of a Legal Entity;
+    regardless of whether such use processes real data,
+    is integrated into any system, or is accessible
+    via any network;
 
-      (c) You must retain, in the Source form of any Derivative Works
-          that You distribute, all copyright, patent, trademark, and
-          attribution notices from the Source form of the Work,
-          excluding those notices that do not pertain to any part of
-          the Derivative Works; and
+(c) Commercial Integration: incorporating the Licensed
+    Work into any product, service, or system that is
+    sold, licensed, subscribed to, or otherwise
+    monetized, directly or indirectly.
 
-      (d) If the Work includes a "NOTICE" text file as part of its
-          distribution, then any Derivative Works that You distribute must
-          include a readable copy of the attribution notices contained
-          within such NOTICE file, excluding those notices that do not
-          pertain to any part of the Derivative Works, in at least one
-          of the following places: within a NOTICE text file distributed
-          as part of the Derivative Works; within the Source form or
-          documentation, if provided along with the Derivative Works; or,
-          within a display generated by the Derivative Works, if and
-          wherever such third-party notices normally appear. The contents
-          of the NOTICE file are for informational purposes only and
-          do not modify the License. You may add Your own attribution
-          notices within Derivative Works that You distribute, alongside
-          or as an addendum to the NOTICE text from the Work, provided
-          that such additional attribution notices cannot be construed
-          as modifying the License.
+"Non-Production Use" means use that satisfies all
+conditions specified in Additional Use Grant section
+(b) above simultaneously. To facilitate compliance,
+users are advised to retain written records sufficient
+to demonstrate that all conditions of Non-Production
+Use are satisfied. The Licensor shall bear the burden
+of proof in accordance with applicable law when
+asserting any claim of breach or infringement.
 
-      You may add Your own copyright statement to Your modifications and
-      may provide additional or different license terms and conditions
-      for use, reproduction, or distribution of Your modifications, or
-      for any such Derivative Works as a whole, provided Your use,
-      reproduction, and distribution of the Work otherwise complies with
-      the conditions stated in this License.
+"Third Party" means any natural person or Legal Entity
+other than the user themselves. For the avoidance of
+doubt, a Legal Entity and its affiliates, subsidiaries,
+parent companies, or related entities each constitute
+separate parties for the purposes of this License,
+unless they are incorporated as a single unified legal
+entity under applicable law.
 
-   5. Submission of Contributions. Unless You explicitly state otherwise,
-      any Contribution intentionally submitted for inclusion in the Work
-      by You to the Licensor shall be under the terms and conditions of
-      this License, without any additional terms or conditions.
-      Notwithstanding the above, nothing herein shall supersede or modify
-      the terms of any separate license agreement you may have executed
-      with Licensor regarding such Contributions.
+------------------------------------------------------------------------
 
-   6. Trademarks. This License does not grant permission to use the trade
-      names, trademarks, service marks, or product names of the Licensor,
-      except as required for reasonable and customary use in describing the
-      origin of the Work and reproducing the content of the NOTICE file.
+Terms
 
-   7. Disclaimer of Warranty. Unless required by applicable law or
-      agreed to in writing, Licensor provides the Work (and each
-      Contributor provides its Contributions) on an "AS IS" BASIS,
-      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-      implied, including, without limitation, any warranties or conditions
-      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
-      PARTICULAR PURPOSE. You are solely responsible for determining the
-      appropriateness of using or redistributing the Work and assume any
-      risks associated with Your exercise of permissions under this License.
+The Licensor hereby grants you the right to copy,
+modify, create derivative works, redistribute, and
+make Non-Production Use and Personal Use of the
+Licensed Work. The foregoing rights are subject to
+the following conditions:
 
-   8. Limitation of Liability. In no event and under no legal theory,
-      whether in tort (including negligence), contract, or otherwise,
-      unless required by applicable law (such as deliberate and grossly
-      negligent acts) or agreed to in writing, shall any Contributor be
-      liable to You for damages, including any direct, indirect, special,
-      incidental, or consequential damages of any character arising as a
-      result of this License or out of the use or inability to use the
-      Work (including but not limited to damages for loss of goodwill,
-      work stoppage, computer failure or malfunction, or any and all
-      other commercial damages or losses), even if such Contributor
-      has been advised of the possibility of such damages.
+Section 1  Production Use Restriction
+You may not make Production Use of the Licensed Work
+except as expressly permitted by a separate commercial
+license obtained from the Licensor. For the avoidance
+of doubt:
+(a) the scale of deployment, number of users,
+    transaction volume, or revenue generated does not
+    affect the applicability of this restriction;
+(b) absence of commercial intent or profit motive does
+    not exempt any use from this restriction; and
+(c) any Production Use, regardless of scale, intent,
+    or organizational structure, requires a commercial
+    license.
 
-   9. Accepting Warranty or Additional Liability. While redistributing
-      the Work or Derivative Works thereof, You may choose to offer,
-      and charge a fee for, acceptance of support, warranty, indemnity,
-      or other liability obligations and/or rights consistent with this
-      License. However, in accepting such obligations, You may act only
-      on Your own behalf and on Your sole responsibility, not on behalf
-      of any other Contributor, and only if You agree to indemnify,
-      defend, and hold each Contributor harmless for any liability
-      incurred by, or claims asserted against, such Contributor by reason
-      of your accepting any such warranty or additional liability.
+Section 2  Automatic Termination
+Any use of the Licensed Work in violation of this
+License will automatically terminate your rights
+under this License for the current version and all
+other versions of the Licensed Work released after
+the date of first violation. For the avoidance of
+doubt, versions of the Licensed Work released under
+a prior open source license before the adoption of
+this License remain governed by that prior license
+and are not affected by termination under this
+section.
 
-   END OF TERMS AND CONDITIONS
+Section 3  Distribution Requirements
+You must provide all recipients of the Licensed Work
+with a copy of this License.
 
-   APPENDIX: How to apply the Apache License to your work.
+Section 4  Modification Notices
+You must cause any modified files to carry prominent
+notices stating that you changed the files and the
+date of such changes.
 
-      To apply the Apache License to your work, attach the following
-      boilerplate notice, with the fields enclosed by brackets "[]"
-      replaced with your own identifying information. (Don't include
-      the brackets!)  The text should be enclosed in the appropriate
-      comment syntax for the file format. We also recommend that a
-      file or class name and description of purpose be included on the
-      same "printed page" as the copyright notice for easier
-      identification within third-party archives.
+Section 5  Notice Preservation
+You must not remove, alter, or obscure any licensing,
+copyright, attribution, or other notices of the
+Licensor in the Licensed Work except as expressly
+permitted by a separate commercial license.
 
-    Copyright 2019 北京翻转极光科技有限责任公司
+Section 6  No Trademark License
+This License does not grant you any right in the
+trademarks, service marks, trade names, or logos
+of the Licensor.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+Section 7  Disclaimer of Warranties
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE
+LICENSED WORK IS PROVIDED ON AN "AS IS" BASIS.
+LICENSOR HEREBY DISCLAIMS ALL WARRANTIES, WHETHER
+EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, AND
+SPECIFICALLY DISCLAIMS ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
+TITLE, AND NON-INFRINGEMENT. THE FOREGOING DISCLAIMER
+SHALL NOT APPLY TO THE EXTENT PROHIBITED BY
+APPLICABLE MANDATORY LAW.
 
-       http://www.apache.org/licenses/LICENSE-2.0
+Section 8  Limitation of Liability
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, IN NO
+EVENT WILL THE LICENSOR BE LIABLE FOR ANY INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES ARISING OUT OF OR RELATED TO THIS LICENSE
+OR THE USE OR INABILITY TO USE THE LICENSED WORK,
+EVEN IF THE LICENSOR HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES. THE FOREGOING LIMITATION
+SHALL NOT APPLY TO THE EXTENT PROHIBITED BY
+APPLICABLE MANDATORY LAW.
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+Section 9  Change Date
+If the Change Date applicable to a specific version
+has passed, this License shall, with respect to that
+version, be replaced by the Change License, and from
+that date you may use that version of the Licensed
+Work under the terms of the Change License.
+
+Section 10  Governing Interpretation
+This License shall be interpreted in accordance with
+its plain meaning and the overall purpose of this
+License. The Licensor hereby declares that the core
+purpose of this License is to require a commercial
+license for all Production Use as defined herein.
+This License shall be interpreted in accordance with
+applicable law.
+
+This License constitutes a standard form contract.
+The Licensor has drawn the attention of users to all
+terms that exclude or limit the Licensor's liability,
+restrict users' rights, or impose obligations on
+users, by presenting such terms prominently in this
+License, in fulfillment of the Licensor's obligation
+to give notice and explanation as required by
+applicable law.
+
+------------------------------------------------------------------------
+
+For information about the Business Source License,
+see https://mariadb.com/bsl11/
+
+For commercial licensing inquiries, contact:
+  Beijing Flipped Aurora Technology Co., Ltd.
+  (北京翻转极光科技有限责任公司)
+  Email: business@gin-vue-admin.com
+  Website: https://www.gin-vue-admin.com

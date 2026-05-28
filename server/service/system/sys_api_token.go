@@ -14,7 +14,7 @@ type ApiTokenService struct{}
 
 func (apiVersion *ApiTokenService) CreateApiToken(apiToken system.SysApiToken, days int) (string, error) {
 	var user system.SysUser
-	if err := global.GVA_DB.Where("id = ?", apiToken.UserID).First(&user).Error; err != nil {
+	if err := global.GVA_DB.Preload("Authorities").Where("id = ?", apiToken.UserID).First(&user).Error; err != nil {
 		return "", errors.New("用户不存在")
 	}
 

@@ -204,3 +204,20 @@ export const setApiRoles = (data) => {
     data
   })
 }
+
+export const previewApiCli = (data) => {
+  return service({
+    url: '/api/previewCli',
+    method: 'post',
+    data
+  })
+}
+
+export const downloadApiCli = (data) => {
+  return service({
+    url: '/api/downloadCli',
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}

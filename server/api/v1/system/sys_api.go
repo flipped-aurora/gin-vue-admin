@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -378,4 +379,54 @@ func (s *SystemApiApi) SetApiRoles(c *gin.Context) {
 	// 刷新casbin缓存使策略立即生效
 	_ = casbinService.FreshCasbin()
 	response.OkWithMessage("设置成功", c)
+}
+
+// PreviewCli
+// @Tags      SysApi
+// @Summary   预览API CLI脚本
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.GenerateApiCliRequest                       true  "API路径、方法与脚本配置"
+// @Success   200   {object}  response.Response{data=systemRes.ApiCliPreviewResponse,msg=string}  "预览成功"
+// @Router    /api/previewCli [post]
+func (s *SystemApiApi) PreviewCli(c *gin.Context) {
+	var req systemReq.GenerateApiCliRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	preview, err := apiCliService.Preview(req)
+	if err != nil {
+		global.GVA_LOG.Error("预览CLI失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(preview, "预览成功", c)
+}
+
+// DownloadCli
+// @Tags      SysApi
+// @Summary   下载API CLI脚本
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/octet-stream
+// @Param     data  body      systemReq.GenerateApiCliRequest  true  "API路径、方法与脚本配置"
+// @Success   200   {string}  binary                          "脚本文件"
+// @Router    /api/downloadCli [post]
+func (s *SystemApiApi) DownloadCli(c *gin.Context) {
+	var req systemReq.GenerateApiCliRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	fileName, content, err := apiCliService.Download(req)
+	if err != nil {
+		global.GVA_LOG.Error("下载CLI失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	c.Header("Content-Description", "File Transfer")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", fileName))
+	c.Data(200, "text/x-shellscript; charset=utf-8", content)
 }

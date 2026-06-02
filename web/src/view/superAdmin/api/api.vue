@@ -113,6 +113,14 @@
               编辑
             </el-button>
             <el-button
+              icon="document"
+              type="primary"
+              link
+              @click="openCliDrawer(scope.row)"
+            >
+              生成CLI
+            </el-button>
+            <el-button
               icon="user"
               type="primary"
               link
@@ -404,6 +412,74 @@
       </el-form>
     </el-drawer>
 
+    <el-drawer
+      v-model="cliDrawerVisible"
+      :size="appStore.drawerSize"
+      :show-close="false"
+      destroy-on-close
+    >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">生成CLI - {{ cliApiRow.description || cliApiRow.path }}</span>
+          <div>
+            <el-button @click="cliDrawerVisible = false">取 消</el-button>
+            <el-button type="primary" :loading="cliDownloading" @click="handleCliDownload">下载脚本</el-button>
+          </div>
+        </div>
+      </template>
+      <warning-bar title="脚本不会内嵌 token，请使用 API Token 页面签发专用 token，并通过环境变量传入。" />
+      <el-form :model="cliForm" label-width="120px">
+        <el-form-item label="API路径">
+          <el-input :model-value="cliApiRow.path" disabled />
+        </el-form-item>
+        <el-form-item label="请求方法">
+          <el-input :model-value="cliApiRow.method" disabled />
+        </el-form-item>
+        <el-form-item label="脚本名称">
+          <el-input v-model="cliForm.wrapperName" placeholder="留空则自动生成" />
+        </el-form-item>
+        <el-form-item label="BaseURL变量">
+          <el-input v-model="cliForm.baseUrlEnvName" />
+        </el-form-item>
+        <el-form-item label="Token变量">
+          <el-input v-model="cliForm.tokenEnvName" />
+        </el-form-item>
+      </el-form>
+      <el-descriptions v-if="cliPreview" :column="1" border class="mb-4">
+        <el-descriptions-item label="摘要">
+          {{ cliPreview.summary || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="说明">
+          {{ cliPreview.description || '-' }}
+        </el-descriptions-item>
+        <el-descriptions-item label="脚本文件">
+          {{ cliPreview.scriptName }}
+        </el-descriptions-item>
+      </el-descriptions>
+      <div class="mb-4">
+        <div class="font-semibold mb-2">识别到的参数</div>
+        <div class="text-sm text-gray-600 mb-2">
+          path: {{ cliPreview?.detectedParams?.path?.length || 0 }}，query: {{ cliPreview?.detectedParams?.query?.length || 0 }}，header: {{ cliPreview?.detectedParams?.header?.length || 0 }}，body: {{ cliPreview?.detectedParams?.hasBody ? '是' : '否' }}
+        </div>
+        <el-alert
+          v-for="warning in cliPreview?.warnings || []"
+          :key="warning"
+          :title="warning"
+          type="warning"
+          :closable="false"
+          class="mb-2"
+        />
+      </div>
+      <el-input
+        v-loading="cliPreviewLoading"
+        :model-value="cliPreview?.scriptContent || ''"
+        type="textarea"
+        :rows="22"
+        readonly
+        placeholder="这里会显示生成的 Bash 脚本预览"
+      />
+    </el-drawer>
+
     <!-- 分配给角色抽屉 -->
     <el-drawer
       v-model="assignRoleDrawerVisible"
@@ -449,7 +525,9 @@
     ignoreApi,
     enterSyncApi,
     getApiRoles,
-    setApiRoles
+    setApiRoles,
+    previewApiCli,
+    downloadApiCli
   } from '@/api/api'
   import { getAuthorityList } from '@/api/authority'
   import { toSQLLine } from '@/utils/stringFun'
@@ -500,6 +578,11 @@
       value: 'DELETE',
       label: '删除',
       type: 'danger'
+    },
+    {
+      value: 'PATCH',
+      label: '修改',
+      type: 'warning'
     }
   ])
 
@@ -861,6 +944,75 @@
           message: 'AI自动填充失败,请重新生成'
         })
       }
+    }
+  }
+
+  const cliDrawerVisible = ref(false)
+  const cliPreviewLoading = ref(false)
+  const cliDownloading = ref(false)
+  const cliApiRow = ref({})
+  const cliPreview = ref(null)
+  const cliForm = ref({
+    wrapperName: '',
+    baseUrlEnvName: 'GVA_BASE_URL',
+    tokenEnvName: 'GVA_X_TOKEN'
+  })
+
+  const buildCliPayload = () => ({
+    path: cliApiRow.value.path,
+    method: cliApiRow.value.method,
+    wrapperName: cliForm.value.wrapperName,
+    baseUrlEnvName: cliForm.value.baseUrlEnvName,
+    tokenEnvName: cliForm.value.tokenEnvName
+  })
+
+  const loadCliPreview = async () => {
+    cliPreviewLoading.value = true
+    try {
+      const res = await previewApiCli(buildCliPayload())
+      if (res.code === 0) {
+        cliPreview.value = res.data
+      } else {
+        cliPreview.value = null
+      }
+    } catch {
+      cliPreview.value = null
+      ElMessage({ type: 'error', message: '脚本预览失败，请检查Swagger定义' })
+    } finally {
+      cliPreviewLoading.value = false
+    }
+  }
+
+  const openCliDrawer = async (row) => {
+    cliApiRow.value = row
+    cliForm.value = {
+      wrapperName: '',
+      baseUrlEnvName: 'GVA_BASE_URL',
+      tokenEnvName: 'GVA_X_TOKEN'
+    }
+    cliPreview.value = null
+    cliDrawerVisible.value = true
+    await loadCliPreview()
+  }
+
+  const handleCliDownload = async () => {
+    cliDownloading.value = true
+    try {
+      const res = await downloadApiCli(buildCliPayload())
+      const blob = new Blob([res])
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = cliPreview.value?.scriptName || 'api-cli.sh'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+      ElMessage({ type: 'success', message: '下载成功' })
+    } catch {
+      ElMessage({ type: 'error', message: '下载失败，请重试' })
+    } finally {
+      cliDownloading.value = false
     }
   }
 

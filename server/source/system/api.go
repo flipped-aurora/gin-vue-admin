@@ -80,6 +80,8 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "api", Method: "POST", Path: "/api/ignoreApi", Description: "忽略API"},
 		{ApiGroup: "api", Method: "GET", Path: "/api/getApiRoles", Description: "获取指定API关联角色列表"},
 		{ApiGroup: "api", Method: "POST", Path: "/api/setApiRoles", Description: "全量覆盖API关联角色列表"},
+		{ApiGroup: "api", Method: "POST", Path: "/api/previewCli", Description: "预览API CLI脚本"},
+		{ApiGroup: "api", Method: "POST", Path: "/api/downloadCli", Description: "下载API CLI脚本"},
 
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/copyAuthority", Description: "拷贝角色"},
 		{ApiGroup: "角色", Method: "POST", Path: "/authority/createAuthority", Description: "创建角色"},

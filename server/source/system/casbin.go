@@ -69,6 +69,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/api/ignoreApi", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiRoles", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/api/setApiRoles", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/api/previewCli", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/api/downloadCli", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/authority/copyAuthority", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authority/updateAuthority", V2: "PUT"},
@@ -271,6 +273,8 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "8881", V1: "/api/getAllApis", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/getApiRoles", V2: "GET"},
 		{Ptype: "p", V0: "8881", V1: "/api/setApiRoles", V2: "POST"},
+		{Ptype: "p", V0: "8881", V1: "/api/previewCli", V2: "POST"},
+		{Ptype: "p", V0: "8881", V1: "/api/downloadCli", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/authority/createAuthority", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/authority/deleteAuthority", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/authority/getAuthorityList", V2: "POST"},

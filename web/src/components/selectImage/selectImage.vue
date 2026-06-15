@@ -1,16 +1,16 @@
 <template>
   <div>
-    <selectComponent :rounded="rounded" v-if="!props.multiple" :model="model" @chooseItem="openChooseImg" @deleteItem="openChooseImg" />
+    <selectComponent :rounded="rounded" v-if="!props.multiple" :model="internalModel" @chooseItem="openChooseImg" @deleteItem="openChooseImg" />
     <div v-else class="w-full gap-4 flex flex-wrap">
-      <draggable 
-        v-model="model" 
-        class="flex flex-wrap gap-4" 
-        item-key="url" 
-        ghost-class="ghost-item" 
-        handle=".drag-handle"
-        animation="300"
-        @start="onDragStart"
-        @end="onDragEnd"
+      <draggable
+          v-model="draggableModel"
+          class="flex flex-wrap gap-4"
+          item-key="url"
+          ghost-class="ghost-item"
+          handle=".drag-handle"
+          animation="300"
+          @start="onDragStart"
+          @end="onDragEnd"
       >
         <template #item="{element, index}">
           <div class="relative group">
@@ -18,12 +18,12 @@
               <el-icon :size="18"><Menu /></el-icon>
             </div>
             <selectComponent :rounded="rounded" :model="element" @chooseItem="openChooseImg"
-                           @deleteItem="deleteImg(index)"
+                             @deleteItem="deleteImg(index)"
             />
           </div>
         </template>
       </draggable>
-      <selectComponent :rounded="rounded" v-if="model?.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+      <selectComponent :rounded="rounded" v-if="internalModel?.length < props.maxUpdateCount || props.maxUpdateCount === 0"
                        @chooseItem="openChooseImg" @deleteItem="openChooseImg"
       />
     </div>
@@ -39,7 +39,7 @@
                 @node-click="handleNodeClick"
                 default-expand-all
             >
-              <template #default="{ node, data }">
+              <template #default="{ data }">
                 <div class="w-36" :class="search.classId === data.ID ? 'text-blue-500 font-bold' : ''">{{ data.name }}
                 </div>
                 <el-dropdown>
@@ -153,7 +153,7 @@ import { ref } from 'vue'
 import { getFileList, editFileName, deleteFile } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
-import WarningBar from '@/components/warningBar/warningBar.vue'
+
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   ArrowLeftBold,
@@ -169,6 +169,7 @@ import { addCategory, deleteCategory, getCategoryList } from '@/api/attachmentCa
 import CropperImage from "@/components/upload/cropper.vue";
 import QRCodeUpload from "@/components/upload/QR-code.vue";
 import draggable from 'vuedraggable'
+import { computed, watch } from 'vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -182,6 +183,71 @@ const total = ref(0)
 const pageSize = ref(20)
 
 const model = defineModel({ type: [String, Array] })
+
+// 原始数据是否为 JSON 字符串
+const isJsonString = ref(false)
+
+// 解析模型数据，支持 JSON 字符串格式
+const parseModelValue = (value) => {
+  if (!value) return props.multiple ? [] : ''
+
+  // 如果是字符串，尝试解析为 JSON
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value)
+      if (Array.isArray(parsed)) {
+        isJsonString.value = true
+        // 如果是单选模式，返回数组的第一个元素
+        if (!props.multiple && parsed.length > 0) {
+          return parsed[0]
+        }
+        return parsed
+      }
+    } catch (e) {
+      // 不是 JSON，作为普通字符串处理
+      isJsonString.value = false
+    }
+  }
+
+  return value
+}
+
+// 内部使用的模型数据
+const internalModel = computed({
+  get() {
+    return parseModelValue(model.value)
+  },
+  set(val) {
+    // 如果原始数据是 JSON 字符串
+    if (isJsonString.value) {
+      // 在单选模式下，需要将单个值包装成数组
+      if (!props.multiple && typeof val === 'string') {
+        model.value = JSON.stringify([val])
+      } else if (Array.isArray(val)) {
+        model.value = JSON.stringify(val)
+      } else {
+        model.value = val
+      }
+    } else {
+      model.value = val
+    }
+  }
+})
+
+// 确保 draggable 始终接收数组
+const draggableModel = computed({
+  get() {
+    const value = internalModel.value
+    // 如果是多选模式且不是数组，返回空数组
+    if (props.multiple && !Array.isArray(value)) {
+      return []
+    }
+    return value
+  },
+  set(val) {
+    internalModel.value = val
+  }
+})
 
 const props = defineProps({
   multiple: {
@@ -203,7 +269,9 @@ const props = defineProps({
 })
 
 const deleteImg = (index) => {
-  model.value.splice(index, 1)
+  const arr = Array.isArray(internalModel.value) ? [...internalModel.value] : []
+  arr.splice(index, 1)
+  internalModel.value = arr
 }
 
 const handleSizeChange = (val) => {
@@ -273,18 +341,26 @@ const chooseImg = (url) => {
       return
     }
   }
-  //if (props.multiple) {
-  //  model.value.push(url)
-  //} else {
-  model.value = url
-  //}
+  if (props.multiple) {
+    // 确保在多选模式下是数组
+    const currentValue = internalModel.value
+    const arr = Array.isArray(currentValue) ? [...currentValue] : []
+    arr.push(url)
+    internalModel.value = arr
+  } else {
+    internalModel.value = url
+  }
   drawer.value = false
 }
 
 const openChooseImg = async() => {
-  if (model.value && !props.multiple) {
-    model.value = ''
+  if (internalModel.value && !props.multiple) {
+    internalModel.value = ''
     return
+  }
+  // 在多选模式下，确保是数组
+  if (props.multiple && !Array.isArray(internalModel.value)) {
+    internalModel.value = []
   }
   await getImageList()
   await fetchCategories()
@@ -437,9 +513,13 @@ const isSelected = (item) => {
 }
 
 const useSelectedImages = () => {
+  // 确保在多选模式下是数组
+  const currentValue = internalModel.value
+  const arr = Array.isArray(currentValue) ? [...currentValue] : []
   selectedImages.value.forEach((item) => {
-    model.value.push(item.url)
+    arr.push(item.url)
   })
+  internalModel.value = arr
   drawer.value = false
   selectedImages.value = []
 }
@@ -452,11 +532,21 @@ const onDragStart = () => {
 const onDragEnd = () => {
   // 拖拽结束时的处理
   document.body.style.cursor = 'default'
-  // 确保model是数组类型
-  if (!Array.isArray(model.value)) {
-    model.value = []
-  }
 }
+
+// 监听 model 值的变化，动态更新 isJsonString
+watch(() => model.value, (newVal) => {
+  if (typeof newVal === 'string') {
+    try {
+      const parsed = JSON.parse(newVal)
+      isJsonString.value = Array.isArray(parsed)
+    } catch (e) {
+      isJsonString.value = false
+    }
+  } else {
+    isJsonString.value = false
+  }
+}, { immediate: true })
 
 </script>
 <style scoped>

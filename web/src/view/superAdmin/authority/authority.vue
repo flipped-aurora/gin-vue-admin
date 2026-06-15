@@ -587,9 +587,4 @@
       }
     }
   }
-  .tree-content {
-    margin-top: 10px;
-    height: calc(100vh - 158px);
-    overflow: auto;
-  }
 </style>

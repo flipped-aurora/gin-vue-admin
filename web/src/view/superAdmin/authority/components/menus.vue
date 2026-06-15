@@ -23,7 +23,7 @@
         </el-select>
       </div>
     </div>
-    <div class="tree-content clear-both">
+    <div class="h-[calc(100vh-254px)] mt-2 overflow-auto  clear-both">
       <el-scrollbar>
         <el-tree
           ref="menuTree"

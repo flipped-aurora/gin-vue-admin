@@ -16,7 +16,7 @@
         >确 定</el-button
       >
     </div>
-    <div class="clear-both pt-4">
+    <div class="h-[calc(100vh-278px)] mt-2 overflow-auto clear-both">
       <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
         <el-checkbox
           v-for="(item, key) in authoritys"

@@ -15,7 +15,7 @@
         >确 定</el-button
       >
     </div>
-    <div class="tree-content">
+    <div class="h-[calc(100vh-208px)] mt-2 overflow-auto">
       <el-scrollbar>
         <el-tree
           ref="apiTree"

@@ -107,7 +107,8 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "mcpTest", Name: "mcpTest", Component: "view/systemTools/autoCode/mcpTest.vue", Sort: 6, Meta: Meta{Title: "Mcp Tools管理", Icon: "partly-cloudy"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "mcpTool", Name: "mcpTool", Component: "view/systemTools/autoCode/mcp.vue", Sort: 7, Meta: Meta{Title: "Mcp Tools模板", Icon: "magnet"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "skills", Name: "skills", Component: "view/systemTools/skills/index.vue", Sort: 8, Meta: Meta{Title: "Skills管理", Icon: "document"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "picture", Name: "picture", Component: "view/systemTools/autoCode/picture.vue", Sort: 9, Meta: Meta{Title: "AI页面绘制", Icon: "picture-filled"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "cli", Name: "cli", Component: "view/systemTools/cli/index.vue", Sort: 9, Meta: Meta{Title: "AI CLI管理", Icon: "cpu", KeepAlive: true}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "picture", Name: "picture", Component: "view/systemTools/autoCode/picture.vue", Sort: 10, Meta: Meta{Title: "AI页面绘制", Icon: "picture-filled"}},
 
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["plugin"], Path: "https://plugin.gin-vue-admin.com/", Name: "https://plugin.gin-vue-admin.com/", Component: "https://plugin.gin-vue-admin.com/", Sort: 0, Meta: Meta{Title: "插件市场", Icon: "shop"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["plugin"], Path: "installPlugin", Name: "installPlugin", Component: "view/systemTools/installPlugin/index.vue", Sort: 1, Meta: Meta{Title: "插件安装", Icon: "box"}},

@@ -68,6 +68,7 @@ func (s *cliService) BuildCliBinary(req systemReq.BuildSysCliBinaryRequest) (str
 	if err != nil {
 		return "", nil, err
 	}
+	applyCliBuildBaseURL(&manifest, req.BaseURL)
 	manifestBytes, err := marshalSysCliManifest(manifest)
 	if err != nil {
 		return "", nil, err

@@ -63,7 +63,8 @@ type PreviewSysCliManifestRequest struct {
 }
 
 type BuildSysCliBinaryRequest struct {
-	CliID  uint   `json:"cliId" form:"cliId"`
-	GOOS   string `json:"goos" form:"goos"`
-	GOARCH string `json:"goarch" form:"goarch"`
+	CliID   uint   `json:"cliId" form:"cliId"`
+	GOOS    string `json:"goos" form:"goos"`
+	GOARCH  string `json:"goarch" form:"goarch"`
+	BaseURL string `json:"baseUrl" form:"baseUrl"`
 }

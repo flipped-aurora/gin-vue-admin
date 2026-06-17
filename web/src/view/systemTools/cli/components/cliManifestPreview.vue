@@ -9,31 +9,68 @@
     <el-alert
       type="warning"
       :closable="false"
-      title="开发环境能力"
-      description="以下下载/编译能力仅供开发环境使用，编译过后的skill，cli可以在生产环境使用；编译类操作需等待数秒。编译下载与 Skill 包内的 CLI 已内嵌配置、可直接运行；Skill 包供 Claude Code、Codex 等 AI 助手使用。"
+      show-icon
+      title="开发环境能力说明"
+      description="下载、编译等操作仅需在开发环境中执行。编译生成的 Skill、CLI 等产物均为独立运行版本，可直接部署至生产环境使用，无需继续依赖开发环境。"
     />
-    <el-alert class="!mt-4" :title="`先执行 ${manifest.name || cli?.command || cli?.name || 'cli'} login --token <jwt> 保存登录态。`" type="info" :closable="false" />
-    <div class="flex items-center gap-2 flex-wrap mt-4">
-      <el-select v-model="buildTarget.goos" size="small" style="width: 110px">
-        <el-option label="Windows" value="windows" />
-        <el-option label="Linux" value="linux" />
-        <el-option label="macOS" value="darwin" />
-      </el-select>
-      <el-select v-model="buildTarget.goarch" size="small" style="width: 100px">
-        <el-option label="amd64" value="amd64" />
-        <el-option label="arm64" value="arm64" />
-      </el-select>
-      <el-button type="primary" :loading="building" @click="buildAndDownload">编译下载</el-button>
-      <el-button :loading="building" @click="downloadSkill">下载 Skill</el-button>
-      <el-button @click="download">下载 Manifest</el-button>
+    <el-alert class="!mt-4" show-icon :title="`先执行 ${manifest.name || cli?.command || cli?.name || 'cli'} login --token <jwt> 保存登录态。`" type="info" :closable="false" />
+
+    <el-card shadow="never" class="mt-4 border-gray-200" body-style="padding-bottom: 0;">
+      <template #header>
+        <span class="font-medium text-gray-800">构建与下载配置</span>
+      </template>
+      <el-form label-width="90px" label-position="left">
+        <el-form-item label="API 地址">
+          <el-input v-model="apiBaseUrl" placeholder="留空使用后台默认地址 (将编译进 CLI 或 Skill 内部)" clearable class="max-w-[400px]" />
+        </el-form-item>
+        <el-form-item label="目标平台">
+          <el-select v-model="buildTarget.goos" class="mr-2" style="width: 140px">
+            <el-option label="Windows" value="windows" />
+            <el-option label="Linux" value="linux" />
+            <el-option label="macOS" value="darwin" />
+          </el-select>
+          <el-select v-model="buildTarget.goarch" style="width: 140px">
+            <el-option label="amd64" value="amd64" />
+            <el-option label="arm64" value="arm64" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="执行操作">
+          <el-button type="primary" :loading="building" @click="buildAndDownload">编译 CLI 可执行程序</el-button>
+          <el-button type="success" :loading="building" plain @click="downloadSkill">生成并下载 Skill 包</el-button>
+          <el-button plain @click="download">获取 Manifest 文件</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <div class="flex justify-between items-center mt-6 mb-2">
+      <span class="text-base font-medium text-gray-800">命令列表</span>
+      <div class="text-xs text-gray-500 flex items-center gap-2">
+        <span>CLI: <el-tag size="small">{{ manifest.name || cli?.command || cli?.name }}</el-tag></span>
+        <span>版本: <el-tag size="small" type="info">{{ manifest.version || 'v1' }}</el-tag></span>
+      </div>
     </div>
-    <div class="mt-4 text-xs text-gray-500">CLI: {{ manifest.name || cli?.command || cli?.name }} / 版本: {{ manifest.version || 'v1' }}</div>
-    <el-collapse class="mt-4">
-      <el-collapse-item v-for="item in manifest.commands || []" :key="item.name" :title="item.name">
-        <div class="mb-2 text-sm text-gray-600">{{ item.method }} {{ item.path }}</div>
-        <pre>{{ JSON.stringify(item, null, 2) }}</pre>
+
+    <el-collapse v-if="manifest.commands && manifest.commands.length" class="border-t" accordion>
+      <el-collapse-item v-for="item in manifest.commands" :key="item.name" :name="item.name">
+        <template #title>
+          <div class="flex items-center gap-3 w-full pr-4">
+            <el-tag
+              :type="item.method === 'GET' ? 'success' : item.method === 'POST' ? 'warning' : item.method === 'DELETE' ? 'danger' : 'primary'"
+              effect="dark"
+              style="width: 60px; text-align: center"
+            >
+              {{ item.method }}
+            </el-tag>
+            <span class="font-medium text-sm">{{ item.name }}</span>
+            <span class="text-gray-400 text-xs ml-auto font-mono bg-gray-100 px-2 py-0.5 rounded">{{ item.path }}</span>
+          </div>
+        </template>
+        <div class="bg-gray-50 rounded p-4 mx-2 overflow-auto text-xs font-mono text-gray-800 border">
+          <pre class="m-0 leading-relaxed">{{ JSON.stringify(item, null, 2) }}</pre>
+        </div>
       </el-collapse-item>
     </el-collapse>
+    <el-empty v-else description="暂无命令数据" :image-size="60" />
   </el-drawer>
 </template>
 
@@ -49,6 +86,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 const manifest = ref({ commands: [] })
 const buildTarget = ref({ goos: 'windows', goarch: 'amd64' })
+const apiBaseUrl = ref('')
 const building = ref(false)
 
 const loadManifest = async () => {
@@ -110,7 +148,8 @@ const buildAndDownload = async () => {
     res = await buildCliBinary({
       cliId: props.cli.ID || props.cli.id,
       goos: buildTarget.value.goos,
-      goarch: buildTarget.value.goarch
+      goarch: buildTarget.value.goarch,
+      baseUrl: apiBaseUrl.value
     })
   } catch (e) {
     building.value = false
@@ -129,7 +168,8 @@ const downloadSkill = async () => {
     res = await downloadCliSkill({
       cliId: props.cli.ID || props.cli.id,
       goos: buildTarget.value.goos,
-      goarch: buildTarget.value.goarch
+      goarch: buildTarget.value.goarch,
+      baseUrl: apiBaseUrl.value
     })
   } catch (e) {
     building.value = false

@@ -50,6 +50,7 @@ func newRootCmd() *cobra.Command {
 	root.PersistentFlags().StringVar(&cfg.BaseURL, "base-url", cfg.BaseURL, "服务地址")
 	root.PersistentFlags().StringVar(&cfg.AuthHeader, "auth-header", cfg.AuthHeader, "认证头名称")
 	root.AddCommand(newLoginCmd(&cfg, configPath))
+	root.AddCommand(newSetBaseURLCmd(&cfg, configPath))
 	root.AddCommand(&cobra.Command{
 		Use:   "version",
 		Short: "显示版本",

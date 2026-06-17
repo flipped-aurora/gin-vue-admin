@@ -389,4 +389,13 @@ func uniqueStrings(items []string) []string {
 	return result
 }
 
+// applyCliBuildBaseURL 用编译时指定的 baseURL 覆盖 manifest 的服务地址，空值保留原值。
+func applyCliBuildBaseURL(manifest *systemRes.SysCliManifestResponse, baseURL string) {
+	baseURL = strings.TrimSpace(baseURL)
+	if baseURL == "" {
+		return
+	}
+	manifest.Server.BaseURL = strings.TrimRight(baseURL, "/")
+}
+
 var _ = config.MCP{}

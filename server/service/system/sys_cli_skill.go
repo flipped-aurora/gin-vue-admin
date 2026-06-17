@@ -43,6 +43,7 @@ const skillBodyTemplate = `# {{.Command}} — {{.DisplayName}} 命令行
 
 1. 获取可执行文件：从 Gin-Vue-Admin「系统工具 → AI CLI管理 → 预览命令 → 编译下载」下载 {{.Command}}（Windows 为 {{.Command}}.exe），放到 PATH。
 2. 登录（只需一次）：{{.Command}} login --token <JWT>。JWT 在 Gin-Vue-Admin 登录后获得，或使用系统工具里的 API Token。
+3. 更改后台 API 地址：{{.Command}} set-base-url <API地址>（写入本地配置，之后命令都用新地址）。
 
 ## 命令一览
 
@@ -172,6 +173,7 @@ func (s *cliService) BuildCliSkill(req systemReq.BuildSysCliBinaryRequest) (stri
 	if err != nil {
 		return "", nil, err
 	}
+	applyCliBuildBaseURL(&manifest, req.BaseURL)
 	manifestBytes, err := marshalSysCliManifest(manifest)
 	if err != nil {
 		return "", nil, err

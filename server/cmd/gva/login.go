@@ -23,3 +23,15 @@ func newLoginCmd(cfg *CliConfig, configPath string) *cobra.Command {
 	cmd.Flags().StringVar(&token, "token", "", "JWT token")
 	return cmd
 }
+
+func newSetBaseURLCmd(cfg *CliConfig, configPath string) *cobra.Command {
+	return &cobra.Command{
+		Use:   "set-base-url <url>",
+		Short: "更改后台 API 地址并保存到本地配置",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cfg.BaseURL = strings.TrimRight(strings.TrimSpace(args[0]), "/")
+			return saveConfig(configPath, *cfg)
+		},
+	}
+}

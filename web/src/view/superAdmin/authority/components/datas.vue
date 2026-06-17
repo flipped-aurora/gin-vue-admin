@@ -1,10 +1,9 @@
 <template>
-  <div>
+    <div class="sticky top-0.5 z-10 my-4 w-192">
     <warning-bar
       title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）。此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。"
       href="https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=36"
     />
-    <div class="sticky top-0.5 z-10 my-4">
       <el-button class="float-left" type="primary" @click="all">全选</el-button>
       <el-button class="float-left" type="primary" @click="self"
         >本角色</el-button
@@ -26,7 +25,6 @@
         >
       </el-checkbox-group>
     </div>
-  </div>
 </template>
 
 <script setup>

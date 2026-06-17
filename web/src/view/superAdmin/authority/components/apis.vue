@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10 flex space-x-2">
+    <div class="sticky top-0.5 z-10 flex space-x-2 w-192">
       <el-input
         v-model="filterTextName"
         class="flex-1"

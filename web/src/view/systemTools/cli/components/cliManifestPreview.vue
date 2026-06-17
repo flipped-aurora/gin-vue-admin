@@ -58,18 +58,43 @@ watch(() => props.modelValue, (val) => {
   }
 })
 
-const download = async () => {
-  const res = await downloadManifest({ cliId: props.cli.ID || props.cli.id })
-  const blob = res instanceof Blob ? res : (res?.data instanceof Blob ? res.data : null)
-  if (!blob) {
-    return
+const cliBaseName = () => props.cli.command || props.cli.name || 'cli'
+
+// 统一处理 blob 下载：后端失败时返回 JSON（含 code/msg），成功才是文件。
+// 先按 content-type 判断，JSON 响应解析校验 code，非 0 视为错误并提示，不触发下载。
+const saveDownload = async (res, filename, failMsg) => {
+  const rawBlob = res instanceof Blob ? res : (res?.data instanceof Blob ? res.data : null)
+  if (!rawBlob) {
+    ElMessage.error(failMsg)
+    return false
+  }
+  const contentType = res?.headers?.['content-type'] || ''
+  let blob = rawBlob
+  if (contentType.includes('application/json')) {
+    const text = await rawBlob.text()
+    try {
+      const obj = JSON.parse(text)
+      if (obj && typeof obj.code !== 'undefined' && obj.code !== 0) {
+        ElMessage.error(obj.msg || failMsg)
+        return false
+      }
+    } catch {
+      // 非 JSON 文本，按文件处理
+    }
+    blob = new Blob([text], { type: contentType })
   }
   const url = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `${props.cli.command || props.cli.name || 'cli'}.manifest.json`
+  link.download = filename
   link.click()
   window.URL.revokeObjectURL(url)
+  return true
+}
+
+const download = async () => {
+  const res = await downloadManifest({ cliId: props.cli.ID || props.cli.id })
+  await saveDownload(res, `${cliBaseName()}.manifest.json`, '下载 Manifest 失败')
 }
 
 const buildAndDownload = async () => {
@@ -87,32 +112,12 @@ const buildAndDownload = async () => {
   } finally {
     building.value = false
   }
-  const blob = res instanceof Blob ? res : (res?.data instanceof Blob ? res.data : null)
-  if (!blob) {
-    ElMessage.error('编译失败，未收到二进制')
-    return
-  }
   const ext = buildTarget.value.goos === 'windows' ? '.exe' : ''
-  const url = window.URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `${props.cli.command || props.cli.name || 'cli'}${ext}`
-  link.click()
-  window.URL.revokeObjectURL(url)
+  await saveDownload(res, `${cliBaseName()}${ext}`, '编译失败，未收到二进制')
 }
 
 const downloadSkill = async () => {
   const res = await downloadCliSkill({ cliId: props.cli.ID || props.cli.id })
-  const blob = res instanceof Blob ? res : (res?.data instanceof Blob ? res.data : null)
-  if (!blob) {
-    ElMessage.error('生成 Skill 失败，未收到文件')
-    return
-  }
-  const url = window.URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `${props.cli.command || props.cli.name || 'cli'}-skill.zip`
-  link.click()
-  window.URL.revokeObjectURL(url)
+  await saveDownload(res, `${cliBaseName()}-skill.zip`, '生成 Skill 失败，未收到文件')
 }
 </script>

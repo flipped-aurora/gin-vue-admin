@@ -157,8 +157,13 @@ func escapeSkillDescription(desc string) string {
 	return strings.TrimSpace(desc)
 }
 
-// BuildCliSkill 生成该 CLI 的 AI 使用说明（SKILL.md + README.md）并打包成 zip。
-func (s *cliService) BuildCliSkill(req systemReq.PreviewSysCliManifestRequest) (string, []byte, error) {
+// BuildCliSkill 生成该 CLI 的 AI 使用说明并和编译好的二进制一起打包成 zip：
+// SKILL.md + references/README.md + references/manifest.json + cli 二进制。
+func (s *cliService) BuildCliSkill(req systemReq.BuildSysCliBinaryRequest) (string, []byte, error) {
+	goos, goarch, err := normalizeBuildTarget(req.GOOS, req.GOARCH)
+	if err != nil {
+		return "", nil, err
+	}
 	cli, bindings, err := s.getCliAndBindings(req.CliID)
 	if err != nil {
 		return "", nil, err
@@ -167,33 +172,47 @@ func (s *cliService) BuildCliSkill(req systemReq.PreviewSysCliManifestRequest) (
 	if err != nil {
 		return "", nil, err
 	}
+	manifestBytes, err := marshalSysCliManifest(manifest)
+	if err != nil {
+		return "", nil, err
+	}
+	binaryName, binaryBytes, err := s.compileCliBinary(cli, manifestBytes, goos, goarch)
+	if err != nil {
+		return "", nil, err
+	}
 	data := buildSkillRenderData(cli, manifest)
 	skillMarkdown := renderSkillMarkdown(data)
 	readmeMarkdown := "# " + data.SkillName + "\n\n" + renderSkillBody(data)
 
-	zipBytes, err := writeSkillZip(skillMarkdown, readmeMarkdown)
+	folderName := sanitizeSingleSegmentSlug(data.SkillName)
+	if folderName == "" {
+		folderName = "cli"
+	}
+	zipBytes, err := writeSkillPackageZip(folderName, skillMarkdown, readmeMarkdown, manifestBytes, binaryName, binaryBytes)
 	if err != nil {
 		return "", nil, err
 	}
-	return data.SkillName + ".zip", zipBytes, nil
+	return folderName + ".zip", zipBytes, nil
 }
 
-func writeSkillZip(skillMarkdown, readmeMarkdown string) ([]byte, error) {
+func writeSkillPackageZip(folderName, skillMarkdown, readmeMarkdown string, manifestBytes []byte, binaryName string, binaryBytes []byte) ([]byte, error) {
 	buf := &bytes.Buffer{}
 	w := zip.NewWriter(buf)
 	files := []struct {
 		name    string
-		content string
+		content []byte
 	}{
-		{"SKILL.md", skillMarkdown},
-		{"README.md", readmeMarkdown},
+		{folderName + "/SKILL.md", []byte(skillMarkdown)},
+		{folderName + "/references/README.md", []byte(readmeMarkdown)},
+		{folderName + "/references/manifest.json", manifestBytes},
+		{folderName + "/" + binaryName, binaryBytes},
 	}
 	for _, f := range files {
 		fw, err := w.Create(f.name)
 		if err != nil {
 			return nil, err
 		}
-		if _, err := fw.Write([]byte(f.content)); err != nil {
+		if _, err := fw.Write(f.content); err != nil {
 			return nil, err
 		}
 	}

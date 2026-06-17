@@ -1,6 +1,9 @@
 package system
 
 import (
+	"archive/zip"
+	"bytes"
+	"io"
 	"strings"
 	"testing"
 
@@ -63,6 +66,47 @@ func TestRenderSkillBodyContainsCommandsAndParams(t *testing.T) {
 	for _, want := range []string{"opsctl", "运维工具", "user-list", "--page", "page-size", "opsctl user-list --page 1", "必填"} {
 		if !strings.Contains(body, want) {
 			t.Fatalf("renderSkillBody missing %q\n%s", want, body)
+		}
+	}
+}
+
+func TestWriteSkillPackageZipContainsAllFiles(t *testing.T) {
+	zipBytes, err := writeSkillPackageZip("opsctl-cli", "# skill", "readme body", []byte(`{"name":"cpt"}`), "cpt.exe", []byte("BINARY"))
+	if err != nil {
+		t.Fatalf("writeSkillPackageZip: %v", err)
+	}
+	r, err := zip.NewReader(bytes.NewReader(zipBytes), int64(len(zipBytes)))
+	if err != nil {
+		t.Fatalf("zip.NewReader: %v", err)
+	}
+	want := map[string]bool{
+		"opsctl-cli/SKILL.md":                 false,
+		"opsctl-cli/references/README.md":     false,
+		"opsctl-cli/references/manifest.json": false,
+		"opsctl-cli/cpt.exe":                  false,
+	}
+	for _, f := range r.File {
+		if _, ok := want[f.Name]; ok {
+			want[f.Name] = true
+		}
+	}
+	for name, found := range want {
+		if !found {
+			t.Errorf("missing %q in zip", name)
+		}
+	}
+	for _, f := range r.File {
+		if f.Name != "opsctl-cli/cpt.exe" {
+			continue
+		}
+		rc, err := f.Open()
+		if err != nil {
+			t.Fatalf("open cpt.exe: %v", err)
+		}
+		data, _ := io.ReadAll(rc)
+		rc.Close()
+		if string(data) != "BINARY" {
+			t.Errorf("cpt.exe content = %q, want %q", string(data), "BINARY")
 		}
 	}
 }

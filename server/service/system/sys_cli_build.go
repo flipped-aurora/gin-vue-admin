@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 )
 
@@ -71,6 +72,11 @@ func (s *cliService) BuildCliBinary(req systemReq.BuildSysCliBinaryRequest) (str
 	if err != nil {
 		return "", nil, err
 	}
+	return s.compileCliBinary(cli, manifestBytes, goos, goarch)
+}
+
+// compileCliBinary 把 manifest 内嵌进 gva 源码副本并交叉编译，返回二进制文件名与内容。
+func (s *cliService) compileCliBinary(cli sysModel.SysCli, manifestBytes []byte, goos, goarch string) (string, []byte, error) {
 	if _, err := exec.LookPath("go"); err != nil {
 		return "", nil, fmt.Errorf("服务器未安装 Go 工具链，无法编译: %w", err)
 	}

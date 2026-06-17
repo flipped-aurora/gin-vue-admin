@@ -257,17 +257,17 @@ func (a *CliApi) BuildCliBinary(c *gin.Context) {
 	c.Data(http.StatusOK, "application/octet-stream", payload)
 }
 
-// DownloadCliSkill 生成并下载该 CLI 的 AI 使用说明（SKILL.md + README.md 的 zip）
+// DownloadCliSkill 生成并下载该 CLI 的 AI 使用说明（SKILL.md + references + cli 二进制的 zip）
 // @Tags Cli
 // @Summary 下载CLI的AI Skill
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/zip
-// @Param data body systemReq.PreviewSysCliManifestRequest true "CLI ID"
+// @Param data body systemReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
 // @Success 200 {file} file "skill zip"
 // @Router /cli/downloadSkill [post]
 func (a *CliApi) DownloadCliSkill(c *gin.Context) {
-	var req systemReq.PreviewSysCliManifestRequest
+	var req systemReq.BuildSysCliBinaryRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return

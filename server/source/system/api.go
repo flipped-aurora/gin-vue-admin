@@ -157,6 +157,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "CLI管理", Method: "POST", Path: "/cli/previewManifest", Description: "预览CLI Manifest"},
 		{ApiGroup: "CLI管理", Method: "POST", Path: "/cli/downloadManifest", Description: "下载CLI Manifest"},
 		{ApiGroup: "CLI管理", Method: "POST", Path: "/cli/buildCli", Description: "编译并下载CLI二进制"},
+		{ApiGroup: "CLI管理", Method: "POST", Path: "/cli/downloadSkill", Description: "下载CLI的AI Skill"},
 
 		{ApiGroup: "代码生成器", Method: "GET", Path: "/autoCode/getDB", Description: "获取所有数据库"},
 		{ApiGroup: "代码生成器", Method: "GET", Path: "/autoCode/getTables", Description: "获取数据库表"},

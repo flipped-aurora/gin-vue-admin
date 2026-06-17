@@ -81,3 +81,12 @@ export const buildCliBinary = (data) => {
     responseType: 'blob'
   })
 }
+
+export const downloadCliSkill = (data) => {
+  return service({
+    url: '/cli/downloadSkill',
+    method: 'post',
+    data,
+    responseType: 'blob'
+  })
+}

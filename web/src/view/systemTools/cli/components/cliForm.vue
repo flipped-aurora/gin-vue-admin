@@ -21,6 +21,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="描述"><el-input v-model="localForm.description" type="textarea" /></el-form-item>
+      <el-divider content-position="left">AI Skill（供 Claude Code 等 AI 助手使用）</el-divider>
+      <el-form-item label="Skill名"><el-input v-model="localForm.skillName" placeholder="留空默认为 <主命令>-cli" /></el-form-item>
+      <el-form-item label="Skill描述"><el-input v-model="localForm.skillDescription" type="textarea" placeholder="告诉 AI 何时使用这个 CLI，例如：需要在终端查询或操作用户数据时使用" /></el-form-item>
     </el-form>
   </el-drawer>
 </template>
@@ -41,7 +44,9 @@ const localForm = reactive({
   displayName: '',
   version: 'v1',
   status: 'enabled',
-  description: ''
+  description: '',
+  skillName: '',
+  skillDescription: ''
 })
 
 watch(() => props.formData, (value) => {
@@ -52,6 +57,8 @@ watch(() => props.formData, (value) => {
   localForm.version = value?.version || 'v1'
   localForm.status = value?.status || 'enabled'
   localForm.description = value?.description || ''
+  localForm.skillName = value?.skillName || ''
+  localForm.skillDescription = value?.skillDescription || ''
 }, { immediate: true, deep: true })
 
 const submit = () => {

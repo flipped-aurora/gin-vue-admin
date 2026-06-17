@@ -257,6 +257,32 @@ func (a *CliApi) BuildCliBinary(c *gin.Context) {
 	c.Data(http.StatusOK, "application/octet-stream", payload)
 }
 
+// DownloadCliSkill 生成并下载该 CLI 的 AI 使用说明（SKILL.md + README.md 的 zip）
+// @Tags Cli
+// @Summary 下载CLI的AI Skill
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/zip
+// @Param data body systemReq.PreviewSysCliManifestRequest true "CLI ID"
+// @Success 200 {file} file "skill zip"
+// @Router /cli/downloadSkill [post]
+func (a *CliApi) DownloadCliSkill(c *gin.Context) {
+	var req systemReq.PreviewSysCliManifestRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	fileName, payload, err := cliService.BuildCliSkill(req)
+	if err != nil {
+		global.GVA_LOG.Error("生成CLI Skill失败!", zap.Error(err))
+		response.FailWithMessage("生成CLI Skill失败: "+err.Error(), c)
+		return
+	}
+	c.Header("Content-Type", "application/zip")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", fileName))
+	c.Data(http.StatusOK, "application/zip", payload)
+}
+
 func (a *CliApi) FindCli(c *gin.Context) {
 	var req commonReq.GetById
 	if err := c.ShouldBindJSON(&req); err != nil {

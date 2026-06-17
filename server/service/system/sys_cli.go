@@ -24,13 +24,15 @@ func (s *cliService) CreateCli(req systemReq.CreateSysCliRequest) (sysModel.SysC
 		return sysModel.SysCli{}, errors.New("存在同名CLI")
 	}
 	entity := sysModel.SysCli{
-		Name:        name,
-		Command:     strings.TrimSpace(req.Command),
-		DisplayName: strings.TrimSpace(req.DisplayName),
-		Version:     strings.TrimSpace(req.Version),
-		Description: strings.TrimSpace(req.Description),
-		Status:      strings.TrimSpace(req.Status),
-		AuthMode:    "jwt",
+		Name:             name,
+		Command:          strings.TrimSpace(req.Command),
+		DisplayName:      strings.TrimSpace(req.DisplayName),
+		Version:          strings.TrimSpace(req.Version),
+		Description:      strings.TrimSpace(req.Description),
+		Status:           strings.TrimSpace(req.Status),
+		AuthMode:         "jwt",
+		SkillName:        strings.TrimSpace(req.SkillName),
+		SkillDescription: strings.TrimSpace(req.SkillDescription),
 	}
 	applySysCliDefaults(&entity)
 	if err := global.GVA_DB.Create(&entity).Error; err != nil {
@@ -59,6 +61,8 @@ func (s *cliService) UpdateCli(req systemReq.UpdateSysCliRequest) (sysModel.SysC
 	entity.Version = strings.TrimSpace(req.Version)
 	entity.Description = strings.TrimSpace(req.Description)
 	entity.Status = strings.TrimSpace(req.Status)
+	entity.SkillName = strings.TrimSpace(req.SkillName)
+	entity.SkillDescription = strings.TrimSpace(req.SkillDescription)
 	applySysCliDefaults(&entity)
 	if err := global.GVA_DB.Save(&entity).Error; err != nil {
 		return sysModel.SysCli{}, err

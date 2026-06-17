@@ -4,13 +4,15 @@ import "github.com/flipped-aurora/gin-vue-admin/server/global"
 
 type SysCli struct {
 	global.GVA_MODEL
-	Name        string `json:"name" gorm:"column:name;size:128;not null;uniqueIndex;comment:CLI唯一标识"`
-	Command     string `json:"command" gorm:"column:command;size:128;not null;default:'';comment:CLI主命令"`
-	DisplayName string `json:"displayName" gorm:"column:display_name;size:128;not null;comment:CLI展示名称"`
-	Version     string `json:"version" gorm:"column:version;size:64;not null;default:v1;comment:CLI版本"`
-	Description string `json:"description" gorm:"column:description;type:text;comment:CLI描述"`
-	Status      string `json:"status" gorm:"column:status;size:32;not null;default:enabled;comment:CLI状态"`
-	AuthMode    string `json:"authMode" gorm:"column:auth_mode;size:32;not null;default:jwt;comment:认证方式"`
+	Name             string `json:"name" gorm:"column:name;size:128;not null;uniqueIndex;comment:CLI唯一标识"`
+	Command          string `json:"command" gorm:"column:command;size:128;not null;default:'';comment:CLI主命令"`
+	DisplayName      string `json:"displayName" gorm:"column:display_name;size:128;not null;comment:CLI展示名称"`
+	Version          string `json:"version" gorm:"column:version;size:64;not null;default:v1;comment:CLI版本"`
+	Description      string `json:"description" gorm:"column:description;type:text;comment:CLI描述"`
+	Status           string `json:"status" gorm:"column:status;size:32;not null;default:enabled;comment:CLI状态"`
+	AuthMode         string `json:"authMode" gorm:"column:auth_mode;size:32;not null;default:jwt;comment:认证方式"`
+	SkillName        string `json:"skillName" gorm:"column:skill_name;size:128;comment:AI Skill名称"`
+	SkillDescription string `json:"skillDescription" gorm:"column:skill_description;type:text;comment:AI Skill描述"`
 }
 
 func (SysCli) TableName() string {

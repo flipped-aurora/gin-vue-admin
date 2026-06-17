@@ -11,22 +11,26 @@ type SysCliSearch struct {
 }
 
 type CreateSysCliRequest struct {
-	Name        string `json:"name" form:"name"`
-	Command     string `json:"command" form:"command"`
-	DisplayName string `json:"displayName" form:"displayName"`
-	Version     string `json:"version" form:"version"`
-	Description string `json:"description" form:"description"`
-	Status      string `json:"status" form:"status"`
+	Name             string `json:"name" form:"name"`
+	Command          string `json:"command" form:"command"`
+	DisplayName      string `json:"displayName" form:"displayName"`
+	Version          string `json:"version" form:"version"`
+	Description      string `json:"description" form:"description"`
+	Status           string `json:"status" form:"status"`
+	SkillName        string `json:"skillName" form:"skillName"`
+	SkillDescription string `json:"skillDescription" form:"skillDescription"`
 }
 
 type UpdateSysCliRequest struct {
-	ID          uint   `json:"id" form:"id"`
-	Name        string `json:"name" form:"name"`
-	Command     string `json:"command" form:"command"`
-	DisplayName string `json:"displayName" form:"displayName"`
-	Version     string `json:"version" form:"version"`
-	Description string `json:"description" form:"description"`
-	Status      string `json:"status" form:"status"`
+	ID               uint   `json:"id" form:"id"`
+	Name             string `json:"name" form:"name"`
+	Command          string `json:"command" form:"command"`
+	DisplayName      string `json:"displayName" form:"displayName"`
+	Version          string `json:"version" form:"version"`
+	Description      string `json:"description" form:"description"`
+	Status           string `json:"status" form:"status"`
+	SkillName        string `json:"skillName" form:"skillName"`
+	SkillDescription string `json:"skillDescription" form:"skillDescription"`
 }
 
 type FindSysCliRequest struct {

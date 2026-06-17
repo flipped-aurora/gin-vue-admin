@@ -23,6 +23,7 @@ func (s *CliRouter) InitCliRouter(Router *gin.RouterGroup, RouterPub *gin.Router
 		cliRouterWithoutRecord.POST("previewManifest", cliApi.PreviewManifest)
 		cliRouterWithoutRecord.POST("downloadManifest", cliApi.DownloadManifest)
 		cliRouterWithoutRecord.POST("buildCli", cliApi.BuildCliBinary)
+		cliRouterWithoutRecord.POST("downloadSkill", cliApi.DownloadCliSkill)
 	}
 	_ = RouterPub
 }

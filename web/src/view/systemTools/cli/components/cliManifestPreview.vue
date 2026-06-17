@@ -14,6 +14,7 @@
             <el-option label="arm64" value="arm64" />
           </el-select>
           <el-button type="primary" :loading="building" @click="buildAndDownload">编译下载</el-button>
+          <el-button @click="downloadSkill">下载 Skill</el-button>
           <el-button @click="download">下载 Manifest</el-button>
           <el-button @click="emit('update:modelValue', false)">关闭</el-button>
         </div>
@@ -33,7 +34,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { previewManifest, downloadManifest, buildCliBinary } from '@/api/system/cli'
+import { previewManifest, downloadManifest, buildCliBinary, downloadCliSkill } from '@/api/system/cli'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
@@ -96,6 +97,21 @@ const buildAndDownload = async () => {
   const link = document.createElement('a')
   link.href = url
   link.download = `${props.cli.command || props.cli.name || 'cli'}${ext}`
+  link.click()
+  window.URL.revokeObjectURL(url)
+}
+
+const downloadSkill = async () => {
+  const res = await downloadCliSkill({ cliId: props.cli.ID || props.cli.id })
+  const blob = res instanceof Blob ? res : (res?.data instanceof Blob ? res.data : null)
+  if (!blob) {
+    ElMessage.error('生成 Skill 失败，未收到文件')
+    return
+  }
+  const url = window.URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${props.cli.command || props.cli.name || 'cli'}-skill.zip`
   link.click()
   window.URL.revokeObjectURL(url)
 }

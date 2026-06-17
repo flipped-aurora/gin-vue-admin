@@ -152,6 +152,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/cli/previewManifest", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/cli/downloadManifest", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/cli/buildCli", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/cli/downloadSkill", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "PUT"},

@@ -20,7 +20,7 @@
       </el-dropdown>
     </el-tooltip>
 
-    <el-tooltip class="" effect="dark" content="搜索" placement="bottom">
+    <el-tooltip v-if="appStore.config.show_search" class="" effect="dark" content="搜索" placement="bottom">
         <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
         <el-icon
             @click="handleCommand"
@@ -42,7 +42,7 @@
 
     </el-tooltip>
 
-    <el-tooltip class="" effect="dark" content="刷新" placement="bottom">
+    <el-tooltip v-if="appStore.config.show_refresh" class="" effect="dark" content="刷新" placement="bottom">
       <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
       <el-icon
           :class="showRefreshAnmite ? 'animate-spin' : ''"

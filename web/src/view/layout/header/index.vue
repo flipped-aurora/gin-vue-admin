@@ -1,9 +1,15 @@
 <template>
   <div
-    class="flex justify-between fixed top-0 left-0 right-0 z-10 h-16 bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700 items-center px-2"
+    class="flex justify-between fixed top-0 right-0 z-10 h-16 text-slate-700 dark:text-slate-300 items-center px-2"
+    :style="{
+      left: isVertical ? appStore.sideWidth + 'px' : '0px',
+      background: 'var(--gva-header-bg)',
+      borderBottom: '1px solid var(--gva-header-border)'
+    }"
   >
     <div class="flex items-center cursor-pointer flex-1">
       <div
+        v-if="!isVertical"
         class="flex items-center justify-center cursor-pointer"
         :class="isMobile ? '' : 'min-w-48'"
         @click="router.push({ path: '/' })"
@@ -24,7 +30,7 @@
 
       <el-breadcrumb
         v-show="!isMobile"
-        v-if="config.side_mode !== 'head' && config.side_mode !== 'combination'"
+        v-if="config.show_breadcrumb && config.side_mode !== 'head' && config.side_mode !== 'combination'"
         class="ml-4"
       >
         <el-breadcrumb-item
@@ -113,6 +119,10 @@
   const isMobile = computed(() => {
     return device.value === 'mobile'
   })
+  // 通栏侧边布局：header 让出左侧侧栏宽度，并隐藏自身 Logo
+  const isVertical = computed(
+    () => config.value.side_mode === 'vertical' && !isMobile.value
+  )
   const toPerson = () => {
     router.push({ name: 'person' })
   }

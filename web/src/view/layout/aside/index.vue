@@ -5,7 +5,8 @@
         config.side_mode === 'normal' ||
         (device === 'mobile' && config.side_mode == 'head') ||
         (device === 'mobile' && config.side_mode == 'combination') ||
-        (device === 'mobile' && config.side_mode == 'sidebar')
+        (device === 'mobile' && config.side_mode == 'sidebar') ||
+        (device === 'mobile' && config.side_mode == 'vertical')
       "
     />
     <head-mode v-if="config.side_mode === 'head' && device !== 'mobile'" />
@@ -16,6 +17,9 @@
     <sidebar-mode
       v-if="config.side_mode === 'sidebar' && device !== 'mobile'"
     />
+    <vertical-mode
+      v-if="config.side_mode === 'vertical' && device !== 'mobile'"
+    />
   </div>
 </template>
 
@@ -24,6 +28,7 @@
   import HeadMode from './headMode.vue'
   import CombinationMode from './combinationMode.vue'
   import SidebarMode from './sidebarMode.vue'
+  import VerticalMode from './verticalMode.vue'
 
   defineProps({
     mode: {

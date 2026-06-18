@@ -1,9 +1,11 @@
 <template>
   <div
-    class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700"
+    class="relative h-full shadow dark:shadow-gray-700"
     :class="isCollapse ? '' : '  px-2'"
     :style="{
-      width: layoutSideWidth + 'px'
+      width: layoutSideWidth + 'px',
+      background: 'var(--gva-aside-bg)',
+      color: 'var(--gva-aside-text)'
     }"
   >
     <el-scrollbar>
@@ -25,6 +27,7 @@
       </el-menu>
     </el-scrollbar>
     <div
+      v-if="config.show_collapse_btn"
       class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer"
       :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
       @click="toggleCollapse"

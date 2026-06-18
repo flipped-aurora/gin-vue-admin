@@ -1,0 +1,90 @@
+/* ============================================================
+ * 主题扩展样式：菜单风格 / 卡片盒子模式 / 全局圆角
+ * 由 <html> 上的 gva-menu--* 与 gva-card--* 类驱动（见 utils/theme.js）
+ * ============================================================ */
+
+/* ---------- 顶栏 / 标签栏配色默认值（按明暗自适应，可被内联变量覆盖） ---------- */
+:root {
+  --gva-header-bg: #ffffff;
+  --gva-header-border: var(--el-border-color-light);
+  --gva-tabs-bg: #ffffff;
+}
+
+html.dark {
+  --gva-header-bg: rgb(15, 23, 42);
+  --gva-header-border: rgb(30, 41, 59);
+  --gva-tabs-bg: rgb(15, 23, 42);
+}
+
+/* ---------- 菜单风格：定义侧栏底色/字色/选中态变量 ---------- */
+/* 设计：白底 + 柔和圆角药丸选中态（浅主色底 + 主色字） */
+.gva-menu--design {
+  --gva-aside-bg: #ffffff;
+  --gva-aside-text: rgb(51, 65, 85);
+  --gva-menu-active-bg: var(--el-color-primary-light-9);
+  --gva-menu-active-text: var(--el-color-primary);
+  --el-menu-text-color: rgb(51, 65, 85);
+}
+
+/* 亮色：白底 + 主色实底选中态（白字），更经典的填充风格 */
+.gva-menu--light {
+  --gva-aside-bg: #ffffff;
+  --gva-aside-text: rgb(51, 65, 85);
+  --gva-menu-active-bg: var(--el-color-primary);
+  --gva-menu-active-text: #ffffff;
+  --el-menu-text-color: rgb(51, 65, 85);
+}
+
+.gva-menu--dark {
+  --gva-aside-bg: rgb(30, 41, 59);
+  --gva-aside-text: rgb(203, 213, 225);
+  --gva-menu-active-bg: var(--el-color-primary);
+  --gva-menu-active-text: #ffffff;
+  --el-menu-text-color: rgb(203, 213, 225);
+  --el-menu-hover-text-color: #ffffff;
+}
+
+/* 暗黑模式下 design/light 菜单跟随深色背景 */
+html.dark.gva-menu--design,
+html.dark.gva-menu--light {
+  --gva-aside-bg: rgb(15, 23, 42);
+  --gva-aside-text: rgb(203, 213, 225);
+  --el-menu-text-color: rgb(203, 213, 225);
+}
+
+/* ---------- 卡片盒子模式：作用于 ElCard / GvaCard / 各类盒子容器 / 警告条 ---------- */
+.gva-card--border {
+  .el-card,
+  .gva-card,
+  .gva-form-box,
+  .gva-search-box,
+  .gva-table-box,
+  .gva-warning-bar {
+    border: 1px solid var(--el-border-color-light) !important;
+    box-shadow: none !important;
+  }
+}
+
+.gva-card--shadow {
+  .el-card,
+  .gva-card,
+  .gva-form-box,
+  .gva-search-box,
+  .gva-table-box,
+  .gva-warning-bar {
+    border-color: transparent !important;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 6px 18px rgba(0, 0, 0, 0.06) !important;
+  }
+}
+
+/* 全局圆角：卡片与各类盒子容器统一跟随 --gva-radius */
+.el-card,
+.gva-card,
+.gva-form-box,
+.gva-search-box,
+.gva-table-box,
+.gva-warning-bar {
+  border-radius: var(--gva-radius, 0.75rem);
+}

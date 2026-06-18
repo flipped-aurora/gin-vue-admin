@@ -1,10 +1,11 @@
 <template>
-  <div class="gva-tabs">
+  <div class="gva-tabs px-6">
     <el-tabs
       v-model="activeValue"
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
-      class="bg-white text-slate-700 dark:text-slate-500 dark:bg-slate-900 pt-1"
+      class="text-slate-700 dark:text-slate-500 pt-1"
+      :style="{ background: 'var(--gva-tabs-bg)' }"
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
@@ -402,7 +403,7 @@
     ::v-deep(.el-tabs__item) {
       box-sizing: border-box;
       border: 1px solid var(--el-border-color-darker);
-      border-radius: 2px;
+      border-radius: var(--gva-radius, 2px);
       margin-right: 5px;
       margin-left: 2px;
       transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;

@@ -127,33 +127,37 @@ function addOpacityToColor(u, opacity) {
   return `rgba(${t[0]}, ${t[1]}, ${t[2]}, ${opacity})`
 }
 
-export const setBodyPrimaryColor = (primaryColor, darkMode) => {
-  let fmtColorFunc = generateAllColors
-  if (darkMode === 'light') {
-    fmtColorFunc = generateAllLightColors
-  }
-
-  document.documentElement.style.setProperty('--el-color-primary', primaryColor)
-  document.documentElement.style.setProperty(
-    '--el-color-primary-bg',
-    addOpacityToColor(primaryColor, 0.4)
-  )
+/**
+ * 把某个 Element Plus 颜色族（primary/success/warning/danger/error/info）
+ * 及其 light-1..10 / dark-1..2 阶写入 :root CSS 变量
+ * @param {string} name 颜色族名（不含 --el-color- 前缀）
+ * @param {string} color 基色 hex
+ * @param {'dark'|'light'} darkMode 当前明暗，决定阶梯生成方向
+ */
+export const setElColor = (name, color, darkMode) => {
+  const fmtColorFunc =
+    darkMode === 'light' ? generateAllLightColors : generateAllColors
+  const root = document.documentElement.style
+  root.setProperty(`--el-color-${name}`, color)
   for (let times = 1; times <= 2; times++) {
-    document.documentElement.style.setProperty(
-      `--el-color-primary-dark-${times}`,
-      fmtColorFunc(primaryColor, times / 10)
+    root.setProperty(
+      `--el-color-${name}-dark-${times}`,
+      fmtColorFunc(color, times / 10)
     )
   }
   for (let times = 1; times <= 10; times++) {
-    document.documentElement.style.setProperty(
-      `--el-color-primary-light-${times}`,
-      fmtColorFunc(primaryColor, times / 10)
+    root.setProperty(
+      `--el-color-${name}-light-${times}`,
+      fmtColorFunc(color, times / 10)
     )
   }
-  document.documentElement.style.setProperty(
-    `--el-menu-hover-bg-color`,
-    addOpacityToColor(primaryColor, 0.2)
-  )
+}
+
+export const setBodyPrimaryColor = (primaryColor, darkMode) => {
+  setElColor('primary', primaryColor, darkMode)
+  const root = document.documentElement.style
+  root.setProperty('--el-color-primary-bg', addOpacityToColor(primaryColor, 0.4))
+  root.setProperty('--el-menu-hover-bg-color', addOpacityToColor(primaryColor, 0.2))
 }
 
 const baseUrl = ref(import.meta.env.VITE_BASE_API)

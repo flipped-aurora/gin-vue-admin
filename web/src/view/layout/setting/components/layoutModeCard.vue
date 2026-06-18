@@ -1,29 +1,29 @@
 <template>
-  <div class="grid grid-cols-2 gap-6 gva-theme-font px-6">
+  <div class="grid grid-cols-2 gap-2.5 gva-theme-font">
     <div
       v-for="layout in layoutModes"
       :key="layout.value"
       class="gva-theme-layout-card"
-      :class="{
-        'ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-900 transform -translate-y-1 shadow-xl': modelValue === layout.value
-      }"
       :style="modelValue === layout.value ? {
         borderColor: primaryColor,
-        ringColor: primaryColor + '40'
+        boxShadow: `0 0 0 1px ${primaryColor}`
       } : {}"
       @click="handleLayoutChange(layout.value)"
     >
-      <div class="flex justify-center mb-5">
+      <div class="flex justify-center mb-1.5">
         <div
-          class="w-28 h-20 bg-gray-50 dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded-lg p-2 flex gap-1.5 shadow-inner"
+          class="w-full h-12 bg-gray-50 dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded-md p-1.5 flex gap-1"
           :class="layout.containerClass"
         >
           <div
             v-if="layout.showSidebar"
-            class="rounded-sm"
+            class="rounded-sm flex flex-col items-center pt-1"
             :class="[layout.sidebarClass]"
             :style="getSidebarStyle(layout)"
-          ></div>
+          >
+            <!-- 通栏侧边：Logo 置顶指示 -->
+            <div v-if="layout.topLogo" class="w-1.5 h-1.5 rounded-full bg-white/80"></div>
+          </div>
 
           <div class="flex-1 flex flex-col gap-1.5">
             <div
@@ -43,8 +43,8 @@
       </div>
 
       <div class="text-center">
-        <span class="block text-base font-semibold gva-theme-text-main mb-2" :class="{ 'text-current': modelValue === layout.value }" :style="modelValue === layout.value ? { color: primaryColor } : {}">{{ layout.label }}</span>
-        <span class="block text-sm text-gray-500 dark:text-gray-400">{{ layout.description }}</span>
+        <span class="block text-[13px] font-semibold gva-theme-text-main" :style="modelValue === layout.value ? { color: primaryColor } : {}">{{ layout.label }}</span>
+        <span class="block text-[11px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight">{{ layout.description }}</span>
       </div>
     </div>
   </div>
@@ -140,6 +140,20 @@ const layoutModes = [
     contentClass: '',
     showRightSidebar: false,
     primaryElement: 'sidebar'
+  },
+  {
+    value: 'vertical',
+    label: '通栏侧边',
+    description: '侧栏通顶，Logo 置顶',
+    containerClass: '',
+    showSidebar: true,
+    sidebarClass: 'w-1/4',
+    showHeader: true,
+    headerClass: 'h-1/4',
+    contentClass: '',
+    showRightSidebar: false,
+    primaryElement: 'sidebar',
+    topLogo: true
   }
 ]
 

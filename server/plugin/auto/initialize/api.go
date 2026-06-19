@@ -68,6 +68,19 @@ func Api(ctx context.Context) {
 		{Path: "/skills/saveGlobalConstraint", Description: "保存全局约束", ApiGroup: "skills", Method: "POST"},
 		{Path: "/skills/packageSkill", Description: "打包技能", ApiGroup: "skills", Method: "POST"},
 		{Path: "/skills/downloadOnlineSkill", Description: "下载在线技能", ApiGroup: "skills", Method: "POST"},
+
+		// cli
+		{Path: "/cli/createCli", Description: "创建CLI", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/getCliList", Description: "获取CLI列表", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/getCliDetail", Description: "获取CLI详情", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/updateCli", Description: "更新CLI", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/deleteCli", Description: "删除CLI", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/addCliApis", Description: "增加CLI关联API", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/removeCliApis", Description: "减少CLI关联API", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/previewManifest", Description: "预览CLI Manifest", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/downloadManifest", Description: "下载CLI Manifest", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/buildCli", Description: "编译并下载CLI二进制", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/downloadSkill", Description: "下载CLI的AI Skill", ApiGroup: "CLI管理", Method: "POST"},
 	}
 	utils.RegisterApis(entities...)
 }

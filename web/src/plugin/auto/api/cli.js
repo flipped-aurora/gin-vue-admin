@@ -64,6 +64,14 @@ export const previewManifest = (data) => {
   })
 }
 
+export const previewApiCommand = (data) => {
+  return service({
+    url: '/cli/previewApiCommand',
+    method: 'post',
+    data
+  })
+}
+
 export const downloadManifest = (data) => {
   return service({
     url: '/cli/downloadManifest',

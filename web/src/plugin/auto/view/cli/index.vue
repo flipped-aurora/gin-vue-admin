@@ -59,7 +59,7 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { createCli, deleteCli, getCliList, updateCli } from '@/api/system/cli'
+import { createCli, deleteCli, getCliList, updateCli } from '@/plugin/auto/api/cli'
 import CliForm from './components/cliForm.vue'
 import CliApiBinding from './components/cliApiBinding.vue'
 import CliManifestPreview from './components/cliManifestPreview.vue'

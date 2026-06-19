@@ -27,6 +27,7 @@ type ManifestCommand struct {
 	Path        string              `json:"path"`
 	ContentType string              `json:"contentType"`
 	Parameters  []ManifestParameter `json:"parameters"`
+	Response    []ManifestParameter `json:"response"`
 }
 
 type ManifestParameter struct {

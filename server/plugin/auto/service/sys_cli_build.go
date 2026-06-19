@@ -1,4 +1,4 @@
-package system
+package service
 
 import (
 	"context"
@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/request"
 )
 
 const (
@@ -55,7 +55,7 @@ func cliBinaryExt(goos string) string {
 }
 
 // BuildCliBinary 把指定 CLI 的 manifest 内嵌进 gva 源码副本，交叉编译出一个开箱即用的二进制。
-func (s *cliService) BuildCliBinary(req systemReq.BuildSysCliBinaryRequest) (string, []byte, error) {
+func (s *cliService) BuildCliBinary(req autoReq.BuildSysCliBinaryRequest) (string, []byte, error) {
 	goos, goarch, err := normalizeBuildTarget(req.GOOS, req.GOARCH)
 	if err != nil {
 		return "", nil, err
@@ -77,7 +77,7 @@ func (s *cliService) BuildCliBinary(req systemReq.BuildSysCliBinaryRequest) (str
 }
 
 // compileCliBinary 把 manifest 内嵌进 gva 源码副本并交叉编译，返回二进制文件名与内容。
-func (s *cliService) compileCliBinary(cli sysModel.SysCli, manifestBytes []byte, goos, goarch string) (string, []byte, error) {
+func (s *cliService) compileCliBinary(cli autoModel.SysCli, manifestBytes []byte, goos, goarch string) (string, []byte, error) {
 	if _, err := exec.LookPath("go"); err != nil {
 		return "", nil, fmt.Errorf("服务器未安装 Go 工具链，无法编译: %w", err)
 	}

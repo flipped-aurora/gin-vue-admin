@@ -42,10 +42,14 @@ type DeleteSysCliRequest struct {
 }
 
 type SysCliApiBindingItem struct {
-	ApiID       uint   `json:"apiId" form:"apiId"`
-	CommandName string `json:"commandName" form:"commandName"`
-	Enabled     bool   `json:"enabled" form:"enabled"`
-	Sort        int    `json:"sort" form:"sort"`
+	ApiID            uint   `json:"apiId" form:"apiId"`
+	CommandName      string `json:"commandName" form:"commandName"`
+	CommandDesc      string `json:"commandDesc" form:"commandDesc"`
+	ParamsOverride   string `json:"paramsOverride" form:"paramsOverride"`
+	ApiBrief         string `json:"apiBrief" form:"apiBrief"`
+	ResponseOverride string `json:"responseOverride" form:"responseOverride"`
+	Enabled          bool   `json:"enabled" form:"enabled"`
+	Sort             int    `json:"sort" form:"sort"`
 }
 
 type AddSysCliApisRequest struct {
@@ -59,6 +63,11 @@ type RemoveSysCliApisRequest struct {
 }
 
 type PreviewSysCliManifestRequest struct {
+	CliID uint `json:"cliId" form:"cliId"`
+}
+
+type PreviewApiCommandRequest struct {
+	ApiID uint `json:"apiId" form:"apiId"`
 	CliID uint `json:"cliId" form:"cliId"`
 }
 

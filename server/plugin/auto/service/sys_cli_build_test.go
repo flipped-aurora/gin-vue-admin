@@ -1,4 +1,4 @@
-package system
+package service
 
 import (
 	"os"
@@ -68,7 +68,7 @@ func TestBuildCliBinaryCompilesBinary(t *testing.T) {
 		t.Skip("go toolchain not available")
 	}
 	_, testFile, _, _ := runtime.Caller(0)
-	serverRoot := filepath.Join(filepath.Dir(testFile), "..", "..")
+	serverRoot := filepath.Join(filepath.Dir(testFile), "..", "..", "..")
 	absRoot := filepath.Join(serverRoot, ".gva-build-test")
 	if err := os.MkdirAll(absRoot, 0o755); err != nil {
 		t.Fatalf("mkdirall: %v", err)

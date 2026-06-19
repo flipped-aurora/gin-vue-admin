@@ -1,10 +1,14 @@
 package router
 
-import api "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
+import (
+	api "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
+	autoApi "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/api"
+)
 
 type RouterGroup struct {
 	AutoCodeRouter
 	SkillsRouter
+	CliRouter
 }
 
 var (
@@ -15,6 +19,7 @@ var (
 	autoCodeTemplateApi  = api.ApiGroupApp.SystemApiGroup.AutoCodeTemplateApi
 	skillsApi            = api.ApiGroupApp.SystemApiGroup.SkillsApi
 	aiWorkflowSessionApi = api.ApiGroupApp.SystemApiGroup.AIWorkflowSessionApi
+	cliApi               = autoApi.ApiGroupApp.CliApi
 )
 
 var RouterGroupApp = new(RouterGroup)

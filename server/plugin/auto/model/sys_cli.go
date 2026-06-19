@@ -1,4 +1,4 @@
-package system
+package model
 
 import "github.com/flipped-aurora/gin-vue-admin/server/global"
 
@@ -21,11 +21,15 @@ func (SysCli) TableName() string {
 
 type SysCliApi struct {
 	global.GVA_MODEL
-	CliID       uint   `json:"cliId" gorm:"column:cli_id;not null;uniqueIndex:idx_cli_api;comment:CLI ID"`
-	ApiID       uint   `json:"apiId" gorm:"column:api_id;not null;uniqueIndex:idx_cli_api;comment:API ID"`
-	CommandName string `json:"commandName" gorm:"column:command_name;size:128;comment:命令名覆盖"`
-	Enabled     bool   `json:"enabled" gorm:"column:enabled;not null;default:true;comment:是否启用"`
-	Sort        int    `json:"sort" gorm:"column:sort;not null;default:0;comment:排序"`
+	CliID            uint   `json:"cliId" gorm:"column:cli_id;not null;uniqueIndex:idx_cli_api;comment:CLI ID"`
+	ApiID            uint   `json:"apiId" gorm:"column:api_id;not null;uniqueIndex:idx_cli_api;comment:API ID"`
+	CommandName      string `json:"commandName" gorm:"column:command_name;size:128;comment:命令名覆盖"`
+	CommandDesc      string `json:"commandDesc" gorm:"column:command_desc;type:text;comment:命令说明覆盖"`
+	ParamsOverride   string `json:"paramsOverride" gorm:"column:params_override;type:text;comment:参数定义覆盖JSON"`
+	ApiBrief         string `json:"apiBrief" gorm:"column:api_brief;size:255;comment:API简介覆盖"`
+	ResponseOverride string `json:"responseOverride" gorm:"column:response_override;type:text;comment:返回字段定义覆盖JSON"`
+	Enabled          bool   `json:"enabled" gorm:"column:enabled;not null;default:true;comment:是否启用"`
+	Sort             int    `json:"sort" gorm:"column:sort;not null;default:0;comment:排序"`
 }
 
 func (SysCliApi) TableName() string {

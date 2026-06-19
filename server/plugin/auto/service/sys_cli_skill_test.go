@@ -1,4 +1,4 @@
-package system
+package service
 
 import (
 	"archive/zip"
@@ -7,22 +7,22 @@ import (
 	"strings"
 	"testing"
 
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
+	autoRes "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/response"
 )
 
 func TestBuildSkillRenderDataFillsDefaults(t *testing.T) {
-	cli := sysModel.SysCli{
+	cli := autoModel.SysCli{
 		Name:        "user-manager",
 		Command:     "opsctl",
 		DisplayName: "运维工具",
 		Description: "用于运维查询",
 	}
-	manifest := systemRes.SysCliManifestResponse{
+	manifest := autoRes.SysCliManifestResponse{
 		Name:    "opsctl",
 		Version: "v1",
-		Commands: []systemRes.SysCliManifestCommand{
-			{Name: "user-list", Summary: "分页获取用户列表", Method: "POST", Path: "/user/list", Examples: []string{"opsctl user-list --page 1"}, Parameters: []systemRes.SysCliManifestParameter{
+		Commands: []autoRes.SysCliManifestCommand{
+			{Name: "user-list", Summary: "分页获取用户列表", Method: "POST", Path: "/user/list", Examples: []string{"opsctl user-list --page 1"}, Parameters: []autoRes.SysCliManifestParameter{
 				{Flag: "page", Type: "integer", Required: true, Description: "页码"},
 				{Flag: "page-size", Type: "integer", Description: "每页大小"},
 			}},
@@ -67,6 +67,45 @@ func TestRenderSkillBodyContainsCommandsAndParams(t *testing.T) {
 		if !strings.Contains(body, want) {
 			t.Fatalf("renderSkillBody missing %q\n%s", want, body)
 		}
+	}
+}
+
+func TestRenderSkillBodyContainsResponseSection(t *testing.T) {
+	data := skillRenderData{
+		Command:     "opsctl",
+		DisplayName: "运维工具",
+		SkillName:   "opsctl-cli",
+		Commands: []skillCommand{
+			{
+				CommandName: "user-list",
+				Summary:     "分页获取用户列表",
+				Response: []skillResponseField{
+					{Name: "total", Description: "总数"},
+					{Name: "list", Description: "用户列表"},
+				},
+			},
+		},
+	}
+	body := renderSkillBody(data)
+	for _, want := range []string{"返回：", "total", "list", "总数"} {
+		if !strings.Contains(body, want) {
+			t.Fatalf("renderSkillBody missing %q\n%s", want, body)
+		}
+	}
+}
+
+func TestRenderSkillBodyOmitsResponseSectionWhenEmpty(t *testing.T) {
+	data := skillRenderData{
+		Command:     "opsctl",
+		DisplayName: "运维工具",
+		SkillName:   "opsctl-cli",
+		Commands: []skillCommand{
+			{CommandName: "user-list", Summary: "分页获取用户列表"},
+		},
+	}
+	body := renderSkillBody(data)
+	if strings.Contains(body, "返回：") {
+		t.Fatalf("should not render response section when empty\n%s", body)
 	}
 }
 

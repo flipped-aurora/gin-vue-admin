@@ -15,6 +15,8 @@ func Gorm(ctx context.Context) {
 		new(autoModel.SysAIWorkflowSession),
 		new(autoModel.SysAutoCodeHistory),
 		new(autoModel.SysAutoCodePackage),
+		new(autoModel.SysCli),
+		new(autoModel.SysCliApi),
 	)
 	if err != nil {
 		err = errors.Wrap(err, "register auto plugin tables failed")

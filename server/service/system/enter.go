@@ -27,5 +27,4 @@ type ServiceGroup struct {
 	SysErrorService
 	LoginLogService
 	ApiTokenService
-	CliService cliService
 }

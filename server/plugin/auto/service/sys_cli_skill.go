@@ -1,4 +1,4 @@
-package system
+package service
 
 import (
 	"archive/zip"
@@ -7,9 +7,9 @@ import (
 	"strings"
 	"text/template"
 
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/request"
+	autoRes "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/response"
 )
 
 type skillParam struct {
@@ -19,10 +19,16 @@ type skillParam struct {
 	Description string
 }
 
+type skillResponseField struct {
+	Name        string
+	Description string
+}
+
 type skillCommand struct {
 	CommandName string
 	Summary     string
 	Parameters  []skillParam
+	Response    []skillResponseField
 	Example     string
 }
 
@@ -62,7 +68,10 @@ const skillBodyTemplate = `# {{.Command}} — {{.DisplayName}} 命令行
 参数：{{if .Parameters}}
 {{range .Parameters}}- ` + "`--{{.Flag}}`" + ` ({{.Type}}{{if .Required}}, 必填{{end}}){{if .Description}} — {{.Description}}{{end}}
 {{end}}{{else}}无{{end}}
-
+{{if .Response}}
+返回：
+{{range .Response}}- ` + "`{{.Name}}`" + `{{if .Description}} — {{.Description}}{{end}}
+{{end}}{{end}}
 示例：
 
 ` + "```bash" + `
@@ -76,7 +85,7 @@ const skillBodyTemplate = `# {{.Command}} — {{.DisplayName}} 命令行
 `
 
 // buildSkillRenderData 从 CLI 实体与 manifest 派生渲染所需的数据结构。
-func buildSkillRenderData(cli sysModel.SysCli, manifest systemRes.SysCliManifestResponse) skillRenderData {
+func buildSkillRenderData(cli autoModel.SysCli, manifest autoRes.SysCliManifestResponse) skillRenderData {
 	data := skillRenderData{
 		Command:     strings.TrimSpace(cli.Command),
 		DisplayName: strings.TrimSpace(cli.DisplayName),
@@ -122,6 +131,12 @@ func buildSkillRenderData(cli sysModel.SysCli, manifest systemRes.SysCliManifest
 				Description: strings.TrimSpace(p.Description),
 			})
 		}
+		for _, r := range cmd.Response {
+			sc.Response = append(sc.Response, skillResponseField{
+				Name:        r.Name,
+				Description: strings.TrimSpace(r.Description),
+			})
+		}
 		data.Commands = append(data.Commands, sc)
 	}
 	return data
@@ -160,7 +175,7 @@ func escapeSkillDescription(desc string) string {
 
 // BuildCliSkill 生成该 CLI 的 AI 使用说明并和编译好的二进制一起打包成 zip：
 // SKILL.md + references/README.md + references/manifest.json + cli 二进制。
-func (s *cliService) BuildCliSkill(req systemReq.BuildSysCliBinaryRequest) (string, []byte, error) {
+func (s *cliService) BuildCliSkill(req autoReq.BuildSysCliBinaryRequest) (string, []byte, error) {
 	goos, goarch, err := normalizeBuildTarget(req.GOOS, req.GOARCH)
 	if err != nil {
 		return "", nil, err

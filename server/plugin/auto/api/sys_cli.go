@@ -1,4 +1,4 @@
-package system
+package api
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/request"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -20,11 +20,11 @@ type CliApi struct{}
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.CreateSysCliRequest true "CLI基础信息"
+// @Param data body autoReq.CreateSysCliRequest true "CLI基础信息"
 // @Success 200 {object} response.Response{data=object,msg=string} "创建成功"
 // @Router /cli/createCli [post]
 func (a *CliApi) CreateCli(c *gin.Context) {
-	var req systemReq.CreateSysCliRequest
+	var req autoReq.CreateSysCliRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -44,11 +44,11 @@ func (a *CliApi) CreateCli(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.SysCliSearch true "查询条件"
+// @Param data body autoReq.SysCliSearch true "查询条件"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /cli/getCliList [post]
 func (a *CliApi) GetCliList(c *gin.Context) {
-	var req systemReq.SysCliSearch
+	var req autoReq.SysCliSearch
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -68,11 +68,11 @@ func (a *CliApi) GetCliList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.FindSysCliRequest true "CLI ID"
+// @Param data body autoReq.FindSysCliRequest true "CLI ID"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /cli/getCliDetail [post]
 func (a *CliApi) GetCliDetail(c *gin.Context) {
-	var req systemReq.FindSysCliRequest
+	var req autoReq.FindSysCliRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -92,11 +92,11 @@ func (a *CliApi) GetCliDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.UpdateSysCliRequest true "CLI基础信息"
+// @Param data body autoReq.UpdateSysCliRequest true "CLI基础信息"
 // @Success 200 {object} response.Response{data=object,msg=string} "更新成功"
 // @Router /cli/updateCli [post]
 func (a *CliApi) UpdateCli(c *gin.Context) {
-	var req systemReq.UpdateSysCliRequest
+	var req autoReq.UpdateSysCliRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -116,11 +116,11 @@ func (a *CliApi) UpdateCli(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.DeleteSysCliRequest true "CLI ID"
+// @Param data body autoReq.DeleteSysCliRequest true "CLI ID"
 // @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /cli/deleteCli [post]
 func (a *CliApi) DeleteCli(c *gin.Context) {
-	var req systemReq.DeleteSysCliRequest
+	var req autoReq.DeleteSysCliRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -139,11 +139,11 @@ func (a *CliApi) DeleteCli(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.AddSysCliApisRequest true "CLI绑定API"
+// @Param data body autoReq.AddSysCliApisRequest true "CLI绑定API"
 // @Success 200 {object} response.Response{data=object,msg=string} "保存成功"
 // @Router /cli/addCliApis [post]
 func (a *CliApi) AddCliApis(c *gin.Context) {
-	var req systemReq.AddSysCliApisRequest
+	var req autoReq.AddSysCliApisRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -163,11 +163,11 @@ func (a *CliApi) AddCliApis(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.RemoveSysCliApisRequest true "CLI解绑API"
+// @Param data body autoReq.RemoveSysCliApisRequest true "CLI解绑API"
 // @Success 200 {object} response.Response{data=object,msg=string} "移除成功"
 // @Router /cli/removeCliApis [post]
 func (a *CliApi) RemoveCliApis(c *gin.Context) {
-	var req systemReq.RemoveSysCliApisRequest
+	var req autoReq.RemoveSysCliApisRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -187,11 +187,11 @@ func (a *CliApi) RemoveCliApis(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.PreviewSysCliManifestRequest true "CLI ID"
+// @Param data body autoReq.PreviewSysCliManifestRequest true "CLI ID"
 // @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /cli/previewManifest [post]
 func (a *CliApi) PreviewManifest(c *gin.Context) {
-	var req systemReq.PreviewSysCliManifestRequest
+	var req autoReq.PreviewSysCliManifestRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -205,17 +205,41 @@ func (a *CliApi) PreviewManifest(c *gin.Context) {
 	response.OkWithDetailed(res, "获取成功", c)
 }
 
+// PreviewApiCommand 预览单个 API 的命令定义（用于选中即预填）
+// @Tags Cli
+// @Summary 预览单个API命令定义
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.PreviewApiCommandRequest true "API ID 与 CLI ID"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
+// @Router /cli/previewApiCommand [post]
+func (a *CliApi) PreviewApiCommand(c *gin.Context) {
+	var req autoReq.PreviewApiCommandRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.PreviewApiCommand(req)
+	if err != nil {
+		global.GVA_LOG.Error("预览API命令定义失败!", zap.Error(err))
+		response.FailWithMessage("预览API命令定义失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "获取成功", c)
+}
+
 // DownloadManifest 下载CLI Manifest
 // @Tags Cli
 // @Summary 下载CLI Manifest
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Param data body systemReq.PreviewSysCliManifestRequest true "CLI ID"
+// @Param data body autoReq.PreviewSysCliManifestRequest true "CLI ID"
 // @Success 200 {file} file "manifest json"
 // @Router /cli/downloadManifest [post]
 func (a *CliApi) DownloadManifest(c *gin.Context) {
-	var req systemReq.PreviewSysCliManifestRequest
+	var req autoReq.PreviewSysCliManifestRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -237,11 +261,11 @@ func (a *CliApi) DownloadManifest(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/octet-stream
-// @Param data body systemReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
+// @Param data body autoReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
 // @Success 200 {file} file "cli binary"
 // @Router /cli/buildCli [post]
 func (a *CliApi) BuildCliBinary(c *gin.Context) {
-	var req systemReq.BuildSysCliBinaryRequest
+	var req autoReq.BuildSysCliBinaryRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -263,11 +287,11 @@ func (a *CliApi) BuildCliBinary(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/zip
-// @Param data body systemReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
+// @Param data body autoReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
 // @Success 200 {file} file "skill zip"
 // @Router /cli/downloadSkill [post]
 func (a *CliApi) DownloadCliSkill(c *gin.Context) {
-	var req systemReq.BuildSysCliBinaryRequest
+	var req autoReq.BuildSysCliBinaryRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -289,7 +313,7 @@ func (a *CliApi) FindCli(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.GetCliDetail(systemReq.FindSysCliRequest{ID: uint(req.ID)})
+	res, err := cliService.GetCliDetail(autoReq.FindSysCliRequest{ID: uint(req.ID)})
 	if err != nil {
 		global.GVA_LOG.Error("获取CLI详情失败!", zap.Error(err))
 		response.FailWithMessage("获取CLI详情失败: "+err.Error(), c)

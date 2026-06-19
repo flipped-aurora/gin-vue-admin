@@ -108,6 +108,14 @@ func Menu(ctx context.Context) {
 			Meta:      model.Meta{Title: "技能管理", Icon: "edit-pen"},
 		},
 		{
+			ParentId:  0,
+			Path:      "cli",
+			Name:      "Cli",
+			Component: "plugin/auto/view/cli/index.vue",
+			Sort:      9,
+			Meta:      model.Meta{Title: "AI CLI管理", Icon: "cpu", KeepAlive: true},
+		},
+		{
 			Path:      "picture",
 			Name:      "picture",
 			Hidden:    false,

@@ -1,4 +1,4 @@
-package system
+package router
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
@@ -21,6 +21,7 @@ func (s *CliRouter) InitCliRouter(Router *gin.RouterGroup, RouterPub *gin.Router
 		cliRouterWithoutRecord.POST("getCliList", cliApi.GetCliList)
 		cliRouterWithoutRecord.POST("getCliDetail", cliApi.GetCliDetail)
 		cliRouterWithoutRecord.POST("previewManifest", cliApi.PreviewManifest)
+		cliRouterWithoutRecord.POST("previewApiCommand", cliApi.PreviewApiCommand)
 		cliRouterWithoutRecord.POST("downloadManifest", cliApi.DownloadManifest)
 		cliRouterWithoutRecord.POST("buildCli", cliApi.BuildCliBinary)
 		cliRouterWithoutRecord.POST("downloadSkill", cliApi.DownloadCliSkill)

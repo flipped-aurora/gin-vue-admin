@@ -20,6 +20,9 @@
           <SettingItem label="显示面包屑">
             <el-switch v-model="config.show_breadcrumb" />
           </SettingItem>
+          <SettingItem label="显示面包屑图标">
+            <el-switch v-model="config.show_breadcrumb_icon" :disabled="!config.show_breadcrumb" />
+          </SettingItem>
           <SettingItem label="显示刷新按钮">
             <el-switch v-model="config.show_refresh" />
           </SettingItem>

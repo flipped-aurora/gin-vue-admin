@@ -37,7 +37,12 @@
           v-for="item in matched.slice(1, matched.length)"
           :key="item.path"
         >
-          {{ fmtTitle(item.meta.title, route) }}
+          <span class="inline-flex items-center gap-1 font-bold">
+            <el-icon v-if="config.show_breadcrumb_icon && item.meta.icon">
+              <component :is="item.meta.icon" />
+            </el-icon>
+            {{ fmtTitle(item.meta.title, route) }}
+          </span>
         </el-breadcrumb-item>
       </el-breadcrumb>
       <gva-aside

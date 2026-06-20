@@ -24,6 +24,7 @@
     "radius": 0.75,
     "card_mode": "shadow",
     "show_breadcrumb": true,
+    "show_breadcrumb_icon": true,
     "show_refresh": true,
     "show_search": true,
     "show_collapse_btn": true,

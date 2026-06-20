@@ -54,6 +54,7 @@ export const PRESET_KEYS = [
   'card_mode',
   // 顶栏可见性 + 配色
   'show_breadcrumb',
+  'show_breadcrumb_icon',
   'show_refresh',
   'show_search',
   'show_collapse_btn',
@@ -88,6 +89,7 @@ export const BASE_CONFIG = {
   radius: 0.75,
   card_mode: 'border',
   show_breadcrumb: true,
+  show_breadcrumb_icon: true,
   show_refresh: true,
   show_search: true,
   show_collapse_btn: true,

@@ -1,10 +1,10 @@
 <template>
-  <div class="gva-tabs px-6">
+  <div class="gva-tabs">
     <el-tabs
       v-model="activeValue"
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
-      class="text-slate-700 dark:text-slate-500 pt-1"
+      class="text-slate-700 dark:text-slate-500 pt-1 px-6"
       :style="{ background: 'var(--gva-tabs-bg)' }"
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"

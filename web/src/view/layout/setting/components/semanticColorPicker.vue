@@ -4,9 +4,10 @@
       <el-color-picker
         v-for="c in colors"
         :key="c.key"
-        v-model="config[c.key]"
+        :model-value="config[c.key]"
         :title="c.label"
         size="small"
+        @update:modelValue="(val) => appStore.toggleSemanticColor(c.key, val)"
       />
     </div>
   </SettingItem>

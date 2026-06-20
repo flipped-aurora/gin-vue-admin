@@ -235,17 +235,18 @@
     historys.value.splice(index, 1)
   }
 
+  // 右键菜单展开时点击页面其它区域关闭：使用具名处理函数，保证 add/remove 引用一致，避免监听器泄漏
+  const closeContextMenuOnBodyClick = () => {
+    contextMenuVisible.value = false
+  }
+
   watch(
     () => contextMenuVisible.value,
-    () => {
-      if (contextMenuVisible.value) {
-        document.body.addEventListener('click', () => {
-          contextMenuVisible.value = false
-        })
+    (visible) => {
+      if (visible) {
+        document.body.addEventListener('click', closeContextMenuOnBodyClick)
       } else {
-        document.body.removeEventListener('click', () => {
-          contextMenuVisible.value = false
-        })
+        document.body.removeEventListener('click', closeContextMenuOnBodyClick)
       }
     }
   )
@@ -356,6 +357,7 @@
   onUnmounted(() => {
     emitter.off('collapse')
     emitter.off('mobile')
+    document.body.removeEventListener('click', closeContextMenuOnBodyClick)
   })
 
   const middleCloseTab = (e) => {

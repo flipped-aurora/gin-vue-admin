@@ -10,15 +10,24 @@
     <template #header>
       <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <h2 class="text-xl font-semibold gva-theme-text-main gva-theme-font">系统配置</h2>
-        <el-button
-          type="primary"
-          size="small"
-          class="reset-btn"
-          :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
-          @click="resetConfig"
-        >
-          重置配置
-        </el-button>
+        <div class="flex items-center gap-2">
+          <el-button
+            type="primary"
+            size="small"
+            class="reset-btn"
+            :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
+            @click="resetConfig"
+          >
+            重置配置
+          </el-button>
+          <el-button
+            size="small"
+            circle
+            :icon="Close"
+            aria-label="关闭系统配置"
+            @click="closeDrawer"
+          />
+        </div>
       </div>
     </template>
 
@@ -60,6 +69,8 @@
   import { ref, computed, watch } from 'vue'
   import { storeToRefs } from 'pinia'
   import { ElMessage } from 'element-plus'
+  import { useDebounceFn } from '@vueuse/core'
+  import { Close } from '@element-plus/icons-vue'
   import { useAppStore } from '@/pinia'
   import { setSelfSetting } from '@/api/user'
   import AppearanceSettings from './modules/appearance/index.vue'
@@ -104,9 +115,13 @@
     appStore.resetConfig()
   }
 
-  watch(config, async () => {
-    await saveConfig();
-  }, { deep: true });
+  const closeDrawer = () => {
+    drawer.value = false
+  }
+
+  // 配置项常被滑块、调色板等高频修改，防抖后再持久化，避免每次微调都打接口并重复弹“保存成功”
+  const debouncedSaveConfig = useDebounceFn(saveConfig, 500)
+  watch(config, debouncedSaveConfig, { deep: true })
 </script>
 
 <style lang="scss">

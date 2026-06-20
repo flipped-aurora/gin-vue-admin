@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 gap-2.5 gva-theme-font">
+  <div class="grid grid-cols-2 max-[480px]:grid-cols-1 gap-2.5 gva-theme-font">
     <div
       v-for="layout in layoutModes"
       :key="layout.value"
@@ -59,7 +59,7 @@ defineOptions({
   name: 'LayoutModeCard'
 })
 
-const props = defineProps({
+defineProps({
   modelValue: {
     type: String,
     default: 'normal'
@@ -72,18 +72,21 @@ const appStore = useAppStore()
 const { config } = storeToRefs(appStore)
 
 const primaryColor = computed(() => config.value.primaryColor)
-const lighterPrimaryColor = computed(() => {
+// 预览缩略图用主色的不同透明度做层次，统一解析一次 RGB，避免重复解析
+const primaryRgb = computed(() => {
   const hex = config.value.primaryColor.replace('#', '')
-  const r = parseInt(hex.substr(0, 2), 16)
-  const g = parseInt(hex.substr(2, 2), 16)
-  const b = parseInt(hex.substr(4, 2), 16)
+  return {
+    r: parseInt(hex.substr(0, 2), 16),
+    g: parseInt(hex.substr(2, 2), 16),
+    b: parseInt(hex.substr(4, 2), 16)
+  }
+})
+const lighterPrimaryColor = computed(() => {
+  const { r, g, b } = primaryRgb.value
   return `rgba(${r}, ${g}, ${b}, 0.7)`
 })
 const lightestPrimaryColor = computed(() => {
-  const hex = config.value.primaryColor.replace('#', '')
-  const r = parseInt(hex.substr(0, 2), 16)
-  const g = parseInt(hex.substr(2, 2), 16)
-  const b = parseInt(hex.substr(4, 2), 16)
+  const { r, g, b } = primaryRgb.value
   return `rgba(${r}, ${g}, ${b}, 0.4)`
 })
 
@@ -98,7 +101,6 @@ const layoutModes = [
     showHeader: true,
     headerClass: 'h-1/4',
     contentClass: '',
-    showRightSidebar: false,
     primaryElement: 'sidebar'
   },
   {
@@ -110,7 +112,6 @@ const layoutModes = [
     showHeader: true,
     headerClass: 'h-1/3',
     contentClass: '',
-    showRightSidebar: false,
     primaryElement: 'header'
   },
   {
@@ -123,8 +124,6 @@ const layoutModes = [
     showHeader: true,
     headerClass: 'h-1/4',
     contentClass: '',
-    showRightSidebar: true,
-    rightSidebarClass: 'w-1/5',
     primaryElement: 'header',
     secondaryElement: 'sidebar'
   },
@@ -138,7 +137,6 @@ const layoutModes = [
     showHeader: true,
     headerClass: 'h-1/4',
     contentClass: '',
-    showRightSidebar: false,
     primaryElement: 'sidebar'
   },
   {
@@ -151,7 +149,6 @@ const layoutModes = [
     showHeader: true,
     headerClass: 'h-1/4',
     contentClass: '',
-    showRightSidebar: false,
     primaryElement: 'sidebar',
     topLogo: true
   }
@@ -185,35 +182,3 @@ const handleLayoutChange = (layout) => {
   emit('update:modelValue', layout)
 }
 </script>
-
-<style scoped>
-.flex-col {
-  flex-direction: column;
-}
-
-.w-1\/4 {
-  width: 25%;
-}
-
-.w-1\/3 {
-  width: 33.333333%;
-}
-
-.w-1\/5 {
-  width: 20%;
-}
-
-.h-1\/4 {
-  height: 25%;
-}
-
-.h-1\/3 {
-  height: 33.333333%;
-}
-
-@media (max-width: 480px) {
-  .grid-cols-2 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-}
-</style>

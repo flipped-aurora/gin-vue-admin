@@ -20,13 +20,17 @@
       <span class="text-sm font-semibold gva-theme-text-main truncate">{{ preset.name }}</span>
       <el-tag v-if="preset.builtin" size="small" type="info" effect="plain">内置</el-tag>
     </div>
-    <el-icon
+    <button
       v-if="!preset.builtin"
-      class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+      type="button"
+      aria-label="删除预设"
+      class="absolute top-2 right-2 p-0 m-0 bg-transparent border-0 cursor-pointer leading-none text-gray-400 hover:text-red-500 [font:inherit]"
       @click.stop="$emit('remove')"
     >
-      <Delete />
-    </el-icon>
+      <el-icon>
+        <Delete />
+      </el-icon>
+    </button>
   </div>
 </template>
 

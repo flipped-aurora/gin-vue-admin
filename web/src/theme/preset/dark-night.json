@@ -1,0 +1,18 @@
+{
+  "order": 3,
+  "version": 2,
+  "name": "暗夜深色",
+  "builtin": true,
+  "config": {
+    "primaryColor": "#5D87FF",
+    "successColor": "#60C041",
+    "warningColor": "#F9901F",
+    "dangerColor": "#F56C6C",
+    "infoColor": "#909399",
+    "darkMode": "dark",
+    "menu_theme": "dark",
+    "radius": 0.5,
+    "card_mode": "shadow"
+  },
+  "ElConf": {}
+}

@@ -77,7 +77,7 @@
           </el-upload>
         </div>
         <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">
-          导出整包含主题与界面设置，可跨账号迁移；兼容导入旧版配置文件。
+          导出当前完整配置（主题 / 布局 / 顶栏 / 界面 / 组件库），可跨账号迁移；兼容导入旧版配置文件。
         </p>
       </div>
     </div>
@@ -97,7 +97,7 @@ import {
   removeCustomPreset,
   serializePreset,
   parsePreset
-} from '@/utils/themePreset'
+} from '@/theme'
 
 defineOptions({
   name: 'PresetSettings'

@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, watchEffect, reactive, computed } from 'vue'
 import { applyTheme } from '@/utils/theme'
-import { buildPresetFromConfig } from '@/utils/themePreset'
+import {
+  buildPresetFromConfig,
+  resolveElConfig,
+  PRESET_KEYS,
+  BASE_CONFIG
+} from '@/theme'
 import { useDark, usePreferredDark } from '@vueuse/core'
 
 export const useAppStore = defineStore('app', () => {
@@ -10,41 +15,13 @@ export const useAppStore = defineStore('app', () => {
   const operateMinWith = ref('240')
   // 侧栏折叠态（运行时态，不持久化），供 vertical 布局的固定侧栏与外壳共享
   const sideCollapse = ref(false)
-  const config = reactive({
-    weakness: false,
-    grey: false,
-    primaryColor: '#5D87FF',
-    // Element Plus 语义色
-    successColor: '#60C041',
-    warningColor: '#F9901F',
-    dangerColor: '#F56C6C',
-    infoColor: '#909399',
-    showTabs: true,
-    darkMode: 'auto',
-    layout_side_width: 256,
-    layout_side_collapsed_width: 80,
-    layout_side_item_height: 48,
-    show_watermark: true,
-    side_mode: 'normal',
-    // 页面过渡动画配置
-    transition_type: 'slide',
-    global_size: 'default',
-    // 菜单风格 'design' | 'light' | 'dark'
-    menu_theme: 'design',
-    // 全局圆角（rem）
-    radius: 0.75,
-    // 卡片盒子模式 'border' | 'shadow'
-    card_mode: 'border',
-    // 顶栏按钮可见性
-    show_breadcrumb: true,
-    show_refresh: true,
-    show_search: true,
-    show_collapse_btn: true,
-    // 顶栏 / 标签栏配色（空字符串 = 跟随主题默认，支持明暗自适应）
-    header_bg: '',
-    header_border: '',
-    tabs_bg: ''
-  })
+  // 系统配置（gva-theme）：初始值来自 BASE_CONFIG（出厂默认），字段说明见 @/theme
+  const config = reactive({ ...BASE_CONFIG })
+
+  // <el-config-provider> 的显式覆盖（ElConf），仅存「被显式声明」的字段；空 = 全部派生 / 回落默认。
+  // 最终注入用 elConfig 计算（ElConf 显式值 > 由 config 派生 > BASE_ELCONF），见 @/theme resolveElConfig。
+  const elConf = reactive({})
+  const elConfig = computed(() => resolveElConfig(config, elConf))
 
   const isDark = useDark({
     selector: 'html',
@@ -155,52 +132,28 @@ export const useAppStore = defineStore('app', () => {
     if (key in config) config[key] = e
   }
 
-  // 应用一个主题预设
+  // 应用一个主题预设：整包补齐式覆盖——遍历全部系统配置键 PRESET_KEYS，
+  // 预设未声明的键回落 BASE_CONFIG（如顶栏配色被清空），保证切换干净、不残留；
+  // ElConf 整包替换（未提供则清空 = 全部派生 / 回落默认）。
   const applyPreset = (preset) => {
-    if (preset?.config) {
-      Object.keys(preset.config).forEach((key) => {
-        if (key in config) config[key] = preset.config[key]
-      })
-    }
+    if (!preset?.config) return
+    PRESET_KEYS.forEach((key) => {
+      config[key] =
+        preset.config[key] === undefined ? BASE_CONFIG[key] : preset.config[key]
+    })
+    Object.keys(elConf).forEach((k) => delete elConf[k])
+    Object.assign(elConf, preset.ElConf || {})
   }
 
-  // 以当前配置导出为预设对象
-  const exportPreset = (name = 'current') => buildPresetFromConfig(config, name)
-
-  const baseCoinfg = {
-    weakness: false,
-    grey: false,
-    primaryColor: '#5D87FF',
-    successColor: '#60C041',
-    warningColor: '#F9901F',
-    dangerColor: '#F56C6C',
-    infoColor: '#909399',
-    showTabs: true,
-    darkMode: 'auto',
-    layout_side_width: 256,
-    layout_side_collapsed_width: 80,
-    layout_side_item_height: 48,
-    show_watermark: true,
-    side_mode: 'normal',
-    // 页面过渡动画配置
-    transition_type: 'slide',
-    global_size: 'default',
-    menu_theme: 'design',
-    radius: 0.75,
-    card_mode: 'border',
-    show_breadcrumb: true,
-    show_refresh: true,
-    show_search: true,
-    show_collapse_btn: true,
-    header_bg: '',
-    header_border: '',
-    tabs_bg: ''
-  }
+  // 以当前配置导出为预设对象（整包：全部系统配置 + ElConf 覆盖）
+  const exportPreset = (name = 'current') =>
+    buildPresetFromConfig(config, name, elConf)
 
   const resetConfig = () => {
-    for (let baseCoinfgKey in baseCoinfg) {
-      config[baseCoinfgKey] = baseCoinfg[baseCoinfgKey]
+    for (let key in BASE_CONFIG) {
+      config[key] = BASE_CONFIG[key]
     }
+    Object.keys(elConf).forEach((k) => delete elConf[k])
   }
 
   // 监听色弱模式和灰色模式
@@ -242,6 +195,7 @@ export const useAppStore = defineStore('app', () => {
     toggleRadius,
     toggleCardMode,
     toggleSemanticColor,
+    elConfig,
     applyPreset,
     exportPreset
   }

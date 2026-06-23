@@ -52,6 +52,46 @@ html.dark.gva-menu--light {
   --el-menu-text-color: rgb(203, 213, 225);
 }
 
+/* ---------- design 菜单风格的结构样式：SoybeanAdmin 式「全宽直角 + 左侧主色竖条」 ----------
+ * 仅作用于 design 风格的纵向侧栏菜单：
+ * - 取消圆角、取消行间距，菜单项左右占满（侧栏 px 内边距由各布局模板按风格关闭）
+ * - 选中背景取主色 light-7（较实，见 .gva-menu--design 的 --gva-menu-active-bg），
+ *   hover 背景取更浅的 light-9，二者拉开层级避免同色无法区分
+ * - 选中项左侧叠加主色竖条 + 主色文字（--el-color-primary，即「深色」）
+ * 两个颜色都跟随主题色色阶自动变化（light/dark 阶由 utils/format.js setElColor 按明暗生成，
+ * 故暗色模式下 light-9 会变为深色阶，整体观感自动适配）。
+ * 注意：--el-menu-hover-bg-color 被 setBodyPrimaryColor 写成了 <html> 的内联变量，
+ *       必须在更内层(.el-menu)上覆盖才能生效。 */
+.gva-menu--design .el-menu {
+  --el-menu-hover-bg-color: var(--el-color-primary-light-10);
+
+  li {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.gva-menu--design .el-menu--vertical {
+  .el-menu-item,
+  .el-sub-menu__title {
+    border-radius: 0;
+  }
+
+  .el-menu-item.is-active {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 5px;
+      background-color: var(--el-color-primary);
+    }
+  }
+}
+
 /* ---------- 卡片盒子模式：作用于 ElCard / GvaCard / 各类盒子容器 / 警告条 ---------- */
 .gva-card--border {
   .el-card,

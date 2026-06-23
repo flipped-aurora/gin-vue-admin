@@ -66,7 +66,8 @@
 
     <!-- 二级菜单并列显示 -->
     <div
-      class="relative h-full shadow dark:shadow-gray-700 px-2"
+      class="relative h-full shadow dark:shadow-gray-700"
+      :class="config.menu_theme === 'design' ? '' : 'px-2'"
       :style="{
         width: layoutSideWidth + 'px',
         background: 'var(--gva-aside-bg)',

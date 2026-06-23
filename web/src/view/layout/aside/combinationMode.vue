@@ -24,7 +24,7 @@
     <div
       v-if="mode === 'normal'"
       class="relative h-full shadow dark:shadow-gray-700"
-      :class="isCollapse ? '' : '  px-2'"
+      :class="isCollapse || config.menu_theme === 'design' ? '' : 'px-2'"
       :style="{
         width: layoutSideWidth + 'px',
         background: 'var(--gva-aside-bg)',

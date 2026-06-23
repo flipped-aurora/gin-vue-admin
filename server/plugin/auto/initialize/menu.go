@@ -25,22 +25,30 @@ func Menu(ctx context.Context) {
 			Hidden:    false,
 			Component: "plugin/auto/view/autoCode/index.vue",
 			Sort:      1,
-			Meta:      model.Meta{Title: "自动代码", Icon: "magic-stick"},
+			Meta:      model.Meta{Title: "代码生成器", Icon: "magic-stick"},
+		},
+		{
+			Path:      "autoCodeAdmin",
+			Name:      "AutoCodeAdmin",
+			Hidden:    true,
+			Component: "plugin/auto/view/autoCodeAdmin/index.vue",
+			Sort:      2,
+			Meta:      model.Meta{Title: "自动代码管理", Icon: "setting"},
 		},
 		{
 			Path:      "autoPkg",
 			Name:      "autoPkg",
 			Hidden:    false,
 			Component: "plugin/auto/view/autoPkg/autoPkg.vue",
-			Sort:      2,
-			Meta:      model.Meta{Title: "自动化包", Icon: "files"},
+			Sort:      3,
+			Meta:      model.Meta{Title: "模板配置", Icon: "files"},
 		},
 		{
 			Path:      "formCreate",
 			Name:      "formCreate",
 			Hidden:    false,
 			Component: "plugin/auto/view/formCreate/index.vue",
-			Sort:      3,
+			Sort:      4,
 			Meta:      model.Meta{Title: "表单生成器", Icon: "magic-stick", KeepAlive: true},
 		},
 		{
@@ -48,7 +56,7 @@ func Menu(ctx context.Context) {
 			Name:      "aiWorkflow",
 			Hidden:    false,
 			Component: "plugin/auto/view/aiWorkflow/index.vue",
-			Sort:      4,
+			Sort:      5,
 			Meta:      model.Meta{Title: "AI 工作流", Icon: "memo"},
 		},
 		{
@@ -64,7 +72,7 @@ func Menu(ctx context.Context) {
 			Name:      "exportTemplate",
 			Hidden:    false,
 			Component: "plugin/auto/view/exportTemplate/exportTemplate.vue",
-			Sort:      5,
+			Sort:      6,
 			Meta:      model.Meta{Title: "导出模板", Icon: "reading"},
 		},
 		{
@@ -72,7 +80,7 @@ func Menu(ctx context.Context) {
 			Name:      "mcpTool",
 			Hidden:    false,
 			Component: "plugin/auto/view/autoCode/mcp.vue",
-			Sort:      6,
+			Sort:      7,
 			Meta:      model.Meta{Title: "Mcp Tools模板", Icon: "monitor"},
 		},
 		{
@@ -80,7 +88,7 @@ func Menu(ctx context.Context) {
 			Name:      "mcpTest",
 			Hidden:    false,
 			Component: "plugin/auto/view/autoCode/mcpTest.vue",
-			Sort:      5,
+			Sort:      8,
 			Meta:      model.Meta{Title: "Mcp Tools管理", Icon: "connection"},
 		},
 		{
@@ -88,7 +96,7 @@ func Menu(ctx context.Context) {
 			Name:      "Skills",
 			Hidden:    false,
 			Component: "plugin/auto/view/skills/index.vue",
-			Sort:      8,
+			Sort:      9,
 			Meta:      model.Meta{Title: "Skills管理", Icon: "edit-pen"},
 		},
 		{
@@ -96,7 +104,7 @@ func Menu(ctx context.Context) {
 			Path:      "cli",
 			Name:      "Cli",
 			Component: "plugin/auto/view/cli/index.vue",
-			Sort:      9,
+			Sort:      10,
 			Meta:      model.Meta{Title: "AI CLI管理", Icon: "cpu", KeepAlive: true},
 		},
 		{
@@ -104,16 +112,8 @@ func Menu(ctx context.Context) {
 			Name:      "picture",
 			Hidden:    false,
 			Component: "plugin/auto/view/autoCode/picture.vue",
-			Sort:      10,
+			Sort:      11,
 			Meta:      model.Meta{Title: "AI页面绘制", Icon: "picture-filled"},
-		},
-		{
-			Path:      "autoCodeAdmin",
-			Name:      "AutoCodeAdmin",
-			Hidden:    true,
-			Component: "plugin/auto/view/autoCodeAdmin/index.vue",
-			Sort:      9,
-			Meta:      model.Meta{Title: "自动代码管理", Icon: "setting"},
 		},
 	}
 	utils.RegisterMenus(entities...)

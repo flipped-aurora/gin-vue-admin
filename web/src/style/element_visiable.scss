@@ -4,7 +4,7 @@
 
 .el-button {
   font-weight: 400;
-  border-radius: 2px;
+  border-radius: var(--gva-radius, 2px);
 }
 
 .gva-pagination {
@@ -16,7 +16,8 @@
   }
 
   .is-active {
-    @apply rounded text-white;
+    @apply text-white;
+    border-radius: var(--gva-radius, 2px);
     background: var(--el-color-primary);
     color: #ffffff !important;
   }
@@ -78,11 +79,13 @@
   @apply mt-8;
   .btn-prev,
   .btn-next {
-    @apply border border-solid border-gray-300 dark:border-gray-700 rounded;
+    @apply border border-solid border-gray-300 dark:border-gray-700;
+    border-radius: var(--gva-radius, 2px);
   }
   .el-pager {
     li {
-      @apply border border-solid border-gray-300 dark:border-gray-600 rounded text-gray-600 text-sm mx-1;
+      @apply border border-solid border-gray-300 dark:border-gray-600 text-gray-600 text-sm mx-1;
+      border-radius: var(--gva-radius, 2px);
     }
   }
 }
@@ -94,10 +97,10 @@
 }
 .el-menu--vertical {
   .el-menu-item {
-    border-radius: 2px;
+    border-radius: var(--gva-radius, 2px);
     &.is-active {
-      background-color: var(--el-color-primary) !important;
-      color: #fff !important;
+      background-color: var(--gva-menu-active-bg, var(--el-color-primary)) !important;
+      color: var(--gva-menu-active-text, #fff) !important;
     }
   }
 }

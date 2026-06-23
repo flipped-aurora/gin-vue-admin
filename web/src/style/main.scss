@@ -10,9 +10,10 @@
 }
 
 .gva-table-box {
-  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 my-2;
   .el-table {
-    @apply border-x border-t border-b-0 rounded border-table-border border-solid -mx-[1px];
+    @apply border-x border-t border-b-0 border-table-border border-solid -mx-[1px];
+    border-radius: var(--gva-radius, 0.75rem);
   }
 }
 
@@ -40,11 +41,11 @@
 }
 
 .gva-search-box {
-  @apply p-4 pb-0 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply p-4 pb-0 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 my-2;
 }
 
 .gva-form-box {
-  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 my-2;
 }
 
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {

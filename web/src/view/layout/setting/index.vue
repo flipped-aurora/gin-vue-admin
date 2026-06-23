@@ -10,30 +10,39 @@
     <template #header>
       <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <h2 class="text-xl font-semibold gva-theme-text-main gva-theme-font">系统配置</h2>
-        <el-button
-          type="primary"
-          size="small"
-          class="reset-btn"
-          :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
-          @click="resetConfig"
-        >
-          重置配置
-        </el-button>
+        <div class="flex items-center gap-2">
+          <el-button
+            type="primary"
+            size="small"
+            class="reset-btn"
+            :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
+            @click="resetConfig"
+          >
+            重置配置
+          </el-button>
+          <el-button
+            size="small"
+            circle
+            :icon="Close"
+            aria-label="关闭系统配置"
+            @click="closeDrawer"
+          />
+        </div>
       </div>
     </template>
 
-    <div class="bg-white dark:bg-gray-900 px-6">
-      <div class="px-8 pt-4 pb-6">
+    <div class="bg-white dark:bg-gray-900 px-5">
+      <div class="pt-3 pb-4">
         <div class="flex justify-center">
-          <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1.5 border border-gray-200 dark:border-gray-700 shadow-sm">
+          <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 gap-0.5">
             <div
               v-for="tab in tabs"
               :key="tab.key"
-              class="px-4 py-2 text-base text-center cursor-pointer font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
+              class="px-4 py-1.5 text-[13px] text-center cursor-pointer font-medium rounded-md transition-colors duration-150 ease-in-out min-w-[60px]"
               :class="[
                 activeTab === tab.key
-                  ? 'text-white shadow-md transform -translate-y-0.5'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ? 'text-white shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               ]"
               :style="activeTab === tab.key ? { backgroundColor: config.primaryColor } : {}"
               @click="activeTab = tab.key"
@@ -48,6 +57,7 @@
         <div class="transition-all duration-300 ease-in-out">
           <AppearanceSettings v-if="activeTab === 'appearance'" />
           <LayoutSettings v-else-if="activeTab === 'layout'" />
+          <PresetSettings v-else-if="activeTab === 'presets'" />
           <GeneralSettings v-else-if="activeTab === 'general'" />
         </div>
       </div>
@@ -59,10 +69,13 @@
   import { ref, computed, watch } from 'vue'
   import { storeToRefs } from 'pinia'
   import { ElMessage } from 'element-plus'
+  import { useDebounceFn } from '@vueuse/core'
+  import { Close } from '@element-plus/icons-vue'
   import { useAppStore } from '@/pinia'
   import { setSelfSetting } from '@/api/user'
   import AppearanceSettings from './modules/appearance/index.vue'
   import LayoutSettings from './modules/layout/index.vue'
+  import PresetSettings from './modules/presets/index.vue'
   import GeneralSettings from './modules/general/index.vue'
 
   defineOptions({
@@ -77,11 +90,12 @@
   const tabs = [
     { key: 'appearance', label: '外观' },
     { key: 'layout', label: '布局' },
+    { key: 'presets', label: '预设' },
     { key: 'general', label: '通用' }
   ]
 
   const width = computed(() => {
-    return device.value === 'mobile' ? '100%' : '500px'
+    return device.value === 'mobile' ? '100%' : '440px'
   })
 
   const drawer = defineModel('drawer', {
@@ -101,9 +115,13 @@
     appStore.resetConfig()
   }
 
-  watch(config, async () => {
-    await saveConfig();
-  }, { deep: true });
+  const closeDrawer = () => {
+    drawer.value = false
+  }
+
+  // 配置项常被滑块、调色板等高频修改，防抖后再持久化，避免每次微调都打接口并重复弹“保存成功”
+  const debouncedSaveConfig = useDebounceFn(saveConfig, 500)
+  watch(config, debouncedSaveConfig, { deep: true })
 </script>
 
 <style lang="scss">
@@ -126,23 +144,23 @@
 }
 
 .gva-theme-card-bg {
-  @apply bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm;
+  @apply bg-gray-50/70 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/60 rounded-lg px-3.5 py-0.5;
 }
 
 .gva-theme-card-white {
-  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5;
+  @apply bg-white dark:bg-gray-700/60 border border-gray-100 dark:border-gray-600/60 rounded-lg px-3 py-2.5 transition-colors duration-150;
 }
 
 .gva-theme-section-header {
-  @apply flex items-center justify-center mb-6;
+  @apply flex items-center mb-2 mt-0.5;
 }
 
 .gva-theme-section-title {
-  @apply px-6 text-lg font-semibold text-gray-700 dark:text-gray-300;
+  @apply text-xs font-semibold tracking-wide text-gray-400 dark:text-gray-500;
 }
 
 .gva-theme-divider {
-  @apply h-px bg-gray-200 dark:bg-gray-700 flex-1;
+  @apply hidden;
 }
 
 .gva-theme-text-main {
@@ -158,11 +176,11 @@
 }
 
 .gva-theme-setting-item {
-  @apply flex items-center justify-between py-4 gva-theme-font border-b border-gray-100 dark:border-gray-700 last:border-b-0;
+  @apply flex items-center justify-between py-2.5 gva-theme-font border-0 border-b border-solid border-gray-100/80 dark:border-gray-700/50 last:border-b-0;
 }
 
 .gva-theme-setting-label {
-  @apply text-sm font-medium gva-theme-text-main;
+  @apply text-[13px] font-medium gva-theme-text-main;
 }
 
 .gva-theme-mode-selector {
@@ -174,7 +192,7 @@
 }
 
 .gva-theme-layout-card {
-  @apply bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl p-3 cursor-pointer transition-all duration-150 ease-in-out hover:-translate-y-1 hover:shadow-xl;
+  @apply bg-white dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-2 cursor-pointer transition-colors duration-150 ease-in-out hover:border-gray-300 dark:hover:border-gray-500;
 }
 
 @keyframes fadeInUp {

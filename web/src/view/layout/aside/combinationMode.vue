@@ -23,10 +23,12 @@
     </div>
     <div
       v-if="mode === 'normal'"
-      class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700"
+      class="relative h-full shadow dark:shadow-gray-700"
       :class="isCollapse ? '' : '  px-2'"
       :style="{
-        width: layoutSideWidth + 'px'
+        width: layoutSideWidth + 'px',
+        background: 'var(--gva-aside-bg)',
+        color: 'var(--gva-aside-text)'
       }"
     >
       <el-scrollbar>

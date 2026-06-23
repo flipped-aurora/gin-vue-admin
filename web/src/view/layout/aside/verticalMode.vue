@@ -1,19 +1,36 @@
 <template>
+  <!-- 通栏侧边：固定全高，Logo 置顶。
+       z-index 低于 header(z-10)，避免盖住 header 内渲染的 drawer/弹层遮罩 -->
   <div
-    class="relative h-full shadow dark:shadow-gray-700"
-    :class="isCollapse ? '' : '  px-2'"
+    class="fixed top-0 left-0 h-screen z-[9] flex flex-col shadow dark:shadow-gray-700"
     :style="{
-      width: layoutSideWidth + 'px',
+      width: sideWidth + 'px',
       background: 'var(--gva-aside-bg)',
       color: 'var(--gva-aside-text)'
     }"
   >
-    <el-scrollbar>
+    <!-- Logo -->
+    <div
+      class="h-16 flex items-center justify-center gap-2 cursor-pointer flex-shrink-0 overflow-hidden px-2"
+      @click="router.push({ path: '/' })"
+    >
+      <Logo />
+      <span
+        v-if="!sideCollapse"
+        class="font-bold text-xl whitespace-nowrap"
+      >
+        {{ $GIN_VUE_ADMIN.appName }}
+      </span>
+    </div>
+
+    <!-- 菜单 -->
+    <el-scrollbar class="flex-1">
       <el-menu
-        :collapse="isCollapse"
+        :collapse="sideCollapse"
         :collapse-transition="false"
         :default-active="active"
         class="!border-r-0 w-full"
+        :class="sideCollapse ? '' : 'px-2'"
         unique-opened
         @select="selectMenuItem"
       >
@@ -26,13 +43,14 @@
         </template>
       </el-menu>
     </el-scrollbar>
+
+    <!-- 折叠按钮 -->
     <div
       v-if="config.show_collapse_btn"
-      class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer"
-      :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
-      @click="toggleCollapse"
+      class="h-10 flex items-center justify-center cursor-pointer flex-shrink-0 border-0 border-t border-solid border-gray-100 dark:border-slate-800"
+      @click="appStore.toggleSideCollapse()"
     >
-      <el-icon v-if="!isCollapse">
+      <el-icon v-if="!sideCollapse">
         <DArrowLeft />
       </el-icon>
       <el-icon v-else>
@@ -44,29 +62,25 @@
 
 <script setup>
   import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
-  import { ref, provide, watchEffect, computed } from 'vue'
+  import Logo from '@/components/logo/index.vue'
+  import { ref, provide, watchEffect } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
   import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
+  import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
 
   defineOptions({
-    name: 'GvaAside'
+    name: 'VerticalMode'
   })
+
+  const appStore = useAppStore()
+  const { config, sideCollapse, sideWidth } = storeToRefs(appStore)
   const route = useRoute()
   const router = useRouter()
   const routerStore = useRouterStore()
-  const isCollapse = ref(false)
   const active = ref('')
-  const layoutSideWidth = computed(() => {
-    if (!isCollapse.value) {
-      return config.value.layout_side_width
-    } else {
-      return config.value.layout_side_collapsed_width
-    }
-  })
+
   watchEffect(() => {
     if (route.name === 'gvaLayoutIframe') {
       active.value = decodeURIComponent(route.query.url)
@@ -75,15 +89,8 @@
     active.value = route.meta.activeName || route.name
   })
 
-  watchEffect(() => {
-    if (device.value === 'mobile') {
-      isCollapse.value = true
-    } else {
-      isCollapse.value = false
-    }
-  })
-
-  provide('isCollapse', isCollapse)
+  // 供 asideComponent / menuItem 注入折叠态
+  provide('isCollapse', sideCollapse)
 
   const selectMenuItem = (index) => {
     const query = {}
@@ -98,16 +105,10 @@
       })
     if (index === route.name) return
     if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-        window.open(index, '_blank')
-        return
+      window.open(index, '_blank')
+      return
     } else {
       router.push({ name: index, query, params })
     }
   }
-
-  const toggleCollapse = () => {
-    isCollapse.value = !isCollapse.value
-  }
 </script>
-
-<style lang="scss"></style>

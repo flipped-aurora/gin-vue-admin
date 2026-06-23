@@ -20,60 +20,51 @@
       </el-dropdown>
     </el-tooltip>
 
-    <el-tooltip class="" effect="dark" content="搜索" placement="bottom">
-        <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
-        <el-icon
-            @click="handleCommand"
-        >
-        <Search />
-      </el-icon>
-        </span>
-
-    </el-tooltip>
-
-    <el-tooltip class="" effect="dark" content="系统设置" placement="bottom">
-        <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
-         <el-icon
-             @click="toggleSetting"
-         >
-        <Setting />
-      </el-icon>
-        </span>
-
-    </el-tooltip>
-
-    <el-tooltip class="" effect="dark" content="刷新" placement="bottom">
-      <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
-      <el-icon
-          :class="showRefreshAnmite ? 'animate-spin' : ''"
-          @click="toggleRefresh"
+    <el-tooltip v-if="appStore.config.show_search" effect="dark" content="搜索" placement="bottom">
+      <span
+        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        @click="handleCommand"
       >
-        <Refresh />
-      </el-icon>
+        <el-icon>
+          <Search />
+        </el-icon>
       </span>
-
     </el-tooltip>
-    <el-tooltip
-      class=""
-      effect="dark"
-      content="切换主题"
-      placement="bottom"
-    >
-      <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
-        <el-icon
-            v-if="appStore.isDark"
-            @click="appStore.toggleTheme(false)"
-        >
-        <Sunny />
-      </el-icon>
-      <el-icon
-          v-else
-          @click="appStore.toggleTheme(true)"
-      >
-        <Moon />
-      </el-icon>
-      </span>
 
+    <el-tooltip effect="dark" content="系统设置" placement="bottom">
+      <span
+        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        @click="toggleSetting"
+      >
+        <el-icon>
+          <Setting />
+        </el-icon>
+      </span>
+    </el-tooltip>
+
+    <el-tooltip v-if="appStore.config.show_refresh" effect="dark" content="刷新" placement="bottom">
+      <span
+        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        @click="toggleRefresh"
+      >
+        <el-icon :class="showRefreshAnmite ? 'animate-spin' : ''">
+          <Refresh />
+        </el-icon>
+      </span>
+    </el-tooltip>
+
+    <el-tooltip effect="dark" content="切换主题" placement="bottom">
+      <span
+        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        @click="appStore.toggleTheme(!appStore.isDark)"
+      >
+        <el-icon v-if="appStore.isDark">
+          <Sunny />
+        </el-icon>
+        <el-icon v-else>
+          <Moon />
+        </el-icon>
+      </span>
     </el-tooltip>
 
     <gva-setting v-model:drawer="showSettingDrawer"></gva-setting>

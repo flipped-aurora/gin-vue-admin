@@ -96,12 +96,14 @@
   }
 }
 .el-menu--vertical {
-  .el-menu-item {
+  /* 叶子菜单项与子菜单标题共用全局圆角，保证一级/二级菜单 hover、选中背景圆角一致 */
+  .el-menu-item,
+  .el-sub-menu__title {
     border-radius: var(--gva-radius, 2px);
-    &.is-active {
-      background-color: var(--gva-menu-active-bg, var(--el-color-primary)) !important;
-      color: var(--gva-menu-active-text, #fff) !important;
-    }
+  }
+  .el-menu-item.is-active {
+    background-color: var(--gva-menu-active-bg, var(--el-color-primary)) !important;
+    color: var(--gva-menu-active-text, #fff) !important;
   }
 }
 

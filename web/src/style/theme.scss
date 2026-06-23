@@ -3,16 +3,16 @@
  * 由 <html> 上的 gva-menu--* 与 gva-card--* 类驱动（见 utils/theme.js）
  * ============================================================ */
 
-/* ---------- 顶栏 / 标签栏配色默认值（按明暗自适应，可被内联变量覆盖） ---------- */
+/* ---------- 顶栏 / 标签栏配色与阴影默认值（按明暗自适应，可被内联变量覆盖） ---------- */
 :root {
   --gva-header-bg: #ffffff;
-  --gva-header-border: var(--el-border-color-light);
+  --gva-header-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
   --gva-tabs-bg: #ffffff;
 }
 
 html.dark {
   --gva-header-bg: rgb(15, 23, 42);
-  --gva-header-border: rgb(30, 41, 59);
+  --gva-header-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35);
   --gva-tabs-bg: rgb(15, 23, 42);
 }
 

@@ -52,14 +52,14 @@ export const PRESET_KEYS = [
   'menu_theme',
   'radius',
   'card_mode',
-  // 顶栏可见性 + 配色
+  // 顶栏可见性 + 配色 + 阴影
   'show_breadcrumb',
   'show_breadcrumb_icon',
   'show_refresh',
   'show_search',
   'show_collapse_btn',
   'header_bg',
-  'header_border',
+  'header_shadow',
   'tabs_bg'
 ]
 
@@ -94,7 +94,7 @@ export const BASE_CONFIG = {
   show_search: true,
   show_collapse_btn: true,
   header_bg: '',
-  header_border: '',
+  header_shadow: 'sm',
   tabs_bg: ''
 }
 

@@ -128,8 +128,31 @@ export const applyCardMode = (mode) => {
 }
 
 /**
- * 顶栏 / 标签栏配色：空值时移除内联变量，回退到 theme.scss 中按明暗定义的默认值；
- * 有值时以内联变量覆盖。暗色模式下对用户所选（浅色）颜色自动推导深色版本。
+ * 顶栏阴影尺寸档位 → box-shadow 预设值（明暗各一套）。
+ * none=无；sm/md/lg 依次增强。暗色背景需更强阴影才可见，故单独定义，
+ * 与顶栏 / 标签栏配色的「按明暗分治」保持一致。
+ */
+const HEADER_SHADOWS = {
+  light: {
+    none: 'none',
+    sm: '0 1px 0 rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)',
+    md: '0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.08)',
+    lg: '0 1px 0 rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.12)'
+  },
+  dark: {
+    none: 'none',
+    sm: '0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35)',
+    md: '0 1px 0 rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.45)',
+    lg: '0 1px 0 rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.55)'
+  }
+}
+
+/**
+ * 顶栏 / 标签栏配色 + 顶栏阴影：
+ * - 配色（header_bg / tabs_bg）：空值时移除内联变量，回退 theme.scss 默认；有值时覆盖，
+ *   暗色模式下对用户所选（浅色）颜色自动推导深色版本。
+ * - 阴影（header_shadow）：按尺寸档位取预设 box-shadow（明暗各一套）；
+ *   未知档位移除内联变量，回退 theme.scss 默认。
  */
 export const applyChrome = (config, isDark) => {
   const s = root().style
@@ -138,8 +161,10 @@ export const applyChrome = (config, isDark) => {
     else s.removeProperty(name)
   }
   setOrClear('--gva-header-bg', config.header_bg)
-  setOrClear('--gva-header-border', config.header_border)
   setOrClear('--gva-tabs-bg', config.tabs_bg)
+  const shadow = HEADER_SHADOWS[isDark ? 'dark' : 'light'][config.header_shadow]
+  if (shadow !== undefined) s.setProperty('--gva-header-shadow', shadow)
+  else s.removeProperty('--gva-header-shadow')
 }
 
 /** 一次性应用全部主题 */

@@ -4,7 +4,7 @@
     :style="{
       left: isVertical ? appStore.sideWidth + 'px' : '0px',
       background: 'var(--gva-header-bg)',
-      borderBottom: '1px solid var(--gva-header-border)'
+      boxShadow: 'var(--gva-header-shadow)'
     }"
   >
     <div class="flex items-center cursor-pointer flex-1">

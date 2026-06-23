@@ -29,7 +29,7 @@
     "show_search": true,
     "show_collapse_btn": true,
     "header_bg": "rgba(255, 255, 255, 0)",
-    "header_border": "rgba(255, 255, 255, 0)",
+    "header_shadow": "none",
     "tabs_bg": "rgba(255, 255, 255, 0)"
   },
   "ElConf": {}

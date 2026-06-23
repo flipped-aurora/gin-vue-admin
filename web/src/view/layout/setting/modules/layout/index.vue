@@ -38,8 +38,13 @@
             </template>
             <el-color-picker v-model="config.header_bg" show-alpha color-format="rgb" size="small" />
           </SettingItem>
-          <SettingItem label="顶栏边框">
-            <el-color-picker v-model="config.header_border" show-alpha color-format="rgb" size="small" />
+          <SettingItem label="顶栏阴影">
+            <el-select v-model="config.header_shadow" class="w-36" size="small">
+              <el-option value="none" label="无" />
+              <el-option value="sm" label="小" />
+              <el-option value="md" label="中" />
+              <el-option value="lg" label="大" />
+            </el-select>
           </SettingItem>
           <SettingItem label="标签栏背景">
             <el-color-picker v-model="config.tabs_bg" show-alpha color-format="rgb" size="small" />

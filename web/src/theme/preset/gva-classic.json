@@ -29,7 +29,7 @@
     "show_search": true,
     "show_collapse_btn": true,
     "header_bg": "",
-    "header_border": "",
+    "header_shadow": "sm",
     "tabs_bg": ""
   },
   "ElConf": {}

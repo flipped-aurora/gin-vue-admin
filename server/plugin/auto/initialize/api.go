@@ -81,6 +81,7 @@ func Api(ctx context.Context) {
 		{Path: "/cli/downloadManifest", Description: "下载CLI Manifest", ApiGroup: "CLI管理", Method: "POST"},
 		{Path: "/cli/buildCli", Description: "编译并下载CLI二进制", ApiGroup: "CLI管理", Method: "POST"},
 		{Path: "/cli/downloadSkill", Description: "下载CLI的AI Skill", ApiGroup: "CLI管理", Method: "POST"},
+		{Path: "/cli/previewApiCommand", Description: "填充API命令", ApiGroup: "CLI管理", Method: "POST"},
 	}
 	utils.RegisterApis(entities...)
 }

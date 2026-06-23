@@ -56,7 +56,7 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="全局尺寸">
-            <el-select v-model="config.global_size" class="w-36" size="small" @change="appStore.toggleGlobalSize">
+            <el-select v-model="config.global_size" class="min-w-24" size="small" @change="appStore.toggleGlobalSize">
               <el-option label="默认" value="default" />
               <el-option label="大" value="large" />
               <el-option label="小" value="small" />

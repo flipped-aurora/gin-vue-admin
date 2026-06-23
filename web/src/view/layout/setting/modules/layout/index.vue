@@ -39,7 +39,7 @@
             <el-color-picker v-model="config.header_bg" show-alpha color-format="rgb" size="small" />
           </SettingItem>
           <SettingItem label="顶栏阴影">
-            <el-select v-model="config.header_shadow" class="w-36" size="small">
+            <el-select v-model="config.header_shadow" class="min-w-24" size="small">
               <el-option value="none" label="无" />
               <el-option value="sm" label="小" />
               <el-option value="md" label="中" />
@@ -70,7 +70,7 @@
             <el-switch v-model="config.showTabs" @change="appStore.toggleTabs" />
           </SettingItem>
           <SettingItem label="页面切换动画">
-            <el-select v-model="config.transition_type" class="w-36" size="small" @change="appStore.toggleTransition">
+            <el-select v-model="config.transition_type" class="min-w-24" size="small" @change="appStore.toggleTransition">
               <el-option value="fade" label="淡入淡出" />
               <el-option value="slide" label="滑动" />
               <el-option value="zoom" label="缩放" />

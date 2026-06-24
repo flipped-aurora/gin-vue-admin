@@ -7,7 +7,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/request"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/request"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

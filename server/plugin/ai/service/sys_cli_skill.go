@@ -8,9 +8,9 @@ import (
 	"strings"
 	"text/template"
 
-	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
-	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/request"
-	autoRes "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/response"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/request"
+	autoRes "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/response"
 )
 
 type skillParam struct {

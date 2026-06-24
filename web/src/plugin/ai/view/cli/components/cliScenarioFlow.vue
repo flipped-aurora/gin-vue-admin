@@ -125,7 +125,7 @@ import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import LogicFlow, { RectNode, RectNodeModel } from '@logicflow/core'
 import '@logicflow/core/dist/index.css'
-import { getCliDetail, updateCli, previewManifest } from '@/plugin/auto/api/cli'
+import { getCliDetail, updateCli, previewManifest } from '@/plugin/ai/api/cli'
 
 class CommandModel extends RectNodeModel {
   initNodeData(data) {

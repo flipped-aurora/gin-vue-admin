@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
-	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/request"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/request"
 )
 
 const (

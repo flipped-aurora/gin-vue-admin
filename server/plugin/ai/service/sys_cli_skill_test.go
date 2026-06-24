@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
-	autoRes "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model/response"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model"
+	autoRes "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/response"
 )
 
 func TestBuildSkillRenderDataFillsDefaults(t *testing.T) {

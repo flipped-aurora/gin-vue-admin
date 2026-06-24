@@ -77,7 +77,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { previewManifest, downloadManifest, buildCliBinary, downloadCliSkill } from '@/plugin/auto/api/cli'
+import { previewManifest, downloadManifest, buildCliBinary, downloadCliSkill } from '@/plugin/ai/api/cli'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },

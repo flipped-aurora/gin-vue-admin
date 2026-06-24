@@ -162,7 +162,7 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { addCliApis, getCliDetail, removeCliApis, previewManifest, previewApiCommand } from '@/plugin/auto/api/cli'
+import { addCliApis, getCliDetail, removeCliApis, previewManifest, previewApiCommand } from '@/plugin/ai/api/cli'
 import { getAllApis } from '@/api/api'
 
 const props = defineProps({

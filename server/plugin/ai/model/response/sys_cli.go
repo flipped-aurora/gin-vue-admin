@@ -1,7 +1,7 @@
 package response
 
 import (
-	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/auto/model"
+	autoModel "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 )
 

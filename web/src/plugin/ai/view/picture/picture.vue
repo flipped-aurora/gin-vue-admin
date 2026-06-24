@@ -108,7 +108,7 @@
       </div>
       
       <!-- 详细描述输入框 -->
-      <div class="relative">
+      <div class="relative pb-4">
         <div class="text-base font-medium mb-2 dark:text-slate-200">详细描述（可选）</div>
         <el-input
             v-model="prompt"
@@ -120,7 +120,7 @@
             @blur="handleBlur"
             @focus="handleFocus"
         />
-        <div class="flex absolute right-2 bottom-2">
+        <div class="flex absolute right-2 bottom-6">
           <el-tooltip effect="light">
             <template #content>
               <div>

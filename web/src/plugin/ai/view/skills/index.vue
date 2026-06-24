@@ -23,7 +23,7 @@
           </div>
         </el-card>
 
-        <el-card shadow="never" class="!border-none shrink-0">
+        <el-card shadow="never" class="!border-none shrink-0 mt-2">
           <div class="flex justify-between items-center mb-2">
             <span class="font-bold">全局约束</span>
             <el-button type="primary" link icon="Edit" @click="openGlobalConstraint">编辑</el-button>

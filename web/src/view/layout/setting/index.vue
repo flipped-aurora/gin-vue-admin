@@ -15,7 +15,7 @@
             type="primary"
             size="small"
             class="reset-btn"
-            :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
+            :style="{ backgroundColor: settings.themeColor, borderColor: settings.themeColor }"
             @click="resetConfig"
           >
             重置配置
@@ -44,7 +44,7 @@
                   ? 'text-white shadow-sm'
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               ]"
-              :style="activeTab === tab.key ? { backgroundColor: config.primaryColor } : {}"
+              :style="activeTab === tab.key ? { backgroundColor: settings.themeColor } : {}"
               @click="activeTab = tab.key"
             >
               {{ tab.label }}
@@ -66,13 +66,10 @@
 </template>
 
 <script setup>
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { ElMessage } from 'element-plus'
-  import { useDebounceFn } from '@vueuse/core'
   import { Close } from '@element-plus/icons-vue'
-  import { useAppStore } from '@/pinia'
-  import { setSelfSetting } from '@/api/user'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import AppearanceSettings from './modules/appearance/index.vue'
   import LayoutSettings from './modules/layout/index.vue'
   import PresetSettings from './modules/presets/index.vue'
@@ -83,7 +80,9 @@
   })
 
   const appStore = useAppStore()
-  const { config, device } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
 
   const activeTab = ref('appearance')
 
@@ -103,25 +102,15 @@
     type: Boolean
   })
 
-  const saveConfig = async () => {
-    const res = await setSelfSetting(config.value)
-    if (res.code === 0) {
-      localStorage.setItem('originSetting', JSON.stringify(config.value))
-      ElMessage.success('保存成功')
-    }
-  }
-
   const resetConfig = () => {
-    appStore.resetConfig()
+    themeStore.resetConfig()
   }
 
   const closeDrawer = () => {
     drawer.value = false
   }
 
-  // 配置项常被滑块、调色板等高频修改，防抖后再持久化，避免每次微调都打接口并重复弹“保存成功”
-  const debouncedSaveConfig = useDebounceFn(saveConfig, 500)
-  watch(config, debouncedSaveConfig, { deep: true })
+  // 主题的本地缓存与远端保存已下沉到 themeStore，抽屉只负责触发交互，无需再监听持久化
 </script>
 
 <style lang="scss">

@@ -13,7 +13,8 @@
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
+import { addOpacityToColor } from '@/theme/color'
 
 defineOptions({
   name: 'SettingItem'
@@ -26,12 +27,12 @@ defineProps({
   }
 })
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 
 const themeStyleVars = computed(() => ({
-  '--setting-primary-color': config.value.primaryColor,
-  '--setting-primary-color-opacity': config.value.primaryColor + '40'
+  '--setting-primary-color': settings.value.themeColor,
+  '--setting-primary-color-opacity': addOpacityToColor(settings.value.themeColor, 0.25)
 }))
 </script>
 

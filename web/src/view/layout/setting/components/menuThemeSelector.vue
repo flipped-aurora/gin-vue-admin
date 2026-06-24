@@ -28,7 +28,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Check } from '@element-plus/icons-vue'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 
 defineOptions({
   name: 'MenuThemeSelector'
@@ -43,9 +43,9 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
-const primaryColor = computed(() => config.value.primaryColor)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
+const primaryColor = computed(() => settings.value.themeColor)
 
 const menuThemes = [
   // 设计：浅主色药丸选中态

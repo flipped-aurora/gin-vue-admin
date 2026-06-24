@@ -2,16 +2,23 @@
   <el-drawer :model-value="modelValue" size="1240px" :show-close="false" @close="emit('update:modelValue', false)">
     <template #header>
       <div class="flex justify-between items-center w-full gap-3">
-        <span class="text-lg">管理API - {{ cli?.name }}</span>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-4">
+          <span class="text-lg">管理API - {{ cli?.name }}</span>
+          <el-radio-group v-model="step">
+            <el-radio-button :label="1">① 选择API</el-radio-button>
+            <el-radio-button :label="2">② 命令定义 · {{ selectedApiIds.length }}</el-radio-button>
+          </el-radio-group>
+        </div>
+        <div class="flex items-center">
           <el-button @click="clearSelected" :disabled="selectedApiIds.length === 0">清空已选</el-button>
           <el-button @click="emit('update:modelValue', false)">取消</el-button>
           <el-button type="primary" @click="save">保存</el-button>
         </div>
       </div>
     </template>
-    <div class="mb-3 text-xs text-gray-500">通过增加或移除 API，动态重新生成 CLI Manifest。</div>
-    <div class="cli-api-wrapper">
+    <div v-show="step === 1">
+      <div class="mb-3 text-xs text-gray-500">通过增加或移除 API，动态重新生成 CLI Manifest。</div>
+      <div class="cli-api-wrapper">
       <el-transfer v-model="selectedApiIds" class="cli-api-transfer" :data="apiOptions" filterable
         :filter-method="filterApiOption" filter-placeholder="请输入API名称/分组/路径/请求方法" :titles="['可选API', '已选API']"
         :button-texts="['移除', '选中']">
@@ -35,9 +42,14 @@
           </div>
         </template>
       </el-transfer>
+      </div>
+      <div v-if="selectedApiIds.length > 0" class="flex justify-end mt-3">
+        <el-button type="primary" plain @click="step = 2">下一步：命令定义（{{ selectedApiIds.length }}）→</el-button>
+      </div>
     </div>
 
-    <div v-if="selectedApiIds.length > 0" class="mt-6">
+    <div v-show="step === 2">
+      <div v-if="selectedApiIds.length > 0">
       <div class="text-base font-medium mb-2">命令定义（可自定义说明与参数）</div>
       <el-table :data="bindingRows" size="small" border>
         <el-table-column label="API" min-width="220">
@@ -68,6 +80,8 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
+      <el-empty v-else description="还没有选择 API，请先回到「① 选择API」选择" />
     </div>
 
     <el-dialog v-model="editor.visible" title="编辑命令定义" width="820px" append-to-body>
@@ -156,6 +170,7 @@ const props = defineProps({
   cli: { type: Object, default: () => ({}) }
 })
 const emit = defineEmits(['update:modelValue', 'refresh'])
+const step = ref(1) // 1=选择API，2=命令定义
 const apiOptions = ref([])
 const selectedApiIds = ref([])
 const originalApiIds = ref([])
@@ -269,6 +284,7 @@ const loadData = async () => {
 
 watch(() => props.modelValue, (val) => {
   if (val && (props.cli.ID || props.cli.id)) {
+    step.value = 1
     loadData()
   }
 })
@@ -393,7 +409,8 @@ const save = async () => {
 }
 
 .cli-api-wrapper :deep(.el-transfer-panel__body) {
-  height: 560px !important;
+  height: calc(100vh - 260px) !important;
+  min-height: 300px;
 }
 
 .cli-api-wrapper :deep(.el-transfer-panel__list) {

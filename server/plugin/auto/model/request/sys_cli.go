@@ -19,6 +19,7 @@ type CreateSysCliRequest struct {
 	Status           string `json:"status" form:"status"`
 	SkillName        string `json:"skillName" form:"skillName"`
 	SkillDescription string `json:"skillDescription" form:"skillDescription"`
+	ScenariosJSON    string `json:"scenariosJson" form:"scenariosJson"`
 }
 
 type UpdateSysCliRequest struct {
@@ -31,6 +32,7 @@ type UpdateSysCliRequest struct {
 	Status           string `json:"status" form:"status"`
 	SkillName        string `json:"skillName" form:"skillName"`
 	SkillDescription string `json:"skillDescription" form:"skillDescription"`
+	ScenariosJSON    string `json:"scenariosJson" form:"scenariosJson"`
 }
 
 type FindSysCliRequest struct {

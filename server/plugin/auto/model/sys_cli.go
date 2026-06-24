@@ -13,6 +13,7 @@ type SysCli struct {
 	AuthMode         string `json:"authMode" gorm:"column:auth_mode;size:32;not null;default:jwt;comment:认证方式"`
 	SkillName        string `json:"skillName" gorm:"column:skill_name;size:128;comment:AI Skill名称"`
 	SkillDescription string `json:"skillDescription" gorm:"column:skill_description;type:text;comment:AI Skill描述"`
+	ScenariosJSON    string `json:"scenariosJson" gorm:"column:scenarios_json;type:text;comment:调用场景链路JSON"`
 }
 
 func (SysCli) TableName() string {
@@ -34,4 +35,31 @@ type SysCliApi struct {
 
 func (SysCliApi) TableName() string {
 	return "sys_cli_apis"
+}
+
+// CliScenario 表示一个命名调用场景，是一张由命令/判断节点与条件边组成的图。
+type CliScenario struct {
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	Sort        int               `json:"sort"`
+	Nodes       []CliScenarioNode `json:"nodes"`
+	Edges       []CliScenarioEdge `json:"edges"`
+}
+
+// CliScenarioNode 节点：command 执行命令；decision 不执行命令，做汇聚+合并判断，靠出边带条件分支。
+type CliScenarioNode struct {
+	ID          string `json:"id"`                     // 节点 ID，边引用
+	Type        string `json:"type"`                   // "command" | "decision"
+	CommandName string `json:"commandName,omitempty"`  // command：执行的命令名
+	Alias       string `json:"alias,omitempty"`        // 节点别名，场景内唯一；供 InputNote/Condition 用 别名.字段 引用上游出参
+	InputNote   string `json:"inputNote,omitempty"`    // 入参来源，用 别名.字段 引用上游，可多源 "create.id + query.token"
+	Note        string `json:"note,omitempty"`         // command:说明；decision:合并判断描述
+}
+
+// CliScenarioEdge 边：from→to，可带条件；条件非空表示满足该条件才走这条边（分支）。
+type CliScenarioEdge struct {
+	From      string `json:"from"`
+	To        string `json:"to"`
+	Condition string `json:"condition,omitempty"` // 空表示默认流转
+	Note      string `json:"note,omitempty"`
 }

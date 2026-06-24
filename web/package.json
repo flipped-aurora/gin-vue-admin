@@ -16,6 +16,8 @@
     "@form-create/designer": "^3.2.6",
     "@form-create/element-ui": "^3.2.10",
     "@iconify/vue": "^5.0.0",
+    "@logicflow/core": "^2.2.3",
+    "@logicflow/extension": "^2.2.3",
     "@unocss/transformer-directives": "^66.4.2",
     "@vue-office/docx": "^1.6.2",
     "@vue-office/excel": "^1.7.11",

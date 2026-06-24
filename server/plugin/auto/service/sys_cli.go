@@ -34,6 +34,7 @@ func (s *cliService) CreateCli(req autoReq.CreateSysCliRequest) (autoModel.SysCl
 		AuthMode:         "jwt",
 		SkillName:        strings.TrimSpace(req.SkillName),
 		SkillDescription: strings.TrimSpace(req.SkillDescription),
+		ScenariosJSON:    req.ScenariosJSON, // JSON 原文不裁剪
 	}
 	applySysCliDefaults(&entity)
 	if err := global.GVA_DB.Create(&entity).Error; err != nil {
@@ -64,6 +65,7 @@ func (s *cliService) UpdateCli(req autoReq.UpdateSysCliRequest) (autoModel.SysCl
 	entity.Status = strings.TrimSpace(req.Status)
 	entity.SkillName = strings.TrimSpace(req.SkillName)
 	entity.SkillDescription = strings.TrimSpace(req.SkillDescription)
+	entity.ScenariosJSON = req.ScenariosJSON // JSON 原文不裁剪
 	applySysCliDefaults(&entity)
 	if err := global.GVA_DB.Save(&entity).Error; err != nil {
 		return autoModel.SysCli{}, err

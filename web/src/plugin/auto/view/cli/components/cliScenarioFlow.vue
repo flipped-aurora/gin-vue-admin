@@ -1,79 +1,127 @@
 <template>
   <el-drawer
     v-model="visible"
-    :title="`调用场景编排 - ${cli.name || cli.command || ''}`"
     direction="rtl"
     size="80%"
+    :show-close="false"
     :append-to-body="false"
     @open="onOpen"
+    @opened="onOpened"
     @closed="onClosed"
   >
-    <div class="scenario-flow">
-      <div class="scenario-bar">
-        <el-select v-model="activeIndex" placeholder="选择场景" style="width: 200px">
+    <template #header>
+      <div class="flex justify-between items-center w-full">
+        <span class="text-lg">调用场景编排 - {{ cli.name || cli.command || '' }}</span>
+        <div>
+          <el-button @click="visible = false">取 消</el-button>
+          <el-button type="primary" :loading="saving" @click="onSave">确 定</el-button>
+        </div>
+      </div>
+    </template>
+
+    <div class="flex-1 flex flex-col min-h-0">
+      <div class="scenario-bar flex items-center gap-2 flex-wrap mb-3">
+        <el-select v-model="activeIndex" placeholder="选择场景" class="!w-[200px]">
           <el-option v-for="(s, i) in scenarios" :key="i" :label="s.name || '未命名'" :value="i" />
         </el-select>
         <el-button icon="plus" @click="addScenario">新建场景</el-button>
         <el-button icon="delete" @click="removeScenario" :disabled="scenarios.length === 0">删除当前</el-button>
-        <el-input v-if="current" v-model="current.name" placeholder="场景名" style="width: 180px" />
-        <el-input v-if="current" v-model="current.description" placeholder="场景说明" style="width: 260px" />
+        <el-input v-if="current" v-model="current.name" placeholder="场景名" class="!w-[180px]" />
+        <el-input v-if="current" v-model="current.description" placeholder="场景说明" class="!w-[260px]" />
       </div>
 
-      <div class="scenario-toolbar" v-if="current">
+      <div class="scenario-toolbar flex items-center gap-2 flex-wrap mb-2" v-if="current">
         <el-button icon="plus" @click="addNode('command')">命令节点</el-button>
         <el-button icon="plus" @click="addNode('decision')">判断节点</el-button>
-        <span class="tip">拖节点锚点手动连线；点节点编辑详情；点连线编辑条件</span>
+        <el-divider direction="vertical" />
+        <el-button-group>
+          <el-button icon="full-screen" @click="fitView">适应画布</el-button>
+          <el-button icon="aim" @click="centerView">居中</el-button>
+          <el-button icon="zoom-in" @click="zoomIn" />
+          <el-button icon="zoom-out" @click="zoomOut" />
+          <el-button icon="refresh-right" @click="resetView">重置</el-button>
+        </el-button-group>
+        <el-dropdown v-if="current.nodes && current.nodes.length" trigger="click" @command="focusNode">
+          <el-button icon="position">定位节点<el-icon class="el-icon--right"><arrow-down /></el-icon></el-button>
+          <template #dropdown>
+            <el-dropdown-menu class="max-h-[320px] overflow-y-auto">
+              <el-dropdown-item v-for="n in current.nodes" :key="n.id" :command="n.id">{{ nodeLabel(n) }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <span class="text-xs text-[#909399]">拖节点锚点手动连线；点节点编辑详情；点连线编辑条件</span>
       </div>
 
-      <div ref="canvasRef" class="scenario-canvas"></div>
+      <div class="scenario-main flex gap-3 min-h-0" :style="{ height: canvasHeight + 'px' }">
+        <div ref="canvasRef" class="flex-1 min-w-0 h-full border border-solid border-[#ebeef5] bg-[#fafafa] rounded box-border overflow-hidden"></div>
 
-      <div class="scenario-detail" v-if="selectedNode">
-        <div class="detail-title">
-          <el-tag :type="selectedNode.type === 'decision' ? 'warning' : 'success'" size="small">{{ selectedNode.type }}</el-tag>
-          <span>编辑节点</span>
-          <el-button icon="delete" link type="danger" style="margin-left: auto" @click="removeSelected">删除节点</el-button>
-        </div>
-        <div class="alias-row">
-          <el-input v-model="selectedNode.alias" style="width: 360px" :class="{ 'alias-dup': isAliasDup }" placeholder="如 getUser，场景内唯一；用于 别名.字段 引用" @input="syncSelectedToLf">
-            <template #prepend>别名</template>
-          </el-input>
-          <span v-if="isAliasDup" class="alias-warn">场景内已存在</span>
-        </div>
-        <div class="alias-hint io-line muted" v-if="aliasHints.length">
-          <span class="io-label">可用别名：</span>
-          <span v-for="h in aliasHints" :key="h.alias" class="alias-chip">{{ h.alias }}({{ h.label }}): {{ h.fields }}</span>
-        </div>
-        <template v-if="selectedNode.type === 'command'">
-          <div class="detail-row">
-            <el-select v-model="selectedNode.commandName" placeholder="选择命令" style="width: 220px" @change="syncSelectedToLf">
-              <el-option v-for="c in commandOptions" :key="c" :label="c" :value="c" />
+        <div class="scenario-detail" v-if="selectedNode">
+          <div class="flex items-center gap-2 mb-2.5 font-semibold">
+            <el-tag :type="selectedNode.type === 'decision' ? 'warning' : 'success'" size="small">{{ selectedNode.type }}</el-tag>
+            <span>编辑节点</span>
+            <el-button icon="delete" link type="danger" class="ml-auto" @click="removeSelected">删除节点</el-button>
+          </div>
+          <div class="mb-2.5">
+            <el-input v-model="selectedNode.alias" class="w-full" :class="{ 'alias-dup': isAliasDup }" placeholder="如 getUser，场景内唯一；用于 别名.字段 引用" @input="syncSelectedToLf">
+              <template #prepend>别名</template>
+            </el-input>
+            <div v-if="isAliasDup" class="text-[#f56c6c] text-xs mt-1">场景内已存在</div>
+          </div>
+          <div class="mb-2.5 text-[13px] leading-[1.8] text-[#909399]" v-if="aliasHints.length">
+            <span class="text-[#606266] font-semibold">可用别名：</span>
+            <span v-for="h in aliasHints" :key="h.alias" class="inline-block mr-3">{{ h.alias }}({{ h.label }}): {{ h.fields }}</span>
+          </div>
+          <template v-if="selectedNode.type === 'command'">
+            <div class="mb-2.5">
+              <el-select v-model="selectedNode.commandName" placeholder="选择命令" class="w-full" @change="syncSelectedToLf">
+                <el-option v-for="c in commandOptions" :key="c" :label="c" :value="c" />
+              </el-select>
+            </div>
+            <div class="mb-2.5">
+              <el-input v-model="selectedNode.note" type="textarea" :rows="3" class="w-full" placeholder="说明" @input="syncSelectedToLf" />
+            </div>
+            <div class="mb-2.5">
+              <el-input v-model="selectedNode.inputNote" placeholder="入参来源(如:create.id + query.token)" class="w-full" @input="syncSelectedToLf" />
+            </div>
+            <div class="bg-[#f5f7fa] rounded px-2.5 py-2" v-if="selectedNode.commandName && commandMap[selectedNode.commandName]">
+              <div class="text-[13px] leading-[1.8]"><span class="text-[#606266] font-semibold">入参：</span>{{ formatParams(commandMap[selectedNode.commandName].parameters) }}</div>
+              <div class="text-[13px] leading-[1.8]"><span class="text-[#606266] font-semibold">出参：</span>{{ formatFields(commandMap[selectedNode.commandName].response) }}</div>
+            </div>
+            <div class="text-[13px] leading-[1.8] text-[#909399]" v-else-if="selectedNode.commandName">该命令暂无参数信息</div>
+          </template>
+          <template v-else>
+            <div class="mb-2.5">
+              <el-input v-model="selectedNode.note" type="textarea" :rows="3" class="w-full" placeholder="合并判断描述（如：基于上游 A.x、B.y、C.z 合并，判断...）" @input="syncSelectedToLf" />
+            </div>
+            <div class="text-[13px] leading-[1.8] text-[#909399]">判断节点不执行命令；出边带条件实现分支（在下方添加连线并填条件）。</div>
+          </template>
+
+          <el-divider content-position="left">出向连线</el-divider>
+          <div class="mb-2.5">
+            <el-select v-model="connectedTargetIds" multiple filterable collapse-tags collapse-tags-tooltip placeholder="选择要连线的目标节点（可多选，已连的会标记）" class="w-full" @change="onEdgeTargetsChange">
+              <el-option v-for="o in edgeTargetOptions" :key="o.id" :label="o.label" :value="o.id" />
             </el-select>
-            <el-input v-model="selectedNode.note" placeholder="说明" style="width: 220px" @input="syncSelectedToLf" />
-            <el-input v-model="selectedNode.inputNote" placeholder="入参来源(如:create.id + query.token)" style="width: 300px" @input="syncSelectedToLf" />
           </div>
-          <div class="io-block" v-if="selectedNode.commandName && commandMap[selectedNode.commandName]">
-            <div class="io-line"><span class="io-label">入参：</span>{{ formatParams(commandMap[selectedNode.commandName].parameters) }}</div>
-            <div class="io-line"><span class="io-label">出参：</span>{{ formatFields(commandMap[selectedNode.commandName].response) }}</div>
+          <div v-if="outgoingEdges.length" class="flex flex-col gap-2.5">
+            <div v-for="e in outgoingEdges" :key="e.id" class="border border-solid border-[#ebeef5] rounded p-2 bg-[#fafafa]">
+              <div class="flex items-center gap-1.5 mb-1.5 text-[13px]">
+                <span class="text-[#409eff] font-semibold">→</span>
+                <span class="flex-1 truncate" :title="nodeLabel(nodeById(e.to))">{{ nodeLabel(nodeById(e.to)) }}</span>
+                <el-button icon="delete" link type="danger" size="small" @click="deleteEdge(e)" />
+              </div>
+              <el-input v-model="e.condition" size="small" class="w-full" placeholder="分支条件（留空=默认流转）" @input="updateEdgeCondition(e)" />
+            </div>
           </div>
-          <div class="io-line muted" v-else-if="selectedNode.commandName">该命令暂无参数信息</div>
-        </template>
-        <template v-else>
-          <el-input v-model="selectedNode.note" type="textarea" :rows="2" placeholder="合并判断描述（如：基于上游 A.x、B.y、C.z 合并，判断...）" @input="syncSelectedToLf" />
-          <div class="io-line muted">判断节点不执行命令；出边带条件实现分支（点画布连线编辑条件）。</div>
-        </template>
+          <div v-else class="text-[13px] leading-[1.8] text-[#909399]">暂无出向连线，可在上方选择目标节点添加</div>
+        </div>
+        <div class="scenario-detail empty" v-else>点击画布节点编辑详情，点空白取消选择</div>
       </div>
-      <div class="scenario-detail empty" v-else>点击画布节点编辑详情，点空白取消选择</div>
     </div>
-
-    <template #footer>
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" :loading="saving" @click="onSave">保存</el-button>
-    </template>
   </el-drawer>
 </template>
 
 <script setup>
-import { ref, computed, nextTick, watch } from 'vue'
+import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import LogicFlow, { RectNode, RectNodeModel } from '@logicflow/core'
 import '@logicflow/core/dist/index.css'
@@ -124,6 +172,7 @@ const current = computed(() => scenarios.value[activeIndex.value])
 const commandOptions = ref([])
 const commandMap = ref({})
 const canvasRef = ref(null)
+const canvasHeight = ref(400)
 const saving = ref(false)
 const cliData = ref({})
 const selectedNodeId = ref(null)
@@ -173,6 +222,115 @@ const findDupAlias = () => {
   return null
 }
 let lf = null
+
+const MIN_CANVAS_HEIGHT = 320
+const CANVAS_BOTTOM_GAP = 8 // 底部留一点空隙，保证画布下边框可见
+// JS 计算画布高度：用抽屉内容区(el-drawer__body)的真实底部，减去画布距顶部的距离，
+// 这样无论上方工具栏占多高、有没有 footer，都能精确铺满剩余高度，不留空隙。
+const computeCanvasHeight = () => {
+  if (!canvasRef.value) return
+  const top = canvasRef.value.getBoundingClientRect().top
+  const body = canvasRef.value.closest('.el-drawer__body')
+  let bottom = window.innerHeight
+  if (body) {
+    const rect = body.getBoundingClientRect()
+    const padBottom = parseFloat(getComputedStyle(body).paddingBottom) || 0
+    bottom = rect.bottom - padBottom
+  }
+  const h = bottom - top - CANVAS_BOTTOM_GAP
+  canvasHeight.value = h > MIN_CANVAS_HEIGHT ? Math.floor(h) : MIN_CANVAS_HEIGHT
+}
+// 把画布真实内部尺寸同步给 LogicFlow（clientHeight 不含边框，画好的图不会盖住下边框）
+const syncCanvasSize = () => {
+  if (!lf || !canvasRef.value) return
+  const w = canvasRef.value.clientWidth
+  const h = canvasRef.value.clientHeight
+  if (w > 0 && h > 0) lf.resize(w, h)
+}
+const onWindowResize = () => {
+  if (!visible.value) return
+  computeCanvasHeight()
+  nextTick(syncCanvasSize)
+}
+
+// 画布视图操作
+const fitView = () => { if (lf) lf.fitView(30, 30) }            // 缩放平移到刚好容纳全部节点
+const centerView = () => { if (lf) lf.translateCenter() }       // 图形整体居中
+const zoomIn = () => { if (lf) lf.zoom(true) }                  // 放大
+const zoomOut = () => { if (lf) lf.zoom(false) }               // 缩小
+const resetView = () => { if (lf) { lf.resetZoom(); lf.translateCenter() } } // 重置缩放并居中
+const focusNode = (id) => { if (lf && id) lf.focusOn({ id }) }  // 定位到指定节点
+const nodeLabel = (n) => {
+  if (!n) return '未知节点'
+  const alias = (n.alias || '').trim()
+  const name = n.type === 'decision' ? ('判断：' + (n.note || '未描述').slice(0, 12)) : (n.commandName || '未选命令')
+  return alias ? `${alias} · ${name}` : name
+}
+const nodeById = (id) => (current.value && current.value.nodes || []).find((n) => n.id === id)
+
+// 连线编辑：画布是连线的真实数据源，这里维护一份响应式镜像供右侧面板读写
+const edgeList = ref([])
+const connectedTargetIds = ref([]) // 多选框的值=当前节点已连线的目标，已连的会被标记选中，不可重复连
+const refreshEdges = () => {
+  if (!lf) { edgeList.value = []; return }
+  let g
+  try { g = lf.getGraphData() } catch (e) { edgeList.value = []; return }
+  edgeList.value = (g.edges || []).map((e) => ({
+    id: e.id,
+    from: e.sourceNodeId,
+    to: e.targetNodeId,
+    condition: (e.properties && e.properties.condition) || '',
+    note: (e.properties && e.properties.note) || ''
+  }))
+}
+// 当前选中节点的出向连线
+const outgoingEdges = computed(() => edgeList.value.filter((e) => e.from === selectedNodeId.value))
+// 多选框始终跟随真实连线（手动拖线、切换节点、增删都会同步勾选状态）
+watch(outgoingEdges, (edges) => { connectedTargetIds.value = [...new Set(edges.map((e) => e.to))] }, { immediate: true })
+// 可连线的目标节点（排除自己）
+const edgeTargetOptions = computed(() =>
+  (current.value && current.value.nodes || [])
+    .filter((n) => n.id !== selectedNodeId.value)
+    .map((n) => ({ id: n.id, label: nodeLabel(n) }))
+)
+// 多选变化时，对比已有连线，新增的勾选建连线、取消的勾选删连线（同一目标不会重复连）
+const onEdgeTargetsChange = (newIds) => {
+  if (!lf || !selectedNodeId.value) return
+  const currentIds = outgoingEdges.value.map((e) => e.to)
+  const toAdd = newIds.filter((id) => !currentIds.includes(id))
+  const toRemove = currentIds.filter((id) => !newIds.includes(id))
+  toAdd.forEach((tid) => {
+    try {
+      lf.addEdge({
+        sourceNodeId: selectedNodeId.value,
+        targetNodeId: tid,
+        type: 'polyline',
+        text: '默认流转',
+        properties: { condition: '', note: '' }
+      })
+    } catch (e) { /* ignore */ }
+  })
+  toRemove.forEach((tid) => {
+    const edge = outgoingEdges.value.find((e) => e.to === tid)
+    if (edge) { try { lf.deleteEdge(edge.id) } catch (e) { /* ignore */ } }
+  })
+  refreshEdges()
+}
+const updateEdgeCondition = (edge) => {
+  if (!lf) return
+  try {
+    lf.setProperties(edge.id, { condition: edge.condition, note: edge.note })
+    lf.updateText(edge.id, edge.condition || '默认流转')
+  } catch (e) { /* ignore */ }
+}
+const deleteEdge = (edge) => {
+  if (!lf) return
+  try { lf.deleteEdge(edge.id) } catch (e) { /* ignore */ }
+  refreshEdges()
+}
+
+onMounted(() => window.addEventListener('resize', onWindowResize))
+onUnmounted(() => window.removeEventListener('resize', onWindowResize))
 
 const uid = () => 'n_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5)
 const formatParams = (params) => {
@@ -228,7 +386,8 @@ const renderCanvas = () => {
   if (!canvasRef.value) return
   if (lf) { try { lf.destroy && lf.destroy() } catch (e) { /* ignore */ }; lf = null }
   canvasRef.value.innerHTML = ''
-  lf = new LogicFlow({ container: canvasRef.value, grid: true, height: canvasRef.value.clientHeight || 360 })
+  computeCanvasHeight()
+  lf = new LogicFlow({ container: canvasRef.value, grid: true, height: canvasHeight.value })
   lf.register({ type: 'command-node', view: RectNode, model: CommandModel })
   lf.register({ type: 'decision-node', view: RectNode, model: DecisionModel })
   const s = current.value || { nodes: [], edges: [] }
@@ -251,12 +410,24 @@ const renderCanvas = () => {
   lf.on('node:click', ({ data }) => { selectedNodeId.value = data.id })
   lf.on('blank:click', () => { selectedNodeId.value = null })
   lf.on('edge:add', ({ data }) => {
+    // 同一对节点之间不允许重复连线（手动拖线也拦截）
+    let g
+    try { g = lf.getGraphData() } catch (e) { g = { edges: [] } }
+    const dup = (g.edges || []).filter((e) => e.sourceNodeId === data.sourceNodeId && e.targetNodeId === data.targetNodeId)
+    if (dup.length > 1) {
+      try { lf.deleteEdge(data.id) } catch (e) { /* ignore */ }
+      ElMessage.warning('该连线已存在，不能重复连线')
+      refreshEdges()
+      return
+    }
     // 用户新建的边（无 condition 属性）默认显示提示，引导点击编辑
     if (!data.properties || data.properties.condition === undefined) {
       lf.setProperties(data.id, { condition: '', note: '' })
       try { lf.updateText(data.id, '默认流转') } catch (e) { /* ignore */ }
     }
+    refreshEdges()
   })
+  lf.on('edge:delete', () => { refreshEdges() })
   lf.on('edge:click', async ({ data }) => {
     try {
       const { value } = await ElMessageBox.prompt('分支条件（留空=默认流转；用自然语言描述，可引用 别名.字段）', '编辑连线条件', {
@@ -265,7 +436,15 @@ const renderCanvas = () => {
       })
       lf.setProperties(data.id, { condition: value })
       try { lf.updateText(data.id, value || '默认流转') } catch (e) { /* ignore */ }
+      refreshEdges()
     } catch (e) { /* cancel */ }
+  })
+  refreshEdges()
+  nextTick(() => {
+    computeCanvasHeight()
+    syncCanvasSize()
+    // 渲染后自动适应一次，保证打开/切换场景时所有节点都在可视区域内
+    if (current.value && current.value.nodes && current.value.nodes.length) fitView()
   })
 }
 
@@ -354,6 +533,17 @@ watch(activeIndex, (n, o) => {
   nextTick(renderCanvas)
 })
 
+// 抽屉滑入动画结束后布局才稳定，此时再按真实位置重算一次高度
+const onOpened = () => {
+  computeCanvasHeight()
+  syncCanvasSize()
+}
+
+// 右侧详情面板显示/隐藏会改变画布宽度，需让 LogicFlow 重新适配
+watch(() => !!selectedNode.value, () => {
+  nextTick(syncCanvasSize)
+})
+
 const onClosed = () => {
   if (lf) { try { lf.destroy && lf.destroy() } catch (e) { /* ignore */ }; lf = null }
   selectedNodeId.value = null
@@ -394,24 +584,15 @@ const onSave = async () => {
 </script>
 
 <style scoped>
-.scenario-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-.scenario-toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-.scenario-toolbar .tip { color: #909399; font-size: 12px; }
+/* 仅保留无法用 UnoCSS 原子类表达的样式：:deep() 覆盖 Element Plus 内部样式、复用的成组复杂样式 */
 :deep(.el-drawer__body) { display: flex; flex-direction: column; overflow: auto; }
-.scenario-flow { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-.scenario-canvas { border: 1px solid #ebeef5; flex: 1; min-height: 0; background: #fafafa; border-radius: 4px; }
-.scenario-detail { margin-top: 12px; border: 1px solid #ebeef5; border-radius: 4px; padding: 12px; background: #fff; }
-.scenario-detail.empty { color: #909399; font-size: 13px; text-align: center; }
-.detail-title { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; font-weight: 600; }
-.detail-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
-.io-block { background: #f5f7fa; border-radius: 4px; padding: 8px 10px; }
-.io-line { font-size: 13px; line-height: 1.8; }
-.io-line.muted { color: #909399; }
-.io-label { color: #606266; font-weight: 600; }
-.alias-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+/* 容器已用 gap 控距，去掉 el-button 相邻默认 margin，避免间距叠加变大 */
+.scenario-bar :deep(.el-button + .el-button),
+.scenario-toolbar :deep(.el-button + .el-button) { margin-left: 0; }
+.scenario-toolbar :deep(.el-divider--vertical) { margin: 0 4px; }
+/* 右侧详情面板：选中态与空态复用同一组复杂样式 */
+.scenario-detail { width: 360px; flex: none; height: 100%; overflow-y: auto; border: 1px solid #ebeef5; border-radius: 4px; padding: 12px; background: #fff; box-sizing: border-box; }
+.scenario-detail.empty { color: #909399; font-size: 13px; display: flex; align-items: center; justify-content: center; text-align: center; }
 .alias-dup :deep(.el-input__wrapper) { box-shadow: 0 0 0 1px #f56c6c inset; }
 .alias-dup :deep(.el-input-group__prepend) { color: #f56c6c; }
-.alias-warn { color: #f56c6c; font-size: 12px; }
-.alias-hint { margin-bottom: 10px; }
-.alias-chip { display: inline-block; margin-right: 12px; }
 </style>

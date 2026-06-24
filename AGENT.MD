@@ -49,6 +49,13 @@
 - 优先复用 `web/src/utils/` 里的工具函数
 - 涉及跨栈边界变更时，同步更新 `aiDoc/frontend-backend/`
 
+### 前端样式
+
+- 前端已接入 UnoCSS（`web/uno.config.js`，presetWind3）。**写样式优先用 UnoCSS 原子类**：布局、间距、排版、尺寸、颜色等能用原子类表达的，一律用原子类，不再新增自定义 class
+- 只有以下情况才写 `<style scoped>`：需要 `:deep()` 覆盖 Element Plus 内部样式、伪类/伪元素、复杂选择器，或原子类确实难以表达的样式
+- 避免内联 `style`；动态样式用绑定的原子 class 或 CSS 变量，主题相关能力优先走 CSS 变量
+- 细则见 `aiDoc/frontend-backend/frontend-rules.md`
+
 ### 插件与模块
 
 - 后端插件放在 `server/plugin/<name>/`

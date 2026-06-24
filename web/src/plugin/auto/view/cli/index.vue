@@ -32,6 +32,7 @@
           <template #default="scope">
             <el-button type="primary" link @click="openEdit(scope.row)">编辑</el-button>
             <el-button type="primary" link @click="openBindings(scope.row)">管理API</el-button>
+            <el-button type="primary" link @click="openScenarios(scope.row)">管理场景</el-button>
             <el-button type="primary" link @click="openManifest(scope.row)">预览命令</el-button>
             <el-button type="danger" link @click="handleDelete(scope.row)">删除</el-button>
           </template>
@@ -53,6 +54,7 @@
     <cli-form v-model="formVisible" :form-data="currentCli" @submit="submitForm" />
     <cli-api-binding v-model="bindingVisible" :cli="currentCli" @refresh="getTableData" />
     <cli-manifest-preview v-model="manifestVisible" :cli="currentCli" />
+    <cli-scenario-flow v-model="scenarioVisible" :cli="currentCli" />
   </div>
 </template>
 
@@ -63,6 +65,7 @@ import { createCli, deleteCli, getCliList, updateCli } from '@/plugin/auto/api/c
 import CliForm from './components/cliForm.vue'
 import CliApiBinding from './components/cliApiBinding.vue'
 import CliManifestPreview from './components/cliManifestPreview.vue'
+import CliScenarioFlow from './components/cliScenarioFlow.vue'
 
 const page = ref(1)
 const pageSize = ref(10)
@@ -72,6 +75,7 @@ const searchInfo = ref({})
 const formVisible = ref(false)
 const bindingVisible = ref(false)
 const manifestVisible = ref(false)
+const scenarioVisible = ref(false)
 const currentCli = ref({})
 
 const getTableData = async () => {
@@ -112,6 +116,11 @@ const openBindings = (row) => {
 const openManifest = (row) => {
   currentCli.value = { ...row }
   manifestVisible.value = true
+}
+
+const openScenarios = (row) => {
+  currentCli.value = { ...row }
+  scenarioVisible.value = true
 }
 
 const handleDelete = async (row) => {

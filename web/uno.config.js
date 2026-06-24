@@ -1,17 +1,19 @@
 import { defineConfig } from '@unocss/vite';
 import presetWind3 from '@unocss/preset-wind3';
 import transformerDirectives from '@unocss/transformer-directives'
+import { unoTheme } from './src/theme/adapters/uno'
 
 export default defineConfig({
   theme: {
+    ...unoTheme,
     backgroundColor: {
-      main: '#F5F5F5'
+      main: 'rgb(var(--layout-bg-color))'
     },
     textColor: {
-      active: 'var(--el-color-primary)'
+      active: 'rgb(var(--primary-color))'
     },
     boxShadowColor: {
-      active: 'var(--el-color-primary)'
+      active: 'rgb(var(--primary-color))'
     },
     borderColor: {
       'table-border': 'var(--el-border-color-lighter)'

@@ -1,6 +1,6 @@
 /* ============================================================
  * 主题扩展样式：菜单风格 / 卡片盒子模式 / 全局圆角
- * 由 <html> 上的 gva-menu--* 与 gva-card--* 类驱动（见 utils/theme.js）
+ * 由 <html> 上的 gva-menu--* 与 gva-card--* 类驱动（见 pinia/modules/theme.js）
  * ============================================================ */
 
 /* ---------- 顶栏 / 标签栏配色与阴影默认值（按明暗自适应，可被内联变量覆盖） ---------- */
@@ -52,15 +52,15 @@ html.dark.gva-menu--light {
   --el-menu-text-color: rgb(203, 213, 225);
 }
 
-/* ---------- design 菜单风格的结构样式：SoybeanAdmin 式「全宽直角 + 左侧主色竖条」 ----------
+/* ---------- design 菜单风格的结构样式：「全宽直角 + 左侧主色竖条」式 ----------
  * 仅作用于 design 风格的纵向侧栏菜单：
  * - 取消圆角、取消行间距，菜单项左右占满（侧栏 px 内边距由各布局模板按风格关闭）
  * - 选中背景取主色 light-7（较实，见 .gva-menu--design 的 --gva-menu-active-bg），
  *   hover 背景取更浅的 light-9，二者拉开层级避免同色无法区分
  * - 选中项左侧叠加主色竖条 + 主色文字（--el-color-primary，即「深色」）
- * 两个颜色都跟随主题色色阶自动变化（light/dark 阶由 utils/format.js setElColor 按明暗生成，
+ * 两个颜色都跟随主题色色阶自动变化（light/dark 阶由 theme/adapters/element-plus.js 按明暗生成，
  * 故暗色模式下 light-9 会变为深色阶，整体观感自动适配）。
- * 注意：--el-menu-hover-bg-color 被 setBodyPrimaryColor 写成了 <html> 的内联变量，
+ * 注意：--el-menu-hover-bg-color 被 Element Plus 主题适配器写成了 <html> 的内联变量，
  *       必须在更内层(.el-menu)上覆盖才能生效。 */
 .gva-menu--design .el-menu {
   --el-menu-hover-bg-color: var(--el-color-primary-light-10);

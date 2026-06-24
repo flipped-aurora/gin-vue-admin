@@ -21,9 +21,9 @@
   import hljs from 'highlight.js'
   import { ElMessage } from 'element-plus'
   import { onMounted, ref, watchEffect } from 'vue'
-  import { useAppStore } from '@/pinia'
+  import { useThemeStore } from '@/pinia'
 
-  const appStore = useAppStore()
+  const themeStore = useThemeStore()
 
   const useCode = ref({})
 
@@ -38,7 +38,7 @@
   ]
 
   onMounted(() => {
-    const isDarkMode = appStore.config.darkMode === 'dark'
+    const isDarkMode = themeStore.isDark
     if (isDarkMode) {
       import('highlight.js/styles/atom-one-dark.css')
     } else {

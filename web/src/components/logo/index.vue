@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { useAppStore } from '@/pinia/modules/app.js';
+import { useThemeStore } from '@/pinia';
 import { storeToRefs } from 'pinia';
 
 const props = defineProps({
@@ -14,8 +14,8 @@ const props = defineProps({
 const darkLogoPath = "/logo.png";  // 系统没有暗黑模式logo，如果需要暗黑模式logo请自行修改文件路径。
 const lightLogoPath = "/logo.png";
 
-const appStore = useAppStore();
-const { isDark } = storeToRefs(appStore);
+const themeStore = useThemeStore();
+const { isDark } = storeToRefs(themeStore);
 
 const logoSrc = ref('');
 const showTextPlaceholder = ref(false);
@@ -69,7 +69,7 @@ function getSize() {
     :style="{
       ...getSize()
     }" :class="{
-      'filter invert-[90%] hue-rotate-180 brightness-110':
+    'filter invert-[90%] hue-rotate-180 brightness-110':
         isDark && logoSrc === '/logo.png',
     }" />
   <div v-else-if="showTextPlaceholder"

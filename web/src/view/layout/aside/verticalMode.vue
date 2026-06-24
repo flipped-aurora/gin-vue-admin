@@ -30,7 +30,7 @@
         :collapse-transition="false"
         :default-active="active"
         class="!border-r-0 w-full"
-        :class="sideCollapse || settings.menu.theme === 'design' ? '' : 'px-2'"
+        :class="sideCollapse || settings.menu.theme === 'design' ? '' : '!px-2'"
         unique-opened
         @select="selectMenuItem"
       >

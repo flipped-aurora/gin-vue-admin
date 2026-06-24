@@ -10,7 +10,7 @@
 }
 
 .gva-table-box {
-  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 my-2;
+  @apply gva-surface;
   .el-table {
     @apply border-x border-t border-b-0 border-table-border border-solid -mx-[1px];
     border-radius: var(--gva-radius, 0.75rem);
@@ -41,15 +41,16 @@
 }
 
 .gva-search-box {
-  @apply p-4 pb-0 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 my-2;
+  @apply gva-surface pb-0;
 }
 
 .gva-form-box {
-  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 my-2;
+  @apply gva-surface;
 }
 
+/* 选中树节点：主色 40% 透明度叠底（用插值输出，避免 Sass 误解析 rgb() 内的 /） */
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background: var(--el-color-primary-bg) !important;
+  background: #{'rgb(var(--primary-color) / 0.4)'} !important;
 }
 
 .el-dropdown {

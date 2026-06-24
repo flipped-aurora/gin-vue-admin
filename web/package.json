@@ -27,6 +27,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
     "ace-builds": "^1.36.4",
+    "arcdash": "^0.0.60",
     "axios": "1.8.2",
     "chokidar": "^4.0.0",
     "echarts": "5.5.1",

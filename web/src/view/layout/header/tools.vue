@@ -20,7 +20,7 @@
       </el-dropdown>
     </el-tooltip>
 
-    <el-tooltip v-if="appStore.config.show_search" effect="dark" content="搜索" placement="bottom">
+    <el-tooltip v-if="settings.header.search.visible" effect="dark" content="搜索" placement="bottom">
       <span
         class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         @click="handleCommand"
@@ -42,7 +42,7 @@
       </span>
     </el-tooltip>
 
-    <el-tooltip v-if="appStore.config.show_refresh" effect="dark" content="刷新" placement="bottom">
+    <el-tooltip v-if="settings.header.refresh.visible" effect="dark" content="刷新" placement="bottom">
       <span
         class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
         @click="toggleRefresh"
@@ -56,9 +56,9 @@
     <el-tooltip effect="dark" content="切换主题" placement="bottom">
       <span
         class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        @click="appStore.toggleTheme(!appStore.isDark)"
+        @click="themeStore.toggleTheme(!themeStore.isDark)"
       >
-        <el-icon v-if="appStore.isDark">
+        <el-icon v-if="themeStore.isDark">
           <Sunny />
         </el-icon>
         <el-icon v-else>
@@ -73,7 +73,8 @@
 </template>
 
 <script setup>
-  import { useAppStore } from '@/pinia'
+  import { useThemeStore } from '@/pinia'
+  import { storeToRefs } from 'pinia'
   import GvaSetting from '@/view/layout/setting/index.vue'
   import { ref } from 'vue'
   import { emitter } from '@/utils/bus.js'
@@ -81,7 +82,8 @@
   import { toDoc } from '@/utils/doc'
   import { isDev } from '@/utils/env.js'
 
-  const appStore = useAppStore()
+  const themeStore = useThemeStore()
+  const { settings } = storeToRefs(themeStore)
   const showSettingDrawer = ref(false)
   const showRefreshAnmite = ref(false)
   const toggleRefresh = () => {

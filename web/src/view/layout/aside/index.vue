@@ -2,23 +2,23 @@
   <div>
     <normal-mode
       v-if="
-        config.side_mode === 'normal' ||
-        (device === 'mobile' && config.side_mode == 'head') ||
-        (device === 'mobile' && config.side_mode == 'combination') ||
-        (device === 'mobile' && config.side_mode == 'sidebar') ||
-        (device === 'mobile' && config.side_mode == 'vertical')
+        settings.layout.mode === 'normal' ||
+        (device === 'mobile' && settings.layout.mode == 'head') ||
+        (device === 'mobile' && settings.layout.mode == 'combination') ||
+        (device === 'mobile' && settings.layout.mode == 'sidebar') ||
+        (device === 'mobile' && settings.layout.mode == 'vertical')
       "
     />
-    <head-mode v-if="config.side_mode === 'head' && device !== 'mobile'" />
+    <head-mode v-if="settings.layout.mode === 'head' && device !== 'mobile'" />
     <combination-mode
-      v-if="config.side_mode === 'combination' && device !== 'mobile'"
+      v-if="settings.layout.mode === 'combination' && device !== 'mobile'"
       :mode="mode"
     />
     <sidebar-mode
-      v-if="config.side_mode === 'sidebar' && device !== 'mobile'"
+      v-if="settings.layout.mode === 'sidebar' && device !== 'mobile'"
     />
     <vertical-mode
-      v-if="config.side_mode === 'vertical' && device !== 'mobile'"
+      v-if="settings.layout.mode === 'vertical' && device !== 'mobile'"
     />
   </div>
 </template>
@@ -38,7 +38,9 @@
   })
 
   import { storeToRefs } from 'pinia'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   const appStore = useAppStore()
-  const { config, device } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
 </script>

@@ -24,7 +24,7 @@
     <div
       v-if="mode === 'normal'"
       class="relative h-full shadow dark:shadow-gray-700"
-      :class="isCollapse || config.menu_theme === 'design' ? '' : 'px-2'"
+      :class="isCollapse || settings.menu.theme === 'design' ? '' : 'px-2'"
       :style="{
         width: layoutSideWidth + 'px',
         background: 'var(--gva-aside-bg)',
@@ -69,10 +69,12 @@
   import { ref, provide, watchEffect, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
 
   defineOptions({
     name: 'GvaAside'
@@ -92,9 +94,9 @@
   const active = ref('')
   const layoutSideWidth = computed(() => {
     if (!isCollapse.value) {
-      return config.value.layout_side_width
+      return settings.value.layout.sideWidth
     } else {
-      return config.value.layout_side_collapsed_width
+      return settings.value.layout.sideCollapsedWidth
     }
   })
   watchEffect(() => {

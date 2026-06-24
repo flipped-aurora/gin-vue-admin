@@ -2,7 +2,7 @@
   <div
     class="flex justify-between fixed top-0 right-0 z-10 h-16 text-slate-700 dark:text-slate-300 items-center px-2"
     :style="{
-      left: isVertical ? appStore.sideWidth + 'px' : '0px',
+      left: isVertical ? headerSideWidth + 'px' : '0px',
       background: 'var(--gva-header-bg)',
       boxShadow: 'var(--gva-header-shadow)'
     }"
@@ -19,8 +19,8 @@
           v-if="!isMobile"
           class="inline-flex font-bold text-2xl ml-2"
           :class="
-            (config.side_mode === 'head' ||
-              config.side_mode === 'combination') &&
+            (settings.layout.mode === 'head' ||
+              settings.layout.mode === 'combination') &&
             'min-w-fit'
           "
         >
@@ -30,7 +30,7 @@
 
       <el-breadcrumb
         v-show="!isMobile"
-        v-if="config.show_breadcrumb && config.side_mode !== 'head' && config.side_mode !== 'combination'"
+        v-if="settings.header.breadcrumb.visible && settings.layout.mode !== 'head' && settings.layout.mode !== 'combination'"
         class="ml-4"
       >
         <el-breadcrumb-item
@@ -38,7 +38,7 @@
           :key="item.path"
         >
           <span class="inline-flex items-center gap-1 font-bold">
-            <el-icon v-if="config.show_breadcrumb_icon && item.meta.icon">
+            <el-icon v-if="settings.header.breadcrumb.showIcon && item.meta.icon">
               <component :is="item.meta.icon" />
             </el-icon>
             {{ fmtTitle(item.meta.title, route) }}
@@ -46,11 +46,11 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
       <gva-aside
-        v-if="config.side_mode === 'head' && !isMobile"
+        v-if="settings.layout.mode === 'head' && !isMobile"
         class="flex-1"
       />
       <gva-aside
-        v-if="config.side_mode === 'combination' && !isMobile"
+        v-if="settings.layout.mode === 'combination' && !isMobile"
         mode="head"
         class="flex-1"
       />
@@ -108,7 +108,7 @@
   import CustomPic from '@/components/customPic/index.vue'
   import { useUserStore } from '@/pinia/modules/user'
   import { useRoute, useRouter } from 'vue-router'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   import { computed } from 'vue'
   import { setUserAuthority } from '@/api/user'
@@ -120,13 +120,20 @@
   const router = useRouter()
   const route = useRoute()
   const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device, sideCollapse } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
   const isMobile = computed(() => {
     return device.value === 'mobile'
   })
   // 通栏侧边布局：header 让出左侧侧栏宽度，并隐藏自身 Logo
   const isVertical = computed(
-    () => config.value.side_mode === 'vertical' && !isMobile.value
+    () => settings.value.layout.mode === 'vertical' && !isMobile.value
+  )
+  const headerSideWidth = computed(
+    () => sideCollapse.value
+      ? settings.value.layout.sideCollapsedWidth
+      : settings.value.layout.sideWidth
   )
   const toPerson = () => {
     router.push({ name: 'person' })

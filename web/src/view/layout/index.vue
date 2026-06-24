@@ -3,7 +3,7 @@
     class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
   >
     <el-watermark
-      v-if="config.show_watermark"
+      v-if="settings.watermark.visible"
       :font="font"
       :z-index="9999"
       :gap="[180, 150]"
@@ -14,29 +14,29 @@
     <div
       class="flex flex-row w-full gva-container pt-16 box-border !h-full"
       :style="
-        config.side_mode === 'vertical' && device !== 'mobile'
-          ? { paddingLeft: appStore.sideWidth + 'px' }
+        settings.layout.mode === 'vertical' && device !== 'mobile'
+          ? { paddingLeft: verticalSideWidth + 'px' }
           : {}
       "
     >
       <gva-aside
         v-if="
-          config.side_mode === 'normal' ||
-          config.side_mode === 'sidebar' ||
-          config.side_mode === 'vertical' ||
-          (device === 'mobile' && config.side_mode == 'head') ||
-          (device === 'mobile' && config.side_mode == 'combination')
+          settings.layout.mode === 'normal' ||
+          settings.layout.mode === 'sidebar' ||
+          settings.layout.mode === 'vertical' ||
+          (device === 'mobile' && settings.layout.mode == 'head') ||
+          (device === 'mobile' && settings.layout.mode == 'combination')
         "
       />
       <gva-aside
-        v-if="config.side_mode === 'combination' && device !== 'mobile'"
+        v-if="settings.layout.mode === 'combination' && device !== 'mobile'"
         mode="normal"
       />
       <div class="flex-1 w-0 h-full">
-        <gva-tabs v-if="config.showTabs" />
+        <gva-tabs v-if="settings.tab.visible" />
         <div
           class="overflow-auto px-8 pt-2"
-          :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
+          :class="settings.tab.visible ? 'gva-container2' : 'gva-container pt-1'"
         >
           <router-view v-if="reloadFlag" v-slot="{ Component, route }">
             <div
@@ -45,7 +45,7 @@
             >
               <transition
                 mode="out-in"
-                :name="route.meta.transitionType || config.transition_type"
+                :name="route.meta.transitionType || settings.page.transition"
               >
                 <keep-alive :include="routerStore.keepAliveRouters">
                   <component :is="Component" :key="route.fullPath" />
@@ -67,15 +67,17 @@
   import GvaTabs from './tabs/index.vue'
   import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
   import { emitter } from '@/utils/bus.js'
-  import { ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
+  import { computed, ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
   import { useUserStore } from '@/pinia/modules/user'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   import '@/style/transition.scss'
   const appStore = useAppStore()
-  const { config, isDark, device } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device, sideCollapse } = storeToRefs(appStore)
+  const { settings, isDark } = storeToRefs(themeStore)
 
   defineOptions({
     name: 'GvaLayout'
@@ -89,6 +91,12 @@
   watchEffect(() => {
     font.color = isDark.value ? 'rgba(255,255,255, .15)' : 'rgba(0, 0, 0, .15)'
   })
+
+  const verticalSideWidth = computed(() =>
+    sideCollapse.value
+      ? settings.value.layout.sideCollapsedWidth
+      : settings.value.layout.sideWidth
+  )
 
   const router = useRouter()
   const route = useRoute()

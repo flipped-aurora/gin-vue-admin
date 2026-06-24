@@ -17,10 +17,10 @@
   import { ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { useUserStore } from '@/pinia/modules/user'
-  import { useAppStore } from '@/pinia'
+  import { useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  const appStore = useAppStore()
-  const { isDark } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { isDark } = storeToRefs(themeStore)
 
 
   defineOptions({

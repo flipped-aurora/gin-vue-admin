@@ -1,6 +1,7 @@
 package system
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -30,9 +31,9 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 	openCaptcha := global.GVA_CONFIG.Captcha.OpenCaptcha               // 是否开启防爆次数
 	openCaptchaTimeOut := global.GVA_CONFIG.Captcha.OpenCaptchaTimeOut // 缓存超时时间
 	key := c.ClientIP()
-	v, ok := global.BlackCache.Get(key)
+	v, ok := global.GVA_CACHE.Get(key)
 	if !ok {
-		global.BlackCache.Set(key, 1, time.Second*time.Duration(openCaptchaTimeOut))
+		global.GVA_CACHE.Set(key, int64(1), time.Second*time.Duration(openCaptchaTimeOut))
 	}
 
 	var oc bool
@@ -63,6 +64,13 @@ func interfaceToInt(v interface{}) (i int) {
 	switch v := v.(type) {
 	case int:
 		i = v
+	case int64:
+		i = int(v)
+	case string:
+		// redis 后端 Get 返回字符串
+		if n, err := strconv.Atoi(v); err == nil {
+			i = n
+		}
 	default:
 		i = 0
 	}

@@ -84,6 +84,6 @@ func JWTAuth() gin.HandlerFunc {
 //@return: bool
 
 func isBlacklist(jwt string) bool {
-	_, ok := global.BlackCache.Get(jwt)
+	_, ok := global.GVA_CACHE.Get(jwt)
 	return ok
 }

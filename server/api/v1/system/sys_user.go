@@ -11,6 +11,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	systemSvc "github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -37,70 +38,73 @@ func (b *BaseApi) Login(c *gin.Context) {
 		return
 	}
 
-	key := c.ClientIP()
-	// 判断验证码是否开启
-	openCaptcha := global.GVA_CONFIG.Captcha.OpenCaptcha               // 是否开启防爆次数
-	openCaptchaTimeOut := global.GVA_CONFIG.Captcha.OpenCaptchaTimeOut // 缓存超时时间
-	v, ok := global.GVA_CACHE.Get(key)
-	if !ok {
-		global.GVA_CACHE.Set(key, int64(1), time.Second*time.Duration(openCaptchaTimeOut))
-	}
+	cfg := securityConfigService.Current()
 
-	var oc bool = openCaptcha == 0 || openCaptcha < interfaceToInt(v)
-	if oc && (l.Captcha == "" || l.CaptchaId == "" || !store.Verify(l.CaptchaId, l.Captcha, true)) {
-		// 验证码次数+1
-		_, _ = global.GVA_CACHE.Increment(key, 1)
-		response.FailWithMessage("验证码错误", c)
-		// 记录登录失败日志
+	// 1. 账号锁定检查
+	if cfg.LockEnable && systemSvc.IsAccountLocked(l.Username) {
+		response.FailWithMessage("账号已锁定，请 "+strconv.Itoa(cfg.LockDuration)+" 分钟后再试", c)
 		loginLogService.CreateLoginLog(system.SysLoginLog{
-			Username:     l.Username,
-			Ip:           c.ClientIP(),
-			Agent:        c.Request.UserAgent(),
-			Status:       false,
-			ErrorMessage: "验证码错误",
+			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
+			Status: false, ErrorMessage: "账号已锁定",
 		})
 		return
 	}
 
+	// 2. 验证码检查（按 IP 计数）
+	key := c.ClientIP()
+	openCaptcha := cfg.CaptchaOpen
+	openCaptchaTimeOut := cfg.CaptchaTimeout
+	v, ok := global.GVA_CACHE.Get(key)
+	if !ok {
+		global.GVA_CACHE.Set(key, int64(1), time.Second*time.Duration(openCaptchaTimeOut))
+	}
+	var oc = openCaptcha == 0 || openCaptcha < interfaceToInt(v)
+	if oc && (l.Captcha == "" || l.CaptchaId == "" || !store.Verify(l.CaptchaId, l.Captcha, true)) {
+		global.GVA_CACHE.Increment(key, 1)
+		response.FailWithMessage("验证码错误", c)
+		loginLogService.CreateLoginLog(system.SysLoginLog{
+			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
+			Status: false, ErrorMessage: "验证码错误",
+		})
+		return
+	}
+
+	// 3. 凭证校验
 	u := &system.SysUser{Username: l.Username, Password: l.Password}
 	user, err := userService.Login(u)
 	if err != nil {
 		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-		// 验证码次数+1
-		_, _ = global.GVA_CACHE.Increment(key, 1)
+		global.GVA_CACHE.Increment(key, 1)
+		systemSvc.RecordLoginFail(l.Username, cfg)
 		response.FailWithMessage("用户名不存在或者密码错误", c)
-		// 记录登录失败日志
 		loginLogService.CreateLoginLog(system.SysLoginLog{
-			Username:     l.Username,
-			Ip:           c.ClientIP(),
-			Agent:        c.Request.UserAgent(),
-			Status:       false,
-			ErrorMessage: "用户名不存在或者密码错误",
+			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
+			Status: false, ErrorMessage: "用户名不存在或者密码错误",
 		})
 		return
 	}
 	if user.Enable != 1 {
 		global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
-		// 验证码次数+1
-		_, _ = global.GVA_CACHE.Increment(key, 1)
+		global.GVA_CACHE.Increment(key, 1)
 		response.FailWithMessage("用户被禁止登录", c)
-		// 记录登录失败日志
 		loginLogService.CreateLoginLog(system.SysLoginLog{
-			Username:     l.Username,
-			Ip:           c.ClientIP(),
-			Agent:        c.Request.UserAgent(),
-			Status:       false,
-			ErrorMessage: "用户被禁止登录",
-			UserID:       user.ID,
+			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
+			Status: false, ErrorMessage: "用户被禁止登录", UserID: user.ID,
 		})
 		return
 	}
-	b.TokenNext(c, *user)
+
+	// 4. 登录成功 清除失败计数与锁
+	systemSvc.ClearLoginFail(l.Username)
+
+	// 5. 密码过期检查
+	needChange := systemSvc.IsPasswordExpired(user.PasswordUpdatedAt, cfg, time.Now())
+	b.TokenNext(c, *user, needChange)
 }
 
-// TokenNext 登录以后签发jwt
-func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
-	token, claims, err := utils.LoginToken(&user)
+// TokenNext 登录以后签发 jwt
+func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser, mustChangePwd bool) {
+	token, claims, err := utils.LoginTokenWithExpire(&user, mustChangePwd)
 	if err != nil {
 		global.GVA_LOG.Error("获取token失败!", zap.Error(err))
 		response.FailWithMessage("获取token失败", c)
@@ -108,19 +112,16 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	}
 	// 记录登录成功日志
 	loginLogService.CreateLoginLog(system.SysLoginLog{
-		Username: user.Username,
-		Ip:       c.ClientIP(),
-		Agent:    c.Request.UserAgent(),
-		Status:   true,
-		UserID:   user.ID,
-		ErrorMessage: "登录成功",
+		Username: user.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
+		Status: true, UserID: user.ID, ErrorMessage: "登录成功",
 	})
 	if !global.GVA_CONFIG.System.UseMultipoint {
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
-			User:      user,
-			Token:     token,
-			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+			User:               user,
+			Token:              token,
+			ExpiresAt:          claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+			NeedChangePassword: mustChangePwd,
 		}, "登录成功", c)
 		return
 	}
@@ -133,9 +134,9 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		}
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
-			User:      user,
-			Token:     token,
-			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+			User: user, Token: token,
+			ExpiresAt:          claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+			NeedChangePassword: mustChangePwd,
 		}, "登录成功", c)
 	} else if err != nil {
 		global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
@@ -153,9 +154,9 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		}
 		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
-			User:      user,
-			Token:     token,
-			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+			User: user, Token: token,
+			ExpiresAt:          claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+			NeedChangePassword: mustChangePwd,
 		}, "登录成功", c)
 	}
 }

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"context"
 	"errors"
 	"net/http"
 	"time"
@@ -42,9 +41,9 @@ func DefaultGenerationKey(c *gin.Context) string {
 }
 
 func DefaultCheckOrMark(key string, expire int, limit int) (err error) {
-	// 判断是否开启redis
-	if global.GVA_REDIS == nil {
-		return err
+	// 无缓存句柄（极端启动期）时 fail-open，避免误伤
+	if global.GVA_CACHE == nil {
+		return nil
 	}
 	if err = SetLimitWithTime(key, limit, time.Duration(expire)*time.Second); err != nil {
 		global.GVA_LOG.Error("limit", zap.Error(err))
@@ -61,32 +60,16 @@ func DefaultLimit() gin.HandlerFunc {
 	}.LimitWithTime()
 }
 
-// SetLimitWithTime 设置访问次数
+// SetLimitWithTime 设置访问次数：窗口内计数到达 limit 即拒绝。
 func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
-	count, err := global.GVA_REDIS.Exists(context.Background(), key).Result()
+	count, err := global.GVA_CACHE.IncrementWithExpire(key, 1, expiration)
 	if err != nil {
-		return err
+		// 运行时缓存异常：记录日志并 fail-open 放行
+		global.GVA_LOG.Error("limit increment", zap.Error(err))
+		return nil
 	}
-	if count == 0 {
-		pipe := global.GVA_REDIS.TxPipeline()
-		pipe.Incr(context.Background(), key)
-		pipe.Expire(context.Background(), key, expiration)
-		_, err = pipe.Exec(context.Background())
-		return err
-	} else {
-		// 次数
-		if times, err := global.GVA_REDIS.Get(context.Background(), key).Int(); err != nil {
-			return err
-		} else {
-			if times >= limit {
-				if t, err := global.GVA_REDIS.PTTL(context.Background(), key).Result(); err != nil {
-					return errors.New("请求太过频繁，请稍后再试")
-				} else {
-					return errors.New("请求太过频繁, 请 " + t.String() + " 秒后尝试")
-				}
-			} else {
-				return global.GVA_REDIS.Incr(context.Background(), key).Err()
-			}
-		}
+	if count > int64(limit) {
+		return errors.New("请求太过频繁，请稍后再试")
 	}
+	return nil
 }

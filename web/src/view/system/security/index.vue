@@ -87,7 +87,7 @@
         </el-tab-pane>
       </el-tabs>
 
-      <div class="mt-4 flex">
+      <div class="mt-4 flex justify-end">
         <el-button type="primary" :loading="saving" @click="onSave">保存</el-button>
       </div>
     </div>

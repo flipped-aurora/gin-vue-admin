@@ -985,7 +985,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-form>
-    <div class="mt-4">
+    <div class="mt-4 flex justify-end">
       <el-button type="primary" @click="update">立即更新 </el-button>
       <el-button type="primary" @click="reload">重载服务 </el-button>
     </div>

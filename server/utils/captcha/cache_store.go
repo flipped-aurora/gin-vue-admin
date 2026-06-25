@@ -11,11 +11,6 @@ import (
 // 验证码校验通过即焚（Verify 时 clear=true 立即删除），此 TTL 仅为未使用验证码的兜底回收时间。
 const defaultCaptchaExpiration = time.Second * 180
 
-// CacheStore 基于 global.GVA_CACHE 的验证码存储，实现 base64Captcha.Store 接口。
-//
-// GVA_CACHE 在 InitGvaCache 时已经决定后端：有 Redis 走 Redis(多实例共享)，否则走进程内存。
-// 因此验证码存储自动跟随该决策，无需再单独维护 Redis/内存两套逻辑(原 utils/captcha/redis.go
-// 的 RedisStore 与此重合)。
 type CacheStore struct {
 	Expiration time.Duration
 	PreKey     string

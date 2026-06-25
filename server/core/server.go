@@ -19,6 +19,9 @@ func RunServer() {
 		}
 	}
 
+	// 初始化通用缓存（必须在 Redis 之后：有 Redis 用 Redis，否则用内存）
+	initialize.InitGvaCache()
+
 	if global.GVA_CONFIG.System.UseMongo {
 		if err := initialize.Mongo.Initialization(); err != nil {
 			zap.L().Error(fmt.Sprintf("%+v", err))

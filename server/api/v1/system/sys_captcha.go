@@ -7,14 +7,15 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
 )
 
-// 当开启多服务器部署时，替换下面的配置，使用redis共享存储验证码
-// var store = captcha.NewDefaultRedisStore()
-var store = base64Captcha.DefaultMemStore
+// store 验证码存储：自动跟随 GVA_CACHE 后端——开启 Redis 时多实例共享，未开启时用进程内存。
+// 无需再手动切换 Redis/内存(原两套逻辑与 GVA_CACHE 重合，已统一收敛到 captcha.CacheStore)。
+var store base64Captcha.Store = captcha.NewCacheStore()
 
 type BaseApi struct{}
 

@@ -180,6 +180,10 @@ func (b *BaseApi) Register(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	if err = utils.ValidatePasswordComplexity(r.Password, securityConfigService.Current()); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	var authorities []system.SysAuthority
 	for _, v := range r.AuthorityIds {
 		authorities = append(authorities, system.SysAuthority{
@@ -213,6 +217,10 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 	}
 	err = utils.Verify(req, utils.ChangePasswordVerify)
 	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err = utils.ValidatePasswordComplexity(req.NewPassword, securityConfigService.Current()); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -504,6 +512,10 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 	var rps systemReq.ResetPassword
 	err := c.ShouldBindJSON(&rps)
 	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err = utils.ValidatePasswordComplexity(rps.Password, securityConfigService.Current()); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

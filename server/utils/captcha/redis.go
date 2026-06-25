@@ -23,7 +23,7 @@ type RedisStore struct {
 }
 
 func (rs *RedisStore) UseWithCtx(ctx context.Context) *RedisStore {
-	if ctx == nil {
+	if ctx != nil {
 		rs.Context = ctx
 	}
 	return rs

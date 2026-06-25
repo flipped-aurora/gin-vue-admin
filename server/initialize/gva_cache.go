@@ -17,7 +17,7 @@ func InitGvaCache() {
 	}
 	dr, err := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
 	if err != nil {
-		// 与 OtherInit 中 BlackCache 一致：JWT 过期配置非法应在启动期暴露
+		// JWT 过期配置非法应在启动期暴露
 		panic(err)
 	}
 	global.GVA_CACHE = gva_cache.NewMemoryCache(dr)

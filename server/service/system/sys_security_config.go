@@ -47,7 +47,7 @@ func (s *SecurityConfigService) Set(cfg system.SysSecurityConfig) error {
 	if err != nil {
 		return err
 	}
-	cfg.ID = 1
+	cfg.GVA_MODEL = prev.GVA_MODEL
 	if err = global.GVA_DB.Save(&cfg).Error; err != nil {
 		return err
 	}

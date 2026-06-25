@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 )
 
 // ValidatePasswordComplexity 按安全配置校验密码复杂度 不满足返回可读错误
 func ValidatePasswordComplexity(pwd string, cfg system.SysSecurityConfig) error {
-	if cfg.PwdMinLength > 0 && len(pwd) < cfg.PwdMinLength {
+	if cfg.PwdMinLength > 0 && utf8.RuneCountInString(pwd) < cfg.PwdMinLength {
 		return fmt.Errorf("密码长度不能少于 %d 位", cfg.PwdMinLength)
 	}
 	var hasUpper, hasLower, hasDigit, hasSpecial bool

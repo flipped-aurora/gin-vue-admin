@@ -214,6 +214,14 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
 
+    if (
+      error.response.status === 403 &&
+      (error.response?.data?.data?.needChangePassword || error.response?.data?.code === 7)
+    ) {
+      router.push({ name: 'ForceChangePassword', replace: true })
+      return Promise.reject(error)
+    }
+
     emitter.emit('show-error', {
       code: error.response.status,
       message: getErrorMessage(error)

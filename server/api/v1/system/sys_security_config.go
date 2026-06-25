@@ -48,6 +48,6 @@ func (s *SecurityConfigApi) SetSecurityConfig(c *gin.Context) {
 		response.FailWithMessage("设置安全配置失败", c)
 		return
 	}
-	saved, _ := securityConfigService.Get()
+	saved := securityConfigService.Current()
 	response.OkWithDetailed(saved, "设置成功", c)
 }

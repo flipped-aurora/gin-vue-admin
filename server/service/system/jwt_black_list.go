@@ -48,5 +48,5 @@ func LoadAll() {
 	}
 	for i := 0; i < len(data); i++ {
 		global.GVA_CACHE.SetDefault(data[i], struct{}{})
-	} // jwt黑名单 加入 BlackCache 中
+	} // jwt黑名单 加入 GVA_CACHE 中
 }

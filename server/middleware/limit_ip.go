@@ -77,6 +77,9 @@ func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
 
 // CacheCheckOrMark 基于 GVA_CACHE 的限流计数 超限返回错误 cache 异常 fail-open
 func CacheCheckOrMark(key string, expire int, limit int) error {
+	if global.GVA_CACHE == nil {
+		return nil
+	}
 	n, err := global.GVA_CACHE.IncrementWithExpire(key, 1, time.Duration(expire)*time.Second)
 	if err != nil {
 		global.GVA_LOG.Error("limit", zap.Error(err))

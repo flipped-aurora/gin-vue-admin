@@ -60,6 +60,8 @@ const onSubmit = () => {
       if (res.code === 0) {
         ElMessage.success('修改成功，请重新登录')
         await userStore.LoginOut()
+      } else {
+        ElMessage.error(res.msg || '修改失败')
       }
     } finally {
       loading.value = false

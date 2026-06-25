@@ -15,7 +15,10 @@ type memoryCache struct {
 // NewMemoryCache 创建内存后端，defaultExpire 为 SetDefault 的默认过期时间。
 func NewMemoryCache(defaultExpire time.Duration) Cache {
 	return &memoryCache{
-		c:             local_cache.NewCache(local_cache.SetDefaultExpire(defaultExpire)),
+		c: local_cache.NewCache(
+			local_cache.SetDefaultExpire(defaultExpire),
+			local_cache.SetCapture(func(string, interface{}) {}), // 禁用默认 stdout 打印
+		),
 		defaultExpire: defaultExpire,
 	}
 }

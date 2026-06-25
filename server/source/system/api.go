@@ -55,6 +55,9 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/getApiTokenList", Description: "获取API Token列表"},
 		{ApiGroup: "API Token", Method: "POST", Path: "/sysApiToken/deleteApiToken", Description: "作废API Token"},
 
+		{ApiGroup: "安全配置", Method: "GET", Path: "/securityConfig/getSecurityConfig", Description: "获取安全配置"},
+		{ApiGroup: "安全配置", Method: "POST", Path: "/securityConfig/setSecurityConfig", Description: "设置安全配置"},
+
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/admin_register", Description: "用户注册"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/getUserList", Description: "获取用户列表"},

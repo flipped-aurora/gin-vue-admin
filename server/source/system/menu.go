@@ -91,6 +91,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["superAdmin"], Path: "loginLog", Name: "loginLog", Component: "view/systemTools/loginLog/index.vue", Sort: 10, Meta: Meta{Title: "登录日志", Icon: "monitor"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["superAdmin"], Path: "sysVersion", Name: "sysVersion", Component: "view/systemTools/version/version.vue", Sort: 11, Meta: Meta{Title: "版本管理", Icon: "server"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["superAdmin"], Path: "sysError", Name: "sysError", Component: "view/systemTools/sysError/sysError.vue", Sort: 12, Meta: Meta{Title: "错误日志", Icon: "warn"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["superAdmin"], Path: "security", Name: "security", Component: "view/system/security/index.vue", Sort: 13, Meta: Meta{Title: "安全配置", Icon: "lock"}},
 
 		// example子菜单
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["example"], Path: "upload", Name: "upload", Component: "view/example/upload/upload.vue", Sort: 5, Meta: Meta{Title: "媒体库（上传下载）", Icon: "upload"}},

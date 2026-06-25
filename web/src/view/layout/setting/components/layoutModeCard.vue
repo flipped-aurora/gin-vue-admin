@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 max-[480px]:grid-cols-1 gap-2.5 gva-theme-font">
+  <div class="grid grid-cols-2 max-[480px]:grid-cols-1 gap-2.5 px-1 gva-theme-font">
     <div
       v-for="layout in layoutModes"
       :key="layout.value"

@@ -50,10 +50,10 @@
             <CardModeSelector v-model="settings.card.mode" />
           </SettingItem>
           <SettingItem label="推荐色阶">
-            <el-switch v-model="settings.recommendColor" />
+            <g-switch v-model="settings.recommendColor" aria-label="推荐色阶" />
           </SettingItem>
           <SettingItem label="信息色跟随主色">
-            <el-switch v-model="settings.isInfoFollowPrimary" />
+            <g-switch v-model="settings.isInfoFollowPrimary" aria-label="信息色跟随主色" />
           </SettingItem>
           <SemanticColorPicker />
         </div>
@@ -68,20 +68,24 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="全局尺寸">
-            <el-select v-model="settings.size" class="min-w-24" size="small">
-              <el-option label="默认" value="default" />
-              <el-option label="大" value="large" />
-              <el-option label="小" value="small" />
-            </el-select>
+            <g-select
+              v-model="settings.size"
+              class="min-w-24"
+              :options="[
+                { label: '默认', value: 'default' },
+                { label: '大', value: 'large' },
+                { label: '小', value: 'small' }
+              ]"
+            />
           </SettingItem>
           <SettingItem label="灰色模式">
-            <el-switch v-model="settings.grayscale" />
+            <g-switch v-model="settings.grayscale" aria-label="灰色模式" />
           </SettingItem>
           <SettingItem label="色弱模式">
-            <el-switch v-model="settings.colourWeakness" />
+            <g-switch v-model="settings.colourWeakness" aria-label="色弱模式" />
           </SettingItem>
           <SettingItem label="显示水印">
-            <el-switch v-model="settings.watermark.visible" />
+            <g-switch v-model="settings.watermark.visible" aria-label="显示水印" />
           </SettingItem>
         </div>
       </div>

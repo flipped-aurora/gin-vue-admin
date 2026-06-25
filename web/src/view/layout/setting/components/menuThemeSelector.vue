@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3 px-1">
     <div
       v-for="item in menuThemes"
       :key="item.value"
@@ -17,9 +17,12 @@
         </div>
         <div class="flex-1 h-full" :style="{ background: item.previewMain }"></div>
       </div>
-      <el-icon v-if="modelValue === item.value" class="absolute top-1 right-1" :style="{ color: primaryColor }">
-        <Check />
-      </el-icon>
+      <svg-icon
+        v-if="modelValue === item.value"
+        icon="lucide:check"
+        class="absolute top-1 right-1"
+        :style="{ color: primaryColor }"
+      />
     </div>
   </div>
 </template>
@@ -27,7 +30,6 @@
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { Check } from '@element-plus/icons-vue'
 import { useThemeStore } from '@/pinia'
 
 defineOptions({

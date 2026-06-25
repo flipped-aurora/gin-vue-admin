@@ -60,11 +60,14 @@
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">将所有设置恢复为默认值（导入/导出已迁移至「预设」）</p>
               </div>
             </div>
-            <el-button type="danger" size="small"
-              class="rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5"
-              @click="handleResetConfig">
+            <g-button
+              variant="destructive"
+              size="sm"
+              class="rounded-lg font-medium hover:-translate-y-0.5"
+              @click="handleResetConfig"
+            >
               重置配置
-            </el-button>
+            </g-button>
           </div>
         </div>
       </div>

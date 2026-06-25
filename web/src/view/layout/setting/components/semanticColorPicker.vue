@@ -1,13 +1,14 @@
 <template>
   <SettingItem label="语义色">
     <div class="flex items-center gap-2">
-      <el-color-picker
+      <g-color-picker
         v-for="c in colors"
         :key="c.key"
         :model-value="settings.otherColor[c.key]"
         :title="c.label"
-        size="small"
-        @update:modelValue="(val) => themeStore.updateThemeColors(c.key, val)"
+        :show-value="false"
+        :swatches="presetSwatches"
+        @update:model-value="(val) => themeStore.updateThemeColors(c.key, val)"
       />
     </div>
   </SettingItem>
@@ -31,4 +32,7 @@ const colors = [
   { key: 'error', label: '危险' },
   { key: 'info', label: '信息' }
 ]
+
+// 语义色常用预设，供面板里快速选取
+const presetSwatches = ['#67c23a', '#e6a23c', '#f56c6c', '#909399', '#60c041', '#f9901f', '#5d87ff', '#38c0fc']
 </script>

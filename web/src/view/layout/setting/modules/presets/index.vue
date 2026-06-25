@@ -44,14 +44,9 @@
         >
           暂无自定义预设，点击下方「保存当前为预设」
         </div>
-        <el-button
-          type="primary"
-          class="w-full rounded-lg font-medium"
-          :style="{ backgroundColor: settings.themeColor, borderColor: settings.themeColor }"
-          @click="handleSaveCurrent"
-        >
+        <g-button class="w-full rounded-lg font-medium" @click="handleSaveCurrent">
           保存当前为预设
-        </el-button>
+        </g-button>
       </div>
     </div>
 
@@ -64,9 +59,13 @@
       </div>
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg flex gap-3">
-          <el-button type="primary" plain class="flex-1 rounded-lg" @click="handleExport">
+          <g-button
+            variant="outline-primary"
+            class="flex-1 rounded-lg"
+            @click="handleExport"
+          >
             导出当前配置
-          </el-button>
+          </g-button>
           <el-upload
             ref="uploadRef"
             :auto-upload="false"
@@ -75,7 +74,9 @@
             class="flex-1"
             @change="handleImport"
           >
-            <el-button type="success" plain class="w-full rounded-lg">导入配置</el-button>
+            <g-button variant="outline-success" class="w-full rounded-lg">
+              导入配置
+            </g-button>
           </el-upload>
         </div>
         <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">
@@ -89,7 +90,6 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { storeToRefs } from 'pinia'
 import { useThemeStore } from '@/pinia'
 import PresetCard from '../../components/presetCard.vue'
 import {
@@ -107,7 +107,6 @@ defineOptions({
 })
 
 const themeStore = useThemeStore()
-const { settings } = storeToRefs(themeStore)
 
 const builtinPresets = BUILTIN_PRESETS
 const customPresets = ref(loadCustomPresets())

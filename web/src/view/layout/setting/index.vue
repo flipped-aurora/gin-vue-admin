@@ -11,22 +11,22 @@
       <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <h2 class="text-xl font-semibold gva-theme-text-main gva-theme-font">系统配置</h2>
         <div class="flex items-center gap-2">
-          <el-button
-            type="primary"
-            size="small"
-            class="reset-btn"
-            :style="{ backgroundColor: settings.themeColor, borderColor: settings.themeColor }"
+          <g-button
+            size="sm"
+            class="rounded-lg font-medium hover:-translate-y-0.5"
             @click="resetConfig"
           >
             重置配置
-          </el-button>
-          <el-button
-            size="small"
-            circle
-            :icon="Close"
+          </g-button>
+          <g-button
+            variant="ghost"
+            size="icon"
+            class="rounded-full"
             aria-label="关闭系统配置"
             @click="closeDrawer"
-          />
+          >
+            <svg-icon local-icon="close" class="h-3.5 w-3.5" />
+          </g-button>
         </div>
       </div>
     </template>
@@ -68,7 +68,6 @@
 <script setup>
   import { ref, computed } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { Close } from '@element-plus/icons-vue'
   import { useAppStore, useThemeStore } from '@/pinia'
   import AppearanceSettings from './modules/appearance/index.vue'
   import LayoutSettings from './modules/layout/index.vue'
@@ -225,11 +224,5 @@
   &:hover {
     background: #6b7280;
   }
-}
-</style>
-
-<style lang="scss" scoped>
-.reset-btn {
-  @apply rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5 hover:brightness-90 hover:shadow-lg;
 }
 </style>

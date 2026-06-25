@@ -9,6 +9,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -72,4 +73,35 @@ func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
 		return errors.New("请求太过频繁，请稍后再试")
 	}
 	return nil
+}
+
+// CacheCheckOrMark 基于 GVA_CACHE 的限流计数 超限返回错误 cache 异常 fail-open
+func CacheCheckOrMark(key string, expire int, limit int) error {
+	n, err := global.GVA_CACHE.IncrementWithExpire(key, 1, time.Duration(expire)*time.Second)
+	if err != nil {
+		global.GVA_LOG.Error("limit", zap.Error(err))
+		return nil // fail-open
+	}
+	if int(n) > limit {
+		return errors.New("请求太过频繁，请稍后再试")
+	}
+	return nil
+}
+
+// SecurityLimit 按安全配置对登录/敏感接口限流 未开启则放行
+func SecurityLimit() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		enable, window, count := service.ServiceGroupApp.SystemServiceGroup.SecurityConfigService.CurrentLimit()
+		if !enable {
+			c.Next()
+			return
+		}
+		key := "GVA_SecLimit" + c.ClientIP() + c.FullPath()
+		if err := CacheCheckOrMark(key, window, count); err != nil {
+			c.JSON(http.StatusOK, gin.H{"code": response.ERROR, "msg": err.Error()})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
 }

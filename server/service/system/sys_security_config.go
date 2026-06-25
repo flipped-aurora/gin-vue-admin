@@ -85,3 +85,9 @@ func (s *SecurityConfigService) LoadAll() {
 	}
 	setSecurityConfigCache(cfg)
 }
+
+// CurrentLimit 供中间件读取限流配置 返回 enable/window/count
+func (s *SecurityConfigService) CurrentLimit() (enable bool, window int, count int) {
+	cfg := s.Current()
+	return cfg.LimitEnable, cfg.LimitWindow, cfg.LimitCount
+}

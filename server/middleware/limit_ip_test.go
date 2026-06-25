@@ -41,3 +41,18 @@ func TestDefaultCheckOrMark_FailOpenWhenCacheNil(t *testing.T) {
 		t.Fatalf("GVA_CACHE 为 nil 时应 fail-open 放行: %v", err)
 	}
 }
+
+func TestCacheCheckOrMark(t *testing.T) {
+	global.GVA_CACHE = gva_cache.NewMemoryCache(time.Hour)
+	key := "GVA_Limit_test_1.2.3.4"
+	// limit=2 前两次放行 第三次拒绝
+	if err := CacheCheckOrMark(key, 60, 2); err != nil {
+		t.Fatalf("1st should pass, got %v", err)
+	}
+	if err := CacheCheckOrMark(key, 60, 2); err != nil {
+		t.Fatalf("2nd should pass, got %v", err)
+	}
+	if err := CacheCheckOrMark(key, 60, 2); err == nil {
+		t.Fatalf("3rd should be limited, got nil")
+	}
+}

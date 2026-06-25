@@ -1,5 +1,5 @@
 <template>
-  <div class="system">
+  <div class="gva-table-box">
     <el-form ref="form" :model="config" label-width="240px">
       <!--  System start  -->
       <el-tabs v-model="activeNames">
@@ -1126,10 +1126,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .system {
-    @apply bg-white p-9 rounded dark:bg-slate-900;
-    h2 {
-      @apply p-2.5 my-2.5 text-lg shadow;
-    }
+  h2 {
+    @apply p-2.5 my-2.5 text-lg shadow;
   }
 </style>

@@ -41,15 +41,15 @@ func (b *BaseApi) Login(c *gin.Context) {
 	// 判断验证码是否开启
 	openCaptcha := global.GVA_CONFIG.Captcha.OpenCaptcha               // 是否开启防爆次数
 	openCaptchaTimeOut := global.GVA_CONFIG.Captcha.OpenCaptchaTimeOut // 缓存超时时间
-	v, ok := global.BlackCache.Get(key)
+	v, ok := global.GVA_CACHE.Get(key)
 	if !ok {
-		global.BlackCache.Set(key, 1, time.Second*time.Duration(openCaptchaTimeOut))
+		global.GVA_CACHE.Set(key, int64(1), time.Second*time.Duration(openCaptchaTimeOut))
 	}
 
 	var oc bool = openCaptcha == 0 || openCaptcha < interfaceToInt(v)
 	if oc && (l.Captcha == "" || l.CaptchaId == "" || !store.Verify(l.CaptchaId, l.Captcha, true)) {
 		// 验证码次数+1
-		global.BlackCache.Increment(key, 1)
+		_, _ = global.GVA_CACHE.Increment(key, 1)
 		response.FailWithMessage("验证码错误", c)
 		// 记录登录失败日志
 		loginLogService.CreateLoginLog(system.SysLoginLog{
@@ -67,7 +67,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
 		// 验证码次数+1
-		global.BlackCache.Increment(key, 1)
+		_, _ = global.GVA_CACHE.Increment(key, 1)
 		response.FailWithMessage("用户名不存在或者密码错误", c)
 		// 记录登录失败日志
 		loginLogService.CreateLoginLog(system.SysLoginLog{
@@ -82,7 +82,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 	if user.Enable != 1 {
 		global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
 		// 验证码次数+1
-		global.BlackCache.Increment(key, 1)
+		_, _ = global.GVA_CACHE.Increment(key, 1)
 		response.FailWithMessage("用户被禁止登录", c)
 		// 记录登录失败日志
 		loginLogService.CreateLoginLog(system.SysLoginLog{

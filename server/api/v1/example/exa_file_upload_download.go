@@ -42,6 +42,14 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 }
 
 // EditFileName 编辑文件名或者备注
+// @Tags      ExaFileUploadAndDownload
+// @Summary   编辑文件名或者备注
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      example.ExaFileUploadAndDownload  true  "传入文件id和文件名或备注"
+// @Success   200   {object}  response.Response{msg=string}     "编辑文件名或者备注"
+// @Router    /fileUploadAndDownload/editFileName [post]
 func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
 	var file example.ExaFileUploadAndDownload
 	err := c.ShouldBindJSON(&file)
@@ -116,8 +124,8 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 // @Summary   导入URL
 // @Security  ApiKeyAuth
 // @Produce   application/json
-// @Param     data  body      example.ExaFileUploadAndDownload  true  "对象"
-// @Success   200   {object}  response.Response{msg=string}     "导入URL"
+// @Param     data  body      []example.ExaFileUploadAndDownload  true  "对象数组"
+// @Success   200   {object}  response.Response{msg=string}       "导入URL"
 // @Router    /fileUploadAndDownload/importURL [post]
 func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
 	var file []example.ExaFileUploadAndDownload

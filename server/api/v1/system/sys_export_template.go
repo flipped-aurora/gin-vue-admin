@@ -247,6 +247,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) GetSysExportTemplateList(c *gi
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Param templateID query string true "导出模板ID"
+// @Success 200 {object} response.Response{data=string} "导出表格一次性下载链接"
 // @Router /sysExportTemplate/exportExcel [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")
@@ -280,9 +282,11 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 // ExportExcelByToken 导出表格
 // @Tags ExportExcelByToken
 // @Summary 导出表格
-// @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Produce application/octet-stream
+// @Param token query string true "导出一次性token"
+// @Success 200 {string} string "excel文件流"
 // @Router /sysExportTemplate/exportExcelByToken [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Context) {
 	token := c.Query("token")
@@ -338,6 +342,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Param templateID query string true "导出模板ID"
+// @Success 200 {object} response.Response{data=string} "导出表格模板一次性下载链接"
 // @Router /sysExportTemplate/exportTemplate [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context) {
 	templateID := c.Query("templateID")
@@ -369,9 +375,11 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context)
 // ExportTemplateByToken 通过token导出表格模板
 // @Tags ExportTemplateByToken
 // @Summary 通过token导出表格模板
-// @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Produce application/octet-stream
+// @Param token query string true "导出一次性token"
+// @Success 200 {string} string "模板文件流"
 // @Router /sysExportTemplate/exportTemplateByToken [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.Context) {
 	token := c.Query("token")
@@ -432,8 +440,11 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 // @Tags SysImportTemplate
 // @Summary 导入表格
 // @Security ApiKeyAuth
-// @accept application/json
+// @accept multipart/form-data
 // @Produce application/json
+// @Param templateID query string true "导入模板ID"
+// @Param file formData file true "导入文件"
+// @Success 200 {object} response.Response{msg=string} "导入成功"
 // @Router /sysExportTemplate/importExcel [post]
 func (sysExportTemplateApi *SysExportTemplateApi) ImportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")

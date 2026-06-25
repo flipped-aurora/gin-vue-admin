@@ -17,6 +17,14 @@ import (
 	"go.uber.org/zap"
 )
 
+// LLMAutoSSE
+// @Tags      AutoCode
+// @Summary   大模型自动化 SSE 流式代理
+// @accept    application/json
+// @Produce   text/event-stream
+// @Param     data  body      common.JSONMap  true  "大模型请求参数"
+// @Success   200   {string}  string          "SSE 流式响应(text/event-stream)"
+// @Router    /autoCode/llmAutoSSE [post]
 func (autoApi *AutoCodeApi) LLMAutoSSE(c *gin.Context) {
 	var llm common.JSONMap
 	if err := c.ShouldBindJSON(&llm); err != nil {

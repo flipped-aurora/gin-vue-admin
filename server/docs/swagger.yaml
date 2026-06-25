@@ -1080,6 +1080,46 @@ definitions:
         description: 是否前端表格列
         type: boolean
     type: object
+  request.AutoMcpTool:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      params:
+        items:
+          properties:
+            default:
+              type: string
+            description:
+              type: string
+            name:
+              type: string
+            required:
+              type: boolean
+            type:
+              description: string, number, boolean, object, array
+              type: string
+          required:
+          - description
+          - name
+          - type
+          type: object
+        type: array
+      response:
+        items:
+          properties:
+            type:
+              description: text, image
+              type: string
+          required:
+          - type
+          type: object
+        type: array
+    required:
+    - description
+    - name
+    type: object
   request.BuildSysCliBinaryRequest:
     properties:
       baseUrl:
@@ -1129,6 +1169,8 @@ definitions:
         type: string
       name:
         type: string
+      scenariosJson:
+        type: string
       skillDescription:
         type: string
       skillName:
@@ -1158,6 +1200,19 @@ definitions:
     properties:
       id:
         type: integer
+    type: object
+  request.DownloadOnlineSkillReq:
+    properties:
+      id:
+        type: integer
+      tool:
+        type: string
+      version:
+        type: string
+    required:
+    - id
+    - tool
+    - version
     type: object
   request.Empty:
     type: object
@@ -1488,6 +1543,219 @@ definitions:
       id:
         type: integer
     type: object
+  request.SkillDeleteRequest:
+    properties:
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillDetailRequest:
+    properties:
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillFileRequest:
+    properties:
+      fileName:
+        type: string
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillFileSaveRequest:
+    properties:
+      content:
+        type: string
+      fileName:
+        type: string
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillGlobalConstraintSaveRequest:
+    properties:
+      content:
+        type: string
+      syncTools:
+        items:
+          type: string
+        type: array
+      tool:
+        type: string
+    type: object
+  request.SkillPackageRequest:
+    properties:
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillReferenceCreateRequest:
+    properties:
+      fileName:
+        type: string
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillResourceCreateRequest:
+    properties:
+      fileName:
+        type: string
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillSaveRequest:
+    properties:
+      markdown:
+        type: string
+      meta:
+        $ref: '#/definitions/system.SkillMeta'
+      skill:
+        type: string
+      syncTools:
+        items:
+          type: string
+        type: array
+      tool:
+        type: string
+    type: object
+  request.SkillScriptCreateRequest:
+    properties:
+      fileName:
+        type: string
+      scriptType:
+        type: string
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillTemplateCreateRequest:
+    properties:
+      fileName:
+        type: string
+      skill:
+        type: string
+      tool:
+        type: string
+    type: object
+  request.SkillToolRequest:
+    properties:
+      tool:
+        type: string
+    type: object
+  request.SysAIWorkflowMarkdownDump:
+    properties:
+      conversationId:
+        type: string
+      currentNodeId:
+        type: string
+      formData:
+        $ref: '#/definitions/common.JSONMap'
+      id:
+        type: integer
+      messageId:
+        type: string
+      messages:
+        items:
+          $ref: '#/definitions/system.AIWorkflowMessage'
+        type: array
+      resultData:
+        $ref: '#/definitions/common.JSONMap'
+      settings:
+        $ref: '#/definitions/common.JSONMap'
+      summary:
+        type: string
+      tab:
+        type: string
+      title:
+        type: string
+    type: object
+  request.SysAIWorkflowSessionSearch:
+    properties:
+      keyword:
+        description: 关键字
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      tab:
+        type: string
+    type: object
+  request.SysAIWorkflowSessionUpsert:
+    properties:
+      conversationId:
+        type: string
+      currentNodeId:
+        type: string
+      formData:
+        $ref: '#/definitions/common.JSONMap'
+      id:
+        type: integer
+      messageId:
+        type: string
+      messages:
+        items:
+          $ref: '#/definitions/system.AIWorkflowMessage'
+        type: array
+      resultData:
+        $ref: '#/definitions/common.JSONMap'
+      settings:
+        $ref: '#/definitions/common.JSONMap'
+      summary:
+        type: string
+      tab:
+        type: string
+      title:
+        type: string
+    type: object
+  request.SysApiTokenSearch:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      authorityId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      expiresAt:
+        type: string
+      keyword:
+        description: 关键字
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      remark:
+        type: string
+      status:
+        type: boolean
+      token:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      user:
+        $ref: '#/definitions/system.SysUser'
+      userId:
+        type: integer
+    type: object
   request.SysAuthorityBtnReq:
     properties:
       authorityId:
@@ -1575,6 +1843,8 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+      scenariosJson:
         type: string
       skillDescription:
         type: string
@@ -1761,6 +2031,23 @@ definitions:
       user:
         $ref: '#/definitions/system.SysUser'
     type: object
+  system.AIWorkflowMessage:
+    properties:
+      content:
+        type: string
+      conversationId:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      messageId:
+        type: string
+      role:
+        type: string
+      snapshot:
+        $ref: '#/definitions/common.JSONMap'
+    type: object
   system.Condition:
     properties:
       ID:
@@ -1824,6 +2111,19 @@ definitions:
         description: 路由切换动画
         type: string
     type: object
+  system.SkillMeta:
+    properties:
+      agent:
+        type: string
+      allowedTools:
+        type: string
+      context:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+    type: object
   system.SysApi:
     properties:
       ID:
@@ -1847,6 +2147,33 @@ definitions:
       updatedAt:
         description: 更新时间
         type: string
+    type: object
+  system.SysApiToken:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      authorityId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      expiresAt:
+        type: string
+      remark:
+        type: string
+      status:
+        description: true有效 false无效
+        type: boolean
+      token:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      user:
+        $ref: '#/definitions/system.SysUser'
+      userId:
+        type: integer
     type: object
   system.SysAuthority:
     properties:
@@ -2128,6 +2455,32 @@ definitions:
         type: string
       updatedAt:
         description: 更新时间
+        type: string
+    type: object
+  system.SysLoginLog:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      agent:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      errorMessage:
+        type: string
+      ip:
+        type: string
+      status:
+        type: boolean
+      updatedAt:
+        description: 更新时间
+        type: string
+      user:
+        $ref: '#/definitions/system.SysUser'
+      userId:
+        type: integer
+      username:
         type: string
     type: object
   system.SysMenu:
@@ -3222,6 +3575,190 @@ paths:
       summary: 删除回滚记录
       tags:
       - AutoCode
+  /autoCode/deleteAIWorkflowSession:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 会话ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除AI工作流会话
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除AI工作流会话
+      tags:
+      - AIWorkflowSession
+  /autoCode/dumpAIWorkflowMarkdown:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: AI工作流Markdown落盘信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysAIWorkflowMarkdownDump'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 导出AI工作流Markdown落盘
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 导出AI工作流Markdown落盘
+      tags:
+      - AIWorkflowSession
+  /autoCode/getAIWorkflowSessionDetail:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 会话ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取AI工作流会话详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取AI工作流会话详情
+      tags:
+      - AIWorkflowSession
+  /autoCode/getAIWorkflowSessionList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小, 分组Tab
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysAIWorkflowSessionSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取AI工作流会话列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取AI工作流会话列表
+      tags:
+      - AIWorkflowSession
+  /autoCode/getColumn:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 业务数据库别名
+        in: query
+        name: businessDB
+        type: string
+      - description: 数据库名
+        in: query
+        name: dbName
+        type: string
+      - description: 表名
+        in: query
+        name: tableName
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取当前表所有字段
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前表所有字段
+      tags:
+      - AutoCode
+  /autoCode/getDB:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 业务数据库别名
+        in: query
+        name: businessDB
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取当前所有数据库
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前所有数据库
+      tags:
+      - AutoCode
   /autoCode/getMeta:
     post:
       consumes:
@@ -3326,6 +3863,39 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 查询回滚记录
+      tags:
+      - AutoCode
+  /autoCode/getTables:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 数据库名
+        in: query
+        name: dbName
+        type: string
+      - description: 业务数据库别名
+        in: query
+        name: businessDB
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取当前数据库所有表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取当前数据库所有表
       tags:
       - AutoCode
   /autoCode/getTemplates:
@@ -3444,7 +4014,8 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items: {}
+                  items:
+                    type: object
                   type: array
                 msg:
                   type: string
@@ -3454,6 +4025,230 @@ paths:
       summary: 安装插件
       tags:
       - AutoCodePlugin
+  /autoCode/llmAuto:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 大模型请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/common.JSONMap'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 大模型自动生成
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      summary: 大模型自动生成
+      tags:
+      - AutoCode
+  /autoCode/llmAutoSSE:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 大模型请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/common.JSONMap'
+      produces:
+      - text/event-stream
+      responses:
+        "200":
+          description: SSE 流式响应(text/event-stream)
+          schema:
+            type: string
+      summary: 大模型自动化 SSE 流式代理
+      tags:
+      - AutoCode
+  /autoCode/mcp:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MCP Tool配置信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AutoMcpTool'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建MCP Tool
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建MCP Tool
+      tags:
+      - AutoCodeMcp
+  /autoCode/mcpList:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取MCP工具列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取MCP工具列表
+      tags:
+      - AutoCodeMcp
+  /autoCode/mcpRoutes:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取系统路由列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取系统路由列表
+      tags:
+      - AutoCodeMcp
+  /autoCode/mcpStart:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 启动MCP独立服务
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 启动MCP独立服务
+      tags:
+      - AutoCodeMcp
+  /autoCode/mcpStatus:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取MCP独立服务状态及服务配置
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取MCP独立服务状态
+      tags:
+      - AutoCodeMcp
+  /autoCode/mcpStop:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 停止MCP独立服务
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 停止MCP独立服务
+      tags:
+      - AutoCodeMcp
+  /autoCode/mcpTest:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具名称name与调用参数arguments
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 测试调用MCP工具返回内容
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    type: object
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 测试调用MCP工具
+      tags:
+      - AutoCodeMcp
   /autoCode/preview:
     post:
       consumes:
@@ -3573,6 +4368,36 @@ paths:
       summary: 回滚自动生成代码
       tags:
       - AutoCode
+  /autoCode/saveAIWorkflowSession:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: AI工作流会话信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysAIWorkflowSessionUpsert'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存AI工作流会话
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存AI工作流会话
+      tags:
+      - AIWorkflowSession
   /base/captcha:
     post:
       consumes:
@@ -4274,6 +5099,34 @@ paths:
       summary: 删除文件
       tags:
       - ExaFileUploadAndDownload
+  /fileUploadAndDownload/editFileName:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 传入文件id和文件名或备注
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/example.ExaFileUploadAndDownload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 编辑文件名或者备注
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑文件名或者备注
+      tags:
+      - ExaFileUploadAndDownload
   /fileUploadAndDownload/findFile:
     get:
       consumes:
@@ -4364,12 +5217,14 @@ paths:
   /fileUploadAndDownload/importURL:
     post:
       parameters:
-      - description: 对象
+      - description: 对象数组
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/example.ExaFileUploadAndDownload'
+          items:
+            $ref: '#/definitions/example.ExaFileUploadAndDownload'
+          type: array
       produces:
       - application/json
       responses:
@@ -5081,6 +5936,692 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /skills/createReference:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillReferenceCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建参考
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建参考
+      tags:
+      - Skills
+  /skills/createResource:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillResourceCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建资源
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建资源
+      tags:
+      - Skills
+  /skills/createScript:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名, 脚本类型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillScriptCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建脚本
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建脚本
+      tags:
+      - Skills
+  /skills/createTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillTemplateCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建模板
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建模板
+      tags:
+      - Skills
+  /skills/deleteSkill:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除技能
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除技能
+      tags:
+      - Skills
+  /skills/downloadOnlineSkill:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能ID, 版本
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.DownloadOnlineSkillReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 下载在线技能
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: 下载在线技能
+      tags:
+      - Skills
+  /skills/getGlobalConstraint:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillToolRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 读取全局约束
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 读取全局约束
+      tags:
+      - Skills
+  /skills/getReference:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 读取参考
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 读取参考
+      tags:
+      - Skills
+  /skills/getResource:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 读取资源
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 读取资源
+      tags:
+      - Skills
+  /skills/getScript:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 读取脚本
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 读取脚本
+      tags:
+      - Skills
+  /skills/getSkillDetail:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillDetailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取技能详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取技能详情
+      tags:
+      - Skills
+  /skills/getSkillList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillToolRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取技能列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取技能列表
+      tags:
+      - Skills
+  /skills/getTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 读取模板
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 读取模板
+      tags:
+      - Skills
+  /skills/getTools:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取工具列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取工具列表
+      tags:
+      - Skills
+  /skills/packageSkill:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillPackageRequest'
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: 打包技能, 返回zip文件流
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 打包技能
+      tags:
+      - Skills
+  /skills/saveGlobalConstraint:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 内容, 同步工具
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillGlobalConstraintSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存全局约束
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存全局约束
+      tags:
+      - Skills
+  /skills/saveReference:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名, 内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存参考
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存参考
+      tags:
+      - Skills
+  /skills/saveResource:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名, 内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存资源
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存资源
+      tags:
+      - Skills
+  /skills/saveScript:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名, 内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存脚本
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存脚本
+      tags:
+      - Skills
+  /skills/saveSkill:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 元数据, 内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存技能
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存技能
+      tags:
+      - Skills
+  /skills/saveTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 工具标识, 技能标识, 文件名, 内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SkillFileSaveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 保存模板
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 保存模板
+      tags:
+      - Skills
+  /sysApiToken/createApiToken:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户ID, 角色ID, 有效天数(-1为永久), 备注
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 签发ApiToken
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 签发ApiToken
+      tags:
+      - SysApiToken
+  /sysApiToken/deleteApiToken:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ApiToken的ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysApiToken'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 作废ApiToken
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 作废ApiToken
+      tags:
+      - SysApiToken
+  /sysApiToken/getApiTokenList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小, 搜索条件
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysApiTokenSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取ApiToken列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ApiToken列表
+      tags:
+      - SysApiToken
   /sysDictionary/createSysDictionary:
     post:
       consumes:
@@ -5831,7 +7372,7 @@ paths:
         in: query
         items:
           type: string
-        name: createdAtRange
+        name: createdAtRange[]
         type: array
       - in: query
         name: form
@@ -5998,9 +7539,24 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: 导出模板ID
+        in: query
+        name: templateID
+        required: true
+        type: string
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 导出表格一次性下载链接
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
       security:
       - ApiKeyAuth: []
       summary: 导出表格
@@ -6010,11 +7566,20 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: 导出一次性token
+        in: query
+        name: token
+        required: true
+        type: string
       produces:
       - application/json
-      responses: {}
-      security:
-      - ApiKeyAuth: []
+      - application/octet-stream
+      responses:
+        "200":
+          description: excel文件流
+          schema:
+            type: string
       summary: 导出表格
       tags:
       - ExportExcelByToken
@@ -6022,9 +7587,24 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: 导出模板ID
+        in: query
+        name: templateID
+        required: true
+        type: string
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 导出表格模板一次性下载链接
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
       security:
       - ApiKeyAuth: []
       summary: 导出表格模板
@@ -6034,11 +7614,20 @@ paths:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: 导出一次性token
+        in: query
+        name: token
+        required: true
+        type: string
       produces:
       - application/json
-      responses: {}
-      security:
-      - ApiKeyAuth: []
+      - application/octet-stream
+      responses:
+        "200":
+          description: 模板文件流
+          schema:
+            type: string
       summary: 通过token导出表格模板
       tags:
       - ExportTemplateByToken
@@ -6189,10 +7778,30 @@ paths:
   /sysExportTemplate/importExcel:
     post:
       consumes:
-      - application/json
+      - multipart/form-data
+      parameters:
+      - description: 导入模板ID
+        in: query
+        name: templateID
+        required: true
+        type: string
+      - description: 导入文件
+        in: formData
+        name: file
+        required: true
+        type: file
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: 导入成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
       security:
       - ApiKeyAuth: []
       summary: 导入表格
@@ -6254,6 +7863,182 @@ paths:
       summary: 更新导出模板
       tags:
       - SysExportTemplate
+  /sysLoginLog/deleteLoginLog:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 登录日志ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysLoginLog'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除登录日志
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除登录日志
+      tags:
+      - SysLoginLog
+  /sysLoginLog/deleteLoginLogByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 登录日志ID集合
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 批量删除登录日志
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除登录日志
+      tags:
+      - SysLoginLog
+  /sysLoginLog/findLoginLog:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - in: query
+        name: agent
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: errorMessage
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - in: query
+        name: status
+        type: boolean
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: userId
+        type: integer
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用id查询登录日志
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/system.SysLoginLog'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询登录日志
+      tags:
+      - SysLoginLog
+  /sysLoginLog/getLoginLogList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - in: query
+        name: agent
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: errorMessage
+        type: string
+      - in: query
+        name: ip
+        type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: status
+        type: boolean
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: userId
+        type: integer
+      - in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取登录日志列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取登录日志列表
+      tags:
+      - SysLoginLog
   /sysOperationRecord/deleteSysOperationRecord:
     delete:
       consumes:
@@ -6856,7 +8641,7 @@ paths:
         in: query
         items:
           type: string
-        name: createdAtRange
+        name: createdAtRange[]
         type: array
       - description: 关键字
         in: query

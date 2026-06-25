@@ -56,4 +56,5 @@ var (
 	loginLogService          = service.ServiceGroupApp.SystemServiceGroup.LoginLogService
 	apiTokenService          = service.ServiceGroupApp.SystemServiceGroup.ApiTokenService
 	skillsService            = service.ServiceGroupApp.SystemServiceGroup.SkillsService
+	securityConfigService    = service.ServiceGroupApp.SystemServiceGroup.SecurityConfigService
 )

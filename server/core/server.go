@@ -30,6 +30,7 @@ func RunServer() {
 
 	if global.GVA_DB != nil {
 		system.LoadAll()
+		(&system.SecurityConfigService{}).LoadAll()
 	}
 
 	Router := initialize.Routers()

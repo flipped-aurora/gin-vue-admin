@@ -28,6 +28,7 @@ type ApiGroup struct {
 	ApiTokenApi
 	SkillsApi
 	AIWorkflowSessionApi
+	SecurityConfigApi
 }
 
 var (

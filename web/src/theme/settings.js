@@ -18,14 +18,14 @@ export const themeSettings = {
   grayscale: false,
   colourWeakness: false,
   recommendColor: false,
-  themeColor: '#5D87FF',
+  themeColor: '#5d87ff',
   themeRadius: 0.75,
   size: 'default',
   otherColor: {
     info: '#909399',
-    success: '#60C041',
-    warning: '#F9901F',
-    error: '#F56C6C'
+    success: '#60c041',
+    warning: '#f9901f',
+    error: '#f56c6c'
   },
   isInfoFollowPrimary: false,
   layout: {

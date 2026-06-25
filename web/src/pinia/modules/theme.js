@@ -7,6 +7,7 @@ import {
   buildThemePreset,
   cacheThemeSettings,
   mergeThemeSettings,
+  normalizeColor,
   normalizeThemePreset,
   normalizeThemeSettings,
   readCachedThemeSettings,
@@ -90,12 +91,14 @@ export const useThemeStore = defineStore('theme', () => {
   }
 
   const updateThemeColors = (key, color) => {
+    // 颜色统一小写后再写入，保证内部 themeColor / otherColor 始终是小写单一形态
+    const value = normalizeColor(color)
     if (key === 'primary') {
-      settings.themeColor = color
+      settings.themeColor = value
       return
     }
 
-    if (key in settings.otherColor) settings.otherColor[key] = color
+    if (key in settings.otherColor) settings.otherColor[key] = value
   }
 
   const applyPreset = (preset) => {

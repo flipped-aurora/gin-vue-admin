@@ -6,6 +6,22 @@ import { defu, isObject, liteClone } from 'arcdash'
 
 export const THEME_SETTINGS_STORAGE_KEY = 'gva-theme-settings'
 
+// 颜色统一小写：项目内部所有颜色字符串以小写为单一形态，避免默认值「#5D87FF」
+// 与预设「#5d87ff」因大小写不等而出现选中态丢失。任何外部数据进入运行态前都过一遍。
+export const normalizeColor = (value) =>
+  typeof value === 'string' ? value.toLowerCase() : value
+
+// 把一份 settings 里的主题色字段统一小写（就地改写后返回同一对象）。
+const normalizeThemeColors = (settings) => {
+  settings.themeColor = normalizeColor(settings.themeColor)
+  if (isObject(settings.otherColor)) {
+    Object.keys(settings.otherColor).forEach((key) => {
+      settings.otherColor[key] = normalizeColor(settings.otherColor[key])
+    })
+  }
+  return settings
+}
+
 // 把 source 深合并进 target（就地，供 themeStore 直接改写响应式 settings）。
 // target / source 都来自完整 schema（默认值或 normalizeThemeSettings 输出），
 // 未知字段的过滤已在 normalize 阶段由 pickKnownKeys 完成，这里无需再做白名单。
@@ -64,7 +80,7 @@ export const normalizeThemeSettings = (input) => {
 
   if (!isThemeSettingsLike(source)) return cloneThemeSettings()
 
-  return defu(pickKnownKeys(source, themeSettings), cloneThemeSettings())
+  return normalizeThemeColors(defu(pickKnownKeys(source, themeSettings), cloneThemeSettings()))
 }
 
 export const normalizeThemePreset = (preset) => {

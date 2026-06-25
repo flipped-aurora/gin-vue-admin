@@ -29,6 +29,12 @@ func getSecurityConfigCache() system.SysSecurityConfig {
 // Get 读取单行配置 不存在则按 config.yaml 默认创建并返回
 func (s *SecurityConfigService) Get() (system.SysSecurityConfig, error) {
 	var cfg system.SysSecurityConfig
+	// 系统尚未初始化(未走 init 向导)或连库失败时 global.GVA_DB 为 nil
+	// 此时返回 config.yaml 默认配置并带错误: 调用方 Current 据此不写缓存
+	// 待数据库就绪后再惰性加载真实行 同时避免对 nil 的 *gorm.DB 解引用导致 panic
+	if global.GVA_DB == nil {
+		return system.DefaultSecurityConfig(global.GVA_CONFIG.Captcha), errors.New("数据库未初始化")
+	}
 	err := global.GVA_DB.Where("id = ?", 1).First(&cfg).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		cfg = system.DefaultSecurityConfig(global.GVA_CONFIG.Captcha)

@@ -1,15 +1,12 @@
 <template>
-  <div class="p-4">
-    <el-card>
-      <template #header>
-        <div class="flex items-center justify-between">
-          <span class="text-base font-medium">安全配置</span>
-          <el-button type="primary" :loading="saving" @click="onSave">保存</el-button>
-        </div>
-      </template>
+  <div>
+    <div class="gva-table-box">
+      <div class="flex items-center mb-4">
+        <span class="text-base font-medium">安全配置</span>
+      </div>
 
       <el-tabs v-model="activeTab">
-        <el-tab-pane label="验证码" name="captcha">
+        <el-tab-pane label="验证码" name="captcha" class="mt-4">
           <el-form :model="form" label-width="160px" class="max-w-2xl">
             <el-form-item label="错误N次后出验证码">
               <el-input-number v-model="form.captchaOpen" :min="0" />
@@ -30,7 +27,7 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="密码复杂度" name="password">
+        <el-tab-pane label="密码复杂度" name="password" class="mt-4">
           <el-form :model="form" label-width="160px" class="max-w-2xl">
             <el-form-item label="最小长度">
               <el-input-number v-model="form.pwdMinLength" :min="1" />
@@ -50,7 +47,7 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="限流" name="limit">
+        <el-tab-pane label="限流" name="limit" class="mt-4">
           <el-form :model="form" label-width="160px" class="max-w-2xl">
             <el-form-item label="开启限流">
               <el-switch v-model="form.limitEnable" />
@@ -64,7 +61,7 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="失败锁定" name="lock">
+        <el-tab-pane label="失败锁定" name="lock" class="mt-4">
           <el-form :model="form" label-width="160px" class="max-w-2xl">
             <el-form-item label="开启失败锁定">
               <el-switch v-model="form.lockEnable" />
@@ -78,7 +75,7 @@
           </el-form>
         </el-tab-pane>
 
-        <el-tab-pane label="密码过期" name="expire">
+        <el-tab-pane label="密码过期" name="expire" class="mt-4">
           <el-form :model="form" label-width="160px" class="max-w-2xl">
             <el-form-item label="开启密码过期">
               <el-switch v-model="form.pwdExpireEnable" />
@@ -89,7 +86,11 @@
           </el-form>
         </el-tab-pane>
       </el-tabs>
-    </el-card>
+
+      <div class="mt-4 flex">
+        <el-button type="primary" :loading="saving" @click="onSave">保存</el-button>
+      </div>
+    </div>
   </div>
 </template>
 

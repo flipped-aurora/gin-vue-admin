@@ -25,6 +25,12 @@ const routes = [
     component: () => import('@/view/example/upload/scanUpload.vue')
   },
   {
+    path: '/forceChangePassword',
+    name: 'ForceChangePassword',
+    component: () => import('@/view/system/security/forceChangePassword.vue'),
+    meta: { title: '修改密码' }
+  },
+  {
     path: '/:catchAll(.*)',
     meta: {
       closeTab: true

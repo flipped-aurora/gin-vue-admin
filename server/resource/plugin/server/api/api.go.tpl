@@ -166,7 +166,7 @@ func (a *{{.Abbreviation}}) Find{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept application/json
 // @Produce application/json
-// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=[]model.{{.StructName}},msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
     // 创建业务用Context
@@ -188,7 +188,7 @@ func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
 // @Accept application/json
 // @Produce application/json
 // @Param data query request.{{.StructName}}Search true "分页获取{{.Description}}列表"
-// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=response.PageResult{list=[]model.{{.StructName}}},msg=string} "获取成功"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func (a *{{.Abbreviation}}) Get{{.StructName}}List(c *gin.Context) {
     // 创建业务用Context

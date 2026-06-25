@@ -87,3 +87,21 @@
 - 响应结构
 - 路由路径
 - 鉴权要求
+
+### 响应类型要落到具体类型
+
+`@Success` 的 `data` 必须反映真实返回类型，让 swag 能生成有意义的返回结构，而不是空对象：
+
+- 分页列表：`response.Response{data=response.PageResult{list=[]xxx.Model},msg=string}`
+  - `response.PageResult.List` 是 `interface{}`，只写 `data=response.PageResult` 会让 swag 把 `list` 生成成空对象，必须用嵌套覆盖把元素类型补上
+- 非分页列表 / 直接返回数组：`response.Response{data=[]xxx.Model,msg=string}`
+- 单对象 / 详情：`response.Response{data=xxx.Model,msg=string}`
+- 仅返回提示、无数据（创建 / 更新 / 删除）：`response.Response{msg=string}`
+- 仅当返回的是动态结构或示例数据（数据源、临时 `gin.H` 拼装等）时，才用 `data=object` 或 `data=[]interface{}`
+
+### 鉴权注释要与路由分组一致
+
+- 私有分组（`PrivateGroup`，挂 `JWTAuth` + `Casbin`）的接口才写 `@Security ApiKeyAuth`
+- 公开分组（`PublicGroup`）的接口不写 `@Security`，否则文档与真实鉴权不符
+
+> 代码生成模板 `resource/package/server/api/api.go.tpl`、`resource/plugin/server/api/api.go.tpl` 已按上述规范生成列表接口返回类型，手写接口遵循同一标准。

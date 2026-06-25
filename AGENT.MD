@@ -38,6 +38,7 @@
 - `enter.go` 继续作为分组注册与组合入口
 - API 层处理 HTTP 相关逻辑，Service 层不要依赖 `gin.Context`
 - 对外接口的 Swagger 注释必须和真实行为保持一致
+- Swagger 的 `@Success` 响应要落到具体类型，让 swag 能生成真实返回结构：列表用 `response.PageResult{list=[]Model}`、详情用具体 model，不要停留在空的 `response.PageResult` 或 `data=object`（仅动态/示例数据才用 `object`）；细则见 `aiDoc/modules/backend-layer-rules.md`
 - 优先沿用 gin-vue-admin 现有模式，不做无关的大改
 
 ### 前后端协作

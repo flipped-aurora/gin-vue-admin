@@ -76,7 +76,8 @@ export const themeSettings = {
         'base-text': 'rgb(31, 41, 55)',
         border: 'rgb(229, 231, 235)',
         muted: 'rgb(248, 250, 252)',
-        'muted-foreground': 'rgb(100, 116, 139)'
+        'muted-foreground': 'rgb(100, 116, 139)',
+        'control-track': 'rgb(209, 213, 219)'
       },
       boxShadow: {
         header: '0 1px 0 rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)',
@@ -93,7 +94,8 @@ export const themeSettings = {
         'base-text': 'rgb(226, 232, 240)',
         border: 'rgb(51, 65, 85)',
         muted: 'rgb(30, 41, 59)',
-        'muted-foreground': 'rgb(148, 163, 184)'
+        'muted-foreground': 'rgb(148, 163, 184)',
+        'control-track': 'rgb(71, 85, 105)'
       },
       boxShadow: {
         header: '0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35)',

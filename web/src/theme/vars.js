@@ -24,7 +24,9 @@ export const themeVars = {
     'base-text': 'rgb(var(--base-text-color))',
     border: 'rgb(var(--border-color))',
     muted: 'rgb(var(--muted-color))',
-    'muted-foreground': 'rgb(var(--muted-foreground-color))'
+    'muted-foreground': 'rgb(var(--muted-foreground-color))',
+    // 控件「未激活轨道」表面：开关关闭态、滑块未填充轨道共用（亮/暗各自适配，替代裸 gray 色阶）
+    'control-track': 'rgb(var(--control-track-color))'
   },
   boxShadow: {
     header: 'var(--header-box-shadow)',

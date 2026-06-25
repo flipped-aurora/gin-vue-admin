@@ -1,6 +1,8 @@
 package system
 
 import (
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/google/uuid"
@@ -30,7 +32,8 @@ type SysUser struct {
 	Phone         string         `json:"phone"  gorm:"comment:用户手机号"`                                                                        // 用户手机号
 	Email         string         `json:"email"  gorm:"comment:用户邮箱"`                                                                         // 用户邮箱
 	Enable        int            `json:"enable" gorm:"default:1;comment:用户是否被冻结 1正常 2冻结"`                                                    //用户是否被冻结 1正常 2冻结
-	OriginSetting common.JSONMap `json:"originSetting" form:"originSetting" gorm:"type:text;default:null;column:origin_setting;comment:配置;"` //配置
+	OriginSetting     common.JSONMap `json:"originSetting" form:"originSetting" gorm:"type:text;default:null;column:origin_setting;comment:配置;"` //配置
+	PasswordUpdatedAt *time.Time    `json:"passwordUpdatedAt" gorm:"comment:密码最后修改时间"`                                                          //密码最后修改时间
 }
 
 func (SysUser) TableName() string {

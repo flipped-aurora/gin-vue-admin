@@ -61,6 +61,7 @@ func RegisterTables() {
 		system.Condition{},
 		system.JoinTemplate{},
 		system.SysParams{},
+		system.SysSecurityConfig{},
 		system.SysVersion{},
 		system.SysError{},
 		system.SysApiToken{},

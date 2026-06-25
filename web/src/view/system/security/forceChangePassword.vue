@@ -48,20 +48,22 @@ const rules = {
   ]
 }
 
-const onSubmit = async () => {
-  await formRef.value.validate()
-  loading.value = true
-  try {
-    const res = await changePassword({
-      password: form.value.password,
-      newPassword: form.value.newPassword
-    })
-    if (res.code === 0) {
-      ElMessage.success('修改成功，请重新登录')
-      await userStore.LoginOut()
+const onSubmit = () => {
+  formRef.value.validate(async (valid) => {
+    if (!valid) return
+    loading.value = true
+    try {
+      const res = await changePassword({
+        password: form.value.password,
+        newPassword: form.value.newPassword
+      })
+      if (res.code === 0) {
+        ElMessage.success('修改成功，请重新登录')
+        await userStore.LoginOut()
+      }
+    } finally {
+      loading.value = false
     }
-  } finally {
-    loading.value = false
-  }
+  })
 }
 </script>

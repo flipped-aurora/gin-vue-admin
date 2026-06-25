@@ -127,6 +127,8 @@ const load = async () => {
   const res = await getSecurityConfig()
   if (res.code === 0) {
     form.value = { ...form.value, ...res.data }
+  } else {
+    ElMessage.error(res.msg || '加载配置失败')
   }
 }
 
@@ -137,6 +139,8 @@ const onSave = async () => {
     if (res.code === 0) {
       form.value = { ...form.value, ...res.data }
       ElMessage.success('保存成功')
+    } else {
+      ElMessage.error(res.msg || '保存失败')
     }
   } finally {
     saving.value = false

@@ -66,6 +66,8 @@
   "/src/view/superAdmin/operation/sysOperationRecord.vue": "SysOperationRecord",
   "/src/view/superAdmin/params/sysParams.vue": "SysParams",
   "/src/view/superAdmin/user/user.vue": "User",
+  "/src/view/system/security/forceChangePassword.vue": "ForceChangePassword",
+  "/src/view/system/security/index.vue": "SecurityConfig",
   "/src/view/system/state.vue": "State",
   "/src/view/systemTools/apiToken/index.vue": "Index",
   "/src/view/systemTools/installPlugin/index.vue": "Index",

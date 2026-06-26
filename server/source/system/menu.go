@@ -60,9 +60,9 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "media", Name: "media", Component: "view/routerHolder.vue", Sort: 5, Meta: Meta{Title: "媒体管理", Icon: "folder-opened"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemTools", Name: "systemTools", Component: "view/routerHolder.vue", Sort: 6, Meta: Meta{Title: "编程辅助", Icon: "cpu"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "ai", Name: "ai", Component: "view/routerHolder.vue", Sort: 7, Meta: Meta{Title: "AI 工坊", Icon: "ai-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "example", Name: "example", Component: "view/example/index.vue", Sort: 8, Meta: Meta{Title: "示例文件", Icon: "management"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "plugin", Name: "plugin", Component: "view/routerHolder.vue", Sort: 9, Meta: Meta{Title: "插件系统", Icon: "cherry"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "about", Name: "about", Component: "view/about/index.vue", Sort: 10, Meta: Meta{Title: "关于我们", Icon: "info-filled"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "example", Name: "example", Component: "view/example/index.vue", Sort: 9, Meta: Meta{Title: "示例文件", Icon: "example-gva"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "plugin", Name: "plugin", Component: "view/routerHolder.vue", Sort: 8, Meta: Meta{Title: "插件系统", Icon: "cherry"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "about", Name: "about", Component: "view/about/index.vue", Sort: 10, Meta: Meta{Title: "关于我们", Icon: "office-building"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "https://www.gin-vue-admin.com", Name: "https://www.gin-vue-admin.com", Component: "/", Sort: 11, Meta: Meta{Title: "官方网站", Icon: "customer-gva"}},
 		{MenuLevel: 0, Hidden: true, ParentId: 0, Path: "person", Name: "person", Component: "view/person/person.vue", Sort: 12, Meta: Meta{Title: "个人信息", Icon: "postcard"}},
 	}
@@ -81,9 +81,9 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 	// 定义子菜单，并设置正确的ParentId
 	childMenus := []SysBaseMenu{
 		// 权限管理
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "authority", Name: "authority", Component: "view/superAdmin/authority/authority.vue", Sort: 1, Meta: Meta{Title: "角色管理", Icon: "avatar"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "authority", Name: "authority", Component: "view/superAdmin/authority/authority.vue", Sort: 1, Meta: Meta{Title: "角色管理", Icon: "stamp"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "menu", Name: "menu", Component: "view/superAdmin/menu/menu.vue", Sort: 2, Meta: Meta{Title: "菜单管理", Icon: "tickets", KeepAlive: true}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "api", Name: "api", Component: "view/superAdmin/api/api.vue", Sort: 3, Meta: Meta{Title: "api管理", Icon: "platform", KeepAlive: true}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "api", Name: "api", Component: "view/superAdmin/api/api.vue", Sort: 3, Meta: Meta{Title: "api管理", Icon: "api-gva", KeepAlive: true}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "user", Name: "user", Component: "view/superAdmin/user/user.vue", Sort: 4, Meta: Meta{Title: "用户管理", Icon: "user"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "apiToken", Name: "apiToken", Component: "view/systemTools/apiToken/index.vue", Sort: 5, Meta: Meta{Title: "API Token", Icon: "key"}},
 
@@ -91,18 +91,18 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "system", Name: "system", Component: "view/systemTools/system/system.vue", Sort: 1, Meta: Meta{Title: "系统配置", Icon: "operation"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "dictionary", Name: "dictionary", Component: "view/superAdmin/dictionary/sysDictionary.vue", Sort: 2, Meta: Meta{Title: "字典管理", Icon: "notebook"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "sysParams", Name: "sysParams", Component: "view/superAdmin/params/sysParams.vue", Sort: 3, Meta: Meta{Title: "参数管理", Icon: "set-up"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "security", Name: "security", Component: "view/system/security/index.vue", Sort: 4, Meta: Meta{Title: "安全配置", Icon: "lock"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "security", Name: "security", Component: "view/system/security/index.vue", Sort: 4, Meta: Meta{Title: "安全配置", Icon: "security-gva"}},
 
 		// 运维监控
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "operation", Name: "operation", Component: "view/superAdmin/operation/sysOperationRecord.vue", Sort: 1, Meta: Meta{Title: "操作历史", Icon: "document"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "loginLog", Name: "loginLog", Component: "view/systemTools/loginLog/index.vue", Sort: 2, Meta: Meta{Title: "登录日志", Icon: "clock"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "sysError", Name: "sysError", Component: "view/systemTools/sysError/sysError.vue", Sort: 3, Meta: Meta{Title: "错误日志", Icon: "warn"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "sysError", Name: "sysError", Component: "view/systemTools/sysError/sysError.vue", Sort: 3, Meta: Meta{Title: "错误日志", Icon: "error-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "sysVersion", Name: "sysVersion", Component: "view/systemTools/version/version.vue", Sort: 4, Meta: Meta{Title: "版本管理", Icon: "version-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "state", Name: "state", Component: "view/system/state.vue", Sort: 5, Meta: Meta{Title: "服务器状态", Icon: "server"}},
 
 		// 媒体管理
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["media"], Path: "upload", Name: "upload", Component: "view/media/upload.vue", Sort: 1, Meta: Meta{Title: "媒体库（上传下载）", Icon: "upload"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["media"], Path: "chunkUpload", Name: "chunkUpload", Component: "view/media/chunkUpload.vue", Sort: 2, Meta: Meta{Title: "大文件上传", Icon: "upload-filled"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["media"], Path: "chunkUpload", Name: "chunkUpload", Component: "view/media/chunkUpload.vue", Sort: 2, Meta: Meta{Title: "大文件上传", Icon: "folder-add"}},
 
 		// example子菜单
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["example"], Path: "customer", Name: "customer", Component: "view/example/customer/customer.vue", Sort: 1, Meta: Meta{Title: "客户列表（资源示例）", Icon: "service"}},
@@ -120,7 +120,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "mcpTest", Name: "mcpTest", Component: "plugin/ai/view/mcp/mcpTest.vue", Sort: 2, Meta: Meta{Title: "Mcp Tools管理", Icon: "connection"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "skills", Name: "Skills", Component: "plugin/ai/view/skills/index.vue", Sort: 3, Meta: Meta{Title: "Skills管理", Icon: "edit-pen"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "cli", Name: "Cli", Component: "plugin/ai/view/cli/index.vue", Sort: 4, Meta: Meta{Title: "AI CLI管理", Icon: "monitor", KeepAlive: true}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "picture", Name: "picture", Component: "plugin/ai/view/picture/picture.vue", Sort: 5, Meta: Meta{Title: "AI页面绘制", Icon: "picture-filled"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "picture", Name: "picture", Component: "plugin/ai/view/picture/picture.vue", Sort: 5, Meta: Meta{Title: "AI页面绘制", Icon: "picture"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "aiWorkflow", Name: "aiWorkflow", Component: "plugin/ai/view/aiWorkflow/index.vue", Sort: 6, Meta: Meta{Title: "AI 工作流", Icon: "memo"}},
 
 		// 插件系统

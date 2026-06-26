@@ -19,7 +19,7 @@ export const themeSettings = {
   colourWeakness: false,
   recommendColor: false,
   themeColor: '#5d87ff',
-  themeRadius: 0.75,
+  themeRadius: 0.5,
   size: 'default',
   otherColor: {
     info: '#909399',
@@ -65,7 +65,7 @@ export const themeSettings = {
     mode: 'border'
   },
   watermark: {
-    visible: true
+    visible: false
   },
   tokens: {
     light: {

@@ -58,6 +58,18 @@
   本地 symbol 传 `local-icon`：`<svg-icon local-icon="close" />`（对应 `src/assets/icons/*.svg`）。
 - 图标集优先 `lucide`（与基础组件库内置图标一致），**不要用 `ep:` 等 Element Plus 图标集**。
 
+### 自定义 SVG 图标（找不到合适图标时）
+
+- 适用范围:**菜单图标**优先空心(线框)风格、避免实心款;**其它系统 / 业务页面的图标只要语义合适即可,不必在意空心还是实心**。
+- 找不到合适图标时(尤其菜单需要空心款而图标集里只有实心款),自建自定义 SVG,而不是将就。
+- 位置与命名:`web/src/assets/icons/<name>-gva.svg`,kebab-case + `-gva` 后缀(避免与内置图标名冲突)。
+- 规格(必须线条化,用 `currentColor` 跟随主题色,不要 fill):`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> …线条 path… </svg>`
+- 注册与引用:`web/src/core/global.js` 的 `registerIcons` 会自动 glob `assets/icons/**/*.svg` 注册为全局组件:
+  - 组件内:`<svg-icon local-icon="<name>-gva" />`
+  - 菜单 seed(`server/source/system/menu.go` 的 `Icon` 字段):直接写 `Icon: "<name>-gva"`(菜单侧用 `<component :is>` 渲染)
+  - 新增 svg 后需重启 / 重新 `npm run build` 以重生成 svg sprite
+- 现有自定义图标:`perm-gva`/`config-gva`/`monitor-gva`/`version-gva`/`ai-gva`/`customer-gva`,以及 `example-gva`(文件)、`security-gva`(挂锁)、`error-gva`(警告三角)、`api-gva`(代码尖括号)。
+
 ## 性能规范
 
 - 路由优先懒加载

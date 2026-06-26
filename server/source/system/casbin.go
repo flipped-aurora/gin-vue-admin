@@ -56,6 +56,9 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysApiToken/getApiTokenList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/sysApiToken/deleteApiToken", V2: "POST"},
 
+		{Ptype: "p", V0: "888", V1: "/securityConfig/getSecurityConfig", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/securityConfig/setSecurityConfig", V2: "POST"},
+
 		{Ptype: "p", V0: "888", V1: "/api/createApi", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiById", V2: "POST"},
@@ -102,10 +105,10 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/user/resetPassword", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/user/setSelfSetting", V2: "PUT"},
 
-		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/findFile", V2: "GET"},
-		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/breakpointContinueFinish", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/breakpointContinue", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/removeChunk", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mediaUpload/init", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mediaUpload/chunk", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mediaUpload/complete", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mediaUpload/:uploadId", V2: "DELETE"},
 
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/upload", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},

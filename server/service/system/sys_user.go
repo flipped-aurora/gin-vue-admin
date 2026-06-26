@@ -33,6 +33,8 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 	// 否则 附加uuid 密码hash加密 注册
 	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.New()
+	now := time.Now()
+	u.PasswordUpdatedAt = &now
 	err = global.GVA_DB.Create(&u).Error
 	return u, err
 }
@@ -76,7 +78,11 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 		return errors.New("原密码错误")
 	}
 	pwd := utils.BcryptHash(newPassword)
-	err = global.GVA_DB.Model(&user).Update("password", pwd).Error
+	now := time.Now()
+	err = global.GVA_DB.Model(&user).Updates(map[string]interface{}{
+		"password":            pwd,
+		"password_updated_at": now,
+	}).Error
 	return err
 }
 
@@ -331,6 +337,10 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 //@return: err error
 
 func (userService *UserService) ResetPassword(ID uint, password string) (err error) {
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash(password)).Error
+	now := time.Now()
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Updates(map[string]interface{}{
+		"password":            utils.BcryptHash(password),
+		"password_updated_at": now,
+	}).Error
 	return err
 }

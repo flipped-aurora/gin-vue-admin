@@ -281,20 +281,18 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "读取模版文件夹失败!")
 	}
+	ignoreDirs := map[string]bool{
+		"page":     true, // page 为表单生成器
+		"function": true, // function 为函数生成器
+		"preview":  true, // preview 为预览代码生成器的代码
+		"mcp":      true, // mcp 为mcp生成器的代码
+		"ai_cli":   true, // ai_cli 为 AI CLI 生成器的代码
+	}
 	for i := 0; i < len(entries); i++ {
 		if entries[i].IsDir() {
-			if entries[i].Name() == "page" {
+			if ignoreDirs[entries[i].Name()] {
 				continue
-			} // page 为表单生成器
-			if entries[i].Name() == "function" {
-				continue
-			} // function 为函数生成器
-			if entries[i].Name() == "preview" {
-				continue
-			} // preview 为预览代码生成器的代码
-			if entries[i].Name() == "mcp" {
-				continue
-			} // preview 为mcp生成器的代码
+			}
 			templates = append(templates, entries[i].Name())
 		}
 	}

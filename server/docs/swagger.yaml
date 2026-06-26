@@ -182,6 +182,18 @@ definitions:
       version:
         type: string
     type: object
+  config.Media:
+    properties:
+      chunk-dir:
+        description: 分片暂存目录
+        type: string
+      max-file-size:
+        description: 单文件最大字节,0=不限
+        type: integer
+      session-ttl:
+        description: 会话过期小时数(清理用)
+        type: integer
+    type: object
   config.Minio:
     properties:
       access-key-id:
@@ -522,6 +534,8 @@ definitions:
         allOf:
         - $ref: '#/definitions/config.MCP'
         description: MCP配置
+      media:
+        $ref: '#/definitions/config.Media'
       minio:
         $ref: '#/definitions/config.Minio'
       mongo:
@@ -729,26 +743,6 @@ definitions:
         description: 栈名
         type: string
     type: object
-  example.ExaAttachmentCategory:
-    properties:
-      ID:
-        description: 主键ID
-        type: integer
-      children:
-        items:
-          $ref: '#/definitions/example.ExaAttachmentCategory'
-        type: array
-      createdAt:
-        description: 创建时间
-        type: string
-      name:
-        type: string
-      pid:
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
   example.ExaCustomer:
     properties:
       ID:
@@ -777,77 +771,6 @@ definitions:
         description: 更新时间
         type: string
     type: object
-  example.ExaFile:
-    properties:
-      ID:
-        description: 主键ID
-        type: integer
-      chunkTotal:
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      exaFileChunk:
-        items:
-          $ref: '#/definitions/example.ExaFileChunk'
-        type: array
-      fileMd5:
-        type: string
-      fileName:
-        type: string
-      filePath:
-        type: string
-      isFinish:
-        type: boolean
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  example.ExaFileChunk:
-    properties:
-      ID:
-        description: 主键ID
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      exaFileID:
-        type: integer
-      fileChunkNumber:
-        type: integer
-      fileChunkPath:
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  example.ExaFileUploadAndDownload:
-    properties:
-      ID:
-        description: 主键ID
-        type: integer
-      classId:
-        description: 分类id
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      key:
-        description: 编号
-        type: string
-      name:
-        description: 文件名
-        type: string
-      tag:
-        description: 文件标签
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-      url:
-        description: 文件地址
-        type: string
-    type: object
   github_com_flipped-aurora_gin-vue-admin_server_config.Email:
     properties:
       from:
@@ -873,6 +796,53 @@ definitions:
         type: string
       to:
         description: 收件人:多个以英文逗号分隔 例：a@qq.com b@qq.com 正式开发中请把此项目作为参数使用
+        type: string
+    type: object
+  media.AttachmentCategory:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      children:
+        items:
+          $ref: '#/definitions/media.AttachmentCategory'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      name:
+        type: string
+      pid:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  media.FileUploadAndDownload:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      classId:
+        description: 分类id
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      key:
+        description: 编号
+        type: string
+      name:
+        description: 文件名
+        type: string
+      tag:
+        description: 文件标签
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      url:
+        description: 文件地址
         type: string
     type: object
   model.Info:
@@ -918,6 +888,20 @@ definitions:
           $ref: '#/definitions/request.SysCliApiBindingItem'
         type: array
       cliId:
+        type: integer
+    type: object
+  request.AttachmentCategorySearch:
+    properties:
+      classId:
+        type: integer
+      keyword:
+        description: 关键字
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
         type: integer
     type: object
   request.AutoCode:
@@ -1215,20 +1199,6 @@ definitions:
     - version
     type: object
   request.Empty:
-    type: object
-  request.ExaAttachmentCategorySearch:
-    properties:
-      classId:
-        type: integer
-      keyword:
-        description: 关键字
-        type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
     type: object
   request.ExportVersionRequest:
     properties:
@@ -1855,6 +1825,34 @@ definitions:
       version:
         type: string
     type: object
+  request.UploadCompleteReq:
+    properties:
+      uploadId:
+        type: integer
+    required:
+    - uploadId
+    type: object
+  request.UploadInitReq:
+    properties:
+      chunkSize:
+        type: integer
+      chunkTotal:
+        type: integer
+      fileHash:
+        type: string
+      fileName:
+        type: string
+      fileSize:
+        type: integer
+      mime:
+        type: string
+    required:
+    - chunkSize
+    - chunkTotal
+    - fileHash
+    - fileName
+    - fileSize
+    type: object
   request.VersionInfo:
     properties:
       code:
@@ -1890,25 +1888,17 @@ definitions:
       customer:
         $ref: '#/definitions/example.ExaCustomer'
     type: object
-  response.ExaFileResponse:
+  response.FileUploadAndDownloadResponse:
     properties:
       file:
-        $ref: '#/definitions/example.ExaFileUploadAndDownload'
-    type: object
-  response.FilePathResponse:
-    properties:
-      filePath:
-        type: string
-    type: object
-  response.FileResponse:
-    properties:
-      file:
-        $ref: '#/definitions/example.ExaFile'
+        $ref: '#/definitions/media.FileUploadAndDownload'
     type: object
   response.LoginResponse:
     properties:
       expiresAt:
         type: integer
+      needChangePassword:
+        type: boolean
       token:
         type: string
       user:
@@ -2030,6 +2020,24 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/system.SysUser'
+    type: object
+  response.UploadCompleteResp:
+    properties:
+      media:
+        $ref: '#/definitions/media.FileUploadAndDownload'
+    type: object
+  response.UploadInitResp:
+    properties:
+      instant:
+        type: boolean
+      media:
+        $ref: '#/definitions/media.FileUploadAndDownload'
+      uploadId:
+        type: integer
+      uploadedChunks:
+        items:
+          type: integer
+        type: array
     type: object
   system.AIWorkflowMessage:
     properties:
@@ -2611,6 +2619,59 @@ definitions:
     - name
     - value
     type: object
+  system.SysSecurityConfig:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      captchaOpen:
+        description: 验证码
+        type: integer
+      captchaTimeout:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      imgHeight:
+        type: integer
+      imgWidth:
+        type: integer
+      keyLong:
+        type: integer
+      limitCount:
+        type: integer
+      limitEnable:
+        description: 限流
+        type: boolean
+      limitWindow:
+        type: integer
+      lockDuration:
+        type: integer
+      lockEnable:
+        description: 失败锁定
+        type: boolean
+      lockThreshold:
+        type: integer
+      pwdExpireDays:
+        type: integer
+      pwdExpireEnable:
+        description: 密码过期
+        type: boolean
+      pwdMinLength:
+        description: 密码复杂度
+        type: integer
+      pwdRequireDigit:
+        type: boolean
+      pwdRequireLower:
+        type: boolean
+      pwdRequireSpecial:
+        type: boolean
+      pwdRequireUpper:
+        type: boolean
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   system.SysUser:
     properties:
       ID:
@@ -2647,6 +2708,9 @@ definitions:
         allOf:
         - $ref: '#/definitions/common.JSONMap'
         description: 配置
+      passwordUpdatedAt:
+        description: 密码最后修改时间
+        type: string
       phone:
         description: 用户手机号
         type: string
@@ -3067,7 +3131,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/example.ExaAttachmentCategory'
+          $ref: '#/definitions/media.AttachmentCategory'
       produces:
       - application/json
       responses: {}
@@ -3116,7 +3180,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/example.ExaAttachmentCategory'
+                  $ref: '#/definitions/media.AttachmentCategory'
                 msg:
                   type: string
               type: object
@@ -4014,8 +4078,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items:
-                    type: object
+                  items: {}
                   type: array
                 msg:
                   type: string
@@ -4045,8 +4108,7 @@ paths:
             allOf:
             - $ref: '#/definitions/response.Response'
             - properties:
-                data:
-                  type: object
+                data: {}
                 msg:
                   type: string
               type: object
@@ -4238,8 +4300,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items:
-                    type: object
+                  items: {}
                   type: array
                 msg:
                   type: string
@@ -4416,8 +4477,6 @@ paths:
                 msg:
                   type: string
               type: object
-      security:
-      - ApiKeyAuth: []
       summary: 生成验证码
       tags:
       - Base
@@ -5046,33 +5105,6 @@ paths:
       summary: 发送邮件
       tags:
       - System
-  /fileUploadAndDownload/breakpointContinue:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: an example for breakpoint resume, 断点续传示例
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 断点续传到服务器
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 断点续传到服务器
-      tags:
-      - ExaFileUploadAndDownload
   /fileUploadAndDownload/deleteFile:
     post:
       parameters:
@@ -5081,7 +5113,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/example.ExaFileUploadAndDownload'
+          $ref: '#/definitions/media.FileUploadAndDownload'
       produces:
       - application/json
       responses:
@@ -5098,7 +5130,7 @@ paths:
       - ApiKeyAuth: []
       summary: 删除文件
       tags:
-      - ExaFileUploadAndDownload
+      - FileUploadAndDownload
   /fileUploadAndDownload/editFileName:
     post:
       consumes:
@@ -5109,7 +5141,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/example.ExaFileUploadAndDownload'
+          $ref: '#/definitions/media.FileUploadAndDownload'
       produces:
       - application/json
       responses:
@@ -5126,64 +5158,7 @@ paths:
       - ApiKeyAuth: []
       summary: 编辑文件名或者备注
       tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/findFile:
-    get:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: Find the file, 查找文件
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 查找文件,返回包括文件详情
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.FileResponse'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 查找文件
-      tags:
-      - ExaFileUploadAndDownload
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 上传文件完成
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 创建文件,返回包括文件路径
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.FilePathResponse'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 创建文件
-      tags:
-      - ExaFileUploadAndDownload
+      - FileUploadAndDownload
   /fileUploadAndDownload/getFileList:
     post:
       consumes:
@@ -5194,7 +5169,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.ExaAttachmentCategorySearch'
+          $ref: '#/definitions/request.AttachmentCategorySearch'
       produces:
       - application/json
       responses:
@@ -5213,7 +5188,7 @@ paths:
       - ApiKeyAuth: []
       summary: 分页文件列表
       tags:
-      - ExaFileUploadAndDownload
+      - FileUploadAndDownload
   /fileUploadAndDownload/importURL:
     post:
       parameters:
@@ -5223,7 +5198,7 @@ paths:
         required: true
         schema:
           items:
-            $ref: '#/definitions/example.ExaFileUploadAndDownload'
+            $ref: '#/definitions/media.FileUploadAndDownload'
           type: array
       produces:
       - application/json
@@ -5241,34 +5216,7 @@ paths:
       - ApiKeyAuth: []
       summary: 导入URL
       tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/removeChunk:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 删除缓存切片
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 删除切片
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 删除切片
-      tags:
-      - ExaFileUploadAndDownload
+      - FileUploadAndDownload
   /fileUploadAndDownload/upload:
     post:
       consumes:
@@ -5289,7 +5237,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/response.ExaFileResponse'
+                  $ref: '#/definitions/response.FileUploadAndDownloadResponse'
                 msg:
                   type: string
               type: object
@@ -5297,7 +5245,7 @@ paths:
       - ApiKeyAuth: []
       summary: 上传文件示例
       tags:
-      - ExaFileUploadAndDownload
+      - FileUploadAndDownload
   /info/createInfo:
     post:
       consumes:
@@ -5619,6 +5567,86 @@ paths:
       summary: jwt加入黑名单
       tags:
       - Jwt
+  /mediaUpload/{uploadId}:
+    delete:
+      parameters:
+      - description: uploadId
+        in: path
+        name: uploadId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 取消上传
+      tags:
+      - MediaUpload
+  /mediaUpload/chunk:
+    post:
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 上传分片
+      tags:
+      - MediaUpload
+  /mediaUpload/complete:
+    post:
+      parameters:
+      - description: 完成参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UploadCompleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UploadCompleteResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 完成上传并合并入库
+      tags:
+      - MediaUpload
+  /mediaUpload/init:
+    post:
+      parameters:
+      - description: 初始化参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UploadInitReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UploadInitResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 初始化大文件上传
+      tags:
+      - MediaUpload
   /menu/addBaseMenu:
     post:
       consumes:
@@ -5936,6 +5964,59 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /securityConfig/getSecurityConfig:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取安全配置
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/system.SysSecurityConfig'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取安全配置
+      tags:
+      - SecurityConfig
+  /securityConfig/setSecurityConfig:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 安全配置
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysSecurityConfig'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置安全配置
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/system.SysSecurityConfig'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置安全配置
+      tags:
+      - SecurityConfig
   /skills/createReference:
     post:
       consumes:
@@ -7372,7 +7453,7 @@ paths:
         in: query
         items:
           type: string
-        name: createdAtRange[]
+        name: createdAtRange
         type: array
       - in: query
         name: form
@@ -8641,7 +8722,7 @@ paths:
         in: query
         items:
           type: string
-        name: createdAtRange[]
+        name: createdAtRange
         type: array
       - description: 关键字
         in: query

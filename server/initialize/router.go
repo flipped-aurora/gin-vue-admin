@@ -43,6 +43,7 @@ func Routers() *gin.Engine {
 
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
+	mediaRouter := router.RouterGroupApp.Media
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
 	// VUE_APP_BASE_API = /
 	// VUE_APP_BASE_PATH = http://localhost
@@ -65,7 +66,7 @@ func Routers() *gin.Engine {
 	PublicGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
 	PrivateGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
 
-	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.MustChangePwdGuard()).Use(middleware.CasbinHandler())
 
 	{
 		// 健康监测
@@ -95,10 +96,12 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)         // 参数管理
 		systemRouter.InitSysErrorRouter(PrivateGroup, PublicGroup)          // 错误日志
 		systemRouter.InitLoginLogRouter(PrivateGroup)                       // 登录日志
+		systemRouter.InitSecurityConfigRouter(PrivateGroup)                 // 安全配置
 		systemRouter.InitApiTokenRouter(PrivateGroup)                       // apiToken签发
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
-		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
-		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类
+		mediaRouter.InitFileUploadAndDownloadRouter(PrivateGroup)           // 文件上传下载功能路由
+		mediaRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)        // 媒体分类
+		mediaRouter.InitMediaUploadRouter(PrivateGroup)                     // 大文件上传
 	}
 
 	//插件路由安装

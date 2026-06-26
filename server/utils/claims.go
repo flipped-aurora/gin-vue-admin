@@ -146,3 +146,18 @@ func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims,
 	token, err = j.CreateToken(claims)
 	return
 }
+
+// LoginTokenWithExpire 签发登录 token 可携带 MustChangePwd 强制改密标记
+func LoginTokenWithExpire(user system.Login, mustChangePwd bool) (token string, claims systemReq.CustomClaims, err error) {
+	j := NewJWT()
+	claims = j.CreateClaims(systemReq.BaseClaims{
+		UUID:        user.GetUUID(),
+		ID:          user.GetUserId(),
+		NickName:    user.GetNickname(),
+		Username:    user.GetUsername(),
+		AuthorityId: user.GetAuthorityId(),
+	})
+	claims.MustChangePwd = mustChangePwd
+	token, err = j.CreateToken(claims)
+	return
+}

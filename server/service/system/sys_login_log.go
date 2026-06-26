@@ -12,6 +12,11 @@ type LoginLogService struct{}
 var LoginLogServiceApp = new(LoginLogService)
 
 func (loginLogService *LoginLogService) CreateLoginLog(loginLog system.SysLoginLog) (err error) {
+	// 系统未初始化(GVA_DB==nil)时 /base/login 仍可被未认证请求触达
+	// 此处静默跳过登录日志 避免对 nil *gorm.DB 解引用 panic(与 CreateSysError 守卫一致)
+	if global.GVA_DB == nil {
+		return nil
+	}
 	err = global.GVA_DB.Create(&loginLog).Error
 	return err
 }

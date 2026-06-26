@@ -74,6 +74,12 @@ export const useUserStore = defineStore('user', () => {
       setUserInfo(res.data.user)
       setToken(res.data.token)
 
+      // 密码过期 强制跳转改密页
+      if (res.data.needChangePassword) {
+        await router.push({ name: 'ForceChangePassword' })
+        return true
+      }
+
       // 初始化路由信息
       const routerStore = useRouterStore()
       await routerStore.SetAsyncRouter()

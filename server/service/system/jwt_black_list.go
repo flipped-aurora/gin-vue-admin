@@ -24,7 +24,7 @@ func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err 
 	if err != nil {
 		return
 	}
-	global.BlackCache.SetDefault(jwtList.Jwt, struct{}{})
+	global.GVA_CACHE.SetDefault(jwtList.Jwt, struct{}{})
 	return
 }
 
@@ -47,6 +47,6 @@ func LoadAll() {
 		return
 	}
 	for i := 0; i < len(data); i++ {
-		global.BlackCache.SetDefault(data[i], struct{}{})
-	} // jwt黑名单 加入 BlackCache 中
+		global.GVA_CACHE.SetDefault(data[i], struct{}{})
+	} // jwt黑名单 加入 GVA_CACHE 中
 }

@@ -54,7 +54,7 @@
       "mode": "border"
     },
     "watermark": {
-      "visible": true
+      "visible": false
     }
   }
 }

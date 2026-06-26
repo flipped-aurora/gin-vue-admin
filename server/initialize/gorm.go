@@ -5,6 +5,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
 	"go.uber.org/zap"
@@ -67,11 +68,11 @@ func RegisterTables() {
 		system.SysApiToken{},
 		system.SysLoginLog{},
 
-		example.ExaFile{},
 		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
-		example.ExaAttachmentCategory{},
+		media.MediaUpload{},
+		media.MediaUploadChunk{},
+		media.FileUploadAndDownload{},
+		media.AttachmentCategory{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))

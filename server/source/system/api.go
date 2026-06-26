@@ -108,10 +108,10 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "菜单", Method: "GET", Path: "/menu/getMenuRoles", Description: "获取菜单关联角色列表"},
 		{ApiGroup: "菜单", Method: "POST", Path: "/menu/setMenuRoles", Description: "全量覆盖菜单关联角色列表"},
 
-		{ApiGroup: "分片上传", Method: "GET", Path: "/fileUploadAndDownload/findFile", Description: "寻找目标文件（秒传）"},
-		{ApiGroup: "分片上传", Method: "POST", Path: "/fileUploadAndDownload/breakpointContinue", Description: "断点续传"},
-		{ApiGroup: "分片上传", Method: "POST", Path: "/fileUploadAndDownload/breakpointContinueFinish", Description: "断点续传完成"},
-		{ApiGroup: "分片上传", Method: "POST", Path: "/fileUploadAndDownload/removeChunk", Description: "上传完成移除文件"},
+		{ApiGroup: "媒体上传", Method: "POST", Path: "/mediaUpload/init", Description: "初始化大文件上传"},
+		{ApiGroup: "媒体上传", Method: "POST", Path: "/mediaUpload/chunk", Description: "上传分片"},
+		{ApiGroup: "媒体上传", Method: "POST", Path: "/mediaUpload/complete", Description: "完成大文件上传"},
+		{ApiGroup: "媒体上传", Method: "DELETE", Path: "/mediaUpload/:uploadId", Description: "取消大文件上传"},
 
 		{ApiGroup: "文件上传与下载", Method: "POST", Path: "/fileUploadAndDownload/upload", Description: "文件上传（建议选择）"},
 		{ApiGroup: "文件上传与下载", Method: "POST", Path: "/fileUploadAndDownload/deleteFile", Description: "删除文件"},

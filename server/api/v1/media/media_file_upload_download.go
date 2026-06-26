@@ -1,11 +1,11 @@
-package example
+package media
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example/request"
-	exampleRes "github.com/flipped-aurora/gin-vue-admin/server/model/example/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/media/request"
+	exampleRes "github.com/flipped-aurora/gin-vue-admin/server/model/media/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"strconv"
@@ -14,16 +14,16 @@ import (
 type FileUploadAndDownloadApi struct{}
 
 // UploadFile
-// @Tags      ExaFileUploadAndDownload
+// @Tags      FileUploadAndDownload
 // @Summary   上传文件示例
 // @Security  ApiKeyAuth
 // @accept    multipart/form-data
 // @Produce   application/json
 // @Param     file  formData  file                                                           true  "上传文件示例"
-// @Success   200   {object}  response.Response{data=exampleRes.ExaFileResponse,msg=string}  "上传文件示例,返回包括文件详情"
+// @Success   200   {object}  response.Response{data=exampleRes.FileUploadAndDownloadResponse,msg=string}  "上传文件示例,返回包括文件详情"
 // @Router    /fileUploadAndDownload/upload [post]
 func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
-	var file example.ExaFileUploadAndDownload
+	var file media.FileUploadAndDownload
 	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
 	classId, _ := strconv.Atoi(c.DefaultPostForm("classId", "0"))
@@ -38,20 +38,20 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 		response.FailWithMessage("上传文件失败", c)
 		return
 	}
-	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, "上传成功", c)
+	response.OkWithDetailed(exampleRes.FileUploadAndDownloadResponse{File: file}, "上传成功", c)
 }
 
 // EditFileName 编辑文件名或者备注
-// @Tags      ExaFileUploadAndDownload
+// @Tags      FileUploadAndDownload
 // @Summary   编辑文件名或者备注
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      example.ExaFileUploadAndDownload  true  "传入文件id和文件名或备注"
+// @Param     data  body      media.FileUploadAndDownload  true  "传入文件id和文件名或备注"
 // @Success   200   {object}  response.Response{msg=string}     "编辑文件名或者备注"
 // @Router    /fileUploadAndDownload/editFileName [post]
 func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
-	var file example.ExaFileUploadAndDownload
+	var file media.FileUploadAndDownload
 	err := c.ShouldBindJSON(&file)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -67,15 +67,15 @@ func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
 }
 
 // DeleteFile
-// @Tags      ExaFileUploadAndDownload
+// @Tags      FileUploadAndDownload
 // @Summary   删除文件
 // @Security  ApiKeyAuth
 // @Produce   application/json
-// @Param     data  body      example.ExaFileUploadAndDownload  true  "传入文件里面id即可"
+// @Param     data  body      media.FileUploadAndDownload  true  "传入文件里面id即可"
 // @Success   200   {object}  response.Response{msg=string}     "删除文件"
 // @Router    /fileUploadAndDownload/deleteFile [post]
 func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
-	var file example.ExaFileUploadAndDownload
+	var file media.FileUploadAndDownload
 	err := c.ShouldBindJSON(&file)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -90,16 +90,16 @@ func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 }
 
 // GetFileList
-// @Tags      ExaFileUploadAndDownload
+// @Tags      FileUploadAndDownload
 // @Summary   分页文件列表
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      request.ExaAttachmentCategorySearch                                        true  "页码, 每页大小, 分类id"
+// @Param     data  body      request.AttachmentCategorySearch                                        true  "页码, 每页大小, 分类id"
 // @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页文件列表,返回包括列表,总数,页码,每页数量"
 // @Router    /fileUploadAndDownload/getFileList [post]
 func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
-	var pageInfo request.ExaAttachmentCategorySearch
+	var pageInfo request.AttachmentCategorySearch
 	err := c.ShouldBindJSON(&pageInfo)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -120,15 +120,15 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 }
 
 // ImportURL
-// @Tags      ExaFileUploadAndDownload
+// @Tags      FileUploadAndDownload
 // @Summary   导入URL
 // @Security  ApiKeyAuth
 // @Produce   application/json
-// @Param     data  body      []example.ExaFileUploadAndDownload  true  "对象数组"
+// @Param     data  body      []media.FileUploadAndDownload  true  "对象数组"
 // @Success   200   {object}  response.Response{msg=string}       "导入URL"
 // @Router    /fileUploadAndDownload/importURL [post]
 func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
-	var file []example.ExaFileUploadAndDownload
+	var file []media.FileUploadAndDownload
 	err := c.ShouldBindJSON(&file)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)

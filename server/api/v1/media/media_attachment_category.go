@@ -1,10 +1,10 @@
-package example
+package media
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -16,7 +16,7 @@ type AttachmentCategoryApi struct{}
 // @Summary   媒体库分类列表
 // @Security  AttachmentCategory
 // @Produce   application/json
-// @Success   200   {object}  response.Response{data=example.ExaAttachmentCategory,msg=string}  "媒体库分类列表"
+// @Success   200   {object}  response.Response{data=media.AttachmentCategory,msg=string}  "媒体库分类列表"
 // @Router    /attachmentCategory/getCategoryList [get]
 func (a *AttachmentCategoryApi) GetCategoryList(c *gin.Context) {
 	res, err := attachmentCategoryService.GetCategoryList()
@@ -34,10 +34,10 @@ func (a *AttachmentCategoryApi) GetCategoryList(c *gin.Context) {
 // @Security  AttachmentCategory
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      example.ExaAttachmentCategory  true  "媒体库分类数据"// @Success   200   {object}  response.Response{msg=string}   "添加媒体库分类"
+// @Param     data  body      media.AttachmentCategory  true  "媒体库分类数据"// @Success   200   {object}  response.Response{msg=string}   "添加媒体库分类"
 // @Router    /attachmentCategory/addCategory [post]
 func (a *AttachmentCategoryApi) AddCategory(c *gin.Context) {
-	var req example.ExaAttachmentCategory
+	var req media.AttachmentCategory
 	if err := c.ShouldBindJSON(&req); err != nil {
 		global.GVA_LOG.Error("参数错误!", zap.Error(err))
 		response.FailWithMessage("参数错误", c)

@@ -1,10 +1,10 @@
-package example
+package media
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
-type ExaFileUploadAndDownload struct {
+type FileUploadAndDownload struct {
 	global.GVA_MODEL
 	Name    string `json:"name" form:"name" gorm:"column:name;comment:文件名"`                                // 文件名
 	ClassId int    `json:"classId" form:"classId" gorm:"default:0;type:int;column:class_id;comment:分类id;"` // 分类id
@@ -13,6 +13,6 @@ type ExaFileUploadAndDownload struct {
 	Key     string `json:"key" form:"key" gorm:"column:key;comment:编号"`                                    // 编号
 }
 
-func (ExaFileUploadAndDownload) TableName() string {
-	return "exa_file_upload_and_downloads"
+func (FileUploadAndDownload) TableName() string {
+	return "media_file_upload_and_downloads"
 }

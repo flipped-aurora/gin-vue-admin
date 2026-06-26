@@ -22,7 +22,7 @@ const routes = [
       title: '扫码上传',
       client: true
     },
-    component: () => import('@/view/example/upload/scanUpload.vue')
+    component: () => import('@/view/media/scanUpload.vue')
   },
   {
     path: '/forceChangePassword',

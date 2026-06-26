@@ -1,4 +1,4 @@
-package example
+package media
 
 import (
 	"github.com/gin-gonic/gin"

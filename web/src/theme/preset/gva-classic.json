@@ -9,7 +9,7 @@
     "grayscale": false,
     "colourWeakness": false,
     "themeColor": "#3b82f6",
-    "themeRadius": 0.125,
+    "themeRadius": 0.25,
     "size": "default",
     "otherColor": {
       "info": "#909399",

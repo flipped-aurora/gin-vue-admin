@@ -81,14 +81,14 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 	// 定义子菜单，并设置正确的ParentId
 	childMenus := []SysBaseMenu{
 		// 权限管理
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "authority", Name: "authority", Component: "view/superAdmin/authority/authority.vue", Sort: 1, Meta: Meta{Title: "角色管理", Icon: "stamp"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "authority", Name: "authority", Component: "view/superAdmin/authority/authority.vue", Sort: 1, Meta: Meta{Title: "角色管理", Icon: "role-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "menu", Name: "menu", Component: "view/superAdmin/menu/menu.vue", Sort: 2, Meta: Meta{Title: "菜单管理", Icon: "tickets", KeepAlive: true}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "api", Name: "api", Component: "view/superAdmin/api/api.vue", Sort: 3, Meta: Meta{Title: "api管理", Icon: "api-gva", KeepAlive: true}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "user", Name: "user", Component: "view/superAdmin/user/user.vue", Sort: 4, Meta: Meta{Title: "用户管理", Icon: "user"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "apiToken", Name: "apiToken", Component: "view/systemTools/apiToken/index.vue", Sort: 5, Meta: Meta{Title: "API Token", Icon: "key"}},
 
 		// 系统设置
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "system", Name: "system", Component: "view/systemTools/system/system.vue", Sort: 1, Meta: Meta{Title: "系统配置", Icon: "operation"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "system", Name: "system", Component: "view/systemTools/system/system.vue", Sort: 1, Meta: Meta{Title: "配置文件", Icon: "config-file-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "dictionary", Name: "dictionary", Component: "view/superAdmin/dictionary/sysDictionary.vue", Sort: 2, Meta: Meta{Title: "字典管理", Icon: "notebook"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "sysParams", Name: "sysParams", Component: "view/superAdmin/params/sysParams.vue", Sort: 3, Meta: Meta{Title: "参数管理", Icon: "set-up"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "security", Name: "security", Component: "view/system/security/index.vue", Sort: 4, Meta: Meta{Title: "安全配置", Icon: "security-gva"}},

@@ -70,7 +70,7 @@
   - 组件内:`<svg-icon local-icon="<name>-gva" />`
   - 菜单 seed(`server/source/system/menu.go` 的 `Icon` 字段):直接写 `Icon: "<name>-gva"`(菜单侧用 `<component :is>` 渲染)
   - 新增 svg 后需重启 / 重新 `npm run build` 以重生成 svg sprite
-- 现有自定义图标:品牌款 `perm-gva`/`config-gva`/`monitor-gva`/`version-gva`/`customer-gva`;lucide 描边款 `ai-gva`(sparkles)、`example-gva`(files)、`security-gva`(lock)、`error-gva`(file-warning)、`api-gva`(code-xml)。
+- 现有自定义图标(均为 lucide 描边款,根上无 `stroke-width`):`perm-gva`(shield-check)、`config-gva`(settings)、`monitor-gva`(activity)、`ai-gva`(sparkles)、`version-gva`(git-branch)、`customer-gva`(globe)、`example-gva`(files)、`security-gva`(lock)、`error-gva`(file-warning)、`api-gva`(code-xml)、`role-gva`(users)、`config-file-gva`(file-cog);覆盖内置名的 `server`(server)、`shop`(store)。
 - 覆盖内置图标的特例:若某菜单已被 seed 成某个**内置(EP)图标名**(如插件市场的 `shop`),又想免重新初始化就换成空心款,可放一个**同名**本地 svg(如 `shop.svg`,lucide store 描边)覆盖之——`<component :is>` 会优先命中本地同名组件。此为唯一允许不带 `-gva` 后缀、故意与内置名冲突的场景。
 
 ## 性能规范

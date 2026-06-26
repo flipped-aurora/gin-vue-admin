@@ -59,7 +59,7 @@
 
 ### 图标
 
-- **菜单图标**(`server/source/system/menu.go` 的 `Icon` 字段)优先用空心(线框)风格,避免填充式/实心款(如 Element Plus 的 `*-filled`,及 `avatar`/`platform`/`management`/`lock` 等视觉实心款);**找不到合适的空心图标时,自建空心自定义 SVG,不要将就用实心款**:放在 `web/src/assets/icons/<name>-gva.svg`(kebab-case + `-gva` 后缀,线条风格 `fill="none" stroke="currentColor"`),由 `web/src/core/global.js` 自动注册、菜单按名引用,新增后需重启/重新构建前端以重生成 sprite
+- **菜单图标**(`server/source/system/menu.go` 的 `Icon` 字段)优先用空心(线框)风格,避免填充式/实心款(如 Element Plus 的 `*-filled`,及 `avatar`/`platform`/`management`/`lock` 等视觉实心款);**找不到合适的空心图标时,去 Iconify(优先 `lucide`)挑一个合适的空心 svg、规整后存为本地 `web/src/assets/icons/<name>-gva.svg`(不要手画自己发挥,也不要将就用实心款)**;由 `web/src/core/global.js` 自动注册、菜单按名引用,新增后需重启/重新构建前端以重生成 sprite(线宽统一由 `svgIcon.vue` 提供,**根 svg 勿写 `stroke-width`**——构建插件会破坏它)
 - **其它系统 / 业务开发的图标**:只要语义合适即可,**不必在意空心还是实心**;优先复用现有图标集(lucide 等),确实没有合适的再自建 svg
 - 自定义 SVG 的规格、机制与现有图标清单见 `aiDoc/frontend-backend/frontend-rules.md` 的「图标规范」
 

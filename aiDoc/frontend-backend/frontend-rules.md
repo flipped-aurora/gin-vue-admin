@@ -61,14 +61,17 @@
 ### 自定义 SVG 图标（找不到合适图标时）
 
 - 适用范围:**菜单图标**优先空心(线框)风格、避免实心款;**其它系统 / 业务页面的图标只要语义合适即可,不必在意空心还是实心**。
-- 找不到合适图标时(尤其菜单需要空心款而图标集里只有实心款),自建自定义 SVG,而不是将就。
+- 找不到合适图标时(尤其菜单需要空心款而图标集里只有实心款),**去 Iconify 取现成 svg、规整后存为本地 svg,不要手画自己发挥**:
+  - 优先 `lucide` 图标集,例如取 `https://api.iconify.design/lucide/<name>.svg`(描边款、`viewBox="0 0 24 24"`)
+  - 把根 `<svg>` 头统一为下面「规格」的本项目风格,内部 path 保持 lucide 原样;**根 `<svg>` 上不要写 `stroke-width`**——构建插件 `vite-auto-import-svg` 会破坏根上的 `stroke-width`(把属性截断、甚至损坏 viewBox)。线宽由 `web/src/components/svgIcon/svgIcon.vue` 的 `<svg stroke-width="1.75">` 统一提供(经 `<use>` 继承进 symbol;想整体调粗细改这一个值即可);若某图标确需不同线宽,写在**内层 `<g>`** 上(能存活并覆盖默认)
 - 位置与命名:`web/src/assets/icons/<name>-gva.svg`,kebab-case + `-gva` 后缀(避免与内置图标名冲突)。
-- 规格(必须线条化,用 `currentColor` 跟随主题色,不要 fill):`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"> …线条 path… </svg>`
+- 规格(必须线条化,用 `currentColor` 跟随主题色,不要 fill;**根上不带 `stroke-width`**):`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"> …线条 path… </svg>`
 - 注册与引用:`web/src/core/global.js` 的 `registerIcons` 会自动 glob `assets/icons/**/*.svg` 注册为全局组件:
   - 组件内:`<svg-icon local-icon="<name>-gva" />`
   - 菜单 seed(`server/source/system/menu.go` 的 `Icon` 字段):直接写 `Icon: "<name>-gva"`(菜单侧用 `<component :is>` 渲染)
   - 新增 svg 后需重启 / 重新 `npm run build` 以重生成 svg sprite
-- 现有自定义图标:`perm-gva`/`config-gva`/`monitor-gva`/`version-gva`/`ai-gva`/`customer-gva`,以及 `example-gva`(文件)、`security-gva`(挂锁)、`error-gva`(警告三角)、`api-gva`(代码尖括号)。
+- 现有自定义图标:品牌款 `perm-gva`/`config-gva`/`monitor-gva`/`version-gva`/`customer-gva`;lucide 描边款 `ai-gva`(sparkles)、`example-gva`(files)、`security-gva`(lock)、`error-gva`(file-warning)、`api-gva`(code-xml)。
+- 覆盖内置图标的特例:若某菜单已被 seed 成某个**内置(EP)图标名**(如插件市场的 `shop`),又想免重新初始化就换成空心款,可放一个**同名**本地 svg(如 `shop.svg`,lucide store 描边)覆盖之——`<component :is>` 会优先命中本地同名组件。此为唯一允许不带 `-gva` 后缀、故意与内置名冲突的场景。
 
 ## 性能规范
 

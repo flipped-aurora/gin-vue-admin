@@ -1,6 +1,6 @@
 <template>
   <template v-if="localIcon">
-    <svg aria-hidden="true" width="1em" height="1em" v-bind="bindAttrs">
+    <svg aria-hidden="true" width="1em" height="1em" stroke-width="1.75" v-bind="bindAttrs">
       <use :xlink:href="'#' + localIcon" rel="external nofollow" />
     </svg>
   </template>

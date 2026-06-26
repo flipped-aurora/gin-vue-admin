@@ -13,6 +13,7 @@
             v-for="p in builtinPresets"
             :key="p.name"
             :preset="p"
+            :compatible="isPresetCompatible(p)"
             @apply="handleApply(p)"
           />
         </div>
@@ -32,6 +33,7 @@
             v-for="p in customPresets"
             :key="p.name"
             :preset="p"
+            :compatible="isPresetCompatible(p)"
             @apply="handleApply(p)"
             @remove="handleRemove(p)"
           />
@@ -42,14 +44,9 @@
         >
           暂无自定义预设，点击下方「保存当前为预设」
         </div>
-        <el-button
-          type="primary"
-          class="w-full rounded-lg font-medium"
-          :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
-          @click="handleSaveCurrent"
-        >
+        <g-button class="w-full rounded-lg font-medium" @click="handleSaveCurrent">
           保存当前为预设
-        </el-button>
+        </g-button>
       </div>
     </div>
 
@@ -62,9 +59,13 @@
       </div>
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg flex gap-3">
-          <el-button type="primary" plain class="flex-1 rounded-lg" @click="handleExport">
+          <g-button
+            variant="outline-primary"
+            class="flex-1 rounded-lg"
+            @click="handleExport"
+          >
             导出当前配置
-          </el-button>
+          </g-button>
           <el-upload
             ref="uploadRef"
             :auto-upload="false"
@@ -73,11 +74,13 @@
             class="flex-1"
             @change="handleImport"
           >
-            <el-button type="success" plain class="w-full rounded-lg">导入配置</el-button>
+            <g-button variant="outline-success" class="w-full rounded-lg">
+              导入配置
+            </g-button>
           </el-upload>
         </div>
         <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">
-          导出当前完整配置（主题 / 布局 / 顶栏 / 界面 / 组件库），可跨账号迁移；兼容导入旧版配置文件。
+          导出当前完整配置（主题 / 布局 / 顶栏 / 界面），可跨账号迁移；
         </p>
       </div>
     </div>
@@ -87,8 +90,7 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 import PresetCard from '../../components/presetCard.vue'
 import {
   BUILTIN_PRESETS,
@@ -96,22 +98,26 @@ import {
   addCustomPreset,
   removeCustomPreset,
   serializePreset,
-  parsePreset
+  parsePreset,
+  isPresetCompatible
 } from '@/theme'
 
 defineOptions({
   name: 'PresetSettings'
 })
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
 
 const builtinPresets = BUILTIN_PRESETS
 const customPresets = ref(loadCustomPresets())
 const uploadRef = ref()
 
 const handleApply = (preset) => {
-  appStore.applyPreset(preset)
+  if (!isPresetCompatible(preset)) {
+    ElMessage.warning(`该预设需要 GVA ≥ ${preset.minMainVersion}，当前版本不支持`)
+    return
+  }
+  themeStore.applyPreset(preset)
   ElMessage.success(`已应用预设「${preset.name}」`)
 }
 
@@ -123,7 +129,7 @@ const handleSaveCurrent = async () => {
       inputPattern: /\S+/,
       inputErrorMessage: '名称不能为空'
     })
-    customPresets.value = addCustomPreset(appStore.exportPreset(value.trim()))
+    customPresets.value = addCustomPreset(themeStore.exportPreset(value.trim()))
     ElMessage.success('预设已保存')
   } catch {
     // 用户取消
@@ -145,7 +151,7 @@ const handleRemove = async (preset) => {
 }
 
 const handleExport = () => {
-  const data = serializePreset(appStore.exportPreset('gin-vue-admin-theme'))
+  const data = serializePreset(themeStore.exportPreset('gin-vue-admin-theme'))
   const blob = new Blob([data], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
@@ -161,13 +167,25 @@ const handleExport = () => {
 const handleImport = (file) => {
   const reader = new FileReader()
   reader.onload = (e) => {
+    let preset
     try {
-      const preset = parsePreset(e.target.result)
-      appStore.applyPreset(preset)
-      ElMessage.success('配置已导入')
+      preset = parsePreset(e.target.result)
     } catch {
       ElMessage.error('配置文件格式错误')
+      return
     }
+    // JSON 合法但不是有效预设（缺 theme / 旧格式）时 parsePreset 返回 null，需显式拦截，
+    // 否则会出现「什么都没应用却提示导入成功」的误导
+    if (!preset?.theme) {
+      ElMessage.error('配置文件不兼容或为空')
+      return
+    }
+    if (!isPresetCompatible(preset)) {
+      ElMessage.warning(`该配置需要 GVA ≥ ${preset.minMainVersion}，当前版本不支持`)
+      return
+    }
+    themeStore.applyPreset(preset)
+    ElMessage.success('配置已导入')
   }
   reader.readAsText(file.raw)
 }

@@ -1,36 +1,60 @@
 {
   "order": 2,
-  "version": 1,
+  "version": 3,
+  "minMainVersion": "2.9.0",
   "name": "Azir-清新蓝",
   "builtin": true,
-  "config": {
-    "weakness": false,
-    "grey": false,
-    "primaryColor": "#5D87FF",
-    "successColor": "#60C041",
-    "warningColor": "#F9901F",
-    "dangerColor": "#F56C6C",
-    "infoColor": "#909399",
-    "showTabs": true,
-    "darkMode": "auto",
-    "layout_side_width": 256,
-    "layout_side_collapsed_width": 80,
-    "layout_side_item_height": 48,
-    "show_watermark": false,
-    "side_mode": "vertical",
-    "transition_type": "slide",
-    "global_size": "default",
-    "menu_theme": "design",
-    "radius": 0.75,
-    "card_mode": "shadow",
-    "show_breadcrumb": true,
-    "show_breadcrumb_icon": true,
-    "show_refresh": true,
-    "show_search": true,
-    "show_collapse_btn": true,
-    "header_bg": "rgba(255, 255, 255, 0)",
-    "header_border": "rgba(255, 255, 255, 0)",
-    "tabs_bg": "rgba(255, 255, 255, 0)"
-  },
-  "ElConf": {}
+  "theme": {
+    "themeScheme": "auto",
+    "grayscale": false,
+    "colourWeakness": false,
+    "themeColor": "#5D87FF",
+    "themeRadius": 0.75,
+    "size": "default",
+    "otherColor": {
+      "info": "#909399",
+      "success": "#60C041",
+      "warning": "#F9901F",
+      "error": "#F56C6C"
+    },
+    "layout": {
+      "mode": "vertical",
+      "sideWidth": 256,
+      "sideCollapsedWidth": 80,
+      "sideItemHeight": 48
+    },
+    "page": {
+      "transition": "slide"
+    },
+    "header": {
+      "breadcrumb": {
+        "visible": true,
+        "showIcon": true
+      },
+      "refresh": {
+        "visible": true
+      },
+      "search": {
+        "visible": true
+      },
+      "collapseButton": {
+        "visible": true
+      },
+      "bg": "rgba(255, 255, 255, 0)",
+      "shadow": "none"
+    },
+    "tab": {
+      "visible": true,
+      "bg": "rgba(255, 255, 255, 0)"
+    },
+    "menu": {
+      "theme": "design"
+    },
+    "card": {
+      "mode": "shadow"
+    },
+    "watermark": {
+      "visible": false
+    }
+  }
 }

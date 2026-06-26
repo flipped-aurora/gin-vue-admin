@@ -30,7 +30,7 @@
         :collapse-transition="false"
         :default-active="active"
         class="!border-r-0 w-full"
-        :class="sideCollapse ? '' : 'px-2'"
+        :class="sideCollapse || settings.menu.theme === 'design' ? '' : '!px-2'"
         unique-opened
         @select="selectMenuItem"
       >
@@ -46,7 +46,7 @@
 
     <!-- 折叠按钮 -->
     <div
-      v-if="config.show_collapse_btn"
+      v-if="settings.header.collapseButton.visible"
       class="h-10 flex items-center justify-center cursor-pointer flex-shrink-0 border-0 border-t border-solid border-gray-100 dark:border-slate-800"
       @click="appStore.toggleSideCollapse()"
     >
@@ -63,10 +63,10 @@
 <script setup>
   import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
   import Logo from '@/components/logo/index.vue'
-  import { ref, provide, watchEffect } from 'vue'
+  import { computed, ref, provide, watchEffect } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   import { DArrowLeft, DArrowRight } from '@element-plus/icons-vue'
 
@@ -75,11 +75,18 @@
   })
 
   const appStore = useAppStore()
-  const { config, sideCollapse, sideWidth } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { sideCollapse } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
   const route = useRoute()
   const router = useRouter()
   const routerStore = useRouterStore()
   const active = ref('')
+  const sideWidth = computed(() =>
+    sideCollapse.value
+      ? settings.value.layout.sideCollapsedWidth
+      : settings.value.layout.sideWidth
+  )
 
   watchEffect(() => {
     if (route.name === 'gvaLayoutIframe') {

@@ -6,7 +6,7 @@
         <span class="gva-theme-section-title">布局模式</span>
       </div>
       <div class="gva-theme-section-content">
-        <LayoutModeCard v-model="config.side_mode" @update:modelValue="appStore.toggleSideMode" />
+        <LayoutModeCard v-model="settings.layout.mode" />
       </div>
     </div>
 
@@ -18,36 +18,59 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="显示面包屑">
-            <el-switch v-model="config.show_breadcrumb" />
+            <g-switch v-model="settings.header.breadcrumb.visible" aria-label="显示面包屑" />
           </SettingItem>
           <SettingItem label="显示面包屑图标">
-            <el-switch v-model="config.show_breadcrumb_icon" :disabled="!config.show_breadcrumb" />
+            <g-switch
+              v-model="settings.header.breadcrumb.showIcon"
+              :disabled="!settings.header.breadcrumb.visible"
+              aria-label="显示面包屑图标"
+            />
           </SettingItem>
           <SettingItem label="显示刷新按钮">
-            <el-switch v-model="config.show_refresh" />
+            <g-switch v-model="settings.header.refresh.visible" aria-label="显示刷新按钮" />
           </SettingItem>
           <SettingItem label="显示搜索按钮">
-            <el-switch v-model="config.show_search" />
+            <g-switch v-model="settings.header.search.visible" aria-label="显示搜索按钮" />
           </SettingItem>
           <SettingItem label="显示折叠按钮">
-            <el-switch v-model="config.show_collapse_btn" />
+            <g-switch v-model="settings.header.collapseButton.visible" aria-label="显示折叠按钮" />
           </SettingItem>
           <SettingItem label="顶栏背景">
             <template #suffix>
               <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">留空跟随主题</span>
             </template>
-            <el-color-picker v-model="config.header_bg" show-alpha color-format="rgb" size="small" />
+            <g-color-picker
+              v-model="settings.header.bg"
+              alpha
+              format="rgb"
+              placeholder="跟随主题"
+              aria-label="顶栏背景"
+            />
           </SettingItem>
-          <SettingItem label="顶栏边框">
-            <el-color-picker v-model="config.header_border" show-alpha color-format="rgb" size="small" />
+          <SettingItem label="顶栏阴影">
+            <g-select
+              v-model="settings.header.shadow"
+              class="min-w-24"
+              :options="[
+                { label: '无', value: 'none' },
+                { label: '小', value: 'sm' },
+                { label: '中', value: 'md' },
+                { label: '大', value: 'lg' }
+              ]"
+            />
           </SettingItem>
           <SettingItem label="标签栏背景">
-            <el-color-picker v-model="config.tabs_bg" show-alpha color-format="rgb" size="small" />
+            <g-color-picker
+              v-model="settings.tab.bg"
+              alpha
+              format="rgb"
+              placeholder="跟随主题"
+              aria-label="标签栏背景"
+            />
           </SettingItem>
           <div class="flex items-center gap-1.5 py-2.5 text-xs text-gray-400 dark:text-gray-500 leading-snug">
-            <el-icon class="flex-shrink-0">
-              <InfoFilled />
-            </el-icon>
+            <svg-icon icon="lucide:info" class="flex-shrink-0" />
             <span>暗色模式下将基于以上配色自动推导深色版本，无需单独设置</span>
           </div>
         </div>
@@ -62,15 +85,19 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="显示标签页">
-            <el-switch v-model="config.showTabs" @change="appStore.toggleTabs" />
+            <g-switch v-model="settings.tab.visible" aria-label="显示标签页" />
           </SettingItem>
           <SettingItem label="页面切换动画">
-            <el-select v-model="config.transition_type" class="w-36" size="small" @change="appStore.toggleTransition">
-              <el-option value="fade" label="淡入淡出" />
-              <el-option value="slide" label="滑动" />
-              <el-option value="zoom" label="缩放" />
-              <el-option value="none" label="无动画" />
-            </el-select>
+            <g-select
+              v-model="settings.page.transition"
+              class="min-w-24"
+              :options="[
+                { label: '淡入淡出', value: 'fade' },
+                { label: '滑动', value: 'slide' },
+                { label: '缩放', value: 'zoom' },
+                { label: '无动画', value: 'none' }
+              ]"
+            />
           </SettingItem>
         </div>
       </div>
@@ -84,13 +111,13 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="展开宽度">
-            <el-input-number v-model="config.layout_side_width" :min="150" :max="400" :step="10" size="small" class="w-28" controls-position="right" />
+            <g-number-field v-model="settings.layout.sideWidth" :min="150" :max="400" :step="10" class="w-28" />
           </SettingItem>
           <SettingItem label="收缩宽度">
-            <el-input-number v-model="config.layout_side_collapsed_width" :min="60" :max="100" size="small" class="w-28" controls-position="right" />
+            <g-number-field v-model="settings.layout.sideCollapsedWidth" :min="60" :max="100" class="w-28" />
           </SettingItem>
           <SettingItem label="菜单项高度">
-            <el-input-number v-model="config.layout_side_item_height" :min="30" :max="50" size="small" class="w-28" controls-position="right" />
+            <g-number-field v-model="settings.layout.sideItemHeight" :min="30" :max="50" class="w-28" />
           </SettingItem>
         </div>
       </div>
@@ -100,8 +127,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
-import { InfoFilled } from '@element-plus/icons-vue'
+import { useThemeStore } from '@/pinia'
 import LayoutModeCard from '../../components/layoutModeCard.vue'
 import SettingItem from '../../components/settingItem.vue'
 
@@ -109,6 +135,6 @@ defineOptions({
   name: 'LayoutSettings'
 })
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 </script>

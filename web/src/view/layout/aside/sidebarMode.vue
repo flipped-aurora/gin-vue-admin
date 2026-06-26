@@ -4,7 +4,7 @@
     <div
       class="relative !h-full shadow dark:shadow-gray-700"
       :style="{
-        width: config.layout_side_collapsed_width + 'px',
+        width: settings.layout.sideCollapsedWidth + 'px',
         background: 'var(--gva-aside-bg)',
         color: 'var(--gva-aside-text)'
       }"
@@ -25,7 +25,7 @@
               :index="item.name"
               class="dark:text-slate-300 overflow-hidden"
               :style="{
-                height: config.layout_side_item_height + 'px'
+                height: settings.layout.sideItemHeight + 'px'
               }"
             >
               <el-icon v-if="item.meta.icon">
@@ -45,7 +45,7 @@
               :class="{'is-active': topActive === item.name}"
               class="dark:text-slate-300 overflow-hidden"
               :style="{
-                height: config.layout_side_item_height + 'px'
+                height: settings.layout.sideItemHeight + 'px'
               }"
             >
               <el-icon v-if="item.meta.icon">
@@ -66,7 +66,8 @@
 
     <!-- 二级菜单并列显示 -->
     <div
-      class="relative h-full shadow dark:shadow-gray-700 px-2"
+      class="relative h-full shadow dark:shadow-gray-700"
+      :class="settings.menu.theme === 'design' ? '' : 'px-2'"
       :style="{
         width: layoutSideWidth + 'px',
         background: 'var(--gva-aside-bg)',
@@ -112,11 +113,13 @@
   import { ref, provide, watchEffect, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
 
   const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
 
   defineOptions({
     name: 'SidebarMode'
@@ -132,9 +135,9 @@
 
   const layoutSideWidth = computed(() => {
     if (!isCollapse.value) {
-      return config.value.layout_side_width
+      return settings.value.layout.sideWidth
     } else {
-      return config.value.layout_side_collapsed_width
+      return settings.value.layout.sideCollapsedWidth
     }
   })
 

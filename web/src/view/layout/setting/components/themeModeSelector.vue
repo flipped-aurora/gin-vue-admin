@@ -26,7 +26,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Sunny, Moon, Monitor } from '@element-plus/icons-vue'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 
 defineOptions({
   name: 'ThemeModeSelector'
@@ -41,10 +41,10 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 
-const primaryColor = computed(() => config.value.primaryColor)
+const primaryColor = computed(() => settings.value.themeColor)
 
 const themeModes = [
   {

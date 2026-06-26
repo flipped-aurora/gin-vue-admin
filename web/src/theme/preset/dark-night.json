@@ -1,18 +1,24 @@
 {
   "order": 3,
-  "version": 2,
+  "version": 3,
+  "minMainVersion": "2.9.0",
   "name": "暗夜深色",
   "builtin": true,
-  "config": {
-    "primaryColor": "#5D87FF",
-    "successColor": "#60C041",
-    "warningColor": "#F9901F",
-    "dangerColor": "#F56C6C",
-    "infoColor": "#909399",
-    "darkMode": "dark",
-    "menu_theme": "dark",
-    "radius": 0.5,
-    "card_mode": "shadow"
-  },
-  "ElConf": {}
+  "theme": {
+    "themeScheme": "dark",
+    "themeColor": "#5D87FF",
+    "themeRadius": 0.5,
+    "otherColor": {
+      "info": "#909399",
+      "success": "#60C041",
+      "warning": "#F9901F",
+      "error": "#F56C6C"
+    },
+    "menu": {
+      "theme": "dark"
+    },
+    "card": {
+      "mode": "shadow"
+    }
+  }
 }

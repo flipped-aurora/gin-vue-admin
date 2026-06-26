@@ -60,11 +60,14 @@
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">将所有设置恢复为默认值（导入/导出已迁移至「预设」）</p>
               </div>
             </div>
-            <el-button type="danger" size="small"
-              class="rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5"
-              @click="handleResetConfig">
+            <g-button
+              variant="destructive"
+              size="sm"
+              class="rounded-lg font-medium hover:-translate-y-0.5"
+              @click="handleResetConfig"
+            >
               重置配置
-            </el-button>
+            </g-button>
           </div>
         </div>
       </div>
@@ -92,13 +95,13 @@
               <div class="flex items-center gap-3 text-sm">
                 <a href="https://github.com/flipped-aurora/gin-vue-admin" target="_blank"
                   class="font-medium transition-colors duration-150 hover:underline"
-                  :style="{ color: config.primaryColor }">
+                  :style="{ color: settings.themeColor }">
                   GitHub 仓库
                 </a>
                 <span class="text-gray-400 dark:text-gray-500">·</span>
                 <a href="https://www.gin-vue-admin.com/" target="_blank"
                   class="font-medium transition-colors duration-150 hover:underline"
-                  :style="{ color: config.primaryColor }">
+                  :style="{ color: settings.themeColor }">
                   官方文档
                 </a>
               </div>
@@ -114,15 +117,15 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 import Logo from '@/components/logo/index.vue'
 
 defineOptions({
   name: 'GeneralSettings'
 })
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 
 const browserInfo = ref('')
 const screenResolution = ref('')
@@ -156,12 +159,11 @@ const handleResetConfig = async () => {
       }
     )
 
-    appStore.resetConfig()
+    themeStore.resetConfig()
     ElMessage.success('配置已重置')
   } catch {
     // User cancelled
   }
 }
 </script>
-
 

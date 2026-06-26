@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 max-[480px]:grid-cols-1 gap-2.5 gva-theme-font">
+  <div class="grid grid-cols-2 max-[480px]:grid-cols-1 gap-2.5 px-1 gva-theme-font">
     <div
       v-for="layout in layoutModes"
       :key="layout.value"
@@ -53,7 +53,8 @@
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
+import { addOpacityToColor } from '@/theme/color'
 
 defineOptions({
   name: 'LayoutModeCard'
@@ -68,27 +69,12 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 
-const primaryColor = computed(() => config.value.primaryColor)
-// 预览缩略图用主色的不同透明度做层次，统一解析一次 RGB，避免重复解析
-const primaryRgb = computed(() => {
-  const hex = config.value.primaryColor.replace('#', '')
-  return {
-    r: parseInt(hex.substr(0, 2), 16),
-    g: parseInt(hex.substr(2, 2), 16),
-    b: parseInt(hex.substr(4, 2), 16)
-  }
-})
-const lighterPrimaryColor = computed(() => {
-  const { r, g, b } = primaryRgb.value
-  return `rgba(${r}, ${g}, ${b}, 0.7)`
-})
-const lightestPrimaryColor = computed(() => {
-  const { r, g, b } = primaryRgb.value
-  return `rgba(${r}, ${g}, ${b}, 0.4)`
-})
+const primaryColor = computed(() => settings.value.themeColor)
+const lighterPrimaryColor = computed(() => addOpacityToColor(primaryColor.value, 0.7))
+const lightestPrimaryColor = computed(() => addOpacityToColor(primaryColor.value, 0.4))
 
 const layoutModes = [
   {

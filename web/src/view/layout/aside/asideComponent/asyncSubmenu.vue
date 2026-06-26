@@ -31,10 +31,10 @@
 
 <script setup>
   import { inject, computed } from 'vue'
-  import { useAppStore } from '@/pinia'
+  import { useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  const appStore = useAppStore()
-  const { config } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { settings } = storeToRefs(themeStore)
 
   defineOptions({
     name: 'AsyncSubmenu'
@@ -54,7 +54,7 @@
   })
 
   const sideHeight = computed(() => {
-    return config.value.layout_side_item_height + 'px'
+    return settings.value.layout.sideItemHeight + 'px'
   })
 
   const menuStyleVars = computed(() => ({

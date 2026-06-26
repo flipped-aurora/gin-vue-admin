@@ -8,10 +8,11 @@ import { useRouterStore } from './router'
 import { useCookies } from '@vueuse/integrations/useCookies'
 import { useStorage } from '@vueuse/core'
 
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
+import { clearCachedThemeSettings } from '@/theme/shared'
 
 export const useUserStore = defineStore('user', () => {
-  const appStore = useAppStore()
+  const themeStore = useThemeStore()
   const loadingInstance = ref(null)
 
   const userInfo = ref({
@@ -27,11 +28,8 @@ export const useUserStore = defineStore('user', () => {
   const setUserInfo = (val) => {
     userInfo.value = val
     if (val.originSetting) {
-      Object.keys(appStore.config).forEach((key) => {
-        if (val.originSetting[key] !== undefined) {
-          appStore.config[key] = val.originSetting[key]
-        }
-      })
+      // 后端返回的用户主题：交给 themeStore 兼容解析并落地（本地缓存由 store 的 watch 接管）
+      themeStore.applyRemoteSettings(val.originSetting)
     }
   }
 
@@ -138,6 +136,8 @@ export const useUserStore = defineStore('user', () => {
     sessionStorage.clear()
     // 清理所有相关的localStorage项
     localStorage.removeItem('originSetting')
+    clearCachedThemeSettings()
+    localStorage.removeItem('vueuse-color-scheme')
     localStorage.removeItem('token')
   }
 

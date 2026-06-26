@@ -115,6 +115,7 @@
 - `aiDoc/frontend-backend/boundary.md`
 - `aiDoc/frontend-backend/frontend-rules.md`
 - `aiDoc/frontend-backend/frontend-utils.md`
+- `aiDoc/frontend-backend/component-library.md`
 - `aiDoc/examples/README.md`
 - `aiDoc/examples/backend/`
 - `aiDoc/examples/frontend/`

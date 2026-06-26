@@ -1,7 +1,7 @@
 <template>
   <div
     class="relative h-full shadow dark:shadow-gray-700"
-    :class="isCollapse ? '' : '  px-2'"
+    :class="isCollapse || settings.menu.theme === 'design' ? '' : 'px-2'"
     :style="{
       width: layoutSideWidth + 'px',
       background: 'var(--gva-aside-bg)',
@@ -27,7 +27,7 @@
       </el-menu>
     </el-scrollbar>
     <div
-      v-if="config.show_collapse_btn"
+      v-if="settings.header.collapseButton.visible"
       class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer"
       :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
       @click="toggleCollapse"
@@ -47,10 +47,12 @@
   import { ref, provide, watchEffect, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
-  import { useAppStore } from '@/pinia'
+  import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
+  const themeStore = useThemeStore()
+  const { device } = storeToRefs(appStore)
+  const { settings } = storeToRefs(themeStore)
 
   defineOptions({
     name: 'GvaAside'
@@ -62,9 +64,9 @@
   const active = ref('')
   const layoutSideWidth = computed(() => {
     if (!isCollapse.value) {
-      return config.value.layout_side_width
+      return settings.value.layout.sideWidth
     } else {
-      return config.value.layout_side_collapsed_width
+      return settings.value.layout.sideCollapsedWidth
     }
   })
   watchEffect(() => {

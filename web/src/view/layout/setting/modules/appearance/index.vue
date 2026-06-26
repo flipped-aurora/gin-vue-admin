@@ -6,7 +6,10 @@
         <span class="gva-theme-section-title">主题模式</span>
       </div>
       <div class="gva-theme-section-content">
-        <ThemeModeSelector v-model="config.darkMode" @update:modelValue="appStore.toggleDarkMode" />
+        <ThemeModeSelector
+          :model-value="settings.themeScheme"
+          @update:modelValue="themeStore.setThemeScheme"
+        />
       </div>
     </div>
 
@@ -16,7 +19,10 @@
         <span class="gva-theme-section-title">主题色</span>
       </div>
       <div class="gva-theme-section-content">
-        <ThemeColorPicker v-model="config.primaryColor" @update:modelValue="appStore.togglePrimaryColor" />
+        <ThemeColorPicker
+          :model-value="settings.themeColor"
+          @update:modelValue="(value) => themeStore.updateThemeColors('primary', value)"
+        />
       </div>
     </div>
 
@@ -26,7 +32,7 @@
         <span class="gva-theme-section-title">菜单风格</span>
       </div>
       <div class="gva-theme-section-content">
-        <MenuThemeSelector v-model="config.menu_theme" @update:modelValue="appStore.toggleMenuTheme" />
+        <MenuThemeSelector v-model="settings.menu.theme" />
       </div>
     </div>
 
@@ -38,10 +44,16 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="全局圆角">
-            <RadiusSelector v-model="config.radius" @update:modelValue="appStore.toggleRadius" />
+            <RadiusSelector v-model="settings.themeRadius" />
           </SettingItem>
           <SettingItem label="卡片样式">
-            <CardModeSelector v-model="config.card_mode" @update:modelValue="appStore.toggleCardMode" />
+            <CardModeSelector v-model="settings.card.mode" />
+          </SettingItem>
+          <SettingItem label="推荐色阶">
+            <g-switch v-model="settings.recommendColor" aria-label="推荐色阶" />
+          </SettingItem>
+          <SettingItem label="信息色跟随主色">
+            <g-switch v-model="settings.isInfoFollowPrimary" aria-label="信息色跟随主色" />
           </SettingItem>
           <SemanticColorPicker />
         </div>
@@ -56,20 +68,24 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <SettingItem label="全局尺寸">
-            <el-select v-model="config.global_size" class="w-36" size="small" @change="appStore.toggleGlobalSize">
-              <el-option label="默认" value="default" />
-              <el-option label="大" value="large" />
-              <el-option label="小" value="small" />
-            </el-select>
+            <g-select
+              v-model="settings.size"
+              class="min-w-24"
+              :options="[
+                { label: '默认', value: 'default' },
+                { label: '大', value: 'large' },
+                { label: '小', value: 'small' }
+              ]"
+            />
           </SettingItem>
           <SettingItem label="灰色模式">
-            <el-switch v-model="config.grey" @change="appStore.toggleGrey" />
+            <g-switch v-model="settings.grayscale" aria-label="灰色模式" />
           </SettingItem>
           <SettingItem label="色弱模式">
-            <el-switch v-model="config.weakness" @change="appStore.toggleWeakness" />
+            <g-switch v-model="settings.colourWeakness" aria-label="色弱模式" />
           </SettingItem>
           <SettingItem label="显示水印">
-            <el-switch v-model="config.show_watermark" @change="appStore.toggleConfigWatermark" />
+            <g-switch v-model="settings.watermark.visible" aria-label="显示水印" />
           </SettingItem>
         </div>
       </div>
@@ -79,7 +95,7 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 import ThemeModeSelector from '../../components/themeModeSelector.vue'
 import ThemeColorPicker from '../../components/themeColorPicker.vue'
 import MenuThemeSelector from '../../components/menuThemeSelector.vue'
@@ -92,6 +108,6 @@ defineOptions({
   name: 'AppearanceSettings'
 })
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 </script>

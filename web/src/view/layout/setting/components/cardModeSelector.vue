@@ -18,7 +18,7 @@
 <script setup>
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 
 defineOptions({
   name: 'CardModeSelector'
@@ -33,9 +33,9 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
-const primaryColor = computed(() => config.value.primaryColor)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
+const primaryColor = computed(() => settings.value.themeColor)
 
 const modes = [
   { value: 'border', label: '边框' },

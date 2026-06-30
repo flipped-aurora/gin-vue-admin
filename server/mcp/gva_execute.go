@@ -679,8 +679,8 @@ func (g *GVAExecutor) collectExpectedFilePaths(plan *ExecutionPlan) []string {
 }
 
 // checkDictionaryExists 检查字典是否存在
-func (g *GVAExecutor) checkDictionaryExists(dictType string) (bool, error) {
-	dictionary, err := findDictionaryByType(context.Background(), dictType)
+func (g *GVAExecutor) checkDictionaryExists(ctx context.Context, dictType string) (bool, error) {
+	dictionary, err := findDictionaryByType(ctx, dictType)
 	if err != nil {
 		return false, err
 	}
@@ -694,7 +694,7 @@ func (g *GVAExecutor) createDictionariesFromInfo(ctx context.Context, dictionari
 	messages = append(messages, fmt.Sprintf("开始创建 %d 个指定字典: ", len(dictionariesInfo)))
 
 	for _, dictInfo := range dictionariesInfo {
-		exists, err := g.checkDictionaryExists(dictInfo.DictType)
+		exists, err := g.checkDictionaryExists(ctx, dictInfo.DictType)
 		if err != nil {
 			messages = append(messages, fmt.Sprintf("检查字典 %s 时出错: %v; ", dictInfo.DictType, err))
 			continue

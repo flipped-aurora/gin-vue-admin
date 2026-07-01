@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 type AwsS3 struct{}
@@ -26,7 +26,7 @@ type AwsS3 struct{}
 //@param: file *multipart.FileHeader
 //@return: string, string, error
 
-func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (*AwsS3) UploadFile(ctx context.Context, file *multipart.FileHeader) (string, string, error) {
 	client := newS3Client()
 	uploader := manager.NewUploader(client)
 
@@ -34,7 +34,7 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	filename := global.GVA_CONFIG.AwsS3.PathPrefix + "/" + fileKey
 	f, openError := file.Open()
 	if openError != nil {
-		global.GVA_LOG.Error("function file.Open() failed", zap.Any("err", openError.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(openError).Error("function file.Open() failed")
 		return "", "", errors.New("function file.Open() failed, err:" + openError.Error())
 	}
 	defer f.Close() // 创建文件 defer 关闭
@@ -46,7 +46,7 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 		ContentType: aws.String(file.Header.Get("Content-Type")),
 	})
 	if err != nil {
-		global.GVA_LOG.Error("function uploader.Upload() failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function uploader.Upload() failed")
 		return "", "", err
 	}
 
@@ -60,7 +60,7 @@ func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
 //@param: key string
 //@return: error
 
-func (*AwsS3) DeleteFile(key string) error {
+func (*AwsS3) DeleteFile(ctx context.Context, key string) error {
 	client := newS3Client()
 	filename := global.GVA_CONFIG.AwsS3.PathPrefix + "/" + key
 	bucket := global.GVA_CONFIG.AwsS3.Bucket
@@ -70,7 +70,7 @@ func (*AwsS3) DeleteFile(key string) error {
 		Key:    aws.String(filename),
 	})
 	if err != nil {
-		global.GVA_LOG.Error("function client.DeleteObject() failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function client.DeleteObject() failed")
 		return errors.New("function client.DeleteObject() failed, err:" + err.Error())
 	}
 

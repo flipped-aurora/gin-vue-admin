@@ -8,9 +8,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/captcha"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
-	"go.uber.org/zap"
 )
 
 // store 验证码存储：自动跟随 GVA_CACHE 后端——开启 Redis 时多实例共享，未开启时用进程内存。
@@ -27,7 +27,7 @@ type BaseApi struct{}
 // @Success   200  {object}  response.Response{data=systemRes.SysCaptchaResponse,msg=string}  "生成验证码,返回包括随机数id,base64,验证码长度,是否开启验证码"
 // @Router    /base/captcha [post]
 func (b *BaseApi) Captcha(c *gin.Context) {
-	cfg := securityConfigService.Current()
+	cfg := securityConfigService.Current(c.Request.Context())
 	// 判断验证码是否开启
 	openCaptcha := cfg.CaptchaOpen               // 错误 N 次后出验证码
 	openCaptchaTimeOut := cfg.CaptchaTimeout      // 计数缓存超时
@@ -46,7 +46,7 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 	cp := base64Captcha.NewCaptcha(driver, store)
 	id, b64s, _, err := cp.Generate()
 	if err != nil {
-		global.GVA_LOG.Error("验证码获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("验证码获取失败!")
 		response.FailWithMessage("验证码获取失败", c)
 		return
 	}

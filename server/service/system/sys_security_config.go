@@ -1,12 +1,14 @@
 package system
 
 import (
+	"context"
 	"errors"
 	"sync/atomic"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"gorm.io/gorm"
 )
 
@@ -27,7 +29,7 @@ func getSecurityConfigCache() system.SysSecurityConfig {
 }
 
 // Get 读取单行配置 不存在则按 config.yaml 默认创建并返回
-func (s *SecurityConfigService) Get() (system.SysSecurityConfig, error) {
+func (s *SecurityConfigService) Get(ctx context.Context) (system.SysSecurityConfig, error) {
 	var cfg system.SysSecurityConfig
 	// 系统尚未初始化(未走 init 向导)或连库失败时 global.GVA_DB 为 nil
 	// 此时返回 config.yaml 默认配置并带错误: 调用方 Current 据此不写缓存
@@ -35,11 +37,11 @@ func (s *SecurityConfigService) Get() (system.SysSecurityConfig, error) {
 	if global.GVA_DB == nil {
 		return system.DefaultSecurityConfig(global.GVA_CONFIG.Captcha), errors.New("数据库未初始化")
 	}
-	err := global.GVA_DB.Where("id = ?", 1).First(&cfg).Error
+	err := global.GVA_DB.WithContext(ctx).Where("id = ?", 1).First(&cfg).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		cfg = system.DefaultSecurityConfig(global.GVA_CONFIG.Captcha)
 		cfg.ID = 1
-		if err = global.GVA_DB.Create(&cfg).Error; err != nil {
+		if err = global.GVA_DB.WithContext(ctx).Create(&cfg).Error; err != nil {
 			return cfg, err
 		}
 		return cfg, nil
@@ -48,20 +50,20 @@ func (s *SecurityConfigService) Get() (system.SysSecurityConfig, error) {
 }
 
 // Set 持久化配置 刷新内存缓存 密码过期由关变开时回填存量 NULL 用户
-func (s *SecurityConfigService) Set(cfg system.SysSecurityConfig) error {
-	prev, err := s.Get()
+func (s *SecurityConfigService) Set(ctx context.Context, cfg system.SysSecurityConfig) error {
+	prev, err := s.Get(ctx)
 	if err != nil {
 		return err
 	}
 	cfg.GVA_MODEL = prev.GVA_MODEL
-	if err = global.GVA_DB.Save(&cfg).Error; err != nil {
+	if err = global.GVA_DB.WithContext(ctx).Save(&cfg).Error; err != nil {
 		return err
 	}
 	setSecurityConfigCache(cfg)
 	// 密码过期由关变开 回填存量 PasswordUpdatedAt 为 NULL 的用户
 	if cfg.PwdExpireEnable && !prev.PwdExpireEnable {
 		now := time.Now()
-		if err = global.GVA_DB.Model(&system.SysUser{}).
+		if err = global.GVA_DB.WithContext(ctx).Model(&system.SysUser{}).
 			Where("password_updated_at IS NULL").
 			Update("password_updated_at", now).Error; err != nil {
 			return err
@@ -71,11 +73,11 @@ func (s *SecurityConfigService) Set(cfg system.SysSecurityConfig) error {
 }
 
 // Current 返回内存缓存当前配置 未加载则惰性 Get
-func (s *SecurityConfigService) Current() system.SysSecurityConfig {
+func (s *SecurityConfigService) Current(ctx context.Context) system.SysSecurityConfig {
 	if v := securityConfigCache.Load(); v != nil {
 		return v.(system.SysSecurityConfig)
 	}
-	cfg, err := s.Get()
+	cfg, err := s.Get(ctx)
 	if err == nil {
 		setSecurityConfigCache(cfg)
 	}
@@ -83,17 +85,17 @@ func (s *SecurityConfigService) Current() system.SysSecurityConfig {
 }
 
 // LoadAll 启动时加载配置入内存缓存
-func (s *SecurityConfigService) LoadAll() {
-	cfg, err := s.Get()
+func (s *SecurityConfigService) LoadAll(ctx context.Context) {
+	cfg, err := s.Get(ctx)
 	if err != nil {
-		global.GVA_LOG.Error("加载安全配置失败!")
+		logger.WithCtx(ctx).Mod("biz").Error("加载安全配置失败!")
 		return
 	}
 	setSecurityConfigCache(cfg)
 }
 
 // CurrentLimit 供中间件读取限流配置 返回 enable/window/count
-func (s *SecurityConfigService) CurrentLimit() (enable bool, window int, count int) {
-	cfg := s.Current()
+func (s *SecurityConfigService) CurrentLimit(ctx context.Context) (enable bool, window int, count int) {
+	cfg := s.Current(ctx)
 	return cfg.LimitEnable, cfg.LimitWindow, cfg.LimitCount
 }

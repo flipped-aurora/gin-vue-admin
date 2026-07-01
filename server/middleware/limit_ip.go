@@ -5,11 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"go.uber.org/zap"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -47,7 +46,7 @@ func DefaultCheckOrMark(key string, expire int, limit int) (err error) {
 		return nil
 	}
 	if err = SetLimitWithTime(key, limit, time.Duration(expire)*time.Second); err != nil {
-		global.GVA_LOG.Error("limit", zap.Error(err))
+		logger.Bg().Mod("system").Err(err).Error("limit")
 	}
 	return err
 }
@@ -66,7 +65,7 @@ func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
 	count, err := global.GVA_CACHE.IncrementWithExpire(key, 1, expiration)
 	if err != nil {
 		// 运行时缓存异常：记录日志并 fail-open 放行
-		global.GVA_LOG.Error("limit increment", zap.Error(err))
+		logger.Bg().Mod("system").Err(err).Error("limit increment")
 		return nil
 	}
 	if count > int64(limit) {
@@ -82,7 +81,7 @@ func CacheCheckOrMark(key string, expire int, limit int) error {
 	}
 	n, err := global.GVA_CACHE.IncrementWithExpire(key, 1, time.Duration(expire)*time.Second)
 	if err != nil {
-		global.GVA_LOG.Error("limit", zap.Error(err))
+		logger.Bg().Mod("system").Err(err).Error("limit")
 		return nil // fail-open
 	}
 	if int(n) > limit {
@@ -94,7 +93,7 @@ func CacheCheckOrMark(key string, expire int, limit int) error {
 // SecurityLimit 按安全配置对登录/敏感接口限流 未开启则放行
 func SecurityLimit() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		enable, window, count := service.ServiceGroupApp.SystemServiceGroup.SecurityConfigService.CurrentLimit()
+		enable, window, count := service.ServiceGroupApp.SystemServiceGroup.SecurityConfigService.CurrentLimit(c.Request.Context())
 		if !enable {
 			c.Next()
 			return

@@ -1,12 +1,11 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type SysParamsApi struct{}
@@ -27,9 +26,9 @@ func (sysParamsApi *SysParamsApi) CreateSysParams(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = sysParamsService.CreateSysParams(&sysParams)
+	err = sysParamsService.CreateSysParams(c.Request.Context(), &sysParams)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败:"+err.Error(), c)
 		return
 	}
@@ -47,9 +46,9 @@ func (sysParamsApi *SysParamsApi) CreateSysParams(c *gin.Context) {
 // @Router /sysParams/deleteSysParams [delete]
 func (sysParamsApi *SysParamsApi) DeleteSysParams(c *gin.Context) {
 	ID := c.Query("ID")
-	err := sysParamsService.DeleteSysParams(ID)
+	err := sysParamsService.DeleteSysParams(c.Request.Context(), ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败:"+err.Error(), c)
 		return
 	}
@@ -66,9 +65,9 @@ func (sysParamsApi *SysParamsApi) DeleteSysParams(c *gin.Context) {
 // @Router /sysParams/deleteSysParamsByIds [delete]
 func (sysParamsApi *SysParamsApi) DeleteSysParamsByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
-	err := sysParamsService.DeleteSysParamsByIds(IDs)
+	err := sysParamsService.DeleteSysParamsByIds(c.Request.Context(), IDs)
 	if err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("批量删除失败!")
 		response.FailWithMessage("批量删除失败:"+err.Error(), c)
 		return
 	}
@@ -91,9 +90,9 @@ func (sysParamsApi *SysParamsApi) UpdateSysParams(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = sysParamsService.UpdateSysParams(sysParams)
+	err = sysParamsService.UpdateSysParams(c.Request.Context(), sysParams)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
 		response.FailWithMessage("更新失败:"+err.Error(), c)
 		return
 	}
@@ -111,9 +110,9 @@ func (sysParamsApi *SysParamsApi) UpdateSysParams(c *gin.Context) {
 // @Router /sysParams/findSysParams [get]
 func (sysParamsApi *SysParamsApi) FindSysParams(c *gin.Context) {
 	ID := c.Query("ID")
-	resysParams, err := sysParamsService.GetSysParams(ID)
+	resysParams, err := sysParamsService.GetSysParams(c.Request.Context(), ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
 		response.FailWithMessage("查询失败:"+err.Error(), c)
 		return
 	}
@@ -136,9 +135,9 @@ func (sysParamsApi *SysParamsApi) GetSysParamsList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := sysParamsService.GetSysParamsInfoList(pageInfo)
+	list, total, err := sysParamsService.GetSysParamsInfoList(c.Request.Context(), pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败:"+err.Error(), c)
 		return
 	}
@@ -161,9 +160,9 @@ func (sysParamsApi *SysParamsApi) GetSysParamsList(c *gin.Context) {
 // @Router /sysParams/getSysParam [get]
 func (sysParamsApi *SysParamsApi) GetSysParam(c *gin.Context) {
 	k := c.Query("key")
-	params, err := sysParamsService.GetSysParam(k)
+	params, err := sysParamsService.GetSysParam(c.Request.Context(), k)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败:"+err.Error(), c)
 		return
 	}

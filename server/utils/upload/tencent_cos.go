@@ -10,19 +10,19 @@ import (
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 
 	"github.com/tencentyun/cos-go-sdk-v5"
-	"go.uber.org/zap"
 )
 
 type TencentCOS struct{}
 
 // UploadFile upload file to COS
-func (*TencentCOS) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (*TencentCOS) UploadFile(ctx context.Context, file *multipart.FileHeader) (string, string, error) {
 	client := NewClient()
 	f, openError := file.Open()
 	if openError != nil {
-		global.GVA_LOG.Error("function file.Open() failed", zap.Any("err", openError.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(openError).Error("function file.Open() failed")
 		return "", "", errors.New("function file.Open() failed, err:" + openError.Error())
 	}
 	defer f.Close() // 创建文件 defer 关闭
@@ -36,12 +36,12 @@ func (*TencentCOS) UploadFile(file *multipart.FileHeader) (string, string, error
 }
 
 // DeleteFile delete file form COS
-func (*TencentCOS) DeleteFile(key string) error {
+func (*TencentCOS) DeleteFile(ctx context.Context, key string) error {
 	client := NewClient()
 	name := global.GVA_CONFIG.TencentCOS.PathPrefix + "/" + key
 	_, err := client.Object.Delete(context.Background(), name)
 	if err != nil {
-		global.GVA_LOG.Error("function bucketManager.Delete() failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function bucketManager.Delete() failed")
 		return errors.New("function bucketManager.Delete() failed, err:" + err.Error())
 	}
 	return nil

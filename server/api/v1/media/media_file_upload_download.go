@@ -1,13 +1,12 @@
 package media
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/media/request"
 	exampleRes "github.com/flipped-aurora/gin-vue-admin/server/model/media/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"strconv"
 )
 
@@ -28,13 +27,13 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")
 	classId, _ := strconv.Atoi(c.DefaultPostForm("classId", "0"))
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("接收文件失败!")
 		response.FailWithMessage("接收文件失败", c)
 		return
 	}
-	file, err = fileUploadAndDownloadService.UploadFile(header, noSave, classId) // 文件上传后拿到文件路径
+	file, err = fileUploadAndDownloadService.UploadFile(c.Request.Context(), header, noSave, classId) // 文件上传后拿到文件路径
 	if err != nil {
-		global.GVA_LOG.Error("上传文件失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("上传文件失败!")
 		response.FailWithMessage("上传文件失败", c)
 		return
 	}
@@ -57,9 +56,9 @@ func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = fileUploadAndDownloadService.EditFileName(file)
+	err = fileUploadAndDownloadService.EditFileName(c.Request.Context(), file)
 	if err != nil {
-		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("编辑失败!")
 		response.FailWithMessage("编辑失败", c)
 		return
 	}
@@ -81,8 +80,8 @@ func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := fileUploadAndDownloadService.DeleteFile(file); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+	if err := fileUploadAndDownloadService.DeleteFile(c.Request.Context(), file); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -105,9 +104,9 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := fileUploadAndDownloadService.GetFileRecordInfoList(pageInfo)
+	list, total, err := fileUploadAndDownloadService.GetFileRecordInfoList(c.Request.Context(), pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -134,8 +133,8 @@ func (b *FileUploadAndDownloadApi) ImportURL(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := fileUploadAndDownloadService.ImportURL(&file); err != nil {
-		global.GVA_LOG.Error("导入URL失败!", zap.Error(err))
+	if err := fileUploadAndDownloadService.ImportURL(c.Request.Context(), &file); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("导入URL失败!")
 		response.FailWithMessage("导入URL失败", c)
 		return
 	}

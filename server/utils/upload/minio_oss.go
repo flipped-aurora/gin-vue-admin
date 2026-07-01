@@ -13,9 +13,9 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"go.uber.org/zap"
 )
 
 var MinioClient *Minio // 优化性能，但是不支持动态配置
@@ -52,18 +52,18 @@ func GetMinio(endpoint, accessKeyID, secretAccessKey, bucketName string, useSSL 
 	return MinioClient, nil
 }
 
-func (m *Minio) UploadFile(file *multipart.FileHeader) (filePathres, key string, uploadErr error) {
+func (m *Minio) UploadFile(ctx context.Context, file *multipart.FileHeader) (filePathres, key string, uploadErr error) {
 	f, openError := file.Open()
 	// mutipart.File to os.File
 	if openError != nil {
-		global.GVA_LOG.Error("function file.Open() Failed", zap.Any("err", openError.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(openError).Error("function file.Open() Failed")
 		return "", "", errors.New("function file.Open() Failed, err:" + openError.Error())
 	}
 
 	filecontent := bytes.Buffer{}
 	_, err := io.Copy(&filecontent, f)
 	if err != nil {
-		global.GVA_LOG.Error("读取文件失败", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("读取文件失败")
 		return "", "", errors.New("读取文件失败, err:" + err.Error())
 	}
 	f.Close() // 创建文件 defer 关闭
@@ -84,23 +84,23 @@ func (m *Minio) UploadFile(file *multipart.FileHeader) (filePathres, key string,
 	}
 
 	// 设置超时10分钟
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
+	putCtx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
 	defer cancel()
 
 	// Upload the file with PutObject   大文件自动切换为分片上传
-	info, err := m.Client.PutObject(ctx, global.GVA_CONFIG.Minio.BucketName, filePathres, &filecontent, file.Size, minio.PutObjectOptions{ContentType: contentType})
+	info, err := m.Client.PutObject(putCtx, global.GVA_CONFIG.Minio.BucketName, filePathres, &filecontent, file.Size, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
-		global.GVA_LOG.Error("上传文件到minio失败", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("上传文件到minio失败")
 		return "", "", errors.New("上传文件到minio失败, err:" + err.Error())
 	}
 	return global.GVA_CONFIG.Minio.BucketUrl + "/" + info.Key, filePathres, nil
 }
 
-func (m *Minio) DeleteFile(key string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+func (m *Minio) DeleteFile(ctx context.Context, key string) error {
+	delCtx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
 	// Delete the object from MinIO
-	err := m.Client.RemoveObject(ctx, m.bucket, key, minio.RemoveObjectOptions{})
+	err := m.Client.RemoveObject(delCtx, m.bucket, key, minio.RemoveObjectOptions{})
 	return err
 }

@@ -1,13 +1,12 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type SystemApi struct{}
@@ -20,9 +19,9 @@ type SystemApi struct{}
 // @Success   200  {object}  response.Response{data=systemRes.SysConfigResponse,msg=string}  "获取配置文件内容,返回包括系统配置"
 // @Router    /system/getSystemConfig [post]
 func (s *SystemApi) GetSystemConfig(c *gin.Context) {
-	config, err := systemConfigService.GetSystemConfig()
+	config, err := systemConfigService.GetSystemConfig(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -44,9 +43,9 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = systemConfigService.SetSystemConfig(sys)
+	err = systemConfigService.SetSystemConfig(c.Request.Context(), sys)
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -64,7 +63,7 @@ func (s *SystemApi) ReloadSystem(c *gin.Context) {
 	// 触发系统重载事件
 	err := utils.GlobalSystemEvents.TriggerReload()
 	if err != nil {
-		global.GVA_LOG.Error("重载系统失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("重载系统失败!")
 		response.FailWithMessage("重载系统失败:"+err.Error(), c)
 		return
 	}
@@ -79,9 +78,9 @@ func (s *SystemApi) ReloadSystem(c *gin.Context) {
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取服务器信息"
 // @Router    /system/getServerInfo [post]
 func (s *SystemApi) GetServerInfo(c *gin.Context) {
-	server, err := systemConfigService.GetServerInfo()
+	server, err := systemConfigService.GetServerInfo(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}

@@ -1,13 +1,12 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type LoginLogApi struct{}
@@ -28,9 +27,9 @@ func (s *LoginLogApi) DeleteLoginLog(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = loginLogService.DeleteLoginLog(loginLog)
+	err = loginLogService.DeleteLoginLog(c.Request.Context(), loginLog)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -53,9 +52,9 @@ func (s *LoginLogApi) DeleteLoginLogByIds(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = loginLogService.DeleteLoginLogByIds(SDS)
+	err = loginLogService.DeleteLoginLogByIds(c.Request.Context(), SDS)
 	if err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("批量删除失败!")
 		response.FailWithMessage("批量删除失败", c)
 		return
 	}
@@ -78,9 +77,9 @@ func (s *LoginLogApi) FindLoginLog(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	reLoginLog, err := loginLogService.GetLoginLog(loginLog.ID)
+	reLoginLog, err := loginLogService.GetLoginLog(c.Request.Context(), loginLog.ID)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -103,9 +102,9 @@ func (s *LoginLogApi) GetLoginLogList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := loginLogService.GetLoginLogInfoList(pageInfo)
+	list, total, err := loginLogService.GetLoginLogInfoList(c.Request.Context(), pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}

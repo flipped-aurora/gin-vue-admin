@@ -1,16 +1,15 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type SystemApiApi struct{}
@@ -36,9 +35,9 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.CreateApi(api)
+	err = apiService.CreateApi(c.Request.Context(), api)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -54,9 +53,9 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 // @Success   200   {object}  response.Response{msg=string}  "同步API"
 // @Router    /api/syncApi [get]
 func (s *SystemApiApi) SyncApi(c *gin.Context) {
-	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
+	newApis, deleteApis, ignoreApis, err := apiService.SyncApi(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("同步失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("同步失败!")
 		response.FailWithMessage("同步失败", c)
 		return
 	}
@@ -76,9 +75,9 @@ func (s *SystemApiApi) SyncApi(c *gin.Context) {
 // @Success   200   {object}  response.Response{msg=string}  "获取API分组"
 // @Router    /api/getApiGroups [get]
 func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
-	groups, apiGroupMap, err := apiService.GetApiGroups()
+	groups, apiGroupMap, err := apiService.GetApiGroups(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -103,9 +102,9 @@ func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.IgnoreApi(ignoreApi)
+	err = apiService.IgnoreApi(c.Request.Context(), ignoreApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("忽略失败!")
 		response.FailWithMessage("忽略失败", c)
 		return
 	}
@@ -127,9 +126,9 @@ func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.EnterSyncApi(syncApi)
+	err = apiService.EnterSyncApi(c.Request.Context(), syncApi)
 	if err != nil {
-		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("忽略失败!")
 		response.FailWithMessage("忽略失败", c)
 		return
 	}
@@ -157,9 +156,9 @@ func (s *SystemApiApi) DeleteApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.DeleteApi(api)
+	err = apiService.DeleteApi(c.Request.Context(), api)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -187,9 +186,9 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := apiService.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc)
+	list, total, err := apiService.GetAPIInfoList(c.Request.Context(), pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -222,9 +221,9 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	api, err := apiService.GetApiById(idInfo.ID)
+	api, err := apiService.GetApiById(c.Request.Context(), idInfo.ID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -252,9 +251,9 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.UpdateApi(api)
+	err = apiService.UpdateApi(c.Request.Context(), api)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("修改失败!")
 		response.FailWithMessage("修改失败", c)
 		return
 	}
@@ -271,9 +270,9 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 // @Router    /api/getAllApis [post]
 func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
-	apis, err := apiService.GetAllApis(authorityID)
+	apis, err := apiService.GetAllApis(c.Request.Context(), authorityID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -296,9 +295,9 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.DeleteApisByIds(ids)
+	err = apiService.DeleteApisByIds(c.Request.Context(), ids)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -315,7 +314,7 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
 	err := casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("刷新失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("刷新失败!")
 		response.FailWithMessage("刷新失败", c)
 		return
 	}
@@ -339,9 +338,9 @@ func (s *SystemApiApi) GetApiRoles(c *gin.Context) {
 		response.FailWithMessage("API路径和请求方法不能为空", c)
 		return
 	}
-	authorityIds, err := casbinService.GetAuthoritiesByApi(path, method)
+	authorityIds, err := casbinService.GetAuthoritiesByApi(c.Request.Context(), path, method)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败"+err.Error(), c)
 		return
 	}
@@ -370,8 +369,8 @@ func (s *SystemApiApi) SetApiRoles(c *gin.Context) {
 		response.FailWithMessage("API路径和请求方法不能为空", c)
 		return
 	}
-	if err := casbinService.SetApiAuthorities(req.Path, req.Method, req.AuthorityIds); err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+	if err := casbinService.SetApiAuthorities(c.Request.Context(), req.Path, req.Method, req.AuthorityIds); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}

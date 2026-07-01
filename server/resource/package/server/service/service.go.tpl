@@ -57,7 +57,7 @@ type {{.StructName}}Service struct {}
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}(ctx context.Context, {{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
-	err = {{$db}}.Create({{.Abbreviation}}).Error
+	err = {{$db}}.WithContext(ctx).Create({{.Abbreviation}}).Error
 	return err
 }
 
@@ -66,7 +66,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}(ct
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .IsTree }}
        var count int64
-	   err = {{$db}}.Find(&{{.Package}}.{{.StructName}}{},"parent_id = ?",{{.PrimaryField.FieldJson}}).Count(&count).Error
+	   err = {{$db}}.WithContext(ctx).Find(&{{.Package}}.{{.StructName}}{},"parent_id = ?",{{.PrimaryField.FieldJson}}).Count(&count).Error
 	   if count > 0 {
            return errors.New("此节点存在子节点不允许删除")
        }
@@ -76,7 +76,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}(ctx
 	{{- end }}
 
 	{{- if .AutoCreateResource }}
-	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
+	err = {{$db}}.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).Update("deleted_by", userID).Error; err != nil {
               return err
         }
@@ -86,7 +86,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}(ctx
         return nil
 	})
     {{- else }}
-	err = {{$db}}.Delete(&{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error
+	err = {{$db}}.WithContext(ctx).Delete(&{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error
 	{{- end }}
 	return err
 }
@@ -95,7 +95,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}(ctx
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ctx context.Context, {{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
-	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
+	err = {{$db}}.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
             return err
         }
@@ -105,7 +105,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
         return nil
     })
     {{- else}}
-	err = {{$db}}.Delete(&[]{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} in ?",{{.PrimaryField.FieldJson}}s).Error
+	err = {{$db}}.WithContext(ctx).Delete(&[]{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} in ?",{{.PrimaryField.FieldJson}}s).Error
     {{- end}}
 	return err
 }
@@ -113,14 +113,14 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
 // Update{{.StructName}} 更新{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}(ctx context.Context, {{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
-	err = {{$db}}.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
+	err = {{$db}}.WithContext(ctx).Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
-	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
+	err = {{$db}}.WithContext(ctx).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
 
@@ -130,7 +130,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(ctx co
 // Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(ctx context.Context) (list []*{{.Package}}.{{.StructName}},err error) {
     // 创建db
-	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
+	db := {{$db}}.WithContext(ctx).Model(&{{.Package}}.{{.StructName}}{})
     var {{.Abbreviation}}s []*{{.Package}}.{{.StructName}}
 
 	err = db.Find(&{{.Abbreviation}}s).Error
@@ -144,7 +144,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
+	db := {{$db}}.WithContext(ctx).Model(&{{.Package}}.{{.StructName}}{})
     var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
 {{- if .GvaModel }}
@@ -199,7 +199,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSou
        {{- else}}
        {{ $dataDB = printf "global.MustGetGlobalDBByDBName(\"%s\")" $value.DBName }}
        {{- end}}
-       {{$dataDB}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+       {{$dataDB}}.WithContext(ctx).Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 	   res["{{$key}}"] = {{$key}}
 	{{- end }}
 	return

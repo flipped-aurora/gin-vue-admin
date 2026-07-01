@@ -8,6 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/flipped-aurora/gin-vue-admin/server/router"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -35,8 +36,12 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 
 func Routers() *gin.Engine {
 	Router := gin.New()
+	// RequestMeta 必须最先：保证 panic 日志与 X-Request-Id 响应头都带 request_id
+	Router.Use(middleware.RequestMeta())
 	// 使用自定义的 Recovery 中间件，记录 panic 并入库
 	Router.Use(middleware.GinRecovery(true))
+	// 全局访问日志 + 唯一 body/resp 捕获点（供 OperationRecord 复用）
+	Router.Use(middleware.AccessLog())
 	if gin.Mode() == gin.DebugMode {
 		Router.Use(gin.Logger())
 	}
@@ -57,10 +62,9 @@ func Routers() *gin.Engine {
 	// 跨域，如需跨域可以打开下面的注释
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
 	// Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
-	// global.GVA_LOG.Info("use middleware cors")
 	docs.SwaggerInfo.BasePath = global.GVA_CONFIG.System.RouterPrefix
 	Router.GET(global.GVA_CONFIG.System.RouterPrefix+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	global.GVA_LOG.Info("register swagger handler")
+	logger.Bg().Mod("system").Info("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 
 	PublicGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
@@ -112,6 +116,6 @@ func Routers() *gin.Engine {
 
 	global.GVA_ROUTERS = Router.Routes()
 
-	global.GVA_LOG.Info("router register success")
+	logger.Bg().Mod("system").Info("router register success")
 	return Router
 }

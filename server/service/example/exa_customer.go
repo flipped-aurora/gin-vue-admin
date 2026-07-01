@@ -1,6 +1,8 @@
 package example
 
 import (
+	"context"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
@@ -18,8 +20,8 @@ var CustomerServiceApp = new(CustomerService)
 //@param: e model.ExaCustomer
 //@return: err error
 
-func (exa *CustomerService) CreateExaCustomer(e example.ExaCustomer) (err error) {
-	err = global.GVA_DB.Create(&e).Error
+func (exa *CustomerService) CreateExaCustomer(ctx context.Context, e example.ExaCustomer) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Create(&e).Error
 	return err
 }
 
@@ -29,8 +31,8 @@ func (exa *CustomerService) CreateExaCustomer(e example.ExaCustomer) (err error)
 //@param: e model.ExaCustomer
 //@return: err error
 
-func (exa *CustomerService) DeleteExaCustomer(e example.ExaCustomer) (err error) {
-	err = global.GVA_DB.Delete(&e).Error
+func (exa *CustomerService) DeleteExaCustomer(ctx context.Context, e example.ExaCustomer) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Delete(&e).Error
 	return err
 }
 
@@ -40,8 +42,8 @@ func (exa *CustomerService) DeleteExaCustomer(e example.ExaCustomer) (err error)
 //@param: e *model.ExaCustomer
 //@return: err error
 
-func (exa *CustomerService) UpdateExaCustomer(e *example.ExaCustomer) (err error) {
-	err = global.GVA_DB.Save(e).Error
+func (exa *CustomerService) UpdateExaCustomer(ctx context.Context, e *example.ExaCustomer) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Save(e).Error
 	return err
 }
 
@@ -51,8 +53,8 @@ func (exa *CustomerService) UpdateExaCustomer(e *example.ExaCustomer) (err error
 //@param: id uint
 //@return: customer model.ExaCustomer, err error
 
-func (exa *CustomerService) GetExaCustomer(id uint) (customer example.ExaCustomer, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&customer).Error
+func (exa *CustomerService) GetExaCustomer(ctx context.Context, id uint) (customer example.ExaCustomer, err error) {
+	err = global.GVA_DB.WithContext(ctx).Where("id = ?", id).First(&customer).Error
 	return
 }
 
@@ -62,13 +64,13 @@ func (exa *CustomerService) GetExaCustomer(id uint) (customer example.ExaCustome
 //@param: sysUserAuthorityID string, info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
+func (exa *CustomerService) GetCustomerInfoList(ctx context.Context, sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB.Model(&example.ExaCustomer{})
+	db := global.GVA_DB.WithContext(ctx).Model(&example.ExaCustomer{})
 	var a system.SysAuthority
 	a.AuthorityId = sysUserAuthorityID
-	auth, err := systemService.AuthorityServiceApp.GetAuthorityInfo(a)
+	auth, err := systemService.AuthorityServiceApp.GetAuthorityInfo(ctx, a)
 	if err != nil {
 		return
 	}

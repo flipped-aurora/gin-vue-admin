@@ -402,7 +402,7 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 				GetMenuIds(dbMenu, &menuIds)
 				// 逆序删除，先删除子菜单
 				for i := len(menuIds) - 1; i >= 0; i-- {
-					err := BaseMenuServiceApp.DeleteBaseMenu(menuIds[i])
+					err := BaseMenuServiceApp.DeleteBaseMenu(context.Background(), menuIds[i])
 					if err != nil {
 						zap.L().Error("删除菜单失败", zap.Int("id", menuIds[i]), zap.Error(err))
 					}
@@ -416,7 +416,7 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 		for _, api := range apis {
 			var dbApi system.SysApi
 			if err := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&dbApi).Error; err == nil {
-				err := ApiServiceApp.DeleteApi(dbApi)
+				err := ApiServiceApp.DeleteApi(context.Background(), dbApi)
 				if err != nil {
 					zap.L().Error("删除API失败", zap.String("path", api.Path), zap.Error(err))
 				}
@@ -429,7 +429,7 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 		for _, dict := range dicts {
 			var dbDict system.SysDictionary
 			if err := global.GVA_DB.Where("type = ?", dict.Type).First(&dbDict).Error; err == nil {
-				err := DictionaryServiceApp.DeleteSysDictionary(dbDict)
+				err := DictionaryServiceApp.DeleteSysDictionary(context.Background(), dbDict)
 				if err != nil {
 					zap.L().Error("删除字典失败", zap.String("type", dict.Type), zap.Error(err))
 				}

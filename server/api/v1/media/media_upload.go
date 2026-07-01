@@ -9,8 +9,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/media/request"
 	mediaRes "github.com/flipped-aurora/gin-vue-admin/server/model/media/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type MediaUploadApi struct{}
@@ -33,9 +33,9 @@ func (a *MediaUploadApi) Init(c *gin.Context) {
 		response.FailWithMessage("文件超过大小上限", c)
 		return
 	}
-	res, err := mediaUploadService.Init(utils.GetUserID(c), req)
+	res, err := mediaUploadService.Init(c.Request.Context(), utils.GetUserID(c), req)
 	if err != nil {
-		global.GVA_LOG.Error("init失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("init失败")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -69,8 +69,8 @@ func (a *MediaUploadApi) Chunk(c *gin.Context) {
 		response.FailWithMessage("分片读取失败", c)
 		return
 	}
-	if err := mediaUploadService.SaveChunk(utils.GetUserID(c), uint(uploadID), index, chunkHash, data); err != nil {
-		global.GVA_LOG.Error("收片失败", zap.Error(err))
+	if err := mediaUploadService.SaveChunk(c.Request.Context(), utils.GetUserID(c), uint(uploadID), index, chunkHash, data); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("收片失败")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -91,9 +91,9 @@ func (a *MediaUploadApi) Complete(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	m, err := mediaUploadService.Complete(utils.GetUserID(c), req.UploadID)
+	m, err := mediaUploadService.Complete(c.Request.Context(), utils.GetUserID(c), req.UploadID)
 	if err != nil {
-		global.GVA_LOG.Error("合并失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("合并失败")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -109,7 +109,7 @@ func (a *MediaUploadApi) Complete(c *gin.Context) {
 // @Router   /mediaUpload/{uploadId} [delete]
 func (a *MediaUploadApi) Cancel(c *gin.Context) {
 	uploadID, _ := strconv.Atoi(c.Param("uploadId"))
-	if err := mediaUploadService.Cancel(utils.GetUserID(c), uint(uploadID)); err != nil {
+	if err := mediaUploadService.Cancel(c.Request.Context(), utils.GetUserID(c), uint(uploadID)); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

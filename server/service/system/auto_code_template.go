@@ -164,7 +164,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			TemplateID:   name,
 			TemplateInfo: string(templateInfo),
 		}
-		err = SysExportTemplateServiceApp.CreateSysExportTemplate(&sysExportTemplate)
+		err = SysExportTemplateServiceApp.CreateSysExportTemplate(ctx, &sysExportTemplate)
 		if err != nil {
 			return err
 		}

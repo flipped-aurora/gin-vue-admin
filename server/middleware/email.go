@@ -11,8 +11,8 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func ErrorToEmail() gin.HandlerFunc {
@@ -51,7 +51,7 @@ func ErrorToEmail() gin.HandlerFunc {
 		if status != 200 {
 			subject := username + "" + record.Ip + "调用了" + record.Path + "报错了"
 			if err := utils.ErrorToEmail(subject, str); err != nil {
-				global.GVA_LOG.Error("ErrorToEmail Failed, err:", zap.Error(err))
+				logger.WithCtx(c.Request.Context()).Mod("http").Err(err).Error("ErrorToEmail Failed, err:")
 			}
 		}
 	}

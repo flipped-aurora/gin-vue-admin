@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"testing"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -11,7 +12,7 @@ func TestSecurityConfigCurrentReadsCache(t *testing.T) {
 	s := &SecurityConfigService{}
 	want := system.SysSecurityConfig{PwdMinLength: 12, LockThreshold: 3}
 	setSecurityConfigCache(want)
-	got := s.Current()
+	got := s.Current(context.Background())
 	if got.PwdMinLength != 12 || got.LockThreshold != 3 {
 		t.Fatalf("Current() = %+v, want PwdMinLength=12 LockThreshold=3", got)
 	}

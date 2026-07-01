@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -139,19 +140,19 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 	for _, pkg := range packages {
 		isEmpty, err := g.isPackageFolderEmpty(pkg.PackageName, pkg.Template)
 		if err != nil {
-global.GVA_LOG.Warn(fmt.Sprintf("检查包 %s 是否为空时出错: %v", pkg.PackageName, err))
+			logger.WithCtx(ctx).Mod("mcp").Err(err).Warn(fmt.Sprintf("检查包 %s 是否为空时出错", pkg.PackageName))
 			continue
 		}
 
 		if isEmpty {
 			if err := g.removeEmptyPackageFolder(pkg.PackageName, pkg.Template); err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("删除空包文件夹 %s 失败: %v", pkg.PackageName, err))
+				logger.WithCtx(ctx).Mod("mcp").Err(err).Warn(fmt.Sprintf("删除空包文件夹 %s 失败", pkg.PackageName))
 			} else {
 				cleanupInfo.DeletedPackages = append(cleanupInfo.DeletedPackages, pkg.PackageName)
 			}
 
 			if err := deleteAutoCodePackage(ctx, pkg.ID); err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("删除包数据库记录 %s 失败: %v", pkg.PackageName, err))
+				logger.WithCtx(ctx).Mod("mcp").Err(err).Warn(fmt.Sprintf("删除包数据库记录 %s 失败", pkg.PackageName))
 			}
 
 			for _, history := range histories {
@@ -187,23 +188,23 @@ global.GVA_LOG.Warn(fmt.Sprintf("检查包 %s 是否为空时出错: %v", pkg.Pa
 		deletedCount := 0
 		for _, historyID := range dirtyHistoryIDs {
 			if err := deleteAutoCodeHistory(ctx, historyID); err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("删除脏历史记录失败: %v", err))
+				logger.WithCtx(ctx).Mod("mcp").Err(err).Warn("删除脏历史记录失败")
 				continue
 			}
 			deletedCount++
 		}
 		if deletedCount > 0 {
-			global.GVA_LOG.Info(fmt.Sprintf("成功删除 %d 条脏历史记录", deletedCount))
+			logger.WithCtx(ctx).Mod("mcp").Info(fmt.Sprintf("成功删除 %d 条脏历史记录", deletedCount))
 		}
 
-		if err := g.cleanupRelatedApiAndMenus(dirtyHistoryIDs); err != nil {
-			global.GVA_LOG.Warn(fmt.Sprintf("清理相关API和菜单记录失败: %v", err))
+		if err := g.cleanupRelatedApiAndMenus(ctx, dirtyHistoryIDs); err != nil {
+			logger.WithCtx(ctx).Mod("mcp").Err(err).Warn("清理相关API和菜单记录失败")
 		}
 	}
 
-	predesignedModules, err := g.scanPredesignedModules()
+	predesignedModules, err := g.scanPredesignedModules(ctx)
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("扫描预设计模块失败: %v", err))
+		logger.WithCtx(ctx).Mod("mcp").Err(err).Warn("扫描预设计模块失败")
 		predesignedModules = []PredesignedModuleInfo{}
 	}
 
@@ -224,7 +225,7 @@ global.GVA_LOG.Warn(fmt.Sprintf("检查包 %s 是否为空时出错: %v", pkg.Pa
 	dictionaries := []DictionaryPre{}
 	dictEntities, err := fetchDictionaryList(ctx, "")
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("获取字典信息失败: %v", err))
+		logger.WithCtx(ctx).Mod("mcp").Err(err).Warn("获取字典信息失败")
 	} else {
 		for _, dictionary := range dictEntities {
 			dictionaries = append(dictionaries, DictionaryPre{
@@ -354,14 +355,14 @@ func (g *GVAAnalyzer) removeDirectoryIfExists(dirPath string) error {
 }
 
 // cleanupRelatedApiAndMenus 清理相关的API和菜单记录
-func (g *GVAAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) error {
+func (g *GVAAnalyzer) cleanupRelatedApiAndMenus(ctx context.Context, historyIDs []uint) error {
 	if len(historyIDs) == 0 {
 		return nil
 	}
 
 	// 这里可以根据需要实现具体的API和菜单清理逻辑
 	// 由于涉及到具体的业务逻辑，这里只做日志记录
-	global.GVA_LOG.Info(fmt.Sprintf("清理历史记录ID %v 相关的API和菜单记录", historyIDs))
+	logger.WithCtx(ctx).Mod("mcp").Info(fmt.Sprintf("清理历史记录ID %v 相关的API和菜单记录", historyIDs))
 
 	// 可以调用service层的相关方法进行清理
 	// 例如：service.ServiceGroupApp.SystemApiService.DeleteApisByIds(historyIDs)
@@ -371,7 +372,7 @@ func (g *GVAAnalyzer) cleanupRelatedApiAndMenus(historyIDs []uint) error {
 }
 
 // scanPredesignedModules 扫描预设计模块
-func (g *GVAAnalyzer) scanPredesignedModules() ([]PredesignedModuleInfo, error) {
+func (g *GVAAnalyzer) scanPredesignedModules(ctx context.Context) ([]PredesignedModuleInfo, error) {
 	// 获取autocode配置路径
 	autocodeRoot := global.GVA_CONFIG.AutoCode.Root
 	if autocodeRoot == "" {
@@ -381,17 +382,17 @@ func (g *GVAAnalyzer) scanPredesignedModules() ([]PredesignedModuleInfo, error) 
 	var modules []PredesignedModuleInfo
 
 	// 扫描plugin目录
-	pluginModules, err := g.scanPluginModules(filepath.Join(autocodeRoot, global.GVA_CONFIG.AutoCode.Server, "plugin"))
+	pluginModules, err := g.scanPluginModules(ctx, filepath.Join(autocodeRoot, global.GVA_CONFIG.AutoCode.Server, "plugin"))
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("扫描plugin模块失败: %v", err))
+		logger.WithCtx(ctx).Mod("mcp").Err(err).Warn("扫描plugin模块失败")
 	} else {
 		modules = append(modules, pluginModules...)
 	}
 
 	// 扫描model目录
-	modelModules, err := g.scanModelModules(filepath.Join(autocodeRoot, global.GVA_CONFIG.AutoCode.Server, "model"))
+	modelModules, err := g.scanModelModules(ctx, filepath.Join(autocodeRoot, global.GVA_CONFIG.AutoCode.Server, "model"))
 	if err != nil {
-		global.GVA_LOG.Warn(fmt.Sprintf("扫描model模块失败: %v", err))
+		logger.WithCtx(ctx).Mod("mcp").Err(err).Warn("扫描model模块失败")
 	} else {
 		modules = append(modules, modelModules...)
 	}
@@ -400,7 +401,7 @@ func (g *GVAAnalyzer) scanPredesignedModules() ([]PredesignedModuleInfo, error) 
 }
 
 // scanPluginModules 扫描插件模块
-func (g *GVAAnalyzer) scanPluginModules(pluginDir string) ([]PredesignedModuleInfo, error) {
+func (g *GVAAnalyzer) scanPluginModules(ctx context.Context, pluginDir string) ([]PredesignedModuleInfo, error) {
 	var modules []PredesignedModuleInfo
 
 	if _, err := os.Stat(pluginDir); os.IsNotExist(err) {
@@ -423,7 +424,7 @@ func (g *GVAAnalyzer) scanPluginModules(pluginDir string) ([]PredesignedModuleIn
 				// 扫描model目录下的模块
 				pluginModules, err := g.scanModulesInDirectory(modelDir, pluginName, "plugin")
 				if err != nil {
-					global.GVA_LOG.Warn(fmt.Sprintf("扫描插件 %s 的模块失败: %v", pluginName, err))
+					logger.WithCtx(ctx).Mod("mcp").Err(err).Warn(fmt.Sprintf("扫描插件 %s 的模块失败", pluginName))
 					continue
 				}
 				modules = append(modules, pluginModules...)
@@ -435,7 +436,7 @@ func (g *GVAAnalyzer) scanPluginModules(pluginDir string) ([]PredesignedModuleIn
 }
 
 // scanModelModules 扫描模型模块
-func (g *GVAAnalyzer) scanModelModules(modelDir string) ([]PredesignedModuleInfo, error) {
+func (g *GVAAnalyzer) scanModelModules(ctx context.Context, modelDir string) ([]PredesignedModuleInfo, error) {
 	var modules []PredesignedModuleInfo
 
 	if _, err := os.Stat(modelDir); os.IsNotExist(err) {
@@ -455,7 +456,7 @@ func (g *GVAAnalyzer) scanModelModules(modelDir string) ([]PredesignedModuleInfo
 			// 扫描包目录下的模块
 			packageModules, err := g.scanModulesInDirectory(packagePath, packageName, "package")
 			if err != nil {
-				global.GVA_LOG.Warn(fmt.Sprintf("扫描包 %s 的模块失败: %v", packageName, err))
+				logger.WithCtx(ctx).Mod("mcp").Err(err).Warn(fmt.Sprintf("扫描包 %s 的模块失败", packageName))
 				continue
 			}
 			modules = append(modules, packageModules...)

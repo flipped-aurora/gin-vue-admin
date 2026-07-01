@@ -1,6 +1,7 @@
 package media
 
 import (
+	"context"
 	"errors"
 	"mime/multipart"
 	"strings"
@@ -22,8 +23,8 @@ var FileUploadAndDownloadServiceApp = new(FileUploadAndDownloadService)
 //@param: file model.FileUploadAndDownload
 //@return: error
 
-func (e *FileUploadAndDownloadService) Upload(file media.FileUploadAndDownload) error {
-	return global.GVA_DB.Create(&file).Error
+func (e *FileUploadAndDownloadService) Upload(ctx context.Context, file media.FileUploadAndDownload) error {
+	return global.GVA_DB.WithContext(ctx).Create(&file).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -32,9 +33,9 @@ func (e *FileUploadAndDownloadService) Upload(file media.FileUploadAndDownload) 
 //@param: id uint
 //@return: model.FileUploadAndDownload, error
 
-func (e *FileUploadAndDownloadService) FindFile(id uint) (media.FileUploadAndDownload, error) {
+func (e *FileUploadAndDownloadService) FindFile(ctx context.Context, id uint) (media.FileUploadAndDownload, error) {
 	var file media.FileUploadAndDownload
-	err := global.GVA_DB.Where("id = ?", id).First(&file).Error
+	err := global.GVA_DB.WithContext(ctx).Where("id = ?", id).First(&file).Error
 	return file, err
 }
 
@@ -44,24 +45,24 @@ func (e *FileUploadAndDownloadService) FindFile(id uint) (media.FileUploadAndDow
 //@param: file model.FileUploadAndDownload
 //@return: err error
 
-func (e *FileUploadAndDownloadService) DeleteFile(file media.FileUploadAndDownload) (err error) {
+func (e *FileUploadAndDownloadService) DeleteFile(ctx context.Context, file media.FileUploadAndDownload) (err error) {
 	var fileFromDb media.FileUploadAndDownload
-	fileFromDb, err = e.FindFile(file.ID)
+	fileFromDb, err = e.FindFile(ctx, file.ID)
 	if err != nil {
 		return
 	}
 	oss := upload.NewOss()
-	if err = oss.DeleteFile(fileFromDb.Key); err != nil {
+	if err = oss.DeleteFile(ctx, fileFromDb.Key); err != nil {
 		return errors.New("文件删除失败")
 	}
-	err = global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(&file).Error
+	err = global.GVA_DB.WithContext(ctx).Where("id = ?", file.ID).Unscoped().Delete(&file).Error
 	return err
 }
 
 // EditFileName 编辑文件名或者备注
-func (e *FileUploadAndDownloadService) EditFileName(file media.FileUploadAndDownload) (err error) {
+func (e *FileUploadAndDownloadService) EditFileName(ctx context.Context, file media.FileUploadAndDownload) (err error) {
 	var fileFromDb media.FileUploadAndDownload
-	return global.GVA_DB.Where("id = ?", file.ID).First(&fileFromDb).Update("name", file.Name).Error
+	return global.GVA_DB.WithContext(ctx).Where("id = ?", file.ID).First(&fileFromDb).Update("name", file.Name).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -70,10 +71,10 @@ func (e *FileUploadAndDownloadService) EditFileName(file media.FileUploadAndDown
 //@param: info request.AttachmentCategorySearch
 //@return: list interface{}, total int64, err error
 
-func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.AttachmentCategorySearch) (list []media.FileUploadAndDownload, total int64, err error) {
+func (e *FileUploadAndDownloadService) GetFileRecordInfoList(ctx context.Context, info request.AttachmentCategorySearch) (list []media.FileUploadAndDownload, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB.Model(&media.FileUploadAndDownload{})
+	db := global.GVA_DB.WithContext(ctx).Model(&media.FileUploadAndDownload{})
 
 	if len(info.Keyword) > 0 {
 		db = db.Where("name LIKE ?", "%"+info.Keyword+"%")
@@ -97,9 +98,9 @@ func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.Attach
 //@param: header *multipart.FileHeader, noSave string
 //@return: file model.FileUploadAndDownload, err error
 
-func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, noSave string, classId int) (file media.FileUploadAndDownload, err error) {
+func (e *FileUploadAndDownloadService) UploadFile(ctx context.Context, header *multipart.FileHeader, noSave string, classId int) (file media.FileUploadAndDownload, err error) {
 	oss := upload.NewOss()
-	filePath, key, uploadErr := oss.UploadFile(header)
+	filePath, key, uploadErr := oss.UploadFile(ctx, header)
 	if uploadErr != nil {
 		return file, uploadErr
 	}
@@ -114,9 +115,9 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 	if noSave == "0" {
 		// 检查是否已存在相同key的记录
 		var existingFile media.FileUploadAndDownload
-		err = global.GVA_DB.Where(&media.FileUploadAndDownload{Key: key}).First(&existingFile).Error
+		err = global.GVA_DB.WithContext(ctx).Where(&media.FileUploadAndDownload{Key: key}).First(&existingFile).Error
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return f, e.Upload(f)
+			return f, e.Upload(ctx, f)
 		}
 		return f, err
 	}
@@ -129,6 +130,6 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 //@param: file model.FileUploadAndDownload
 //@return: error
 
-func (e *FileUploadAndDownloadService) ImportURL(file *[]media.FileUploadAndDownload) error {
-	return global.GVA_DB.Create(&file).Error
+func (e *FileUploadAndDownloadService) ImportURL(ctx context.Context, file *[]media.FileUploadAndDownload) error {
+	return global.GVA_DB.WithContext(ctx).Create(&file).Error
 }

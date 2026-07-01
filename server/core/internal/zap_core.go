@@ -82,17 +82,20 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 		// 生成基础信息
 		info := entry.Message
 
-		// 提取 zap.Error(err) 内容
+		// 提取 zap.Error(err) 内容与 request_id
 		var errStr string
+		var reqID string
 		for i := 0; i < len(fields); i++ {
 			f := fields[i]
-			if f.Type == zapcore.ErrorType || f.Key == "error" || f.Key == "err" {
+			if f.Key == "request_id" && f.String != "" {
+				reqID = f.String
+			}
+			if errStr == "" && (f.Type == zapcore.ErrorType || f.Key == "error" || f.Key == "err") {
 				if f.Interface != nil {
 					errStr = fmt.Sprintf("%v", f.Interface)
 				} else if f.String != "" {
 					errStr = f.String
 				}
-				break
 			}
 		}
 		if errStr != "" {
@@ -120,9 +123,10 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 		// 使用后台上下文，避免依赖 gin.Context
 		ctx := context.Background()
 		_ = service.ServiceGroupApp.SystemServiceGroup.SysErrorService.CreateSysError(ctx, &system.SysError{
-			Form:  &form,
-			Info:  &info,
-			Level: level,
+			Form:      &form,
+			Info:      &info,
+			Level:     level,
+			RequestID: reqID,
 		})
 	}
 	return err

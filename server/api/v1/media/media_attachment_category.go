@@ -1,12 +1,11 @@
 package media
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type AttachmentCategoryApi struct{}
@@ -19,9 +18,9 @@ type AttachmentCategoryApi struct{}
 // @Success   200   {object}  response.Response{data=media.AttachmentCategory,msg=string}  "媒体库分类列表"
 // @Router    /attachmentCategory/getCategoryList [get]
 func (a *AttachmentCategoryApi) GetCategoryList(c *gin.Context) {
-	res, err := attachmentCategoryService.GetCategoryList()
+	res, err := attachmentCategoryService.GetCategoryList(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取分类列表失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取分类列表失败!")
 		response.FailWithMessage("获取分类列表失败", c)
 		return
 	}
@@ -39,13 +38,13 @@ func (a *AttachmentCategoryApi) GetCategoryList(c *gin.Context) {
 func (a *AttachmentCategoryApi) AddCategory(c *gin.Context) {
 	var req media.AttachmentCategory
 	if err := c.ShouldBindJSON(&req); err != nil {
-		global.GVA_LOG.Error("参数错误!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("参数错误!")
 		response.FailWithMessage("参数错误", c)
 		return
 	}
 
-	if err := attachmentCategoryService.AddCategory(&req); err != nil {
-		global.GVA_LOG.Error("创建/更新失败!", zap.Error(err))
+	if err := attachmentCategoryService.AddCategory(c.Request.Context(), &req); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建/更新失败!")
 		response.FailWithMessage("创建/更新失败："+err.Error(), c)
 		return
 	}
@@ -73,7 +72,7 @@ func (a *AttachmentCategoryApi) DeleteCategory(c *gin.Context) {
 		return
 	}
 
-	if err := attachmentCategoryService.DeleteCategory(&req.ID); err != nil {
+	if err := attachmentCategoryService.DeleteCategory(c.Request.Context(), &req.ID); err != nil {
 		response.FailWithMessage("删除失败", c)
 		return
 	}

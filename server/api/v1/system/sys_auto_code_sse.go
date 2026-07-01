@@ -8,13 +8,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-contrib/sse"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
-	"go.uber.org/zap"
 )
 
 // LLMAutoSSE
@@ -28,7 +27,7 @@ import (
 func (autoApi *AutoCodeApi) LLMAutoSSE(c *gin.Context) {
 	var llm common.JSONMap
 	if err := c.ShouldBindJSON(&llm); err != nil {
-		global.GVA_LOG.Error("LLMAutoSSE 参数绑定失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("LLMAutoSSE 参数绑定失败!")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -37,10 +36,10 @@ func (autoApi *AutoCodeApi) LLMAutoSSE(c *gin.Context) {
 		llm = common.JSONMap{}
 	}
 	llm["response_mode"] = "streaming"
-	global.GVA_LOG.Info("LLMAutoSSE 收到请求", zap.Any("mode", llm["mode"]))
+	logger.WithCtx(c.Request.Context()).Mod("biz").Field("mode", llm["mode"]).Info("LLMAutoSSE 收到请求")
 
 	if err := autoApi.streamLLMAsSSE(c, llm); err != nil {
-		global.GVA_LOG.Error("大模型 SSE 代理失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("大模型 SSE 代理失败!")
 		if c.Writer.Written() {
 			writeLLMStreamError(c, err)
 			return
@@ -65,9 +64,7 @@ func (autoApi *AutoCodeApi) streamLLMAsSSE(c *gin.Context, llm common.JSONMap) e
 	}
 
 	ct := res.Header.Get("Content-Type")
-	global.GVA_LOG.Info("LLMAutoSSE 上游返回成功，开始 SSE 流式转发",
-		zap.Int("status", res.StatusCode),
-		zap.String("content-type", ct))
+	logger.WithCtx(c.Request.Context()).Mod("biz").Field("status", res.StatusCode).Field("content-type", ct).Info("LLMAutoSSE 上游返回成功，开始 SSE 流式转发")
 
 	// 如果上游返回的不是 SSE 流（可能是 blocking 模式返回的 JSON），直接读取并转发
 	if !strings.Contains(ct, "text/event-stream") && !strings.Contains(ct, "text/plain") {
@@ -75,8 +72,7 @@ func (autoApi *AutoCodeApi) streamLLMAsSSE(c *gin.Context, llm common.JSONMap) e
 		if readErr != nil {
 			return fmt.Errorf("读取上游非流式响应失败: %w", readErr)
 		}
-		global.GVA_LOG.Warn("LLMAutoSSE 上游返回非 SSE 流，Content-Type: "+ct+", 将以单次事件转发",
-			zap.String("body_preview", previewResponseBody(body)))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Field("body_preview", previewResponseBody(body)).Warn("LLMAutoSSE 上游返回非 SSE 流，Content-Type: "+ct+", 将以单次事件转发")
 
 		flusher, ok := c.Writer.(http.Flusher)
 		if !ok {
@@ -112,13 +108,13 @@ func (autoApi *AutoCodeApi) streamLLMAsSSE(c *gin.Context, llm common.JSONMap) e
 	lines := make([]string, 0, 8)
 	blockCount := 0
 
-	global.GVA_LOG.Info("LLMAutoSSE 开始读取上游流数据...")
+	logger.WithCtx(c.Request.Context()).Mod("biz").Info("LLMAutoSSE 开始读取上游流数据...")
 
 	for {
-		global.GVA_LOG.Debug("LLMAutoSSE 等待读取下一行...")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Debug("LLMAutoSSE 等待读取下一行...")
 		line, readErr := reader.ReadString('\n')
 		if readErr != nil && !errors.Is(readErr, io.EOF) {
-			global.GVA_LOG.Error("LLMAutoSSE 读取上游流失败", zap.Int("已转发块数", blockCount), zap.Error(readErr))
+			logger.WithCtx(c.Request.Context()).Mod("biz").Field("已转发块数", blockCount).Err(readErr).Error("LLMAutoSSE 读取上游流失败")
 			return fmt.Errorf("读取上游流式响应失败: %w", readErr)
 		}
 
@@ -127,7 +123,7 @@ func (autoApi *AutoCodeApi) streamLLMAsSSE(c *gin.Context, llm common.JSONMap) e
 			if len(lines) > 0 {
 				blockCount++
 				if blockCount <= 3 {
-					global.GVA_LOG.Debug("LLMAutoSSE 转发 SSE 块", zap.Int("block", blockCount), zap.Strings("lines", lines))
+					logger.WithCtx(c.Request.Context()).Mod("biz").Field("block", blockCount).Field("lines", lines).Debug("LLMAutoSSE 转发 SSE 块")
 				}
 			}
 			if err := emitSSEBlock(c, lines); err != nil {
@@ -149,7 +145,7 @@ func (autoApi *AutoCodeApi) streamLLMAsSSE(c *gin.Context, llm common.JSONMap) e
 				return err
 			}
 			flusher.Flush()
-			global.GVA_LOG.Info("LLMAutoSSE 流式转发完成", zap.Int("总块数", blockCount))
+			logger.WithCtx(c.Request.Context()).Mod("biz").Field("总块数", blockCount).Info("LLMAutoSSE 流式转发完成")
 			return nil
 		}
 	}

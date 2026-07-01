@@ -1,6 +1,7 @@
 package media
 
 import (
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"testing"
@@ -27,13 +28,13 @@ func TestInitNewAndResume(t *testing.T) {
 	testDB(t)
 	s := &MediaUploadService{}
 	req := request.UploadInitReq{FileName: "a.bin", FileHash: "h1", FileSize: 10, ChunkSize: 5, ChunkTotal: 2}
-	r1, err := s.Init(1, req)
+	r1, err := s.Init(context.Background(), 1, req)
 	if err != nil || r1.Instant || r1.UploadID == 0 {
 		t.Fatalf("init new: %+v err=%v", r1, err)
 	}
 	// 模拟收到分片 0
 	global.GVA_DB.Create(&media.MediaUploadChunk{UploadID: r1.UploadID, ChunkIndex: 0})
-	r2, _ := s.Init(1, req)
+	r2, _ := s.Init(context.Background(), 1, req)
 	if r2.UploadID != r1.UploadID || len(r2.UploadedChunks) != 1 || r2.UploadedChunks[0] != 0 {
 		t.Fatalf("resume should report chunk 0: %+v", r2)
 	}
@@ -43,13 +44,13 @@ func TestSaveChunkIdempotent(t *testing.T) {
 	testDB(t)
 	global.GVA_CONFIG.Media.ChunkDir = t.TempDir()
 	s := &MediaUploadService{}
-	r, _ := s.Init(1, request.UploadInitReq{FileName: "a", FileHash: "h", FileSize: 3, ChunkSize: 3, ChunkTotal: 1})
+	r, _ := s.Init(context.Background(), 1, request.UploadInitReq{FileName: "a", FileHash: "h", FileSize: 3, ChunkSize: 3, ChunkTotal: 1})
 	data := []byte("abc")
 	import_md5 := "900150983cd24fb0d6963f7d28e17f72" // md5("abc")
-	if err := s.SaveChunk(1, r.UploadID, 0, import_md5, data); err != nil {
+	if err := s.SaveChunk(context.Background(), 1, r.UploadID, 0, import_md5, data); err != nil {
 		t.Fatal(err)
 	}
-	if err := s.SaveChunk(1, r.UploadID, 0, import_md5, data); err != nil {
+	if err := s.SaveChunk(context.Background(), 1, r.UploadID, 0, import_md5, data); err != nil {
 		t.Fatalf("重复收片应幂等: %v", err)
 	}
 	var cnt int64
@@ -58,7 +59,7 @@ func TestSaveChunkIdempotent(t *testing.T) {
 		t.Fatalf("应只有 1 条分片记录, got %d", cnt)
 	}
 	// 错误 hash 应失败
-	if err := s.SaveChunk(1, r.UploadID, 0, "deadbeef", data); err == nil {
+	if err := s.SaveChunk(context.Background(), 1, r.UploadID, 0, "deadbeef", data); err == nil {
 		t.Fatal("hash 不符应报错")
 	}
 }
@@ -72,14 +73,14 @@ func TestCompleteMergeAndRegister(t *testing.T) {
 	s := &MediaUploadService{}
 	full := []byte("hello big world")
 	// 整文件 md5
-	r, _ := s.Init(1, request.UploadInitReq{FileName: "x.txt", FileHash: md5hex(full), FileSize: int64(len(full)), ChunkSize: 6, ChunkTotal: 3})
+	r, _ := s.Init(context.Background(), 1, request.UploadInitReq{FileName: "x.txt", FileHash: md5hex(full), FileSize: int64(len(full)), ChunkSize: 6, ChunkTotal: 3})
 	chunks := [][]byte{full[0:6], full[6:10], full[10:]}
 	for i, c := range chunks {
-		if err := s.SaveChunk(1, r.UploadID, i, md5hex(c), c); err != nil {
+		if err := s.SaveChunk(context.Background(), 1, r.UploadID, i, md5hex(c), c); err != nil {
 			t.Fatal(err)
 		}
 	}
-	m, err := s.Complete(1, r.UploadID)
+	m, err := s.Complete(context.Background(), 1, r.UploadID)
 	if err != nil {
 		t.Fatalf("complete: %v", err)
 	}

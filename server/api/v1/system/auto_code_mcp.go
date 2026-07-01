@@ -8,6 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/mcp/client"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -31,7 +32,7 @@ func (a *AutoCodeTemplateApi) MCP(c *gin.Context) {
 	toolFilePath, err := autoCodeTemplateService.CreateMcp(c.Request.Context(), info)
 	if err != nil {
 		response.FailWithMessage("创建失败", c)
-		global.GVA_LOG.Error(err.Error())
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error(err.Error())
 		return
 	}
 	response.OkWithMessage("创建成功,MCP Tool路径:"+toolFilePath, c)

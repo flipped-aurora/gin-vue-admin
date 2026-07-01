@@ -3,6 +3,7 @@ package service
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -371,12 +372,12 @@ func topologicalOrder(nodes []autoModel.CliScenarioNode, edges []autoModel.CliSc
 
 // BuildCliSkill 生成该 CLI 的 AI 使用说明并和编译好的二进制一起打包成 zip：
 // SKILL.md + references/README.md + references/manifest.json + cli 二进制。
-func (s *cliService) BuildCliSkill(req autoReq.BuildSysCliBinaryRequest) (string, []byte, error) {
+func (s *cliService) BuildCliSkill(ctx context.Context, req autoReq.BuildSysCliBinaryRequest) (string, []byte, error) {
 	goos, goarch, err := normalizeBuildTarget(req.GOOS, req.GOARCH)
 	if err != nil {
 		return "", nil, err
 	}
-	cli, bindings, err := s.getCliAndBindings(req.CliID)
+	cli, bindings, err := s.getCliAndBindings(ctx, req.CliID)
 	if err != nil {
 		return "", nil, err
 	}

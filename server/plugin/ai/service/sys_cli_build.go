@@ -55,12 +55,12 @@ func cliBinaryExt(goos string) string {
 }
 
 // BuildCliBinary 把指定 CLI 的 manifest 内嵌进 gva 源码副本，交叉编译出一个开箱即用的二进制。
-func (s *cliService) BuildCliBinary(req autoReq.BuildSysCliBinaryRequest) (string, []byte, error) {
+func (s *cliService) BuildCliBinary(ctx context.Context, req autoReq.BuildSysCliBinaryRequest) (string, []byte, error) {
 	goos, goarch, err := normalizeBuildTarget(req.GOOS, req.GOARCH)
 	if err != nil {
 		return "", nil, err
 	}
-	cli, bindings, err := s.getCliAndBindings(req.CliID)
+	cli, bindings, err := s.getCliAndBindings(ctx, req.CliID)
 	if err != nil {
 		return "", nil, err
 	}

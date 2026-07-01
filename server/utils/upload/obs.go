@@ -1,6 +1,7 @@
 package upload
 
 import (
+	"context"
 	"mime/multipart"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -16,7 +17,7 @@ func NewHuaWeiObsClient() (client *obs.ObsClient, err error) {
 	return obs.New(global.GVA_CONFIG.HuaWeiObs.AccessKey, global.GVA_CONFIG.HuaWeiObs.SecretKey, global.GVA_CONFIG.HuaWeiObs.Endpoint)
 }
 
-func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (o *Obs) UploadFile(ctx context.Context, file *multipart.FileHeader) (string, string, error) {
 	// var open multipart.File
 	open, err := file.Open()
 	if err != nil {
@@ -51,7 +52,7 @@ func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	return filepath, filename, err
 }
 
-func (o *Obs) DeleteFile(key string) error {
+func (o *Obs) DeleteFile(ctx context.Context, key string) error {
 	client, err := NewHuaWeiObsClient()
 	if err != nil {
 		return errors.Wrap(err, "获取华为对象存储对象失败!")

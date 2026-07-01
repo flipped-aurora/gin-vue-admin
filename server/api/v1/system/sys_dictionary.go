@@ -1,12 +1,11 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type DictionaryApi struct{}
@@ -27,9 +26,9 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryService.CreateSysDictionary(dictionary)
+	err = dictionaryService.CreateSysDictionary(c.Request.Context(), dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -52,9 +51,9 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryService.DeleteSysDictionary(dictionary)
+	err = dictionaryService.DeleteSysDictionary(c.Request.Context(), dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -77,9 +76,9 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryService.UpdateSysDictionary(&dictionary)
+	err = dictionaryService.UpdateSysDictionary(c.Request.Context(), &dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
 		response.FailWithMessage("更新失败", c)
 		return
 	}
@@ -102,9 +101,9 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID, dictionary.Status)
+	sysDictionary, err := dictionaryService.GetSysDictionary(c.Request.Context(), dictionary.Type, dictionary.ID, dictionary.Status)
 	if err != nil {
-		global.GVA_LOG.Error("字典未创建或未开启!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("字典未创建或未开启!")
 		response.FailWithMessage("字典未创建或未开启", c)
 		return
 	}
@@ -127,9 +126,9 @@ func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, err := dictionaryService.GetSysDictionaryInfoList(c, dictionary)
+	list, err := dictionaryService.GetSysDictionaryInfoList(c.Request.Context(), dictionary)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -156,9 +155,9 @@ func (s *DictionaryApi) ExportSysDictionary(c *gin.Context) {
 		response.FailWithMessage("字典ID不能为空", c)
 		return
 	}
-	exportData, err := dictionaryService.ExportSysDictionary(dictionary.ID)
+	exportData, err := dictionaryService.ExportSysDictionary(c.Request.Context(), dictionary.ID)
 	if err != nil {
-		global.GVA_LOG.Error("导出失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("导出失败!")
 		response.FailWithMessage("导出失败", c)
 		return
 	}
@@ -181,9 +180,9 @@ func (s *DictionaryApi) ImportSysDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryService.ImportSysDictionary(req.Json)
+	err = dictionaryService.ImportSysDictionary(c.Request.Context(), req.Json)
 	if err != nil {
-		global.GVA_LOG.Error("导入失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("导入失败!")
 		response.FailWithMessage("导入失败: "+err.Error(), c)
 		return
 	}

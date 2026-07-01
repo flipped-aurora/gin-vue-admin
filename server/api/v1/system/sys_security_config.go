@@ -1,11 +1,10 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type SecurityConfigApi struct{}
@@ -19,9 +18,9 @@ type SecurityConfigApi struct{}
 // @Success   200  {object}  response.Response{data=system.SysSecurityConfig,msg=string}  "获取安全配置"
 // @Router    /securityConfig/getSecurityConfig [get]
 func (s *SecurityConfigApi) GetSecurityConfig(c *gin.Context) {
-	cfg, err := securityConfigService.Get()
+	cfg, err := securityConfigService.Get(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取安全配置失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取安全配置失败!")
 		response.FailWithMessage("获取安全配置失败", c)
 		return
 	}
@@ -43,11 +42,11 @@ func (s *SecurityConfigApi) SetSecurityConfig(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := securityConfigService.Set(cfg); err != nil {
-		global.GVA_LOG.Error("设置安全配置失败!", zap.Error(err))
+	if err := securityConfigService.Set(c.Request.Context(), cfg); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置安全配置失败!")
 		response.FailWithMessage("设置安全配置失败", c)
 		return
 	}
-	saved := securityConfigService.Current()
+	saved := securityConfigService.Current(c.Request.Context())
 	response.OkWithDetailed(saved, "设置成功", c)
 }

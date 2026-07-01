@@ -1,6 +1,7 @@
 package core
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -29,8 +30,8 @@ func RunServer() {
 	}
 
 	if global.GVA_DB != nil {
-		system.LoadAll()
-		(&system.SecurityConfigService{}).LoadAll()
+		system.LoadAll(context.Background())
+		(&system.SecurityConfigService{}).LoadAll(context.Background())
 	}
 
 	Router := initialize.Routers()

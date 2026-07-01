@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -16,17 +17,17 @@ func TestIsPasswordExpired(t *testing.T) {
 	old := now.AddDate(0, 0, -100)
 	recent := now.AddDate(0, 0, -10)
 
-	if !IsPasswordExpired(&old, cfg, now) {
+	if !IsPasswordExpired(context.Background(), &old, cfg, now) {
 		t.Fatalf("expected expired for 100 days old")
 	}
-	if IsPasswordExpired(&recent, cfg, now) {
+	if IsPasswordExpired(context.Background(), &recent, cfg, now) {
 		t.Fatalf("expected not expired for 10 days old")
 	}
-	if IsPasswordExpired(nil, cfg, now) {
+	if IsPasswordExpired(context.Background(), nil, cfg, now) {
 		t.Fatalf("nil time should be not expired")
 	}
 	off := system.SysSecurityConfig{PwdExpireEnable: false, PwdExpireDays: 90}
-	if IsPasswordExpired(&old, off, now) {
+	if IsPasswordExpired(context.Background(), &old, off, now) {
 		t.Fatalf("disabled config should be not expired")
 	}
 }
@@ -35,22 +36,23 @@ func TestLockCounting(t *testing.T) {
 	global.GVA_CACHE = gva_cache.NewMemoryCache(time.Hour)
 	cfg := system.SysSecurityConfig{LockEnable: true, LockThreshold: 3, LockDuration: 30}
 	user := "locktester"
+	ctx := context.Background()
 
-	ClearLoginFail(user)
-	if IsAccountLocked(user) {
+	ClearLoginFail(ctx, user)
+	if IsAccountLocked(ctx, user) {
 		t.Fatalf("should not be locked initially")
 	}
-	RecordLoginFail(user, cfg)
-	RecordLoginFail(user, cfg)
-	if IsAccountLocked(user) {
+	RecordLoginFail(ctx, user, cfg)
+	RecordLoginFail(ctx, user, cfg)
+	if IsAccountLocked(ctx, user) {
 		t.Fatalf("should not be locked at 2 fails (threshold 3)")
 	}
-	RecordLoginFail(user, cfg)
-	if !IsAccountLocked(user) {
+	RecordLoginFail(ctx, user, cfg)
+	if !IsAccountLocked(ctx, user) {
 		t.Fatalf("should be locked at 3 fails")
 	}
-	ClearLoginFail(user)
-	if IsAccountLocked(user) {
+	ClearLoginFail(ctx, user)
+	if IsAccountLocked(ctx, user) {
 		t.Fatalf("clear should remove lock")
 	}
 }

@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -22,16 +23,16 @@ type ApiService struct{}
 
 var ApiServiceApp = new(ApiService)
 
-func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
-	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
+func (apiService *ApiService) CreateApi(ctx context.Context, api system.SysApi) (err error) {
+	if !errors.Is(global.GVA_DB.WithContext(ctx).Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同api")
 	}
-	return global.GVA_DB.Create(&api).Error
+	return global.GVA_DB.WithContext(ctx).Create(&api).Error
 }
 
-func (apiService *ApiService) GetApiGroups() (groups []string, groupApiMap map[string]string, err error) {
+func (apiService *ApiService) GetApiGroups(ctx context.Context) (groups []string, groupApiMap map[string]string, err error) {
 	var apis []system.SysApi
-	err = global.GVA_DB.Find(&apis).Error
+	err = global.GVA_DB.WithContext(ctx).Find(&apis).Error
 	if err != nil {
 		return
 	}
@@ -52,17 +53,17 @@ func (apiService *ApiService) GetApiGroups() (groups []string, groupApiMap map[s
 	return
 }
 
-func (apiService *ApiService) SyncApi() (newApis, deleteApis, ignoreApis []system.SysApi, err error) {
+func (apiService *ApiService) SyncApi(ctx context.Context) (newApis, deleteApis, ignoreApis []system.SysApi, err error) {
 	newApis = make([]system.SysApi, 0)
 	deleteApis = make([]system.SysApi, 0)
 	ignoreApis = make([]system.SysApi, 0)
 	var apis []system.SysApi
-	err = global.GVA_DB.Find(&apis).Error
+	err = global.GVA_DB.WithContext(ctx).Find(&apis).Error
 	if err != nil {
 		return
 	}
 	var ignores []system.SysIgnoreApi
-	err = global.GVA_DB.Find(&ignores).Error
+	err = global.GVA_DB.WithContext(ctx).Find(&ignores).Error
 	if err != nil {
 		return
 	}
@@ -126,15 +127,15 @@ func (apiService *ApiService) SyncApi() (newApis, deleteApis, ignoreApis []syste
 	return
 }
 
-func (apiService *ApiService) IgnoreApi(ignoreApi system.SysIgnoreApi) (err error) {
+func (apiService *ApiService) IgnoreApi(ctx context.Context, ignoreApi system.SysIgnoreApi) (err error) {
 	if ignoreApi.Flag {
-		return global.GVA_DB.Create(&ignoreApi).Error
+		return global.GVA_DB.WithContext(ctx).Create(&ignoreApi).Error
 	}
-	return global.GVA_DB.Unscoped().Delete(&ignoreApi, "path = ? AND method = ?", ignoreApi.Path, ignoreApi.Method).Error
+	return global.GVA_DB.WithContext(ctx).Unscoped().Delete(&ignoreApi, "path = ? AND method = ?", ignoreApi.Path, ignoreApi.Method).Error
 }
 
-func (apiService *ApiService) EnterSyncApi(syncApis systemRes.SysSyncApis) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+func (apiService *ApiService) EnterSyncApi(ctx context.Context, syncApis systemRes.SysSyncApis) (err error) {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var txErr error
 		if len(syncApis.NewApis) > 0 {
 			txErr = tx.Create(&syncApis.NewApis).Error
@@ -159,13 +160,13 @@ func (apiService *ApiService) EnterSyncApi(syncApis systemRes.SysSyncApis) (err 
 //@param: api model.SysApi
 //@return: err error
 
-func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
+func (apiService *ApiService) DeleteApi(ctx context.Context, api system.SysApi) (err error) {
 	var entity system.SysApi
-	err = global.GVA_DB.First(&entity, "id = ?", api.ID).Error // 根据id查询api记录
-	if errors.Is(err, gorm.ErrRecordNotFound) {                // api记录不存在
+	err = global.GVA_DB.WithContext(ctx).First(&entity, "id = ?", api.ID).Error // 根据id查询api记录
+	if errors.Is(err, gorm.ErrRecordNotFound) {                                  // api记录不存在
 		return err
 	}
-	err = global.GVA_DB.Delete(&entity).Error
+	err = global.GVA_DB.WithContext(ctx).Delete(&entity).Error
 	if err != nil {
 		return err
 	}
@@ -179,10 +180,10 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 //@param: api model.SysApi, info request.PageInfo, order string, desc bool
 //@return: list interface{}, total int64, err error
 
-func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.PageInfo, order string, desc bool) (list interface{}, total int64, err error) {
+func (apiService *ApiService) GetAPIInfoList(ctx context.Context, api system.SysApi, info request.PageInfo, order string, desc bool) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB.Model(&system.SysApi{})
+	db := global.GVA_DB.WithContext(ctx).Model(&system.SysApi{})
 	var apiList []system.SysApi
 
 	if api.Path != "" {
@@ -234,12 +235,12 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 //@description: 获取所有的api
 //@return:  apis []model.SysApi, err error
 
-func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi, err error) {
-	parentAuthorityID, err := AuthorityServiceApp.GetParentAuthorityID(authorityID)
+func (apiService *ApiService) GetAllApis(ctx context.Context, authorityID uint) (apis []system.SysApi, err error) {
+	parentAuthorityID, err := AuthorityServiceApp.GetParentAuthorityID(ctx, authorityID)
 	if err != nil {
 		return nil, err
 	}
-	err = global.GVA_DB.Order("id desc").Find(&apis).Error
+	err = global.GVA_DB.WithContext(ctx).Order("id desc").Find(&apis).Error
 	if parentAuthorityID == 0 || !global.GVA_CONFIG.System.UseStrictAuth {
 		return
 	}
@@ -262,8 +263,8 @@ func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi
 //@param: id float64
 //@return: api model.SysApi, err error
 
-func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) {
-	err = global.GVA_DB.First(&api, "id = ?", id).Error
+func (apiService *ApiService) GetApiById(ctx context.Context, id int) (api system.SysApi, err error) {
+	err = global.GVA_DB.WithContext(ctx).First(&api, "id = ?", id).Error
 	return
 }
 
@@ -273,12 +274,12 @@ func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) 
 //@param: api model.SysApi
 //@return: err error
 
-func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
+func (apiService *ApiService) UpdateApi(ctx context.Context, api system.SysApi) (err error) {
 	var oldA system.SysApi
-	err = global.GVA_DB.First(&oldA, "id = ?", api.ID).Error
+	err = global.GVA_DB.WithContext(ctx).First(&oldA, "id = ?", api.ID).Error
 	if oldA.Path != api.Path || oldA.Method != api.Method {
 		var duplicateApi system.SysApi
-		if ferr := global.GVA_DB.First(&duplicateApi, "path = ? AND method = ?", api.Path, api.Method).Error; ferr != nil {
+		if ferr := global.GVA_DB.WithContext(ctx).First(&duplicateApi, "path = ? AND method = ?", api.Path, api.Method).Error; ferr != nil {
 			if !errors.Is(ferr, gorm.ErrRecordNotFound) {
 				return ferr
 			}
@@ -293,12 +294,12 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 		return err
 	}
 
-	err = CasbinServiceApp.UpdateCasbinApi(oldA.Path, api.Path, oldA.Method, api.Method)
+	err = CasbinServiceApp.UpdateCasbinApi(ctx, oldA.Path, api.Path, oldA.Method, api.Method)
 	if err != nil {
 		return err
 	}
 
-	return global.GVA_DB.Save(&api).Error
+	return global.GVA_DB.WithContext(ctx).Save(&api).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -307,8 +308,8 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 //@param: apis []model.SysApi
 //@return: err error
 
-func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+func (apiService *ApiService) DeleteApisByIds(ctx context.Context, ids request.IdsReq) (err error) {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var apis []system.SysApi
 		err = tx.Find(&apis, "id in ?", ids.Ids).Error
 		if err != nil {

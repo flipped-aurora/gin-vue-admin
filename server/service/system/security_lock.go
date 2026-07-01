@@ -1,12 +1,12 @@
 package system
 
 import (
+	"context"
 	"time"
-
-	"go.uber.org/zap"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 func loginFailKey(username string) string {
@@ -18,18 +18,18 @@ func loginLockKey(username string) string {
 }
 
 // IsAccountLocked 查询账号是否处于锁定状态
-func IsAccountLocked(username string) bool {
+func IsAccountLocked(ctx context.Context, username string) bool {
 	return global.GVA_CACHE.Exists(loginLockKey(username))
 }
 
 // RecordLoginFail 记录一次登录失败 计数滚动窗口 TTL=LockDuration 达阈值置锁
-func RecordLoginFail(username string, cfg system.SysSecurityConfig) {
+func RecordLoginFail(ctx context.Context, username string, cfg system.SysSecurityConfig) {
 	if !cfg.LockEnable {
 		return
 	}
 	n, err := global.GVA_CACHE.IncrementWithExpire(loginFailKey(username), 1, cfg.LockDurationTimeout())
 	if err != nil {
-		global.GVA_LOG.Error("登录失败计数失败", zap.Error(err))
+		logger.WithCtx(ctx).Mod("biz").Err(err).Error("登录失败计数失败")
 		return
 	}
 	if int(n) >= cfg.LockThreshold {
@@ -38,13 +38,13 @@ func RecordLoginFail(username string, cfg system.SysSecurityConfig) {
 }
 
 // ClearLoginFail 清除失败计数与锁 登录成功调用
-func ClearLoginFail(username string) {
+func ClearLoginFail(ctx context.Context, username string) {
 	global.GVA_CACHE.Delete(loginFailKey(username))
 	global.GVA_CACHE.Delete(loginLockKey(username))
 }
 
 // IsPasswordExpired 纯函数 判定密码是否过期
-func IsPasswordExpired(passwordUpdatedAt *time.Time, cfg system.SysSecurityConfig, now time.Time) bool {
+func IsPasswordExpired(ctx context.Context, passwordUpdatedAt *time.Time, cfg system.SysSecurityConfig, now time.Time) bool {
 	if !cfg.PwdExpireEnable || cfg.PwdExpireDays <= 0 {
 		return false
 	}

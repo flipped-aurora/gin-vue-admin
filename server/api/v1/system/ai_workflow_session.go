@@ -1,13 +1,12 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type AIWorkflowSessionApi struct{}
@@ -30,7 +29,7 @@ func (a *AIWorkflowSessionApi) Save(c *gin.Context) {
 
 	session, err := aiWorkflowSessionService.Save(c.Request.Context(), utils.GetUserID(c), info)
 	if err != nil {
-		global.GVA_LOG.Error("保存 AI 工作流会话失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存 AI 工作流会话失败")
 		response.FailWithMessage("保存会话失败", c)
 		return
 	}
@@ -56,7 +55,7 @@ func (a *AIWorkflowSessionApi) GetList(c *gin.Context) {
 
 	list, total, err := aiWorkflowSessionService.GetList(c.Request.Context(), utils.GetUserID(c), info)
 	if err != nil {
-		global.GVA_LOG.Error("获取 AI 工作流会话列表失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取 AI 工作流会话列表失败")
 		response.FailWithMessage("获取会话列表失败", c)
 		return
 	}
@@ -87,7 +86,7 @@ func (a *AIWorkflowSessionApi) GetDetail(c *gin.Context) {
 
 	session, err := aiWorkflowSessionService.GetDetail(c.Request.Context(), utils.GetUserID(c), info.Uint())
 	if err != nil {
-		global.GVA_LOG.Error("获取 AI 工作流会话详情失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取 AI 工作流会话详情失败")
 		response.FailWithMessage("获取会话详情失败", c)
 		return
 	}
@@ -112,7 +111,7 @@ func (a *AIWorkflowSessionApi) Delete(c *gin.Context) {
 	}
 
 	if err := aiWorkflowSessionService.Delete(c.Request.Context(), utils.GetUserID(c), info.Uint()); err != nil {
-		global.GVA_LOG.Error("删除 AI 工作流会话失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除 AI 工作流会话失败")
 		response.FailWithMessage("删除会话失败", c)
 		return
 	}
@@ -138,7 +137,7 @@ func (a *AIWorkflowSessionApi) DumpMarkdown(c *gin.Context) {
 
 	result, err := aiWorkflowSessionService.DumpMarkdown(c.Request.Context(), utils.GetUserID(c), info)
 	if err != nil {
-		global.GVA_LOG.Error("AI 工作流 Markdown 落盘失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("AI 工作流 Markdown 落盘失败")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

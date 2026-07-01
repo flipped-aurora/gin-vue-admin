@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type CliApi struct{}
@@ -29,9 +28,9 @@ func (a *CliApi) CreateCli(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.CreateCli(req)
+	res, err := cliService.CreateCli(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("创建CLI失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建CLI失败!")
 		response.FailWithMessage("创建CLI失败: "+err.Error(), c)
 		return
 	}
@@ -53,9 +52,9 @@ func (a *CliApi) GetCliList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.GetCliList(req)
+	res, err := cliService.GetCliList(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("获取CLI列表失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取CLI列表失败!")
 		response.FailWithMessage("获取CLI列表失败: "+err.Error(), c)
 		return
 	}
@@ -77,9 +76,9 @@ func (a *CliApi) GetCliDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.GetCliDetail(req)
+	res, err := cliService.GetCliDetail(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("获取CLI详情失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取CLI详情失败!")
 		response.FailWithMessage("获取CLI详情失败: "+err.Error(), c)
 		return
 	}
@@ -101,9 +100,9 @@ func (a *CliApi) UpdateCli(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.UpdateCli(req)
+	res, err := cliService.UpdateCli(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("更新CLI失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新CLI失败!")
 		response.FailWithMessage("更新CLI失败: "+err.Error(), c)
 		return
 	}
@@ -125,8 +124,8 @@ func (a *CliApi) DeleteCli(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := cliService.DeleteCli(req); err != nil {
-		global.GVA_LOG.Error("删除CLI失败!", zap.Error(err))
+	if err := cliService.DeleteCli(c.Request.Context(), req); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除CLI失败!")
 		response.FailWithMessage("删除CLI失败: "+err.Error(), c)
 		return
 	}
@@ -148,9 +147,9 @@ func (a *CliApi) AddCliApis(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.AddCliApis(req)
+	res, err := cliService.AddCliApis(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("增加CLI关联API失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("增加CLI关联API失败!")
 		response.FailWithMessage("增加CLI关联API失败: "+err.Error(), c)
 		return
 	}
@@ -172,9 +171,9 @@ func (a *CliApi) RemoveCliApis(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.RemoveCliApis(req)
+	res, err := cliService.RemoveCliApis(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("减少CLI关联API失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("减少CLI关联API失败!")
 		response.FailWithMessage("减少CLI关联API失败: "+err.Error(), c)
 		return
 	}
@@ -196,9 +195,9 @@ func (a *CliApi) PreviewManifest(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.PreviewManifest(req.CliID)
+	res, err := cliService.PreviewManifest(c.Request.Context(), req.CliID)
 	if err != nil {
-		global.GVA_LOG.Error("预览CLI Manifest失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("预览CLI Manifest失败!")
 		response.FailWithMessage("预览CLI Manifest失败: "+err.Error(), c)
 		return
 	}
@@ -220,9 +219,9 @@ func (a *CliApi) PreviewApiCommand(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.PreviewApiCommand(req)
+	res, err := cliService.PreviewApiCommand(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("预览API命令定义失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("预览API命令定义失败!")
 		response.FailWithMessage("预览API命令定义失败: "+err.Error(), c)
 		return
 	}
@@ -244,9 +243,9 @@ func (a *CliApi) DownloadManifest(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	fileName, payload, err := cliService.DownloadManifest(req.CliID)
+	fileName, payload, err := cliService.DownloadManifest(c.Request.Context(), req.CliID)
 	if err != nil {
-		global.GVA_LOG.Error("下载CLI Manifest失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("下载CLI Manifest失败!")
 		response.FailWithMessage("下载CLI Manifest失败: "+err.Error(), c)
 		return
 	}
@@ -270,9 +269,9 @@ func (a *CliApi) BuildCliBinary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	fileName, payload, err := cliService.BuildCliBinary(req)
+	fileName, payload, err := cliService.BuildCliBinary(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("编译CLI二进制失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("编译CLI二进制失败!")
 		response.FailWithMessage("编译CLI二进制失败: "+err.Error(), c)
 		return
 	}
@@ -296,9 +295,9 @@ func (a *CliApi) DownloadCliSkill(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	fileName, payload, err := cliService.BuildCliSkill(req)
+	fileName, payload, err := cliService.BuildCliSkill(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("生成CLI Skill失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("生成CLI Skill失败!")
 		response.FailWithMessage("生成CLI Skill失败: "+err.Error(), c)
 		return
 	}
@@ -313,9 +312,9 @@ func (a *CliApi) FindCli(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := cliService.GetCliDetail(autoReq.FindSysCliRequest{ID: uint(req.ID)})
+	res, err := cliService.GetCliDetail(c.Request.Context(), autoReq.FindSysCliRequest{ID: uint(req.ID)})
 	if err != nil {
-		global.GVA_LOG.Error("获取CLI详情失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取CLI详情失败!")
 		response.FailWithMessage("获取CLI详情失败: "+err.Error(), c)
 		return
 	}

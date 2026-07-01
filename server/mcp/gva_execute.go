@@ -11,6 +11,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -235,7 +236,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	// 验证执行计划的完整性
-	if err := g.validateExecutionPlan(&plan); err != nil {
+	if err := g.validateExecutionPlan(ctx, &plan); err != nil {
 		return nil, fmt.Errorf("执行计划验证失败: %v", err)
 	}
 
@@ -253,7 +254,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	// 如果执行成功且有原始需求，提供代码复检建议
 	var reviewMessage string
 	if result.Success && originalRequirement != "" {
-		global.GVA_LOG.Info("执行完成，返回生成的文件路径供AI进行代码复检...")
+		logger.WithCtx(ctx).Mod("mcp").Info("执行完成，返回生成的文件路径供AI进行代码复检...")
 
 		// 构建文件路径信息供AI使用
 		var pathsInfo []string
@@ -290,7 +291,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 }
 
 // validateExecutionPlan 验证执行计划的完整性
-func (g *GVAExecutor) validateExecutionPlan(plan *ExecutionPlan) error {
+func (g *GVAExecutor) validateExecutionPlan(ctx context.Context, plan *ExecutionPlan) error {
 	if plan.PackageName == "" {
 		return errors.New("packageName 不能为空")
 	}
@@ -403,7 +404,7 @@ func (g *GVAExecutor) validateExecutionPlan(plan *ExecutionPlan) error {
 				if field.DataSource != nil {
 					associationValue := field.DataSource.Association
 					if associationValue == 2 && field.FieldType != "array" {
-						global.GVA_LOG.Info(fmt.Sprintf("module %d field %d association=2, force fieldType to array", moduleIndex+1, i+1))
+						logger.WithCtx(ctx).Mod("mcp").Info(fmt.Sprintf("module %d field %d association=2, force fieldType to array", moduleIndex+1, i+1))
 						moduleInfo.Fields[i].FieldType = "array"
 					}
 					if associationValue != 1 && associationValue != 2 {

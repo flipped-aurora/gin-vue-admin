@@ -17,8 +17,7 @@ import (
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	request "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
-	"go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 var AutocodeHistory = new(autoCodeHistory)
@@ -73,15 +72,15 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			return err
 		}
 	}
-	if info.DeleteApi {
-		ids := info.ApiIds(history)
-		err = ApiServiceApp.DeleteApisByIds(ids)
-		if err != nil {
-			global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
-		}
-	} // 清除API表
+		if info.DeleteApi {
+			ids := info.ApiIds(history)
+			err = ApiServiceApp.DeleteApisByIds(ctx, ids)
+			if err != nil {
+				logger.WithCtx(ctx).Mod("biz").Err(err).Error("ClearTag DeleteApiByIds:")
+			}
+		} // 清除API表
 	if info.DeleteMenu {
-		err = BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID))
+		err = BaseMenuServiceApp.DeleteBaseMenu(ctx, int(history.MenuID))
 		if err != nil {
 			return errors.Wrap(err, "删除菜单失败!")
 		}

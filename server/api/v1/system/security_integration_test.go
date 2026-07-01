@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -21,21 +22,22 @@ func TestAccountLockFlow(t *testing.T) {
 	global.GVA_CACHE = gva_cache.NewMemoryCache(time.Hour)
 	cfg := sysModel.SysSecurityConfig{LockEnable: true, LockThreshold: 2, LockDuration: 30}
 	user := "integration_lock_user"
+	ctx := context.Background()
 
-	systemService.ClearLoginFail(user)
-	if systemService.IsAccountLocked(user) {
+	systemService.ClearLoginFail(ctx, user)
+	if systemService.IsAccountLocked(ctx, user) {
 		t.Fatalf("should not be locked after clear")
 	}
-	systemService.RecordLoginFail(user, cfg)
-	if systemService.IsAccountLocked(user) {
+	systemService.RecordLoginFail(ctx, user, cfg)
+	if systemService.IsAccountLocked(ctx, user) {
 		t.Fatalf("should not be locked after 1 fail")
 	}
-	systemService.RecordLoginFail(user, cfg)
-	if !systemService.IsAccountLocked(user) {
+	systemService.RecordLoginFail(ctx, user, cfg)
+	if !systemService.IsAccountLocked(ctx, user) {
 		t.Fatalf("should be locked after threshold reached")
 	}
-	systemService.ClearLoginFail(user)
-	if systemService.IsAccountLocked(user) {
+	systemService.ClearLoginFail(ctx, user)
+	if systemService.IsAccountLocked(ctx, user) {
 		t.Fatalf("should be unlocked after clear")
 	}
 }
@@ -68,11 +70,11 @@ func TestPasswordExpiryFlow(t *testing.T) {
 	now := time.Now()
 	cfg := sysModel.SysSecurityConfig{PwdExpireEnable: true, PwdExpireDays: 30}
 	old := now.AddDate(0, 0, -40)
-	if !systemService.IsPasswordExpired(&old, cfg, now) {
+	if !systemService.IsPasswordExpired(context.Background(), &old, cfg, now) {
 		t.Fatalf("40 days old with 30d expiry should be expired")
 	}
 	fresh := now.AddDate(0, 0, -5)
-	if systemService.IsPasswordExpired(&fresh, cfg, now) {
+	if systemService.IsPasswordExpired(context.Background(), &fresh, cfg, now) {
 		t.Fatalf("5 days old should not be expired")
 	}
 }

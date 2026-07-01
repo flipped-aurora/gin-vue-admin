@@ -63,7 +63,7 @@ type {{.Abbreviation}} struct {}
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Create{{.StructName}}(ctx context.Context, {{.Abbreviation}} *model.{{.StructName}}) (err error) {
-	err = {{$db}}.Create({{.Abbreviation}}).Error
+	err = {{$db}}.WithContext(ctx).Create({{.Abbreviation}}).Error
 	return err
 }
 
@@ -73,7 +73,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}(ctx context.Context, {{.Primar
 
 	{{- if .IsTree }}
        var count int64
-       err = {{$db}}.Find(&model.{{.StructName}}{},"parent_id = ?",{{.PrimaryField.FieldJson}}).Count(&count).Error
+       err = {{$db}}.WithContext(ctx).Find(&model.{{.StructName}}{},"parent_id = ?",{{.PrimaryField.FieldJson}}).Count(&count).Error
        if count > 0 {
           return errors.New("此节点存在子节点不允许删除")
        }
@@ -83,7 +83,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}(ctx context.Context, {{.Primar
     {{- end }}
 
 	{{- if .AutoCreateResource }}
-	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
+	err = {{$db}}.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).Update("deleted_by", userID).Error; err != nil {
               return err
         }
@@ -93,7 +93,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}(ctx context.Context, {{.Primar
         return nil
 	})
     {{- else }}
-	err = {{$db}}.Delete(&model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error
+	err = {{$db}}.WithContext(ctx).Delete(&model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error
 	{{- end }}
 	return err
 }
@@ -102,7 +102,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}(ctx context.Context, {{.Primar
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds(ctx context.Context, {{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
-	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
+	err = {{$db}}.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
             return err
         }
@@ -112,7 +112,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds(ctx context.Context, {{.P
         return nil
     })
     {{- else}}
-	err = {{$db}}.Delete(&[]model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} in ?",{{.PrimaryField.FieldJson}}s).Error
+	err = {{$db}}.WithContext(ctx).Delete(&[]model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} in ?",{{.PrimaryField.FieldJson}}s).Error
     {{- end}}
 	return err
 }
@@ -120,14 +120,14 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds(ctx context.Context, {{.P
 // Update{{.StructName}} 更新{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Update{{.StructName}}(ctx context.Context, {{.Abbreviation}} model.{{.StructName}}) (err error) {
-	err = {{$db}}.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
+	err = {{$db}}.WithContext(ctx).Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Get{{.StructName}}(ctx context.Context, {{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} model.{{.StructName}}, err error) {
-	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
+	err = {{$db}}.WithContext(ctx).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
 
@@ -137,7 +137,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}(ctx context.Context, {{.PrimaryFi
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context) (list []*model.{{.StructName}},err error) {
     // 创建db
-	db := {{$db}}.Model(&model.{{.StructName}}{})
+	db := {{$db}}.WithContext(ctx).Model(&model.{{.StructName}}{})
     var {{.Abbreviation}}s []*model.{{.StructName}}
 
 	err = db.Find(&{{.Abbreviation}}s).Error
@@ -151,7 +151,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := {{$db}}.Model(&model.{{.StructName}}{})
+	db := {{$db}}.WithContext(ctx).Model(&model.{{.StructName}}{})
     var {{.Abbreviation}}s []model.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
 {{- if .GvaModel }}
@@ -197,7 +197,7 @@ func (s *{{.Abbreviation}})Get{{.StructName}}DataSource(ctx context.Context) (re
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)
-	   {{$db}}.Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+	   {{$db}}.WithContext(ctx).Table("{{$value.Table}}"){{- if $value.HasDeletedAt}}.Where("deleted_at IS NULL"){{ end }}.Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
 	   res["{{$key}}"] = {{$key}}
 	{{- end }}
 	return

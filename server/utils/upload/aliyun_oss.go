@@ -1,28 +1,29 @@
 package upload
 
 import (
+	"context"
 	"errors"
 	"mime/multipart"
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 type AliyunOSS struct{}
 
-func (*AliyunOSS) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (*AliyunOSS) UploadFile(ctx context.Context, file *multipart.FileHeader) (string, string, error) {
 	bucket, err := NewBucket()
 	if err != nil {
-		global.GVA_LOG.Error("function AliyunOSS.NewBucket() Failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function AliyunOSS.NewBucket() Failed")
 		return "", "", errors.New("function AliyunOSS.NewBucket() Failed, err:" + err.Error())
 	}
 
 	// 读取本地文件。
 	f, openError := file.Open()
 	if openError != nil {
-		global.GVA_LOG.Error("function file.Open() Failed", zap.Any("err", openError.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(openError).Error("function file.Open() Failed")
 		return "", "", errors.New("function file.Open() Failed, err:" + openError.Error())
 	}
 	defer f.Close() // 创建文件 defer 关闭
@@ -33,17 +34,17 @@ func (*AliyunOSS) UploadFile(file *multipart.FileHeader) (string, string, error)
 	// 上传文件流。
 	err = bucket.PutObject(yunFileTmpPath, f)
 	if err != nil {
-		global.GVA_LOG.Error("function formUploader.Put() Failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function formUploader.Put() Failed")
 		return "", "", errors.New("function formUploader.Put() Failed, err:" + err.Error())
 	}
 
 	return global.GVA_CONFIG.AliyunOSS.BucketUrl + "/" + yunFileTmpPath, yunFileTmpPath, nil
 }
 
-func (*AliyunOSS) DeleteFile(key string) error {
+func (*AliyunOSS) DeleteFile(ctx context.Context, key string) error {
 	bucket, err := NewBucket()
 	if err != nil {
-		global.GVA_LOG.Error("function AliyunOSS.NewBucket() Failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function AliyunOSS.NewBucket() Failed")
 		return errors.New("function AliyunOSS.NewBucket() Failed, err:" + err.Error())
 	}
 
@@ -51,7 +52,7 @@ func (*AliyunOSS) DeleteFile(key string) error {
 	// 如需删除文件夹，请将objectName设置为对应的文件夹名称。如果文件夹非空，则需要将文件夹下的所有object删除后才能删除该文件夹。
 	err = bucket.DeleteObject(key)
 	if err != nil {
-		global.GVA_LOG.Error("function bucketManager.Delete() failed", zap.Any("err", err.Error()))
+		logger.WithCtx(ctx).Mod("upload").Err(err).Error("function bucketManager.Delete() failed")
 		return errors.New("function bucketManager.Delete() failed, err:" + err.Error())
 	}
 

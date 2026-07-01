@@ -15,6 +15,9 @@ type Zap struct {
 	ShowLine      bool   `mapstructure:"show-line" json:"show-line" yaml:"show-line"`                // 显示行
 	LogInConsole  bool   `mapstructure:"log-in-console" json:"log-in-console" yaml:"log-in-console"` // 输出控制台
 	RetentionDay  int    `mapstructure:"retention-day" json:"retention-day" yaml:"retention-day"`    // 日志保留天数
+	AccessReqBody    bool `mapstructure:"access-req-body" json:"access-req-body" yaml:"access-req-body"`          // 访问日志记录请求体
+	AccessRespData   bool `mapstructure:"access-resp-data" json:"access-resp-data" yaml:"access-resp-data"`       // 访问日志记录响应体
+	AccessReqHeaders bool `mapstructure:"access-req-headers" json:"access-req-headers" yaml:"access-req-headers"` // 访问日志记录请求头
 }
 
 // Levels 根据字符串转化为 zapcore.Levels
@@ -32,11 +35,11 @@ func (c *Zap) Levels() []zapcore.Level {
 
 func (c *Zap) Encoder() zapcore.Encoder {
 	config := zapcore.EncoderConfig{
-		TimeKey:       "time",
+		TimeKey:       "ts",
 		NameKey:       "name",
 		LevelKey:      "level",
 		CallerKey:     "caller",
-		MessageKey:    "message",
+		MessageKey:    "msg",
 		StacktraceKey: c.StacktraceKey,
 		LineEnding:    zapcore.DefaultLineEnding,
 		EncodeTime: func(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {

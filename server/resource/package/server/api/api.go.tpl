@@ -9,7 +9,7 @@ import (
     {{.Package}}Req "{{.Module}}/model/{{.Package}}/request"
     {{- end }}
     "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+    "{{.Module}}/utils/logger"
     {{- if .AutoCreateResource}}
     "{{.Module}}/utils"
     {{- end }}
@@ -47,7 +47,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 	{{- end }}
 	err = {{.Abbreviation}}Service.Create{{.StructName}}(ctx,&{{.Abbreviation}})
 	if err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+        logger.WithCtx(ctx).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败:" + err.Error(), c)
 		return
 	}
@@ -73,7 +73,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
         {{- end }}
 	err := {{.Abbreviation}}Service.Delete{{.StructName}}(ctx,{{.PrimaryField.FieldJson}} {{- if .AutoCreateResource -}},userID{{- end -}})
 	if err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+        logger.WithCtx(ctx).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败:" + err.Error(), c)
 		return
 	}
@@ -98,7 +98,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
         {{- end }}
 	err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(ctx,{{.PrimaryField.FieldJson}}s{{- if .AutoCreateResource }},userID{{- end }})
 	if err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+        logger.WithCtx(ctx).Mod("biz").Err(err).Error("批量删除失败!")
 		response.FailWithMessage("批量删除失败:" + err.Error(), c)
 		return
 	}
@@ -129,7 +129,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
         {{- end }}
 	err = {{.Abbreviation}}Service.Update{{.StructName}}(ctx,{{.Abbreviation}})
 	if err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+        logger.WithCtx(ctx).Mod("biz").Err(err).Error("更新失败!")
 		response.FailWithMessage("更新失败:" + err.Error(), c)
 		return
 	}
@@ -152,7 +152,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")
 	re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}(ctx,{{.PrimaryField.FieldJson}})
 	if err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+        logger.WithCtx(ctx).Mod("biz").Err(err).Error("查询失败!")
 		response.FailWithMessage("查询失败:" + err.Error(), c)
 		return
 	}
@@ -174,7 +174,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
 
 	list, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(ctx)
 	if err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	    logger.WithCtx(ctx).Mod("biz").Err(err).Error("获取失败!")
         response.FailWithMessage("获取失败:" + err.Error(), c)
         return
     }
@@ -202,7 +202,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
 	}
 	list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(ctx,pageInfo)
 	if err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	    logger.WithCtx(ctx).Mod("biz").Err(err).Error("获取失败!")
         response.FailWithMessage("获取失败:" + err.Error(), c)
         return
     }
@@ -230,7 +230,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}DataSource(c *
     // 此接口为获取数据源定义的数据
     dataSource, err := {{.Abbreviation}}Service.Get{{.StructName}}DataSource(ctx)
     if err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+        logger.WithCtx(ctx).Mod("biz").Err(err).Error("查询失败!")
    		response.FailWithMessage("查询失败:" + err.Error(), c)
    		return
     }

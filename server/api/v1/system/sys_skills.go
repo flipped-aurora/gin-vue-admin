@@ -3,11 +3,10 @@ package system
 import (
 	"net/http"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type SkillsApi struct{}
@@ -23,7 +22,7 @@ type SkillsApi struct{}
 func (s *SkillsApi) GetTools(c *gin.Context) {
 	data, err := skillsService.Tools(c.Request.Context())
 	if err != nil {
-		global.GVA_LOG.Error("获取工具列表失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取工具列表失败")
 		response.FailWithMessage("获取工具列表失败", c)
 		return
 	}
@@ -44,7 +43,7 @@ func (s *SkillsApi) GetSkillList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	data, err := skillsService.List(c.Request.Context(), req.Tool)
 	if err != nil {
-		global.GVA_LOG.Error("获取技能列表失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取技能列表失败")
 		response.FailWithMessage("获取技能列表失败", c)
 		return
 	}
@@ -65,7 +64,7 @@ func (s *SkillsApi) GetSkillDetail(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	data, err := skillsService.Detail(c.Request.Context(), req.Tool, req.Skill)
 	if err != nil {
-		global.GVA_LOG.Error("获取技能详情失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取技能详情失败")
 		response.FailWithMessage("获取技能详情失败", c)
 		return
 	}
@@ -85,7 +84,7 @@ func (s *SkillsApi) SaveSkill(c *gin.Context) {
 	var req request.SkillSaveRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.Save(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("保存技能失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存技能失败")
 		response.FailWithMessage("保存技能失败", c)
 		return
 	}
@@ -105,7 +104,7 @@ func (s *SkillsApi) DeleteSkill(c *gin.Context) {
 	var req request.SkillDeleteRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.Delete(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("删除技能失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除技能失败")
 		response.FailWithMessage("删除技能失败: "+err.Error(), c)
 		return
 	}
@@ -126,7 +125,7 @@ func (s *SkillsApi) CreateScript(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	fileName, content, err := skillsService.CreateScript(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("创建脚本失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建脚本失败")
 		response.FailWithMessage("创建脚本失败", c)
 		return
 	}
@@ -147,7 +146,7 @@ func (s *SkillsApi) GetScript(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	content, err := skillsService.GetScript(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("读取脚本失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("读取脚本失败")
 		response.FailWithMessage("读取脚本失败", c)
 		return
 	}
@@ -167,7 +166,7 @@ func (s *SkillsApi) SaveScript(c *gin.Context) {
 	var req request.SkillFileSaveRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.SaveScript(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("保存脚本失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存脚本失败")
 		response.FailWithMessage("保存脚本失败", c)
 		return
 	}
@@ -188,7 +187,7 @@ func (s *SkillsApi) CreateResource(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	fileName, content, err := skillsService.CreateResource(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("创建资源失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建资源失败")
 		response.FailWithMessage("创建资源失败", c)
 		return
 	}
@@ -209,7 +208,7 @@ func (s *SkillsApi) GetResource(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	content, err := skillsService.GetResource(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("读取资源失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("读取资源失败")
 		response.FailWithMessage("读取资源失败", c)
 		return
 	}
@@ -229,7 +228,7 @@ func (s *SkillsApi) SaveResource(c *gin.Context) {
 	var req request.SkillFileSaveRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.SaveResource(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("保存资源失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存资源失败")
 		response.FailWithMessage("保存资源失败", c)
 		return
 	}
@@ -250,7 +249,7 @@ func (s *SkillsApi) CreateReference(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	fileName, content, err := skillsService.CreateReference(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("创建参考失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建参考失败")
 		response.FailWithMessage("创建参考失败", c)
 		return
 	}
@@ -271,7 +270,7 @@ func (s *SkillsApi) GetReference(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	content, err := skillsService.GetReference(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("读取参考失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("读取参考失败")
 		response.FailWithMessage("读取参考失败", c)
 		return
 	}
@@ -291,7 +290,7 @@ func (s *SkillsApi) SaveReference(c *gin.Context) {
 	var req request.SkillFileSaveRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.SaveReference(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("保存参考失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存参考失败")
 		response.FailWithMessage("保存参考失败", c)
 		return
 	}
@@ -312,7 +311,7 @@ func (s *SkillsApi) CreateTemplate(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	fileName, content, err := skillsService.CreateTemplate(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("创建模板失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建模板失败")
 		response.FailWithMessage("创建模板失败", c)
 		return
 	}
@@ -333,7 +332,7 @@ func (s *SkillsApi) GetTemplate(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	content, err := skillsService.GetTemplate(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("读取模板失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("读取模板失败")
 		response.FailWithMessage("读取模板失败", c)
 		return
 	}
@@ -353,7 +352,7 @@ func (s *SkillsApi) SaveTemplate(c *gin.Context) {
 	var req request.SkillFileSaveRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.SaveTemplate(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("保存模板失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存模板失败")
 		response.FailWithMessage("保存模板失败", c)
 		return
 	}
@@ -374,7 +373,7 @@ func (s *SkillsApi) GetGlobalConstraint(c *gin.Context) {
 	_ = c.ShouldBindJSON(&req)
 	content, exists, err := skillsService.GetGlobalConstraint(c.Request.Context(), req.Tool)
 	if err != nil {
-		global.GVA_LOG.Error("读取全局约束失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("读取全局约束失败")
 		response.FailWithMessage("读取全局约束失败", c)
 		return
 	}
@@ -394,7 +393,7 @@ func (s *SkillsApi) SaveGlobalConstraint(c *gin.Context) {
 	var req request.SkillGlobalConstraintSaveRequest
 	_ = c.ShouldBindJSON(&req)
 	if err := skillsService.SaveGlobalConstraint(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("保存全局约束失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("保存全局约束失败")
 		response.FailWithMessage("保存全局约束失败", c)
 		return
 	}
@@ -416,7 +415,7 @@ func (s *SkillsApi) PackageSkill(c *gin.Context) {
 
 	fileName, data, err := skillsService.Package(c.Request.Context(), req)
 	if err != nil {
-		global.GVA_LOG.Error("打包技能失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("打包技能失败")
 		response.FailWithMessage("打包技能失败: "+err.Error(), c)
 		return
 	}
@@ -442,7 +441,7 @@ func (s *SkillsApi) DownloadOnlineSkill(c *gin.Context) {
 	}
 
 	if err := skillsService.DownloadOnlineSkill(c.Request.Context(), req); err != nil {
-		global.GVA_LOG.Error("下载在线技能失败", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("下载在线技能失败")
 		response.FailWithMessage("下载在线技能失败: "+err.Error(), c)
 		return
 	}

@@ -1,12 +1,11 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	sysReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type ApiTokenApi struct{}
@@ -39,9 +38,9 @@ func (s *ApiTokenApi) CreateApiToken(c *gin.Context) {
 		Remark:      req.Remark,
 	}
 
-	jwtStr, err := apiTokenService.CreateApiToken(token, req.Days)
+	jwtStr, err := apiTokenService.CreateApiToken(c.Request.Context(), token, req.Days)
 	if err != nil {
-		global.GVA_LOG.Error("签发失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("签发失败!")
 		response.FailWithMessage("签发失败: "+err.Error(), c)
 		return
 	}
@@ -65,9 +64,9 @@ func (s *ApiTokenApi) GetApiTokenList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := apiTokenService.GetApiTokenList(pageInfo)
+	list, total, err := apiTokenService.GetApiTokenList(c.Request.Context(), pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -95,9 +94,9 @@ func (s *ApiTokenApi) DeleteApiToken(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiTokenService.DeleteApiToken(req.ID)
+	err = apiTokenService.DeleteApiToken(c.Request.Context(), req.ID)
 	if err != nil {
-		global.GVA_LOG.Error("作废失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("作废失败!")
 		response.FailWithMessage("作废失败", c)
 		return
 	}

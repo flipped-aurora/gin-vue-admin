@@ -13,9 +13,9 @@ import (
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	systemSvc "github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
-	"go.uber.org/zap"
 )
 
 // Login
@@ -38,12 +38,12 @@ func (b *BaseApi) Login(c *gin.Context) {
 		return
 	}
 
-	cfg := securityConfigService.Current()
+	cfg := securityConfigService.Current(c.Request.Context())
 
 	// 1. 账号锁定检查
-	if cfg.LockEnable && systemSvc.IsAccountLocked(l.Username) {
+	if cfg.LockEnable && systemSvc.IsAccountLocked(c.Request.Context(), l.Username) {
 		response.FailWithMessage("账号已锁定，请 "+strconv.Itoa(cfg.LockDuration)+" 分钟后再试", c)
-		loginLogService.CreateLoginLog(system.SysLoginLog{
+		loginLogService.CreateLoginLog(c.Request.Context(), system.SysLoginLog{
 			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
 			Status: false, ErrorMessage: "账号已锁定",
 		})
@@ -62,7 +62,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 	if oc && (l.Captcha == "" || l.CaptchaId == "" || !store.Verify(l.CaptchaId, l.Captcha, true)) {
 		global.GVA_CACHE.Increment(key, 1)
 		response.FailWithMessage("验证码错误", c)
-		loginLogService.CreateLoginLog(system.SysLoginLog{
+		loginLogService.CreateLoginLog(c.Request.Context(), system.SysLoginLog{
 			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
 			Status: false, ErrorMessage: "验证码错误",
 		})
@@ -71,23 +71,23 @@ func (b *BaseApi) Login(c *gin.Context) {
 
 	// 3. 凭证校验
 	u := &system.SysUser{Username: l.Username, Password: l.Password}
-	user, err := userService.Login(u)
+	user, err := userService.Login(c.Request.Context(), u)
 	if err != nil {
-		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("登陆失败! 用户名不存在或者密码错误!")
 		global.GVA_CACHE.Increment(key, 1)
-		systemSvc.RecordLoginFail(l.Username, cfg)
+		systemSvc.RecordLoginFail(c.Request.Context(), l.Username, cfg)
 		response.FailWithMessage("用户名不存在或者密码错误", c)
-		loginLogService.CreateLoginLog(system.SysLoginLog{
+		loginLogService.CreateLoginLog(c.Request.Context(), system.SysLoginLog{
 			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
 			Status: false, ErrorMessage: "用户名不存在或者密码错误",
 		})
 		return
 	}
 	if user.Enable != 1 {
-		global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error("登陆失败! 用户被禁止登录!")
 		global.GVA_CACHE.Increment(key, 1)
 		response.FailWithMessage("用户被禁止登录", c)
-		loginLogService.CreateLoginLog(system.SysLoginLog{
+		loginLogService.CreateLoginLog(c.Request.Context(), system.SysLoginLog{
 			Username: l.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
 			Status: false, ErrorMessage: "用户被禁止登录", UserID: user.ID,
 		})
@@ -95,10 +95,10 @@ func (b *BaseApi) Login(c *gin.Context) {
 	}
 
 	// 4. 登录成功 清除失败计数与锁
-	systemSvc.ClearLoginFail(l.Username)
+	systemSvc.ClearLoginFail(c.Request.Context(), l.Username)
 
 	// 5. 密码过期检查
-	needChange := systemSvc.IsPasswordExpired(user.PasswordUpdatedAt, cfg, time.Now())
+	needChange := systemSvc.IsPasswordExpired(c.Request.Context(), user.PasswordUpdatedAt, cfg, time.Now())
 	b.TokenNext(c, *user, needChange)
 }
 
@@ -106,12 +106,12 @@ func (b *BaseApi) Login(c *gin.Context) {
 func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser, mustChangePwd bool) {
 	token, claims, err := utils.LoginTokenWithExpire(&user, mustChangePwd)
 	if err != nil {
-		global.GVA_LOG.Error("获取token失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取token失败!")
 		response.FailWithMessage("获取token失败", c)
 		return
 	}
 	// 记录登录成功日志
-	loginLogService.CreateLoginLog(system.SysLoginLog{
+	loginLogService.CreateLoginLog(c.Request.Context(), system.SysLoginLog{
 		Username: user.Username, Ip: c.ClientIP(), Agent: c.Request.UserAgent(),
 		Status: true, UserID: user.ID, ErrorMessage: "登录成功",
 	})
@@ -126,9 +126,9 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser, mustChangePwd b
 		return
 	}
 
-	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
+	if jwtStr, err := jwtService.GetRedisJWT(c.Request.Context(), user.Username); err == redis.Nil {
 		if err := utils.SetRedisJWT(token, user.Username); err != nil {
-			global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
+			logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置登录状态失败!")
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
@@ -139,12 +139,12 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser, mustChangePwd b
 			NeedChangePassword: mustChangePwd,
 		}, "登录成功", c)
 	} else if err != nil {
-		global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置登录状态失败!")
 		response.FailWithMessage("设置登录状态失败", c)
 	} else {
 		var blackJWT system.JwtBlacklist
 		blackJWT.Jwt = jwtStr
-		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
+		if err := jwtService.JsonInBlacklist(c.Request.Context(), blackJWT); err != nil {
 			response.FailWithMessage("jwt作废失败", c)
 			return
 		}
@@ -180,7 +180,7 @@ func (b *BaseApi) Register(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err = utils.ValidatePasswordComplexity(r.Password, securityConfigService.Current()); err != nil {
+	if err = utils.ValidatePasswordComplexity(r.Password, securityConfigService.Current(c.Request.Context())); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -191,9 +191,9 @@ func (b *BaseApi) Register(c *gin.Context) {
 		})
 	}
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities, Enable: r.Enable, Phone: r.Phone, Email: r.Email}
-	userReturn, err := userService.Register(*user)
+	userReturn, err := userService.Register(c.Request.Context(), *user)
 	if err != nil {
-		global.GVA_LOG.Error("注册失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("注册失败!")
 		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
 		return
 	}
@@ -220,15 +220,15 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err = utils.ValidatePasswordComplexity(req.NewPassword, securityConfigService.Current()); err != nil {
+	if err = utils.ValidatePasswordComplexity(req.NewPassword, securityConfigService.Current(c.Request.Context())); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	uid := utils.GetUserID(c)
 	u := &system.SysUser{GVA_MODEL: global.GVA_MODEL{ID: uid}, Password: req.Password}
-	err = userService.ChangePassword(u, req.NewPassword)
+	err = userService.ChangePassword(c.Request.Context(), u, req.NewPassword)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("修改失败!")
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 		return
 	}
@@ -256,9 +256,9 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := userService.GetUserInfoList(pageInfo)
+	list, total, err := userService.GetUserInfoList(c.Request.Context(), pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -291,9 +291,9 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 		return
 	}
 	userID := utils.GetUserID(c)
-	err = userService.SetUserAuthority(userID, sua.AuthorityId)
+	err = userService.SetUserAuthority(c.Request.Context(), userID, sua.AuthorityId)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("修改失败!")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -301,7 +301,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	claims.AuthorityId = sua.AuthorityId
 	token, err := utils.NewJWT().CreateToken(*claims)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("修改失败!")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -328,9 +328,9 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 		return
 	}
 	authorityID := utils.GetUserAuthorityId(c)
-	err = userService.SetUserAuthorities(authorityID, sua.ID, sua.AuthorityIds)
+	err = userService.SetUserAuthorities(c.Request.Context(), authorityID, sua.ID, sua.AuthorityIds)
 	if err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("修改失败!")
 		response.FailWithMessage("修改失败", c)
 		return
 	}
@@ -363,9 +363,9 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 		response.FailWithMessage("删除失败, 无法删除自己。", c)
 		return
 	}
-	err = userService.DeleteUser(reqId.ID)
+	err = userService.DeleteUser(c.Request.Context(), reqId.ID)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -395,14 +395,14 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 	}
 	if len(user.AuthorityIds) != 0 {
 		authorityID := utils.GetUserAuthorityId(c)
-		err = userService.SetUserAuthorities(authorityID, user.ID, user.AuthorityIds)
+		err = userService.SetUserAuthorities(c.Request.Context(), authorityID, user.ID, user.AuthorityIds)
 		if err != nil {
-			global.GVA_LOG.Error("设置失败!", zap.Error(err))
+			logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 			response.FailWithMessage("设置失败", c)
 			return
 		}
 	}
-	err = userService.SetUserInfo(system.SysUser{
+	err = userService.SetUserInfo(c.Request.Context(), system.SysUser{
 		GVA_MODEL: global.GVA_MODEL{
 			ID: user.ID,
 		},
@@ -413,7 +413,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		Enable:    user.Enable,
 	})
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -437,7 +437,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		return
 	}
 	user.ID = utils.GetUserID(c)
-	err = userService.SetSelfInfo(system.SysUser{
+	err = userService.SetSelfInfo(c.Request.Context(), system.SysUser{
 		GVA_MODEL: global.GVA_MODEL{
 			ID: user.ID,
 		},
@@ -448,7 +448,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		Enable:    user.Enable,
 	})
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -472,9 +472,9 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 		return
 	}
 
-	err = userService.SetSelfSetting(req, utils.GetUserID(c))
+	err = userService.SetSelfSetting(c.Request.Context(), req, utils.GetUserID(c))
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败", c)
 		return
 	}
@@ -491,9 +491,9 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 // @Router    /user/getUserInfo [get]
 func (b *BaseApi) GetUserInfo(c *gin.Context) {
 	uuid := utils.GetUserUuid(c)
-	ReqUser, err := userService.GetUserInfo(uuid)
+	ReqUser, err := userService.GetUserInfo(c.Request.Context(), uuid)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -515,13 +515,13 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err = utils.ValidatePasswordComplexity(rps.Password, securityConfigService.Current()); err != nil {
+	if err = utils.ValidatePasswordComplexity(rps.Password, securityConfigService.Current(c.Request.Context())); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = userService.ResetPassword(rps.ID, rps.Password)
+	err = userService.ResetPassword(c.Request.Context(), rps.ID, rps.Password)
 	if err != nil {
-		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("重置失败!")
 		response.FailWithMessage("重置失败"+err.Error(), c)
 		return
 	}

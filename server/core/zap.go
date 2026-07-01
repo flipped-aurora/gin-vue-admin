@@ -32,5 +32,10 @@ func Zap() (logger *zap.Logger) {
 		opts = append(opts, zap.AddCaller())
 	}
 	logger = logger.WithOptions(opts...)
+	logger = logger.With(
+		zap.String("node", global.GVA_CONFIG.App.Node),
+		zap.String("app_id", global.GVA_CONFIG.App.AppID),
+		zap.String("env", global.GVA_CONFIG.App.Env),
+	)
 	return logger
 }

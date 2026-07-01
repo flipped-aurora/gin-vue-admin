@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between fixed top-0 right-0 z-10 h-16 text-slate-700 dark:text-slate-300 items-center px-2"
+    class="flex justify-between fixed top-0 right-0 z-20 h-16 text-slate-700 dark:text-slate-300 items-center px-2"
     :style="{
       left: isVertical ? headerSideWidth + 'px' : '0px',
       background: 'var(--gva-header-bg)',

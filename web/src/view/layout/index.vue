@@ -31,6 +31,7 @@
       <gva-aside
         v-if="settings.layout.mode === 'combination' && device !== 'mobile'"
         mode="normal"
+        class="z-10"
       />
       <div class="flex-1 w-0 h-full">
         <gva-tabs v-if="settings.tab.visible" />

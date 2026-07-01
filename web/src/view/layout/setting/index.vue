@@ -4,6 +4,7 @@
     title="系统配置"
     direction="rtl"
     :size="width"
+    append-to-body
     :show-close="false"
     class="gva-theme-drawer"
   >

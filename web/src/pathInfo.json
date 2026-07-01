@@ -38,6 +38,7 @@
   "/src/view/layout/setting/components/radiusSelector.vue": "RadiusSelector",
   "/src/view/layout/setting/components/semanticColorPicker.vue": "SemanticColorPicker",
   "/src/view/layout/setting/components/settingItem.vue": "SettingItem",
+  "/src/view/layout/setting/components/tabModeSelector.vue": "TabModeSelector",
   "/src/view/layout/setting/components/themeColorPicker.vue": "ThemeColorPicker",
   "/src/view/layout/setting/components/themeModeSelector.vue": "ThemeModeSelector",
   "/src/view/layout/setting/index.vue": "GvaSetting",

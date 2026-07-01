@@ -182,7 +182,8 @@ service.interceptors.response.use(
     ElMessage({
       showClose: true,
       message: response.data.msg || decodeURI(response.headers.msg),
-      type: 'error'
+      type: 'error',
+      plain: true
     })
 
     return response.data.msg ? response.data : response

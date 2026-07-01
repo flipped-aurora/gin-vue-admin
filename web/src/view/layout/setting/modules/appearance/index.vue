@@ -36,6 +36,16 @@
       </div>
     </div>
 
+    <!-- 标签栏风格 -->
+    <div class="mb-6">
+      <div class="gva-theme-section-header">
+        <span class="gva-theme-section-title">标签栏风格</span>
+      </div>
+      <div class="gva-theme-section-content">
+        <TabModeSelector v-model="settings.tab.mode" />
+      </div>
+    </div>
+
     <!-- 外观细节：圆角 / 卡片 / 语义色 -->
     <div class="mb-6">
       <div class="gva-theme-section-header">
@@ -99,6 +109,7 @@ import { useThemeStore } from '@/pinia'
 import ThemeModeSelector from '../../components/themeModeSelector.vue'
 import ThemeColorPicker from '../../components/themeColorPicker.vue'
 import MenuThemeSelector from '../../components/menuThemeSelector.vue'
+import TabModeSelector from '../../components/tabModeSelector.vue'
 import SemanticColorPicker from '../../components/semanticColorPicker.vue'
 import RadiusSelector from '../../components/radiusSelector.vue'
 import CardModeSelector from '../../components/cardModeSelector.vue'

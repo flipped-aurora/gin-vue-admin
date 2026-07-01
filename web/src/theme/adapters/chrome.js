@@ -15,6 +15,21 @@ const HEADER_SHADOWS = {
   }
 }
 
+const TAB_SHADOWS = {
+  light: {
+    none: 'none',
+    sm: '0 1px 2px rgba(0, 21, 41, 0.08)',
+    md: '0 2px 8px rgba(0, 21, 41, 0.12)',
+    lg: '0 6px 18px rgba(0, 21, 41, 0.16)'
+  },
+  dark: {
+    none: 'none',
+    sm: '0 1px 3px rgba(0, 0, 0, 0.35)',
+    md: '0 2px 8px rgba(0, 0, 0, 0.45)',
+    lg: '0 6px 18px rgba(0, 0, 0, 0.55)'
+  }
+}
+
 const setOrClear = (style, key, value) => {
   if (value === undefined || value === null || value === '') style.removeProperty(key)
   else style.setProperty(key, value)
@@ -33,5 +48,6 @@ export const applyChromeTheme = ({ settings, isDark }) => {
   setOrClear(style, '--gva-header-bg', headerBg)
   setOrClear(style, '--gva-tabs-bg', tabBg)
   setOrClear(style, '--gva-header-shadow', HEADER_SHADOWS[mode][settings.header.shadow])
+  setOrClear(style, '--gva-tabs-shadow', TAB_SHADOWS[mode][settings.tab.shadow])
 }
 

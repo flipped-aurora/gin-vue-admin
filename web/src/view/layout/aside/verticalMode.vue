@@ -1,8 +1,6 @@
 <template>
-  <!-- 通栏侧边：固定全高，Logo 置顶。
-       z-index 低于 header(z-10)，避免盖住 header 内渲染的 drawer/弹层遮罩 -->
   <div
-    class="fixed top-0 left-0 h-screen z-[9] flex flex-col shadow dark:shadow-gray-700"
+    class="fixed top-0 left-0 h-screen z-30 flex flex-col shadow dark:shadow-gray-700"
     :style="{
       width: sideWidth + 'px',
       background: 'var(--gva-aside-bg)',

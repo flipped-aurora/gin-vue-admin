@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative h-full shadow dark:shadow-gray-700"
+    class="relative h-full shadow dark:shadow-gray-700 z-10"
     :class="isCollapse || settings.menu.theme === 'design' ? '' : 'px-2'"
     :style="{
       width: layoutSideWidth + 'px',

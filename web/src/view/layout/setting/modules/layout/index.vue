@@ -69,6 +69,18 @@
               aria-label="标签栏背景"
             />
           </SettingItem>
+          <SettingItem label="标签栏阴影">
+            <g-select
+              v-model="settings.tab.shadow"
+              class="min-w-24"
+              :options="[
+                { label: '无', value: 'none' },
+                { label: '小', value: 'sm' },
+                { label: '中', value: 'md' },
+                { label: '大', value: 'lg' }
+              ]"
+            />
+          </SettingItem>
           <div class="flex items-center gap-1.5 py-2.5 text-xs text-gray-400 dark:text-gray-500 leading-snug">
             <svg-icon icon="lucide:info" class="flex-shrink-0" />
             <span>暗色模式下将基于以上配色自动推导深色版本，无需单独设置</span>

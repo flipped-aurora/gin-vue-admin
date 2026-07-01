@@ -1,5 +1,6 @@
 import { computed, reactive, watch, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
+import { ElMessage } from 'element-plus'
 import { useDark, useDebounceFn, usePreferredDark } from '@vueuse/core'
 import { setSelfSetting } from '@/api/user'
 import {
@@ -68,7 +69,13 @@ export const useThemeStore = defineStore('theme', () => {
     remoteSaving = true
     try {
       const res = await setSelfSetting(buildThemeEnvelope(settings))
-      if (res?.code === 0) remoteBaseline = json
+      if (res?.code === 0) {
+        remoteBaseline = json
+        ElMessage.success({
+          message: '保存成功',
+          plain: true
+        })
+      }
     } catch {
       // 静默失败：本地缓存仍是最新，下次任意改动会重新触发保存
     } finally {

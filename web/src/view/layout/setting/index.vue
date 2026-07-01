@@ -109,8 +109,6 @@
   const closeDrawer = () => {
     drawer.value = false
   }
-
-  // 主题的本地缓存与远端保存已下沉到 themeStore，抽屉只负责触发交互，无需再监听持久化
 </script>
 
 <style lang="scss">

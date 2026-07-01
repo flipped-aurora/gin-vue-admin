@@ -45,13 +45,15 @@
     },
     "tab": {
       "visible": true,
+      "shadow": "none",
+      "mode": "button",
       "bg": "rgba(255, 255, 255, 0)"
     },
     "menu": {
       "theme": "design"
     },
     "card": {
-      "mode": "shadow"
+      "mode": "border"
     },
     "watermark": {
       "visible": false

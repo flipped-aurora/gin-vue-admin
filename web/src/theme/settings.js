@@ -52,11 +52,15 @@ export const themeSettings = {
       visible: true
     },
     bg: '',
-    shadow: 'sm'
+    shadow: 'sm',
   },
   tab: {
     visible: true,
-    bg: ''
+    bg: '',
+    // 标签栏阴影档位：none / sm / md / lg（与顶栏阴影同机制）
+    shadow: 'sm',
+    // 标签栏风格：button(描边胶囊) / chrome(浏览器标签) / slider(底部指示条)
+    mode: 'button'
   },
   menu: {
     theme: 'design'

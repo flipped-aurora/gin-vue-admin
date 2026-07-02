@@ -2,8 +2,11 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="CLI名称">
-          <el-input v-model="searchInfo.name" placeholder="搜索 CLI 名称" />
+        <el-form-item label="名称">
+          <el-input v-model="searchInfo.name" placeholder="搜索 MCP 名称" />
+        </el-form-item>
+        <el-form-item label="显示名称">
+          <el-input v-model="searchInfo.displayName" placeholder="搜索显示名称" />
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="searchInfo.status" clearable placeholder="请选择">
@@ -19,11 +22,10 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openCreate">新增CLI</el-button>
+        <el-button type="primary" icon="plus" @click="openCreate">新增MCP</el-button>
       </div>
       <el-table :data="tableData" row-key="ID">
         <el-table-column label="名称" prop="name" min-width="140" />
-        <el-table-column label="主命令" prop="command" min-width="140" />
         <el-table-column label="显示名称" prop="displayName" min-width="140" />
         <el-table-column label="版本" prop="version" width="100" />
         <el-table-column label="状态" width="100" align="center">
@@ -38,12 +40,11 @@
           </template>
         </el-table-column>
         <el-table-column label="API数" prop="apiCount" width="80" />
-        <el-table-column label="操作" min-width="320">
+        <el-table-column label="操作" min-width="300">
           <template #default="scope">
             <el-button type="primary" link @click="openEdit(scope.row)">编辑</el-button>
             <el-button type="primary" link @click="openBindings(scope.row)">管理API</el-button>
             <el-button type="primary" link @click="openScenarios(scope.row)">管理场景</el-button>
-            <el-button type="primary" link @click="openManifest(scope.row)">预览命令</el-button>
             <el-button type="danger" link @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -61,21 +62,19 @@
       </div>
     </div>
 
-    <cli-form v-model="formVisible" :form-data="currentCli" @submit="submitForm" />
-    <cli-api-binding v-model="bindingVisible" :cli="currentCli" @refresh="getTableData" />
-    <cli-manifest-preview v-model="manifestVisible" :cli="currentCli" />
-    <cli-scenario-flow v-model="scenarioVisible" :cli="currentCli" />
+    <mcp-form v-model="formVisible" :form-data="currentMcp" @submit="submitForm" />
+    <mcp-api-binding v-model="bindingVisible" :mcp="currentMcp" @refresh="getTableData" />
+    <mcp-scenario-flow v-model="scenarioVisible" :mcp="currentMcp" @refresh="getTableData" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { createCli, deleteCli, getCliList, updateCli } from '@/plugin/ai/api/cli'
-import CliForm from './components/cliForm.vue'
-import CliApiBinding from './components/cliApiBinding.vue'
-import CliManifestPreview from './components/cliManifestPreview.vue'
-import CliScenarioFlow from './components/cliScenarioFlow.vue'
+import { createMcp, deleteMcp, getMcpList, updateMcp } from '@/plugin/ai/api/mcpApi'
+import McpForm from './components/mcpForm.vue'
+import McpApiBinding from './components/mcpApiBinding.vue'
+import McpScenarioFlow from './components/mcpScenarioFlow.vue'
 
 const page = ref(1)
 const pageSize = ref(10)
@@ -84,12 +83,11 @@ const tableData = ref([])
 const searchInfo = ref({})
 const formVisible = ref(false)
 const bindingVisible = ref(false)
-const manifestVisible = ref(false)
 const scenarioVisible = ref(false)
-const currentCli = ref({})
+const currentMcp = ref({})
 
 const getTableData = async () => {
-  const res = await getCliList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const res = await getMcpList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (res.code === 0) {
     tableData.value = res.data.list
     total.value = res.data.total
@@ -99,17 +97,17 @@ const getTableData = async () => {
 }
 
 const openCreate = () => {
-  currentCli.value = {}
+  currentMcp.value = {}
   formVisible.value = true
 }
 
 const openEdit = (row) => {
-  currentCli.value = { ...row }
+  currentMcp.value = { ...row }
   formVisible.value = true
 }
 
 const submitForm = async (formData) => {
-  const api = formData.id ? updateCli : createCli
+  const api = formData.id ? updateMcp : createMcp
   const res = await api(formData)
   if (res.code === 0) {
     ElMessage.success(formData.id ? '更新成功' : '创建成功')
@@ -119,23 +117,18 @@ const submitForm = async (formData) => {
 }
 
 const openBindings = (row) => {
-  currentCli.value = { ...row }
+  currentMcp.value = { ...row }
   bindingVisible.value = true
 }
 
-const openManifest = (row) => {
-  currentCli.value = { ...row }
-  manifestVisible.value = true
-}
-
 const openScenarios = (row) => {
-  currentCli.value = { ...row }
+  currentMcp.value = { ...row }
   scenarioVisible.value = true
 }
 
 const handleDelete = async (row) => {
-  await ElMessageBox.confirm(`确定删除 CLI ${row.name} 吗？`, '提示', { type: 'warning' })
-  const res = await deleteCli({ id: row.ID || row.id })
+  await ElMessageBox.confirm(`确定删除 MCP ${row.name} 吗？`, '提示', { type: 'warning' })
+  const res = await deleteMcp({ id: row.ID || row.id })
   if (res.code === 0) {
     ElMessage.success('删除成功')
     getTableData()
@@ -143,23 +136,19 @@ const handleDelete = async (row) => {
 }
 
 const toggleStatus = async (row, val) => {
-  const res = await updateCli({
+  const res = await updateMcp({
     id: row.ID || row.id,
     name: row.name,
-    command: row.command,
     displayName: row.displayName,
-    version: row.version,
     description: row.description,
     status: val ? 'enabled' : 'disabled',
-    skillName: row.skillName,
-    skillDescription: row.skillDescription,
+    version: row.version,
     scenariosJson: row.scenariosJson
   })
   if (res.code === 0) {
     row.status = val ? 'enabled' : 'disabled'
     ElMessage.success(val ? '已启用' : '已禁用')
   } else {
-    // 失败回滚（el-switch 靠 model-value 控制，row.status 没变会自动复位）
     ElMessage.error(res.msg || '切换失败')
   }
 }

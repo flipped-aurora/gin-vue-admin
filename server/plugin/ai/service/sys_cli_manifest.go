@@ -194,6 +194,7 @@ func buildSysCliManifestCommand(cli autoModel.SysCli, spec *swaggerSpec, binding
 		Name:        name,
 		Summary:     summary,
 		Description: description,
+		CommandDesc: strings.TrimSpace(binding.Binding.CommandDesc),
 		Method:      strings.ToUpper(strings.TrimSpace(binding.Api.Method)),
 		Path:        fullPath,
 		ContentType: contentType,

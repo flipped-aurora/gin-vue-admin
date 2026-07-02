@@ -191,7 +191,7 @@ func TestFilterScenariosDropsUnknownNodesAndDanglingEdges(t *testing.T) {
 }
 
 func TestRenderScenariosMarkdownEmpty(t *testing.T) {
-	if got := renderScenariosMarkdown(nil); got != "" {
+	if got := renderScenariosMarkdown(nil, true); got != "" {
 		t.Fatalf("empty should render empty, got %q", got)
 	}
 }
@@ -213,7 +213,7 @@ func TestRenderScenariosMarkdownLinearDecisionMerge(t *testing.T) {
 			{From: "n2", To: "n4", Condition: "status=pending"},
 		},
 	}}
-	got := renderScenariosMarkdown(scenarios)
+	got := renderScenariosMarkdown(scenarios, true)
 	for _, want := range []string{
 		"## 典型场景", "### 开通用户", "按状态分支",
 		"1. `user-create`", "创建用户",
@@ -242,7 +242,7 @@ func TestRenderScenariosMarkdownWithAlias(t *testing.T) {
 			{From: "n2", To: "n3", Condition: "create.status=active"},
 		},
 	}}
-	got := renderScenariosMarkdown(scenarios)
+	got := renderScenariosMarkdown(scenarios, true)
 	for _, want := range []string{
 		"1. `user-create`（别名：create）",
 		"2. 判断：基于 create.status 合并判断（别名：check）",
@@ -268,7 +268,7 @@ func TestRenderScenariosMarkdownCycleDoesNotPanic(t *testing.T) {
 			{From: "n2", To: "n1"},
 		},
 	}}
-	got := renderScenariosMarkdown(scenarios)
+	got := renderScenariosMarkdown(scenarios, true)
 	if !strings.Contains(got, "## 典型场景") || !strings.Contains(got, "`cmd-a`") {
 		t.Fatalf("cycle should degrade gracefully, got %q", got)
 	}

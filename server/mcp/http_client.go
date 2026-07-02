@@ -151,3 +151,63 @@ func doUpstream[T any](ctx context.Context, method, endpoint string, query url.V
 
 	return &result, nil
 }
+
+// doUpstreamRaw 是动态 tool 专用的上游调用：接受完整 path（已替换路径参数）、method、query、body，
+// 返回原始响应字节（动态 tool 把响应原样包成 MCP text content 返回给外部 AI）。
+// 认证头从 ctx 取（与 doUpstream 一致，由外部 AI 通过 MCP 请求头透传 token）。
+func doUpstreamRaw(ctx context.Context, method, path string, query url.Values, body any) (int, []byte, error) {
+	token := authTokenFromContext(ctx)
+	if token == "" {
+		return 0, nil, fmt.Errorf("缺少MCP鉴权请求头: %s", configuredAuthHeader())
+	}
+
+	path = strings.TrimSpace(path)
+	if path == "" {
+		return 0, nil, fmt.Errorf("上游接口路径不能为空")
+	}
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
+
+	requestURL, err := url.Parse(upstreamBaseURL() + path)
+	if err != nil {
+		return 0, nil, fmt.Errorf("构建上游请求地址失败: %w", err)
+	}
+	if len(query) > 0 {
+		requestURL.RawQuery = query.Encode()
+	}
+
+	var reader io.Reader
+	if body != nil {
+		payload, err := json.Marshal(body)
+		if err != nil {
+			return 0, nil, fmt.Errorf("序列化上游请求失败: %w", err)
+		}
+		reader = bytes.NewReader(payload)
+	}
+
+	timeoutCtx, cancel := context.WithTimeout(ctx, requestTimeout())
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(timeoutCtx, method, requestURL.String(), reader)
+	if err != nil {
+		return 0, nil, fmt.Errorf("创建上游请求失败: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set(configuredAuthHeader(), token)
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return 0, nil, fmt.Errorf("请求上游服务失败: %w", err)
+	}
+	defer resp.Body.Close()
+
+	rawBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return resp.StatusCode, nil, fmt.Errorf("读取上游响应失败: %w", err)
+	}
+	return resp.StatusCode, rawBody, nil
+}

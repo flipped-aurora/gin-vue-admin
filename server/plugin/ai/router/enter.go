@@ -9,11 +9,13 @@ type RouterGroup struct {
 	CliRouter
 	SkillsRouter
 	McpRouter
+	McpApiRouter
 	AIWorkflowRouter
 }
 
 var (
 	cliApi               = aiApi.ApiGroupApp.CliApi
+	mcpApi               = aiApi.ApiGroupApp.McpApi
 	skillsApi            = api.ApiGroupApp.SystemApiGroup.SkillsApi
 	autoCodeTemplateApi  = api.ApiGroupApp.SystemApiGroup.AutoCodeTemplateApi
 	aiWorkflowSessionApi = api.ApiGroupApp.SystemApiGroup.AIWorkflowSessionApi

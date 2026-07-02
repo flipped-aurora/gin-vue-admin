@@ -4,8 +4,10 @@ import aiService "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/servi
 
 type ApiGroup struct {
 	CliApi
+	McpApi
 }
 
 var ApiGroupApp = new(ApiGroup)
 
 var cliService = aiService.ServiceGroupApp.CliService
+var mcpService = aiService.ServiceGroupApp.McpService

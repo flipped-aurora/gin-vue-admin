@@ -36,7 +36,7 @@ func AccessLog() gin.HandlerFunc {
 		if !strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data") {
 			raw, _ := io.ReadAll(c.Request.Body)
 			c.Request.Body = io.NopCloser(bytes.NewBuffer(raw))
-			reqBody = logger.Truncate(string(raw), logger.MaxBodyBytes)
+			reqBody = logger.Truncate(string(raw), logger.AccessLogMaxBytes())
 		} else {
 			reqBody = logger.MultipartMark
 		}
@@ -63,7 +63,7 @@ func AccessLog() gin.HandlerFunc {
 			b = b.Field("req_body", reqBody)
 		}
 		if zc.AccessRespData {
-			b = b.Field("resp_data", logger.Truncate(buf.String(), logger.MaxBodyBytes))
+			b = b.Field("resp_data", logger.Truncate(buf.String(), logger.AccessLogMaxBytes()))
 		}
 		if errs := c.Errors.ByType(gin.ErrorTypePrivate).String(); errs != "" {
 			b = b.Field("error_msg", strings.TrimRight(errs, "\n"))

@@ -14,6 +14,8 @@ func Gorm(ctx context.Context) {
 	err := global.GVA_DB.WithContext(ctx).AutoMigrate(
 		new(aiModel.SysCli),
 		new(aiModel.SysCliApi),
+		new(aiModel.SysMcp),
+		new(aiModel.SysMcpApi),
 		new(aiModel.SysAIWorkflowSession),
 	)
 	if err != nil {

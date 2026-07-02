@@ -43,6 +43,7 @@ type SysCliManifestCommand struct {
 	Name        string                        `json:"name"`
 	Summary     string                        `json:"summary"`
 	Description string                        `json:"description"`
+	CommandDesc string                        `json:"commandDesc"` // 用户在绑定编辑里手写的工具说明（未填为空，区别于 Swagger 自动派生的 summary/description）
 	Method      string                        `json:"method"`
 	Path        string                        `json:"path"`
 	ContentType string                        `json:"contentType"`

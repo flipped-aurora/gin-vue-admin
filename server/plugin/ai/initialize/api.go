@@ -62,6 +62,18 @@ func Api(ctx context.Context) {
 		{Path: "/cli/buildCli", Description: "编译并下载CLI二进制", ApiGroup: "CLI管理", Method: "POST"},
 		{Path: "/cli/downloadSkill", Description: "下载CLI的AI Skill", ApiGroup: "CLI管理", Method: "POST"},
 		{Path: "/cli/previewApiCommand", Description: "填充API命令", ApiGroup: "CLI管理", Method: "POST"},
+
+		// mcpApi（动态 tool 注册）
+		{Path: "/mcpApi/createMcp", Description: "创建MCP", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/getMcpList", Description: "获取MCP列表", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/getMcpDetail", Description: "获取MCP详情", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/updateMcp", Description: "更新MCP", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/deleteMcp", Description: "删除MCP", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/addMcpApis", Description: "增加MCP关联API", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/removeMcpApis", Description: "减少MCP关联API", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/previewManifest", Description: "预览MCP能力定义", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/previewPrompt", Description: "预览MCP编排prompt", ApiGroup: "MCP管理", Method: "POST"},
+		{Path: "/mcpApi/previewApiCommand", Description: "按API生成能力定义", ApiGroup: "MCP管理", Method: "POST"},
 	}
 	utils.RegisterApis(entities...)
 }

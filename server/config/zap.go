@@ -18,6 +18,7 @@ type Zap struct {
 	AccessReqBody    bool `mapstructure:"access-req-body" json:"access-req-body" yaml:"access-req-body"`          // 访问日志记录请求体
 	AccessRespData   bool `mapstructure:"access-resp-data" json:"access-resp-data" yaml:"access-resp-data"`       // 访问日志记录响应体
 	AccessReqHeaders bool `mapstructure:"access-req-headers" json:"access-req-headers" yaml:"access-req-headers"` // 访问日志记录请求头
+	AccessLogMaxBytes int `mapstructure:"access-log-max-bytes" json:"access-log-max-bytes" yaml:"access-log-max-bytes"` // 访问日志/操作记录请求体与响应体的最大字节数，超过则截断为占位标记；0 表示用代码兜底默认值
 }
 
 // Levels 根据字符串转化为 zapcore.Levels

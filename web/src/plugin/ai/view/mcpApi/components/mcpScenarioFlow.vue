@@ -11,13 +11,27 @@
   >
     <template #header>
       <div class="flex justify-between items-center w-full">
-        <span class="text-lg">调用场景编排 - {{ cli.name || cli.command || '' }}</span>
+        <span class="text-lg">调用场景编排 - {{ mcp.name || mcp.command || '' }}</span>
         <div>
+          <el-button @click="openPromptPreview" :disabled="!mcpId">预览Prompt</el-button>
           <el-button @click="visible = false">取 消</el-button>
           <el-button type="primary" :loading="saving" @click="onSave">确 定</el-button>
         </div>
       </div>
     </template>
+
+    <!-- 预览 Prompt 弹窗 -->
+    <el-dialog v-model="promptVisible" title="编排 Prompt 预览（AI 将看到的内容）" width="720px" append-to-body>
+      <div v-if="promptLoading" class="text-center py-8 text-gray-400">加载中...</div>
+      <template v-else>
+        <div class="mb-3 text-sm text-gray-500">
+          <span class="font-medium">prompt 名称：</span>{{ promptPreview.name || '—' }}
+          <span class="ml-4 font-medium">描述：</span>{{ promptPreview.description || '—' }}
+        </div>
+        <el-input v-if="promptPreview.markdown" type="textarea" :model-value="promptPreview.markdown" :rows="18" readonly class="prompt-preview-area" />
+        <el-empty v-else description="暂无场景编排，请先在画布上编排并保存" />
+      </template>
+    </el-dialog>
 
     <div class="flex-1 flex flex-col min-h-0">
       <div class="scenario-bar flex items-center gap-2 flex-wrap mb-3">
@@ -33,7 +47,7 @@
       </div>
 
       <div class="scenario-toolbar flex items-center gap-2 flex-wrap mb-2" v-if="current">
-        <el-button icon="plus" @click="addNode('command')">命令节点</el-button>
+        <el-button icon="plus" @click="addNode('command')">API节点</el-button>
         <el-button icon="plus" @click="addNode('decision')">判断节点</el-button>
         <el-divider direction="vertical" />
         <el-button-group>
@@ -71,11 +85,11 @@
           </div>
           <div class="mb-2.5 text-[13px] leading-[1.8] text-[#909399]" v-if="aliasHints.length">
             <span class="text-[#606266] font-semibold">可用别名：</span>
-            <span v-for="h in aliasHints" :key="h.alias" class="inline-block mr-3">{{ h.alias }}({{ h.label }}): {{ h.fields }}</span>
+            <span v-for="h in aliasHints" :key="h.alias" class="inline-block mr-3">{{ h.alias }}({{ h.name }}): {{ h.fields }}</span>
           </div>
           <template v-if="selectedNode.type === 'command'">
             <div class="mb-2.5">
-              <el-select v-model="selectedNode.commandName" placeholder="选择命令" class="w-full" @change="syncSelectedToLf">
+              <el-select v-model="selectedNode.commandName" placeholder="选择API" class="w-full" @change="syncSelectedToLf">
                 <el-option v-for="c in commandOptions" :key="c.value" :label="c.label" :value="c.value" style="height: auto; padding: 6px 12px; line-height: 1.4;">
                   <span class="font-medium text-gray-800 dark:text-gray-200">{{ c.label }}</span>
                   <span class="block text-xs text-gray-400 mt-1 whitespace-normal">{{ c.description || '暂无介绍' }}</span>
@@ -92,19 +106,22 @@
               <div class="text-[13px] leading-[1.8]"><span class="text-[#606266] font-semibold">入参：</span>{{ formatParams(commandMap[selectedNode.commandName].parameters) }}</div>
               <div class="text-[13px] leading-[1.8]"><span class="text-[#606266] font-semibold">出参：</span>{{ formatFields(commandMap[selectedNode.commandName].response) }}</div>
             </div>
-            <div class="text-[13px] leading-[1.8] text-[#909399]" v-else-if="selectedNode.commandName">该命令暂无参数信息</div>
+            <div class="text-[13px] leading-[1.8] text-[#909399]" v-else-if="selectedNode.commandName">该API暂无参数信息</div>
           </template>
           <template v-else>
             <div class="mb-2.5">
               <el-input v-model="selectedNode.note" type="textarea" :rows="3" class="w-full" placeholder="合并判断描述（如：基于上游 A.x、B.y、C.z 合并，判断...）" @input="syncSelectedToLf" />
             </div>
-            <div class="text-[13px] leading-[1.8] text-[#909399]">判断节点不执行命令；出边带条件实现分支（在下方添加连线并填条件）。</div>
+            <div class="text-[13px] leading-[1.8] text-[#909399]">判断节点不调用API；出边带条件实现分支（在下方添加连线并填条件）。</div>
           </template>
 
           <el-divider content-position="left">出向连线</el-divider>
           <div class="mb-2.5">
             <el-select v-model="connectedTargetIds" multiple filterable collapse-tags collapse-tags-tooltip placeholder="选择要连线的目标节点（可多选，已连的会标记）" class="w-full" @change="onEdgeTargetsChange">
-              <el-option v-for="o in edgeTargetOptions" :key="o.id" :label="o.label" :value="o.id" />
+              <el-option v-for="o in edgeTargetOptions" :key="o.id" :label="o.label" :value="o.id" style="height: auto; padding: 6px 12px; line-height: 1.4;">
+                <span class="font-medium text-gray-800 dark:text-gray-200">{{ o.label }}</span>
+                <span class="block text-xs text-gray-400 mt-1 whitespace-normal">{{ o.note || (o.type === 'decision' ? '判断节点' : 'API节点') }}</span>
+              </el-option>
             </el-select>
           </div>
           <div v-if="outgoingEdges.length" class="flex flex-col gap-2.5">
@@ -130,7 +147,7 @@ import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import LogicFlow, { RectNode, RectNodeModel } from '@logicflow/core'
 import '@logicflow/core/dist/index.css'
-import { getCliDetail, updateCli, previewManifest } from '@/plugin/ai/api/cli'
+import { getMcpDetail, updateMcp, previewMcpManifest, previewMcpPrompt } from '@/plugin/ai/api/mcpApi'
 
 class CommandModel extends RectNodeModel {
   initNodeData(data) {
@@ -163,7 +180,7 @@ class DecisionModel extends RectNodeModel {
 
 const props = defineProps({
   modelValue: Boolean,
-  cli: { type: Object, default: () => ({}) }
+  mcp: { type: Object, default: () => ({}) }
 })
 const emit = defineEmits(['update:modelValue'])
 const visible = computed({
@@ -179,7 +196,13 @@ const commandMap = ref({})
 const canvasRef = ref(null)
 const canvasHeight = ref(400)
 const saving = ref(false)
-const cliData = ref({})
+
+// 预览 Prompt
+const promptVisible = ref(false)
+const promptLoading = ref(false)
+const promptPreview = ref({ name: '', description: '', markdown: '' })
+const mcpData = ref({})
+const mcpId = computed(() => props.mcp?.ID || props.mcp?.id)
 const selectedNodeId = ref(null)
 const selectedNode = computed(() => {
   if (!current.value || !selectedNodeId.value) return null
@@ -199,7 +222,7 @@ const aliasHints = computed(() => {
     .map((n) => {
       const cmd = n.commandName && commandMap.value[n.commandName]
       const fields = cmd ? formatFields(cmd.response) : ''
-      return { alias: n.alias.trim(), label: n.commandName || '未选命令', fields: fields || '无' }
+      return { alias: n.alias.trim(), name: (cmd && cmd.name) || n.commandName || '未选API', fields: fields || '无' }
     })
 })
 const defaultAlias = (kind) => {
@@ -268,7 +291,9 @@ const focusNode = (id) => { if (lf && id) lf.focusOn({ id }) }  // 定位到指�
 const nodeLabel = (n) => {
   if (!n) return '未知节点'
   const alias = (n.alias || '').trim()
-  const name = n.type === 'decision' ? ('判断：' + (n.note || '未描述').slice(0, 12)) : (n.commandName || '未选命令')
+  // command 节点显示中文名（从 commandMap 取 label），而非 slug
+  const cmdLabel = (n.commandName && commandMap.value[n.commandName] && commandMap.value[n.commandName].label) || n.commandName
+  const name = n.type === 'decision' ? ('判断：' + (n.note || '未描述').slice(0, 12)) : (cmdLabel || '未选API')
   return alias ? `${alias} · ${name}` : name
 }
 const nodeById = (id) => (current.value && current.value.nodes || []).find((n) => n.id === id)
@@ -296,7 +321,7 @@ watch(outgoingEdges, (edges) => { connectedTargetIds.value = [...new Set(edges.m
 const edgeTargetOptions = computed(() =>
   (current.value && current.value.nodes || [])
     .filter((n) => n.id !== selectedNodeId.value)
-    .map((n) => ({ id: n.id, label: nodeLabel(n) }))
+    .map((n) => ({ id: n.id, label: nodeLabel(n), note: n.note, type: n.type }))
 )
 // 多选变化时，对比已有连线，新增的勾选建连线、取消的勾选删连线（同一目标不会重复连）
 const onEdgeTargetsChange = (newIds) => {
@@ -349,32 +374,35 @@ const formatFields = (fields) => {
 const buildText = (n) => {
   if (!n) return ''
   if (n.type === 'decision') return '判断：' + (n.note || '未描述').slice(0, 20)
-  return n.commandName || '未选命令'
+  // command 节点显示中文名（从 commandMap 取 label）
+  const cmdLabel = (n.commandName && commandMap.value[n.commandName] && commandMap.value[n.commandName].label) || n.commandName
+  return cmdLabel || '未选API'
 }
 
 const onOpen = async () => {
-  if (!props.cli.id && !props.cli.ID) {
-    ElMessage.warning('请先保存 CLI 基础信息')
+  const id = mcpId.value
+  if (!id) {
+    ElMessage.warning('请先保存 MCP 基础信息')
     visible.value = false
     return
   }
-  const id = props.cli.ID || props.cli.id
-  const res = await getCliDetail({ id })
+  const res = await getMcpDetail({ id })
   if (res.code !== 0) return
-  cliData.value = res.data.cli || {}
-  const manifestRes = await previewManifest({ cliId: id })
+  mcpData.value = res.data.mcp || {}
+  const manifestRes = await previewMcpManifest({ mcpId: id })
   const commands = manifestRes.code === 0 ? (manifestRes.data.commands || []) : []
+  // 下拉选项：第一行 command.name，第二行 command.description（原始 swagger 派生说明）
   commandOptions.value = commands.map((c) => ({
     label: c.name,
     value: c.name,
-    description: c.commandDesc || c.description || ''
+    description: c.description || ''
   })).filter((o) => o.value)
   const map = {}
-  commands.forEach((c) => { map[c.name] = { parameters: c.parameters || [], response: c.response || [] } })
+  commands.forEach((c) => { map[c.name] = { label: c.commandDesc || c.name, name: c.name, parameters: c.parameters || [], response: c.response || [] } })
   commandMap.value = map
   let parsed = []
   try {
-    parsed = JSON.parse(res.data.cli.scenariosJson || '[]')
+    parsed = JSON.parse(res.data.mcp.scenariosJson || '[]')
   } catch (e) {
     parsed = []
   }
@@ -462,7 +490,7 @@ const syncFromCanvas = (idx) => {
   if (!lf || !scenarios.value[idx]) return
   let g
   try { g = lf.getGraphData() } catch (e) { return }
-  // nodes：业务字段（命令名/说明等）以 scenarios 为准（详情面板直接编辑），画布只同步坐标
+  // nodes：业务字段（API名/说明等）以 scenarios 为准（详情面板直接编辑），画布只同步坐标
   const existing = {}
   scenarios.value[idx].nodes.forEach((n) => { existing[n.id] = n })
   scenarios.value[idx].nodes = (g.nodes || []).map((ln) => {
@@ -558,6 +586,22 @@ const onClosed = () => {
   selectedNodeId.value = null
 }
 
+// 预览 Prompt：调后端把当前 MCP 的 scenariosJson 渲染成 markdown 展示
+const openPromptPreview = async () => {
+  const id = mcpId.value
+  if (!id) return
+  promptVisible.value = true
+  promptLoading.value = true
+  try {
+    const res = await previewMcpPrompt({ mcpId: id })
+    if (res.code === 0) {
+      promptPreview.value = res.data || { name: '', description: '', markdown: '' }
+    }
+  } finally {
+    promptLoading.value = false
+  }
+}
+
 const onSave = async () => {
   saving.value = true
   try {
@@ -567,17 +611,14 @@ const onSave = async () => {
       ElMessage.error(`场景「${dup.scenario}」存在重复别名：${dup.alias}，请修改后再保存`)
       return
     }
-    const c = cliData.value
-    const res = await updateCli({
-      id: c.ID || c.id,
-      name: c.name,
-      command: c.command,
-      displayName: c.displayName,
-      version: c.version,
-      description: c.description,
-      status: c.status,
-      skillName: c.skillName,
-      skillDescription: c.skillDescription,
+    const m = mcpData.value
+    const res = await updateMcp({
+      id: m.ID || m.id,
+      name: m.name,
+      displayName: m.displayName,
+      description: m.description,
+      status: m.status,
+      version: m.version,
       scenariosJson: JSON.stringify(scenarios.value)
     })
     if (res.code === 0) {

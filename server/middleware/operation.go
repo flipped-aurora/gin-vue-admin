@@ -7,7 +7,6 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
@@ -17,15 +16,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/gin-gonic/gin"
 )
-
-var respPool sync.Pool
-var bufferSize = 1024
-
-func init() {
-	respPool.New = func() interface{} {
-		return make([]byte, bufferSize)
-	}
-}
 
 func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -71,7 +61,7 @@ func OperationRecord() gin.HandlerFunc {
 		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data") {
 			record.Body = "[文件]"
 		} else {
-			if len(body) > bufferSize {
+			if len(body) > logger.AccessLogMaxBytes() {
 				record.Body = "[超出记录长度]"
 			} else {
 				record.Body = string(body)
@@ -102,7 +92,7 @@ func OperationRecord() gin.HandlerFunc {
 			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/download") ||
 			strings.Contains(c.Writer.Header().Get("Content-Disposition"), "attachment") ||
 			strings.Contains(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") {
-			if len(record.Resp) > bufferSize {
+			if len(record.Resp) > logger.AccessLogMaxBytes() {
 				// 截断
 				record.Body = "超出记录长度"
 			}

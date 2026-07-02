@@ -151,7 +151,15 @@ func (s *MediaUploadService) Complete(ctx context.Context, userID, uploadID uint
 	if i := strings.LastIndex(up.FileName, "."); i >= 0 {
 		ext = strings.TrimPrefix(up.FileName[i:], ".")
 	}
-	m = media.FileUploadAndDownload{Name: up.FileName, Url: url, Tag: ext, Key: key}
+	m = media.FileUploadAndDownload{
+		Name:   up.FileName,
+		Url:    url,
+		Tag:    ext,
+		Key:    key,
+		Size:   up.FileSize,
+		Md5:    up.FileHash,
+		UserID: up.UserID,
+	}
 	if err = global.GVA_DB.WithContext(ctx).Create(&m).Error; err != nil {
 		return fail(err)
 	}

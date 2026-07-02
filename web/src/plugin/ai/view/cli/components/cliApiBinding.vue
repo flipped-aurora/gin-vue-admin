@@ -72,11 +72,12 @@
         <el-table-column label="返回数" width="70" align="center">
           <template #default="{ row }">{{ row.responseCount }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="150" align="center">
+        <el-table-column label="操作" width="200" align="center">
           <template #default="{ row }">
             <el-button link type="primary" @click="openEditor(row.apiId)">编辑</el-button>
             <el-button link type="primary" :loading="generatingIds.has(row.apiId)"
               @click="autoGenerate(row.apiId)">自动生成</el-button>
+            <el-button link type="danger" @click="removeBinding(row.apiId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -204,6 +205,7 @@ const filterApiOption = (query, option) => {
 
 const clearSelected = () => {
   selectedApiIds.value = []
+  bindingsMap.value = {}
 }
 
 const parseParams = (raw) => {
@@ -310,6 +312,14 @@ const autoGenerate = async (apiId) => {
   } finally {
     generatingIds.delete(apiId)
   }
+}
+
+// 删除绑定：从穿梭框已选和 bindingsMap 移除（点保存时才真正解绑后端）
+const removeBinding = (apiId) => {
+  selectedApiIds.value = selectedApiIds.value.filter((id) => id !== apiId)
+  const next = { ...bindingsMap.value }
+  delete next[apiId]
+  bindingsMap.value = next
 }
 
 const openEditor = (apiId) => {

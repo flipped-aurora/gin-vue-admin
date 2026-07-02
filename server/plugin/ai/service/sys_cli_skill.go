@@ -151,7 +151,7 @@ func buildSkillRenderData(cli autoModel.SysCli, manifest autoRes.SysCliManifestR
 	for _, c := range manifest.Commands {
 		validCmds[c.Name] = true
 	}
-	data.ScenariosMarkdown = renderScenariosMarkdown(filterScenarios(scenarios, validCmds))
+	data.ScenariosMarkdown = renderScenariosMarkdown(filterScenarios(scenarios, validCmds), true)
 	return data
 }
 
@@ -240,13 +240,17 @@ func filterScenarioGraph(nodes []autoModel.CliScenarioNode, edges []autoModel.Cl
 	return filtered, edgeOut
 }
 
-// renderScenariosMarkdown 把每个场景的图按拓扑序渲染为「## 典型场景」markdown；空返回空串。
-func renderScenariosMarkdown(scenarios []autoModel.CliScenario) string {
+// renderScenariosMarkdown 把每个场景的图按拓扑序渲染为 markdown；空返回空串。
+// withHeading=true 时在顶部拼一个「## 典型场景」一级分组标题（CLI skill 用）；
+// MCP prompt 预览传 false，避免在已带 MCP 上下文的 prompt 里再冒出一个固定标题。
+func renderScenariosMarkdown(scenarios []autoModel.CliScenario, withHeading bool) string {
 	if len(scenarios) == 0 {
 		return ""
 	}
 	var b strings.Builder
-	b.WriteString("## 典型场景\n\n")
+	if withHeading {
+		b.WriteString("## 典型场景\n\n")
+	}
 	for _, s := range scenarios {
 		name := strings.TrimSpace(s.Name)
 		if name == "" {

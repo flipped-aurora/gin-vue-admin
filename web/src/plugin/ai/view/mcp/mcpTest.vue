@@ -82,6 +82,26 @@
       description="MCP 服务未启动，点击上方“启动”后可加载工具列表。"
     />
 
+    <!-- 编排 Prompt 区域 -->
+    <el-card v-if="mcpPrompts.length" class="mb-4">
+      <template #header>
+        <div class="flex items-center justify-between font-bold">
+          <span>编排 Prompt（tool 间调用顺序指引，AI 客户端可见）</span>
+          <span class="text-xs text-gray-400 font-normal">{{ mcpPrompts.length }} 个</span>
+        </div>
+      </template>
+      <el-collapse>
+        <el-collapse-item v-for="p in mcpPrompts" :key="p.name" :name="p.name">
+          <template #title>
+            <span class="font-medium">{{ p.name }}</span>
+            <span class="ml-3 text-xs text-gray-500 truncate">{{ p.description }}</span>
+          </template>
+          <pre v-if="p.markdown" class="whitespace-pre-wrap break-words rounded bg-gray-100 p-2.5 text-sm text-gray-700 dark:bg-slate-800 dark:text-slate-300">{{ p.markdown }}</pre>
+          <el-empty v-else description="暂无场景内容" :image-size="40" />
+        </el-collapse-item>
+      </el-collapse>
+    </el-card>
+
     <el-row :gutter="8">
       <el-col
         v-for="tool in mcpTools"
@@ -300,6 +320,7 @@ import {
   mcpStop,
   mcpTest
 } from '@/api/autoCode'
+import service from '@/utils/request'
 import { useUserStore } from '@/pinia/modules/user'
 
 defineOptions({
@@ -335,6 +356,7 @@ const defaultServerConfig = {
 }
 
 const mcpTools = ref([])
+const mcpPrompts = ref([]) // 编排 prompt 列表（来自 mcpApi/listPromptsPublic）
 const testDialogVisible = ref(false)
 const currentTestingTool = ref(null)
 const testParamsForm = reactive({})
@@ -446,6 +468,21 @@ const fetchMcpTools = async ({ silent = false } = {}) => {
   }
 }
 
+const fetchMcpPrompts = async () => {
+  try {
+    const res = await service({
+      url: '/mcpApi/listPromptsPublic',
+      method: 'get'
+    })
+    if (res.code === 0) {
+      mcpPrompts.value = res.data.prompts || []
+    }
+  } catch (e) {
+    // prompt 加载失败不影响 tool 列表展示
+    mcpPrompts.value = []
+  }
+}
+
 const refreshMcpOverview = async ({ silent = false, loadTools = true } = {}) => {
   statusLoading.value = true
   try {
@@ -463,6 +500,8 @@ const refreshMcpOverview = async ({ silent = false, loadTools = true } = {}) => 
     } else if (!mcpServiceStatus.value.reachable) {
       mcpTools.value = []
     }
+    // 编排 prompt 来自 GVA DB（不依赖 MCP 进程），始终刷新
+    await fetchMcpPrompts()
   } finally {
     statusLoading.value = false
   }

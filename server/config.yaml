@@ -9,14 +9,18 @@ jwt:
 # zap logger configuration
 zap:
     level: info
+    prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
     format: console
-    prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
     director: log
-    show-line: true
     encode-level: LowercaseColorLevelEncoder
     stacktrace-key: stacktrace
+    show-line: true
     log-in-console: true
     retention-day: -1
+    access-req-body: true
+    access-resp-data: true
+    access-req-headers: true
+    access-log-max-bytes: 10240
 
 # redis configuration
 redis:

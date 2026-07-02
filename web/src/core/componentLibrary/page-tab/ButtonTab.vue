@@ -12,8 +12,8 @@ const props = defineProps({
 
 <template>
   <div
-    class="gva-tab-btn mb-1.2 relative inline-flex items-center gap-.8 h-8 cursor-pointer select-none  whitespace-nowrap rounded-[var(--gva-radius)] px-3 text-[13px] text-base-text transition-all duration-200 hover:text-active hover:bg-[rgb(var(--primary-color)/0.08)]"
-    :class="[active ? 'text-active bg-[rgb(var(--primary-color)/.12)] font-medium' : '', props.class]"
+    class="gva-tab-btn mb-1.2 relative inline-flex items-center gap-.8 h-9 cursor-pointer select-none  whitespace-nowrap rounded-[var(--gva-radius)] px-3.5 text-[14px] transition-all duration-200 hover:text-active hover:bg-[rgb(var(--primary-color)/0.08)]"
+    :class="[active ? 'text-active bg-[rgb(var(--primary-color)/.12)] font-medium' : 'text-base-text', props.class]"
   >
     <slot name="prefix" />
     <slot />

@@ -55,6 +55,8 @@ func OperationRecord() gin.HandlerFunc {
 			Body:      "",
 			UserID:    userId,
 			RequestID: logger.FromCtx(c.Request.Context()).GetRequestID(),
+			TraceID:   logger.FromCtx(c.Request.Context()).GetTraceID(),
+			DeviceID:  logger.FromCtx(c.Request.Context()).GetDeviceID(),
 		}
 
 		// 上传文件时候 中间件日志进行裁断操作

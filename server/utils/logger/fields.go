@@ -32,3 +32,17 @@ func (f *Fields) GetRequestID() string {
 	}
 	return f.RequestID
 }
+
+func (f *Fields) GetTraceID() string {
+	if f == nil {
+		return ""
+	}
+	return f.TraceID
+}
+
+func (f *Fields) GetDeviceID() string {
+	if f == nil {
+		return ""
+	}
+	return f.DeviceID
+}

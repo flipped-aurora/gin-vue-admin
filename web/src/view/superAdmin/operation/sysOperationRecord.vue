@@ -57,6 +57,21 @@
           </template>
         </el-table-column>
         <el-table-column align="left" label="请求IP" prop="ip" width="120" />
+        <el-table-column align="left" label="请求ID" prop="request_id" width="200" show-overflow-tooltip>
+          <template #default="{ row }">
+            <span class="text-xs text-gray-500">{{ row.request_id || '—' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="链路ID" prop="trace_id" width="200" show-overflow-tooltip>
+          <template #default="{ row }">
+            <span class="text-xs text-gray-500">{{ row.trace_id || '无' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="设备ID" prop="device_id" width="160" show-overflow-tooltip>
+          <template #default="{ row }">
+            <span class="text-xs text-gray-500">{{ row.device_id || '无' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           align="left"
           label="请求方法"

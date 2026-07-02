@@ -20,6 +20,8 @@ type SysOperationRecord struct {
 	Body         string        `json:"body" form:"body" gorm:"type:text;column:body;comment:请求Body"`                 // 请求Body
 	Resp         string        `json:"resp" form:"resp" gorm:"type:text;column:resp;comment:响应Body"`                 // 响应Body
 	UserID       int           `json:"user_id" form:"user_id" gorm:"column:user_id;comment:用户id"`                    // 用户id
-	RequestID    string        `json:"request_id" form:"request_id" gorm:"index;column:request_id;type:varchar(64);comment:请求ID"` // 请求ID
+	RequestID    string        `json:"request_id" form:"request_id" gorm:"index;column:request_id;type:varchar(64);comment:请求ID"`   // 请求ID
+	TraceID      string        `json:"trace_id" form:"trace_id" gorm:"column:trace_id;type:varchar(64);comment:链路ID"` // 链路ID
+	DeviceID     string        `json:"device_id" form:"device_id" gorm:"column:device_id;type:varchar(64);comment:设备ID"` // 设备ID
 	User         SysUser       `json:"user"`
 }

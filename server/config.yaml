@@ -20,7 +20,7 @@ zap:
     access-req-body: true
     access-resp-data: true
     access-req-headers: true
-    access-log-max-bytes: 10240
+    access-log-max-bytes: 1024
 
 # redis configuration
 redis:

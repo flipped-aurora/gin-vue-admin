@@ -72,8 +72,7 @@ export const useThemeStore = defineStore('theme', () => {
       if (res?.code === 0) {
         remoteBaseline = json
         ElMessage.success({
-          message: '保存成功',
-          plain: true
+          message: '保存成功'
         })
       }
     } catch {

@@ -3,7 +3,10 @@ import { setElementPlusColor, setElementPlusPrimaryColor } from '../color'
 export const BASE_ELCONF = {
   zIndex: 2000,
   button: { autoInsertSpace: false },
-  message: { grouping: false }
+  message: { 
+    grouping: false,
+    plain: true,
+   }
 }
 
 /**

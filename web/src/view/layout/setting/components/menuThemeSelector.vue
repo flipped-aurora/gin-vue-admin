@@ -51,11 +51,11 @@ const primaryColor = computed(() => settings.value.themeColor)
 
 const menuThemes = [
   // 设计：浅主色药丸选中态
-  { value: 'design', label: '设计', previewSide: '#ffffff', previewMain: '#f5f6f8', previewActive: 'var(--el-color-primary-light-8)', previewSideText: '#94a3b8' },
+  { value: 'design', label: '设计', previewSide: '#ffffff', previewMain: '#f5f6f8', previewActive: 'rgb(var(--primary-color) / 0.15)', previewSideText: '#94a3b8' },
   // 亮色：主色实底选中态
-  { value: 'light', label: '亮色', previewSide: '#ffffff', previewMain: '#f5f6f8', previewActive: 'var(--el-color-primary)', previewSideText: '#94a3b8' },
-  // 暗色：深色侧栏
-  { value: 'dark', label: '暗色', previewSide: '#1e293b', previewMain: '#f5f6f8', previewActive: 'var(--el-color-primary)', previewSideText: '#cbd5e1' }
+  { value: 'light', label: '亮色', previewSide: '#ffffff', previewMain: '#f5f6f8', previewActive: 'rgb(var(--primary-color))', previewSideText: '#94a3b8' },
+  // 分组：通栏纯侧栏，一级为可折叠分组标题，选中为浅灰药丸
+  { value: 'group', label: '分组', previewSide: '#ffffff', previewMain: '#f5f6f8', previewActive: '#e2e8f0', previewSideText: '#64748b' }
 ]
 
 const handleChange = (value) => {

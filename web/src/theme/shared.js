@@ -70,6 +70,16 @@ const isThemeSettingsLike = (source) =>
  * - 合法的新结构 → 先按 schema 过滤未知键（pickKnownKeys），再用 defu 覆盖到默认值之上
  *   （source 优先，缺失 / undefined 自动回落默认；未知键已被剔除，不会进入运行态）。
  */
+// 值级迁移：老版本把「深色」当成一种菜单风格（menu.theme==='dark'）。新版本里深色是与风格
+// 正交的独立开关（menu.darkSider），这里把老值翻译过去，保住老用户外观。
+const migrateLegacyDarkMenu = (settings) => {
+  if (settings?.menu?.theme === 'dark') {
+    settings.menu.theme = 'design'
+    settings.menu.darkSider = true
+  }
+  return settings
+}
+
 export const normalizeThemeSettings = (input) => {
   // 带 version 字段的信封：只接受当前大版本，否则视为不兼容数据，回落默认。
   if (isObject(input) && 'version' in input && input.version !== THEME_SETTINGS_VERSION) {
@@ -80,7 +90,9 @@ export const normalizeThemeSettings = (input) => {
 
   if (!isThemeSettingsLike(source)) return cloneThemeSettings()
 
-  return normalizeThemeColors(defu(pickKnownKeys(source, themeSettings), cloneThemeSettings()))
+  return migrateLegacyDarkMenu(
+    normalizeThemeColors(defu(pickKnownKeys(source, themeSettings), cloneThemeSettings()))
+  )
 }
 
 export const normalizeThemePreset = (preset) => {
@@ -173,11 +185,14 @@ const getCssVarByTokens = (tokens) => {
 export const addThemeVarsToGlobal = (tokens, darkTokens) => {
   const css = `:root { ${getCssVarByTokens(tokens)} }`
   const darkCss = `html.dark { ${getCssVarByTokens(darkTokens)} }`
+  // 作用域暗色：浅色主题下给侧栏容器加 .gva-sider-dark，即让其子树的语义 token 翻成暗色。
+  // 与 html.dark 共用同一套 darkTokens，保证「浅色 + 深色侧栏」与「全局暗色侧栏」观感一致。
+  const scopedDarkCss = `.gva-sider-dark { ${getCssVarByTokens(darkTokens)} }`
   const styleId = 'theme-vars'
   const style = document.querySelector(`#${styleId}`) || document.createElement('style')
 
   style.id = styleId
-  style.textContent = css + darkCss
+  style.textContent = css + darkCss + scopedDarkCss
   document.head.appendChild(style)
 }
 

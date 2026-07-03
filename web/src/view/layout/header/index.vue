@@ -8,19 +8,29 @@
     }"
   >
     <div class="flex items-center cursor-pointer flex-1">
+      <!-- 移动端(<640)：展开抽屉菜单的入口，替代 Logo -->
+      <button
+        v-if="isMobile"
+        type="button"
+        aria-label="打开菜单"
+        :class="cn(
+          'flex h-9 w-9 cursor-pointer appearance-none items-center justify-center rounded-md bg-transparent text-base-text transition-colors hover:bg-muted',
+          FOCUS_RING
+        )"
+        @click="appStore.toggleMobileMenu(true)"
+      >
+        <svg-icon icon="lucide:menu" class="h-5 w-5" />
+      </button>
       <div
-        v-if="!isVertical"
-        class="flex items-center justify-center cursor-pointer"
-        :class="isMobile ? '' : 'min-w-48'"
+        v-else-if="!isVertical"
+        class="flex min-w-48 cursor-pointer items-center justify-center"
         @click="router.push({ path: '/' })"
       >
         <Logo />
         <div
-          v-if="!isMobile"
           class="inline-flex font-bold text-2xl ml-2"
           :class="
-            (settings.layout.mode === 'head' ||
-              settings.layout.mode === 'combination') &&
+            (effectiveMode === 'head' || effectiveMode === 'combination') &&
             'min-w-fit'
           "
         >
@@ -30,7 +40,7 @@
 
       <el-breadcrumb
         v-show="!isMobile"
-        v-if="settings.header.breadcrumb.visible && settings.layout.mode !== 'head' && settings.layout.mode !== 'combination'"
+        v-if="settings.header.breadcrumb.visible && effectiveMode !== 'head' && effectiveMode !== 'combination'"
         class="ml-4"
       >
         <el-breadcrumb-item
@@ -46,11 +56,11 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
       <gva-aside
-        v-if="settings.layout.mode === 'head' && !isMobile"
+        v-if="effectiveMode === 'head' && !isMobile"
         class="flex-1"
       />
       <gva-aside
-        v-if="settings.layout.mode === 'combination' && !isMobile"
+        v-if="effectiveMode === 'combination' && !isMobile"
         mode="head"
         class="flex-1"
       />
@@ -115,26 +125,26 @@
   import { fmtTitle } from '@/utils/fmtRouterTitle'
   import gvaAside from '@/view/layout/aside/index.vue'
   import Logo from '@/components/logo/index.vue'
+  import { useLayoutMode } from '@/hooks/useLayoutMode'
+  import { useSideWidth } from '@/hooks/useSideWidth'
+  import { cn, FOCUS_RING } from '@/core/componentLibrary/utils'
 
   const userStore = useUserStore()
   const router = useRouter()
   const route = useRoute()
   const appStore = useAppStore()
   const themeStore = useThemeStore()
-  const { device, sideCollapse } = storeToRefs(appStore)
+  const { device } = storeToRefs(appStore)
   const { settings } = storeToRefs(themeStore)
   const isMobile = computed(() => {
     return device.value === 'mobile'
   })
+  const { effectiveMode } = useLayoutMode()
   // 通栏侧边布局：header 让出左侧侧栏宽度，并隐藏自身 Logo
   const isVertical = computed(
-    () => settings.value.layout.mode === 'vertical' && !isMobile.value
+    () => effectiveMode.value === 'vertical' && !isMobile.value
   )
-  const headerSideWidth = computed(
-    () => sideCollapse.value
-      ? settings.value.layout.sideCollapsedWidth
-      : settings.value.layout.sideWidth
-  )
+  const { sideWidth: headerSideWidth } = useSideWidth()
   const toPerson = () => {
     router.push({ name: 'person' })
   }

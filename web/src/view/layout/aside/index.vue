@@ -1,25 +1,13 @@
 <template>
   <div>
-    <normal-mode
-      v-if="
-        settings.layout.mode === 'normal' ||
-        (device === 'mobile' && settings.layout.mode == 'head') ||
-        (device === 'mobile' && settings.layout.mode == 'combination') ||
-        (device === 'mobile' && settings.layout.mode == 'sidebar') ||
-        (device === 'mobile' && settings.layout.mode == 'vertical')
-      "
-    />
-    <head-mode v-if="settings.layout.mode === 'head' && device !== 'mobile'" />
+    <normal-mode v-if="effectiveMode === 'normal'" />
+    <head-mode v-if="effectiveMode === 'head'" />
     <combination-mode
-      v-if="settings.layout.mode === 'combination' && device !== 'mobile'"
+      v-if="effectiveMode === 'combination'"
       :mode="mode"
     />
-    <sidebar-mode
-      v-if="settings.layout.mode === 'sidebar' && device !== 'mobile'"
-    />
-    <vertical-mode
-      v-if="settings.layout.mode === 'vertical' && device !== 'mobile'"
-    />
+    <sidebar-mode v-if="effectiveMode === 'sidebar'" />
+    <vertical-mode v-if="effectiveMode === 'vertical'" />
   </div>
 </template>
 
@@ -29,6 +17,11 @@
   import CombinationMode from './combinationMode.vue'
   import SidebarMode from './sidebarMode.vue'
   import VerticalMode from './verticalMode.vue'
+  import { useLayoutMode } from '@/hooks/useLayoutMode'
+
+  defineOptions({
+    name: 'GvaAside'
+  })
 
   defineProps({
     mode: {
@@ -37,10 +30,5 @@
     }
   })
 
-  import { storeToRefs } from 'pinia'
-  import { useAppStore, useThemeStore } from '@/pinia'
-  const appStore = useAppStore()
-  const themeStore = useThemeStore()
-  const { device } = storeToRefs(appStore)
-  const { settings } = storeToRefs(themeStore)
+  const { effectiveMode } = useLayoutMode()
 </script>

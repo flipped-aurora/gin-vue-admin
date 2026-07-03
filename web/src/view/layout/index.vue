@@ -14,25 +14,25 @@
     <div
       class="flex flex-row w-full gva-container pt-16 box-border !h-full"
       :style="
-        settings.layout.mode === 'vertical' && device !== 'mobile'
+        effectiveMode === 'vertical' && !isMobile
           ? { paddingLeft: verticalSideWidth + 'px' }
           : {}
       "
     >
       <gva-aside
         v-if="
-          settings.layout.mode === 'normal' ||
-          settings.layout.mode === 'sidebar' ||
-          settings.layout.mode === 'vertical' ||
-          (device === 'mobile' && settings.layout.mode == 'head') ||
-          (device === 'mobile' && settings.layout.mode == 'combination')
+          !isMobile &&
+          (effectiveMode === 'normal' ||
+            effectiveMode === 'sidebar' ||
+            effectiveMode === 'vertical')
         "
       />
       <gva-aside
-        v-if="settings.layout.mode === 'combination' && device !== 'mobile'"
+        v-if="!isMobile && effectiveMode === 'combination'"
         mode="normal"
         class="z-10"
       />
+      <mobile-menu-drawer v-if="isMobile" />
       <div class="flex-1 w-0 h-full">
         <gva-tabs v-if="settings.tab.visible" />
         <div
@@ -63,7 +63,10 @@
 
 <script setup>
   import GvaAside from '@/view/layout/aside/index.vue'
+  import MobileMenuDrawer from '@/view/layout/aside/MobileMenuDrawer.vue'
   import GvaHeader from '@/view/layout/header/index.vue'
+  import { useLayoutMode } from '@/hooks/useLayoutMode'
+  import { useSideWidth } from '@/hooks/useSideWidth'
   import useResponsive from '@/hooks/responsive'
   import GvaTabs from './tabs/index.vue'
   import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
@@ -77,8 +80,11 @@
   import '@/style/transition.scss'
   const appStore = useAppStore()
   const themeStore = useThemeStore()
-  const { device, sideCollapse } = storeToRefs(appStore)
+  const { device } = storeToRefs(appStore)
   const { settings, isDark } = storeToRefs(themeStore)
+  const isMobile = computed(() => device.value === 'mobile')
+  const { effectiveMode } = useLayoutMode()
+  const { sideWidth: verticalSideWidth } = useSideWidth()
 
   defineOptions({
     name: 'GvaLayout'
@@ -92,12 +98,6 @@
   watchEffect(() => {
     font.color = isDark.value ? 'rgba(255,255,255, .15)' : 'rgba(0, 0, 0, .15)'
   })
-
-  const verticalSideWidth = computed(() =>
-    sideCollapse.value
-      ? settings.value.layout.sideCollapsedWidth
-      : settings.value.layout.sideWidth
-  )
 
   const router = useRouter()
   const route = useRoute()

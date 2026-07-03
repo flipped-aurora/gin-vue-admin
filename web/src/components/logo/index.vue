@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useThemeStore } from '@/pinia';
 import { storeToRefs } from 'pinia';
 
@@ -8,6 +8,12 @@ const props = defineProps({
   size: {
     type: Number,
     default: 2
+  },
+  // 侧栏深色时强制走暗色 logo：浅色主题 + 深色侧边栏场景下全局 isDark 仍为 false，
+  // 通栏侧边 / 移动抽屉把此值传进来，让 logo 连同侧栏一起变深。
+  dark: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -16,6 +22,9 @@ const lightLogoPath = "/logo.png";
 
 const themeStore = useThemeStore();
 const { isDark } = storeToRefs(themeStore);
+
+// 有效暗色：全局暗色 或 侧栏深色（props.dark）任一成立即走暗色 logo
+const effectiveDark = computed(() => props.dark || isDark.value);
 
 const logoSrc = ref('');
 const showTextPlaceholder = ref(false);
@@ -30,20 +39,24 @@ function checkImageExists(url) {
   });
 }
 
-watchEffect(async () => {
+watchEffect(async (onCleanup) => {
+  // effectiveDark 快速翻转时，用 stale 标记丢弃过期的异步结果，避免旧结果覆盖新值
+  let stale = false
+  onCleanup(() => (stale = true))
   showTextPlaceholder.value = false; // 重置占位符状态
 
   // 暗色模式直接 load，可以省一次亮色的 load
-  if (isDark.value && await checkImageExists(darkLogoPath)) {
-    logoSrc.value = darkLogoPath;
+  if (effectiveDark.value && await checkImageExists(darkLogoPath)) {
+    if (!stale) logoSrc.value = darkLogoPath;
     return;
   }
 
   if (await checkImageExists(lightLogoPath)) {
-    logoSrc.value = lightLogoPath;
+    if (!stale) logoSrc.value = lightLogoPath;
     return
   }
 
+  if (stale) return
   // 到这里就包没有提供两种 logo 了
   showTextPlaceholder.value = true;
   console.error(
@@ -70,7 +83,7 @@ function getSize() {
       ...getSize()
     }" :class="{
     'filter invert-[90%] hue-rotate-180 brightness-110':
-        isDark && logoSrc === '/logo.png',
+        effectiveDark && logoSrc === '/logo.png',
     }" />
   <div v-else-if="showTextPlaceholder"
     class="rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200 font-bold text-xs"

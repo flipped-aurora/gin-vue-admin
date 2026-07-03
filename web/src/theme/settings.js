@@ -63,7 +63,8 @@ export const themeSettings = {
     mode: 'button'
   },
   menu: {
-    theme: 'design'
+    theme: 'design',
+    darkSider: false
   },
   card: {
     mode: 'border'
@@ -103,6 +104,7 @@ export const themeSettings = {
       },
       boxShadow: {
         header: '0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35)',
+        sider: '2px 0 8px 0 rgba(0, 0, 0, 0.35)',
         tab: '0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35)',
         card: '0 1px 2px rgba(0, 0, 0, 0.28), 0 6px 18px rgba(0, 0, 0, 0.32)'
       }

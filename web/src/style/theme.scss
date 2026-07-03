@@ -1,6 +1,6 @@
 /* ============================================================
- * 主题扩展样式：菜单风格 / 卡片盒子模式 / 全局圆角
- * 由 <html> 上的 gva-menu--* 与 gva-card--* 类驱动（见 pinia/modules/theme.js）
+ * 主题扩展样式：卡片盒子模式 / 全局圆角
+ * 由 <html> 上的 gva-card--* 类驱动（见 pinia/modules/theme.js）
  * ============================================================ */
 
 /* ---------- 顶栏 / 标签栏配色与阴影默认值（按明暗自适应，可被内联变量覆盖） ---------- */
@@ -16,82 +16,6 @@ html.dark {
   --gva-header-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35);
   --gva-tabs-bg: rgb(15, 23, 42);
   --gva-tabs-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
-}
-
-/* ---------- 菜单风格：定义侧栏底色/字色/选中态变量 ---------- */
-/* 设计：白底 + 柔和圆角药丸选中态（浅主色底 + 主色字） */
-.gva-menu--design {
-  --gva-aside-bg: #ffffff;
-  --gva-aside-text: rgb(51, 65, 85);
-  --gva-menu-active-bg: var(--el-color-primary-light-9);
-  --gva-menu-active-text: var(--el-color-primary);
-  --el-menu-text-color: rgb(51, 65, 85);
-}
-
-/* 亮色：白底 + 主色实底选中态（白字），更经典的填充风格 */
-.gva-menu--light {
-  --gva-aside-bg: #ffffff;
-  --gva-aside-text: rgb(51, 65, 85);
-  --gva-menu-active-bg: var(--el-color-primary);
-  --gva-menu-active-text: #ffffff;
-  --el-menu-text-color: rgb(51, 65, 85);
-}
-
-.gva-menu--dark {
-  --gva-aside-bg: rgb(30, 41, 59);
-  --gva-aside-text: rgb(203, 213, 225);
-  --gva-menu-active-bg: var(--el-color-primary);
-  --gva-menu-active-text: #ffffff;
-  --el-menu-text-color: rgb(203, 213, 225);
-  --el-menu-hover-text-color: #ffffff;
-}
-
-/* 暗黑模式下 design/light 菜单跟随深色背景 */
-html.dark.gva-menu--design,
-html.dark.gva-menu--light {
-  --gva-aside-bg: rgb(15, 23, 42);
-  --gva-aside-text: rgb(203, 213, 225);
-  --el-menu-text-color: rgb(203, 213, 225);
-}
-
-/* ---------- design 菜单风格的结构样式：「全宽直角 + 左侧主色竖条」式 ----------
- * 仅作用于 design 风格的纵向侧栏菜单：
- * - 取消圆角、取消行间距，菜单项左右占满（侧栏 px 内边距由各布局模板按风格关闭）
- * - 选中背景取主色 light-7（较实，见 .gva-menu--design 的 --gva-menu-active-bg），
- *   hover 背景取更浅的 light-9，二者拉开层级避免同色无法区分
- * - 选中项左侧叠加主色竖条 + 主色文字（--el-color-primary，即「深色」）
- * 两个颜色都跟随主题色色阶自动变化（light/dark 阶由 theme/adapters/element-plus.js 按明暗生成，
- * 故暗色模式下 light-9 会变为深色阶，整体观感自动适配）。
- * 注意：--el-menu-hover-bg-color 被 Element Plus 主题适配器写成了 <html> 的内联变量，
- *       必须在更内层(.el-menu)上覆盖才能生效。 */
-.gva-menu--design .el-menu {
-  --el-menu-hover-bg-color: var(--el-color-primary-light-10);
-
-  li {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-}
-
-.gva-menu--design .el-menu--vertical {
-  .el-menu-item,
-  .el-sub-menu__title {
-    border-radius: 0;
-  }
-
-  .el-menu-item.is-active {
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 5px;
-      background-color: var(--el-color-primary);
-    }
-  }
 }
 
 /* ---------- 卡片盒子模式：作用于 ElCard / GvaCard / 各类盒子容器 / 警告条 ---------- */

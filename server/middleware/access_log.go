@@ -46,6 +46,7 @@ func AccessLog() gin.HandlerFunc {
 		buf := &bytes.Buffer{}
 		c.Writer = captureWriter{ResponseWriter: c.Writer, buf: buf}
 		c.Set(ctxRespBufferKey, buf)
+		c.Writer.Header().Set("X-Gva-Version", global.Version)
 
 		c.Next()
 

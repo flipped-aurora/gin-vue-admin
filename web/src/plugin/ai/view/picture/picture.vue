@@ -95,13 +95,13 @@
         </div>
       </div>
     </div>
-    <!-- 结果区：左右分栏（窄屏自动堆叠） -->
+    <!-- 结果区：左右分栏（左窄右宽，窄屏自动堆叠） -->
     <div class="mt-4">
       <div
-        class="grid grid-cols-1 lg:grid-cols-2 gap-4"
+        class="grid grid-cols-1 lg:grid-cols-12 gap-4"
       >
-        <!-- 左栏：对话式 AI 输出（消息历史 + 底部统一输入） -->
-        <div class="flex flex-col rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden h-[600px]">
+        <!-- 左栏：对话式 AI 输出（消息历史 + 底部统一输入），占 3/12 -->
+        <div class="lg:col-span-3 flex flex-col rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden h-[600px]">
           <div class="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
             <span class="font-medium text-gray-700 dark:text-slate-200">
               AI 输出
@@ -224,23 +224,24 @@
             </div>
           </div>
 
-          <!-- 底部统一输入栏（首轮与调整共用） -->
+          <!-- 底部统一输入栏（首轮与调整共用），按钮悬浮在 textarea 右下角 -->
           <div class="border-t border-gray-200 dark:border-slate-700 p-3 bg-gray-50 dark:bg-slate-800">
-            <div class="flex items-end gap-2">
+            <div class="relative">
               <el-input
                 v-model="chatInput"
                 type="textarea"
-                :rows="2"
+                :rows="3"
                 resize="none"
                 :placeholder="chatPlaceholder"
                 @keydown="handleChatKeydown"
-                class="flex-1"
+                class="chat-textarea"
               />
               <el-button
                 type="primary"
                 :loading="streaming"
                 :disabled="!chatInput.trim() && !streaming"
                 @click="sendChat"
+                class="chat-send-btn !absolute right-2 bottom-2"
               >
                 {{ hasConversation ? '调整' : '生成' }}
               </el-button>
@@ -252,11 +253,11 @@
           </div>
         </div>
 
-        <!-- 右栏：页面预览 / 源代码 -->
-        <div class="flex flex-col">
-          <el-tabs type="border-card">
-            <el-tab-pane label="页面预览">
-              <div class="h-[500px] overflow-auto bg-gray-50 p-4 rounded dark:bg-slate-900">
+        <!-- 右栏：页面预览 / 源代码，占 9/12，与左栏等高 -->
+        <div class="lg:col-span-9 flex flex-col h-[600px]">
+          <el-tabs type="border-card" class="flex-1 flex flex-col picture-tabs">
+            <el-tab-pane label="页面预览" class="picture-tab-pane">
+              <div class="flex-1 overflow-auto bg-gray-50 p-4 rounded dark:bg-slate-900">
                 <div
                   v-if="!loadedComponents"
                   class="text-gray-500 text-center py-4 dark:text-slate-400"
@@ -270,8 +271,8 @@
                 />
               </div>
             </el-tab-pane>
-            <el-tab-pane label="源代码">
-              <div class="relative h-[500px] overflow-auto bg-gray-50 p-4 rounded dark:bg-slate-900">
+            <el-tab-pane label="源代码" class="picture-tab-pane">
+              <div class="relative flex-1 overflow-auto bg-gray-50 p-4 rounded dark:bg-slate-900">
                 <el-button
                   type="primary"
                   :icon="DocumentCopy"
@@ -755,3 +756,19 @@ const sendChat = async () => {
   await sendQuery(query, isInitial)
 }
 </script>
+
+<style scoped>
+/* 让 textarea 右下角留出空间，避免文字被悬浮按钮挡住 */
+.chat-textarea :deep(.el-textarea__inner) {
+  padding-right: 96px;
+  padding-bottom: 48px;
+}
+/* 右栏 tabs 撑满高度，使内容区与左栏等高 */
+.picture-tabs :deep(.el-tabs__content) {
+  flex: 1;
+  overflow: hidden;
+}
+.picture-tab-pane {
+  height: 100%;
+}
+</style>

@@ -15,12 +15,15 @@ zap:
     encode-level: LowercaseColorLevelEncoder
     stacktrace-key: stacktrace
     show-line: true
-    log-in-console: true
+    log-in-console: false
     retention-day: -1
     access-req-body: true
     access-resp-data: true
     access-req-headers: true
     access-log-max-bytes: 1024
+    file-only-modules:
+      - http
+      - sql
 
 # redis configuration
 redis:

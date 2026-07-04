@@ -19,6 +19,19 @@ type Zap struct {
 	AccessRespData   bool `mapstructure:"access-resp-data" json:"access-resp-data" yaml:"access-resp-data"`       // 访问日志记录响应体
 	AccessReqHeaders bool `mapstructure:"access-req-headers" json:"access-req-headers" yaml:"access-req-headers"` // 访问日志记录请求头
 	AccessLogMaxBytes int `mapstructure:"access-log-max-bytes" json:"access-log-max-bytes" yaml:"access-log-max-bytes"` // 访问日志/操作记录请求体与响应体的最大字节数，超过则截断为占位标记；0 表示用代码兜底默认值
+	// 这些模块的日志只进文件，不进控制台（即使 log-in-console 为 true）。
+	// 模块名对应 logger.WithCtx(ctx).Mod("xxx") 的 xxx
+	FileOnlyModules []string `mapstructure:"file-only-modules" json:"file-only-modules" yaml:"file-only-modules"`
+}
+
+// IsFileOnly 判断某个模块的日志是否只进文件、不进控制台
+func (c *Zap) IsFileOnly(mod string) bool {
+	for _, m := range c.FileOnlyModules {
+		if m == mod {
+			return true
+		}
+	}
+	return false
 }
 
 // Levels 根据字符串转化为 zapcore.Levels

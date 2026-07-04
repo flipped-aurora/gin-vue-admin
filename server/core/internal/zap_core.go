@@ -30,6 +30,8 @@ func NewZapCore(level zapcore.Level) *ZapCore {
 	return entity
 }
 
+// WriteSyncer 返回只写文件的 syncer（不含控制台）。
+// formats 用于 business/folder/directory 子目录路由。
 func (z *ZapCore) WriteSyncer(formats ...string) zapcore.WriteSyncer {
 	cutter := NewCutter(
 		global.GVA_CONFIG.Zap.Director,
@@ -38,11 +40,27 @@ func (z *ZapCore) WriteSyncer(formats ...string) zapcore.WriteSyncer {
 		CutterWithLayout(time.DateOnly),
 		CutterWithFormats(formats...),
 	)
-	if global.GVA_CONFIG.Zap.LogInConsole {
-		multiSyncer := zapcore.NewMultiWriteSyncer(os.Stdout, cutter)
-		return zapcore.AddSync(multiSyncer)
-	}
 	return zapcore.AddSync(cutter)
+}
+
+// WriteSyncerWithConsole 返回文件+控制台的 syncer。
+// 仅当本次日志允许进控制台时使用。
+func (z *ZapCore) WriteSyncerWithConsole(formats ...string) zapcore.WriteSyncer {
+	cutter := NewCutter(
+		global.GVA_CONFIG.Zap.Director,
+		z.level.String(),
+		global.GVA_CONFIG.Zap.RetentionDay,
+		CutterWithLayout(time.DateOnly),
+		CutterWithFormats(formats...),
+	)
+	multiSyncer := zapcore.NewMultiWriteSyncer(os.Stdout, cutter)
+	return zapcore.AddSync(multiSyncer)
+}
+
+// shouldShowConsole 判断本条日志是否应进控制台：
+// 全局开关打开，且该模块不在 file-only-modules 清单里。
+func shouldShowConsole(mod string) bool {
+	return global.GVA_CONFIG.Zap.LogInConsole && !global.GVA_CONFIG.Zap.IsFileOnly(mod)
 }
 
 func (z *ZapCore) Enabled(level zapcore.Level) bool {
@@ -61,12 +79,32 @@ func (z *ZapCore) Check(entry zapcore.Entry, check *zapcore.CheckedEntry) *zapco
 }
 
 func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
+	// 读出本条日志的 mod（logger.WithCtx(ctx).Mod("xxx") 附带的字段）
+	var mod string
+	var subdir string
 	for i := 0; i < len(fields); i++ {
-		if fields[i].Key == "business" || fields[i].Key == "folder" || fields[i].Key == "directory" {
-			syncer := z.WriteSyncer(fields[i].String)
-			z.Core = zapcore.NewCore(global.GVA_CONFIG.Zap.Encoder(), syncer, z.level)
+		if fields[i].Key == "mod" && mod == "" {
+			mod = fields[i].String
+		}
+		if subdir == "" && (fields[i].Key == "business" || fields[i].Key == "folder" || fields[i].Key == "directory") {
+			subdir = fields[i].String
 		}
 	}
+
+	// 决定本次写入使用的 syncer：是否进控制台（按模块）、是否进子目录（business 路由）
+	var syncer zapcore.WriteSyncer
+	switch {
+	case shouldShowConsole(mod) && subdir != "":
+		syncer = z.WriteSyncerWithConsole(subdir)
+	case shouldShowConsole(mod):
+		syncer = z.WriteSyncerWithConsole()
+	case subdir != "":
+		syncer = z.WriteSyncer(subdir)
+	default:
+		syncer = z.WriteSyncer()
+	}
+	z.Core = zapcore.NewCore(global.GVA_CONFIG.Zap.Encoder(), syncer, z.level)
+
 	// 先写入原日志目标
 	err := z.Core.Write(entry, fields)
 

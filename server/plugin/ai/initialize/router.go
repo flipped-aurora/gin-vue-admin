@@ -16,5 +16,4 @@ func Router(engine *gin.Engine) {
 	router.RouterGroupApp.InitSkillsRouter(private, public)
 	router.RouterGroupApp.InitMcpRouter(private)
 	router.RouterGroupApp.InitMcpApiRouter(private, public)
-	router.RouterGroupApp.InitAIWorkflowRouter(private)
 }

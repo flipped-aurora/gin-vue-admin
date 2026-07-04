@@ -20,7 +20,6 @@ type ServiceGroup struct {
 	SecurityConfigService
 	SysVersionService
 	SkillsService
-	AIWorkflowSession aiWorkflowSession
 	AutoCodePlugin    autoCodePlugin
 	AutoCodePackage   autoCodePackage
 	AutoCodeHistory   autoCodeHistory

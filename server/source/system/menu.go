@@ -121,7 +121,6 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "skills", Name: "Skills", Component: "plugin/ai/view/skills/index.vue", Sort: 3, Meta: Meta{Title: "Skills管理", Icon: "edit-pen"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "cli", Name: "Cli", Component: "plugin/ai/view/cli/index.vue", Sort: 4, Meta: Meta{Title: "AI CLI管理", Icon: "monitor", KeepAlive: true}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "picture", Name: "picture", Component: "plugin/ai/view/picture/picture.vue", Sort: 5, Meta: Meta{Title: "AI页面绘制", Icon: "picture"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["ai"], Path: "aiWorkflow", Name: "aiWorkflow", Component: "plugin/ai/view/aiWorkflow/index.vue", Sort: 6, Meta: Meta{Title: "AI 工作流", Icon: "memo"}},
 
 		// 插件系统
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["plugin"], Path: "https://plugin.gin-vue-admin.com/", Name: "https://plugin.gin-vue-admin.com/", Component: "https://plugin.gin-vue-admin.com/", Sort: 0, Meta: Meta{Title: "插件市场", Icon: "shop"}},

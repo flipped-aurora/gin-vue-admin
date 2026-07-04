@@ -7,7 +7,7 @@
     "serve": "node openDocument.js && vite --host --mode development",
     "build": "vite build --mode production",
     "limit-build": "npm install increase-memory-limit-fixbug cross-env -g && npm run fix-memory-limit && node ./limit && npm run build",
-    "preview": "vite preview --host --mode development",
+    "preview": "vite preview --host 0.0.0.0 --mode development",
     "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
   },
   "type": "module",
@@ -51,7 +51,7 @@
     "tailwind-merge": "^3.6.0",
     "universal-cookie": "^7",
     "vform3-builds": "^3.0.10",
-    "vite-auto-import-svg": "^2.5.0",
+    "vite-auto-import-svg": "^2.9.2",
     "vue": "^3.5.31",
     "vue-cropper": "^1.1.4",
     "vue-echarts": "^7.0.3",

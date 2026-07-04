@@ -17,6 +17,18 @@ definitions:
       endpoint:
         type: string
     type: object
+  config.App:
+    properties:
+      app-id:
+        description: 应用标识
+        type: string
+      env:
+        description: 环境：dev/test/prod
+        type: string
+      node:
+        description: 节点标识
+        type: string
+    type: object
   config.Autocode:
     properties:
       ai-path:
@@ -496,6 +508,10 @@ definitions:
     properties:
       aliyun-oss:
         $ref: '#/definitions/config.AliyunOSS'
+      app:
+        allOf:
+        - $ref: '#/definitions/config.App'
+        description: 应用身份（日志静态字段 node/app_id/env）
       autocode:
         allOf:
         - $ref: '#/definitions/config.Autocode'
@@ -715,6 +731,18 @@ definitions:
     type: object
   config.Zap:
     properties:
+      access-log-max-bytes:
+        description: 访问日志/操作记录请求体与响应体的最大字节数，超过则截断为占位标记；0 表示用代码兜底默认值
+        type: integer
+      access-req-body:
+        description: 访问日志记录请求体
+        type: boolean
+      access-req-headers:
+        description: 访问日志记录请求头
+        type: boolean
+      access-resp-data:
+        description: 访问日志记录响应体
+        type: boolean
       director:
         description: 日志文件夹
         type: string
@@ -832,9 +860,18 @@ definitions:
       key:
         description: 编号
         type: string
+      md5:
+        description: 文件MD5
+        type: string
+      mime:
+        description: MIME类型
+        type: string
       name:
         description: 文件名
         type: string
+      size:
+        description: 文件大小(字节)
+        type: integer
       tag:
         description: 文件标签
         type: string
@@ -844,6 +881,9 @@ definitions:
       url:
         description: 文件地址
         type: string
+      userId:
+        description: 上传者ID
+        type: integer
     type: object
   model.Info:
     properties:
@@ -890,18 +930,46 @@ definitions:
       cliId:
         type: integer
     type: object
+  request.AddSysMcpApisRequest:
+    properties:
+      bindings:
+        items:
+          $ref: '#/definitions/request.SysMcpApiBindingItem'
+        type: array
+      mcpId:
+        type: integer
+    type: object
   request.AttachmentCategorySearch:
     properties:
       classId:
+        description: 分类id
         type: integer
+      desc:
+        description: 是否倒序
+        type: boolean
+      endCreatedAt:
+        description: 创建时间止（不含）
+        type: string
       keyword:
         description: 关键字
+        type: string
+      orderKey:
+        description: 排序字段（如 id/size/created_at）
         type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
+        type: integer
+      startCreatedAt:
+        description: 创建时间起（含）
+        type: string
+      tag:
+        description: 文件类型/标签（扩展名，如 jpg/pdf）
+        type: string
+      userId:
+        description: 上传者ID
         type: integer
     type: object
   request.AutoCode:
@@ -1164,6 +1232,21 @@ definitions:
       version:
         type: string
     type: object
+  request.CreateSysMcpRequest:
+    properties:
+      description:
+        type: string
+      displayName:
+        type: string
+      name:
+        type: string
+      scenariosJson:
+        type: string
+      status:
+        type: string
+      version:
+        type: string
+    type: object
   request.DataSource:
     properties:
       association:
@@ -1181,6 +1264,11 @@ definitions:
         type: string
     type: object
   request.DeleteSysCliRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  request.DeleteSysMcpRequest:
     properties:
       id:
         type: integer
@@ -1230,7 +1318,22 @@ definitions:
     - versionCode
     - versionName
     type: object
+  request.FileBatchDeleteReq:
+    properties:
+      ids:
+        description: 文件记录ID列表
+        items:
+          type: integer
+        type: array
+    required:
+    - ids
+    type: object
   request.FindSysCliRequest:
+    properties:
+      id:
+        type: integer
+    type: object
+  request.FindSysMcpRequest:
     properties:
       id:
         type: integer
@@ -1344,6 +1447,18 @@ definitions:
     - adminPassword
     - dbName
     type: object
+  request.ListOssFilesReq:
+    properties:
+      cursor:
+        description: 分页游标（上次返回的 nextCursor）
+        type: string
+      limit:
+        description: 每页数量（<=0 默认 100）
+        type: integer
+      prefix:
+        description: 对象 key 前缀过滤
+        type: string
+    type: object
   request.Login:
     properties:
       captcha:
@@ -1420,6 +1535,15 @@ definitions:
           type: integer
         type: array
       cliId:
+        type: integer
+    type: object
+  request.RemoveSysMcpApisRequest:
+    properties:
+      apiIds:
+        items:
+          type: integer
+        type: array
+      mcpId:
         type: integer
     type: object
   request.SearchApiParams:
@@ -1623,74 +1747,6 @@ definitions:
       tool:
         type: string
     type: object
-  request.SysAIWorkflowMarkdownDump:
-    properties:
-      conversationId:
-        type: string
-      currentNodeId:
-        type: string
-      formData:
-        $ref: '#/definitions/common.JSONMap'
-      id:
-        type: integer
-      messageId:
-        type: string
-      messages:
-        items:
-          $ref: '#/definitions/system.AIWorkflowMessage'
-        type: array
-      resultData:
-        $ref: '#/definitions/common.JSONMap'
-      settings:
-        $ref: '#/definitions/common.JSONMap'
-      summary:
-        type: string
-      tab:
-        type: string
-      title:
-        type: string
-    type: object
-  request.SysAIWorkflowSessionSearch:
-    properties:
-      keyword:
-        description: 关键字
-        type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      tab:
-        type: string
-    type: object
-  request.SysAIWorkflowSessionUpsert:
-    properties:
-      conversationId:
-        type: string
-      currentNodeId:
-        type: string
-      formData:
-        $ref: '#/definitions/common.JSONMap'
-      id:
-        type: integer
-      messageId:
-        type: string
-      messages:
-        items:
-          $ref: '#/definitions/system.AIWorkflowMessage'
-        type: array
-      resultData:
-        $ref: '#/definitions/common.JSONMap'
-      settings:
-        $ref: '#/definitions/common.JSONMap'
-      summary:
-        type: string
-      tab:
-        type: string
-      title:
-        type: string
-    type: object
   request.SysApiTokenSearch:
     properties:
       ID:
@@ -1802,6 +1858,41 @@ definitions:
       status:
         type: string
     type: object
+  request.SysMcpApiBindingItem:
+    properties:
+      apiBrief:
+        type: string
+      apiId:
+        type: integer
+      commandDesc:
+        type: string
+      commandName:
+        type: string
+      enabled:
+        type: boolean
+      paramsOverride:
+        type: string
+      responseOverride:
+        type: string
+      sort:
+        type: integer
+    type: object
+  request.SysMcpSearch:
+    properties:
+      keyword:
+        description: 关键字
+        type: string
+      name:
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        type: string
+    type: object
   request.UpdateSysCliRequest:
     properties:
       command:
@@ -1819,6 +1910,23 @@ definitions:
       skillDescription:
         type: string
       skillName:
+        type: string
+      status:
+        type: string
+      version:
+        type: string
+    type: object
+  request.UpdateSysMcpRequest:
+    properties:
+      description:
+        type: string
+      displayName:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      scenariosJson:
         type: string
       status:
         type: string
@@ -2038,23 +2146,6 @@ definitions:
         items:
           type: integer
         type: array
-    type: object
-  system.AIWorkflowMessage:
-    properties:
-      content:
-        type: string
-      conversationId:
-        type: string
-      createdAt:
-        type: string
-      id:
-        type: string
-      messageId:
-        type: string
-      role:
-        type: string
-      snapshot:
-        $ref: '#/definitions/common.JSONMap'
     type: object
   system.Condition:
     properties:
@@ -2408,6 +2499,9 @@ definitions:
         type: string
       level:
         type: string
+      request_id:
+        description: 请求ID
+        type: string
       solution:
         description: 解决方案
         type: string
@@ -2561,6 +2655,9 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
+      device_id:
+        description: 设备ID
+        type: string
       error_message:
         description: 错误信息
         type: string
@@ -2576,12 +2673,18 @@ definitions:
       path:
         description: 请求路径
         type: string
+      request_id:
+        description: 请求ID
+        type: string
       resp:
         description: 响应Body
         type: string
       status:
         description: 请求状态
         type: integer
+      trace_id:
+        description: 链路ID
+        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -3639,124 +3742,6 @@ paths:
       summary: 删除回滚记录
       tags:
       - AutoCode
-  /autoCode/deleteAIWorkflowSession:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 会话ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.GetById'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 删除AI工作流会话
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 删除AI工作流会话
-      tags:
-      - AIWorkflowSession
-  /autoCode/dumpAIWorkflowMarkdown:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: AI工作流Markdown落盘信息
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysAIWorkflowMarkdownDump'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 导出AI工作流Markdown落盘
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  type: object
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 导出AI工作流Markdown落盘
-      tags:
-      - AIWorkflowSession
-  /autoCode/getAIWorkflowSessionDetail:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 会话ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.GetById'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 获取AI工作流会话详情
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  type: object
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 获取AI工作流会话详情
-      tags:
-      - AIWorkflowSession
-  /autoCode/getAIWorkflowSessionList:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 页码, 每页大小, 分组Tab
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysAIWorkflowSessionSearch'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 分页获取AI工作流会话列表
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取AI工作流会话列表
-      tags:
-      - AIWorkflowSession
   /autoCode/getColumn:
     get:
       consumes:
@@ -4429,36 +4414,6 @@ paths:
       summary: 回滚自动生成代码
       tags:
       - AutoCode
-  /autoCode/saveAIWorkflowSession:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: AI工作流会话信息
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysAIWorkflowSessionUpsert'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 保存AI工作流会话
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  type: object
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 保存AI工作流会话
-      tags:
-      - AIWorkflowSession
   /base/captcha:
     post:
       consumes:
@@ -5131,6 +5086,34 @@ paths:
       summary: 删除文件
       tags:
       - FileUploadAndDownload
+  /fileUploadAndDownload/deleteFiles:
+    post:
+      parameters:
+      - description: 文件ID列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FileBatchDeleteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 批量删除结果
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除文件
+      tags:
+      - FileUploadAndDownload
   /fileUploadAndDownload/editFileName:
     post:
       consumes:
@@ -5157,6 +5140,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 编辑文件名或者备注
+      tags:
+      - FileUploadAndDownload
+  /fileUploadAndDownload/findFile:
+    get:
+      parameters:
+      - description: 文件ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 文件详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/media.FileUploadAndDownload'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查找单个文件详情
       tags:
       - FileUploadAndDownload
   /fileUploadAndDownload/getFileList:
@@ -5215,6 +5225,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 导入URL
+      tags:
+      - FileUploadAndDownload
+  /fileUploadAndDownload/listOssFiles:
+    post:
+      parameters:
+      - description: 前缀/游标/每页数量
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.ListOssFilesReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 存储桶文件列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 列举存储桶文件
       tags:
       - FileUploadAndDownload
   /fileUploadAndDownload/upload:
@@ -5567,6 +5605,342 @@ paths:
       summary: jwt加入黑名单
       tags:
       - Jwt
+  /mcpApi/addMcpApis:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 绑定信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AddSysMcpApisRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 绑定成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 给MCP绑定API
+      tags:
+      - McpApi
+  /mcpApi/createMcp:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MCP基础信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateSysMcpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建MCP
+      tags:
+      - McpApi
+  /mcpApi/deleteMcp:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MCP ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.DeleteSysMcpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除MCP
+      tags:
+      - McpApi
+  /mcpApi/getMcpDetail:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MCP ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindSysMcpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取MCP详情
+      tags:
+      - McpApi
+  /mcpApi/getMcpList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 查询条件
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysMcpSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取MCP列表
+      tags:
+      - McpApi
+  /mcpApi/listBindingsPublic:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      summary: 列出MCP动态tool的能力定义
+      tags:
+      - McpApi
+  /mcpApi/listPromptsPublic:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      summary: 列出MCP编排prompt
+      tags:
+      - McpApi
+  /mcpApi/previewApiCommand:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: apiId
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 按API生成能力定义
+      tags:
+      - McpApi
+  /mcpApi/previewManifest:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: mcpId
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 预览MCP能力定义
+      tags:
+      - McpApi
+  /mcpApi/previewPrompt:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: mcpId
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 预览MCP编排prompt
+      tags:
+      - McpApi
+  /mcpApi/removeMcpApis:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 解绑信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RemoveSysMcpApisRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 解绑成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 解绑MCP的API
+      tags:
+      - McpApi
+  /mcpApi/updateMcp:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: MCP基础信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateSysMcpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新MCP
+      tags:
+      - McpApi
   /mediaUpload/{uploadId}:
     delete:
       parameters:
@@ -8197,6 +8571,10 @@ paths:
         in: query
         name: createdAt
         type: string
+      - description: 设备ID
+        in: query
+        name: device_id
+        type: string
       - description: 错误信息
         in: query
         name: error_message
@@ -8217,6 +8595,10 @@ paths:
         in: query
         name: path
         type: string
+      - description: 请求ID
+        in: query
+        name: request_id
+        type: string
       - description: 响应Body
         in: query
         name: resp
@@ -8225,6 +8607,10 @@ paths:
         in: query
         name: status
         type: integer
+      - description: 链路ID
+        in: query
+        name: trace_id
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -8274,6 +8660,10 @@ paths:
         in: query
         name: createdAt
         type: string
+      - description: 设备ID
+        in: query
+        name: device_id
+        type: string
       - description: 错误信息
         in: query
         name: error_message
@@ -8306,6 +8696,10 @@ paths:
         in: query
         name: path
         type: string
+      - description: 请求ID
+        in: query
+        name: request_id
+        type: string
       - description: 响应Body
         in: query
         name: resp
@@ -8314,6 +8708,10 @@ paths:
         in: query
         name: status
         type: integer
+      - description: 链路ID
+        in: query
+        name: trace_id
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt

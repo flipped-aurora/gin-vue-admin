@@ -1571,215 +1571,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/autoCode/deleteAIWorkflowSession": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "AIWorkflowSession"
-                ],
-                "summary": "删除AI工作流会话",
-                "parameters": [
-                    {
-                        "description": "会话ID",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.GetById"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "删除AI工作流会话",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/autoCode/dumpAIWorkflowMarkdown": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "AIWorkflowSession"
-                ],
-                "summary": "导出AI工作流Markdown落盘",
-                "parameters": [
-                    {
-                        "description": "AI工作流Markdown落盘信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SysAIWorkflowMarkdownDump"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "导出AI工作流Markdown落盘",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/autoCode/getAIWorkflowSessionDetail": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "AIWorkflowSession"
-                ],
-                "summary": "获取AI工作流会话详情",
-                "parameters": [
-                    {
-                        "description": "会话ID",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.GetById"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "获取AI工作流会话详情",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/autoCode/getAIWorkflowSessionList": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "AIWorkflowSession"
-                ],
-                "summary": "分页获取AI工作流会话列表",
-                "parameters": [
-                    {
-                        "description": "页码, 每页大小, 分组Tab",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SysAIWorkflowSessionSearch"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "分页获取AI工作流会话列表",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.PageResult"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/autoCode/getColumn": {
             "get": {
                 "security": [
@@ -2965,59 +2756,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/autoCode/saveAIWorkflowSession": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "AIWorkflowSession"
-                ],
-                "summary": "保存AI工作流会话",
-                "parameters": [
-                    {
-                        "description": "AI工作流会话信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SysAIWorkflowSessionUpsert"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "保存AI工作流会话",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/base/captcha": {
             "post": {
                 "consumes": [
@@ -4189,6 +3927,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/fileUploadAndDownload/deleteFiles": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FileUploadAndDownload"
+                ],
+                "summary": "批量删除文件",
+                "parameters": [
+                    {
+                        "description": "文件ID列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FileBatchDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "批量删除结果",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/editFileName": {
             "post": {
                 "security": [
@@ -4228,6 +4016,54 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/fileUploadAndDownload/findFile": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FileUploadAndDownload"
+                ],
+                "summary": "查找单个文件详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "文件ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "文件详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/media.FileUploadAndDownload"
+                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -4331,6 +4167,56 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/fileUploadAndDownload/listOssFiles": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FileUploadAndDownload"
+                ],
+                "summary": "列举存储桶文件",
+                "parameters": [
+                    {
+                        "description": "前缀/游标/每页数量",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ListOssFilesReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "存储桶文件列表",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -4943,6 +4829,601 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/addMcpApis": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "给MCP绑定API",
+                "parameters": [
+                    {
+                        "description": "绑定信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AddSysMcpApisRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "绑定成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/createMcp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "创建MCP",
+                "parameters": [
+                    {
+                        "description": "MCP基础信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateSysMcpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/deleteMcp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "删除MCP",
+                "parameters": [
+                    {
+                        "description": "MCP ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DeleteSysMcpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/getMcpDetail": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "获取MCP详情",
+                "parameters": [
+                    {
+                        "description": "MCP ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FindSysMcpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/getMcpList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "获取MCP列表",
+                "parameters": [
+                    {
+                        "description": "查询条件",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysMcpSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/listBindingsPublic": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "列出MCP动态tool的能力定义",
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/listPromptsPublic": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "列出MCP编排prompt",
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/previewApiCommand": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "按API生成能力定义",
+                "parameters": [
+                    {
+                        "description": "apiId",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/previewManifest": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "预览MCP能力定义",
+                "parameters": [
+                    {
+                        "description": "mcpId",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/previewPrompt": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "预览MCP编排prompt",
+                "parameters": [
+                    {
+                        "description": "mcpId",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/removeMcpApis": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "解绑MCP的API",
+                "parameters": [
+                    {
+                        "description": "解绑信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RemoveSysMcpApisRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "解绑成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/mcpApi/updateMcp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "McpApi"
+                ],
+                "summary": "更新MCP",
+                "parameters": [
+                    {
+                        "description": "MCP基础信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateSysMcpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -9507,6 +9988,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "设备ID",
+                        "name": "device_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "错误信息",
                         "name": "error_message",
                         "in": "query"
@@ -9537,6 +10024,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "请求ID",
+                        "name": "request_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "响应Body",
                         "name": "resp",
                         "in": "query"
@@ -9545,6 +10038,12 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "请求状态",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "链路ID",
+                        "name": "trace_id",
                         "in": "query"
                     },
                     {
@@ -9630,6 +10129,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "设备ID",
+                        "name": "device_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "错误信息",
                         "name": "error_message",
                         "in": "query"
@@ -9678,6 +10183,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+                        "description": "请求ID",
+                        "name": "request_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "响应Body",
                         "name": "resp",
                         "in": "query"
@@ -9686,6 +10197,12 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "请求状态",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "链路ID",
+                        "name": "trace_id",
                         "in": "query"
                     },
                     {
@@ -11285,6 +11802,23 @@ const docTemplate = `{
                 }
             }
         },
+        "config.App": {
+            "type": "object",
+            "properties": {
+                "app-id": {
+                    "description": "应用标识",
+                    "type": "string"
+                },
+                "env": {
+                    "description": "环境：dev/test/prod",
+                    "type": "string"
+                },
+                "node": {
+                    "description": "节点标识",
+                    "type": "string"
+                }
+            }
+        },
         "config.Autocode": {
             "type": "object",
             "properties": {
@@ -11962,6 +12496,14 @@ const docTemplate = `{
                 "aliyun-oss": {
                     "$ref": "#/definitions/config.AliyunOSS"
                 },
+                "app": {
+                    "description": "应用身份（日志静态字段 node/app_id/env）",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/config.App"
+                        }
+                    ]
+                },
                 "autocode": {
                     "description": "auto",
                     "allOf": [
@@ -12284,6 +12826,22 @@ const docTemplate = `{
         "config.Zap": {
             "type": "object",
             "properties": {
+                "access-log-max-bytes": {
+                    "description": "访问日志/操作记录请求体与响应体的最大字节数，超过则截断为占位标记；0 表示用代码兜底默认值",
+                    "type": "integer"
+                },
+                "access-req-body": {
+                    "description": "访问日志记录请求体",
+                    "type": "boolean"
+                },
+                "access-req-headers": {
+                    "description": "访问日志记录请求头",
+                    "type": "boolean"
+                },
+                "access-resp-data": {
+                    "description": "访问日志记录响应体",
+                    "type": "boolean"
+                },
                 "director": {
                     "description": "日志文件夹",
                     "type": "string"
@@ -12448,9 +13006,21 @@ const docTemplate = `{
                     "description": "编号",
                     "type": "string"
                 },
+                "md5": {
+                    "description": "文件MD5",
+                    "type": "string"
+                },
+                "mime": {
+                    "description": "MIME类型",
+                    "type": "string"
+                },
                 "name": {
                     "description": "文件名",
                     "type": "string"
+                },
+                "size": {
+                    "description": "文件大小(字节)",
+                    "type": "integer"
                 },
                 "tag": {
                     "description": "文件标签",
@@ -12463,6 +13033,10 @@ const docTemplate = `{
                 "url": {
                     "description": "文件地址",
                     "type": "string"
+                },
+                "userId": {
+                    "description": "上传者ID",
+                    "type": "integer"
                 }
             }
         },
@@ -12531,14 +13105,41 @@ const docTemplate = `{
                 }
             }
         },
+        "request.AddSysMcpApisRequest": {
+            "type": "object",
+            "properties": {
+                "bindings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.SysMcpApiBindingItem"
+                    }
+                },
+                "mcpId": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.AttachmentCategorySearch": {
             "type": "object",
             "properties": {
                 "classId": {
+                    "description": "分类id",
                     "type": "integer"
+                },
+                "desc": {
+                    "description": "是否倒序",
+                    "type": "boolean"
+                },
+                "endCreatedAt": {
+                    "description": "创建时间止（不含）",
+                    "type": "string"
                 },
                 "keyword": {
                     "description": "关键字",
+                    "type": "string"
+                },
+                "orderKey": {
+                    "description": "排序字段（如 id/size/created_at）",
                     "type": "string"
                 },
                 "page": {
@@ -12547,6 +13148,18 @@ const docTemplate = `{
                 },
                 "pageSize": {
                     "description": "每页大小",
+                    "type": "integer"
+                },
+                "startCreatedAt": {
+                    "description": "创建时间起（含）",
+                    "type": "string"
+                },
+                "tag": {
+                    "description": "文件类型/标签（扩展名，如 jpg/pdf）",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "上传者ID",
                     "type": "integer"
                 }
             }
@@ -12913,6 +13526,29 @@ const docTemplate = `{
                 }
             }
         },
+        "request.CreateSysMcpRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "scenariosJson": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
         "request.DataSource": {
             "type": "object",
             "properties": {
@@ -12938,6 +13574,14 @@ const docTemplate = `{
             }
         },
         "request.DeleteSysCliRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.DeleteSysMcpRequest": {
             "type": "object",
             "properties": {
                 "id": {
@@ -13009,7 +13653,30 @@ const docTemplate = `{
                 }
             }
         },
+        "request.FileBatchDeleteReq": {
+            "type": "object",
+            "required": [
+                "ids"
+            ],
+            "properties": {
+                "ids": {
+                    "description": "文件记录ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "request.FindSysCliRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.FindSysMcpRequest": {
             "type": "object",
             "properties": {
                 "id": {
@@ -13176,6 +13843,23 @@ const docTemplate = `{
                 }
             }
         },
+        "request.ListOssFilesReq": {
+            "type": "object",
+            "properties": {
+                "cursor": {
+                    "description": "分页游标（上次返回的 nextCursor）",
+                    "type": "string"
+                },
+                "limit": {
+                    "description": "每页数量（\u003c=0 默认 100）",
+                    "type": "integer"
+                },
+                "prefix": {
+                    "description": "对象 key 前缀过滤",
+                    "type": "string"
+                }
+            }
+        },
         "request.Login": {
             "type": "object",
             "properties": {
@@ -13284,6 +13968,20 @@ const docTemplate = `{
                     }
                 },
                 "cliId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.RemoveSysMcpApisRequest": {
+            "type": "object",
+            "properties": {
+                "apiIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "mcpId": {
                     "type": "integer"
                 }
             }
@@ -13588,108 +14286,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.SysAIWorkflowMarkdownDump": {
-            "type": "object",
-            "properties": {
-                "conversationId": {
-                    "type": "string"
-                },
-                "currentNodeId": {
-                    "type": "string"
-                },
-                "formData": {
-                    "$ref": "#/definitions/common.JSONMap"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "messageId": {
-                    "type": "string"
-                },
-                "messages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/system.AIWorkflowMessage"
-                    }
-                },
-                "resultData": {
-                    "$ref": "#/definitions/common.JSONMap"
-                },
-                "settings": {
-                    "$ref": "#/definitions/common.JSONMap"
-                },
-                "summary": {
-                    "type": "string"
-                },
-                "tab": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "request.SysAIWorkflowSessionSearch": {
-            "type": "object",
-            "properties": {
-                "keyword": {
-                    "description": "关键字",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页大小",
-                    "type": "integer"
-                },
-                "tab": {
-                    "type": "string"
-                }
-            }
-        },
-        "request.SysAIWorkflowSessionUpsert": {
-            "type": "object",
-            "properties": {
-                "conversationId": {
-                    "type": "string"
-                },
-                "currentNodeId": {
-                    "type": "string"
-                },
-                "formData": {
-                    "$ref": "#/definitions/common.JSONMap"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "messageId": {
-                    "type": "string"
-                },
-                "messages": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/system.AIWorkflowMessage"
-                    }
-                },
-                "resultData": {
-                    "$ref": "#/definitions/common.JSONMap"
-                },
-                "settings": {
-                    "$ref": "#/definitions/common.JSONMap"
-                },
-                "summary": {
-                    "type": "string"
-                },
-                "tab": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
         "request.SysApiTokenSearch": {
             "type": "object",
             "properties": {
@@ -13851,6 +14447,58 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SysMcpApiBindingItem": {
+            "type": "object",
+            "properties": {
+                "apiBrief": {
+                    "type": "string"
+                },
+                "apiId": {
+                    "type": "integer"
+                },
+                "commandDesc": {
+                    "type": "string"
+                },
+                "commandName": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "paramsOverride": {
+                    "type": "string"
+                },
+                "responseOverride": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.SysMcpSearch": {
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "request.UpdateSysCliRequest": {
             "type": "object",
             "properties": {
@@ -13876,6 +14524,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "skillName": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateSysMcpRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "displayName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "scenariosJson": {
                     "type": "string"
                 },
                 "status": {
@@ -14208,32 +14882,6 @@ const docTemplate = `{
                     "items": {
                         "type": "integer"
                     }
-                }
-            }
-        },
-        "system.AIWorkflowMessage": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "conversationId": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "messageId": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "string"
-                },
-                "snapshot": {
-                    "$ref": "#/definitions/common.JSONMap"
                 }
             }
         },
@@ -14739,6 +15387,10 @@ const docTemplate = `{
                 "level": {
                     "type": "string"
                 },
+                "request_id": {
+                    "description": "请求ID",
+                    "type": "string"
+                },
                 "solution": {
                     "description": "解决方案",
                     "type": "string"
@@ -14955,6 +15607,10 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
+                "device_id": {
+                    "description": "设备ID",
+                    "type": "string"
+                },
                 "error_message": {
                     "description": "错误信息",
                     "type": "string"
@@ -14975,6 +15631,10 @@ const docTemplate = `{
                     "description": "请求路径",
                     "type": "string"
                 },
+                "request_id": {
+                    "description": "请求ID",
+                    "type": "string"
+                },
                 "resp": {
                     "description": "响应Body",
                     "type": "string"
@@ -14982,6 +15642,10 @@ const docTemplate = `{
                 "status": {
                     "description": "请求状态",
                     "type": "integer"
+                },
+                "trace_id": {
+                    "description": "链路ID",
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",

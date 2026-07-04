@@ -27,7 +27,6 @@ type ApiGroup struct {
 	LoginLogApi
 	ApiTokenApi
 	SkillsApi
-	AIWorkflowSessionApi
 	SecurityConfigApi
 }
 
@@ -47,7 +46,6 @@ var (
 	operationRecordService   = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 	dictionaryDetailService  = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 	autoCodeService          = service.ServiceGroupApp.SystemServiceGroup.AutoCodeService
-	aiWorkflowSessionService = service.ServiceGroupApp.SystemServiceGroup.AIWorkflowSession
 	autoCodePluginService    = service.ServiceGroupApp.SystemServiceGroup.AutoCodePlugin
 	autoCodePackageService   = service.ServiceGroupApp.SystemServiceGroup.AutoCodePackage
 	autoCodeHistoryService   = service.ServiceGroupApp.SystemServiceGroup.AutoCodeHistory

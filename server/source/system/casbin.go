@@ -190,11 +190,6 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/mcpRoutes", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/mcpTest", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/mcpList", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/autoCode/saveAIWorkflowSession", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/autoCode/getAIWorkflowSessionList", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/autoCode/getAIWorkflowSessionDetail", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/autoCode/deleteAIWorkflowSession", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/autoCode/dumpAIWorkflowMarkdown", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},
@@ -372,11 +367,6 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "9528", V1: "/autoCode/mcpStart", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/autoCode/mcpStop", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/autoCode/mcpRoutes", V2: "POST"},
-		{Ptype: "p", V0: "9528", V1: "/autoCode/saveAIWorkflowSession", V2: "POST"},
-		{Ptype: "p", V0: "9528", V1: "/autoCode/getAIWorkflowSessionList", V2: "POST"},
-		{Ptype: "p", V0: "9528", V1: "/autoCode/getAIWorkflowSessionDetail", V2: "POST"},
-		{Ptype: "p", V0: "9528", V1: "/autoCode/deleteAIWorkflowSession", V2: "POST"},
-		{Ptype: "p", V0: "9528", V1: "/autoCode/dumpAIWorkflowMarkdown", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/user/getUserInfo", V2: "GET"},
 	}
 	if err := db.Create(&entities).Error; err != nil {

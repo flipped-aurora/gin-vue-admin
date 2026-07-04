@@ -68,14 +68,6 @@ func Menu(ctx context.Context) {
 			Sort:      6,
 			Meta:      model.Meta{Title: "AI页面绘制", Icon: "picture-filled"},
 		},
-		{
-			Path:      "aiWorkflow",
-			Name:      "aiWorkflow",
-			Hidden:    false,
-			Component: "plugin/ai/view/aiWorkflow/index.vue",
-			Sort:      7,
-			Meta:      model.Meta{Title: "AI 工作流", Icon: "memo"},
-		},
 	}
 	utils.RegisterMenus(entities...)
 }

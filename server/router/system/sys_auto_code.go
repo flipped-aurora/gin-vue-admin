@@ -30,11 +30,6 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 		autoCodeRouter.POST("getPackage", autoCodePackageApi.All)
 		autoCodeRouter.POST("delPackage", autoCodePackageApi.Delete)
 		autoCodeRouter.POST("createPackage", autoCodePackageApi.Create)
-		autoCodeRouter.POST("saveAIWorkflowSession", aiWorkflowSessionApi.Save)
-		autoCodeRouter.POST("getAIWorkflowSessionList", aiWorkflowSessionApi.GetList)
-		autoCodeRouter.POST("getAIWorkflowSessionDetail", aiWorkflowSessionApi.GetDetail)
-		autoCodeRouter.POST("deleteAIWorkflowSession", aiWorkflowSessionApi.Delete)
-		autoCodeRouter.POST("dumpAIWorkflowMarkdown", aiWorkflowSessionApi.DumpMarkdown)
 	}
 	{
 		autoCodeRouter.GET("getTemplates", autoCodePackageApi.Templates)

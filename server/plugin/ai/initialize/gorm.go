@@ -16,7 +16,6 @@ func Gorm(ctx context.Context) {
 		new(aiModel.SysCliApi),
 		new(aiModel.SysMcp),
 		new(aiModel.SysMcpApi),
-		new(aiModel.SysAIWorkflowSession),
 	)
 	if err != nil {
 		err = errors.Wrap(err, "register ai plugin tables failed")

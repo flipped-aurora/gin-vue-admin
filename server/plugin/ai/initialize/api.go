@@ -42,13 +42,6 @@ func Api(ctx context.Context) {
 		{Path: "/autoCode/mcpRoutes", Description: "获取 MCP 路由", ApiGroup: "代码生成器", Method: "POST"},
 		{Path: "/autoCode/mcpTest", Description: "测试 MCP 调用", ApiGroup: "代码生成器", Method: "POST"},
 
-		// AI 工作流（处理逻辑仍在 core，路径前缀沿用 autoCode）
-		{Path: "/autoCode/saveAIWorkflowSession", Description: "保存 AI 工作流会话", ApiGroup: "代码生成器", Method: "POST"},
-		{Path: "/autoCode/getAIWorkflowSessionList", Description: "获取 AI 工作流列表", ApiGroup: "代码生成器", Method: "POST"},
-		{Path: "/autoCode/getAIWorkflowSessionDetail", Description: "获取 AI 工作流详情", ApiGroup: "代码生成器", Method: "POST"},
-		{Path: "/autoCode/deleteAIWorkflowSession", Description: "删除 AI 工作流会话", ApiGroup: "代码生成器", Method: "POST"},
-		{Path: "/autoCode/dumpAIWorkflowMarkdown", Description: "导出 AI 工作流 Markdown", ApiGroup: "代码生成器", Method: "POST"},
-
 		// cli
 		{Path: "/cli/createCli", Description: "创建CLI", ApiGroup: "CLI管理", Method: "POST"},
 		{Path: "/cli/getCliList", Description: "获取CLI列表", ApiGroup: "CLI管理", Method: "POST"},

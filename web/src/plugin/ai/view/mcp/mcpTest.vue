@@ -30,8 +30,8 @@
             >
               刷新
             </el-button>
-            <el-tooltip content="复制配置" placement="top">
-              <el-button :icon="DocumentCopy" circle @click="copyMcpConfig" />
+            <el-tooltip content="复制当前配置" placement="top">
+              <el-button :icon="DocumentCopy" circle @click="copyMcpConfig(activeConfig)" />
             </el-tooltip>
           </div>
         </div>
@@ -71,9 +71,40 @@
         </div>
       </div>
 
-      <pre
-        class="font-mono whitespace-pre-wrap break-words rounded bg-gray-100 p-2.5 text-gray-700 dark:bg-slate-800 dark:text-slate-300"
-      >{{ mcpServerConfig }}</pre>
+      <el-tabs v-model="activeConfigTab" class="mcp-client-tabs">
+        <el-tab-pane
+          v-for="item in clientConfigs"
+          :key="item.key"
+          :label="item.label"
+          :name="item.key"
+        >
+          <div
+            class="mb-2 flex items-start justify-between gap-2 rounded border border-dashed border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+          >
+            <div class="min-w-0 leading-relaxed">
+              <div>
+                配置文件：<span
+                  class="break-all font-mono text-gray-700 dark:text-slate-300"
+                  >{{ item.location }}</span
+                >
+              </div>
+              <div class="mt-1">{{ item.note }}</div>
+            </div>
+            <el-button
+              size="small"
+              text
+              :icon="DocumentCopy"
+              class="shrink-0"
+              @click="copyMcpConfig(item)"
+            >
+              复制
+            </el-button>
+          </div>
+          <pre
+            class="font-mono whitespace-pre-wrap break-words rounded bg-gray-100 p-2.5 text-gray-700 dark:bg-slate-800 dark:text-slate-300"
+          >{{ item.content }}</pre>
+        </el-tab-pane>
+      </el-tabs>
     </el-card>
 
     <el-empty
@@ -322,6 +353,7 @@ import {
 } from '@/api/autoCode'
 import service from '@/utils/request'
 import { useUserStore } from '@/pinia/modules/user'
+import { buildClientConfigs } from './clientConfigTemplates'
 
 defineOptions({
   name: 'MCPTest'
@@ -344,17 +376,6 @@ const emptyStatus = () => ({
   message: 'MCP 独立服务未启动'
 })
 
-const defaultServerConfig = {
-  mcpServers: {
-    gva: {
-      url: 'http://127.0.0.1:8889/mcp',
-      headers: {
-        'x-token': ''
-      }
-    }
-  }
-}
-
 const mcpTools = ref([])
 const mcpPrompts = ref([]) // 编排 prompt 列表（来自 mcpApi/listPromptsPublic）
 const testDialogVisible = ref(false)
@@ -365,25 +386,23 @@ const apiDialogResponse = ref(null)
 const statusLoading = ref(false)
 const actionLoading = reactive({ start: false, stop: false })
 const mcpServiceStatus = ref(emptyStatus())
+const serverName = ref('gva')
+const activeConfigTab = ref('claude-code')
 
-const buildMcpServerConfig = (config) => {
-  const nextConfig = JSON.parse(
-    JSON.stringify(config || defaultServerConfig)
-  )
-  const serverName = Object.keys(nextConfig.mcpServers || {})[0]
-
-  if (serverName) {
-    const headers = nextConfig.mcpServers[serverName].headers || {}
-    const headerKeys = Object.keys(headers).length ? Object.keys(headers) : ['x-token']
-    nextConfig.mcpServers[serverName].headers = Object.fromEntries(
-      headerKeys.map((key) => [key, userStore.token || ''])
-    )
-  }
-
-  return JSON.stringify(nextConfig, null, 2)
-}
-
-const mcpServerConfig = ref(buildMcpServerConfig(defaultServerConfig))
+// 各常用 AI 工具的 MCP 配置示例（server 名 / 地址 / 鉴权头 / token 均取自当前服务状态）
+const clientConfigs = computed(() =>
+  buildClientConfigs({
+    serverName: serverName.value,
+    url: mcpServiceStatus.value.baseURL,
+    authHeader: mcpServiceStatus.value.authHeader,
+    token: userStore.token
+  })
+)
+const activeConfig = computed(
+  () =>
+    clientConfigs.value.find((item) => item.key === activeConfigTab.value) ||
+    clientConfigs.value[0]
+)
 
 const serviceReachable = computed(() => Boolean(mcpServiceStatus.value.reachable))
 const disableStart = computed(
@@ -443,8 +462,10 @@ const applyMcpOverview = (payload = {}) => {
       ...payload.status
     }
   }
-  if (payload.mcpServerConfig) {
-    mcpServerConfig.value = buildMcpServerConfig(payload.mcpServerConfig)
+  const servers = payload.mcpServerConfig?.mcpServers
+  if (servers) {
+    const [name] = Object.keys(servers)
+    if (name) serverName.value = name
   }
 }
 
@@ -548,10 +569,16 @@ const handleStopMcp = async () => {
   }
 }
 
-const copyMcpConfig = async () => {
+const copyMcpConfig = async (item) => {
+  const target = item?.content ?? activeConfig.value?.content ?? ''
+  if (!target) {
+    ElMessage.warning('暂无可复制的配置')
+    return
+  }
   try {
-    await navigator.clipboard.writeText(mcpServerConfig.value)
-    ElMessage.success('配置已复制')
+    await navigator.clipboard.writeText(target)
+    const label = item?.label ?? activeConfig.value?.label ?? ''
+    ElMessage.success(label ? `已复制 ${label} 配置` : '配置已复制')
   } catch (error) {
     ElMessage.error(`复制失败: ${error}`)
   }

@@ -6,8 +6,8 @@ import { defu, isObject, liteClone } from 'arcdash'
 
 export const THEME_SETTINGS_STORAGE_KEY = 'gva-theme-settings'
 
-// 颜色统一小写：项目内部所有颜色字符串以小写为单一形态，避免默认值「#5D87FF」
-// 与预设「#5d87ff」因大小写不等而出现选中态丢失。任何外部数据进入运行态前都过一遍。
+// 颜色统一小写：项目内部所有颜色字符串以小写为单一形态，避免默认值「#194bfb」
+// 与预设「#194bfb」因大小写不等而出现选中态丢失。任何外部数据进入运行态前都过一遍。
 export const normalizeColor = (value) =>
   typeof value === 'string' ? value.toLowerCase() : value
 

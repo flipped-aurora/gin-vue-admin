@@ -18,7 +18,7 @@ export const themeSettings = {
   grayscale: false,
   colourWeakness: false,
   recommendColor: false,
-  themeColor: '#5d87ff',
+  themeColor: '#194bfb',
   themeRadius: 0.5,
   size: 'default',
   otherColor: {

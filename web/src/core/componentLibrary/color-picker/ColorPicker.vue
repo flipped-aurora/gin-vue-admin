@@ -51,7 +51,7 @@ const colorSpace = computed(() => (props.format === 'rgb' ? 'rgb' : 'hsb'))
 const outFormat = computed(() =>
   props.format === 'rgb' ? (props.alpha ? 'rgba' : 'rgb') : props.alpha ? 'hexa' : 'hex'
 )
-// 空值兜底色取自默认主题色单一真源（settings.themeColor），不再手抄字面量 #5D87FF / rgba(93,135,255,1)。
+// 空值兜底色取自默认主题色单一真源（settings.themeColor），不再手抄字面量 #194bfb / rgba(93,135,255,1)。
 // alpha 模式补足透明度通道（满不透明）；派生失败则回落到 hex 本身（仍可被 parseColor 解析）。
 const fallback = computed(() => {
   const base = themeSettings.themeColor

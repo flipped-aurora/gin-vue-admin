@@ -19,7 +19,7 @@
           @mousedown="middleCloseTab($event, item)"
           @close="removeTab(getFmtString(item))"
         >
-          <template v-if="item.meta.icon" #prefix>
+          <template v-if="showTabIcon && item.meta.icon" #prefix>
             <component :is="item.meta.icon" class="h-4 w-4 shrink-0" />
           </template>
           {{ fmtTitle(item.meta.title, item) }}
@@ -73,6 +73,8 @@
 
   // 标签风格（button / chrome / slider），由主题设置驱动，可换肤
   const tabMode = computed(() => settings.value.tab.mode || 'button')
+  // 是否在标签上展示路由图标
+  const showTabIcon = computed(() => settings.value.tab.showIcon !== false)
   const containerClass = computed(
     () =>
       ({

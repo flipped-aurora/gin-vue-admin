@@ -77,7 +77,7 @@ provide('gvaMenuCtx', {
     :class="props.class"
     @select="select"
   />
-  <nav v-else :class="['flex flex-col gap-0.5 py-2', navPadClass, props.class]">
+  <nav v-else :class="['flex flex-col gap-0.5', navPadClass, props.class]">
     <MenuItem v-for="item in topItems" :key="item.name" :node="item" :depth="0" />
   </nav>
 </template>

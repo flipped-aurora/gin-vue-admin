@@ -47,11 +47,16 @@
           v-for="item in matched.slice(1, matched.length)"
           :key="item.path"
         >
-          <span class="inline-flex items-center gap-1 font-bold">
-            <el-icon v-if="settings.header.breadcrumb.showIcon && item.meta.icon">
+          <span class="inline-flex items-center gap-1 font-bold leading-[16px]">
+            <el-icon
+              v-if="settings.header.breadcrumb.showIcon && item.meta.icon"
+              class="inline-flex h-4 w-4 items-center justify-center"
+            >
               <component :is="item.meta.icon" />
             </el-icon>
-            {{ fmtTitle(item.meta.title, route) }}
+            <span>
+              {{ fmtTitle(item.meta.title, route) }}
+            </span>
           </span>
         </el-breadcrumb-item>
       </el-breadcrumb>

@@ -48,6 +48,11 @@
       </div>
       <div class="gva-theme-section-content">
         <TabModeSelector v-model="settings.tab.mode" />
+        <div class="gva-theme-card-bg mt-3">
+          <SettingItem label="展示图标">
+            <g-switch v-model="settings.tab.showIcon" aria-label="展示图标" />
+          </SettingItem>
+        </div>
       </div>
     </div>
 

@@ -1,11 +1,13 @@
 <template>
-  <div class="flex items-center mx-4 gap-4">
-    <el-tooltip v-if="isDev" class="" effect="dark" content="视频教程" placement="bottom">
+  <!-- 工具图标组：扁平图标，无独立描边/阴影，统一 32px 点击区域，hover 出现浅色高亮。
+       el-tooltip__trigger / el-dropdown 工具类统一拉伸为 32px 高，保证所有图标垂直居中对齐。 -->
+  <div class="flex items-center gap-1 mx-4 [&_.el-tooltip__trigger]:inline-flex [&_.el-tooltip__trigger]:items-center [&_.el-tooltip__trigger]:h-8 [&_.el-dropdown]:inline-flex [&_.el-dropdown]:items-center [&_.el-dropdown]:h-8">
+    <el-tooltip v-if="isDev" effect="dark" content="视频教程" placement="bottom">
       <el-dropdown @command="toDoc">
-        <span class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
-          <el-icon>
-          <Film />
-        </el-icon>
+        <span class="gva-tool-btn">
+          <el-icon class="text-[18px] leading-none">
+            <Film />
+          </el-icon>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -20,34 +22,35 @@
       </el-dropdown>
     </el-tooltip>
 
-    <el-tooltip v-if="settings.header.search.visible" effect="dark" content="搜索" placement="bottom">
-      <span
-        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        @click="handleCommand"
-      >
-        <el-icon>
+    <el-tooltip
+      v-if="settings.header.search.visible"
+      effect="dark"
+      content="搜索"
+      placement="bottom"
+    >
+      <span class="gva-tool-btn" @click="handleCommand">
+        <el-icon class="text-[18px] leading-none">
           <Search />
         </el-icon>
       </span>
     </el-tooltip>
 
     <el-tooltip effect="dark" content="系统设置" placement="bottom">
-      <span
-        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        @click="toggleSetting"
-      >
-        <el-icon>
+      <span class="gva-tool-btn" @click="toggleSetting">
+        <el-icon class="text-[18px] leading-none">
           <Setting />
         </el-icon>
       </span>
     </el-tooltip>
 
-    <el-tooltip v-if="settings.header.refresh.visible" effect="dark" content="刷新" placement="bottom">
-      <span
-        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
-        @click="toggleRefresh"
-      >
-        <el-icon :class="showRefreshAnmite ? 'animate-spin' : ''">
+    <el-tooltip
+      v-if="settings.header.refresh.visible"
+      effect="dark"
+      content="刷新"
+      placement="bottom"
+    >
+      <span class="gva-tool-btn" @click="toggleRefresh">
+        <el-icon :class="showRefreshAnmite ? 'animate-spin' : ''" class="text-[18px] leading-none">
           <Refresh />
         </el-icon>
       </span>
@@ -55,13 +58,13 @@
 
     <el-tooltip effect="dark" content="切换主题" placement="bottom">
       <span
-        class="w-8 h-8 p-2 rounded-full flex items-center justify-center shadow border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
+        class="gva-tool-btn"
         @click="themeStore.toggleTheme(!themeStore.isDark)"
       >
-        <el-icon v-if="themeStore.isDark">
+        <el-icon v-if="themeStore.isDark" class="text-[18px] leading-none">
           <Sunny />
         </el-icon>
-        <el-icon v-else>
+        <el-icon v-else class="text-[18px] leading-none">
           <Moon />
         </el-icon>
       </span>
@@ -183,5 +186,3 @@
     }
   ]
 </script>
-
-<style scoped lang="scss"></style>

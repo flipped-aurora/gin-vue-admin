@@ -66,49 +66,87 @@
       />
     </div>
 
-    <div class="ml-2 flex items-center">
+    <div class="ml-2 flex items-center gap-3">
       <tools />
-      <el-dropdown>
-        <div class="flex justify-center items-center h-full w-full">
-          <span
-            class="cursor-pointer flex justify-center items-center text-black dark:text-gray-100"
+      <!-- 0.5px 极细分隔线，区分工具区与用户区 -->
+      <div
+        class="h-6 w-px bg-gray-200 dark:bg-slate-600"
+        role="separator"
+      />
+      <!-- hover 触发：鼠标移上用户胶囊即展开操作菜单，移出（含指针穿越到菜单）后自动收起 -->
+      <HoverCardRoot v-model:open="hoverOpen" :open-delay="100" :close-delay="120">
+        <HoverCardTrigger as-child>
+          <!-- 用户信息聚合为胶囊组件：圆角 + 内边距，hover 时出现浅色反馈 -->
+          <div
+            class="flex items-center gap-2 px-2 py-1 rounded-lg outline-none cursor-pointer transition-colors hover:bg-muted"
           >
             <CustomPic />
-            <span v-show="!isMobile" class="w-16">{{
-              userStore.userInfo.nickName
-            }}</span>
-            <el-icon>
+            <span
+              v-show="!isMobile"
+              class="text-base font-medium max-w-[8rem] truncate text-black dark:text-gray-100"
+            >{{ userStore.userInfo.nickName }}</span>
+            <el-icon class="text-slate-400 dark:text-slate-500">
               <arrow-down />
             </el-icon>
-          </span>
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item>
-              <span class="font-bold">
-                当前角色：{{ userStore.userInfo.authority.authorityName }}
-              </span>
-            </el-dropdown-item>
-            <template v-if="userStore.userInfo.authorities">
-              <el-dropdown-item
-                v-for="item in userStore.userInfo.authorities.filter(
-                  (i) => i.authorityId !== userStore.userInfo.authorityId
-                )"
+          </div>
+        </HoverCardTrigger>
+        <HoverCardPortal>
+          <HoverCardContent
+            :side-offset="8"
+            side="bottom"
+            align="end"
+            class="z-[3000] min-w-56 rounded-[10px] border border-border bg-container p-1.5 shadow-sider data-[state=open]:animate-[fade-in_0.1s_ease-out] data-[state=closed]:animate-[fade-out_0.1s_ease-in]"
+          >
+            <!-- 用户身份信息（label，非交互） -->
+            <div class="gva-menu-label">
+              <div class="min-w-0">
+                <div class="truncate text-[15px] font-semibold text-black dark:text-gray-100">
+                  {{ userStore.userInfo.nickName }}
+                </div>
+                <div class="truncate text-[13px] text-slate-500 dark:text-slate-400">
+                  当前角色：{{ userStore.userInfo.authority.authorityName }}
+                </div>
+              </div>
+            </div>
+
+            <!-- 分隔线：身份信息 / 角色切换 -->
+            <div class="gva-menu-sep" />
+
+            <!-- 角色切换组 -->
+            <template v-if="otherAuthorities.length">
+              <div
+                v-for="item in otherAuthorities"
                 :key="item.authorityId"
-                @click="changeUserAuth(item.authorityId)"
+                class="gva-menu-item"
+                @click="handleSelect(() => changeUserAuth(item.authorityId))"
               >
-                <span> 切换为：{{ item.authorityName }} </span>
-              </el-dropdown-item>
+                <svg-icon icon="lucide:repeat" class="h-4 w-4 shrink-0 text-slate-500" />
+                <span>切换为：{{ item.authorityName }}</span>
+              </div>
+              <!-- 分隔线：角色切换 / 账户操作 -->
+              <div class="gva-menu-sep" />
             </template>
-            <el-dropdown-item icon="avatar" @click="toPerson">
-              个人信息
-            </el-dropdown-item>
-            <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">
-              登 出
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+
+            <!-- 账户操作组 -->
+            <div class="gva-menu-item" @click="handleSelect(toPerson)">
+              <svg-icon icon="lucide:user" class="h-4 w-4 shrink-0 text-slate-500" />
+              <span>个人信息</span>
+            </div>
+
+            <!-- 分隔线：个人信息 / 登出 -->
+            <div class="gva-menu-sep" />
+
+            <!-- 退出登录（红色语义色） -->
+            <div
+              class="gva-menu-item gva-menu-item-danger"
+              @click="handleSelect(userStore.LoginOut)"
+            >
+              <svg-icon icon="lucide:log-out" class="h-4 w-4 shrink-0" />
+              <span class="whitespace-nowrap">登&nbsp;出</span>
+            </div>
+          </HoverCardContent>
+        </HoverCardPortal>
+      </HoverCardRoot>
     </div>
   </div>
 </template>
@@ -120,7 +158,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { setUserAuthority } from '@/api/user'
   import { fmtTitle } from '@/utils/fmtRouterTitle'
   import gvaAside from '@/view/layout/aside/index.vue'
@@ -128,6 +166,12 @@
   import { useLayoutMode } from '@/hooks/useLayoutMode'
   import { useSideWidth } from '@/hooks/useSideWidth'
   import { cn, FOCUS_RING } from '@/core/componentLibrary/utils'
+  import {
+    HoverCardRoot,
+    HoverCardTrigger,
+    HoverCardPortal,
+    HoverCardContent
+  } from 'reka-ui'
 
   const userStore = useUserStore()
   const router = useRouter()
@@ -145,10 +189,24 @@
     () => effectiveMode.value === 'vertical' && !isMobile.value
   )
   const { sideWidth: headerSideWidth } = useSideWidth()
+  // 除当前角色外的可切换角色
+  const otherAuthorities = computed(() => {
+    const list = userStore.userInfo.authorities || []
+    return list.filter(
+      (i) => i.authorityId !== userStore.userInfo.authorityId
+    )
+  })
   const toPerson = () => {
     router.push({ name: 'person' })
   }
   const matched = computed(() => route.meta.matched)
+
+  // hover 菜单受控：点击任意菜单项后立即关闭
+  const hoverOpen = ref(false)
+  const handleSelect = (fn) => {
+    hoverOpen.value = false
+    fn && fn()
+  }
 
   const changeUserAuth = async (id) => {
     const res = await setUserAuthority({
@@ -161,5 +219,3 @@
     }
   }
 </script>
-
-<style scoped lang="scss"></style>

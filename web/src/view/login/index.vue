@@ -9,7 +9,7 @@
     >
       <img
         class="absolute right-0 top-0 h-full w-auto max-w-none"
-        src="@/assets/login_right_banner.svg"
+        src="@/assets/cover-redesign.svg"
         alt="banner"
       />
     </div>
@@ -69,7 +69,7 @@
           </el-form-item>
           <el-form-item class="mb-6">
             <el-button
-              class="shadow shadow-active h-11 w-full"
+              class="btn-primary shadow shadow-active h-11 w-full"
               type="primary"
               size="large"
               @click="submitForm"
@@ -87,28 +87,27 @@
             >
           </el-form-item>
         </el-form>
+        <BottomInfo class="login-footer" style="padding-top: 14px">
+          <div class="links items-center justify-center gap-3 hidden md:flex">
+            <a href="https://support.qq.com/product/371961" target="_blank">
+              <img src="@/assets/support.png" class="footer-icon" alt="客服" />
+            </a>
+            <a href="https://space.bilibili.com/322210472" target="_blank">
+              <img src="@/assets/video.png" class="footer-icon" alt="视频站" />
+            </a>
+            <a href="https://www.gin-vue-admin.com/" target="_blank">
+              <img src="@/assets/docs.png" class="footer-icon" alt="文档" />
+            </a>
+            <a
+              href="https://github.com/flipped-aurora/gin-vue-admin"
+              target="_blank"
+            >
+              <img src="@/assets/github.png" class="footer-icon" alt="github" />
+            </a>
+          </div>
+        </BottomInfo>
       </div>
     </div>
-
-    <BottomInfo class="left-0 right-0 absolute bottom-3 mx-auto w-full z-20">
-      <div class="links items-center justify-center gap-2 hidden md:flex">
-        <a href="https://www.gin-vue-admin.com/" target="_blank">
-          <img src="@/assets/docs.png" class="w-8 h-8" alt="文档" />
-        </a>
-        <a href="https://support.qq.com/product/371961" target="_blank">
-          <img src="@/assets/kefu.png" class="w-8 h-8" alt="客服" />
-        </a>
-        <a
-          href="https://github.com/flipped-aurora/gin-vue-admin"
-          target="_blank"
-        >
-          <img src="@/assets/github.png" class="w-8 h-8" alt="github" />
-        </a>
-        <a href="https://space.bilibili.com/322210472" target="_blank">
-          <img src="@/assets/video.png" class="w-8 h-8" alt="视频站" />
-        </a>
-      </div>
-    </BottomInfo>
   </div>
 </template>
 
@@ -254,5 +253,62 @@
     --el-button-active-bg-color: var(--el-color-primary-light-8);
     --el-button-active-text-color: var(--el-color-primary);
     --el-button-active-border-color: var(--el-color-primary);
+  }
+
+  /* 登录主按钮：主题色 #2264f2，边框与背景一致；
+     hover / active 沿用 Element Plus 的深浅关系（更浅 / 更深） */
+  .btn-primary {
+    --el-button-bg-color: #2264f2;
+    --el-button-border-color: #2264f2;
+    --el-button-hover-bg-color: #6493f6;
+    --el-button-hover-border-color: #6493f6;
+    --el-button-active-bg-color: #1b50c2;
+    --el-button-active-border-color: #1b50c2;
+  }
+
+  /* 登录页页脚：三行纵向排列
+     第一行 Powered by / 第二行图标组（gap 12px）/ 第三行 Copyright。
+     仅作用于登录页，不影响后台主布局中的同一 BottomInfo 组件。 */
+  .login-footer {
+    flex-direction: column !important;
+    /* 两行文字统一字号：常规屏 11px（!important 覆盖组件自带的 text-sm），
+       2K 屏放大到 14px。图标尺寸单独设置（见 .footer-icon）。 */
+    font-size: 11px !important;
+  }
+
+  /* 2K 及以上大屏（≥2560px）：两行文字放大到 14px */
+  @media (min-width: 2560px) {
+    .login-footer {
+      font-size: 14px !important;
+    }
+  }
+
+  /* 两行文字信息（Powered by、Copyright）统一置灰 */
+  .login-footer :deep(.text-center) {
+    color: #94a3b8;
+  }
+
+  /* 两行文字里的链接：默认继承置灰色、常规字重 */
+  .login-footer :deep(.text-center a) {
+    color: inherit;
+    font-weight: 400;
+  }
+
+  /* 第一行 Gin-Vue-Admin 链接：使用主题色 #2264f2 */
+  .login-footer :deep(.text-center:first-child a) {
+    color: #2264f2;
+  }
+
+  /* 第二行图标：常规屏 16px，2K 屏 22px（与文字字号相互独立） */
+  .footer-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  @media (min-width: 2560px) {
+    .footer-icon {
+      width: 22px;
+      height: 22px;
+    }
   }
 </style>

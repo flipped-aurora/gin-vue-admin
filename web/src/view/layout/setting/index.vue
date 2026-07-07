@@ -1,7 +1,6 @@
 <template>
   <el-drawer
     v-model="drawer"
-    title="系统配置"
     direction="rtl"
     :size="width"
     append-to-body
@@ -9,8 +8,8 @@
     class="gva-theme-drawer"
   >
     <template #header>
-      <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <h2 class="text-xl font-semibold gva-theme-text-main gva-theme-font">系统配置</h2>
+      <div class="flex items-center justify-between">
+        <span class="text-base">系统配置</span>
         <div class="flex items-center gap-2">
           <g-button
             size="sm"
@@ -115,10 +114,6 @@
 .gva-theme-drawer {
   .el-drawer {
     @apply bg-white dark:bg-gray-900;
-  }
-
-  .el-drawer__header {
-    @apply p-0 border-0;
   }
 
   .el-drawer__body {

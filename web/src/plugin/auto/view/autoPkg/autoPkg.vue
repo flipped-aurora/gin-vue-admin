@@ -75,7 +75,7 @@
       </el-form>
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">创建Package</span>
+          <span class="text-base">创建Package</span>
           <div>
             <el-button @click="closeDialog"> 取 消 </el-button>
             <el-button type="primary" @click="enterDialog"> 确 定 </el-button>

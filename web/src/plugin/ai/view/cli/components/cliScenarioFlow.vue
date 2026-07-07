@@ -11,7 +11,7 @@
   >
     <template #header>
       <div class="flex justify-between items-center w-full">
-        <span class="text-lg">调用场景编排 - {{ cli.name || cli.command || '' }}</span>
+        <span class="text-base">调用场景编排 - {{ cli.name || cli.command || '' }}</span>
         <div>
           <el-button @click="visible = false">取 消</el-button>
           <el-button type="primary" :loading="saving" @click="onSave">确 定</el-button>

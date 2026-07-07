@@ -767,7 +767,7 @@
     <el-drawer v-model="dialogFlag" size="70%" :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">组件内容</span>
+          <span class="text-base">组件内容</span>
           <div>
             <el-button @click="closeDialog"> 取 消 </el-button>
             <el-button type="primary" @click="enterDialog"> 确 定 </el-button>
@@ -788,7 +788,7 @@
     <el-drawer v-model="previewFlag" size="80%" :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">操作栏</span>
+          <span class="text-base">操作栏</span>
           <div>
             <el-button type="primary" @click="selectText"> 全选 </el-button>
             <el-button type="primary" @click="copy"> 复制 </el-button>

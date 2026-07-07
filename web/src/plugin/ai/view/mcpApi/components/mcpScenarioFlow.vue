@@ -11,7 +11,7 @@
   >
     <template #header>
       <div class="flex justify-between items-center w-full">
-        <span class="text-lg">调用场景编排 - {{ mcp.name || mcp.command || '' }}</span>
+        <span class="text-base">调用场景编排 - {{ mcp.name || mcp.command || '' }}</span>
         <div>
           <el-button @click="openPromptPreview" :disabled="!mcpId">预览Prompt</el-button>
           <el-button @click="visible = false">取 消</el-button>

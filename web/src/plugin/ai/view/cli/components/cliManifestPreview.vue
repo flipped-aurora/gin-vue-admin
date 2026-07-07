@@ -2,7 +2,7 @@
   <el-drawer :model-value="modelValue" size="760px" :show-close="false" @close="emit('update:modelValue', false)">
     <template #header>
       <div class="flex justify-between items-center w-full">
-        <span class="text-lg">命令预览 - {{ cli?.command || cli?.name }}</span>
+        <span class="text-base">命令预览 - {{ cli?.command || cli?.name }}</span>
         <el-button @click="emit('update:modelValue', false)">关闭</el-button>
       </div>
     </template>

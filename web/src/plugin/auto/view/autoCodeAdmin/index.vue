@@ -129,7 +129,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">操作栏</span>
+          <span class="text-base">操作栏</span>
           <div>
             <el-button type="primary" @click="runFunc" :loading="aiLoading">
               生成

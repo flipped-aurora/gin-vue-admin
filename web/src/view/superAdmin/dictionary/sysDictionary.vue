@@ -127,7 +127,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{
+          <span class="text-base">{{
             type === 'create' ? '添加字典' : '修改字典'
           }}</span>
           <div>
@@ -201,7 +201,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">导入字典JSON</span>
+          <span class="text-base">导入字典JSON</span>
           <div>
             <el-button @click="closeImportDrawer"> 取 消 </el-button>
             <el-button type="primary" @click="handleImport" :loading="importing">

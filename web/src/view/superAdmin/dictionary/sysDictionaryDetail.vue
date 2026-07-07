@@ -111,7 +111,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{
+          <span class="text-base">{{
             type === 'create' ? '添加字典项' : '修改字典项'
           }}</span>
           <div>

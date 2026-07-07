@@ -448,7 +448,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">在线 Skills</span>
+          <span class="text-base">在线 Skills</span>
           <el-button @click="onlineDrawerVisible = false">关 闭</el-button>
         </div>
       </template>

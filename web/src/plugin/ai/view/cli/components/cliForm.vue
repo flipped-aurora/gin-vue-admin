@@ -2,7 +2,7 @@
   <el-drawer :model-value="modelValue" size="520px" :show-close="false" @close="emit('update:modelValue', false)">
     <template #header>
       <div class="flex justify-between items-center w-full">
-        <span class="text-lg">{{ localForm.id ? '编辑CLI' : '新增CLI' }}</span>
+        <span class="text-base">{{ localForm.id ? '编辑CLI' : '新增CLI' }}</span>
         <div>
           <el-button @click="emit('update:modelValue', false)">取消</el-button>
           <el-button type="primary" @click="submit">确定</el-button>

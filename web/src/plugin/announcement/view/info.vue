@@ -174,7 +174,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type === 'create' ? '添加' : '修改' }}</span>
+          <span class="text-base">{{ type === 'create' ? '添加' : '修改' }}</span>
           <div>
             <el-button type="primary" @click="enterDialog"> 确 定 </el-button>
             <el-button @click="closeDialog"> 取 消 </el-button>

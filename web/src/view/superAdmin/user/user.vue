@@ -182,7 +182,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">用户</span>
+          <span class="text-base">用户</span>
           <div>
             <el-button @click="closeAddUserDialog">取 消</el-button>
             <el-button type="primary" @click="enterAddUserDialog"

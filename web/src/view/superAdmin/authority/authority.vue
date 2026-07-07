@@ -72,7 +72,7 @@
     <el-drawer v-model="authorityFormVisible" :size="appStore.drawerSize" :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ authorityTitleForm }}</span>
+          <span class="text-base">{{ authorityTitleForm }}</span>
           <div>
             <el-button @click="closeAuthorityForm">取 消</el-button>
             <el-button type="primary" @click="submitAuthorityForm"
@@ -151,7 +151,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">分配用户 - {{ assignRow.authorityName }}</span>
+          <span class="text-base">分配用户 - {{ assignRow.authorityName }}</span>
           <div>
             <el-button @click="assignDrawerVisible = false">取 消</el-button>
             <el-button type="primary" :loading="assignSubmitting" @click="confirmAssign">确 定</el-button>

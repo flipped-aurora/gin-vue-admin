@@ -155,7 +155,7 @@
       />
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">同步路由</span>
+          <span class="text-base">同步路由</span>
           <div>
             <el-button :loading="apiCompletionLoading" @click="closeSyncDialog">
               取 消
@@ -355,7 +355,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ dialogTitle }}</span>
+          <span class="text-base">{{ dialogTitle }}</span>
           <div>
             <el-button @click="closeDialog"> 取 消 </el-button>
             <el-button type="primary" @click="enterDialog"> 确 定 </el-button>
@@ -413,7 +413,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">分配角色 - {{ assignApiRow.description }}</span>
+          <span class="text-base">分配角色 - {{ assignApiRow.description }}</span>
           <div>
             <el-button @click="assignRoleDrawerVisible = false">取 消</el-button>
             <el-button type="primary" :loading="assignRoleSubmitting" @click="confirmAssignRole">确 定</el-button>

@@ -3,7 +3,7 @@
     <template #header>
       <div class="flex justify-between items-center w-full gap-3">
         <div class="flex items-center gap-4">
-          <span class="text-lg">管理API - {{ mcp?.name }}</span>
+          <span class="text-base">管理API - {{ mcp?.name }}</span>
           <el-radio-group v-model="step">
             <el-radio-button :label="1">① 选择API</el-radio-button>
             <el-radio-button :label="2">② 已绑定API · {{ bindingRows.length }}</el-radio-button>

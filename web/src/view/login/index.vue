@@ -5,11 +5,11 @@
   >
     <!-- 右侧蓝色斜切 banner（仅桌面端显示） -->
     <div
-      class="banner-oblique absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden bg-[#194bfb] md:block"
+      class="banner-oblique absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden bg-[#2264f2] md:block"
     >
       <img
         class="absolute right-0 top-0 h-full w-auto max-w-none"
-        src="@/assets/login_right_banner.jpg"
+        src="@/assets/login_right_banner.svg"
         alt="banner"
       />
     </div>

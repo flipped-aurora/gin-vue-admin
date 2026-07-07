@@ -36,7 +36,7 @@
       <div class="flex-1 w-0 h-full">
         <gva-tabs v-if="settings.tab.visible" />
         <div
-          class="overflow-auto px-4 pt-2"
+          class="overflow-auto px-2"
           :class="settings.tab.visible ? 'gva-container2' : 'gva-container pt-1'"
         >
           <router-view v-if="reloadFlag" v-slot="{ Component, route }">

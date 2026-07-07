@@ -45,11 +45,11 @@ defineOptions({
 // 双向绑定统一走 defineModel，取代手写 modelValue prop + emit
 const modelValue = defineModel({
   type: String,
-  default: '#194bfb'
+  default: '#2264f2'
 })
 
 const presetColors = [
-  { color: '#194bfb', name: '默认' },
+  { color: '#2264f2', name: '默认' },
   { color: '#b48df3', name: '雅紫' },
   { color: '#1d84ff', name: '天蓝' },
   { color: '#60c041', name: '清新绿' },

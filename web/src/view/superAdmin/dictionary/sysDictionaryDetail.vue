@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="gva-table-box">
-      <div class="gva-btn-list justify-between flex items-center">
+  <div class="h-full">
+    <div class="gva-table-box !my-0 h-full flex flex-col overflow-hidden">
+      <div class="gva-btn-list justify-between flex items-center flex-none">
         <span class="text font-bold">字典详细内容</span>
         <div class="flex items-center gap-2">
           <el-input
@@ -28,7 +28,9 @@
         </div>
       </div>
       <!-- 表格视图 -->
+      <div class="flex-1 min-h-0">
       <el-table
+        height="100%"
         :data="displayTreeData"
         style="width: 100%"
         tooltip-effect="dark"
@@ -98,6 +100,7 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
     </div>
 
     <el-drawer

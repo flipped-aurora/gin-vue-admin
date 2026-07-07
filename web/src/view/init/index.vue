@@ -5,11 +5,11 @@
   >
     <!-- 右侧蓝色斜切 banner（仅桌面端显示） -->
     <div
-      class="banner-oblique absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden bg-[#194bfb] md:block"
+      class="banner-oblique absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden bg-[#2264f2] md:block"
     >
       <img
         class="absolute right-0 top-0 h-full w-auto max-w-none"
-        src="@/assets/login_right_banner.jpg"
+        src="@/assets/login_right_banner.svg"
         alt="banner"
       />
     </div>
@@ -27,7 +27,7 @@
                 class="flex items-start gap-3 text-gray-600 dark:text-gray-300"
               >
                 <span
-                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#194bfb]"
+                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2264f2]"
                 />
                 <span>您需有用一定的 VUE 和 GOLANG 基础</span>
               </li>
@@ -35,16 +35,16 @@
                 class="flex items-start gap-3 text-gray-600 dark:text-gray-300"
               >
                 <span
-                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#194bfb]"
+                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2264f2]"
                 />
                 <span>
                   请您确认是否已经阅读过<a
-                    class="mx-1 font-bold text-[#194bfb]"
+                    class="mx-1 font-bold text-[#2264f2]"
                     href="https://www.gin-vue-admin.com"
                     target="_blank"
                     >官方文档</a
                   ><a
-                    class="font-bold text-[#194bfb]"
+                    class="font-bold text-[#2264f2]"
                     href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=2"
                     target="_blank"
                     >初始化视频</a
@@ -55,7 +55,7 @@
                 class="flex items-start gap-3 text-gray-600 dark:text-gray-300"
               >
                 <span
-                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#194bfb]"
+                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2264f2]"
                 />
                 <span>请您确认是否了解后续的配置流程</span>
               </li>
@@ -63,11 +63,11 @@
                 class="flex items-start gap-3 text-gray-600 dark:text-gray-300"
               >
                 <span
-                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#194bfb]"
+                  class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2264f2]"
                 />
                 <span
                   >如果您使用 mysql 数据库，请确认数据库引擎为
-                  <span class="font-bold text-[#194bfb]">innoDB</span></span
+                  <span class="font-bold text-[#2264f2]">innoDB</span></span
                 >
               </li>
             </ul>

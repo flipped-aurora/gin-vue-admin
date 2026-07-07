@@ -34,5 +34,5 @@ const colors = [
 ]
 
 // 语义色常用预设，供面板里快速选取
-const presetSwatches = ['#67c23a', '#e6a23c', '#f56c6c', '#909399', '#60c041', '#f9901f', '#194bfb', '#38c0fc']
+const presetSwatches = ['#67c23a', '#e6a23c', '#f56c6c', '#909399', '#60c041', '#f9901f', '#2264f2', '#38c0fc']
 </script>

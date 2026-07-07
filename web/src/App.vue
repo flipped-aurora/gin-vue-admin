@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="bg-gray-50 text-slate-700 !dark:text-slate-500 dark:bg-slate-800"
+    class="bg-gray-50 text-slate-700 text-sm !dark:text-slate-500 dark:bg-slate-800"
   >
     <el-config-provider :locale="zhCn" v-bind="themeStore.elConfig">
       <router-view />
@@ -41,6 +41,6 @@
   }
 
   .gva-container2 {
-    height: calc(100% - 4.5rem);
+    height: calc(100% - 2.5rem);
   }
 </style>

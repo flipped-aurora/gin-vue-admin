@@ -1,13 +1,13 @@
 <template>
   <div
-    class="gva-warning-bar px-1.5 py-2 flex items-center mt-2 bg-amber-50 gap-2 mb-3 text-amber-500 dark:bg-amber-700 dark:text-gray-200"
+    class="gva-warning-bar px-1.5 py-2 flex items-center my-2 bg-amber-50 gap-2 text-amber-500 dark:bg-amber-700 dark:text-gray-200"
     :class="href && 'cursor-pointer'"
     @click="open"
   >
-    <el-icon class="text-xl">
+    <el-icon>
       <warning-filled />
     </el-icon>
-    <span>
+    <span class="text-sm">
       {{ title }}
     </span>
   </div>

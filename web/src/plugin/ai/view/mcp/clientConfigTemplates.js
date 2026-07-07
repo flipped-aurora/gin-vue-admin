@@ -1,3 +1,6 @@
+// 把配置对象序列化成缩进 2 空格的 JSON 文本，供 <pre> 直接展示 / 复制。
+const jsonBlock = (obj) => JSON.stringify(obj, null, 2)
+
 export const buildClientConfigs = ({ serverName, url, authHeader, token } = {}) => {
   const name = serverName || 'gva'
   const serverUrl = url || 'http://127.0.0.1:8889/mcp'

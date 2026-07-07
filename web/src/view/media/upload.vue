@@ -1,10 +1,15 @@
 <template>
-  <div v-loading.fullscreen.lock="fullscreenLoading">
-    <div class="flex gap-4 pt-2">
+  <div
+    ref="mediaRoot"
+    class="flex flex-col overflow-hidden"
+    :style="{ height: rootHeight }"
+    v-loading.fullscreen.lock="fullscreenLoading"
+  >
+    <div class="flex gap-4 pt-2 flex-1 min-h-0">
       <div
-        class="flex-none w-64 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
+        class="flex-none w-64 gva-table-box !my-0 h-full flex flex-col overflow-hidden"
       >
-        <el-scrollbar style="height: calc(100vh - 300px)">
+        <el-scrollbar class="flex-1">
           <el-tree
             :data="categories"
             node-key="id"
@@ -48,10 +53,8 @@
           </el-tree>
         </el-scrollbar>
       </div>
-      <div
-        class="flex-1 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900"
-      >
-        <div class="gva-table-box mt-0 mb-0">
+      <div class="flex-1 min-w-0 h-full overflow-hidden">
+        <div class="gva-table-box !my-0 h-full flex flex-col overflow-hidden">
           <warning-bar
             title="点击“文件名”可以编辑；选择的类别即是上传的类别。"
           />
@@ -83,7 +86,8 @@
             </el-button>
           </div>
 
-          <el-table :data="tableData">
+          <div class="flex-1 min-h-0">
+          <el-table height="100%" :data="tableData">
             <el-table-column align="left" label="预览" width="100">
               <template #default="scope">
                 <CustomPic pic-type="file" :pic-src="scope.row.url" preview />
@@ -150,6 +154,7 @@
               </template>
             </el-table-column>
           </el-table>
+          </div>
           <div class="gva-pagination">
             <el-pagination
               :current-page="page"
@@ -219,7 +224,13 @@
   import { CreateUUID, formatDate } from '@/utils/format'
   import WarningBar from '@/components/warningBar/warningBar.vue'
 
-  import { ref } from 'vue'
+  import {
+    ref,
+    onMounted,
+    onActivated,
+    onBeforeUnmount,
+    nextTick
+  } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import {
     addCategory,
@@ -234,6 +245,24 @@
   })
 
   const fullscreenLoading = ref(false)
+
+  // 让整页填满视口高度：动态测量根节点距视口顶部的距离，填满到视口底部，
+  // 避免写死 magic number（顶栏/标签栏高度变化时仍自适应）。
+  const mediaRoot = ref(null)
+  const rootHeight = ref('auto')
+  const updateRootHeight = () => {
+    const el = mediaRoot.value
+    if (!el) return
+    const top = el.getBoundingClientRect().top
+    rootHeight.value = `${Math.max(320, window.innerHeight - top - 32)}px`
+  }
+  onMounted(() => {
+    nextTick(updateRootHeight)
+    window.addEventListener('resize', updateRootHeight)
+  })
+  onActivated(updateRootHeight)
+  onBeforeUnmount(() => window.removeEventListener('resize', updateRootHeight))
+
   const path = ref(import.meta.env.VITE_BASE_API)
 
   const imageUrl = ref('')

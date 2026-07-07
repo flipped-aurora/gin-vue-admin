@@ -1,14 +1,17 @@
 <template>
-  <div>
+  <div
+    ref="dictRoot"
+    class="flex flex-col overflow-hidden"
+    :style="{ height: rootHeight }"
+  >
     <warning-bar
+      class="flex-none"
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <el-splitter class="h-full">
+    <el-splitter class="flex-1 min-h-0 gva-dict-splitter">
       <el-splitter-panel size="300px" min="200px" max="800px" collapsible>
-        <div
-          class="flex-none bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
-        >
-          <div class="flex justify-between items-center relative">
+        <div class="gva-table-box !my-0 mr-2 h-full flex flex-col overflow-hidden">
+          <div class="flex justify-between items-center relative flex-none">
             <span class="text font-bold">字典列表</span>
             <el-input
               class="!absolute top-0 left-0 z-2 ease-in-out animate-slide-left"
@@ -61,7 +64,7 @@
               </el-tooltip>
             </el-button-group>
           </div>
-          <el-scrollbar class="mt-4" style="height: calc(100vh - 300px)">
+          <el-scrollbar class="mt-4 flex-1">
             <div
               v-for="dictionary in dictionaryData"
               :key="dictionary.ID"
@@ -110,9 +113,7 @@
         </div>
       </el-splitter-panel>
       <el-splitter-panel :min="200">
-        <div
-          class="flex-1 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900"
-        >
+        <div class="ml-2 h-full overflow-hidden">
           <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
         </div>
       </el-splitter-panel>
@@ -353,7 +354,15 @@
   } from '@/api/sysDictionary' // 此处请自行替换地址
   import { llmAuto } from '@/api/autoCode'
   import WarningBar from '@/components/warningBar/warningBar.vue'
-  import { ref, computed, watch } from 'vue'
+  import {
+    ref,
+    computed,
+    watch,
+    onMounted,
+    onActivated,
+    onBeforeUnmount,
+    nextTick
+  } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
@@ -365,6 +374,23 @@
   })
 
   const appStore = useAppStore()
+
+  // 让整页填满视口高度：动态测量根节点距视口顶部的距离，填满到视口底部，
+  // 避免写死 magic number（顶栏/标签栏/告警条高度变化时仍自适应）。
+  const dictRoot = ref(null)
+  const rootHeight = ref('auto')
+  const updateRootHeight = () => {
+    const el = dictRoot.value
+    if (!el) return
+    const top = el.getBoundingClientRect().top
+    rootHeight.value = `${Math.max(320, window.innerHeight - top - 16)}px`
+  }
+  onMounted(() => {
+    nextTick(updateRootHeight)
+    window.addEventListener('resize', updateRootHeight)
+  })
+  onActivated(updateRootHeight)
+  onBeforeUnmount(() => window.removeEventListener('resize', updateRootHeight))
 
   const selectID = ref(0)
 
@@ -818,6 +844,34 @@
 </script>
 
 <style scoped>
+  /* 拖拽分隔条：去掉默认整条实线，改成居中一颗浅色小握把；
+     hover 变主色并变长，保留拖拽能力，观感更克制。 */
+  :deep(.el-splitter-bar__dragger) {
+    background-color: transparent !important;
+  }
+  :deep(.el-splitter-bar) {
+    position: relative;
+  }
+  :deep(.el-splitter-bar)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 40px;
+    border-radius: 999px;
+    background-color: var(--el-border-color);
+    transition:
+      background-color 0.2s ease,
+      height 0.2s ease;
+    pointer-events: none;
+  }
+  :deep(.el-splitter-bar:hover)::after {
+    background-color: var(--el-color-primary);
+    height: 56px;
+  }
+
   .dict-box {
     height: calc(100vh - 240px);
   }

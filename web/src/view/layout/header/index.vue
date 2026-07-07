@@ -40,7 +40,7 @@
           v-for="item in matched.slice(1, matched.length)"
           :key="item.path"
         >
-          {{ fmtTitle(item.meta.title, route) }}
+          {{ t(fmtTitle(item.meta.title, route)) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
       <gva-aside

@@ -9,7 +9,7 @@
     >
       <img
         class="absolute right-0 top-0 h-full w-auto max-w-none"
-        src="@/assets/login_right_banner.svg"
+        src="@/assets/cover-redesign.svg"
         alt="banner"
       />
     </div>
@@ -100,6 +100,7 @@
               :model="form"
               label-position="top"
               size="large"
+              class="init-form"
             >
               <el-form-item label="管理员密码">
                 <el-input
@@ -126,7 +127,7 @@
                 <el-form-item
                   v-if="form.dbType !== 'sqlite'"
                   label="host"
-                  class="flex-1"
+                  class="flex-[7]"
                 >
                   <el-input
                     v-model="form.host"
@@ -136,7 +137,7 @@
                 <el-form-item
                   v-if="form.dbType !== 'sqlite'"
                   label="port"
-                  class="flex-1"
+                  class="flex-[3]"
                 >
                   <el-input
                     v-model="form.port"
@@ -148,14 +149,14 @@
                 <el-form-item
                   v-if="form.dbType !== 'sqlite'"
                   label="userName"
-                  class="flex-1"
+                  class="flex-[7]"
                 >
                   <el-input
                     v-model="form.userName"
                     placeholder="请输入数据库用户名"
                   />
                 </el-form-item>
-                <el-form-item label="dbName" class="flex-1">
+                <el-form-item label="dbName" class="flex-[3]">
                   <el-input
                     v-model="form.dbName"
                     placeholder="请输入数据库名称"
@@ -180,7 +181,7 @@
                   placeholder="请输入postgresql指定template"
                 />
               </el-form-item>
-              <el-form-item>
+              <el-form-item style="padding-top: 12px">
                 <el-button
                   type="primary"
                   size="large"
@@ -384,6 +385,27 @@
     --el-button-active-text-color: var(--el-color-primary);
     --el-button-active-border-color: var(--el-color-primary);
   }
+
+  /* 全页主题色统一为 #2264f2：覆盖 Element Plus 主色及其派生深浅色，
+     让实心/镂空按钮、输入框聚焦、下拉选中等所有主色区域保持一致 */
+  #userLayout {
+    --el-color-primary: #2264f2;
+    --el-color-primary-light-3: #6493f6;
+    --el-color-primary-light-5: #91b2f9;
+    --el-color-primary-light-7: #bdd1fb;
+    --el-color-primary-light-8: #d3e0fc;
+    --el-color-primary-light-9: #e9f0fe;
+    --el-color-primary-dark-2: #1b50c2;
+  }
+
+  /* 初始化表单：非 2K 屏（<2560px）每行 margin-bottom 收窄到 10px；
+     2K 及以上保持 Element Plus 默认间距 */
+  @media (max-width: 2559.98px) {
+    .init-form :deep(.el-form-item) {
+      margin-bottom: 10px;
+    }
+  }
+
   /* 淡入上浮：替换原来的飞入动画 */
   .anim-fade-up {
     animation: anim-fade-up 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;

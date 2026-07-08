@@ -309,7 +309,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(ctx contex
 			db = db.Order(orderStr)
 		}
 
-		err = db.Debug().Find(&tableMap).Error
+		err = db.Find(&tableMap).Error
 		if err != nil {
 			return nil, "", err
 		}

@@ -14,15 +14,22 @@ export const menuIndent = (depth, theme) =>
   'px'
 
 // 过滤隐藏项：菜单各处渲染前的统一入口。
-export const visibleItems = (items) => (items || []).filter((i) => !i.hidden)
+export const visibleItems = (items) => {
+  const list = items || []
+  return list.filter((i) => !i.hidden)
+}
 
 // key 是否落在某节点子树内（含自身）。
-export const isKeyInSubtree = (node, key) =>
-  node.name === key || (node.children || []).some((c) => isKeyInSubtree(c, key))
+export const isKeyInSubtree = (node, key) => {
+  const children = node.children || []
+  return node.name === key || children.some((c) => isKeyInSubtree(c, key))
+}
 
 // 在根级菜单里求 key 所属的一级菜单节点（跳过隐藏一级），找不到返回 null。
-export const resolveActiveTop = (rootMenus, key) =>
-  (rootMenus || []).find((top) => !top.hidden && isKeyInSubtree(top, key)) || null
+export const resolveActiveTop = (rootMenus, key) => {
+  const topMenus = rootMenus || []
+  return topMenus.find((top) => !top.hidden && isKeyInSubtree(top, key)) || null
+}
 
 /**
  * 在菜单树中按 name 求从根到该节点的祖先路径（含自身），找不到返回 []。

@@ -48,8 +48,7 @@ func (sysParamsService *SysParamsService) GetSysParams(ctx context.Context, ID s
 // GetSysParamsInfoList 分页获取参数记录
 // Author [Mr.奇淼](https://github.com/pixelmaxQm)
 func (sysParamsService *SysParamsService) GetSysParamsInfoList(ctx context.Context, info systemReq.SysParamsSearch) (list []system.SysParams, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	// 创建db
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysParams{})
 	var sysParamss []system.SysParams

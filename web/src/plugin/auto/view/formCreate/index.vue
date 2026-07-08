@@ -179,7 +179,7 @@ const resetForm = () => {
   if (!formRef.value) return
   formRef.value.resetFields()
 }
-<\/script>
+<${'/'}script>
 `
   }
 

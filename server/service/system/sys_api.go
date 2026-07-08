@@ -181,8 +181,7 @@ func (apiService *ApiService) DeleteApi(ctx context.Context, api system.SysApi) 
 //@return: list interface{}, total int64, err error
 
 func (apiService *ApiService) GetAPIInfoList(ctx context.Context, api system.SysApi, info request.PageInfo, order string, desc bool) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysApi{})
 	var apiList []system.SysApi
 

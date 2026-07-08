@@ -39,7 +39,7 @@
                 @node-click="handleNodeClick"
                 default-expand-all
             >
-              <template #default="{ node, data }">
+              <template #default="{ data }">
                 <div class="w-36" :class="search.classId === data.ID ? 'text-blue-500 font-bold' : ''">{{ data.name }}
                 </div>
                 <el-dropdown>
@@ -153,7 +153,6 @@ import { ref } from 'vue'
 import { getFileList, editFileName, deleteFile } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
-import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   ArrowLeftBold,

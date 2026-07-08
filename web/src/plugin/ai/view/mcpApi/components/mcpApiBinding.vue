@@ -289,12 +289,14 @@ const loadData = async () => {
     previewMcpManifest({ mcpId: mcpId.value })
   ])
   if (apiRes.code === 0) {
-    apiOptions.value = (apiRes.data.apis || []).map(buildApiOption)
+    const apis = apiRes.data.apis || []
+    apiOptions.value = apis.map(buildApiOption)
   }
   const ids = []
   const map = {}
   if (detailRes.code === 0) {
-    ;(detailRes.data.bindings || []).forEach(b => {
+    const bindings = detailRes.data.bindings || []
+    bindings.forEach(b => {
       const id = normalizeId(b)
       if (!id) return
       ids.push(id)
@@ -317,7 +319,8 @@ const loadData = async () => {
   // 从 previewMcpManifest 结果构建 manifestMap，按 c.source.apiId 索引
   if (manifestRes.code === 0) {
     const m = {}
-    ;(manifestRes.data.commands || []).forEach(c => {
+    const commands = manifestRes.data.commands || []
+    commands.forEach(c => {
       const id = c.source && c.source.apiId
       if (id) {
         m[id] = { name: c.name, summary: c.summary, parameters: c.parameters || [], response: c.response || [] }
@@ -341,11 +344,13 @@ const openEditor = (apiId) => {
   const auto = manifestMap.value[apiId] || {}
   let params = local.paramsOverride ? parseParams(local.paramsOverride) : []
   if (params.length === 0) {
-    params = (auto.parameters || []).map(p => ({ ...p }))
+    const autoParams = auto.parameters || []
+    params = autoParams.map(p => ({ ...p }))
   }
   let responseParams = local.responseOverride ? parseParams(local.responseOverride) : []
   if (responseParams.length === 0) {
-    responseParams = (auto.response || []).map(p => ({ ...p }))
+    const autoResponse = auto.response || []
+    responseParams = autoResponse.map(p => ({ ...p }))
   }
   editor.visible = true
   editor.apiId = apiId

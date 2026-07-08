@@ -39,8 +39,7 @@ func (loginLogService *LoginLogService) GetLoginLog(ctx context.Context, id uint
 }
 
 func (loginLogService *LoginLogService) GetLoginLogInfoList(ctx context.Context, info systemReq.SysLoginLogSearch) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	// 创建db
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysLoginLog{})
 	var loginLogs []system.SysLoginLog

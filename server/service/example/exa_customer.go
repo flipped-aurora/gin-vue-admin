@@ -65,8 +65,7 @@ func (exa *CustomerService) GetExaCustomer(ctx context.Context, id uint) (custom
 //@return: list interface{}, total int64, err error
 
 func (exa *CustomerService) GetCustomerInfoList(ctx context.Context, sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	db := global.GVA_DB.WithContext(ctx).Model(&example.ExaCustomer{})
 	var a system.SysAuthority
 	a.AuthorityId = sysUserAuthorityID

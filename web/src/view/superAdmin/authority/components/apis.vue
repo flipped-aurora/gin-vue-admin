@@ -29,7 +29,7 @@
           :filter-node-method="filterNode"
           @check="nodeChange"
         >
-          <template #default="{ _, data }">
+          <template #default="{ data }">
             <div class="flex items-center justify-between w-full pr-1">
               <span>{{ data.description }} </span>
               <el-tooltip :content="data.path">

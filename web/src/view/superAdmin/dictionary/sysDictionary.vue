@@ -356,7 +356,6 @@
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import {
     ref,
-    computed,
     watch,
     onMounted,
     onActivated,
@@ -455,11 +454,6 @@
     focused.value = false
   }
 
-  // 触发图片选择
-  const triggerImageSelect = () => {
-    imageFileInputRef.value?.click()
-  }
-
   const handlePaste = (event) => {
     const items = event.clipboardData.items;
     for (let i = 0; i < items.length; i++) {
@@ -518,12 +512,6 @@
       jsonPreviewError.value = 'JSON格式错误: ' + e.message
       jsonPreview.value = null
     }
-  })
-
-  // 格式化JSON预览
-  const jsonPreviewFormatted = computed(() => {
-    if (!jsonPreview.value) return ''
-    return JSON.stringify(jsonPreview.value, null, 2)
   })
 
 
@@ -705,12 +693,12 @@
   }
 
   // 处理拖拽进入
-  const handleDragOver = (e) => {
+  const handleDragOver = () => {
     isDragging.value = true
   }
 
   // 处理拖拽离开
-  const handleDragLeave = (e) => {
+  const handleDragLeave = () => {
     isDragging.value = false
   }
   // 处理文件拖拽

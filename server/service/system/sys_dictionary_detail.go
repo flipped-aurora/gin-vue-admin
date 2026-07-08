@@ -178,8 +178,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetail(c
 //@return: list interface{}, total int64, err error
 
 func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailInfoList(ctx context.Context, info request.SysDictionaryDetailSearch) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	// 创建db
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysDictionaryDetail{})
 	var sysDictionaryDetails []system.SysDictionaryDetail

@@ -29,8 +29,10 @@ const emit = defineEmits(['select'])
 const topItems = computed(() => visibleItems(props.items))
 const hasKids = (i) => visibleItems(i.children).length > 0
 // 顶级项高亮：激活键等于自身或落在其子树内（父项随激活子路由高亮）
-const containsKey = (node, key) =>
-  node.name === key || (node.children || []).some((c) => containsKey(c, key))
+const containsKey = (node, key) => {
+  const children = node.children || []
+  return node.name === key || children.some((c) => containsKey(c, key))
+}
 const isActive = (item) => !!props.active && containsKey(item, props.active)
 
 const triggerClass = (activeState) =>

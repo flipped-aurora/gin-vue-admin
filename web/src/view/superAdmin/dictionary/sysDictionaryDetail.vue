@@ -190,7 +190,7 @@
   } from '@/api/sysDictionaryDetail' // 此处请自行替换地址
   import { ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { formatBoolean, formatDate } from '@/utils/format'
+  import { formatBoolean } from '@/utils/format'
   import { useAppStore } from '@/pinia'
   import { Search } from '@element-plus/icons-vue'
 

@@ -69,8 +69,7 @@ func (apiVersion *ApiTokenService) CreateApiToken(ctx context.Context, apiToken 
 }
 
 func (apiVersion *ApiTokenService) GetApiTokenList(ctx context.Context, info sysReq.SysApiTokenSearch) (list []system.SysApiToken, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysApiToken{})
 
 	db = db.Preload("User")

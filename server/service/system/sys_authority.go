@@ -131,7 +131,7 @@ func (authorityService *AuthorityService) UpdateAuthority(ctx context.Context, a
 //@return: err error
 
 func (authorityService *AuthorityService) DeleteAuthority(ctx context.Context, auth *system.SysAuthority) error {
-	if errors.Is(global.GVA_DB.WithContext(ctx).Debug().Preload("Users").First(&auth).Error, gorm.ErrRecordNotFound) {
+	if errors.Is(global.GVA_DB.WithContext(ctx).Preload("Users").First(&auth).Error, gorm.ErrRecordNotFound) {
 		return errors.New("该角色不存在")
 	}
 	if len(auth.Users) != 0 {
@@ -200,7 +200,7 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(ctx context.Conte
 			err = db.Preload("DataAuthorityId").Where("authority_id = ?", authorityID).Find(&authorities).Error
 		} else {
 			// 非顶级角色只能修改以下权限
-			err = db.Debug().Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
+			err = db.Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
 		}
 	} else {
 		err = db.Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authorities).Error

@@ -53,7 +53,7 @@ func (s *autoCodeHistory) First(ctx context.Context, info common.GetById) (strin
 // Author [songzhibin97](https://github.com/songzhibin97)
 func (s *autoCodeHistory) Repeat(businessDB, structName, abbreviation, Package string) bool {
 	var count int64
-	global.GVA_DB.Model(&model.SysAutoCodeHistory{}).Where("business_db = ? and (struct_name = ? OR abbreviation = ?) and package = ? and flag = ?", businessDB, structName, abbreviation, Package, 0).Count(&count).Debug()
+	global.GVA_DB.Model(&model.SysAutoCodeHistory{}).Where("business_db = ? and (struct_name = ? OR abbreviation = ?) and package = ? and flag = ?", businessDB, structName, abbreviation, Package, 0).Count(&count)
 	return count > 0
 }
 

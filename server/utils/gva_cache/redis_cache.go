@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 // redisCache 包装 go-redis，使缓存语义在多实例间共享。
@@ -27,12 +28,16 @@ func (r *redisCache) Get(key string) (any, bool) {
 }
 
 func (r *redisCache) Set(key string, value any, ttl time.Duration) {
-	r.client.Set(context.Background(), key, value, ttl)
+	if err := r.client.Set(context.Background(), key, value, ttl).Err(); err != nil {
+		zap.L().Warn("gva_cache: redis set 失败", zap.String("key", key), zap.Error(err))
+	}
 }
 
 func (r *redisCache) SetDefault(key string, value any) {
 	// 无过期
-	r.client.Set(context.Background(), key, value, 0)
+	if err := r.client.Set(context.Background(), key, value, 0).Err(); err != nil {
+		zap.L().Warn("gva_cache: redis setDefault 失败", zap.String("key", key), zap.Error(err))
+	}
 }
 
 func (r *redisCache) Increment(key string, n int64) (int64, error) {
@@ -63,5 +68,7 @@ func (r *redisCache) Exists(key string) bool {
 }
 
 func (r *redisCache) Delete(key string) {
-	r.client.Del(context.Background(), key)
+	if err := r.client.Del(context.Background(), key).Err(); err != nil {
+		zap.L().Warn("gva_cache: redis delete 失败", zap.String("key", key), zap.Error(err))
+	}
 }

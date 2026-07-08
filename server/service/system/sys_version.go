@@ -41,8 +41,7 @@ func (sysVersionService *SysVersionService) GetSysVersion(ctx context.Context, I
 // GetSysVersionInfoList 分页获取版本管理记录
 // Author [yourname](https://github.com/yourname)
 func (sysVersionService *SysVersionService) GetSysVersionInfoList(ctx context.Context, info systemReq.SysVersionSearch) (list []system.SysVersion, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	// 创建db
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysVersion{})
 	var sysVersions []system.SysVersion

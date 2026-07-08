@@ -250,13 +250,15 @@ const loadData = async () => {
     previewManifest({ cliId: props.cli.ID || props.cli.id })
   ])
   if (apiRes.code === 0) {
-    apiOptions.value = (apiRes.data.apis || []).map(buildApiOption)
+    const apis = apiRes.data.apis || []
+    apiOptions.value = apis.map(buildApiOption)
   }
   let ids = []
   if (detailRes.code === 0) {
     const map = {}
     ids = []
-    ;(detailRes.data.bindings || []).forEach(b => {
+    const bindings = detailRes.data.bindings || []
+    bindings.forEach(b => {
       const id = normalizeId(b)
       if (!id) return
       ids.push(id)
@@ -273,7 +275,8 @@ const loadData = async () => {
   }
   if (manifestRes.code === 0) {
     const map = {}
-    ;(manifestRes.data.commands || []).forEach(c => {
+    const commands = manifestRes.data.commands || []
+    commands.forEach(c => {
       const id = c.source && c.source.apiId
       if (id) {
         map[id] = { name: c.name, summary: c.summary, parameters: c.parameters || [], response: c.response || [] }
@@ -327,11 +330,13 @@ const openEditor = (apiId) => {
   const auto = manifestMap.value[apiId] || {}
   let params = local.paramsOverride ? parseParams(local.paramsOverride) : []
   if (params.length === 0) {
-    params = (auto.parameters || []).map(p => ({ ...p }))
+    const autoParams = auto.parameters || []
+    params = autoParams.map(p => ({ ...p }))
   }
   let responseParams = local.responseOverride ? parseParams(local.responseOverride) : []
   if (responseParams.length === 0) {
-    responseParams = (auto.response || []).map(p => ({ ...p }))
+    const autoResponse = auto.response || []
+    responseParams = autoResponse.map(p => ({ ...p }))
   }
   editor.visible = true
   editor.apiId = apiId

@@ -17,7 +17,7 @@
             @node-click="handleNodeClick"
             default-expand-all
           >
-            <template #default="{ node, data }">
+            <template #default="{ data }">
               <div
                 class="w-36"
                 :class="

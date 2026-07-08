@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -45,4 +46,54 @@ func Truncate(s string, max int) string {
 		return truncatedMark
 	}
 	return s
+}
+
+// 需脱敏的请求/响应体字段名（统一小写、去掉 _ - 后比较）
+var sensitiveBodyKeys = map[string]struct{}{
+	"password": {}, "newpassword": {}, "oldpassword": {}, "confirmpassword": {},
+	"passwd": {}, "pwd": {}, "token": {}, "accesstoken": {}, "refreshtoken": {},
+	"secret": {}, "clientsecret": {}, "apikey": {}, "privatekey": {}, "idcard": {},
+}
+
+func normalizeBodyKey(k string) string {
+	k = strings.ToLower(k)
+	k = strings.ReplaceAll(k, "_", "")
+	k = strings.ReplaceAll(k, "-", "")
+	return k
+}
+
+// SanitizeBody 对 JSON 请求/响应体做字段级脱敏：按字段名匹配 password / token / secret 等
+// 敏感键，将其值替换为掩码。仅处理 JSON；非 JSON 或解析失败时原样返回，
+// 保证脱敏逻辑本身不会影响到日志记录（例如截断后的半截 JSON 直接原样返回）。
+func SanitizeBody(contentType, body string) string {
+	if body == "" || !strings.Contains(strings.ToLower(contentType), "json") {
+		return body
+	}
+	var v any
+	if err := json.Unmarshal([]byte(body), &v); err != nil {
+		return body
+	}
+	maskSensitiveBody(v)
+	out, err := json.Marshal(v)
+	if err != nil {
+		return body
+	}
+	return string(out)
+}
+
+func maskSensitiveBody(v any) {
+	switch t := v.(type) {
+	case map[string]any:
+		for k, val := range t {
+			if _, ok := sensitiveBodyKeys[normalizeBodyKey(k)]; ok {
+				t[k] = maskValue
+				continue
+			}
+			maskSensitiveBody(val)
+		}
+	case []any:
+		for _, item := range t {
+			maskSensitiveBody(item)
+		}
+	}
 }

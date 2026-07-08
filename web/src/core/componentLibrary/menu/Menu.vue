@@ -38,7 +38,8 @@ const select = (key) => emit('select', key)
 
 const collectKeys = (node) => {
   const keys = [node.name]
-  ;(node.children || []).forEach((c) => keys.push(...collectKeys(c)))
+  const children = node.children || []
+  children.forEach((c) => keys.push(...collectKeys(c)))
   return keys
 }
 // 展开策略：group 自由多开；其余风格 unique-opened（只保留当前路径，收起同级）

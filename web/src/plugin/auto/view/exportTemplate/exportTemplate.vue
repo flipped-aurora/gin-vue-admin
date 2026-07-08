@@ -1023,26 +1023,6 @@ JOINS模式下不支持导入
   const previewConditions = ref([])
   const aceOptions = { wrap: true, showPrintMargin: false, fontSize: 14 }
 
-  const openPreview = async (row) => {
-    // 获取模板完整信息以展示条件输入项
-    const res = await findSysExportTemplate({ ID: row.ID })
-    if (res.code === 0) {
-      previewTemplate.value = res.data.resysExportTemplate
-      previewConditions.value = (previewTemplate.value.conditions || []).map((c) => ({
-        from: c.from,
-        column: c.column,
-        operator: c.operator
-      }))
-      // 预填默认的排序与限制
-      previewForm.value.order = previewTemplate.value.order || ''
-      previewForm.value.limit = previewTemplate.value.limit || 0
-      previewForm.value.offset = 0
-      previewSQLCode.value = ''
-      activeTab.value = 'sql'
-      drawerVisible.value = true
-    }
-  }
-
   const runPreview = async () => {
     if (!previewTemplate.value) return
     // 组装 params，与导出组件保持一致

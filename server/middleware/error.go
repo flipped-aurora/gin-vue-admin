@@ -9,8 +9,6 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 )
@@ -43,33 +41,15 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 					return
 				}
 
+				// 仅记录一次结构化日志：Error 级日志已由 zap core 统一落 sys_error 表，
+				// 此处不再直接写库，消除此前每次 panic 产生两条 sys_error 记录的双写。
+				b := logger.WithCtx(c.Request.Context()).Mod("http").
+					Field("error", fmt.Sprintf("%v", err)).
+					Field("request", string(httpRequest))
 				if stack {
-					form := "后端"
-					info := fmt.Sprintf("Panic: %v\nRequest: %s\nStack: %s", err, string(httpRequest), string(debug.Stack()))
-					level := "error"
-					_ = service.ServiceGroupApp.SystemServiceGroup.SysErrorService.CreateSysError(c.Request.Context(), &system.SysError{
-						Form:  &form,
-						Info:  &info,
-						Level: level,
-					})
-					logger.WithCtx(c.Request.Context()).Mod("http").
-						Field("error", fmt.Sprintf("%v", err)).
-						Field("request", string(httpRequest)).
-						Error("[Recovery from panic]")
-				} else {
-					form := "后端"
-					info := fmt.Sprintf("Panic: %v\nRequest: %s", err, string(httpRequest))
-					level := "error"
-					_ = service.ServiceGroupApp.SystemServiceGroup.SysErrorService.CreateSysError(c.Request.Context(), &system.SysError{
-						Form:  &form,
-						Info:  &info,
-						Level: level,
-					})
-					logger.WithCtx(c.Request.Context()).Mod("http").
-						Field("error", fmt.Sprintf("%v", err)).
-						Field("request", string(httpRequest)).
-						Error("[Recovery from panic]")
+					b = b.Field("stack", string(debug.Stack()))
 				}
+				b.Error("[Recovery from panic]")
 				c.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()

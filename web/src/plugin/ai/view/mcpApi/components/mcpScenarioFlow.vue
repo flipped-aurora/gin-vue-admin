@@ -213,11 +213,13 @@ const isAliasDup = computed(() => {
   if (!n) return false
   const alias = (n.alias || '').trim()
   if (!alias) return false
-  return (current.value.nodes || []).some((o) => o.id !== n.id && (o.alias || '').trim() === alias)
+  const nodes = current.value.nodes || []
+  return nodes.some((o) => o.id !== n.id && (o.alias || '').trim() === alias)
 })
 const aliasHints = computed(() => {
   if (!current.value) return []
-  return (current.value.nodes || [])
+  const nodes = current.value.nodes || []
+  return nodes
     .filter((n) => n.type === 'command' && (n.alias || '').trim())
     .map((n) => {
       const cmd = n.commandName && commandMap.value[n.commandName]
@@ -228,7 +230,8 @@ const aliasHints = computed(() => {
 const defaultAlias = (kind) => {
   const prefix = kind === 'decision' ? 'check' : 'step'
   let max = 0
-  ;(current.value.nodes || []).forEach((n) => {
+  const nodes = current.value.nodes || []
+  nodes.forEach((n) => {
     const a = n.alias || ''
     if (a.startsWith(prefix)) {
       const num = parseInt(a.slice(prefix.length), 10)
@@ -296,7 +299,10 @@ const nodeLabel = (n) => {
   const name = n.type === 'decision' ? ('判断：' + (n.note || '未描述').slice(0, 12)) : (cmdLabel || '未选API')
   return alias ? `${alias} · ${name}` : name
 }
-const nodeById = (id) => (current.value && current.value.nodes || []).find((n) => n.id === id)
+const nodeById = (id) => {
+  const nodes = current.value && current.value.nodes || []
+  return nodes.find((n) => n.id === id)
+}
 
 // 连线编辑：画布是连线的真实数据源，这里维护一份响应式镜像供右侧面板读写
 const edgeList = ref([])
@@ -305,7 +311,8 @@ const refreshEdges = () => {
   if (!lf) { edgeList.value = []; return }
   let g
   try { g = lf.getGraphData() } catch (e) { edgeList.value = []; return }
-  edgeList.value = (g.edges || []).map((e) => ({
+  const edges = g.edges || []
+  edgeList.value = edges.map((e) => ({
     id: e.id,
     from: e.sourceNodeId,
     to: e.targetNodeId,
@@ -318,11 +325,12 @@ const outgoingEdges = computed(() => edgeList.value.filter((e) => e.from === sel
 // 多选框始终跟随真实连线（手动拖线、切换节点、增删都会同步勾选状态）
 watch(outgoingEdges, (edges) => { connectedTargetIds.value = [...new Set(edges.map((e) => e.to))] }, { immediate: true })
 // 可连线的目标节点（排除自己）
-const edgeTargetOptions = computed(() =>
-  (current.value && current.value.nodes || [])
+const edgeTargetOptions = computed(() => {
+  const nodes = current.value && current.value.nodes || []
+  return nodes
     .filter((n) => n.id !== selectedNodeId.value)
     .map((n) => ({ id: n.id, label: nodeLabel(n), note: n.note, type: n.type }))
-)
+})
 // 多选变化时，对比已有连线，新增的勾选建连线、取消的勾选删连线（同一目标不会重复连）
 const onEdgeTargetsChange = (newIds) => {
   if (!lf || !selectedNodeId.value) return
@@ -421,7 +429,7 @@ const onOpen = async () => {
 
 const renderCanvas = () => {
   if (!canvasRef.value) return
-  if (lf) { try { lf.destroy && lf.destroy() } catch (e) { /* ignore */ }; lf = null }
+  if (lf) { try { lf.destroy && lf.destroy() } catch (e) { /* ignore */ } lf = null }
   canvasRef.value.innerHTML = ''
   computeCanvasHeight()
   lf = new LogicFlow({ container: canvasRef.value, grid: true, height: canvasHeight.value })
@@ -450,7 +458,8 @@ const renderCanvas = () => {
     // 同一对节点之间不允许重复连线（手动拖线也拦截）
     let g
     try { g = lf.getGraphData() } catch (e) { g = { edges: [] } }
-    const dup = (g.edges || []).filter((e) => e.sourceNodeId === data.sourceNodeId && e.targetNodeId === data.targetNodeId)
+    const edges = g.edges || []
+    const dup = edges.filter((e) => e.sourceNodeId === data.sourceNodeId && e.targetNodeId === data.targetNodeId)
     if (dup.length > 1) {
       try { lf.deleteEdge(data.id) } catch (e) { /* ignore */ }
       ElMessage.warning('该连线已存在，不能重复连线')
@@ -493,7 +502,8 @@ const syncFromCanvas = (idx) => {
   // nodes：业务字段（API名/说明等）以 scenarios 为准（详情面板直接编辑），画布只同步坐标
   const existing = {}
   scenarios.value[idx].nodes.forEach((n) => { existing[n.id] = n })
-  scenarios.value[idx].nodes = (g.nodes || []).map((ln) => {
+  const nodes = g.nodes || []
+  scenarios.value[idx].nodes = nodes.map((ln) => {
     const old = existing[ln.id]
     if (old) {
       old.x = ln.x
@@ -512,7 +522,8 @@ const syncFromCanvas = (idx) => {
     }
   })
   // edges：手动连线只在画布，从画布提取
-  scenarios.value[idx].edges = (g.edges || []).map((e) => ({
+  const edges = g.edges || []
+  scenarios.value[idx].edges = edges.map((e) => ({
     from: e.sourceNodeId,
     to: e.targetNodeId,
     condition: (e.properties && e.properties.condition) || '',
@@ -582,7 +593,7 @@ watch(() => !!selectedNode.value, () => {
 })
 
 const onClosed = () => {
-  if (lf) { try { lf.destroy && lf.destroy() } catch (e) { /* ignore */ }; lf = null }
+  if (lf) { try { lf.destroy && lf.destroy() } catch (e) { /* ignore */ } lf = null }
   selectedNodeId.value = null
 }
 

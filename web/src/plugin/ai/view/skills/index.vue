@@ -524,7 +524,7 @@
 <script setup>
   import { computed, onMounted, reactive, ref } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { QuestionFilled, Document, Plus, Search, Check, Edit } from '@element-plus/icons-vue'
+  import { QuestionFilled, Document, Edit } from '@element-plus/icons-vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import {
     getSkillTools,
@@ -1280,7 +1280,8 @@
   }
 
   function skillsFilesToRows(list) {
-    return (list || []).map((name) => ({ name }))
+    const files = list || []
+    return files.map((name) => ({ name }))
   }
 
   // ===== 在线 Skills =====

@@ -8,7 +8,9 @@
     "build": "vite build --mode production",
     "limit-build": "npm install increase-memory-limit-fixbug cross-env -g && npm run fix-memory-limit && node ./limit && npm run build",
     "preview": "vite preview --host 0.0.0.0 --mode development",
-    "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
+    "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "type": "module",
   "dependencies": {
@@ -29,19 +31,15 @@
     "ace-builds": "^1.36.4",
     "arcdash": "^0.0.60",
     "axios": "1.8.2",
-    "chokidar": "^4.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "echarts": "5.5.1",
     "element-plus": "^2.13.6",
     "highlight.js": "^11.10.0",
-    "install": "^0.13.0",
     "marked": "14.1.1",
     "marked-highlight": "^2.1.4",
     "mitt": "^3.0.1",
-    "npm": "^11.3.0",
     "nprogress": "^0.2.0",
-    "path": "^0.12.7",
     "pinia": "^2.2.2",
     "qs": "^6.13.0",
     "reka-ui": "^2.10.0",
@@ -62,21 +60,18 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.0",
     "@babel/eslint-parser": "^7.25.1",
+    "@babel/preset-env": "^7.25.0",
     "@eslint/js": "^8.56.0",
     "@unocss/extractor-svelte": "^66.4.2",
     "@unocss/preset-wind3": "^66.4.2",
     "@unocss/vite": "^66.5.0",
     "@vitejs/plugin-vue": "^6.0.6",
-    "@vue/cli-plugin-babel": "~5.0.8",
-    "@vue/cli-plugin-eslint": "~5.0.8",
-    "@vue/cli-plugin-router": "~5.0.8",
-    "@vue/cli-plugin-vuex": "~5.0.8",
-    "@vue/cli-service": "~5.0.8",
     "@vue/compiler-sfc": "^3.5.1",
     "autoprefixer": "^10.4.20",
-    "babel-plugin-import": "^1.13.8",
     "chalk": "^5.3.0",
+    "chokidar": "^4.0.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.19.2",
@@ -85,7 +80,7 @@
     "vite": "^8.0.10",
     "vite-check-multiple-dom": "0.2.1",
     "vite-plugin-banner": "^0.8.0",
-    "vite-plugin-importer": "^0.2.5",
-    "vite-plugin-vue-devtools": "^8.1.1"
+    "vite-plugin-vue-devtools": "^8.1.1",
+    "vue-eslint-parser": "^9.4.3"
   }
 }

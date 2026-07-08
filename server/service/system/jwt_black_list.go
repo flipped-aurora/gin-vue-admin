@@ -23,7 +23,7 @@ func (jwtService *JwtService) JsonInBlacklist(ctx context.Context, jwtList syste
 	if err != nil {
 		return
 	}
-	global.GVA_CACHE.SetDefault(jwtList.Jwt, struct{}{})
+	global.GVA_CACHE.SetDefault(jwtList.Jwt, "1")
 	return
 }
 
@@ -46,6 +46,6 @@ func LoadAll(ctx context.Context) {
 		return
 	}
 	for i := 0; i < len(data); i++ {
-		global.GVA_CACHE.SetDefault(data[i], struct{}{})
+		global.GVA_CACHE.SetDefault(data[i], "1")
 	} // jwt黑名单 加入 GVA_CACHE 中
 }

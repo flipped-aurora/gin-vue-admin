@@ -95,8 +95,7 @@ func (userService *UserService) ChangePassword(ctx context.Context, u *system.Sy
 //@return: err error, list interface{}, total int64
 
 func (userService *UserService) GetUserInfoList(ctx context.Context, info systemReq.GetUserList) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	db := global.GVA_DB.WithContext(ctx).Model(&system.SysUser{})
 	var userList []system.SysUser
 

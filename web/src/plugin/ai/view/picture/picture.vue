@@ -304,7 +304,7 @@
 
 <script setup>
 import { createWebStream } from '@/api/autoCode'
-import { ref, reactive, markRaw, computed, nextTick } from 'vue'
+import { ref, markRaw, computed, nextTick } from 'vue'
 import * as Vue from "vue";
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage } from 'element-plus'
@@ -313,6 +313,7 @@ import { DocumentCopy, RefreshRight, ArrowRight, ArrowDown, ChatDotRound } from 
 import { loadModule } from "vue3-sfc-loader";
 
 defineOptions({
+  // eslint-disable-next-line vue/no-reserved-component-names
   name: 'Picture'
 })
 
@@ -348,7 +349,7 @@ const copySnippet = (vueString) => {
           type: 'success',
         })
       })
-      .catch(err => {
+      .catch(() => {
         ElMessage({
           message: '复制失败',
           type: 'warning',
@@ -503,7 +504,7 @@ const loadVueComponent = async (vueCode) => {
               // 稍后会将样式添加到Shadow DOM中
               return textContent
             },
-            handleModule(type, source, path, options) {
+            handleModule(_type, _source, _path, _options) {
               // 默认处理器
               return undefined
             },

@@ -1353,7 +1353,7 @@
           item.fieldName = toUpperCase(item.fieldName)
           if (item.fieldType === 'enum') {
             // 判断一下 item.dataTypeLong 按照,切割后的每个元素是否都使用 '' 包裹，如果没包 则修改为包裹起来的 然后再转为字符串赋值给 item.dataTypeLong
-            item.dataTypeLong = item.dataTypeLong.replace(/[\[\]{}()]/g, '')
+            item.dataTypeLong = item.dataTypeLong.replace(/[[\]{}()]/g, '')
             const arr = item.dataTypeLong.split(',')
             arr.forEach((ele, index) => {
               if (ele.indexOf("'") === -1) {

@@ -103,8 +103,7 @@ func (e *FileUploadAndDownloadService) EditFileName(ctx context.Context, file me
 //@return: list interface{}, total int64, err error
 
 func (e *FileUploadAndDownloadService) GetFileRecordInfoList(ctx context.Context, info request.AttachmentCategorySearch) (list []media.FileUploadAndDownload, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	db := global.GVA_DB.WithContext(ctx).Model(&media.FileUploadAndDownload{})
 
 	if len(info.Keyword) > 0 {

@@ -400,6 +400,17 @@
 
             <el-collapse>
               <el-collapse-item title="额外透传参数" name="settings">
+                <el-form-item label="模型提供商预设">
+                  <el-select v-model="settings.providerPreset" class="w-full">
+                    <el-option label="不使用预设" value="" />
+                    <el-option
+                      v-for="preset in LLM_PROVIDER_PRESETS"
+                      :key="preset.provider"
+                      :label="preset.label"
+                      :value="preset.provider"
+                    />
+                  </el-select>
+                </el-form-item>
                 <el-form-item label="额外透传参数 JSON">
                   <el-input
                     v-model="settings.extraPayload"
@@ -1020,7 +1031,26 @@ const FLOW_TYPE_LABEL_MAP = {
   gva_polish: 'GVA 功能完善',
   mcp_assist: 'MCP 使用指导'
 }
-const defaultSettings = { extraPayload: '' }
+const LLM_PROVIDER_PRESETS = [
+  {
+    label: 'MiniMax MiniMax-M3',
+    provider: 'minimax',
+    model: 'MiniMax-M3',
+    openai_base: 'https://api.minimax.io/v1',
+    anthropic_base: 'https://api.minimax.io/anthropic/v1',
+    context: 1000000,
+    price: { input: 0.6, output: 2.4 },
+    cache_read: 0.12,
+    cache_write: null,
+    thinking: [],
+    multimodal: {}
+  }
+]
+const PROVIDER_PRESET_MAP = LLM_PROVIDER_PRESETS.reduce((map, preset) => {
+  map[preset.provider] = preset
+  return map
+}, {})
+const defaultSettings = { extraPayload: '', providerPreset: '' }
 const newAnalysisForm = () => ({
   requirement: '',
   packageType: 'auto',
@@ -2041,14 +2071,22 @@ const rollbackToMessage = async (messageId) => {
 }
 
 const parseExtraPayload = () => {
-  if (!settings.extraPayload.trim()) return {}
-  try {
-    const parsed = JSON.parse(settings.extraPayload)
-    return parsed && typeof parsed === 'object' ? parsed : {}
-  } catch (error) {
-    ElMessage.error('额外透传参数不是有效 JSON')
-    throw error
+  const preset = PROVIDER_PRESET_MAP[settings.providerPreset]
+  let extra = preset ? clone(preset) : {}
+  if (extra.label) delete extra.label
+  if (settings.extraPayload.trim()) {
+    try {
+      const parsed = JSON.parse(settings.extraPayload)
+      extra = {
+        ...extra,
+        ...(parsed && typeof parsed === 'object' ? parsed : {})
+      }
+    } catch (error) {
+      ElMessage.error('额外透传参数不是有效 JSON')
+      throw error
+    }
   }
+  return extra
 }
 
 const sendChat = async ({ tab, query, inputs, onProgress }) => {

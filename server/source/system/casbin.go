@@ -158,6 +158,17 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/cli/downloadSkill", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/cli/previewApiCommand", V2: "POST"},
 
+		{Ptype: "p", V0: "888", V1: "/mcpApi/createMcp", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/getMcpList", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/getMcpDetail", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/updateMcp", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/deleteMcp", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/addMcpApis", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/removeMcpApis", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/previewManifest", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/previewPrompt", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/mcpApi/previewApiCommand", V2: "POST"},
+
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "PUT"},
 		{Ptype: "p", V0: "888", V1: "/customer/customer", V2: "POST"},

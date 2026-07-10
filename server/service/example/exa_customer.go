@@ -6,8 +6,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemService "github.com/flipped-aurora/gin-vue-admin/server/service/system"
 )
 
 type CustomerService struct{}
@@ -43,7 +41,8 @@ func (exa *CustomerService) DeleteExaCustomer(ctx context.Context, e example.Exa
 //@return: err error
 
 func (exa *CustomerService) UpdateExaCustomer(ctx context.Context, e *example.ExaCustomer) (err error) {
-	err = global.GVA_DB.WithContext(ctx).Save(e).Error
+	// 归属列(dept_id/created_by)创建时盖章后即不可变, 更新时忽略, 防止被表单未回传的零值覆盖
+	err = global.GVA_DB.WithContext(ctx).Omit("dept_id", "created_by").Save(e).Error
 	return err
 }
 
@@ -65,24 +64,15 @@ func (exa *CustomerService) GetExaCustomer(ctx context.Context, id uint) (custom
 //@return: list interface{}, total int64, err error
 
 func (exa *CustomerService) GetCustomerInfoList(ctx context.Context, sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
+	_ = sysUserAuthorityID // 数据范围已由数据权限引擎接管, 旧的按角色 DataAuthorityId 手写过滤已移除
 	limit, offset := info.LimitOffset()
+	// 数据范围(本部门及子级/仅本人)由数据权限引擎的 GORM 回调按当前角色 data_scope
+	// 自动追加 dept_id/created_by 过滤, 此处只写常规分页查询即可。
 	db := global.GVA_DB.WithContext(ctx).Model(&example.ExaCustomer{})
-	var a system.SysAuthority
-	a.AuthorityId = sysUserAuthorityID
-	auth, err := systemService.AuthorityServiceApp.GetAuthorityInfo(ctx, a)
-	if err != nil {
-		return
-	}
-	var dataId []uint
-	for _, v := range auth.DataAuthorityId {
-		dataId = append(dataId, v.AuthorityId)
-	}
 	var CustomerList []example.ExaCustomer
-	err = db.Where("sys_user_authority_id in ?", dataId).Count(&total).Error
-	if err != nil {
+	if err = db.Count(&total).Error; err != nil {
 		return CustomerList, total, err
-	} else {
-		err = db.Limit(limit).Offset(offset).Preload("SysUser").Where("sys_user_authority_id in ?", dataId).Find(&CustomerList).Error
 	}
+	err = db.Limit(limit).Offset(offset).Preload("SysUser").Find(&CustomerList).Error
 	return CustomerList, total, err
 }

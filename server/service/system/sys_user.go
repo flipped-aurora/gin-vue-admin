@@ -54,7 +54,7 @@ func (userService *UserService) Login(ctx context.Context, u *system.SysUser) (u
 	}
 
 	var user system.SysUser
-	err = global.GVA_DB.WithContext(ctx).Where("username = ?", u.Username).Preload("Authorities").Preload("Authority").First(&user).Error
+	err = global.GVA_DB.WithContext(ctx).Where("username = ?", u.Username).Preload("Authorities").Preload("Authority").Preload("Departments").Preload("Positions").Preload("Dept").First(&user).Error
 	if err == nil {
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("密码错误")
@@ -134,7 +134,7 @@ func (userService *UserService) GetUserInfoList(ctx context.Context, info system
 		}
 	}
 
-	err = db.Limit(limit).Offset(offset).Order(orderStr).Preload("Authorities").Preload("Authority").Find(&userList).Error
+	err = db.Limit(limit).Offset(offset).Order(orderStr).Preload("Authorities").Preload("Authority").Preload("Departments").Preload("Positions").Preload("Dept").Find(&userList).Error
 	return userList, total, err
 }
 
@@ -228,6 +228,67 @@ func (userService *UserService) SetUserAuthorities(ctx context.Context, adminAut
 	})
 }
 
+// SetUserDepartments 设置用户归属部门(多部门)与主部门
+// 可见范围由 deptIds 决定; 主部门(primaryDeptId)用于数据归属/盖章, 为空时取集合首个, 且必须落在归属集合内
+func (userService *UserService) SetUserDepartments(ctx context.Context, id uint, deptIds []uint, primaryDeptId uint) (err error) {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		var user system.SysUser
+		if txErr := tx.Where("id = ?", id).First(&user).Error; txErr != nil {
+			logger.WithCtx(ctx).Mod("biz").Debug(txErr.Error())
+			return errors.New("查询用户数据失败")
+		}
+		if txErr := tx.Delete(&[]system.SysUserDepartment{}, "sys_user_id = ?", id).Error; txErr != nil {
+			return txErr
+		}
+		if len(deptIds) > 0 {
+			records := make([]system.SysUserDepartment, 0, len(deptIds))
+			for _, deptId := range deptIds {
+				records = append(records, system.SysUserDepartment{SysUserId: id, SysDepartmentId: deptId})
+			}
+			if txErr := tx.Create(&records).Error; txErr != nil {
+				return txErr
+			}
+		}
+		// 计算主部门
+		pid := primaryDeptId
+		if pid == 0 && len(deptIds) > 0 {
+			pid = deptIds[0]
+		}
+		if pid != 0 {
+			inSet := false
+			for _, deptId := range deptIds {
+				if deptId == pid {
+					inSet = true
+					break
+				}
+			}
+			if !inSet {
+				return errors.New("主部门必须在归属部门范围内")
+			}
+		}
+		return tx.Model(&system.SysUser{}).Where("id = ?", id).Update("dept_id", pid).Error
+	})
+}
+
+// SetUserPositions 设置用户岗位(多岗位)
+func (userService *UserService) SetUserPositions(ctx context.Context, id uint, positionIds []uint) (err error) {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if txErr := tx.Delete(&[]system.SysUserPosition{}, "sys_user_id = ?", id).Error; txErr != nil {
+			return txErr
+		}
+		if len(positionIds) > 0 {
+			records := make([]system.SysUserPosition, 0, len(positionIds))
+			for _, positionId := range positionIds {
+				records = append(records, system.SysUserPosition{SysUserId: id, SysPositionId: positionId})
+			}
+			if txErr := tx.Create(&records).Error; txErr != nil {
+				return txErr
+			}
+		}
+		return nil
+	})
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteUser
 //@description: 删除用户
@@ -240,6 +301,12 @@ func (userService *UserService) DeleteUser(ctx context.Context, id int) (err err
 			return err
 		}
 		if err := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&[]system.SysUserDepartment{}, "sys_user_id = ?", id).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&[]system.SysUserPosition{}, "sys_user_id = ?", id).Error; err != nil {
 			return err
 		}
 		return nil
@@ -297,7 +364,7 @@ func (userService *UserService) SetSelfSetting(ctx context.Context, req common.J
 
 func (userService *UserService) GetUserInfo(ctx context.Context, uuid uuid.UUID) (user system.SysUser, err error) {
 	var reqUser system.SysUser
-	err = global.GVA_DB.WithContext(ctx).Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
+	err = global.GVA_DB.WithContext(ctx).Preload("Authorities").Preload("Authority").Preload("Departments").Preload("Positions").Preload("Dept").First(&reqUser, "uuid = ?", uuid).Error
 	if err != nil {
 		return reqUser, err
 	}

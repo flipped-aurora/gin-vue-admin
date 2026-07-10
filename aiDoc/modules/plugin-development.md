@@ -6,9 +6,11 @@
 
 - `api/`
 - `config/`
+- `gen/`（gorm/gen 代码生成入口，`go:generate` 独立程序）
 - `initialize/`
 - `model/`
 - `model/request/`
+- `plugin/`（插件内全局配置访问包：`var Config config.Config`）
 - `router/`
 - `service/`
 - `plugin.go`
@@ -18,19 +20,20 @@
 前端插件推荐保持以下结构：
 
 - `api/`
-- `components/`
-- `view/`
 - `form/`
-- `config.js` 或等价入口文件
+- `view/`
+
+以上与前端插件生成模板（`server/resource/plugin/web/`）的产物一致；确有需要时可自建 `components/` 等子目录，但不是模板产物、不做强制要求。
 
 ## 插件入口约束
 
 `plugin.go` 至少要承担以下职责：
 
-- 实现项目要求的插件接口
-- 在 `init()` 中完成插件注册
-- 通过 `Register` 方法挂载路由
-- 通过 `RouterPath` 返回插件根路径
+- 实现 v2 插件接口 `interfaces.Plugin`（`server/utils/plugin/v2`，只有一个 `Register(group *gin.Engine)` 方法）
+- 在 `init()` 中调用 `interfaces.Register(Plugin)` 完成自注册
+- 在 `Register` 中完成路由挂载，并按需调度 `initialize` 包的 `Gorm / Api / Menu / Dictionary / Viper` 初始化
+
+> 遗留的 v1 接口（带 `RouterPath()` 方法，仅 email 插件仍在使用，由 `plugin_biz_v1.go` 手动挂载）不要用于新插件。
 
 ## 插件设计原则
 

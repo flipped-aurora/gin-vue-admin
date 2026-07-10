@@ -13,6 +13,8 @@
 - `ID`、`CreatedAt`、`UpdatedAt` 这些基础字段沿用项目现有约定
 - 请求模型放在 `model/request/`
 - 列表查询模型应定义 `XxxSearch`，并内嵌通用的 `request.PageInfo`
+- `CreatedBy`/`UpdatedBy`/`DeletedBy`/`DeptId`（列名 `created_by`/`updated_by`/`deleted_by`/`dept_id`）这组公共操作字段**仅在业务表需要数据权限时才创建**，对应代码生成器的 AutoCreateResource 产物，不是每张表的必备字段；手写模型需要同类语义时用同名字段，不要自造 `CreatorID` 等同义字段
+- `DeptId`（归属部门）服务于数据权限：数据权限引擎按 `created_by`/`dept_id` 两列做行级过滤与创建时自动盖章，自造字段不会被引擎识别
 
 ## 类型一致性
 
@@ -25,6 +27,12 @@
 - 只承载业务逻辑，不处理 HTTP 语义
 - 不要依赖 `gin.Context`
 - 函数应返回业务结果和 `error`
+- 查询方法以 `ctx context.Context` 为首参，数据库调用用 `global.GVA_DB.WithContext(ctx)` 串联请求链路（API 层传 `c.Request.Context()`）
+- 分页统一 `limit, offset := info.LimitOffset()`（`request.PageInfo` 提供，pageSize 超过 `MaxPageSize=100` 自动截断），不要手写 `PageSize*(Page-1)` 换算
+- 数据权限（行级过滤）由统一引擎的 GORM 全局回调实现（`server/utils/datascope/`）：受控表（带 `dept_id`/`created_by` 列）的范围过滤与创建盖章由引擎自动完成，Service 不手写 `dept_id`/`created_by` 过滤条件、不手动赋值 `CreatedBy`/`DeptId`；更新走 `Save` 等全量写时用 `Omit("dept_id", "created_by")` 保护归属列不被表单零值覆盖
+- 操作人盖章按列存在自动参与，均不手动赋值：更新盖 `updated_by`（不要放进 `Omit`）；表同时有 `deleted_by` 列与 `gorm.DeletedAt` 时，软删除的那条 UPDATE 自动并入 `deleted_by`（硬删除 / `Unscoped` 不盖）；无身份 / `WithSystem` / `UpdateColumn`(SkipHooks) 不盖
+- 漏写条件的 update/delete 会被引擎挡下并报 `ErrMissingWhereClause`（不会静默作用于整个数据范围）；确需全量写用 `Session(&gorm.Session{AllowGlobalUpdate: true})` 显式声明
+- 漏传 ctx 等于旁路数据权限（现阶段放行 + 告警 + 落审计表）；确需跨范围查询用 `db.Set("data_scope:skip", true)` 显式旁路，定时任务/CLI/初始化用 `datascope.WithSystem(ctx)`，不要裸用 `context.Background()`
 - 每个模块在 `service/` 下建立独立文件，并在 `service/enter.go` 注册
 
 ## API 层

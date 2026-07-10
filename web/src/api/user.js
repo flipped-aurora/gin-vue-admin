@@ -159,6 +159,30 @@ export const setUserAuthorities = (data) => {
 }
 
 // @Tags User
+// @Summary 设置用户归属部门
+// @Security ApiKeyAuth
+// @Router /user/setUserDepartments [post]
+export const setUserDepartments = (data) => {
+  return service({
+    url: '/user/setUserDepartments',
+    method: 'post',
+    data: data
+  })
+}
+
+// @Tags User
+// @Summary 设置用户岗位
+// @Security ApiKeyAuth
+// @Router /user/setUserPositions [post]
+export const setUserPositions = (data) => {
+  return service({
+    url: '/user/setUserPositions',
+    method: 'post',
+    data: data
+  })
+}
+
+// @Tags User
 // @Summary 获取用户信息
 // @Security ApiKeyAuth
 // @accept application/json

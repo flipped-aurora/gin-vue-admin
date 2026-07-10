@@ -171,35 +171,57 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	response.OkWithDetailed(list, "获取成功", c)
 }
 
-// SetDataAuthority
+// SetDataScope
 // @Tags      Authority
-// @Summary   设置角色资源权限
+// @Summary   设置角色数据范围(数据权限)
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      system.SysAuthority            true  "设置角色资源权限"
-// @Success   200   {object}  response.Response{msg=string}  "设置角色资源权限"
-// @Router    /authority/setDataAuthority [post]
-func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
-	var auth system.SysAuthority
-	err := c.ShouldBindJSON(&auth)
-	if err != nil {
+// @Param     data  body      systemReq.SetDataScope         true  "角色ID, 数据范围"
+// @Success   200   {object}  response.Response{msg=string}  "设置角色数据范围"
+// @Router    /authority/setDataScope [post]
+func (a *AuthorityApi) SetDataScope(c *gin.Context) {
+	var req systemReq.SetDataScope
+	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(auth, utils.AuthorityIdVerify)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+	if req.AuthorityId == 0 {
+		response.FailWithMessage("角色ID不能为空", c)
 		return
 	}
-	adminAuthorityID := utils.GetUserAuthorityId(c)
-	err = authorityService.SetDataAuthority(c.Request.Context(), adminAuthorityID, auth)
-	if err != nil {
+	if err := authorityService.SetDataScope(c.Request.Context(), req.AuthorityId, req.DataScope, req.DeptIds); err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}
 	response.OkWithMessage("设置成功", c)
+}
+
+// GetDataScopeDepts
+// @Tags      Authority
+// @Summary   获取角色自定义部门集(数据权限第5档)
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     authorityId  query     uint                                       true  "角色ID"
+// @Success   200          {object}  response.Response{data=[]uint,msg=string}  "获取成功"
+// @Router    /authority/getDataScopeDepts [get]
+func (a *AuthorityApi) GetDataScopeDepts(c *gin.Context) {
+	var req systemReq.SetDataScope
+	if err := c.ShouldBindQuery(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	ids, err := authorityService.GetDataScopeDepts(c.Request.Context(), req.AuthorityId)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		response.FailWithMessage("获取失败"+err.Error(), c)
+		return
+	}
+	if ids == nil {
+		ids = []uint{}
+	}
+	response.OkWithDetailed(ids, "获取成功", c)
 }
 
 // GetUsersByAuthority

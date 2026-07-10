@@ -11,6 +11,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/datascope"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"gorm.io/gorm"
 )
@@ -146,7 +147,7 @@ func (authorityService *AuthorityService) DeleteAuthority(ctx context.Context, a
 
 	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var err error
-		if err = tx.Preload("SysBaseMenus").Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth).Error; err != nil {
+		if err = tx.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth).Error; err != nil {
 			return err
 		}
 
@@ -155,11 +156,6 @@ func (authorityService *AuthorityService) DeleteAuthority(ctx context.Context, a
 				return err
 			}
 			// err = db.Association("SysBaseMenus").Delete(&auth)
-		}
-		if len(auth.DataAuthorityId) > 0 {
-			if err = tx.Model(auth).Association("DataAuthorityId").Delete(auth.DataAuthorityId); err != nil {
-				return err
-			}
 		}
 
 		if err = tx.Delete(&system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error; err != nil {
@@ -197,13 +193,13 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(ctx context.Conte
 		// 当开启了严格树形结构后
 		if *authority.ParentId == 0 {
 			// 只有顶级角色可以修改自己的权限和以下权限
-			err = db.Preload("DataAuthorityId").Where("authority_id = ?", authorityID).Find(&authorities).Error
+			err = db.Where("authority_id = ?", authorityID).Find(&authorities).Error
 		} else {
 			// 非顶级角色只能修改以下权限
-			err = db.Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
+			err = db.Where("parent_id = ?", authorityID).Find(&authorities).Error
 		}
 	} else {
-		err = db.Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authorities).Error
+		err = db.Where("parent_id = ?", "0").Find(&authorities).Error
 	}
 
 	for k := range authorities {
@@ -222,7 +218,7 @@ func (authorityService *AuthorityService) GetStructAuthorityList(ctx context.Con
 	var auth system.SysAuthority
 	_ = global.GVA_DB.WithContext(ctx).First(&auth, "authority_id = ?", authorityID).Error
 	var authorities []system.SysAuthority
-	err = global.GVA_DB.WithContext(ctx).Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
+	err = global.GVA_DB.WithContext(ctx).Where("parent_id = ?", authorityID).Find(&authorities).Error
 	if len(authorities) > 0 {
 		for k := range authorities {
 			list = append(list, authorities[k].AuthorityId)
@@ -266,34 +262,42 @@ func (authorityService *AuthorityService) CheckAuthorityIDAuth(ctx context.Conte
 //@return: sa system.SysAuthority, err error
 
 func (authorityService *AuthorityService) GetAuthorityInfo(ctx context.Context, auth system.SysAuthority) (sa system.SysAuthority, err error) {
-	err = global.GVA_DB.WithContext(ctx).Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
+	err = global.GVA_DB.WithContext(ctx).Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
 	return sa, err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: SetDataAuthority
-//@description: 设置角色资源权限
-//@param: auth model.SysAuthority
-//@return: error
-
-func (authorityService *AuthorityService) SetDataAuthority(ctx context.Context, adminAuthorityID uint, auth system.SysAuthority) error {
-	var checkIDs []uint
-	checkIDs = append(checkIDs, auth.AuthorityId)
-	for i := range auth.DataAuthorityId {
-		checkIDs = append(checkIDs, auth.DataAuthorityId[i].AuthorityId)
-	}
-
-	for i := range checkIDs {
-		err := authorityService.CheckAuthorityIDAuth(ctx, adminAuthorityID, checkIDs[i])
-		if err != nil {
+// SetDataScope 设置角色数据权限。data_scope 取值见 datascope 包常量;
+// 档位为"自定义部门集"(5)时以 deptIds 全量覆盖角色的部门集, 其余档位清空部门集避免残留。
+func (authorityService *AuthorityService) SetDataScope(ctx context.Context, authorityID uint, dataScope int, deptIds []uint) error {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&system.SysAuthority{}).
+			Where("authority_id = ?", authorityID).
+			Update("data_scope", dataScope).Error; err != nil {
 			return err
 		}
-	}
+		if err := tx.Delete(&[]system.SysAuthorityDepartment{}, "sys_authority_authority_id = ?", authorityID).Error; err != nil {
+			return err
+		}
+		if dataScope == datascope.ScopeCustom && len(deptIds) > 0 {
+			records := make([]system.SysAuthorityDepartment, 0, len(deptIds))
+			for _, d := range deptIds {
+				records = append(records, system.SysAuthorityDepartment{
+					SysAuthorityAuthorityId: authorityID, SysDepartmentId: d,
+				})
+			}
+			if err := tx.Create(&records).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
 
-	var s system.SysAuthority
-	global.GVA_DB.WithContext(ctx).Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
-	err := global.GVA_DB.WithContext(ctx).Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
-	return err
+// GetDataScopeDepts 获取角色"自定义部门集"配置的部门ID列表
+func (authorityService *AuthorityService) GetDataScopeDepts(ctx context.Context, authorityID uint) (ids []uint, err error) {
+	err = global.GVA_DB.WithContext(ctx).Model(&system.SysAuthorityDepartment{}).
+		Where("sys_authority_authority_id = ?", authorityID).Pluck("sys_department_id", &ids).Error
+	return
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -316,7 +320,7 @@ func (authorityService *AuthorityService) SetMenuAuthority(ctx context.Context, 
 //@return: err error
 
 func (authorityService *AuthorityService) findChildrenAuthority(ctx context.Context, authority *system.SysAuthority) (err error) {
-	err = global.GVA_DB.WithContext(ctx).Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
+	err = global.GVA_DB.WithContext(ctx).Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
 	if len(authority.Children) > 0 {
 		for k := range authority.Children {
 			err = authorityService.findChildrenAuthority(ctx, &authority.Children[k])

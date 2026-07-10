@@ -70,7 +70,7 @@ func Routers() *gin.Engine {
 	PublicGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
 	PrivateGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
 
-	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.MustChangePwdGuard()).Use(middleware.CasbinHandler())
+	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.MustChangePwdGuard()).Use(middleware.CasbinHandler()).Use(middleware.DataScope())
 
 	{
 		// 健康监测
@@ -92,6 +92,9 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysVersionRouter(PrivateGroup)                     // 发版相关路由
 		systemRouter.InitCasbinRouter(PrivateGroup)                         // 权限相关路由
 		systemRouter.InitAuthorityRouter(PrivateGroup)                      // 注册角色路由
+		systemRouter.InitSysDepartmentRouter(PrivateGroup)                  // 注册部门路由
+		systemRouter.InitSysPositionRouter(PrivateGroup)                    // 注册岗位路由
+		systemRouter.InitSysDataAccessLogRouter(PrivateGroup)               // 数据权限审计日志
 		systemRouter.InitSysDictionaryRouter(PrivateGroup)                  // 字典管理
 		systemRouter.InitSysOperationRecordRouter(PrivateGroup)             // 操作记录
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)            // 字典详情管理

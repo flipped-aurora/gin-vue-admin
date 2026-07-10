@@ -148,8 +148,7 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context) (lis
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
 // Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info request.{{.StructName}}Search) (list []model.{{.StructName}}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
     // 创建db
 	db := {{$db}}.WithContext(ctx).Model(&model.{{.StructName}}{})
     var {{.Abbreviation}}s []model.{{.StructName}}

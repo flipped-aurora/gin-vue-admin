@@ -89,6 +89,56 @@
             />
           </template>
         </el-table-column>
+        <el-table-column align="left" label="所属部门" min-width="200">
+          <template #default="scope">
+            <el-cascader
+              v-model="scope.row.departmentIds"
+              :options="deptOptions"
+              :show-all-levels="false"
+              collapse-tags
+              :props="{
+                multiple: true,
+                checkStrictly: true,
+                label: 'name',
+                value: 'ID',
+                emitPath: false
+              }"
+              placeholder="未分配"
+              @visible-change="
+                (flag) => {
+                  changeDepartment(scope.row, flag, 0)
+                }
+              "
+              @remove-tag="
+                (removeId) => {
+                  changeDepartment(scope.row, false, removeId)
+                }
+              "
+            />
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="岗位" min-width="180">
+          <template #default="scope">
+            <el-select
+              v-model="scope.row.positionIds"
+              multiple
+              collapse-tags
+              placeholder="未分配"
+              @visible-change="
+                (flag) => {
+                  changePosition(scope.row, flag)
+                }
+              "
+            >
+              <el-option
+                v-for="p in positionOptions"
+                :key="p.ID"
+                :label="p.name"
+                :value="p.ID"
+              />
+            </el-select>
+          </template>
+        </el-table-column>
         <el-table-column align="left" label="启用" min-width="150">
           <template #default="scope">
             <el-switch
@@ -254,11 +304,15 @@
   import {
     getUserList,
     setUserAuthorities,
+    setUserDepartments,
+    setUserPositions,
     register,
     deleteUser
   } from '@/api/user'
 
   import { getAuthorityList } from '@/api/authority'
+  import { getDepartmentList } from '@/api/department'
+  import { getPositionList } from '@/api/position'
   import CustomPic from '@/components/customPic/index.vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
   import { setUserInfo, resetPassword } from '@/api/user.js'
@@ -366,10 +420,13 @@
     () => tableData.value,
     () => {
       setAuthorityIds()
+      setDeptPositionIds()
     }
   )
 
   const authOptions = ref([])
+  const deptOptions = ref([])
+  const positionOptions = ref([])
   const setOptions = (authData) => {
     authOptions.value = []
     setAuthorityOptions(authData, authOptions.value)
@@ -379,9 +436,30 @@
     getTableData()
     const res = await getAuthorityList()
     setOptions(res.data)
+    const deptRes = await getDepartmentList()
+    if (deptRes.code === 0) {
+      deptOptions.value = deptRes.data || []
+    }
+    const posRes = await getPositionList({ page: 1, pageSize: 1000 })
+    if (posRes.code === 0) {
+      positionOptions.value = posRes.data.list || []
+    }
   }
 
   initPage()
+
+  // 把后端返回的部门/岗位关联映射成前端多选控件需要的 id 数组
+  const setDeptPositionIds = () => {
+    tableData.value &&
+      tableData.value.forEach((user) => {
+        user.departmentIds = user.departments
+          ? user.departments.map((i) => i.ID)
+          : []
+        user.positionIds = user.positions
+          ? user.positions.map((i) => i.ID)
+          : []
+      })
+  }
 
   // 重置密码对话框相关
   const resetPwdDialog = ref(false)
@@ -587,6 +665,59 @@
       } else {
         row.authorityIds = [removeAuth, ...row.authorityIds]
       }
+    }
+  }
+
+  // 设置用户归属部门（即时保存，主部门默认沿用原主部门或取首个）
+  const tempDept = {}
+  const changeDepartment = async (row, flag, removeId) => {
+    if (flag) {
+      if (!removeId) {
+        tempDept[row.ID] = [...(row.departmentIds || [])]
+      }
+      return
+    }
+    await nextTick()
+    const deptIds = row.departmentIds || []
+    let primaryDeptId = 0
+    if (deptIds.length) {
+      primaryDeptId = deptIds.includes(row.deptId) ? row.deptId : deptIds[0]
+    }
+    const res = await setUserDepartments({
+      ID: row.ID,
+      deptIds,
+      primaryDeptId
+    })
+    if (res.code === 0) {
+      row.deptId = primaryDeptId
+      ElMessage({ type: 'success', message: '部门设置成功' })
+    } else {
+      if (!removeId) {
+        row.departmentIds = [...(tempDept[row.ID] || [])]
+        delete tempDept[row.ID]
+      } else {
+        row.departmentIds = [removeId, ...(row.departmentIds || [])]
+      }
+    }
+  }
+
+  // 设置用户岗位（即时保存）
+  const tempPos = {}
+  const changePosition = async (row, flag) => {
+    if (flag) {
+      tempPos[row.ID] = [...(row.positionIds || [])]
+      return
+    }
+    await nextTick()
+    const res = await setUserPositions({
+      ID: row.ID,
+      positionIds: row.positionIds || []
+    })
+    if (res.code === 0) {
+      ElMessage({ type: 'success', message: '岗位设置成功' })
+    } else {
+      row.positionIds = [...(tempPos[row.ID] || [])]
+      delete tempPos[row.ID]
     }
   }
 

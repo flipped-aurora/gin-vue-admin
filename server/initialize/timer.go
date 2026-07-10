@@ -9,6 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	mediaService "github.com/flipped-aurora/gin-vue-admin/server/service/media"
 	"github.com/flipped-aurora/gin-vue-admin/server/task"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/datascope"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
@@ -18,7 +19,9 @@ func Timer() {
 		option = append(option, cron.WithSeconds())
 		// 清理DB定时任务
 		_, err := global.GVA_Timer.AddTaskByFunc("ClearDB", "@daily", func() {
-			err := task.ClearTable(global.GVA_DB) // 定时任务方法定在task文件包中
+			// 系统上下文: 无请求身份, 数据权限回调放行(WithSystem)
+			sysDB := global.GVA_DB.WithContext(datascope.WithSystem(context.Background()))
+			err := task.ClearTable(sysDB) // 定时任务方法定在task文件包中
 			if err != nil {
 				fmt.Println("timer error:", err)
 			}
@@ -30,7 +33,7 @@ func Timer() {
 		// 清理过期大文件上传会话
 		_, err = global.GVA_Timer.AddTaskByFunc("CleanStaleUploads", "@hourly", func() {
 			svc := mediaService.MediaUploadService{}
-			if err := svc.CleanupStale(context.Background(), global.GVA_CONFIG.Media.SessionTTL); err != nil {
+			if err := svc.CleanupStale(datascope.WithSystem(context.Background()), global.GVA_CONFIG.Media.SessionTTL); err != nil {
 				logger.Bg().Mod("system").Err(err).Error("CleanStaleUploads error")
 			}
 		}, "定时清理过期上传会话", option...)

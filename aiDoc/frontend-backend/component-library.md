@@ -41,7 +41,9 @@ core/componentLibrary/
 ├── switch/             # Switch
 ├── slider/             # Slider（单值 number 对外，内部包数组，支持 marks）
 ├── number-field/       # NumberField（数字步进输入）
-└── color-picker/       # ColorPicker（Popover 内组合 reka 颜色原语，支持 alpha）
+├── color-picker/       # ColorPicker（Popover 内组合 reka 颜色原语，支持 alpha）
+├── page-tab/           # PageTab（页签，button/chrome/slider 三种模式子组件私有）
+└── menu/               # Menu（导航菜单，MenuItem/MenuFlyout/HorizontalMenu 等部件私有）
 ```
 
 ## 使用方式
@@ -59,13 +61,18 @@ core/componentLibrary/
 | Slider      | `<g-slider />`       |
 | NumberField | `<g-number-field />` |
 | ColorPicker | `<g-color-picker />` |
+| PageTab     | `<g-page-tab />`     |
+| Menu        | `<g-menu />`         |
 
 注册是**自动遍历** barrel 导出实现的（`g-` + 导出名转 kebab-case），新增组件只要从 `index.js`
-导出即自动获得全局标签，无需再改 `global.js`；`cn` 这类工具函数导出（非对象）会被跳过。
-个别从 barrel re-export 的「非本库自有组件对象」（如 reka-ui 的 `SelectValue`，仅供 granular 模式按需 import）
-不应获得全局标签，已由 `global.js` 的 `NON_GLOBAL_EXPORTS` 名单显式排除——新增此类 re-export 时同步登记。
+导出即自动获得全局标签，无需再改 `global.js`。三类非组件导出不会获得全局标签：
+`cn` / `buttonVariants` 这类**函数**导出由 typeof 判断跳过；`BUTTON_VARIANTS` / `MENU_THEMES` /
+`PAGE_TAB_MODES` 这类**枚举数组**导出由 `Array.isArray` 统一跳过；其余「非本库自有组件对象」
+（如 reka-ui 的 `SelectValue`，仅供 granular 模式按需 import）需登记进 `global.js` 的
+`NON_GLOBAL_EXPORTS` 名单显式排除——新增此类 re-export 时同步登记。
 
-> **命名三层关系**（刻意分层，勿混用）：组件内 `defineOptions({ name: 'UiXxx' })` = devtools 显示名 /
+> **命名三层关系**（刻意分层，勿混用）：组件内 `defineOptions({ name })` = devtools 显示名
+> （六个基础控件为 `UiXxx`；Menu 系为 `Gva*`、PageTab 系为 `PageTab*`）/
 > barrel 导出 `Xxx`（PascalCase）= 显式 import 名 / 全局标签 `g-xxx`（kebab-case）= 模板里用。
 
 ### 2. 显式 import（仍受支持）
@@ -144,6 +151,12 @@ import { Button } from '@/core/componentLibrary/button'
   `alpha` 开透明度通道，`format`=`hex|rgb`，`swatches` 传预设色卡；
   纯图形触发器可传 `title`（hover 提示，兼作可访问名兜底）/ `ariaLabel`；
   对外写回防抖 100ms，卸载时 flush 补发最终值。
+- **g-page-tab**：单个标签页（纯展示），`mode` = `button | chrome | slider`（可选值集中导出为 `PAGE_TAB_MODES`）；
+  原生事件经 attribute fallthrough 透传到根元素，关闭走显式 `close` 事件；
+  ButtonTab / ChromeTab / SliderTab 三个模式子组件保持私有、不从 barrel 导出。
+- **g-menu**：导航菜单，`theme` = `design | light | group`（可选值集中导出为 `MENU_THEMES`），
+  `orientation` = `vertical | horizontal`，支持 `collapsed` / `v-model:open-keys`，选中走 `select` 事件；
+  MenuItem / MenuFlyout / HorizontalMenu 等部件保持私有，仅 Menu 获得全局标签。
 
 ## 新增 / 修改组件 checklist
 

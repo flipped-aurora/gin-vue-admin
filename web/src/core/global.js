@@ -63,12 +63,13 @@ const toKebabCase = (name) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowe
 // barrel 里会混入「非本库自有组件」的 re-export（如 reka-ui 的 SelectValue，仅供 granular 模式按需 import），
 // 它们是组件对象、会通过下面 typeof 判断，但不应获得全局 g- 标签。用显式名单挡掉，
 // 既修掉 g-select-value 这类无人消费的命名空间泄漏，又保持「本库自有组件导出即自动注册」的设计不变。
+// 枚举数组导出（BUTTON_VARIANTS / MENU_THEMES 等）typeof 也是 object，由 Array.isArray 统一跳过，无需登记名单。
 const NON_GLOBAL_EXPORTS = new Set(['SelectValue'])
 
 const registerComponentLibrary = (app) => {
   for (const [name, component] of Object.entries(ComponentLibrary)) {
     if (NON_GLOBAL_EXPORTS.has(name)) continue
-    if (component && typeof component === 'object') {
+    if (component && typeof component === 'object' && !Array.isArray(component)) {
       app.component(`g-${toKebabCase(name)}`, component)
     }
   }

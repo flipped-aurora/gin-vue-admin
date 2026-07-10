@@ -337,6 +337,60 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 	response.OkWithMessage("修改成功", c)
 }
 
+// SetUserDepartments
+// @Tags      SysUser
+// @Summary   设置用户归属部门
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetUserDepartments   true  "用户ID, 部门ID集合, 主部门ID"
+// @Success   200   {object}  response.Response{msg=string}  "设置用户归属部门"
+// @Router    /user/setUserDepartments [post]
+func (b *BaseApi) SetUserDepartments(c *gin.Context) {
+	var req systemReq.SetUserDepartments
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if req.ID == 0 {
+		response.FailWithMessage("用户ID不能为空", c)
+		return
+	}
+	if err := userService.SetUserDepartments(c.Request.Context(), req.ID, req.DeptIds, req.PrimaryDeptId); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
+		response.FailWithMessage("设置失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
+
+// SetUserPositions
+// @Tags      SysUser
+// @Summary   设置用户岗位
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetUserPositions     true  "用户ID, 岗位ID集合"
+// @Success   200   {object}  response.Response{msg=string}  "设置用户岗位"
+// @Router    /user/setUserPositions [post]
+func (b *BaseApi) SetUserPositions(c *gin.Context) {
+	var req systemReq.SetUserPositions
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if req.ID == 0 {
+		response.FailWithMessage("用户ID不能为空", c)
+		return
+	}
+	if err := userService.SetUserPositions(c.Request.Context(), req.ID, req.PositionIds); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
+		response.FailWithMessage("设置失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
+
 // DeleteUser
 // @Tags      SysUser
 // @Summary   删除用户

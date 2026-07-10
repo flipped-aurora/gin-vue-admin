@@ -382,7 +382,7 @@
     const el = dictRoot.value
     if (!el) return
     const top = el.getBoundingClientRect().top
-    rootHeight.value = `${Math.max(320, window.innerHeight - top - 16)}px`
+    rootHeight.value = `${Math.max(320, window.innerHeight - top - 32)}px`
   }
   onMounted(() => {
     nextTick(updateRootHeight)

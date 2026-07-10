@@ -33,6 +33,8 @@ func Reload() error {
 	DBList()
 
 	if global.GVA_DB != nil {
+		// 重新注册数据权限 GORM 回调
+		RegisterDataScopeCallbacks()
 		// 确保数据库表结构是最新的
 		RegisterTables()
 	}

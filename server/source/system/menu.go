@@ -55,13 +55,14 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 	allMenus := []SysBaseMenu{
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "dashboard", Name: "dashboard", Component: "view/dashboard/index.vue", Sort: 1, Meta: Meta{Title: "仪表盘", Icon: "odometer"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "permission", Name: "permission", Component: "view/routerHolder.vue", Sort: 2, Meta: Meta{Title: "权限管理", Icon: "perm-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemConfig", Name: "systemConfig", Component: "view/routerHolder.vue", Sort: 3, Meta: Meta{Title: "系统设置", Icon: "config-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "monitor", Name: "monitor", Component: "view/routerHolder.vue", Sort: 4, Meta: Meta{Title: "运维监控", Icon: "monitor-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "media", Name: "media", Component: "view/routerHolder.vue", Sort: 5, Meta: Meta{Title: "媒体管理", Icon: "folder-opened"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemTools", Name: "systemTools", Component: "view/routerHolder.vue", Sort: 6, Meta: Meta{Title: "编程辅助", Icon: "cpu"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "ai", Name: "ai", Component: "view/routerHolder.vue", Sort: 7, Meta: Meta{Title: "AI 工坊", Icon: "ai-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "example", Name: "example", Component: "view/example/index.vue", Sort: 9, Meta: Meta{Title: "示例文件", Icon: "example-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "plugin", Name: "plugin", Component: "view/routerHolder.vue", Sort: 8, Meta: Meta{Title: "插件系统", Icon: "cherry"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "org", Name: "org", Component: "view/routerHolder.vue", Sort: 3, Meta: Meta{Title: "组织架构", Icon: "share"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemConfig", Name: "systemConfig", Component: "view/routerHolder.vue", Sort: 4, Meta: Meta{Title: "系统设置", Icon: "config-gva"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "monitor", Name: "monitor", Component: "view/routerHolder.vue", Sort: 5, Meta: Meta{Title: "运维监控", Icon: "monitor-gva"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "media", Name: "media", Component: "view/routerHolder.vue", Sort: 6, Meta: Meta{Title: "媒体管理", Icon: "folder-opened"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemTools", Name: "systemTools", Component: "view/routerHolder.vue", Sort: 7, Meta: Meta{Title: "编程辅助", Icon: "cpu"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "ai", Name: "ai", Component: "view/routerHolder.vue", Sort: 8, Meta: Meta{Title: "AI 工坊", Icon: "ai-gva"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "example", Name: "example", Component: "view/example/index.vue", Sort: 10, Meta: Meta{Title: "示例文件", Icon: "example-gva"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "plugin", Name: "plugin", Component: "view/routerHolder.vue", Sort: 9, Meta: Meta{Title: "插件系统", Icon: "cherry"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "about", Name: "about", Component: "view/about/index.vue", Sort: 10, Meta: Meta{Title: "关于我们", Icon: "office-building"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "https://www.gin-vue-admin.com", Name: "https://www.gin-vue-admin.com", Component: "/", Sort: 11, Meta: Meta{Title: "官方网站", Icon: "customer-gva"}},
 		{MenuLevel: 0, Hidden: true, ParentId: 0, Path: "person", Name: "person", Component: "view/person/person.vue", Sort: 12, Meta: Meta{Title: "个人信息", Icon: "postcard"}},
@@ -87,6 +88,10 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "user", Name: "user", Component: "view/superAdmin/user/user.vue", Sort: 4, Meta: Meta{Title: "用户管理", Icon: "user"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "apiToken", Name: "apiToken", Component: "view/systemTools/apiToken/index.vue", Sort: 5, Meta: Meta{Title: "API Token", Icon: "key"}},
 
+		// 组织架构
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "department", Name: "department", Component: "view/superAdmin/department/department.vue", Sort: 1, Meta: Meta{Title: "部门管理", Icon: "office-building"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "position", Name: "position", Component: "view/superAdmin/position/position.vue", Sort: 2, Meta: Meta{Title: "岗位管理", Icon: "postcard"}},
+
 		// 系统设置
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "system", Name: "system", Component: "view/systemTools/system/system.vue", Sort: 1, Meta: Meta{Title: "配置文件", Icon: "config-file-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "dictionary", Name: "dictionary", Component: "view/superAdmin/dictionary/sysDictionary.vue", Sort: 2, Meta: Meta{Title: "字典管理", Icon: "notebook"}},
@@ -99,6 +104,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "sysError", Name: "sysError", Component: "view/systemTools/sysError/sysError.vue", Sort: 3, Meta: Meta{Title: "错误日志", Icon: "error-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "sysVersion", Name: "sysVersion", Component: "view/systemTools/version/version.vue", Sort: 4, Meta: Meta{Title: "版本管理", Icon: "version-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "state", Name: "state", Component: "view/system/state.vue", Sort: 5, Meta: Meta{Title: "服务器状态", Icon: "server"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "dataAccessLog", Name: "dataAccessLog", Component: "view/superAdmin/dataAccessLog/dataAccessLog.vue", Sort: 6, Meta: Meta{Title: "数据权限审计", Icon: "warning"}},
 
 		// 媒体管理
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["media"], Path: "upload", Name: "upload", Component: "view/media/upload.vue", Sort: 1, Meta: Meta{Title: "媒体库（上传下载）", Icon: "upload"}},

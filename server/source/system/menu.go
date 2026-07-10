@@ -55,7 +55,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 	allMenus := []SysBaseMenu{
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "dashboard", Name: "dashboard", Component: "view/dashboard/index.vue", Sort: 1, Meta: Meta{Title: "仪表盘", Icon: "odometer"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "permission", Name: "permission", Component: "view/routerHolder.vue", Sort: 2, Meta: Meta{Title: "权限管理", Icon: "perm-gva"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "org", Name: "org", Component: "view/routerHolder.vue", Sort: 3, Meta: Meta{Title: "组织架构", Icon: "share"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "org", Name: "org", Component: "view/routerHolder.vue", Sort: 3, Meta: Meta{Title: "组织管理", Icon: "share"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "systemConfig", Name: "systemConfig", Component: "view/routerHolder.vue", Sort: 4, Meta: Meta{Title: "系统设置", Icon: "config-gva"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "monitor", Name: "monitor", Component: "view/routerHolder.vue", Sort: 5, Meta: Meta{Title: "运维监控", Icon: "monitor-gva"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "media", Name: "media", Component: "view/routerHolder.vue", Sort: 6, Meta: Meta{Title: "媒体管理", Icon: "folder-opened"}},
@@ -85,12 +85,12 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "authority", Name: "authority", Component: "view/superAdmin/authority/authority.vue", Sort: 1, Meta: Meta{Title: "角色管理", Icon: "role-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "menu", Name: "menu", Component: "view/superAdmin/menu/menu.vue", Sort: 2, Meta: Meta{Title: "菜单管理", Icon: "tickets", KeepAlive: true}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "api", Name: "api", Component: "view/superAdmin/api/api.vue", Sort: 3, Meta: Meta{Title: "api管理", Icon: "api-gva", KeepAlive: true}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "user", Name: "user", Component: "view/superAdmin/user/user.vue", Sort: 4, Meta: Meta{Title: "用户管理", Icon: "user"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "apiToken", Name: "apiToken", Component: "view/systemTools/apiToken/index.vue", Sort: 5, Meta: Meta{Title: "API Token", Icon: "key"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["permission"], Path: "apiToken", Name: "apiToken", Component: "view/systemTools/apiToken/index.vue", Sort: 4, Meta: Meta{Title: "API Token", Icon: "key"}},
 
-		// 组织架构
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "department", Name: "department", Component: "view/superAdmin/department/department.vue", Sort: 1, Meta: Meta{Title: "部门管理", Icon: "office-building"}},
-		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "position", Name: "position", Component: "view/superAdmin/position/position.vue", Sort: 2, Meta: Meta{Title: "岗位管理", Icon: "postcard"}},
+		// 组织管理
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "user", Name: "user", Component: "view/superAdmin/user/user.vue", Sort: 1, Meta: Meta{Title: "用户管理", Icon: "user"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "department", Name: "department", Component: "view/superAdmin/department/department.vue", Sort: 2, Meta: Meta{Title: "部门管理", Icon: "office-building"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["org"], Path: "position", Name: "position", Component: "view/superAdmin/position/position.vue", Sort: 3, Meta: Meta{Title: "岗位管理", Icon: "postcard"}},
 
 		// 系统设置
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemConfig"], Path: "system", Name: "system", Component: "view/systemTools/system/system.vue", Sort: 1, Meta: Meta{Title: "配置文件", Icon: "config-file-gva"}},

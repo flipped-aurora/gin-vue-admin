@@ -74,10 +74,9 @@ func OperationRecord() gin.HandlerFunc {
 
 		c.Next()
 
-		latency := time.Since(now)
 		record.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
 		record.Status = c.Writer.Status()
-		record.Latency = latency
+		record.LatencyMs = time.Since(now).Milliseconds()
 		// 响应体由 AccessLog 中间件统一捕获（pre 阶段缓存缓冲区指针），此处读取
 		if v, ok := c.Get(ctxRespBufferKey); ok {
 			if buf, bok := v.(*bytes.Buffer); bok {
@@ -95,8 +94,8 @@ func OperationRecord() gin.HandlerFunc {
 			strings.Contains(c.Writer.Header().Get("Content-Disposition"), "attachment") ||
 			strings.Contains(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") {
 			if len(record.Resp) > logger.AccessLogMaxBytes() {
-				// 截断
-				record.Body = "超出记录长度"
+				// 下载类响应体超长时截断的是 Resp(此处原误写为 Body)
+				record.Resp = "[超出记录长度]"
 			}
 		}
 		if err := global.GVA_DB.Create(&record).Error; err != nil {

@@ -7,6 +7,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	astutil "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/stacktrace"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -16,7 +17,8 @@ import (
 )
 
 type ZapCore struct {
-	level zapcore.Level
+	level  zapcore.Level
+	fields []zapcore.Field // With 附加的常驻字段(如 node/app_id/env),Write 时并入输出
 	zapcore.Core
 }
 
@@ -67,8 +69,14 @@ func (z *ZapCore) Enabled(level zapcore.Level) bool {
 	return z.level == level
 }
 
+// With 必须保留 *ZapCore 包装:zap 的 logger.With 会用返回值替换原 core,
+// 若直接返回内层 core.With(...),Write 的错误入库/控制台路由/business 子目录
+// 全部被旁路。附加字段暂存于 fields,Write 时并入输出。
 func (z *ZapCore) With(fields []zapcore.Field) zapcore.Core {
-	return z.Core.With(fields)
+	combined := make([]zapcore.Field, 0, len(z.fields)+len(fields))
+	combined = append(combined, z.fields...)
+	combined = append(combined, fields...)
+	return &ZapCore{level: z.level, Core: z.Core, fields: combined}
 }
 
 func (z *ZapCore) Check(entry zapcore.Entry, check *zapcore.CheckedEntry) *zapcore.CheckedEntry {
@@ -83,7 +91,7 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 	var mod string
 	var subdir string
 	for i := 0; i < len(fields); i++ {
-		if fields[i].Key == "mod" && mod == "" {
+		if fields[i].Key == logger.FieldMod && mod == "" {
 			mod = fields[i].String
 		}
 		if subdir == "" && (fields[i].Key == "business" || fields[i].Key == "folder" || fields[i].Key == "directory") {
@@ -103,10 +111,15 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 	default:
 		syncer = z.WriteSyncer()
 	}
-	z.Core = zapcore.NewCore(global.GVA_CONFIG.Zap.Encoder(), syncer, z.level)
+	// 用局部 core 写入:不改写 z.Core(共享状态,并发 Write 下会互相踩踏),
+	// 并把 With 暂存的常驻字段(node/app_id/env)并入本条输出
+	core := zapcore.NewCore(global.GVA_CONFIG.Zap.Encoder(), syncer, z.level)
+	if len(z.fields) > 0 {
+		fields = append(append(make([]zapcore.Field, 0, len(z.fields)+len(fields)), z.fields...), fields...)
+	}
 
 	// 先写入原日志目标
-	err := z.Core.Write(entry, fields)
+	err := core.Write(entry, fields)
 
 	// 捕捉 Error 及以上级别日志并入库，且可提取 zap.Error(err) 的错误内容
 	if entry.Level >= zapcore.ErrorLevel {
@@ -120,13 +133,17 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 		// 生成基础信息
 		info := entry.Message
 
-		// 提取 zap.Error(err) 内容与 request_id
+		// 提取 zap.Error(err) 内容与 request_id/trace_id
 		var errStr string
 		var reqID string
+		var traceID string
 		for i := 0; i < len(fields); i++ {
 			f := fields[i]
-			if f.Key == "request_id" && f.String != "" {
+			if f.Key == logger.FieldRequestID && f.String != "" {
 				reqID = f.String
+			}
+			if f.Key == logger.FieldTraceID && f.String != "" {
+				traceID = f.String
 			}
 			if errStr == "" && (f.Type == zapcore.ErrorType || f.Key == "error" || f.Key == "err") {
 				if f.Interface != nil {
@@ -165,6 +182,7 @@ func (z *ZapCore) Write(entry zapcore.Entry, fields []zapcore.Field) error {
 			Info:      &info,
 			Level:     level,
 			RequestID: reqID,
+			TraceID:   traceID,
 		})
 	}
 	return err

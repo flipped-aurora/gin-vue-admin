@@ -988,6 +988,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/authority/getDataScopeDepts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authority"
+                ],
+                "summary": "获取角色自定义部门集(数据权限第5档)",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "authorityId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/authority/getUsersByAuthority": {
             "get": {
                 "security": [
@@ -1042,7 +1093,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/authority/setDataAuthority": {
+        "/authority/setDataScope": {
             "post": {
                 "security": [
                     {
@@ -1058,21 +1109,21 @@ const docTemplate = `{
                 "tags": [
                     "Authority"
                 ],
-                "summary": "设置角色资源权限",
+                "summary": "设置角色数据范围(数据权限)",
                 "parameters": [
                     {
-                        "description": "设置角色资源权限",
+                        "description": "角色ID, 数据范围",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/system.SysAuthority"
+                            "$ref": "#/definitions/request.SetDataScope"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "设置角色资源权限",
+                        "description": "设置角色数据范围",
                         "schema": {
                             "allOf": [
                                 {
@@ -3560,6 +3611,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "description": "创建人(数据权限引擎自动盖章/过滤)",
+                        "name": "createdBy",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "客户名",
                         "name": "customerName",
@@ -3569,6 +3626,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "客户手机号",
                         "name": "customerPhoneData",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "归属部门(数据权限引擎自动盖章/过滤)",
+                        "name": "deptId",
                         "in": "query"
                     },
                     {
@@ -3810,6 +3873,482 @@ const docTemplate = `{
                                         "data": {
                                             "$ref": "#/definitions/response.PageResult"
                                         },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/dataAccessLog/deleteDataAccessLogByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDataAccessLog"
+                ],
+                "summary": "批量删除数据权限审计日志",
+                "parameters": [
+                    {
+                        "description": "ID列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/dataAccessLog/getDataAccessLogList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDataAccessLog"
+                ],
+                "summary": "分页获取数据权限审计日志",
+                "parameters": [
+                    {
+                        "description": "页码, 每页大小, 事件类型, 表名",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysDataAccessLogSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "分页获取数据权限审计日志",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.PageResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/system.SysDataAccessLog"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/createDepartment": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "创建部门",
+                "parameters": [
+                    {
+                        "description": "部门名称, 父部门ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysDepartment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建部门",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/deleteDepartment": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "删除部门",
+                "parameters": [
+                    {
+                        "description": "部门ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除部门",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/findDepartment": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "根据ID获取部门",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "部门ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/system.SysDepartment"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/getDepartmentList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "获取部门树",
+                "parameters": [
+                    {
+                        "description": "部门名称",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysDepartmentSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取部门树",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/system.SysDepartment"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/getDepartmentUsers": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "获取部门下的用户ID列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "部门ID",
+                        "name": "deptId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/setDepartmentUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "设置部门成员(反向分配用户)",
+                "parameters": [
+                    {
+                        "description": "部门ID, 用户ID列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetDepartmentUsers"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/department/updateDepartment": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDepartment"
+                ],
+                "summary": "更新部门",
+                "parameters": [
+                    {
+                        "description": "部门ID, 部门名称, 父部门ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysDepartment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新部门",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
                                         "msg": {
                                             "type": "string"
                                         }
@@ -6118,6 +6657,376 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "更新菜单",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/createPosition": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "创建岗位",
+                "parameters": [
+                    {
+                        "description": "岗位名称, 岗位编码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysPosition"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建岗位",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/deletePosition": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "删除岗位",
+                "parameters": [
+                    {
+                        "description": "岗位ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除岗位",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/findPosition": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "根据ID获取岗位",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "岗位ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/system.SysPosition"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/getPositionList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "分页获取岗位列表",
+                "parameters": [
+                    {
+                        "description": "页码, 每页大小, 搜索条件",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysPositionSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "分页获取岗位列表",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.PageResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/system.SysPosition"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/getPositionUsers": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "获取岗位下的用户ID列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "岗位ID",
+                        "name": "positionId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/setPositionUsers": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "设置岗位成员(反向分配用户)",
+                "parameters": [
+                    {
+                        "description": "岗位ID, 用户ID列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetPositionUsers"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/position/updatePosition": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysPosition"
+                ],
+                "summary": "更新岗位",
+                "parameters": [
+                    {
+                        "description": "岗位ID, 岗位名称",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysPosition"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新岗位",
                         "schema": {
                             "allOf": [
                                 {
@@ -10005,9 +10914,9 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "延迟",
-                        "name": "latency",
+                        "type": "integer",
+                        "description": "延迟(毫秒),便于 SQL 直接聚合",
+                        "name": "latency_ms",
                         "in": "query"
                     },
                     {
@@ -10042,7 +10951,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "链路ID",
+                        "description": "链路ID,索引支撑按 trace 反查",
                         "name": "trace_id",
                         "in": "query"
                     },
@@ -10152,9 +11061,9 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "description": "延迟",
-                        "name": "latency",
+                        "type": "integer",
+                        "description": "延迟(毫秒),便于 SQL 直接聚合",
+                        "name": "latency_ms",
                         "in": "query"
                     },
                     {
@@ -10201,7 +11110,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "链路ID",
+                        "description": "链路ID,索引支撑按 trace 反查",
                         "name": "trace_id",
                         "in": "query"
                     },
@@ -11719,6 +12628,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/setUserDepartments": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "设置用户归属部门",
+                "parameters": [
+                    {
+                        "description": "用户ID, 部门ID集合, 主部门ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetUserDepartments"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置用户归属部门",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/setUserInfo": {
             "put": {
                 "security": [
@@ -11762,6 +12721,56 @@ const docTemplate = `{
                                             "type": "object",
                                             "additionalProperties": true
                                         },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/setUserPositions": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "设置用户岗位",
+                "parameters": [
+                    {
+                        "description": "用户ID, 岗位ID集合",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetUserPositions"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置用户岗位",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
                                         "msg": {
                                             "type": "string"
                                         }
@@ -12850,6 +13859,13 @@ const docTemplate = `{
                     "description": "编码级",
                     "type": "string"
                 },
+                "file-only-modules": {
+                    "description": "这些模块的日志只进文件，不进控制台（即使 log-in-console 为 true）。\n模块名对应 logger.WithCtx(ctx).Mod(\"xxx\") 的 xxx",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "format": {
                     "description": "输出",
                     "type": "string"
@@ -12891,6 +13907,10 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
+                "createdBy": {
+                    "description": "创建人(数据权限引擎自动盖章/过滤)",
+                    "type": "integer"
+                },
                 "customerName": {
                     "description": "客户名",
                     "type": "string"
@@ -12898,6 +13918,10 @@ const docTemplate = `{
                 "customerPhoneData": {
                     "description": "客户手机号",
                     "type": "string"
+                },
+                "deptId": {
+                    "description": "归属部门(数据权限引擎自动盖章/过滤)",
+                    "type": "integer"
                 },
                 "sysUser": {
                     "description": "管理详情",
@@ -14059,6 +15083,42 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SetDataScope": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "dataScope": {
+                    "description": "数据权限 1全部 2本部门及以下 3本部门 4仅本人 5自定义部门",
+                    "type": "integer"
+                },
+                "deptIds": {
+                    "description": "自定义部门集(档位为5时生效)",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.SetDepartmentUsers": {
+            "type": "object",
+            "properties": {
+                "deptId": {
+                    "description": "部门ID",
+                    "type": "integer"
+                },
+                "userIds": {
+                    "description": "用户ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "request.SetMenuAuthorities": {
             "type": "object",
             "properties": {
@@ -14072,6 +15132,22 @@ const docTemplate = `{
                 "menuId": {
                     "description": "菜单ID",
                     "type": "integer"
+                }
+            }
+        },
+        "request.SetPositionUsers": {
+            "type": "object",
+            "properties": {
+                "positionId": {
+                    "description": "岗位ID",
+                    "type": "integer"
+                },
+                "userIds": {
+                    "description": "用户ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -14112,6 +15188,42 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "request.SetUserDepartments": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "deptIds": {
+                    "description": "归属部门ID集合(数据可见范围)",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "primaryDeptId": {
+                    "description": "主部门ID(数据归属/盖章),为空时取集合首个",
+                    "type": "integer"
+                }
+            }
+        },
+        "request.SetUserPositions": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "positionIds": {
+                    "description": "岗位ID集合",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
@@ -14447,6 +15559,40 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SysDataAccessLogSearch": {
+            "type": "object",
+            "properties": {
+                "eventType": {
+                    "description": "事件类型 no_identity/blocked_write",
+                    "type": "string"
+                },
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "targetTable": {
+                    "description": "受控业务表名(模糊)",
+                    "type": "string"
+                }
+            }
+        },
+        "request.SysDepartmentSearch": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "按部门名称模糊查询",
+                    "type": "string"
+                }
+            }
+        },
         "request.SysMcpApiBindingItem": {
             "type": "object",
             "properties": {
@@ -14496,6 +15642,35 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "string"
+                }
+            }
+        },
+        "request.SysPositionSearch": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "岗位编码",
+                    "type": "string"
+                },
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "岗位名称",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "是否启用",
+                    "type": "boolean"
                 }
             }
         },
@@ -15088,11 +16263,9 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
-                "dataAuthorityId": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/system.SysAuthority"
-                    }
+                "dataScope": {
+                    "description": "数据范围(数据权限)",
+                    "type": "integer"
                 },
                 "defaultRouter": {
                     "description": "默认菜单(默认dashboard)",
@@ -15248,6 +16421,119 @@ const docTemplate = `{
                 }
             }
         },
+        "system.SysDataAccessLog": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "authorityId": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "详情",
+                    "type": "string"
+                },
+                "eventType": {
+                    "description": "事件类型",
+                    "type": "string"
+                },
+                "method": {
+                    "description": "HTTP方法",
+                    "type": "string"
+                },
+                "operation": {
+                    "description": "操作类型",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "请求路径",
+                    "type": "string"
+                },
+                "requestId": {
+                    "description": "请求链路ID",
+                    "type": "string"
+                },
+                "scope": {
+                    "description": "数据权限档位",
+                    "type": "integer"
+                },
+                "targetTable": {
+                    "description": "受控业务表名",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "system.SysDepartment": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "ancestors": {
+                    "description": "祖级链",
+                    "type": "string"
+                },
+                "children": {
+                    "description": "子部门(内存组装,不建列)",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysDepartment"
+                    }
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "leader": {
+                    "description": "负责人用户(联系电话/邮箱从该用户带出)",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    ]
+                },
+                "leaderId": {
+                    "description": "负责人(关联 sys_users)",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "部门名称",
+                    "type": "string"
+                },
+                "parentId": {
+                    "description": "父部门ID(0为顶级)",
+                    "type": "integer"
+                },
+                "sort": {
+                    "description": "排序",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "system.SysDictionary": {
             "type": "object",
             "properties": {
@@ -15397,6 +16683,10 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "处理状态：未处理/处理中/处理完成",
+                    "type": "string"
+                },
+                "trace_id": {
+                    "description": "链路ID,用于按 trace 串联日志与错误",
                     "type": "string"
                 },
                 "updatedAt": {
@@ -15619,9 +16909,9 @@ const docTemplate = `{
                     "description": "请求ip",
                     "type": "string"
                 },
-                "latency": {
-                    "description": "延迟",
-                    "type": "string"
+                "latency_ms": {
+                    "description": "延迟(毫秒),便于 SQL 直接聚合",
+                    "type": "integer"
                 },
                 "method": {
                     "description": "请求方法",
@@ -15644,7 +16934,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "trace_id": {
-                    "description": "链路ID",
+                    "description": "链路ID,索引支撑按 trace 反查",
                     "type": "string"
                 },
                 "updatedAt": {
@@ -15694,6 +16984,43 @@ const docTemplate = `{
                 },
                 "value": {
                     "description": "参数值",
+                    "type": "string"
+                }
+            }
+        },
+        "system.SysPosition": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "code": {
+                    "description": "岗位编码",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "岗位名称",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "排序",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -15804,6 +17131,25 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
+                "departments": {
+                    "description": "多部门归属(数据可见范围)",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysDepartment"
+                    }
+                },
+                "dept": {
+                    "description": "主部门",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysDepartment"
+                        }
+                    ]
+                },
+                "deptId": {
+                    "description": "主部门ID(数据归属)",
+                    "type": "integer"
+                },
                 "email": {
                     "description": "用户邮箱",
                     "type": "string"
@@ -15835,6 +17181,13 @@ const docTemplate = `{
                 "phone": {
                     "description": "用户手机号",
                     "type": "string"
+                },
+                "positions": {
+                    "description": "多岗位",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysPosition"
+                    }
                 },
                 "updatedAt": {
                     "description": "更新时间",

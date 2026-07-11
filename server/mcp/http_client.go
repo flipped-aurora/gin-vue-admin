@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 type upstreamEnvelope[T any] struct {
@@ -116,6 +117,8 @@ func doUpstream[T any](ctx context.Context, method, endpoint string, query url.V
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
+	// 链路传播:外部 AI → MCP 进程 → GVA 主服务串成同一条 trace
+	logger.InjectTraceHeaders(timeoutCtx, req)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -198,6 +201,8 @@ func doUpstreamRaw(ctx context.Context, method, path string, query url.Values, b
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
+	// 链路传播:外部 AI → MCP 进程 → GVA 主服务串成同一条 trace
+	logger.InjectTraceHeaders(timeoutCtx, req)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

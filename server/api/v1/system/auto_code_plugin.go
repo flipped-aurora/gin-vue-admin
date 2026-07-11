@@ -90,7 +90,7 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitMenu(menuInfo)
+	err = autoCodePluginService.InitMenu(c.Request.Context(), menuInfo)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化Menu失败!")
 		response.FailWithMessage("创建初始化Menu失败"+err.Error(), c)
@@ -114,7 +114,7 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitAPI(apiInfo)
+	err = autoCodePluginService.InitAPI(c.Request.Context(), apiInfo)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化API失败!")
 		response.FailWithMessage("创建初始化API失败"+err.Error(), c)
@@ -138,7 +138,7 @@ func (a *AutoCodePluginApi) InitDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitDictionary(dictInfo)
+	err = autoCodePluginService.InitDictionary(c.Request.Context(), dictInfo)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化Dictionary失败!")
 		response.FailWithMessage("创建初始化Dictionary失败"+err.Error(), c)
@@ -208,7 +208,7 @@ func (a *AutoCodePluginApi) GetPluginList(c *gin.Context) {
 func (a *AutoCodePluginApi) Remove(c *gin.Context) {
 	pluginName := c.Query("pluginName")
 	pluginType := c.Query("pluginType")
-	err := autoCodePluginService.Remove(pluginName, pluginType)
+	err := autoCodePluginService.Remove(c.Request.Context(), pluginName, pluginType)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败"+err.Error(), c)

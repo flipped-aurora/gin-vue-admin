@@ -1037,7 +1037,7 @@ const LLM_PROVIDER_PRESETS = [
     provider: 'minimax',
     model: 'MiniMax-M3',
     openai_base: 'https://api.minimax.io/v1',
-    anthropic_base: 'https://api.minimax.io/anthropic/v1',
+    anthropic_base: 'https://api.minimax.io/anthropic',
     context: 1000000,
     price: { input: 0.6, output: 2.4 },
     cache_read: 0.12,

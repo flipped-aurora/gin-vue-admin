@@ -78,21 +78,26 @@
         class="h-6 w-px bg-gray-200 dark:bg-slate-600"
         role="separator"
       />
-      <!-- hover 触发：鼠标移上用户胶囊即展开操作菜单，移出（含指针穿越到菜单）后自动收起 -->
-      <HoverCardRoot v-model:open="hoverOpen" :open-delay="100" :close-delay="120">
+      <!-- hover 触发：鼠标移上用户胶囊即展开操作菜单；点击胶囊则钉住展开（移出也保持），点击面板外或选择菜单项收起 -->
+      <HoverCardRoot :open="menuOpen" :open-delay="100" :close-delay="120" @update:open="onHoverChange">
         <HoverCardTrigger as-child>
-          <!-- 用户信息聚合为胶囊组件：圆角 + 内边距，hover 时出现浅色反馈 -->
+          <!-- 用户信息聚合为胶囊组件：圆角跟随全局 --gva-radius + 内边距，hover 时出现浅色反馈 -->
           <div
-            class="flex items-center gap-2 px-2 py-1 rounded-lg outline-none cursor-pointer transition-colors hover:bg-muted"
+            ref="triggerEl"
+            class="flex items-center gap-2 px-2 py-1 rounded-[var(--gva-radius)] outline-none cursor-pointer transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+            @pointerdown="pinMenu"
           >
             <CustomPic />
             <span
               v-show="!isMobile"
               class="text-base font-medium max-w-[8rem] truncate text-black dark:text-gray-100"
             >{{ userStore.userInfo.nickName }}</span>
-            <el-icon class="text-slate-400 dark:text-slate-500">
-              <arrow-down />
-            </el-icon>
+            <!-- 展开箭头：svgIcon，随面板展开/收缩沿顺时针翻转（0→180→360…始终增加） -->
+            <svg-icon
+              icon="lucide:chevron-down"
+              class="h-4 w-4 text-slate-400 transition-transform duration-200 dark:text-slate-500"
+              :style="{ transform: `rotate(${arrowDeg}deg)` }"
+            />
           </div>
         </HoverCardTrigger>
         <HoverCardPortal>
@@ -101,6 +106,7 @@
             side="bottom"
             align="end"
             class="z-[3000] min-w-56 rounded-[10px] border border-border bg-container p-1.5 shadow-sider data-[state=open]:animate-[fade-in_0.1s_ease-out] data-[state=closed]:animate-[fade-out_0.1s_ease-in]"
+            @pointer-down-outside="onPointerDownOutside"
           >
             <!-- 用户身份信息（label，非交互） -->
             <div class="gva-menu-label">
@@ -163,7 +169,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useAppStore, useThemeStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { setUserAuthority } from '@/api/user'
   import { fmtTitle } from '@/utils/fmtRouterTitle'
   import gvaAside from '@/view/layout/aside/index.vue'
@@ -206,9 +212,33 @@
   }
   const matched = computed(() => route.meta.matched)
 
-  // hover 菜单受控：点击任意菜单项后立即关闭
+  // 用户菜单受控：hover 展开由 reka 驱动（hoverOpen），点击胶囊钉住（pinned）
+  // menuOpen = 悬停中 或 已钉住；两者任一为真即展开
+  const triggerEl = ref(null)
   const hoverOpen = ref(false)
+  const pinned = ref(false)
+  const menuOpen = computed(() => hoverOpen.value || pinned.value)
+  const onHoverChange = (val) => {
+    hoverOpen.value = val
+  }
+  // 点击胶囊：钉住展开，移出后仍保持（reka 会在 pointerdown 关闭 hover 态，pinned 兜底不收起）
+  const pinMenu = () => {
+    pinned.value = true
+  }
+  // 点击面板外收起；但点击胶囊本身（触发钉住）不算“外部”，避免与 pinMenu 抢占
+  const onPointerDownOutside = (e) => {
+    const target = e.detail?.originalEvent?.target
+    if (triggerEl.value && target && triggerEl.value.contains(target)) return
+    pinned.value = false
+  }
+  // 展开箭头角度：每次展开/收缩累加 180°，保证上下翻转始终顺时针
+  const arrowDeg = ref(0)
+  watch(menuOpen, () => {
+    arrowDeg.value += 180
+  })
+  // 选择菜单项：清除钉住与 hover 态，立即收起
   const handleSelect = (fn) => {
+    pinned.value = false
     hoverOpen.value = false
     fn && fn()
   }

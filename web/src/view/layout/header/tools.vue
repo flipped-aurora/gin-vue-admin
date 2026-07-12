@@ -1,11 +1,11 @@
 <template>
   <!-- 工具图标组：扁平图标，无独立描边/阴影，统一 32px 点击区域，hover 出现浅色高亮。
        el-tooltip__trigger / el-dropdown 工具类统一拉伸为 32px 高，保证所有图标垂直居中对齐。 -->
-  <div class="flex items-center gap-1 mx-4 [&_.el-tooltip__trigger]:inline-flex [&_.el-tooltip__trigger]:items-center [&_.el-tooltip__trigger]:h-8 [&_.el-dropdown]:inline-flex [&_.el-dropdown]:items-center [&_.el-dropdown]:h-8">
+  <div class="flex items-center gap-1 mx-3 [&_.el-tooltip__trigger]:inline-flex [&_.el-tooltip__trigger]:items-center [&_.el-tooltip__trigger]:h-9 [&_.el-dropdown]:inline-flex [&_.el-dropdown]:items-center [&_.el-dropdown]:h-9">
     <el-tooltip v-if="isDev" effect="dark" content="视频教程" placement="bottom">
       <el-dropdown @command="toDoc">
         <span class="gva-tool-btn">
-          <el-icon class="text-[18px] leading-none">
+          <el-icon class="text-[20px] leading-none">
             <Film />
           </el-icon>
         </span>
@@ -29,7 +29,7 @@
       placement="bottom"
     >
       <span class="gva-tool-btn" @click="handleCommand">
-        <el-icon class="text-[18px] leading-none">
+        <el-icon class="text-[20px] leading-none">
           <Search />
         </el-icon>
       </span>
@@ -37,7 +37,7 @@
 
     <el-tooltip effect="dark" content="系统设置" placement="bottom">
       <span class="gva-tool-btn" @click="toggleSetting">
-        <el-icon class="text-[18px] leading-none">
+        <el-icon class="text-[20px] leading-none">
           <Setting />
         </el-icon>
       </span>
@@ -50,7 +50,7 @@
       placement="bottom"
     >
       <span class="gva-tool-btn" @click="toggleRefresh">
-        <el-icon :class="showRefreshAnmite ? 'animate-spin' : ''" class="text-[18px] leading-none">
+        <el-icon :class="showRefreshAnmite ? 'animate-spin' : ''" class="text-[20px] leading-none">
           <Refresh />
         </el-icon>
       </span>
@@ -61,10 +61,10 @@
         class="gva-tool-btn"
         @click="themeStore.toggleTheme(!themeStore.isDark)"
       >
-        <el-icon v-if="themeStore.isDark" class="text-[18px] leading-none">
+        <el-icon v-if="themeStore.isDark" class="text-[20px] leading-none">
           <Sunny />
         </el-icon>
-        <el-icon v-else class="text-[18px] leading-none">
+        <el-icon v-else class="text-[20px] leading-none">
           <Moon />
         </el-icon>
       </span>

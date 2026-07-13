@@ -25,7 +25,7 @@ export default defineConfig({
     // header 工具图标点击区域：扁平 36px，与右侧用户胶囊（30px 头像 + 内边距≈36px）等高，视觉权重对齐；圆角跟随全局 --gva-radius；
     // hover 出现清晰的中性灰底——用半透明叠加（黑/白各 10%）而非 bg-muted：
     // muted 亮色值≈slate-50，与白色顶栏几乎同色导致 hover 底看不出来；叠加层与顶栏底色无关，深浅两态都清晰可见。
-    'gva-tool-btn': 'inline-flex items-center justify-center w-9 h-9 rounded-[var(--gva-radius)] text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer outline-none transition-colors',
+    'gva-tool-btn': 'inline-flex items-center justify-center w-9 h-9 rounded-[var(--gva-radius)] text-muted-foreground hover:text-base-text hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer outline-none transition-colors',
     // header 用户菜单项：图标+文案，hover/键盘聚焦/子菜单展开高亮。
     // 高亮底与工具栏按钮一致——中性灰叠加（黑/白各 10%）而非 bg-muted：muted 亮色值≈slate-50 带冷蓝调，观感偏浅蓝且与白色面板对比过弱。
     'gva-menu-item': 'flex items-center gap-2 w-full px-2.5 py-2 rounded-lg text-[14px] text-base-text cursor-pointer outline-none transition-colors hover:bg-black/10 dark:hover:bg-white/10 data-[highlighted]:bg-black/10 dark:data-[highlighted]:bg-white/10 data-[state=open]:bg-black/10 dark:data-[state=open]:bg-white/10',

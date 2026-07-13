@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-between fixed top-0 right-0 z-20 h-16 text-slate-700 dark:text-slate-300 items-center px-2"
+    class="flex justify-between fixed top-0 right-0 z-20 h-16 text-base-text items-center px-2"
     :style="{
       left: isVertical ? headerSideWidth + 'px' : '0px',
       background: 'var(--gva-header-bg)',
@@ -75,7 +75,7 @@
       <tools />
       <!-- 0.5px 极细分隔线，区分工具区与用户区 -->
       <div
-        class="h-6 w-px bg-gray-200 dark:bg-slate-600"
+        class="h-6 w-px bg-border"
         role="separator"
       />
       <!-- hover 触发：鼠标移上用户胶囊即展开操作菜单；点击胶囊则钉住展开（移出也保持），点击面板外或选择菜单项收起 -->
@@ -90,12 +90,12 @@
             <CustomPic />
             <span
               v-show="!isMobile"
-              class="text-base font-medium max-w-[8rem] truncate text-black dark:text-gray-100"
+              class="text-base font-medium max-w-[8rem] truncate text-base-text"
             >{{ userStore.userInfo.nickName }}</span>
             <!-- 展开箭头：svgIcon，随面板展开/收缩沿顺时针翻转（0→180→360…始终增加） -->
             <svg-icon
               icon="lucide:chevron-down"
-              class="h-4 w-4 text-slate-400 transition-transform duration-200 dark:text-slate-500"
+              class="h-4 w-4 text-muted-foreground transition-transform duration-200"
               :style="{ transform: `rotate(${arrowDeg}deg)` }"
             />
           </div>
@@ -111,10 +111,10 @@
             <!-- 用户身份信息（label，非交互） -->
             <div class="gva-menu-label">
               <div class="min-w-0">
-                <div class="truncate text-[15px] font-semibold text-black dark:text-gray-100">
+                <div class="truncate text-[15px] font-semibold text-base-text">
                   {{ userStore.userInfo.nickName }}
                 </div>
-                <div class="truncate text-[13px] text-slate-500 dark:text-slate-400">
+                <div class="truncate text-[13px] text-muted-foreground">
                   当前角色：{{ userStore.userInfo.authority.authorityName }}
                 </div>
               </div>
@@ -131,7 +131,7 @@
                 class="gva-menu-item"
                 @click="handleSelect(() => changeUserAuth(item.authorityId))"
               >
-                <svg-icon icon="lucide:repeat" class="h-4 w-4 shrink-0 text-slate-500" />
+                <svg-icon icon="lucide:repeat" class="h-4 w-4 shrink-0 text-muted-foreground" />
                 <span>切换为：{{ item.authorityName }}</span>
               </div>
               <!-- 分隔线：角色切换 / 账户操作 -->
@@ -140,7 +140,7 @@
 
             <!-- 账户操作组 -->
             <div class="gva-menu-item" @click="handleSelect(toPerson)">
-              <svg-icon icon="lucide:user" class="h-4 w-4 shrink-0 text-slate-500" />
+              <svg-icon icon="lucide:user" class="h-4 w-4 shrink-0 text-muted-foreground" />
               <span>个人信息</span>
             </div>
 

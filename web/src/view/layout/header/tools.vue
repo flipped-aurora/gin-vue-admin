@@ -1,74 +1,41 @@
 <template>
-  <!-- 工具图标组：扁平图标，无独立描边/阴影，统一 32px 点击区域，hover 出现浅色高亮。
-       el-tooltip__trigger / el-dropdown 工具类统一拉伸为 32px 高，保证所有图标垂直居中对齐。 -->
-  <div class="flex items-center gap-1 mx-3 [&_.el-tooltip__trigger]:inline-flex [&_.el-tooltip__trigger]:items-center [&_.el-tooltip__trigger]:h-9 [&_.el-dropdown]:inline-flex [&_.el-dropdown]:items-center [&_.el-dropdown]:h-9">
-    <el-tooltip v-if="isDev" effect="dark" content="视频教程" placement="bottom">
-      <el-dropdown @command="toDoc">
-        <span class="gva-tool-btn">
-          <el-icon class="text-[20px] leading-none">
-            <Film />
-          </el-icon>
-        </span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item
-              v-for="item in videoList"
-              :key="item.link"
-              :command="item.link"
-              >{{ item.title }}</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </el-tooltip>
+  <!-- 工具按钮组：扁平图标，无独立描边/阴影，hover 时图标 morph 为文案（取代 tooltip）。 -->
+  <div class="flex items-center gap-1 mx-3">
+    <g-dropdown-menu
+      v-if="isDev"
+      trigger="hover"
+      :items="videoList"
+      @select="(item) => toDoc(item.value)"
+    >
+      <icon-button icon="lucide:clapperboard" label="教程" />
+    </g-dropdown-menu>
 
-    <el-tooltip
+    <icon-button
       v-if="settings.header.search.visible"
-      effect="dark"
-      content="搜索"
-      placement="bottom"
-    >
-      <span class="gva-tool-btn" @click="handleCommand">
-        <el-icon class="text-[20px] leading-none">
-          <Search />
-        </el-icon>
-      </span>
-    </el-tooltip>
+      icon="lucide:search"
+      label="搜索"
+      @click="handleCommand"
+    />
 
-    <el-tooltip effect="dark" content="系统设置" placement="bottom">
-      <span class="gva-tool-btn" @click="toggleSetting">
-        <el-icon class="text-[20px] leading-none">
-          <Setting />
-        </el-icon>
-      </span>
-    </el-tooltip>
+    <icon-button
+      icon="lucide:settings"
+      label="设置"
+      @click="toggleSetting"
+    />
 
-    <el-tooltip
+    <icon-button
       v-if="settings.header.refresh.visible"
-      effect="dark"
-      content="刷新"
-      placement="bottom"
-    >
-      <span class="gva-tool-btn" @click="toggleRefresh">
-        <el-icon :class="showRefreshAnmite ? 'animate-spin' : ''" class="text-[20px] leading-none">
-          <Refresh />
-        </el-icon>
-      </span>
-    </el-tooltip>
+      icon="lucide:refresh-cw"
+      label="刷新"
+      :icon-class="showRefreshAnmite ? 'animate-spin' : ''"
+      @click="toggleRefresh"
+    />
 
-    <el-tooltip effect="dark" content="切换主题" placement="bottom">
-      <span
-        class="gva-tool-btn"
-        @click="themeStore.toggleTheme(!themeStore.isDark)"
-      >
-        <el-icon v-if="themeStore.isDark" class="text-[20px] leading-none">
-          <Sunny />
-        </el-icon>
-        <el-icon v-else class="text-[20px] leading-none">
-          <Moon />
-        </el-icon>
-      </span>
-    </el-tooltip>
+    <icon-button
+      :icon="themeStore.isDark ? 'lucide:sun' : 'lucide:moon'"
+      label="主题"
+      @click="themeStore.toggleTheme(!themeStore.isDark)"
+    />
 
     <gva-setting v-model:drawer="showSettingDrawer"></gva-setting>
     <command-menu ref="command" />
@@ -82,6 +49,7 @@
   import { ref } from 'vue'
   import { emitter } from '@/utils/bus.js'
   import CommandMenu from '@/components/commandMenu/index.vue'
+  import IconButton from '@/components/iconButton/index.vue'
   import { toDoc } from '@/utils/doc'
   import { isDev } from '@/utils/env.js'
 
@@ -129,60 +97,60 @@
 
   const videoList = [
     {
-      title: '1.clone项目和安装依赖',
-      link: 'https://www.bilibili.com/video/BV1jx4y1s7xx'
+      label: '1.clone项目和安装依赖',
+      value: 'https://www.bilibili.com/video/BV1jx4y1s7xx'
     },
     {
-      title: '2.初始化项目',
-      link: 'https://www.bilibili.com/video/BV1sr421K7sv'
+      label: '2.初始化项目',
+      value: 'https://www.bilibili.com/video/BV1sr421K7sv'
     },
     {
-      title: '3.开启调试工具+创建初始化包',
-      link: 'https://www.bilibili.com/video/BV1iH4y1c7Na'
+      label: '3.开启调试工具+创建初始化包',
+      value: 'https://www.bilibili.com/video/BV1iH4y1c7Na'
     },
     {
-      title: '4.手动使用自动化创建功能',
-      link: 'https://www.bilibili.com/video/BV1UZ421T7fV'
+      label: '4.手动使用自动化创建功能',
+      value: 'https://www.bilibili.com/video/BV1UZ421T7fV'
     },
     {
-      title: '5.使用已有表格创建业务',
-      link: 'https://www.bilibili.com/video/BV1NE4m1977s'
+      label: '5.使用已有表格创建业务',
+      value: 'https://www.bilibili.com/video/BV1NE4m1977s'
     },
     {
-      title: '6.使用AI创建业务和创建数据源模式的可选项',
-      link: 'https://www.bilibili.com/video/BV17i421a7DE'
+      label: '6.使用AI创建业务和创建数据源模式的可选项',
+      value: 'https://www.bilibili.com/video/BV17i421a7DE'
     },
     {
-      title: '7.创建自己的后端方法',
-      link: 'https://www.bilibili.com/video/BV1Yw4m1k7fg'
+      label: '7.创建自己的后端方法',
+      value: 'https://www.bilibili.com/video/BV1Yw4m1k7fg'
     },
     {
-      title: '8.新增一个前端页面',
-      link: 'https://www.bilibili.com/video/BV12y411i7oE'
+      label: '8.新增一个前端页面',
+      value: 'https://www.bilibili.com/video/BV12y411i7oE'
     },
     {
-      title: '9.配置一个前端二级页面',
-      link: 'https://www.bilibili.com/video/BV1ZM4m1y7i3'
+      label: '9.配置一个前端二级页面',
+      value: 'https://www.bilibili.com/video/BV1ZM4m1y7i3'
     },
     {
-      title: '10.配置一个前端菜单参数',
-      link: 'https://www.bilibili.com/video/BV1WS42197DZ'
+      label: '10.配置一个前端菜单参数',
+      value: 'https://www.bilibili.com/video/BV1WS42197DZ'
     },
     {
-      title: '11.菜单参数实战+动态菜单标题+菜单高亮配置',
-      link: 'https://www.bilibili.com/video/BV1NE4m1979c'
+      label: '11.菜单参数实战+动态菜单标题+菜单高亮配置',
+      value: 'https://www.bilibili.com/video/BV1NE4m1979c'
     },
     {
-      title: '12.增加菜单可控按钮',
-      link: 'https://www.bilibili.com/video/BV1Sw4m1k746'
+      label: '12.增加菜单可控按钮',
+      value: 'https://www.bilibili.com/video/BV1Sw4m1k746'
     },
     {
-      title: '14.新增客户角色和其相关配置教学',
-      link: 'https://www.bilibili.com/video/BV1Ki421a7X2'
+      label: '14.新增客户角色和其相关配置教学',
+      value: 'https://www.bilibili.com/video/BV1Ki421a7X2'
     },
     {
-      title: '15.发布项目上线',
-      link: 'https://www.bilibili.com/video/BV1Lx4y1s77D'
+      label: '15.发布项目上线',
+      value: 'https://www.bilibili.com/video/BV1Lx4y1s77D'
     }
   ]
 </script>

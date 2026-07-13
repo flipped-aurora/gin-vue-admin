@@ -1,17 +1,70 @@
 package example
 
 import (
+	"errors"
+	"strconv"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example/request"
 	exampleRes "github.com/flipped-aurora/gin-vue-admin/server/model/example/response"
+	exampleService "github.com/flipped-aurora/gin-vue-admin/server/service/example"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"strconv"
 )
 
 type FileUploadAndDownloadApi struct{}
+
+// CreateScanUploadToken 创建短时、一次性的扫码上传凭证
+// @Tags      ExaFileUploadAndDownload
+// @Summary   创建扫码上传凭证
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      object{classId=int}  true  "文件分类 ID"
+// @Success   200   {object}  response.Response{data=object{token=string,expiresAt=int64},msg=string}
+// @Router    /fileUploadAndDownload/createScanUploadToken [post]
+func (b *FileUploadAndDownloadApi) CreateScanUploadToken(c *gin.Context) {
+	var req struct {
+		ClassID int `json:"classId"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || req.ClassID < 0 {
+		response.FailWithMessage("classId 参数错误", c)
+		return
+	}
+	token, expiresAt, err := fileUploadAndDownloadService.IssueScanUploadToken(req.ClassID)
+	if err != nil {
+		global.GVA_LOG.Error("创建扫码上传凭证失败!", zap.Error(err))
+		response.FailWithMessage("创建扫码上传凭证失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{
+		"token":     token,
+		"expiresAt": expiresAt.Unix(),
+	}, "创建成功", c)
+}
+
+// UploadFileByScanToken 使用一次性扫码凭证上传文件
+// @Tags      ExaFileUploadAndDownload
+// @Summary   使用扫码上传凭证上传文件
+// @accept    multipart/form-data
+// @Produce   application/json
+// @Param     x-upload-token  header    string  true  "扫码上传凭证"
+// @Param     file            formData  file    true  "上传文件"
+// @Success   200             {object}  response.Response{data=exampleRes.ExaFileResponse,msg=string}
+// @Router    /fileUploadAndDownload/uploadByScanToken [post]
+func (b *FileUploadAndDownloadApi) UploadFileByScanToken(c *gin.Context) {
+	classID, err := fileUploadAndDownloadService.ConsumeScanUploadToken(c.GetHeader("x-upload-token"))
+	if err != nil {
+		if !errors.Is(err, exampleService.ErrInvalidScanUploadToken) {
+			global.GVA_LOG.Error("读取扫码上传凭证失败!", zap.Error(err))
+		}
+		response.NoAuth("扫码上传凭证无效或已过期，请重新扫码", c)
+		return
+	}
+	b.uploadFile(c, classID)
+}
 
 // UploadFile
 // @Tags      ExaFileUploadAndDownload
@@ -23,10 +76,14 @@ type FileUploadAndDownloadApi struct{}
 // @Success   200   {object}  response.Response{data=exampleRes.ExaFileResponse,msg=string}  "上传文件示例,返回包括文件详情"
 // @Router    /fileUploadAndDownload/upload [post]
 func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
+	classId, _ := strconv.Atoi(c.DefaultPostForm("classId", "0"))
+	b.uploadFile(c, classId)
+}
+
+func (b *FileUploadAndDownloadApi) uploadFile(c *gin.Context, classId int) {
 	var file example.ExaFileUploadAndDownload
 	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
-	classId, _ := strconv.Atoi(c.DefaultPostForm("classId", "0"))
 	if err != nil {
 		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
 		response.FailWithMessage("接收文件失败", c)

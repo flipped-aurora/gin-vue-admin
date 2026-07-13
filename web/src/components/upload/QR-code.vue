@@ -31,7 +31,7 @@
 import logoSrc from '@/assets/logo.png'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 import { ref } from 'vue'
-import { useUserStore } from '@/pinia/modules/user'
+import { createScanUploadToken } from '@/api/fileUploadAndDownload'
 
 defineOptions({
   name: 'QRCodeUpload'
@@ -47,14 +47,15 @@ const props = defineProps({
 })
 
 const dialogVisible = ref(false)
-const userStore = useUserStore()
 const codeUrl = ref('')
 
-const createQrCode = () => {
+const createQrCode = async() => {
+  const res = await createScanUploadToken(props.classId)
+  if (res.code !== 0) return
   const local = window.location
-  codeUrl.value = local.protocol + '//' + local.host + '/#/scanUpload?id=' + props.classId + '&token=' + userStore.token + '&t=' + Date.now()
+  const query = new URLSearchParams({ uploadToken: res.data.token })
+  codeUrl.value = `${local.protocol}//${local.host}/#/scanUpload?${query.toString()}`
   dialogVisible.value = true
-  console.log(codeUrl.value)
 }
 
 const onFinished = () => {

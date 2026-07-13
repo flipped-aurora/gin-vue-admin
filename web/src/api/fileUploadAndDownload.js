@@ -65,3 +65,12 @@ export const uploadFile = (data) => {
     data,
   });
 };
+
+// 创建短时、一次性且绑定上传分类的扫码凭证
+export const createScanUploadToken = (classId) => {
+  return service({
+    url: '/fileUploadAndDownload/createScanUploadToken',
+    method: 'post',
+    data: { classId }
+  })
+}

@@ -22,6 +22,7 @@ func DefaultCasbin() []CasbinInfo {
 		{Path: "/user/getUserInfo", Method: "GET"},
 		{Path: "/user/setSelfInfo", Method: "PUT"},
 		{Path: "/fileUploadAndDownload/upload", Method: "POST"},
+		{Path: "/fileUploadAndDownload/createScanUploadToken", Method: "POST"},
 		{Path: "/sysDictionary/findSysDictionary", Method: "GET"},
 	}
 }

@@ -108,6 +108,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/removeChunk", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/upload", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/createScanUploadToken", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/editFileName", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/fileUploadAndDownload/getFileList", V2: "POST"},
@@ -292,6 +293,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "8881", V1: "/user/getUserList", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/user/setUserAuthority", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/upload", V2: "POST"},
+		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/createScanUploadToken", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/getFileList", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/fileUploadAndDownload/editFileName", V2: "POST"},
@@ -340,6 +342,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "9528", V1: "/user/getUserList", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/user/setUserAuthority", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/upload", V2: "POST"},
+		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/createScanUploadToken", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/getFileList", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/deleteFile", V2: "POST"},
 		{Ptype: "p", V0: "9528", V1: "/fileUploadAndDownload/editFileName", V2: "POST"},

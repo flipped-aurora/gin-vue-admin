@@ -43,6 +43,7 @@
             <g-color-picker
               v-model="settings.header.bg"
               alpha
+              clearable
               format="rgb"
               placeholder="跟随主题"
               aria-label="顶栏背景"
@@ -64,6 +65,7 @@
             <g-color-picker
               v-model="settings.tab.bg"
               alpha
+              clearable
               format="rgb"
               placeholder="跟随主题"
               aria-label="标签栏背景"

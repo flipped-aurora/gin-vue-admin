@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="h-full gva-container2 overflow-auto bg-slate-50/60 dark:bg-slate-800">
     <div class="space-y-2 py-2">
-      <section
+      <gva-card
         class="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white px-5 py-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
       >
         
@@ -20,7 +20,7 @@
             <el-button @click="goPluginMarket">插件市场</el-button>
           </div>
         </div>
-      </section>
+      </gva-card>
 
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
         <gva-card>

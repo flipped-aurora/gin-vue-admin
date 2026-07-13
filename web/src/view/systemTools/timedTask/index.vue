@@ -123,6 +123,18 @@
             <el-select v-model="form.methodName" placeholder="选择已注册方法" style="width: 100%">
               <el-option v-for="m in methodOptions" :key="m.name" :label="`${m.name} — ${m.description}`" :value="m.name" />
             </el-select>
+            <div class="text-xs text-gray-400 mt-1 flex items-center flex-wrap">
+              <span>没有想要的方法？需在后端 server/initialize/timer.go 的 Timer() 中注册，重启服务后即可选择</span>
+              <el-popover placement="top" :width="560" trigger="click">
+                <template #reference>
+                  <el-button type="primary" link size="small">查看注册模板</el-button>
+                </template>
+                <pre class="text-xs leading-5 whitespace-pre overflow-x-auto m-0 p-2 rounded bg-gray-50 dark:bg-gray-800">{{ methodRegisterTemplate }}</pre>
+                <div class="text-right mt-2">
+                  <el-button size="small" type="primary" @click="copyRegisterTemplate">复制模板</el-button>
+                </div>
+              </el-popover>
+            </div>
           </el-form-item>
           <el-form-item label="参数(JSON)">
             <el-input v-model="paramsText" type="textarea" :rows="4" placeholder='自由 JSON, 由方法自行解析, 如 {"days": 30}; 留空则不传' />
@@ -286,6 +298,32 @@ const paramsText = ref('')
 const headerText = ref('')
 const methodOptions = ref([])
 const formTitle = computed(() => (form.value.ID ? '编辑定时任务' : '新增定时任务'))
+
+// 注册方法代码模板: 引导二开在 server/initialize/timer.go 的 Timer() 中追加 task.Register
+const methodRegisterTemplate = `// 位置: server/initialize/timer.go -> Timer()
+task.Register("MyTask", "任务说明(展示在方法下拉中)", func(ctx context.Context, params json.RawMessage) error {
+	// params 为面板「参数(JSON)」原文, 按需解析; 无参数可忽略
+	// var p struct {
+	// 	Days int \`json:"days"\`
+	// }
+	// if len(params) > 0 {
+	// 	if err := json.Unmarshal(params, &p); err != nil {
+	// 		return err
+	// 	}
+	// }
+	// TODO: 业务逻辑; 数据库操作请使用 global.GVA_DB.WithContext(ctx)
+	return nil
+})`
+
+const copyRegisterTemplate = () => {
+  const input = document.createElement('textarea')
+  input.value = methodRegisterTemplate
+  document.body.appendChild(input)
+  input.select()
+  document.execCommand('copy')
+  document.body.removeChild(input)
+  ElMessage.success('已复制, 请粘贴到 server/initialize/timer.go 的 Timer() 中, 重启后生效')
+}
 
 const openForm = async (row) => {
   form.value = row ? { ...emptyForm(), ...row } : emptyForm()

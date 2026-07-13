@@ -17,3 +17,4 @@
 - `frontend-rules.md`
 - `frontend-utils.md`
 - `component-library.md`
+- `theme-classnames.md`

@@ -3,14 +3,14 @@
     <div
       v-for="item in menuThemes"
       :key="item.value"
-      class="relative flex flex-col items-center p-1.5 bg-white dark:bg-gray-700/50 border rounded-lg cursor-pointer transition-colors duration-150 ease-in-out hover:border-gray-300 dark:hover:border-gray-500"
-      :class="modelValue === item.value ? '' : 'border-gray-200 dark:border-gray-600'"
+      class="relative flex flex-col items-center p-1.5 bg-container border rounded-lg cursor-pointer transition-colors duration-150 ease-in-out hover:border-primary"
+      :class="modelValue === item.value ? '' : 'border-border'"
       :style="modelValue === item.value ? { borderColor: primaryColor, boxShadow: `0 0 0 1px ${primaryColor}` } : {}"
       :title="item.label"
       @click="handleChange(item.value)"
     >
       <!-- 迷你预览：左侧栏 + 主区 -->
-      <div class="w-full h-9 rounded overflow-hidden flex border border-gray-200 dark:border-gray-600">
+      <div class="w-full h-9 rounded overflow-hidden flex border border-border">
         <div class="w-1/3 h-full flex flex-col gap-1 p-1" :style="{ background: item.previewSide }">
           <div class="h-1.5 rounded-sm" :style="{ background: item.previewActive }"></div>
           <div class="h-1.5 rounded-sm opacity-40" :style="{ background: item.previewSideText }"></div>

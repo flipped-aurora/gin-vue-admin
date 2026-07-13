@@ -1,11 +1,11 @@
 <template>
   <div
-    class="relative flex flex-col gap-3 p-4 bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl cursor-pointer transition-all duration-150 ease-in-out hover:-translate-y-0.5 hover:shadow-lg"
+    class="relative flex flex-col gap-3 p-4 bg-container border-2 border-border rounded-xl cursor-pointer transition-all duration-150 ease-in-out hover:-translate-y-0.5 hover:shadow-lg"
     :class="{ 'opacity-60': !compatible }"
     @click="$emit('apply')"
   >
     <!-- 迷你预览：侧栏 + 主区 + 调色板 -->
-    <div class="h-14 rounded-lg overflow-hidden flex border border-gray-200 dark:border-gray-600">
+    <div class="h-14 rounded-lg overflow-hidden flex border border-border">
       <div class="w-1/4 h-full" :style="{ background: sideBg }"></div>
       <div class="flex-1 h-full p-2 flex flex-col gap-1" :style="{ background: mainBg }">
         <div class="h-2 w-2/3 rounded" :style="{ background: preview.primaryColor }"></div>
@@ -34,7 +34,7 @@
       v-if="!preset.builtin"
       type="button"
       aria-label="删除预设"
-      class="absolute top-2 right-2 p-0 m-0 bg-transparent border-0 cursor-pointer leading-none text-gray-400 hover:text-red-500 [font:inherit]"
+      class="absolute top-2 right-2 p-0 m-0 bg-transparent border-0 cursor-pointer leading-none text-muted-foreground hover:text-red-500 [font:inherit]"
       @click.stop="$emit('remove')"
     >
       <el-icon>

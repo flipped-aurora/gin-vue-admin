@@ -69,9 +69,6 @@
           <SettingItem label="卡片样式">
             <CardModeSelector v-model="settings.card.mode" />
           </SettingItem>
-          <SettingItem label="推荐色阶">
-            <g-switch v-model="settings.recommendColor" aria-label="推荐色阶" />
-          </SettingItem>
           <SettingItem label="信息色跟随主色">
             <g-switch v-model="settings.isInfoFollowPrimary" aria-label="信息色跟随主色" />
           </SettingItem>

@@ -6,7 +6,7 @@
         :key="colorItem.color"
         type="button"
         class="relative w-6 h-6 rounded-full cursor-pointer border text-white border-black/5 transition-transform duration-150 hover:scale-110"
-        :class="modelValue === colorItem.color ? 'scale-110 ring-2 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-800' : ''"
+        :class="modelValue === colorItem.color ? 'scale-110 ring-2 ring-offset-2 ring-offset-muted' : ''"
         :style="{
           backgroundColor: colorItem.color,
           '--tw-ring-color': colorItem.color
@@ -22,7 +22,7 @@
         />
       </button>
 
-      <span class="w-px h-5 bg-gray-200 dark:bg-gray-600 mx-0.5"></span>
+      <span class="w-px h-5 bg-border mx-0.5"></span>
 
       <g-color-picker
         :model-value="modelValue"
@@ -32,7 +32,7 @@
         @update:model-value="handleCustomColorChange"
       />
 
-      <code class="ml-auto text-xs font-mono text-gray-400 dark:text-gray-500">{{ modelValue }}</code>
+      <code class="ml-auto text-xs font-mono text-muted-foreground">{{ modelValue }}</code>
     </div>
   </div>
 </template>

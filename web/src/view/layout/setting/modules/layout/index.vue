@@ -38,7 +38,7 @@
           </SettingItem>
           <SettingItem label="顶栏背景">
             <template #suffix>
-              <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">留空跟随主题</span>
+              <span class="text-xs text-muted-foreground ml-2">留空跟随主题</span>
             </template>
             <g-color-picker
               v-model="settings.header.bg"
@@ -81,7 +81,7 @@
               ]"
             />
           </SettingItem>
-          <div class="flex items-center gap-1.5 py-2.5 text-xs text-gray-400 dark:text-gray-500 leading-snug">
+          <div class="flex items-center gap-1.5 py-2.5 text-xs text-muted-foreground leading-snug">
             <svg-icon icon="lucide:info" class="flex-shrink-0" />
             <span>暗色模式下将基于以上配色自动推导深色版本，无需单独设置</span>
           </div>

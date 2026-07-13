@@ -31,6 +31,8 @@ export const applyElementPlusTheme = ({ themeColors: colors, settings, isDark })
   const mode = isDark ? 'dark' : 'light'
   const root = document.documentElement.style
   const radius = `${settings.themeRadius}rem`
+  // Prism 把品牌色钉在 500（明暗两态一致），故传入的原始种子色即各语义色的 500 步，
+  // 与 UnoCSS 的 bg-primary / bg-success 同源，直接写入 --el-* 即可保持一致；mode 仅用于生成明暗变体。
 
   setElementPlusPrimaryColor(colors.primary, mode)
   setElementPlusColor('success', colors.success, mode)

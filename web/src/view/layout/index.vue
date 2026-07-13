@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
+    class="bg-main text-base-text w-screen h-screen"
   >
     <el-watermark
       v-if="settings.watermark.visible"
@@ -42,7 +42,7 @@
           <router-view v-if="reloadFlag" v-slot="{ Component, route }">
             <div
               id="gva-base-load-dom"
-              class="gva-body-h bg-gray-50 dark:bg-slate-800"
+              class="gva-body-h bg-main"
             >
               <transition
                 mode="out-in"

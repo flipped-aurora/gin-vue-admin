@@ -39,25 +39,32 @@ func (b *Builder) Err(err error) *Builder { b.err = err; return b }
 func (b *Builder) assemble() []zap.Field {
 	f := make([]zap.Field, 0, len(b.fields)+10)
 	f = append(f, b.fields...)
-	f = append(f, zap.String("mod", b.mod))
+	f = append(f, zap.String(FieldMod, b.mod))
 
 	fields := FromCtx(b.ctx)
 	if fields == nil {
 		fields = &Fields{}
 	}
 	f = append(f,
-		zap.String("request_id", fields.RequestID),
-		zap.String("trace_id", fields.TraceID),
-		zap.String("device_id", fields.DeviceID),
-		zap.String("client_ip", fields.ClientIP),
-		zap.String("http_method", fields.HTTPMethod),
-		zap.String("http_path", fields.HTTPPath),
+		zap.String(FieldRequestID, fields.RequestID),
+		zap.String(FieldTraceID, fields.TraceID),
+		zap.String(FieldDeviceID, fields.DeviceID),
+		zap.String(FieldClientIP, fields.ClientIP),
+		zap.String(FieldHTTPMethod, fields.HTTPMethod),
+		zap.String(FieldHTTPPath, fields.HTTPPath),
 	)
+	// span 字段仅在有值时输出,避免非请求链路日志出现空字段
+	if fields.SpanID != "" {
+		f = append(f, zap.String(FieldSpanID, fields.SpanID))
+	}
+	if fields.ParentSpanID != "" {
+		f = append(f, zap.String(FieldParentSpanID, fields.ParentSpanID))
+	}
 	if b.err != nil {
-		f = append(f, zap.String("error_msg", b.err.Error()), zap.Stack("error_stack"))
+		f = append(f, zap.String(FieldErrorMsg, b.err.Error()), zap.Stack(FieldErrorStack))
 	}
 	if b.hasDetail {
-		f = append(f, zap.Any("detail", b.detail))
+		f = append(f, zap.Any(FieldDetail, b.detail))
 	}
 	return f
 }

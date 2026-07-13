@@ -35,13 +35,13 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = apiService.CreateApi(c.Request.Context(), api)
+	created, err := apiService.CreateApi(c.Request.Context(), api)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败", c)
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithDetailed(created, "创建成功", c)
 }
 
 // SyncApi

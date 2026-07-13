@@ -31,6 +31,7 @@ type ApiGroup struct {
 	ApiTokenApi
 	SkillsApi
 	SecurityConfigApi
+	TimedTaskApi
 }
 
 var (
@@ -62,4 +63,5 @@ var (
 	apiTokenService         = service.ServiceGroupApp.SystemServiceGroup.ApiTokenService
 	skillsService           = service.ServiceGroupApp.SystemServiceGroup.SkillsService
 	securityConfigService   = service.ServiceGroupApp.SystemServiceGroup.SecurityConfigService
+	timedTaskService        = service.ServiceGroupApp.SystemServiceGroup.TimedTaskService
 )

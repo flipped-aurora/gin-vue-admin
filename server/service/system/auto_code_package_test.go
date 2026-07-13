@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 )
@@ -41,6 +42,9 @@ func Test_autoCodePackage_Create(t *testing.T) {
 			},
 			wantErr: false,
 		},
+	}
+	if global.GVA_DB == nil {
+		t.Skip("需要已初始化的数据库(global.GVA_DB), 且会生成真实代码目录, 干净环境跳过")
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -95,8 +99,8 @@ func Test_autoCodePackage_templates(t *testing.T) {
 			}
 			for key, value := range gotCode {
 				t.Logf("\n")
-				t.Logf(key)
-				t.Logf(value)
+				t.Log(key)
+				t.Log(value)
 				t.Logf("\n")
 			}
 			t.Log(gotCreates)

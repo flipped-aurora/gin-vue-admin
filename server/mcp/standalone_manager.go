@@ -240,15 +240,13 @@ func StopManagedStandalone(ctx context.Context) (ManagedStandaloneStatus, error)
 }
 
 func checkMCPHealth(ctx context.Context) (bool, error) {
-	timeoutCtx, cancel := context.WithTimeout(context.Background(), mcpHealthCheckTimeout)
-	defer cancel()
-
-	if ctx != nil {
-		if deadline, ok := ctx.Deadline(); ok {
-			timeoutCtx, cancel = context.WithDeadline(context.Background(), deadline)
-			defer cancel()
-		}
+	if ctx == nil {
+		ctx = context.Background()
 	}
+
+	// 健康检查始终以 mcpHealthCheckTimeout 作为上限，同时继承调用方更早的截止时间与取消信号
+	timeoutCtx, cancel := context.WithTimeout(ctx, mcpHealthCheckTimeout)
+	defer cancel()
 
 	req, err := http.NewRequestWithContext(timeoutCtx, http.MethodGet, ResolveMCPHealthURL(), nil)
 	if err != nil {

@@ -15,7 +15,8 @@ type MenuListResponse struct {
 	Success     bool                 `json:"success"`
 	Message     string               `json:"message"`
 	Menus       []system.SysBaseMenu `json:"menus"`
-	TotalCount  int                  `json:"totalCount"`
+	TotalCount  int                  `json:"totalCount"` // 全部菜单节点数(含各级子菜单)
+	RootCount   int                  `json:"rootCount"`  // 顶层菜单数量
 	Description string               `json:"description"`
 }
 
@@ -49,11 +50,16 @@ func (m *MenuLister) Handle(ctx context.Context, _ mcp.CallToolRequest) (*mcp.Ca
 		return nil, err
 	}
 
+	// getMenuList 返回的是树,resp.Data 只是顶层菜单;摊平后取节点总数,避免 totalCount 只数顶层而误导
+	menuIndex := make(map[uint]system.SysBaseMenu, len(resp.Data))
+	flattenBaseMenus(resp.Data, menuIndex)
+
 	return textResultWithJSON("", MenuListResponse{
 		Success:     true,
 		Message:     "获取菜单列表成功",
 		Menus:       resp.Data,
-		TotalCount:  len(resp.Data),
-		Description: "系统中所有菜单信息的标准列表，包含路由配置和组件信息",
+		TotalCount:  len(menuIndex),
+		RootCount:   len(resp.Data),
+		Description: "系统中所有菜单信息的标准列表（树形，menus 为顶层，子菜单在各自 children 内），包含路由配置和组件信息",
 	})
 }

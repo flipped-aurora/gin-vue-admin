@@ -23,11 +23,13 @@ type ApiService struct{}
 
 var ApiServiceApp = new(ApiService)
 
-func (apiService *ApiService) CreateApi(ctx context.Context, api system.SysApi) (err error) {
+func (apiService *ApiService) CreateApi(ctx context.Context, api system.SysApi) (system.SysApi, error) {
 	if !errors.Is(global.GVA_DB.WithContext(ctx).Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同api")
+		return system.SysApi{}, errors.New("存在相同api")
 	}
-	return global.GVA_DB.WithContext(ctx).Create(&api).Error
+	// Create 会把自增主键回写进 api,直接返回创建后的实体(含 ID),免去调用方二次回查
+	err := global.GVA_DB.WithContext(ctx).Create(&api).Error
+	return api, err
 }
 
 func (apiService *ApiService) GetApiGroups(ctx context.Context) (groups []string, groupApiMap map[string]string, err error) {

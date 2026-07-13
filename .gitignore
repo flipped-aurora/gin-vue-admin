@@ -43,7 +43,3 @@ web/pnpm-lock.yaml
 *.sqlite
 *.sqlite3
 worktrees/
-
-# Playwright / local UI comparison artifacts
-.playwright-mcp/
-/gva-*.png

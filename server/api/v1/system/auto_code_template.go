@@ -103,9 +103,9 @@ func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 		info.FuncName = "填充funcName"
 		info.Method = "填充method"
 		info.Description = "填充description"
-		tempMap, err = autoCodeTemplateService.GetApiAndServer(info)
+		tempMap, err = autoCodeTemplateService.GetApiAndServer(c.Request.Context(), info)
 	} else {
-		err = autoCodeTemplateService.AddFunc(info)
+		err = autoCodeTemplateService.AddFunc(c.Request.Context(), info)
 	}
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("注入失败!")

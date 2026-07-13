@@ -1,54 +1,25 @@
+// server/initialize/timer.go
 package initialize
 
 import (
 	"context"
-	"fmt"
-
-	"github.com/robfig/cron/v3"
+	"encoding/json"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	mediaService "github.com/flipped-aurora/gin-vue-admin/server/service/media"
 	"github.com/flipped-aurora/gin-vue-admin/server/task"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/datascope"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
+// Timer 注册可供定时任务面板选用的命名方法。
+// 不再硬编码调度: 调度由 sys_timed_tasks 表驱动(种子见 source/system/timed_task.go),
+// 启动加载见 LoadTimedTasks。ctx 由统一 Runner 注入(已带 datascope.WithSystem 与超时)。
+// 二开注册自己的任务: 在此追加 task.Register, 然后在面板新建任务选择该方法即可。
 func Timer() {
-	go func() {
-		var option []cron.Option
-		option = append(option, cron.WithSeconds())
-		// 清理DB定时任务
-		_, err := global.GVA_Timer.AddTaskByFunc("ClearDB", "@daily", func() {
-			// 系统上下文: 无请求身份, 数据权限回调放行(WithSystem)
-			sysDB := global.GVA_DB.WithContext(datascope.WithSystem(context.Background()))
-			err := task.ClearTable(sysDB) // 定时任务方法定在task文件包中
-			if err != nil {
-				fmt.Println("timer error:", err)
-			}
-		}, "定时清理数据库【日志，黑名单】内容", option...)
-		if err != nil {
-			fmt.Println("add timer error:", err)
-		}
-
-		// 清理过期大文件上传会话
-		_, err = global.GVA_Timer.AddTaskByFunc("CleanStaleUploads", "@hourly", func() {
-			svc := mediaService.MediaUploadService{}
-			if err := svc.CleanupStale(datascope.WithSystem(context.Background()), global.GVA_CONFIG.Media.SessionTTL); err != nil {
-				logger.Bg().Mod("system").Err(err).Error("CleanStaleUploads error")
-			}
-		}, "定时清理过期上传会话", option...)
-		if err != nil {
-			fmt.Println("add timer error:", err)
-		}
-
-		// 其他定时任务定在这里 参考上方使用方法
-
-		//_, err := global.GVA_Timer.AddTaskByFunc("定时任务标识", "corn表达式", func() {
-		//	具体执行内容...
-		//  ......
-		//}, option...)
-		//if err != nil {
-		//	fmt.Println("add timer error:", err)
-		//}
-	}()
+	task.Register("ClearDB", "清理数据库过期日志(操作记录/JWT黑名单/定时任务执行日志)", func(ctx context.Context, _ json.RawMessage) error {
+		return task.ClearTable(global.GVA_DB.WithContext(ctx))
+	})
+	task.Register("CleanStaleUploads", "清理过期大文件上传会话", func(ctx context.Context, _ json.RawMessage) error {
+		svc := mediaService.MediaUploadService{}
+		return svc.CleanupStale(ctx, global.GVA_CONFIG.Media.SessionTTL)
+	})
 }

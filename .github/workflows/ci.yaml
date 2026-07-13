@@ -36,10 +36,18 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./web
+
+      - name: Lint
+        # 存量约 36 个 eslint 问题，先运行使结果可见、暂不阻断；清理后转为硬门禁。
+        run: npm run lint
+        working-directory: ./web
+        continue-on-error: true
+
       - name: Build test
-        run: |
-          npm install
-          npm run build
+        run: npm run build
         working-directory: ./web
 
   backend:
@@ -48,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.22]
+        go-version: [1.24]
     steps:
       - name: Set up Go ${{ matrix.go-version }}
         uses: actions/setup-go@v5
@@ -68,10 +76,18 @@ jobs:
           fi
         working-directory: ./server
 
-      - name: Test and Build
+      - name: Build
         run: |
-          go build -v -race
+          go build -v -race ./...
         working-directory: ./server
+
+      - name: Test
+        # 当前部分测试依赖真实 MySQL/Redis，先运行使结果在 CI 可见、暂不阻断；
+        # 待补齐 service 容器并为集成测试打标记后，去掉 continue-on-error 转为硬门禁。
+        run: |
+          go test ./... -count=1 -vet=off
+        working-directory: ./server
+        continue-on-error: true
 
   devops-test:
     if: github.ref == 'refs/heads/test'
@@ -84,7 +100,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.19.0]
-        go-version: [1.22]
+        go-version: [1.24]
     steps:
       - name: Check out branch
         uses: actions/checkout@v4
@@ -195,7 +211,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['20.x']
-        go-version: ['1.22']
+        go-version: ['1.24']
     steps:
       - uses: actions/checkout@v4
       - name: tag major and minor versions

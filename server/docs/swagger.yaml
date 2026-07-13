@@ -749,6 +749,13 @@ definitions:
       encode-level:
         description: 编码级
         type: string
+      file-only-modules:
+        description: |-
+          这些模块的日志只进文件，不进控制台（即使 log-in-console 为 true）。
+          模块名对应 logger.WithCtx(ctx).Mod("xxx") 的 xxx
+        items:
+          type: string
+        type: array
       format:
         description: 输出
         type: string
@@ -779,12 +786,18 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
+      createdBy:
+        description: 创建人(数据权限引擎自动盖章/过滤)
+        type: integer
       customerName:
         description: 客户名
         type: string
       customerPhoneData:
         description: 客户手机号
         type: string
+      deptId:
+        description: 归属部门(数据权限引擎自动盖章/过滤)
+        type: integer
       sysUser:
         allOf:
         - $ref: '#/definitions/system.SysUser'
@@ -1599,6 +1612,31 @@ definitions:
         description: API路径
         type: string
     type: object
+  request.SetDataScope:
+    properties:
+      authorityId:
+        description: 角色ID
+        type: integer
+      dataScope:
+        description: 数据权限 1全部 2本部门及以下 3本部门 4仅本人 5自定义部门
+        type: integer
+      deptIds:
+        description: 自定义部门集(档位为5时生效)
+        items:
+          type: integer
+        type: array
+    type: object
+  request.SetDepartmentUsers:
+    properties:
+      deptId:
+        description: 部门ID
+        type: integer
+      userIds:
+        description: 用户ID列表
+        items:
+          type: integer
+        type: array
+    type: object
   request.SetMenuAuthorities:
     properties:
       authorityIds:
@@ -1609,6 +1647,17 @@ definitions:
       menuId:
         description: 菜单ID
         type: integer
+    type: object
+  request.SetPositionUsers:
+    properties:
+      positionId:
+        description: 岗位ID
+        type: integer
+      userIds:
+        description: 用户ID列表
+        items:
+          type: integer
+        type: array
     type: object
   request.SetRoleUsers:
     properties:
@@ -1636,6 +1685,31 @@ definitions:
         type: array
       id:
         type: integer
+    type: object
+  request.SetUserDepartments:
+    properties:
+      ID:
+        description: 用户ID
+        type: integer
+      deptIds:
+        description: 归属部门ID集合(数据可见范围)
+        items:
+          type: integer
+        type: array
+      primaryDeptId:
+        description: 主部门ID(数据归属/盖章),为空时取集合首个
+        type: integer
+    type: object
+  request.SetUserPositions:
+    properties:
+      ID:
+        description: 用户ID
+        type: integer
+      positionIds:
+        description: 岗位ID集合
+        items:
+          type: integer
+        type: array
     type: object
   request.SkillDeleteRequest:
     properties:
@@ -1858,6 +1932,30 @@ definitions:
       status:
         type: string
     type: object
+  request.SysDataAccessLogSearch:
+    properties:
+      eventType:
+        description: 事件类型 no_identity/blocked_write
+        type: string
+      keyword:
+        description: 关键字
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      targetTable:
+        description: 受控业务表名(模糊)
+        type: string
+    type: object
+  request.SysDepartmentSearch:
+    properties:
+      name:
+        description: 按部门名称模糊查询
+        type: string
+    type: object
   request.SysMcpApiBindingItem:
     properties:
       apiBrief:
@@ -1892,6 +1990,27 @@ definitions:
         type: integer
       status:
         type: string
+    type: object
+  request.SysPositionSearch:
+    properties:
+      code:
+        description: 岗位编码
+        type: string
+      keyword:
+        description: 关键字
+        type: string
+      name:
+        description: 岗位名称
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        description: 是否启用
+        type: boolean
     type: object
   request.UpdateSysCliRequest:
     properties:
@@ -2289,10 +2408,9 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
-      dataAuthorityId:
-        items:
-          $ref: '#/definitions/system.SysAuthority'
-        type: array
+      dataScope:
+        description: 数据范围(数据权限)
+        type: integer
       defaultRouter:
         description: 默认菜单(默认dashboard)
         type: string
@@ -2398,6 +2516,87 @@ definitions:
         type: string
       value:
         description: 地址栏携带参数的值
+        type: string
+    type: object
+  system.SysDataAccessLog:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      authorityId:
+        description: 角色ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      detail:
+        description: 详情
+        type: string
+      eventType:
+        description: 事件类型
+        type: string
+      method:
+        description: HTTP方法
+        type: string
+      operation:
+        description: 操作类型
+        type: string
+      path:
+        description: 请求路径
+        type: string
+      requestId:
+        description: 请求链路ID
+        type: string
+      scope:
+        description: 数据权限档位
+        type: integer
+      targetTable:
+        description: 受控业务表名
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      userId:
+        description: 用户ID
+        type: integer
+    type: object
+  system.SysDepartment:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      ancestors:
+        description: 祖级链
+        type: string
+      children:
+        description: 子部门(内存组装,不建列)
+        items:
+          $ref: '#/definitions/system.SysDepartment'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      leader:
+        allOf:
+        - $ref: '#/definitions/system.SysUser'
+        description: 负责人用户(联系电话/邮箱从该用户带出)
+      leaderId:
+        description: 负责人(关联 sys_users)
+        type: integer
+      name:
+        description: 部门名称
+        type: string
+      parentId:
+        description: 父部门ID(0为顶级)
+        type: integer
+      sort:
+        description: 排序
+        type: integer
+      status:
+        description: 是否启用
+        type: boolean
+      updatedAt:
+        description: 更新时间
         type: string
     type: object
   system.SysDictionary:
@@ -2507,6 +2706,9 @@ definitions:
         type: string
       status:
         description: 处理状态：未处理/处理中/处理完成
+        type: string
+      trace_id:
+        description: 链路ID,用于按 trace 串联日志与错误
         type: string
       updatedAt:
         description: 更新时间
@@ -2664,9 +2866,9 @@ definitions:
       ip:
         description: 请求ip
         type: string
-      latency:
-        description: 延迟
-        type: string
+      latency_ms:
+        description: 延迟(毫秒),便于 SQL 直接聚合
+        type: integer
       method:
         description: 请求方法
         type: string
@@ -2683,7 +2885,7 @@ definitions:
         description: 请求状态
         type: integer
       trace_id:
-        description: 链路ID
+        description: 链路ID,索引支撑按 trace 反查
         type: string
       updatedAt:
         description: 更新时间
@@ -2721,6 +2923,33 @@ definitions:
     - key
     - name
     - value
+    type: object
+  system.SysPosition:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      code:
+        description: 岗位编码
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      name:
+        description: 岗位名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        description: 是否启用
+        type: boolean
+      updatedAt:
+        description: 更新时间
+        type: string
     type: object
   system.SysSecurityConfig:
     properties:
@@ -2795,6 +3024,18 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
+      departments:
+        description: 多部门归属(数据可见范围)
+        items:
+          $ref: '#/definitions/system.SysDepartment'
+        type: array
+      dept:
+        allOf:
+        - $ref: '#/definitions/system.SysDepartment'
+        description: 主部门
+      deptId:
+        description: 主部门ID(数据归属)
+        type: integer
       email:
         description: 用户邮箱
         type: string
@@ -2817,6 +3058,11 @@ definitions:
       phone:
         description: 用户手机号
         type: string
+      positions:
+        description: 多岗位
+        items:
+          $ref: '#/definitions/system.SysPosition'
+        type: array
       updatedAt:
         description: 更新时间
         type: string
@@ -3410,6 +3656,35 @@ paths:
       summary: 分页获取角色列表
       tags:
       - Authority
+  /authority/getDataScopeDepts:
+    get:
+      parameters:
+      - description: 角色ID
+        in: query
+        name: authorityId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    type: integer
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取角色自定义部门集(数据权限第5档)
+      tags:
+      - Authority
   /authority/getUsersByAuthority:
     get:
       consumes:
@@ -3441,22 +3716,22 @@ paths:
       summary: 获取拥有指定角色的用户ID列表
       tags:
       - Authority
-  /authority/setDataAuthority:
+  /authority/setDataScope:
     post:
       consumes:
       - application/json
       parameters:
-      - description: 设置角色资源权限
+      - description: 角色ID, 数据范围
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/system.SysAuthority'
+          $ref: '#/definitions/request.SetDataScope'
       produces:
       - application/json
       responses:
         "200":
-          description: 设置角色资源权限
+          description: 设置角色数据范围
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
@@ -3466,7 +3741,7 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: 设置角色资源权限
+      summary: 设置角色数据范围(数据权限)
       tags:
       - Authority
   /authority/setRoleUsers:
@@ -4896,6 +5171,10 @@ paths:
         in: query
         name: createdAt
         type: string
+      - description: 创建人(数据权限引擎自动盖章/过滤)
+        in: query
+        name: createdBy
+        type: integer
       - description: 客户名
         in: query
         name: customerName
@@ -4904,6 +5183,10 @@ paths:
         in: query
         name: customerPhoneData
         type: string
+      - description: 归属部门(数据权限引擎自动盖章/过滤)
+        in: query
+        name: deptId
+        type: integer
       - description: 管理角色ID
         in: query
         name: sysUserAuthorityID
@@ -5025,6 +5308,273 @@ paths:
       summary: 分页获取权限客户列表
       tags:
       - ExaCustomer
+  /dataAccessLog/deleteDataAccessLogByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除数据权限审计日志
+      tags:
+      - SysDataAccessLog
+  /dataAccessLog/getDataAccessLogList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小, 事件类型, 表名
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysDataAccessLogSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取数据权限审计日志
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/system.SysDataAccessLog'
+                        type: array
+                    type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取数据权限审计日志
+      tags:
+      - SysDataAccessLog
+  /department/createDepartment:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 部门名称, 父部门ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysDepartment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建部门
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建部门
+      tags:
+      - SysDepartment
+  /department/deleteDepartment:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 部门ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除部门
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除部门
+      tags:
+      - SysDepartment
+  /department/findDepartment:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 部门ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/system.SysDepartment'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 根据ID获取部门
+      tags:
+      - SysDepartment
+  /department/getDepartmentList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 部门名称
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysDepartmentSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取部门树
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/system.SysDepartment'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取部门树
+      tags:
+      - SysDepartment
+  /department/getDepartmentUsers:
+    get:
+      parameters:
+      - description: 部门ID
+        in: query
+        name: deptId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    type: integer
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取部门下的用户ID列表
+      tags:
+      - SysDepartment
+  /department/setDepartmentUsers:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 部门ID, 用户ID列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetDepartmentUsers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置部门成员(反向分配用户)
+      tags:
+      - SysDepartment
+  /department/updateDepartment:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 部门ID, 部门名称, 父部门ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysDepartment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新部门
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新部门
+      tags:
+      - SysDepartment
   /email/emailTest:
     post:
       produces:
@@ -6338,6 +6888,213 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /position/createPosition:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 岗位名称, 岗位编码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysPosition'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建岗位
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建岗位
+      tags:
+      - SysPosition
+  /position/deletePosition:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 岗位ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除岗位
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除岗位
+      tags:
+      - SysPosition
+  /position/findPosition:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 岗位ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/system.SysPosition'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 根据ID获取岗位
+      tags:
+      - SysPosition
+  /position/getPositionList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小, 搜索条件
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysPositionSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取岗位列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.PageResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/system.SysPosition'
+                        type: array
+                    type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取岗位列表
+      tags:
+      - SysPosition
+  /position/getPositionUsers:
+    get:
+      parameters:
+      - description: 岗位ID
+        in: query
+        name: positionId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    type: integer
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取岗位下的用户ID列表
+      tags:
+      - SysPosition
+  /position/setPositionUsers:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 岗位ID, 用户ID列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetPositionUsers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置岗位成员(反向分配用户)
+      tags:
+      - SysPosition
+  /position/updatePosition:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 岗位ID, 岗位名称
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysPosition'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新岗位
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新岗位
+      tags:
+      - SysPosition
   /securityConfig/getSecurityConfig:
     get:
       consumes:
@@ -8583,10 +9340,10 @@ paths:
         in: query
         name: ip
         type: string
-      - description: 延迟
+      - description: 延迟(毫秒),便于 SQL 直接聚合
         in: query
-        name: latency
-        type: string
+        name: latency_ms
+        type: integer
       - description: 请求方法
         in: query
         name: method
@@ -8607,7 +9364,7 @@ paths:
         in: query
         name: status
         type: integer
-      - description: 链路ID
+      - description: 链路ID,索引支撑按 trace 反查
         in: query
         name: trace_id
         type: string
@@ -8676,10 +9433,10 @@ paths:
         in: query
         name: keyword
         type: string
-      - description: 延迟
+      - description: 延迟(毫秒),便于 SQL 直接聚合
         in: query
-        name: latency
-        type: string
+        name: latency_ms
+        type: integer
       - description: 请求方法
         in: query
         name: method
@@ -8708,7 +9465,7 @@ paths:
         in: query
         name: status
         type: integer
-      - description: 链路ID
+      - description: 链路ID,索引支撑按 trace 反查
         in: query
         name: trace_id
         type: string
@@ -9575,6 +10332,34 @@ paths:
       summary: 更改用户权限
       tags:
       - SysUser
+  /user/setUserDepartments:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户ID, 部门ID集合, 主部门ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserDepartments'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置用户归属部门
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户归属部门
+      tags:
+      - SysUser
   /user/setUserInfo:
     put:
       consumes:
@@ -9604,6 +10389,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 设置用户信息
+      tags:
+      - SysUser
+  /user/setUserPositions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户ID, 岗位ID集合
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserPositions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置用户岗位
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户岗位
       tags:
       - SysUser
 securityDefinitions:

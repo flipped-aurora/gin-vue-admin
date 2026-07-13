@@ -78,6 +78,7 @@
   "/src/view/systemTools/pubPlug/pubPlug.vue": "PubPlug",
   "/src/view/systemTools/sysError/sysError.vue": "SysError",
   "/src/view/systemTools/system/system.vue": "Config",
+  "/src/view/systemTools/timedTask/index.vue": "TimedTask",
   "/src/view/systemTools/version/version.vue": "SysVersion",
   "/src/plugin/ai/view/cli/components/cliApiBinding.vue": "CliApiBinding",
   "/src/plugin/ai/view/cli/components/cliForm.vue": "CliForm",
@@ -101,5 +102,7 @@
   "/src/plugin/auto/view/autoPkg/autoPkg.vue": "AutoPkg",
   "/src/plugin/auto/view/exportTemplate/exportTemplate.vue": "ExportTemplate",
   "/src/plugin/auto/view/formCreate/index.vue": "FormGenerator",
-  "/src/plugin/email/view/index.vue": "Email"
+  "/src/plugin/email/view/index.vue": "Email",
+  "/src/plugin/sms/view/channel.vue": "SmsChannel",
+  "/src/plugin/sms/view/log.vue": "SmsLog"
 }

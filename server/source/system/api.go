@@ -58,6 +58,16 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "安全配置", Method: "GET", Path: "/securityConfig/getSecurityConfig", Description: "获取安全配置"},
 		{ApiGroup: "安全配置", Method: "POST", Path: "/securityConfig/setSecurityConfig", Description: "设置安全配置"},
 
+		{ApiGroup: "定时任务", Method: "POST", Path: "/timedTask/createTimedTask", Description: "创建定时任务"},
+		{ApiGroup: "定时任务", Method: "PUT", Path: "/timedTask/updateTimedTask", Description: "更新定时任务"},
+		{ApiGroup: "定时任务", Method: "DELETE", Path: "/timedTask/deleteTimedTask", Description: "删除定时任务"},
+		{ApiGroup: "定时任务", Method: "POST", Path: "/timedTask/toggleTimedTask", Description: "启用/停用定时任务"},
+		{ApiGroup: "定时任务", Method: "POST", Path: "/timedTask/triggerTimedTask", Description: "手动触发定时任务"},
+		{ApiGroup: "定时任务", Method: "GET", Path: "/timedTask/getTimedTaskList", Description: "获取定时任务列表"},
+		{ApiGroup: "定时任务", Method: "GET", Path: "/timedTask/getTimedTaskLogList", Description: "获取定时任务执行日志"},
+		{ApiGroup: "定时任务", Method: "GET", Path: "/timedTask/getRegisteredMethods", Description: "获取已注册方法列表"},
+		{ApiGroup: "定时任务", Method: "GET", Path: "/timedTask/alertStream", Description: "订阅定时任务失败告警(SSE)"},
+
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/admin_register", Description: "用户注册"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/getUserList", Description: "获取用户列表"},
@@ -167,6 +177,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "系统字典", Method: "PUT", Path: "/sysDictionary/updateSysDictionary", Description: "更新字典"},
 		{ApiGroup: "系统字典", Method: "GET", Path: "/sysDictionary/findSysDictionary", Description: "根据ID获取字典（建议选择）"},
 		{ApiGroup: "系统字典", Method: "GET", Path: "/sysDictionary/getSysDictionaryList", Description: "获取字典列表"},
+		{ApiGroup: "系统字典", Method: "GET", Path: "/sysDictionary/getSysDictionaryListWithDetails", Description: "获取字典列表(含明细)"},
 		{ApiGroup: "系统字典", Method: "POST", Path: "/sysDictionary/importSysDictionary", Description: "导入字典JSON"},
 		{ApiGroup: "系统字典", Method: "GET", Path: "/sysDictionary/exportSysDictionary", Description: "导出字典JSON"},
 

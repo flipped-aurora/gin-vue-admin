@@ -12,6 +12,8 @@ type SysError struct {
 	Info     *string `json:"info" form:"info" gorm:"comment:错误内容;column:info;type:text;"`                    //错误内容
 	Level    string  `json:"level" form:"level" gorm:"comment:日志等级;column:level;"`
 	RequestID string  `json:"request_id" form:"request_id" gorm:"index;comment:请求ID;column:request_id;type:varchar(64);"` //请求ID
+	TraceID   string  `json:"trace_id" form:"trace_id" gorm:"index;comment:链路ID;column:trace_id;type:varchar(64);"`       //链路ID,用于按 trace 串联日志与错误
+
 	Solution *string `json:"solution" form:"solution" gorm:"comment:解决方案;column:solution;type:text"`               //解决方案
 	Status   string  `json:"status" form:"status" gorm:"comment:处理状态;column:status;type:varchar(20);default:未处理;"` //处理状态：未处理/处理中/处理完成
 }

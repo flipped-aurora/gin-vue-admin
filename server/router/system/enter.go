@@ -28,6 +28,7 @@ type RouterGroup struct {
 	ApiTokenRouter
 	SkillsRouter
 	SecurityConfigRouter
+	TimedTaskRouter
 }
 
 var (
@@ -57,4 +58,5 @@ var (
 	sysErrorApi         = api.ApiGroupApp.SystemApiGroup.SysErrorApi
 	skillsApi           = api.ApiGroupApp.SystemApiGroup.SkillsApi
 	securityConfigApi   = api.ApiGroupApp.SystemApiGroup.SecurityConfigApi
+	timedTaskApi        = api.ApiGroupApp.SystemApiGroup.TimedTaskApi
 )

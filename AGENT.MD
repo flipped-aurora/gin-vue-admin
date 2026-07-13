@@ -66,6 +66,13 @@
 - **其它系统 / 业务开发的图标**:只要语义合适即可,**不必在意空心还是实心**;优先复用现有图标集(lucide 等),确实没有合适的再自建 svg
 - 自定义 SVG 的规格、机制与现有图标清单见 `aiDoc/frontend-backend/frontend-rules.md` 的「图标规范」
 
+### 页面点触测试(AI 驱动浏览器验证)
+
+- 前端页面改动需要真实浏览器点触验证时,登录态获取按 `aiDoc/frontend-backend/page-click-testing.md` 执行:优先静默读取 `.local/gva-test-token`(已 gitignore);没有或失效时按该文档的标准话术向用户索取 token,注入 localStorage 后点触
+- 点触依赖浏览器自动化能力:当前环境不具备时,**主动建议用户安装**(按该文档「环境前置」一节的话术给出推荐项,首选 Playwright),经用户确认后再装,不要不问就装;用户拒绝则回退为"给出人工目测清单"
+- 需要覆盖登录链路本身(验证码/锁定)时,用「系统设置 → 安全配置」的验证码阈值临时直登,测完改回
+- token 是真实凭证:不写入任何会提交的文件、不出现在截图/日志/commit 信息里;点触造成的破坏性数据操作先征得用户同意
+
 ### 插件与模块
 
 - 后端插件放在 `server/plugin/<name>/`
@@ -124,6 +131,7 @@
 - `aiDoc/modules/plugin-development.md`
 - `aiDoc/frontend-backend/boundary.md`
 - `aiDoc/frontend-backend/frontend-rules.md`
+- `aiDoc/frontend-backend/page-click-testing.md`
 - `aiDoc/frontend-backend/frontend-utils.md`
 - `aiDoc/frontend-backend/component-library.md`
 - `aiDoc/examples/README.md`

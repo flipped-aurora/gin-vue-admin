@@ -71,6 +71,8 @@ func RegisterTables() {
 		system.SysError{},
 		system.SysApiToken{},
 		system.SysLoginLog{},
+		system.SysTimedTask{},
+		system.SysTimedTaskLog{},
 
 		example.ExaCustomer{},
 		media.MediaUpload{},

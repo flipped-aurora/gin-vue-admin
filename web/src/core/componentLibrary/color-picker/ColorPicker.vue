@@ -5,6 +5,7 @@ import {
   PopoverTrigger,
   PopoverPortal,
   PopoverContent,
+  PopoverClose,
   ColorAreaRoot,
   ColorAreaArea,
   ColorAreaThumb,
@@ -39,25 +40,30 @@ const props = defineProps({
   title: { type: String, default: undefined },
   // 纯图形触发器的可访问名（屏幕阅读器），优先级高于 title / placeholder
   ariaLabel: { type: String, default: undefined },
+  // 是否提供「清空」按钮：清空后 modelValue 置空、由调用方语义回落（如顶栏背景留空跟随主题）。
+  // 语义色 / 主题色这类不允许为空的场景保持 false。
+  clearable: { type: Boolean, default: false },
   class: { type: null, default: '' }
 })
 
 // 双向绑定统一走 defineModel，取代手写 modelValue prop + emit
 const modelValue = defineModel({ type: String, default: '' })
 
-// area / hue 用 hsb 取「饱和度·明度」面板；rgb 模式（带 alpha 的背景）整套走 rgb。
-const colorSpace = computed(() => (props.format === 'rgb' ? 'rgb' : 'hsb'))
-// alpha 模式输出带透明度通道的格式（rgba / hexa），无 alpha 时输出 rgb / hex
-const outFormat = computed(() =>
-  props.format === 'rgb' ? (props.alpha ? 'rgba' : 'rgb') : props.alpha ? 'hexa' : 'hex'
-)
+// 交互面板恒用 hsb：「饱和度·明度」面板与 hue 色相条只在 HSL/HSB 空间才有对应通道，
+// RGB 空间的合法通道是 red/green/blue/alpha——此前 rgb 模式误把 colorSpace 切成 'rgb'，
+// 通道取值 undefined，面板/色相条完全失效（顶栏/标签栏背景选不了色）。输出格式由 toOut 负责转换。
+const colorSpace = 'hsb'
+// 输出格式：reka 的 colorToString 只认 hex / rgb / hsb / hsl（'rgba'/'hexa' 会抛
+// Unknown format，此前导致 alpha 模式写回失败、拖完颜色不生效）。
+// 'rgb' 在 alpha < 1 时会自动输出 rgba(...) 字符串，无需单独的 'rgba' 格式。
+const outFormat = computed(() => (props.format === 'rgb' ? 'rgb' : 'hex'))
 // 空值兜底色取自默认主题色单一真源（settings.themeColor），不再手抄字面量 #2264f2 / rgba(93,135,255,1)。
 // alpha 模式补足透明度通道（满不透明）；派生失败则回落到 hex 本身（仍可被 parseColor 解析）。
 const fallback = computed(() => {
   const base = themeSettings.themeColor
   if (!props.alpha) return base
   try {
-    return colorToString(parseColor(base), 'rgba')
+    return colorToString(parseColor(base), 'rgb')
   } catch {
     return base
   }
@@ -126,6 +132,14 @@ const hexValue = computed(() => {
 const onSwatchPick = (hex) => {
   if (!hex) return
   onColorUpdate(safeParse(hex))
+}
+
+// 清空：取消挂起的防抖写回，置空 modelValue（调用方据空值回落语义默认），面板色复位到兜底色
+const onClear = () => {
+  cancelEmit()
+  pendingColor = null
+  modelValue.value = ''
+  color.value = safeParse(fallback.value)
 }
 
 // 外部 modelValue 变化（如点主题色预设圆点）时同步进来；与当前一致则跳过，避免回环。
@@ -251,6 +265,20 @@ const checkerStyle = {
             <span class="block h-full w-full" :style="{ backgroundColor: s }" />
           </ColorSwatchPickerItem>
         </ColorSwatchPickerRoot>
+
+        <!-- 清空（恢复语义默认，如“跟随主题”）：opt-in，语义色/主题色等不允许为空的场景不展示 -->
+        <PopoverClose v-if="clearable" as-child>
+          <button
+            type="button"
+            :class="cn(
+              'mt-3 w-full rounded-md border border-border px-2 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-primary',
+              FOCUS_RING
+            )"
+            @click="onClear"
+          >
+            清空（{{ placeholder }}）
+          </button>
+        </PopoverClose>
       </PopoverContent>
     </PopoverPortal>
   </PopoverRoot>

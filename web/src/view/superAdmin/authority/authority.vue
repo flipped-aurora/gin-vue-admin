@@ -20,21 +20,30 @@
           min-width="180"
           prop="authorityName"
         />
-        <el-table-column align="left" label="数据权限" min-width="210">
+        <el-table-column align="left" label="数据权限" min-width="150">
           <template #default="scope">
             <div class="flex items-center gap-1">
-              <el-select
-                v-model="scope.row.dataScope"
-                class="flex-1"
-                @change="() => changeDataScope(scope.row)"
+              <el-dropdown
+                trigger="click"
+                @command="(cmd) => selectDataScope(scope.row, cmd)"
               >
-                <el-option
-                  v-for="item in dataScopeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
+                <el-button link type="primary">
+                  {{ dataScopeLabel(scope.row.dataScope) }}
+                  <el-icon class="ml-1"><arrow-down /></el-icon>
+                </el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      v-for="item in dataScopeOptions"
+                      :key="item.value"
+                      :command="item.value"
+                      :disabled="scope.row.dataScope === item.value"
+                    >
+                      {{ item.label }}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
               <el-button
                 v-if="scope.row.dataScope === 5"
                 icon="setting"
@@ -367,6 +376,17 @@
     } else {
       row.dataScope = prevScope[row.authorityId]
     }
+  }
+
+  // 档位值 -> 中文标签, 用于列表内以文字(而非常驻下拉框)展示当前数据权限
+  const dataScopeLabel = (value) =>
+    dataScopeOptions.find((item) => item.value === value)?.label || '未设置'
+
+  // 点击下拉菜单切换档位: 复用 changeDataScope 的即时保存与失败回退逻辑
+  const selectDataScope = (row, value) => {
+    if (row.dataScope === value) return
+    row.dataScope = value
+    changeDataScope(row)
   }
 
   // 自定义部门集弹窗

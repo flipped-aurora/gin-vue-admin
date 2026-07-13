@@ -1,12 +1,16 @@
 package timer
 
 import (
-	"github.com/robfig/cron/v3"
 	"sync"
+	"time"
+
+	"github.com/robfig/cron/v3"
 )
 
 type Timer interface {
-	// 寻找所有Cron
+	// Snapshot 返回全部任务的只读快照(含下次执行时间), 并发安全
+	Snapshot() []TaskDetail
+	// Deprecated: 返回内部 map, 调用方锁外遍历有竞态; 请改用 Snapshot()
 	FindCronList() map[string]*taskManager
 	// 添加Task 方法形式以秒的形式加入
 	AddTaskByFuncWithSecond(cronName string, spec string, fun func(), taskName string, option ...cron.Option) (cron.EntryID, error) // 添加Task Func以秒的形式加入
@@ -166,6 +170,34 @@ func (t *timer) FindCronList() map[string]*taskManager {
 	t.Lock()
 	defer t.Unlock()
 	return t.cronList
+}
+
+// TaskDetail 任务只读快照(锁内深拷生成, 可安全在锁外使用)
+type TaskDetail struct {
+	CronName string
+	TaskName string
+	Spec     string
+	EntryID  int
+	NextRun  time.Time
+}
+
+// Snapshot 返回全部 cron 下全部任务的只读快照(含下次执行时间)
+func (t *timer) Snapshot() []TaskDetail {
+	t.Lock()
+	defer t.Unlock()
+	details := make([]TaskDetail, 0)
+	for cronName, tm := range t.cronList {
+		for id, tk := range tm.tasks {
+			details = append(details, TaskDetail{
+				CronName: cronName,
+				TaskName: tk.TaskName,
+				Spec:     tk.Spec,
+				EntryID:  int(id),
+				NextRun:  tm.corn.Entry(id).Next,
+			})
+		}
+	}
+	return details
 }
 
 // StartCron 开始任务

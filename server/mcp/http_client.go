@@ -9,16 +9,47 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 type upstreamEnvelope[T any] struct {
 	Code int    `json:"code"`
 	Data T      `json:"data"`
 	Msg  string `json:"msg"`
+}
+
+// upstreamAuthHeader 是回打主服务时携带 token 的请求头名。主服务 JWT 中间件固定读取 x-token
+// (见 utils/claims.go),与 MCP 入站可配置的 auth_header 解耦:入站用 configuredAuthHeader()
+// 读外部客户端 token,出站一律用 x-token,否则运维一旦把 auth_header 配成非默认值,所有工具全部 401。
+const upstreamAuthHeader = "x-token"
+
+// parseOptionalBool 解析可选的布尔参数,兼容原生 bool 与字符串("true"/"false"/"1"/"0" 等);
+// 缺省或非法返回 def。用于 MCP 客户端把布尔发成字符串、原生 bool 断言失败会静默回落的场景
+func parseOptionalBool(v any, def bool) bool {
+	switch value := v.(type) {
+	case bool:
+		return value
+	case string:
+		if b, err := strconv.ParseBool(strings.TrimSpace(value)); err == nil {
+			return b
+		}
+	}
+	return def
+}
+
+// truncateUpstreamBody 截断上游非 JSON 响应片段,便于在错误里暴露真实内容而不刷屏
+func truncateUpstreamBody(b []byte) string {
+	const max = 200
+	s := strings.TrimSpace(string(b))
+	if len(s) > max {
+		return s[:max] + "…"
+	}
+	return s
 }
 
 func ResolveMCPServiceURL() string {
@@ -52,12 +83,60 @@ func upstreamBaseURL() string {
 	return "http://127.0.0.1:8888"
 }
 
+// upstreamURL 基于上游 base url 拼接完整地址。upstreamBaseURL() 已 TrimRight,
+// 此处只补齐 path 前导斜杠,不再重复裁剪。
+func upstreamURL(path string) string {
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
+	return upstreamBaseURL() + path
+}
+
 func requestTimeout() time.Duration {
 	timeout := global.GVA_CONFIG.MCP.RequestTimeout
 	if timeout <= 0 {
 		timeout = 15
 	}
 	return time.Duration(timeout) * time.Second
+}
+
+// defaultUpstreamTimeout 是回打主服务公共(免鉴权)接口的默认超时。
+const defaultUpstreamTimeout = 10 * time.Second
+
+// fetchPublicUpstream 回打主服务的公共(免鉴权)接口:带超时的 GET + 标准信封解析。
+// 动态 tool 与编排 prompt 的注册共用同一模式,T 为信封 Data 字段的具体负载类型。
+func fetchPublicUpstream[T any](path string) (*upstreamEnvelope[T], error) {
+	timeoutCtx, cancel := context.WithTimeout(context.Background(), defaultUpstreamTimeout)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(timeoutCtx, http.MethodGet, upstreamURL(path), nil)
+	if err != nil {
+		return nil, fmt.Errorf("构建请求失败: %w", err)
+	}
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("请求上游接口失败: %w", err)
+	}
+	defer resp.Body.Close()
+
+	rawBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("读取响应失败: %w", err)
+	}
+	if resp.StatusCode >= http.StatusBadRequest {
+		return nil, fmt.Errorf("上游接口返回状态码 %d: %s", resp.StatusCode, string(rawBody))
+	}
+
+	var result upstreamEnvelope[T]
+	if err := json.Unmarshal(rawBody, &result); err != nil {
+		return nil, fmt.Errorf("解析响应失败: %w", err)
+	}
+	if result.Code != 0 {
+		return nil, fmt.Errorf("上游接口业务错误: %s", result.Msg)
+	}
+	return &result, nil
 }
 
 func getUpstream[T any](ctx context.Context, endpoint string, query url.Values) (*upstreamEnvelope[T], error) {
@@ -112,10 +191,12 @@ func doUpstream[T any](ctx context.Context, method, endpoint string, query url.V
 		return nil, fmt.Errorf("创建上游请求失败: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set(configuredAuthHeader(), token)
+	req.Header.Set(upstreamAuthHeader, token)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
+	// 链路传播:外部 AI → MCP 进程 → GVA 主服务串成同一条 trace
+	logger.InjectTraceHeaders(timeoutCtx, req)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -131,6 +212,11 @@ func doUpstream[T any](ctx context.Context, method, endpoint string, query url.V
 	var result upstreamEnvelope[T]
 	if len(rawBody) > 0 {
 		if err := json.Unmarshal(rawBody, &result); err != nil {
+			// 上游返回非 JSON(如 404/502 的 HTML 或网关错误页):先暴露真实状态码,
+			// 不让解析错误掩盖真实的 HTTP 失败
+			if resp.StatusCode >= http.StatusBadRequest {
+				return nil, fmt.Errorf("上游请求失败，状态码: %d，响应: %s", resp.StatusCode, truncateUpstreamBody(rawBody))
+			}
 			return nil, fmt.Errorf("解析上游响应失败: %w", err)
 		}
 	}
@@ -194,10 +280,12 @@ func doUpstreamRaw(ctx context.Context, method, path string, query url.Values, b
 		return 0, nil, fmt.Errorf("创建上游请求失败: %w", err)
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set(configuredAuthHeader(), token)
+	req.Header.Set(upstreamAuthHeader, token)
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
+	// 链路传播:外部 AI → MCP 进程 → GVA 主服务串成同一条 trace
+	logger.InjectTraceHeaders(timeoutCtx, req)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {

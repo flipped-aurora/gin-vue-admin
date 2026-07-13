@@ -4,7 +4,7 @@
     :class="[surfaceClass, siderDarkClass]"
     :style="{ width: layoutSideWidth + 'px' }"
   >
-    <el-scrollbar class="flex-1">
+    <el-scrollbar class="flex-1 py-2">
       <g-menu
         :items="menus"
         :theme="menuTheme"

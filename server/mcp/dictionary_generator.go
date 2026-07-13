@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -35,6 +36,7 @@ type DictionaryGenerateResponse struct {
 	Message      string `json:"message"`
 	DictType     string `json:"dictType"`
 	OptionsCount int    `json:"optionsCount"`
+	FailedCount  int    `json:"failedCount,omitempty"`
 }
 
 func (d *DictionaryOptionsGenerator) New() mcp.Tool {
@@ -120,24 +122,21 @@ func (d *DictionaryOptionsGenerator) createDictionaryWithOptions(ctx context.Con
 		dictName = d.generateDictionaryName(req.DictType, req.FieldDesc)
 	}
 
-	if err := createDictionary(ctx, system.SysDictionary{
+	createdDict, err := createDictionary(ctx, system.SysDictionary{
 		Name:   dictName,
 		Type:   req.DictType,
 		Status: enabledBoolPointer(),
 		Desc:   req.Description,
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, fmt.Errorf("创建字典失败: %v", err)
 	}
-
-	createdDict, err := findDictionaryByType(ctx, req.DictType)
-	if err != nil {
-		return nil, fmt.Errorf("获取创建的字典失败: %v", err)
-	}
-	if createdDict == nil {
-		return nil, fmt.Errorf("获取创建的字典失败")
+	if createdDict == nil || createdDict.ID == 0 {
+		return nil, fmt.Errorf("创建字典成功但未返回有效ID")
 	}
 
 	successCount := 0
+	var failedOptions []string
 	for _, option := range req.Options {
 		err := createDictionaryDetail(ctx, system.SysDictionaryDetail{
 			Label:           option.Label,
@@ -148,15 +147,29 @@ func (d *DictionaryOptionsGenerator) createDictionaryWithOptions(ctx context.Con
 		})
 		if err == nil {
 			successCount++
+		} else {
+			failedOptions = append(failedOptions, fmt.Sprintf("%s(%s): %v", option.Label, option.Value, err))
 		}
 	}
 
-	return &DictionaryGenerateResponse{
-		Success:      true,
-		Message:      fmt.Sprintf("成功创建字典 %s，包含 %d 个选项", req.DictType, successCount),
+	resp := &DictionaryGenerateResponse{
 		DictType:     req.DictType,
 		OptionsCount: successCount,
-	}, nil
+		FailedCount:  len(failedOptions),
+	}
+	switch {
+	case len(failedOptions) == 0:
+		resp.Success = true
+		resp.Message = fmt.Sprintf("成功创建字典 %s，包含 %d 个选项", req.DictType, successCount)
+	case successCount == 0:
+		// 字典本体已建但所有选项都失败:必须显式报失败,否则调用方会误以为整体成功
+		resp.Success = false
+		resp.Message = fmt.Sprintf("字典 %s 已创建，但全部 %d 个选项创建失败: %s", req.DictType, len(failedOptions), strings.Join(failedOptions, "; "))
+	default:
+		resp.Success = true
+		resp.Message = fmt.Sprintf("字典 %s 已创建，%d 个选项成功、%d 个失败: %s", req.DictType, successCount, len(failedOptions), strings.Join(failedOptions, "; "))
+	}
+	return resp, nil
 }
 
 func (d *DictionaryOptionsGenerator) generateDictionaryName(dictType, fieldDesc string) string {

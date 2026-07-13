@@ -26,13 +26,13 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryService.CreateSysDictionary(c.Request.Context(), dictionary)
+	created, err := dictionaryService.CreateSysDictionary(c.Request.Context(), dictionary)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败", c)
 		return
 	}
-	response.OkWithMessage("创建成功", c)
+	response.OkWithDetailed(created, "创建成功", c)
 }
 
 // DeleteSysDictionary
@@ -127,6 +127,31 @@ func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 		return
 	}
 	list, err := dictionaryService.GetSysDictionaryInfoList(c.Request.Context(), dictionary)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(list, "获取成功", c)
+}
+
+// GetSysDictionaryListWithDetails
+// @Tags      SysDictionary
+// @Summary   获取字典列表(含字典项明细)
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     request.SysDictionarySearch                                 true  "字典 name 或者 type"
+// @Success   200   {object}  response.Response{data=[]system.SysDictionary,msg=string}   "字典列表(每项含 SysDictionaryDetails)"
+// @Router    /sysDictionary/getSysDictionaryListWithDetails [get]
+func (s *DictionaryApi) GetSysDictionaryListWithDetails(c *gin.Context) {
+	var dictionary request.SysDictionarySearch
+	err := c.ShouldBindQuery(&dictionary)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, err := dictionaryService.GetSysDictionaryListWithDetails(c.Request.Context(), dictionary.Name)
 	if err != nil {
 		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)

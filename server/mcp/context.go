@@ -93,7 +93,11 @@ func extractIncomingAuthToken(headers http.Header) string {
 			continue
 		}
 		if key == "authorization" {
-			return strings.TrimSpace(strings.TrimPrefix(value, "Bearer "))
+			// 大小写不敏感地剥离 Bearer 前缀:合法的 "bearer xxx" 也应正确取到 token
+			if len(value) >= 7 && strings.EqualFold(value[:7], "Bearer ") {
+				return strings.TrimSpace(value[7:])
+			}
+			return value
 		}
 		return value
 	}

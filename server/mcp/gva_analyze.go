@@ -1,12 +1,12 @@
-﻿package mcpTool
+package mcpTool
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -24,32 +24,21 @@ type GVAAnalyzer struct{}
 
 // AnalyzeRequest 分析请求结构体
 type AnalyzeRequest struct {
-	Requirement string `json:"requirement" binding:"required"` // 用户需求描述
+	Requirement string `json:"requirement"` // 用户需求描述（可选，仅作为调用方上下文，不影响返回快照）
 }
 
 // AnalyzeResponse 分析响应结构体
 type AnalyzeResponse struct {
 	ExistingPackages   []PackageInfo           `json:"existingPackages"`   // 现有包信息
-PredesignedModules []PredesignedModuleInfo `json:"predesignedModules"` // 预设计模块信息
+	PredesignedModules []PredesignedModuleInfo `json:"predesignedModules"` // 预设计模块信息
 	Dictionaries       []DictionaryPre         `json:"dictionaries"`       // 字典信息
 	CleanupInfo        *CleanupInfo            `json:"cleanupInfo"`        // 清理信息（如果有）
-}
-
-// ModuleInfo 模块信息
-type ModuleInfo struct {
-	ModuleName  string   `json:"moduleName"`  // 模块名称
-	PackageName string   `json:"packageName"` // 包名
-	Template    string   `json:"template"`    // 模板类型
-	StructName  string   `json:"structName"`  // 结构体名称
-	TableName   string   `json:"tableName"`   // 表名
-	Description string   `json:"description"` // 描述
-FilePaths   []string `json:"filePaths"`   // 相关文件路径
 }
 
 // PackageInfo 包信息
 type PackageInfo struct {
 	PackageName string `json:"packageName"` // 包名
-Template    string `json:"template"`    // 模板类型
+	Template    string `json:"template"`    // 模板类型
 	Label       string `json:"label"`       // 标签
 	Desc        string `json:"desc"`        // 描述
 	Module      string `json:"module"`      // 模块
@@ -60,7 +49,7 @@ Template    string `json:"template"`    // 模板类型
 type PredesignedModuleInfo struct {
 	ModuleName  string   `json:"moduleName"`  // 模块名称
 	PackageName string   `json:"packageName"` // 包名
-Template    string   `json:"template"`    // 模板类型
+	Template    string   `json:"template"`    // 模板类型
 	FilePaths   []string `json:"filePaths"`   // 文件路径列表
 	Description string   `json:"description"` // 描述
 }
@@ -75,21 +64,17 @@ type CleanupInfo struct {
 // New 创建GVA分析器工具
 func (g *GVAAnalyzer) New() mcp.Tool {
 	return mcp.NewTool("gva_analyze",
-		mcp.WithDescription("返回当前系统中有效的包和模块信息，并分析用户需求是否需要创建新的包、模块和字典。同时检查并清理空包，确保系统整洁。"),
+		mcp.WithDescription("返回当前系统中有效的包、模块与字典清单（快照），供调用方对照 requirement 自行判断需要新建哪些包/模块/字典；同时检查并清理空包，保持系统整洁。注意：本工具只提供现状快照，不对 requirement 内容做过滤或匹配，返回结果与 requirement 文本无关。"),
 		mcp.WithString("requirement",
-			mcp.Description("用户需求描述，用于分析是否需要创建新的包和模块"),
-			mcp.Required(),
+			mcp.Description("用户需求描述，可选，仅作为调用方分析的上下文；本工具返回全量快照，不依赖也不解析其内容"),
 		),
 	)
 }
 
 // Handle 处理分析请求
 func (g *GVAAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	// 解析请求参数
-	requirementStr, ok := request.GetArguments()["requirement"].(string)
-	if !ok || requirementStr == "" {
-		return nil, errors.New("参数错误：requirement 必须是非空字符串")
-	}
+	// 解析请求参数：requirement 为可选上下文，工具返回全量快照，不依赖其内容
+	requirementStr, _ := request.GetArguments()["requirement"].(string)
 
 	// 创建分析请求
 	analyzeReq := AnalyzeRequest{
@@ -103,16 +88,7 @@ func (g *GVAAnalyzer) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	// 序列化响应
-	responseJSON, err := json.Marshal(response)
-	if err != nil {
-		return nil, fmt.Errorf("序列化响应失败: %v", err)
-	}
-
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.NewTextContent(string(responseJSON)),
-		},
-	}, nil
+	return textResultWithJSON("", response)
 }
 
 // performAnalysis 执行分析逻辑
@@ -174,13 +150,15 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 		})
 	}
 
+	emptyHistoryIDSet := make(map[uint]struct{}, len(emptyPackageHistoryIDs))
+	for _, emptyID := range emptyPackageHistoryIDs {
+		emptyHistoryIDSet[emptyID] = struct{}{}
+	}
+
 	var dirtyHistoryIDs []uint
 	for _, history := range histories {
-		for _, emptyID := range emptyPackageHistoryIDs {
-			if history.ID == emptyID {
-				dirtyHistoryIDs = append(dirtyHistoryIDs, history.ID)
-				break
-			}
+		if _, ok := emptyHistoryIDSet[history.ID]; ok {
+			dirtyHistoryIDs = append(dirtyHistoryIDs, history.ID)
 		}
 	}
 
@@ -210,14 +188,7 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 
 	filteredModules := []PredesignedModuleInfo{}
 	for _, module := range predesignedModules {
-		isDeleted := false
-		for _, deletedPkg := range cleanupInfo.DeletedPackages {
-			if module.PackageName == deletedPkg {
-				isDeleted = true
-				break
-			}
-		}
-		if !isDeleted {
+		if !slices.Contains(cleanupInfo.DeletedPackages, module.PackageName) {
 			filteredModules = append(filteredModules, module)
 		}
 	}
@@ -240,10 +211,10 @@ func (g *GVAAnalyzer) performAnalysis(ctx context.Context, req AnalyzeRequest) (
 		var message strings.Builder
 		message.WriteString("**系统清理完成**\n\n")
 		if len(cleanupInfo.DeletedPackages) > 0 {
-message.WriteString(fmt.Sprintf("- 删除了 %d 个空包: %s\n", len(cleanupInfo.DeletedPackages), strings.Join(cleanupInfo.DeletedPackages, ", ")))
+			message.WriteString(fmt.Sprintf("- 删除了 %d 个空包: %s\n", len(cleanupInfo.DeletedPackages), strings.Join(cleanupInfo.DeletedPackages, ", ")))
 		}
 		if len(cleanupInfo.DeletedModules) > 0 {
-message.WriteString(fmt.Sprintf("- 删除了 %d 个相关模块: %s\n", len(cleanupInfo.DeletedModules), strings.Join(cleanupInfo.DeletedModules, ", ")))
+			message.WriteString(fmt.Sprintf("- 删除了 %d 个相关模块: %s\n", len(cleanupInfo.DeletedModules), strings.Join(cleanupInfo.DeletedModules, ", ")))
 		}
 		cleanupInfo.CleanupMessage = message.String()
 		cleanupResult = cleanupInfo
@@ -261,29 +232,44 @@ message.WriteString(fmt.Sprintf("- 删除了 %d 个相关模块: %s\n", len(clea
 
 // isPackageFolderEmpty 检查包文件夹是否为空
 func (g *GVAAnalyzer) isPackageFolderEmpty(packageName, template string) (bool, error) {
-	// 根据模板类型确定基础路径
-	var basePath string
+	root := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+
+	// package 模板的代码散落在 api/v1、model、router、service 四处(与 removeEmptyPackageFolder 删除的目录一致);
+	// 必须四处全无 .go 才算空,否则仅凭 api/v1 空就删掉 DB 包记录会遗留 service/model 下的孤儿代码
+	var dirs []string
 	if template == "plugin" {
-		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", packageName)
+		dirs = []string{filepath.Join(root, "plugin", packageName)}
 	} else {
-		basePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", packageName)
+		dirs = []string{
+			filepath.Join(root, "api", "v1", packageName),
+			filepath.Join(root, "model", packageName),
+			filepath.Join(root, "router", packageName),
+			filepath.Join(root, "service", packageName),
+		}
 	}
 
-	// 检查文件夹是否存在
-	if _, err := os.Stat(basePath); os.IsNotExist(err) {
-		return true, nil // 文件夹不存在，认为空
-	} else if err != nil {
-		return false, err // 其他错误
+	for _, dir := range dirs {
+		if _, err := os.Stat(dir); os.IsNotExist(err) {
+			continue // 该目录不存在,视作此处为空,继续看其它目录
+		} else if err != nil {
+			return false, err
+		}
+		noGoFiles, err := g.dirHasNoGoFiles(dir)
+		if err != nil {
+			return false, err
+		}
+		if !noGoFiles {
+			return false, nil // 任一目录仍有 .go,整包不算空
+		}
 	}
-	// 递归检查是否有.go文件
-	return g.hasGoFilesRecursive(basePath)
+	return true, nil
 }
 
-// hasGoFilesRecursive 递归检查目录及其子目录中是否有.go文件
-func (g *GVAAnalyzer) hasGoFilesRecursive(dirPath string) (bool, error) {
+// dirHasNoGoFiles 递归检查目录及其子目录：无 .go 文件（含读取失败）时返回 true，发现 .go 文件时返回 false
+func (g *GVAAnalyzer) dirHasNoGoFiles(dirPath string) (bool, error) {
 	entries, err := os.ReadDir(dirPath)
 	if err != nil {
-		return true, err // 读取失败，返回空
+		return true, err // 读取失败，视作无 .go 文件
 	}
 
 	// 检查当前目录下的.go文件
@@ -297,11 +283,11 @@ func (g *GVAAnalyzer) hasGoFilesRecursive(dirPath string) (bool, error) {
 	for _, entry := range entries {
 		if entry.IsDir() {
 			subDirPath := filepath.Join(dirPath, entry.Name())
-			isEmpty, err := g.hasGoFilesRecursive(subDirPath)
+			noGoFiles, err := g.dirHasNoGoFiles(subDirPath)
 			if err != nil {
 				continue // 忽略子目录的错误，继续检查其他目录
 			}
-			if !isEmpty {
+			if !noGoFiles {
 				return false, nil // 子目录中找到.go文件，不为空
 			}
 		}
@@ -343,11 +329,10 @@ func (g *GVAAnalyzer) removeDirectoryIfExists(dirPath string) error {
 	}
 
 	// 检查目录中是否包含go文件
-	noGoFiles, err := g.hasGoFilesRecursive(dirPath)
+	noGoFiles, err := g.dirHasNoGoFiles(dirPath)
 	if err != nil {
 		return err
 	}
-	// hasGoFilesRecursive 返回 false 表示发现了 go 文件
 	if noGoFiles {
 		return os.RemoveAll(dirPath)
 	}

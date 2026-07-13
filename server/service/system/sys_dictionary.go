@@ -22,12 +22,13 @@ type DictionaryService struct{}
 
 var DictionaryServiceApp = new(DictionaryService)
 
-func (dictionaryService *DictionaryService) CreateSysDictionary(ctx context.Context, sysDictionary system.SysDictionary) (err error) {
+func (dictionaryService *DictionaryService) CreateSysDictionary(ctx context.Context, sysDictionary system.SysDictionary) (system.SysDictionary, error) {
 	if (!errors.Is(global.GVA_DB.WithContext(ctx).First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
-		return errors.New("存在相同的type，不允许创建")
+		return system.SysDictionary{}, errors.New("存在相同的type，不允许创建")
 	}
-	err = global.GVA_DB.WithContext(ctx).Create(&sysDictionary).Error
-	return err
+	// Create 会把自增主键回写进 sysDictionary,直接返回创建后的实体(含 ID),免去调用方二次回查
+	err := global.GVA_DB.WithContext(ctx).Create(&sysDictionary).Error
+	return sysDictionary, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -128,6 +129,23 @@ func (dictionaryService *DictionaryService) GetSysDictionaryInfoList(ctx context
 	query = query.Preload("Children")
 	err = query.Find(&sysDictionarys).Error
 	return sysDictionarys, err
+}
+
+//@function: GetSysDictionaryListWithDetails
+//@description: 一次性返回字典列表及其字典项明细,避免调用方逐条拉取明细造成 N+1。
+//             明细不在 SQL 层按 status 过滤(按 sort 排序全量返回),是否包含禁用项交由调用方决定。
+//@param: name string
+//@return: list []system.SysDictionary, err error
+
+func (dictionaryService *DictionaryService) GetSysDictionaryListWithDetails(ctx context.Context, name string) (list []system.SysDictionary, err error) {
+	query := global.GVA_DB.WithContext(ctx)
+	if name != "" {
+		query = query.Where("name LIKE ? OR type LIKE ?", "%"+name+"%", "%"+name+"%")
+	}
+	err = query.Preload("SysDictionaryDetails", func(db *gorm.DB) *gorm.DB {
+		return db.Order("sort")
+	}).Find(&list).Error
+	return list, err
 }
 
 // checkCircularReference 检查是否会形成循环引用

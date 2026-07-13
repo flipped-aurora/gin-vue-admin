@@ -18,7 +18,8 @@ func (s *DictionaryRouter) InitSysDictionaryRouter(Router *gin.RouterGroup) {
 		sysDictionaryRouter.GET("exportSysDictionary", dictionaryApi.ExportSysDictionary)    // 导出SysDictionary
 	}
 	{
-		sysDictionaryRouterWithoutRecord.GET("findSysDictionary", dictionaryApi.FindSysDictionary)       // 根据ID获取SysDictionary
-		sysDictionaryRouterWithoutRecord.GET("getSysDictionaryList", dictionaryApi.GetSysDictionaryList) // 获取SysDictionary列表
+		sysDictionaryRouterWithoutRecord.GET("findSysDictionary", dictionaryApi.FindSysDictionary)                             // 根据ID获取SysDictionary
+		sysDictionaryRouterWithoutRecord.GET("getSysDictionaryList", dictionaryApi.GetSysDictionaryList)                       // 获取SysDictionary列表
+		sysDictionaryRouterWithoutRecord.GET("getSysDictionaryListWithDetails", dictionaryApi.GetSysDictionaryListWithDetails) // 获取SysDictionary列表(含字典项明细,一次返回)
 	}
 }

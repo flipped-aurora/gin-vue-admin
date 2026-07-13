@@ -2,12 +2,7 @@ package mcpTool
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
-	"strings"
-	"time"
 
 	"github.com/mark3labs/mcp-go/mcp"
 	mcpServer "github.com/mark3labs/mcp-go/server"
@@ -20,13 +15,9 @@ type promptDef struct {
 	Markdown    string `json:"markdown"`
 }
 
-// promptsResponse 是 GVA ListMcpPromptsPublic 接口的响应结构（复用 GVA 标准信封）。
-type promptsResponse struct {
-	Code int `json:"code"`
-	Data struct {
-		Prompts []promptDef `json:"prompts"`
-	} `json:"data"`
-	Msg string `json:"msg"`
+// promptsData 是 GVA ListMcpPromptsPublic 接口 data 字段的负载（信封由 upstreamEnvelope 提供）。
+type promptsData struct {
+	Prompts []promptDef `json:"prompts"`
 }
 
 // registerDynamicPrompts 从 GVA 主服务读取编排 prompt 定义，注册成 MCP prompt。
@@ -65,36 +56,9 @@ func registerDynamicPrompts(s *mcpServer.MCPServer) {
 
 // fetchDynamicPrompts 通过 HTTP 回打 GVA 的 ListMcpPromptsPublic 接口读取编排定义。
 func fetchDynamicPrompts() ([]promptDef, error) {
-	endpoint := strings.TrimRight(upstreamBaseURL(), "/") + "/mcpApi/listPromptsPublic"
-	timeoutCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	req, err := http.NewRequestWithContext(timeoutCtx, http.MethodGet, endpoint, nil)
+	result, err := fetchPublicUpstream[promptsData]("/mcpApi/listPromptsPublic")
 	if err != nil {
-		return nil, fmt.Errorf("构建请求失败: %w", err)
-	}
-	req.Header.Set("Accept", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("请求 GVA prompt 接口失败: %w", err)
-	}
-	defer resp.Body.Close()
-
-	rawBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("读取响应失败: %w", err)
-	}
-	if resp.StatusCode >= 400 {
-		return nil, fmt.Errorf("GVA prompt 接口返回状态码 %d: %s", resp.StatusCode, string(rawBody))
-	}
-
-	var result promptsResponse
-	if err := json.Unmarshal(rawBody, &result); err != nil {
-		return nil, fmt.Errorf("解析响应失败: %w", err)
-	}
-	if result.Code != 0 {
-		return nil, fmt.Errorf("GVA prompt 接口业务错误: %s", result.Msg)
+		return nil, err
 	}
 	return result.Data.Prompts, nil
 }

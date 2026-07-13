@@ -60,12 +60,12 @@ export const themeSettings = {
     // 标签栏阴影档位：none / sm / md / lg（与顶栏阴影同机制）
     shadow: 'sm',
     // 标签栏风格：button(描边胶囊) / chrome(浏览器标签) / slider(底部指示条)
-    mode: 'button',
+    mode: 'chrome',
     // 是否在标签上展示路由图标
     showIcon: true
   },
   menu: {
-    theme: 'design',
+    theme: 'light',
     darkSider: false
   },
   card: {

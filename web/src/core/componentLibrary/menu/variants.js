@@ -37,7 +37,7 @@ export const menuItemVariants = cva(
         theme: 'group',
         role: 'item',
         active: true,
-        class: 'bg-muted text-base-text font-medium'
+        class: 'bg-[rgb(var(--primary-color)/0.12)] text-active font-medium'
       },
       {
         theme: 'group',

@@ -41,6 +41,7 @@ func Reload() error {
 
 	// 重新初始化定时任务
 	Timer()
+	LoadTimedTasks()
 
 	logger.Bg().Mod("system").Info("系统配置重新加载完成")
 	return nil

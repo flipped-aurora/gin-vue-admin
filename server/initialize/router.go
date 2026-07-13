@@ -105,6 +105,7 @@ func Routers() *gin.Engine {
 		systemRouter.InitLoginLogRouter(PrivateGroup)                       // 登录日志
 		systemRouter.InitSecurityConfigRouter(PrivateGroup)                 // 安全配置
 		systemRouter.InitApiTokenRouter(PrivateGroup)                       // apiToken签发
+		systemRouter.InitTimedTaskRouter(PrivateGroup)                      // 定时任务
 		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
 		mediaRouter.InitFileUploadAndDownloadRouter(PrivateGroup)           // 文件上传下载功能路由
 		mediaRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)        // 媒体分类

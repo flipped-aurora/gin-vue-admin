@@ -2,6 +2,7 @@ package timer
 
 import (
 	"fmt"
+	"sync"
 	"testing"
 	"time"
 
@@ -69,4 +70,44 @@ func TestNewTimerTask(t *testing.T) {
 		b, c := tm.FindCron("job")
 		fmt.Println(a, b, c)
 	}
+}
+
+func TestSnapshot(t *testing.T) {
+	tm := NewTimerTask()
+	defer tm.Close()
+	_, err := tm.AddTaskByFunc("snapCron", "@hourly", func() {}, "快照任务")
+	if err != nil {
+		t.Fatal(err)
+	}
+	snap := tm.Snapshot()
+	if len(snap) != 1 {
+		t.Fatalf("期望 1 条, got %d", len(snap))
+	}
+	d := snap[0]
+	if d.CronName != "snapCron" || d.TaskName != "快照任务" || d.Spec != "@hourly" {
+		t.Fatalf("快照字段不符: %+v", d)
+	}
+	if !d.NextRun.After(time.Now()) {
+		t.Fatalf("NextRun 应在未来: %v", d.NextRun)
+	}
+}
+
+func TestSnapshotConcurrent(t *testing.T) { // 配合 -race: 快照与增删并发安全
+	tm := NewTimerTask()
+	defer tm.Close()
+	var wg sync.WaitGroup
+	for i := 0; i < 30; i++ {
+		wg.Add(2)
+		go func(n int) {
+			defer wg.Done()
+			_, _ = tm.AddTaskByFunc(fmt.Sprintf("c%d", n), "@daily", func() {}, "并发")
+		}(i)
+		go func() {
+			defer wg.Done()
+			for _, d := range tm.Snapshot() {
+				_ = d.NextRun
+			}
+		}()
+	}
+	wg.Wait()
 }

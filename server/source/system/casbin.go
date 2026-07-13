@@ -59,6 +59,16 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/securityConfig/getSecurityConfig", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/securityConfig/setSecurityConfig", V2: "POST"},
 
+		{Ptype: "p", V0: "888", V1: "/timedTask/createTimedTask", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/updateTimedTask", V2: "PUT"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/deleteTimedTask", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/toggleTimedTask", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/triggerTimedTask", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/getTimedTaskList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/getTimedTaskLogList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/getRegisteredMethods", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/timedTask/alertStream", V2: "GET"},
+
 		{Ptype: "p", V0: "888", V1: "/api/createApi", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getApiById", V2: "POST"},

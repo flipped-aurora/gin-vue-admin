@@ -30,6 +30,12 @@ func ClearTable(db *gorm.DB) error {
 		Interval:     "168h",
 	})
 
+	ClearTableDetail = append(ClearTableDetail, common.ClearDB{
+		TableName:    "sys_timed_task_logs",
+		CompareField: "created_at",
+		Interval:     "720h", // 执行日志保留 30 天
+	})
+
 	if db == nil {
 		return errors.New("db Cannot be empty")
 	}

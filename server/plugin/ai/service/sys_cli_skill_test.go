@@ -256,6 +256,119 @@ func TestRenderScenariosMarkdownWithAlias(t *testing.T) {
 	}
 }
 
+// command 节点出边上的流转条件必须渲染出来（回归 bug：此前只有 decision 节点渲染出边条件，
+// 挂在 command 节点连线上的条件被整段丢弃，场景无法体现该 step 何时被调用）。
+func TestRenderScenariosMarkdownCommandBranchConditions(t *testing.T) {
+	scenarios := []autoModel.CliScenario{{
+		Name: "支付分支",
+		Nodes: []autoModel.CliScenarioNode{
+			{ID: "n1", Type: "command", CommandName: "order-create", Alias: "create", Note: "创建订单"},
+			{ID: "n2", Type: "command", CommandName: "pay-notify", Note: "支付成功通知"},
+			{ID: "n3", Type: "command", CommandName: "order-cancel", Note: "超时取消"},
+		},
+		Edges: []autoModel.CliScenarioEdge{
+			{From: "n1", To: "n2", Condition: "create.status=paid"},
+			{From: "n1", To: "n3", Condition: "create.status=timeout"},
+		},
+	}}
+	got := renderScenariosMarkdown(scenarios, true)
+	for _, want := range []string{
+		"1. `order-create`（别名：create）",
+		"若 create.status=paid → `pay-notify`",
+		"若 create.status=timeout → `order-cancel`",
+	} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("missing %q in\n%s", want, got)
+		}
+	}
+}
+
+// 只有单条带条件的 command 出边（“执行完这一步，满足条件才走到下一步”）也要渲染出条件。
+func TestRenderScenariosMarkdownSingleCommandEdgeConditionRendered(t *testing.T) {
+	scenarios := []autoModel.CliScenario{{
+		Name: "单条件流转",
+		Nodes: []autoModel.CliScenarioNode{
+			{ID: "n1", Type: "command", CommandName: "user-create", Alias: "create"},
+			{ID: "n2", Type: "command", CommandName: "welcome-send"},
+		},
+		Edges: []autoModel.CliScenarioEdge{
+			{From: "n1", To: "n2", Condition: "create.isNew=true"},
+		},
+	}}
+	got := renderScenariosMarkdown(scenarios, true)
+	if !strings.Contains(got, "若 create.isNew=true → `welcome-send`") {
+		t.Fatalf("single command-edge condition dropped:\n%s", got)
+	}
+}
+
+// 单条无条件 command 出边保持隐式（靠编号顺序表达），不产生冗余箭头，避免线性链路噪声。
+func TestRenderScenariosMarkdownSinglePlainCommandEdgeStaysImplicit(t *testing.T) {
+	scenarios := []autoModel.CliScenario{{
+		Name: "线性",
+		Nodes: []autoModel.CliScenarioNode{
+			{ID: "n1", Type: "command", CommandName: "step-a"},
+			{ID: "n2", Type: "command", CommandName: "step-b"},
+		},
+		Edges: []autoModel.CliScenarioEdge{
+			{From: "n1", To: "n2"},
+		},
+	}}
+	got := renderScenariosMarkdown(scenarios, true)
+	if strings.Contains(got, "→") {
+		t.Fatalf("single unconditional command edge should stay implicit, got:\n%s", got)
+	}
+}
+
+// command 节点混合“带条件 + 无条件”出边：条件边渲染“若…”，无条件边渲染“默认流转”，不出现“否则”。
+func TestRenderScenariosMarkdownCommandMixedEdges(t *testing.T) {
+	scenarios := []autoModel.CliScenario{{
+		Name: "混合分支",
+		Nodes: []autoModel.CliScenarioNode{
+			{ID: "n1", Type: "command", CommandName: "order-create", Alias: "create"},
+			{ID: "n2", Type: "command", CommandName: "pay-notify"},
+			{ID: "n3", Type: "command", CommandName: "log-record"},
+		},
+		Edges: []autoModel.CliScenarioEdge{
+			{From: "n1", To: "n2", Condition: "create.status=paid"},
+			{From: "n1", To: "n3"},
+		},
+	}}
+	got := renderScenariosMarkdown(scenarios, true)
+	for _, want := range []string{
+		"若 create.status=paid → `pay-notify`",
+		"默认流转 → `log-record`",
+	} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("missing %q in\n%s", want, got)
+		}
+	}
+	if strings.Contains(got, "否则") {
+		t.Fatalf("unconditional edge should not render 否则:\n%s", got)
+	}
+}
+
+// 悬空出边（目标节点不存在，MCP 预览路径不过滤）应渲染可读占位而非空 backtick，且不 panic。
+func TestRenderScenariosMarkdownDanglingEdgeTarget(t *testing.T) {
+	scenarios := []autoModel.CliScenario{{
+		Name: "悬空边",
+		Nodes: []autoModel.CliScenarioNode{
+			{ID: "n1", Type: "command", CommandName: "order-create"},
+			{ID: "n2", Type: "command", CommandName: "pay-notify"},
+		},
+		Edges: []autoModel.CliScenarioEdge{
+			{From: "n1", To: "n2", Condition: "已支付"},
+			{From: "n1", To: "ghost", Condition: "未知目标"},
+		},
+	}}
+	got := renderScenariosMarkdown(scenarios, false)
+	if !strings.Contains(got, "若 未知目标 → （未知节点）") {
+		t.Fatalf("dangling target should render placeholder:\n%s", got)
+	}
+	if strings.Contains(got, "→ ``") {
+		t.Fatalf("dangling target must not render empty backticks:\n%s", got)
+	}
+}
+
 func TestRenderScenariosMarkdownCycleDoesNotPanic(t *testing.T) {
 	scenarios := []autoModel.CliScenario{{
 		Name: "环",

@@ -10,19 +10,19 @@
       <div class="gva-theme-section-content">
         <div class="gva-theme-card-bg">
           <div class="grid grid-cols-2 gap-4 text-sm">
-            <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
+            <div class="flex justify-between items-center py-3 border-b border-border">
               <span class="gva-theme-text-sub font-medium">版本</span>
               <span class="font-mono gva-theme-text-main font-semibold">v2.7.4</span>
             </div>
-            <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
+            <div class="flex justify-between items-center py-3 border-b border-border">
               <span class="gva-theme-text-sub font-medium">前端框架</span>
               <span class="font-mono gva-theme-text-main font-semibold">Vue 3</span>
             </div>
-            <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
+            <div class="flex justify-between items-center py-3 border-b border-border">
               <span class="gva-theme-text-sub font-medium">UI 组件库</span>
               <span class="font-mono gva-theme-text-main font-semibold">Element Plus</span>
             </div>
-            <div class="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-600">
+            <div class="flex justify-between items-center py-3 border-b border-border">
               <span class="gva-theme-text-sub font-medium">构建工具</span>
               <span class="font-mono gva-theme-text-main font-semibold">Vite</span>
             </div>
@@ -57,7 +57,7 @@
               </div>
               <div>
                 <h4 class="text-sm font-semibold gva-theme-text-main">重置配置</h4>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">将所有设置恢复为默认值（导入/导出已迁移至「预设」）</p>
+                <p class="text-xs text-muted-foreground mt-1">将所有设置恢复为默认值（导入/导出已迁移至「预设」）</p>
               </div>
             </div>
             <g-button
@@ -84,7 +84,7 @@
         <div class="gva-theme-card-bg">
           <div class="flex items-start gap-5">
             <div
-              class="w-16 h-16 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+              class="w-16 h-16 bg-container border border-border rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
               <Logo />
             </div>
             <div class="flex-1">
@@ -98,7 +98,7 @@
                   :style="{ color: settings.themeColor }">
                   GitHub 仓库
                 </a>
-                <span class="text-gray-400 dark:text-gray-500">·</span>
+                <span class="text-muted-foreground">·</span>
                 <a href="https://www.gin-vue-admin.com/" target="_blank"
                   class="font-medium transition-colors duration-150 hover:underline"
                   :style="{ color: settings.themeColor }">

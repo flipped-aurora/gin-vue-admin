@@ -40,7 +40,7 @@
         </div>
         <div
           v-else
-          class="gva-theme-card-bg text-center text-sm text-gray-400 dark:text-gray-500 py-6 mb-4"
+          class="gva-theme-card-bg text-center text-sm text-muted-foreground py-6 mb-4"
         >
           暂无自定义预设，点击下方「保存当前为预设」
         </div>
@@ -79,7 +79,7 @@
             </g-button>
           </el-upload>
         </div>
-        <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">
+        <p class="text-xs text-muted-foreground mt-3">
           导出当前完整配置（主题 / 布局 / 顶栏 / 界面），可跨账号迁移；
         </p>
       </div>

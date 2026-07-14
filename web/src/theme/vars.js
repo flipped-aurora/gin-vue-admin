@@ -20,7 +20,6 @@ export const themeVars = {
     nprogress: 'rgb(var(--nprogress-color))',
     container: 'rgb(var(--container-bg-color))',
     layout: 'rgb(var(--layout-bg-color))',
-    inverted: 'rgb(var(--inverted-bg-color))',
     'base-text': 'rgb(var(--base-text-color))',
     border: 'rgb(var(--border-color))',
     muted: 'rgb(var(--muted-color))',

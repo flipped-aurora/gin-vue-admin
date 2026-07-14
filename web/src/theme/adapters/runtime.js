@@ -18,11 +18,7 @@ import { applyElementPlusTheme } from './element-plus'
 import { applyStructureTheme } from './structure'
 
 const applyCssVarsTheme = ({ settings, themeColors }) => {
-  const { themeTokens, darkThemeTokens } = createThemeToken(
-    themeColors,
-    settings.tokens,
-    settings.recommendColor
-  )
+  const { themeTokens, darkThemeTokens } = createThemeToken(themeColors, settings.tokens)
   addThemeVarsToGlobal(themeTokens, darkThemeTokens)
 }
 

@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="h-full gva-container2 overflow-auto bg-slate-50/60 dark:bg-slate-800">
+  <div class="h-full gva-container2 overflow-auto bg-main">
     <div class="space-y-2 py-2">
       <gva-card
         class="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white px-5 py-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
@@ -7,11 +7,11 @@
         
         <div class="relative flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p class="text-xs tracking-[0.2em] text-slate-500 dark:text-slate-400">DASHBOARD</p>
-            <h1 class="mt-2 text-xl font-semibold text-slate-900 dark:text-slate-100 lg:text-2xl">
+            <p class="text-xs tracking-[0.2em] text-muted-foreground">DASHBOARD</p>
+            <h1 class="mt-2 text-xl font-semibold text-base-text lg:text-2xl">
               欢迎回来，开始今天的Coding节奏
             </h1>
-            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+            <p class="mt-2 text-sm text-muted-foreground">
               {{ today }} · 已为你聚合核心业务数据、插件动态和系统公告
             </p>
           </div>

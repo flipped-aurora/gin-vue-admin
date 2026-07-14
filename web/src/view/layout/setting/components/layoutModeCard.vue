@@ -44,7 +44,7 @@
 
       <div class="text-center">
         <span class="block text-[13px] font-semibold gva-theme-text-main" :style="modelValue === layout.value ? { color: primaryColor } : {}">{{ layout.label }}</span>
-        <span class="block text-[11px] text-gray-400 dark:text-gray-500 mt-0.5 leading-tight">{{ layout.description }}</span>
+        <span class="block text-[11px] text-muted-foreground mt-0.5 leading-tight">{{ layout.description }}</span>
       </div>
     </div>
   </div>

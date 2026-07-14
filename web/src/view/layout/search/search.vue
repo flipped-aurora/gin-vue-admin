@@ -54,12 +54,12 @@
 </script>
 <style scoped lang="scss">
   .search-component {
-    @apply inline-flex overflow-hidden text-center gap-5 mr-5 text-black dark:text-gray-100;
+    @apply inline-flex overflow-hidden text-center gap-5 mr-5 text-base-text;
     div {
       @apply cursor-pointer;
     }
     .el-input__inner {
-      @apply border-b border-solid border-gray-300;
+      @apply border-b border-solid border-border;
     }
     .el-dropdown-link {
       @apply cursor-pointer;

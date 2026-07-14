@@ -42,17 +42,14 @@ export const rgbToHex = (r, g, b) => {
   return `#${parts.join('')}`
 }
 
-export const colorToHex = (color) => {
-  const rgb = colorToRgb(color)
-  return rgb ? rgbToHex(rgb.r, rgb.g, rgb.b) : color
-}
-
 export const colorToRgbChannels = (color) => {
   const rgb = colorToRgb(color)
   return rgb ? `${rgb.r} ${rgb.g} ${rgb.b}` : '0 0 0'
 }
 
-export const mixColor = (color, target, amount) => {
+// 仅供本文件内 Element Plus 明暗变体（generateLightColor / generateDarkColor）使用；
+// 主题色阶已由 Prism 生成，不再对外暴露此原语。
+const mixColor = (color, target, amount) => {
   const sourceRgb = colorToRgb(color)
   const targetRgb = colorToRgb(target)
   if (!sourceRgb || !targetRgb) return color
@@ -129,8 +126,10 @@ export const autoDarkColor = (color) => {
   return `rgba(${r}, ${g}, ${b}, ${rgb.a})`
 }
 
-const generateDarkColor = (color, amount) => mixColor(color, '#0a0a1e', amount)
-const generateLightColor = (color, amount) => mixColor(color, '#f0f8ff', amount)
+// Element Plus 明暗变体（--el-color-*-light-N / -dark-N）：按官方算法向纯白/纯黑混合，
+// 不再使用带蓝调的魔法锚点色（原 #f0f8ff / #0a0a1e）。
+const generateDarkColor = (color, amount) => mixColor(color, '#000000', amount)
+const generateLightColor = (color, amount) => mixColor(color, '#ffffff', amount)
 
 /**
  * Keep the current GVA/Element Plus palette behavior while moving ownership
@@ -163,39 +162,4 @@ export const setElementPlusPrimaryColor = (primaryColor, mode) => {
   const root = document.documentElement.style
   root.setProperty('--el-color-primary-bg', addOpacityToColor(primaryColor, 0.4))
   root.setProperty('--el-menu-hover-bg-color', addOpacityToColor(primaryColor, 0.2))
-}
-
-export const createSimplePalette = (color) => ({
-  50: mixColor(color, '#ffffff', 0.92),
-  100: mixColor(color, '#ffffff', 0.84),
-  200: mixColor(color, '#ffffff', 0.72),
-  300: mixColor(color, '#ffffff', 0.56),
-  400: mixColor(color, '#ffffff', 0.32),
-  500: color,
-  600: mixColor(color, '#000000', 0.12),
-  700: mixColor(color, '#000000', 0.24),
-  800: mixColor(color, '#000000', 0.36),
-  900: mixColor(color, '#000000', 0.48),
-  950: mixColor(color, '#000000', 0.6)
-})
-
-const RECOMMENDED_PALETTE_MIX = {
-  50: ['#ffffff', 0.95],
-  100: ['#ffffff', 0.9],
-  200: ['#ffffff', 0.78],
-  300: ['#ffffff', 0.64],
-  400: ['#ffffff', 0.38],
-  500: [null, 0],
-  600: ['#000000', 0.08],
-  700: ['#000000', 0.18],
-  800: ['#000000', 0.3],
-  900: ['#000000', 0.42],
-  950: ['#000000', 0.56]
-}
-
-export const createRecommendedPalette = (color) => {
-  return Object.entries(RECOMMENDED_PALETTE_MIX).reduce((palette, [level, [target, amount]]) => {
-    palette[level] = target ? mixColor(color, target, amount) : color
-    return palette
-  }, {})
 }

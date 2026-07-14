@@ -8,7 +8,7 @@
         :class="[
           modelValue === mode.value
             ? 'text-white shadow-sm transform -translate-y-0.5'
-            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+            : 'text-muted-foreground hover:text-base-text hover:bg-muted'
         ]"
         :style="modelValue === mode.value ? { backgroundColor: primaryColor } : {}"
         @click="handleModeChange(mode.value)"

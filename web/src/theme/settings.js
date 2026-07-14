@@ -17,7 +17,6 @@ export const themeSettings = {
   themeScheme: 'auto',
   grayscale: false,
   colourWeakness: false,
-  recommendColor: false,
   themeColor: '#2264f2',
   themeRadius: 0.5,
   size: 'default',
@@ -74,18 +73,10 @@ export const themeSettings = {
   watermark: {
     visible: false
   },
+  // 中性/表面色不再在此硬编码：container / layout / border / muted / base-text 等全部由
+  // Prism 的 neutral 色阶在 token.js 中派生（详见 createThemeToken）。此处只保留与颜色无关的阴影档位。
   tokens: {
     light: {
-      colors: {
-        container: 'rgb(255, 255, 255)',
-        layout: 'rgb(247, 250, 252)',
-        inverted: 'rgb(15, 23, 42)',
-        'base-text': 'rgb(31, 41, 55)',
-        border: 'rgb(229, 231, 235)',
-        muted: 'rgb(248, 250, 252)',
-        'muted-foreground': 'rgb(100, 116, 139)',
-        'control-track': 'rgb(209, 213, 219)'
-      },
       boxShadow: {
         header: '0 1px 0 rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)',
         sider: '2px 0 8px 0 rgba(29, 35, 41, 0.05)',
@@ -94,16 +85,6 @@ export const themeSettings = {
       }
     },
     dark: {
-      colors: {
-        container: 'rgb(15, 23, 42)',
-        layout: 'rgb(30, 41, 59)',
-        inverted: 'rgb(255, 255, 255)',
-        'base-text': 'rgb(226, 232, 240)',
-        border: 'rgb(51, 65, 85)',
-        muted: 'rgb(30, 41, 59)',
-        'muted-foreground': 'rgb(148, 163, 184)',
-        'control-track': 'rgb(71, 85, 105)'
-      },
       boxShadow: {
         header: '0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35)',
         sider: '2px 0 8px 0 rgba(0, 0, 0, 0.35)',

@@ -1,15 +1,15 @@
 ﻿<template>
   <div
-    class="gva-card bg-white text-black/80 dark:text-slate-400 dark:bg-slate-900 dark:text-white/80"
+    class="gva-card bg-container text-base-text"
     :class="[customClass || '', withoutPadding ? 'p-0' : 'p-4']"
   >
     <div v-if="title" class="flex justify-between items-center">
-      <div class="text-sm font-semibold tracking-tight text-black dark:text-white">
+      <div class="text-sm font-semibold tracking-tight text-base-text">
         {{ title }}
       </div>
       <div
         v-if="showAction"
-        class="text-xs text-black/60 dark:text-white/60 hover:text-active cursor-pointer"
+        class="text-xs text-muted-foreground hover:text-active cursor-pointer"
       >
         更多
       </div>

@@ -1,11 +1,11 @@
 <template>
   <div
-    class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
+    class="bg-main text-base-text w-screen h-screen"
   >
     <iframe
         v-if="reloadFlag"
         id="gva-base-load-dom"
-        class="gva-body-h bg-gray-50 dark:bg-slate-800 w-full border-t border-gray-200 dark:border-slate-700"
+        class="gva-body-h bg-main w-full border-t border-border"
         :src="url"
     ></iframe>
   </div>

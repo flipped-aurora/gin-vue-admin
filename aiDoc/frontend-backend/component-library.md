@@ -37,6 +37,7 @@ core/componentLibrary/
 ├── index.js            # 总出口：re-export 各组件 + cn
 ├── utils.js            # cn()：clsx + tailwind-merge 合并 class
 ├── button/             # Button + buttonVariants(cva)
+├── dropdown-menu/      # DropdownMenu(:items 便捷模式，trigger=click|hover) + Content/Item 部件
 ├── select/             # Select(:options 便捷模式) + Trigger/Content/Item 部件
 ├── switch/             # Switch
 ├── slider/             # Slider（单值 number 对外，内部包数组，支持 marks）
@@ -53,10 +54,11 @@ core/componentLibrary/
 `core/global.js` 会把 barrel 导出的每个组件以 **`g-` 前缀（kebab-case）**注册为全局组件，
 命名与项目里 `el-button` 等用法统一，全站直接用、无需 import：
 
-| 组件        | 全局标签             |
-| ----------- | -------------------- |
-| Button      | `<g-button />`       |
-| Select      | `<g-select />`       |
+| 组件         | 全局标签               |
+| ------------ | ---------------------- |
+| Button       | `<g-button />`         |
+| DropdownMenu | `<g-dropdown-menu />`  |
+| Select       | `<g-select />`         |
 | Switch      | `<g-switch />`       |
 | Slider      | `<g-slider />`       |
 | NumberField | `<g-number-field />` |
@@ -144,6 +146,17 @@ import { Button } from '@/core/componentLibrary/button'
 - **g-select**：默认走便捷 `:options` 模式（本地算当前文案，规避 reka SelectValue 首屏回填时机问题）；
   `option.value` 支持 `string | number | boolean`，回写**保留原值类型**（内部用 `String(value)` 映射桥接 reka）；
   便捷模式仅必填单选，需清空 / 多选时用 granular 部件（`g-select-trigger / g-select-content / g-select-item`）。
+- **g-dropdown-menu**：动作下拉菜单（reka `DropdownMenu` 底座，anatomy 对齐官方文档）；默认插槽放触发器
+  （asChild 合并行为），便捷模式传 `:items`（`{ label, value?, danger?, disabled? }`），选中把整个 item 从
+  `select` 事件抛出；`trigger` = `click | hover`（可选值集中导出为 `DROPDOWN_MENU_TRIGGERS`）。
+  - 菜单项高亮走主题色实底 + 白字（`data-[highlighted]:bg-primary`，鼠标悬停与键盘导航同态），
+    `danger` 项红色文本、高亮红色实底；面板自带指向触发器的箭头（`DropdownMenuArrow`，`fill-container`
+    随换肤 / 暗色自适应），`:arrow="false"` 可关；进出场按官方推荐用
+    `--reka-dropdown-menu-content-transform-origin` 做缩放淡入淡出（keyframes `popper-in/out`，transition.scss）。
+  - hover 模式：非 modal（modal 会给 body 设 `pointer-events:none`，触发器收不到指针事件导致开关闪烁死循环）、
+    移出后延迟 120ms 收起、关闭时阻止 closeAutoFocus 回焦触发器（避免非键盘操作留下 focus ring）。
+  - 完全自定义面板用 `#content` 插槽 + granular 部件
+    （`g-dropdown-menu-content / g-dropdown-menu-item / g-dropdown-menu-label / g-dropdown-menu-separator`）。
 - **g-switch**：关=`control-track`、开=`primary`；纯图形控件，调用方按语义传 `aria-label`。
 - **g-slider**：对外是单值 `number`（内部包成数组），支持 `marks`；未填充轨道走 `control-track`，可传 `aria-label`。
 - **g-number-field**：数字步进输入；`+`/`-` 按 `step` 增减，手输的值也会吸附到 `step` 的倍数。

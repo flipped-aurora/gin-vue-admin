@@ -3,8 +3,8 @@
     <div
       v-for="item in tabModes"
       :key="item.value"
-      class="relative flex flex-col items-center gap-1.5 p-1.5 bg-white dark:bg-gray-700/50 border rounded-lg cursor-pointer transition-colors duration-150 ease-in-out hover:border-gray-300 dark:hover:border-gray-500"
-      :class="modelValue === item.value ? '' : 'border-gray-200 dark:border-gray-600'"
+      class="relative flex flex-col items-center gap-1.5 p-1.5 bg-container border rounded-lg cursor-pointer transition-colors duration-150 ease-in-out hover:border-primary"
+      :class="modelValue === item.value ? '' : 'border-border'"
       :style="
         modelValue === item.value
           ? { borderColor: primaryColor, boxShadow: `0 0 0 1px ${primaryColor}` }

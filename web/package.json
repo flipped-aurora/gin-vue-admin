@@ -20,6 +20,7 @@
     "@iconify/vue": "^5.0.0",
     "@logicflow/core": "^2.2.3",
     "@logicflow/extension": "^2.2.3",
+    "@simple-prism/core": "^0.1.4",
     "@unocss/transformer-directives": "^66.4.2",
     "@vue-office/docx": "^1.6.2",
     "@vue-office/excel": "^1.7.11",

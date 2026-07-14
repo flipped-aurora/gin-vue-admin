@@ -31,10 +31,10 @@
       </div>
     </template>
 
-    <div class="bg-white dark:bg-gray-900 px-5">
+    <div class="bg-container px-5">
       <div class="pt-3 pb-4">
         <div class="flex justify-center">
-          <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 gap-0.5">
+          <div class="inline-flex bg-muted rounded-lg p-1 gap-0.5">
             <div
               v-for="tab in tabs"
               :key="tab.key"
@@ -42,7 +42,7 @@
               :class="[
                 activeTab === tab.key
                   ? 'text-white shadow-sm'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  : 'text-muted-foreground hover:text-base-text'
               ]"
               :style="activeTab === tab.key ? { backgroundColor: settings.themeColor } : {}"
               @click="activeTab = tab.key"
@@ -113,7 +113,7 @@
 <style lang="scss">
 .gva-theme-drawer {
   .el-drawer {
-    @apply bg-white dark:bg-gray-900;
+    @apply bg-container;
   }
 
   .el-drawer__body {
@@ -126,11 +126,11 @@
 }
 
 .gva-theme-card-bg {
-  @apply bg-gray-50/70 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700/60 rounded-lg px-3.5 py-0.5;
+  @apply bg-layout border border-border rounded-lg px-3.5 py-0.5;
 }
 
 .gva-theme-card-white {
-  @apply bg-white dark:bg-gray-700/60 border border-gray-100 dark:border-gray-600/60 rounded-lg px-3 py-2.5 transition-colors duration-150;
+  @apply bg-container border border-border rounded-lg px-3 py-2.5 transition-colors duration-150;
 }
 
 .gva-theme-section-header {
@@ -138,7 +138,7 @@
 }
 
 .gva-theme-section-title {
-  @apply text-xs font-semibold tracking-wide text-gray-400 dark:text-gray-500;
+  @apply text-xs font-semibold tracking-wide text-muted-foreground;
 }
 
 .gva-theme-divider {
@@ -146,11 +146,11 @@
 }
 
 .gva-theme-text-main {
-  @apply text-gray-900 dark:text-white;
+  @apply text-base-text;
 }
 
 .gva-theme-text-sub {
-  @apply text-gray-600 dark:text-gray-400;
+  @apply text-muted-foreground;
 }
 
 .gva-theme-section-content {
@@ -158,7 +158,7 @@
 }
 
 .gva-theme-setting-item {
-  @apply flex items-center justify-between py-2.5 gva-theme-font border-0 border-b border-solid border-gray-100/80 dark:border-gray-700/50 last:border-b-0;
+  @apply flex items-center justify-between py-2.5 gva-theme-font border-0 border-b border-solid border-border last:border-b-0;
 }
 
 .gva-theme-setting-label {
@@ -166,7 +166,7 @@
 }
 
 .gva-theme-mode-selector {
-  @apply inline-flex bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 gap-1;
+  @apply inline-flex bg-layout border border-border rounded-lg p-1 gap-1;
 }
 
 .gva-theme-mode-item {
@@ -174,7 +174,7 @@
 }
 
 .gva-theme-layout-card {
-  @apply bg-white dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg p-2 cursor-pointer transition-colors duration-150 ease-in-out hover:border-gray-300 dark:hover:border-gray-500;
+  @apply bg-container border border-border rounded-lg p-2 cursor-pointer transition-colors duration-150 ease-in-out hover:border-primary;
 }
 
 @keyframes fadeInUp {

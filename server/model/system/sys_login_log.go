@@ -12,5 +12,5 @@ type SysLoginLog struct {
 	ErrorMessage  string  `json:"errorMessage" gorm:"column:error_message;comment:错误信息"`
 	Agent         string  `json:"agent" gorm:"column:agent;comment:代理"`
 	UserID        uint    `json:"userId" gorm:"column:user_id;comment:用户id"`
-	User          SysUser `json:"user" gorm:"foreignKey:UserID"`
+	User          SysUser `json:"user" form:"-" gorm:"foreignKey:UserID"` // 登录用户(Preload 填充);form:"-" 阻止 gin 查询绑定递归进 SysUser
 }

@@ -30,7 +30,7 @@ type SysUser struct {
 	Authority         SysAuthority    `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`                        // 用户角色
 	Authorities       []SysAuthority  `json:"authorities" gorm:"many2many:sys_user_authority;"`                                                   // 多用户角色
 	DeptId            uint            `json:"deptId" gorm:"comment:主部门ID(数据归属/盖章)"`                                                               // 主部门ID(数据归属)
-	Dept              SysDepartment   `json:"dept" gorm:"foreignKey:DeptId;references:ID;comment:主部门"`                                            // 主部门
+	Dept              SysDepartment   `json:"dept" form:"-" gorm:"foreignKey:DeptId;references:ID;comment:主部门"`                                   // 主部门;form:"-" 阻断 gin 绑定递归(与 SysDepartment.Leader 成环会栈溢出)
 	Departments       []SysDepartment `json:"departments" gorm:"many2many:sys_user_departments;"`                                                 // 多部门归属(数据可见范围)
 	Positions         []SysPosition   `json:"positions" gorm:"many2many:sys_user_positions;"`                                                     // 多岗位
 	Phone             string          `json:"phone"  gorm:"comment:用户手机号"`                                                                        // 用户手机号

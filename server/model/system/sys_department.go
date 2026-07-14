@@ -11,7 +11,7 @@ type SysDepartment struct {
 	Ancestors string          `json:"ancestors" gorm:"comment:祖级链,逗号分隔如 0,1,5"`        // 祖级链
 	Sort      int             `json:"sort" gorm:"default:0;comment:排序"`                // 排序
 	LeaderId  uint            `json:"leaderId" gorm:"comment:负责人用户ID"`                 // 负责人(关联 sys_users)
-	Leader    *SysUser        `json:"leader" gorm:"foreignKey:LeaderId;references:ID"` // 负责人用户(联系电话/邮箱从该用户带出)
+	Leader    *SysUser        `json:"leader" form:"-" gorm:"foreignKey:LeaderId;references:ID"` // 负责人用户(联系电话/邮箱从该用户带出);form:"-" 阻断 gin 绑定递归(与 SysUser.Dept 成环会栈溢出)
 	Status    *bool           `json:"status" gorm:"default:true;comment:是否启用"`         // 是否启用
 	Children  []SysDepartment `json:"children" gorm:"-"`                               // 子部门(内存组装,不建列)
 }

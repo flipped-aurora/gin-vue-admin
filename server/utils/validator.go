@@ -137,7 +137,12 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 	for i := 0; i < num; i++ {
 		tagVal := typ.Field(i)
 		val := val.Field(i)
-		if tagVal.Type.Kind() == reflect.Struct {
+		// 只递归进【匿名内嵌】结构体(如 global.GVA_MODEL / request.PageInfo):
+		// 递归的唯一目的是够到内嵌提升上来的字段(如 IdVerify 的 ID、PageInfoVerify 的 Page)。
+		// 具名关联字段(User/Dept/Meta 等)是独立业务对象,不属于当前结构体自身,不应被扫描——
+		// 否则关联对象内嵌的 GVA_MODEL.ID 恒为 0,会让 IdVerify 误报"ID值不能为空"。
+		// 需要单独校验某个具名子结构时,调用方直接 Verify(x.Sub, rule)(项目既有用法)。
+		if tagVal.Anonymous && tagVal.Type.Kind() == reflect.Struct {
 			if err = Verify(val.Interface(), roleMap); err != nil {
 				return err
 			}

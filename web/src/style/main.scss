@@ -44,6 +44,10 @@
   @apply gva-surface pb-0;
 }
 
+.gva-content-box {
+  @apply gva-surface;
+}
+
 .gva-form-box {
   @apply gva-surface;
 }

@@ -368,6 +368,10 @@ func (userService *UserService) GetUserInfo(ctx context.Context, uuid uuid.UUID)
 	if err != nil {
 		return reqUser, err
 	}
+	// 为多部门解析 "公司/部门" 全路径, 供个人页「所属架构」展示; 失败不阻断用户信息返回
+	if e := SysDepartmentServiceApp.FillNamePaths(ctx, reqUser.Departments); e != nil {
+		logger.WithCtx(ctx).Mod("biz").Err(e).Warn("解析部门全路径失败")
+	}
 	MenuServiceApp.UserAuthorityDefaultRouter(ctx, &reqUser)
 	return reqUser, err
 }

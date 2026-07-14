@@ -734,7 +734,7 @@
         </el-table>
       </div>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-end mt-4">
+      <div class="gva-btn-list justify-end mt-4 mb-0">
         <el-button type="primary" :disabled="isAdd" @click="exportJson()">
           导出json
         </el-button>

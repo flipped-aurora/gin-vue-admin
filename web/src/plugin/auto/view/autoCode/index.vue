@@ -4,7 +4,7 @@
       href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
       title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。"
     />
-    <div class="gva-search-box" v-if="!isAdd">
+    <div class="gva-content-box" v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">
         使用AI创建<a
           class="text-blue-600 text-sm ml-4"
@@ -25,7 +25,7 @@
           @blur="handleBlur"
         />
 
-        <div class="flex absolute right-28 bottom-2">
+        <div class="flex absolute right-24 bottom-2">
           <el-tooltip effect="light">
             <template #content>
               <div>
@@ -77,7 +77,7 @@
       </div>
     </div>
     <!-- 从数据库直接获取字段 -->
-    <div class="gva-search-box" v-if="!isAdd">
+    <div class="gva-content-box" v-if="!isAdd">
       <div class="text-lg mb-2 text-gray-600">从数据库创建</div>
       <el-form
         ref="getTableForm"
@@ -173,7 +173,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="gva-search-box">
+    <div class="gva-content-box">
       <!-- 初始版本自动化代码工具 -->
       <div class="text-lg mb-2 text-gray-600">自动化结构</div>
       <el-form
@@ -268,7 +268,7 @@
               prop="package"
               class="w-full relative"
             >
-              <el-select v-model="form.package" class="w-full pr-12" filterable>
+              <el-select v-model="form.package" class="w-full pr-12 min-w-full" filterable>
                 <el-option
                   v-for="item in pkgs"
                   :key="item.ID"
@@ -309,7 +309,7 @@
                 v-model="form.businessDB"
                 clearable
                 placeholder="选择业务库"
-                class="w-full"
+                class="w-full min-w-full"
               >
                 <el-option
                   v-for="item in dbList"
@@ -332,7 +332,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="gva-search-box">
+    <div class="gva-content-box">
       <el-collapse class="no-border-collapse">
         <el-collapse-item>
           <template #title>
@@ -734,7 +734,7 @@
         </el-table>
       </div>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-end mt-4">
+      <div class="gva-btn-list justify-end mt-4 mb-0">
         <el-button type="primary" :disabled="isAdd" @click="exportJson()">
           导出json
         </el-button>

@@ -14,6 +14,7 @@
 - 请求模型放在 `model/request/`
 - 列表查询模型应定义 `XxxSearch`，并内嵌通用的 `request.PageInfo`
 - `CreatedBy`/`UpdatedBy`/`DeletedBy`/`DeptId`（列名 `created_by`/`updated_by`/`deleted_by`/`dept_id`）这组公共操作字段**仅在业务表需要数据权限时才创建**，对应代码生成器的 AutoCreateResource 产物，不是每张表的必备字段；手写模型需要同类语义时用同名字段，不要自造 `CreatorID` 等同义字段
+- 模型上的**关联对象字段**（Preload 填充的 struct / 指针，如 `User SysUser`、`Leader *SysUser`）必须加 `form:"-"`：gin 的 query/form 绑定按类型树递归且会给 nil 指针自动 new，模型间互相引用（如 `SysUser.Dept` ⇄ `SysDepartment.Leader`）一旦被 `ShouldBindQuery` 扫到会无限递归、进程直接 `stack overflow` 崩溃；关联对象本来也不可能从 query string 传入
 - `DeptId`（归属部门）服务于数据权限：数据权限引擎按 `created_by`/`dept_id` 两列做行级过滤与创建时自动盖章，自造字段不会被引擎识别
 
 ## 类型一致性

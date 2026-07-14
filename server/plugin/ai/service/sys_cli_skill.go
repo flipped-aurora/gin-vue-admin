@@ -294,6 +294,7 @@ func writeScenarioGraph(b *strings.Builder, nodes []autoModel.CliScenarioNode, e
 				line += "（入参：" + in + "）"
 			}
 			b.WriteString(line + "\n")
+			writeOutgoingEdges(b, n, outEdges[n.ID], nodeByID)
 		case "decision":
 			desc := strings.TrimSpace(n.Note)
 			if desc == "" {
@@ -304,23 +305,62 @@ func writeScenarioGraph(b *strings.Builder, nodes []autoModel.CliScenarioNode, e
 				head += "（别名：" + alias + "）"
 			}
 			b.WriteString(head + "\n")
-			for _, e := range outEdges[n.ID] {
-				target := nodeLabel(nodeByID[e.To])
-				if cond := strings.TrimSpace(e.Condition); cond != "" {
-					b.WriteString(fmt.Sprintf("   - 若 %s → %s\n", cond, target))
-				} else {
-					b.WriteString(fmt.Sprintf("   - 否则 → %s\n", target))
-				}
-			}
+			writeOutgoingEdges(b, n, outEdges[n.ID], nodeByID)
 		}
 	}
+}
+
+// writeOutgoingEdges 把节点的出向连线（流转条件）渲染为子项，让「满足什么条件才走到下一个节点」在生成的场景里可见。
+// decision 是天然分支点，恒展开；command 仅在出现分支（≥2 条出边）或任一出边带条件时展开，
+// 单条无条件出边保持隐式（靠编号顺序表达线性流转），避免线性链路产生冗余箭头。
+// 不这样处理时，挂在 command 出边上的流转条件会被整段丢弃，场景无法体现该 step 何时被调用。
+func writeOutgoingEdges(b *strings.Builder, n autoModel.CliScenarioNode, edges []autoModel.CliScenarioEdge, nodeByID map[string]autoModel.CliScenarioNode) {
+	if len(edges) == 0 {
+		return
+	}
+	if n.Type != "decision" && !edgesCarryFlow(edges) {
+		return
+	}
+	for _, e := range edges {
+		target := edgeTargetLabel(nodeByID, e.To)
+		if cond := strings.TrimSpace(e.Condition); cond != "" {
+			b.WriteString(fmt.Sprintf("   - 若 %s → %s\n", cond, target))
+		} else {
+			// 无条件出边统一用「默认流转」，与画布上未填条件连线的默认文案一致；
+			// 也避免同一节点多条无条件出边渲染出多行「否则」这种反直觉措辞。
+			b.WriteString(fmt.Sprintf("   - 默认流转 → %s\n", target))
+		}
+	}
+}
+
+// edgeTargetLabel 返回出边目标节点的标签；目标缺失（脏数据/手工编辑 JSON 产生的悬空边，
+// MCP 预览路径不做过滤）时给出可读占位，避免渲染出空的 backtick。
+func edgeTargetLabel(nodeByID map[string]autoModel.CliScenarioNode, id string) string {
+	if n, ok := nodeByID[id]; ok {
+		return nodeLabel(n)
+	}
+	return "（未知节点）"
+}
+
+// edgesCarryFlow 判断一组出边是否携带需要显式表达的流转信息：
+// 存在分支（≥2 条出边）或任一出边带条件，都需要在场景里展开说明。
+func edgesCarryFlow(edges []autoModel.CliScenarioEdge) bool {
+	if len(edges) >= 2 {
+		return true
+	}
+	for _, e := range edges {
+		if strings.TrimSpace(e.Condition) != "" {
+			return true
+		}
+	}
+	return false
 }
 
 func nodeLabel(n autoModel.CliScenarioNode) string {
 	if n.Type == "decision" {
 		return "判断"
 	}
-	return "`" + strings.TrimSpace(n.CommandName) + "`"
+	return "`" + strings.TrimSpace(n.CommandName) + "（别名：" + strings.TrimSpace(n.Alias) + "）`"
 }
 
 // topologicalOrder 返回节点 ID 的拓扑序列；入度为 0 的节点优先（按 nodes 顺序入队保证稳定）。

@@ -20,5 +20,5 @@ type SysOperationRecord struct {
 	RequestID    string  `json:"request_id" form:"request_id" gorm:"index;column:request_id;type:varchar(64);comment:请求ID"`     // 请求ID
 	TraceID      string  `json:"trace_id" form:"trace_id" gorm:"index;column:trace_id;type:varchar(64);comment:链路ID"`           // 链路ID,索引支撑按 trace 反查
 	DeviceID     string  `json:"device_id" form:"device_id" gorm:"column:device_id;type:varchar(64);comment:设备ID"`              // 设备ID
-	User         SysUser `json:"user"`
+	User         SysUser `json:"user" form:"-"` // 操作人(Preload 填充);form:"-" 阻止 gin 查询绑定递归进 SysUser
 }

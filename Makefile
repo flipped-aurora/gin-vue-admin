@@ -2,7 +2,7 @@ SHELL = /bin/bash
 
 #SCRIPT_DIR         = $(shell pwd)/etc/script
 #请选择golang版本
-BUILD_IMAGE_SERVER  = golang:1.22
+BUILD_IMAGE_SERVER  = golang:1.24
 #请选择node版本
 BUILD_IMAGE_WEB     = node:20
 #项目名称

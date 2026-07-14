@@ -240,7 +240,7 @@
        
       <!-- 显示设置区域 -->
       <div class="border-b border-gray-200">
-        <h3 class="font-semibold text-gray-700 mb-4">显示设置</h3>
+        <h3 class="font-semibold text-gray-700 mb-4 mt-2">显示设置</h3>
         <el-form
           :inline="true"
           :model="form"

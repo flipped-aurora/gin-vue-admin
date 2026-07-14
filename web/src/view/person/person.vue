@@ -56,11 +56,11 @@
         <!-- 基本信息列表 -->
         <div class="space-y-6">
           <div class="info-item">
-            <el-icon class="info-icon"><user /></el-icon>
+            <el-icon class="info-icon"><office-building /></el-icon>
             <div>
-              <div class="info-label">用户 ID</div>
+              <div class="info-label">所属架构</div>
               <div class="info-value">
-                {{ userStore.userInfo.ID || '—' }}
+                {{ orgText }}
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@
           </div>
 
           <!-- 账号密码 -->
-          <div class="setting-row">
+          <div class="setting-row last-row">
             <div class="setting-label">
               <div class="setting-title">账号密码</div>
               <div class="setting-desc">建议定期更新密码以保障账号安全</div>
@@ -154,19 +154,6 @@
             <el-button class="setting-action" @click="showPassword = true">
               修改密码
             </el-button>
-          </div>
-
-          <!-- 用户 ID -->
-          <div class="setting-row last-row">
-            <div class="setting-label">
-              <div class="setting-title">用户 ID</div>
-              <div class="setting-desc">用于系统内部身份标识，仅限管理员修改</div>
-            </div>
-            <div class="setting-value">
-              {{ userStore.userInfo.ID || '—' }}
-            </div>
-            <!-- TODO: 原型图中的「修改 ID」按钮，当前无修改用户 ID 的逻辑 -->
-            <el-button class="setting-action">修改 ID</el-button>
           </div>
         </div>
       </div>
@@ -297,7 +284,7 @@
 
 <script setup>
   import { setSelfInfo, changePassword } from '@/api/user.js'
-  import { reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import { useUserStore } from '@/pinia/modules/user'
   import SelectImage from '@/components/selectImage/selectImage.vue'
@@ -306,6 +293,17 @@
   })
 
   const userStore = useUserStore()
+
+  // 所属架构:当前用户各部门的「公司/部门」全路径, 多部门用「｜」分隔, 无部门显示「未定义部门」
+  const orgText = computed(() => {
+    const list = userStore.userInfo.departments || []
+    const text = list
+      .map((d) => d.namePath || d.name)
+      .filter(Boolean)
+      .join(' ｜ ')
+    return text || '未定义部门'
+  })
+
   const modifyPwdForm = ref(null)
   const showPassword = ref(false)
   const pwdModify = ref({})
@@ -460,34 +458,6 @@
       })
     }
   })
-
-  // 添加活动数据
-  const activities = [
-    {
-      timestamp: '2024-01-10',
-      title: '完成项目里程碑',
-      content: '成功完成第三季度主要项目开发任务，获得团队一致好评',
-      type: 'primary'
-    },
-    {
-      timestamp: '2024-01-11',
-      title: '代码审核完成',
-      content: '完成核心模块代码审核，提出多项改进建议并获采纳',
-      type: 'success'
-    },
-    {
-      timestamp: '2024-01-12',
-      title: '技术分享会',
-      content: '主持团队技术分享会，分享前端性能优化经验',
-      type: 'warning'
-    },
-    {
-      timestamp: '2024-01-13',
-      title: '新功能上线',
-      content: '成功上线用户反馈的新特性，显著提升用户体验',
-      type: 'danger'
-    }
-  ]
 </script>
 
 <style scoped lang="scss">

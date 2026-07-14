@@ -17,10 +17,10 @@
   "/src/view/example/index.vue": "Example",
   "/src/view/init/index.vue": "Init",
   "/src/view/layout/aside/CollapseBar.vue": "AsideCollapseBar",
+  "/src/view/layout/aside/MobileMenuDrawer.vue": "MobileMenuDrawer",
   "/src/view/layout/aside/combinationMode.vue": "AsideCombinationMode",
   "/src/view/layout/aside/headMode.vue": "AsideHeadMode",
   "/src/view/layout/aside/index.vue": "GvaAside",
-  "/src/view/layout/aside/MobileMenuDrawer.vue": "MobileMenuDrawer",
   "/src/view/layout/aside/normalMode.vue": "AsideNormalMode",
   "/src/view/layout/aside/sidebarMode.vue": "SidebarMode",
   "/src/view/layout/aside/verticalMode.vue": "VerticalMode",
@@ -102,7 +102,5 @@
   "/src/plugin/auto/view/autoPkg/autoPkg.vue": "AutoPkg",
   "/src/plugin/auto/view/exportTemplate/exportTemplate.vue": "ExportTemplate",
   "/src/plugin/auto/view/formCreate/index.vue": "FormGenerator",
-  "/src/plugin/email/view/index.vue": "Email",
-  "/src/plugin/sms/view/channel.vue": "SmsChannel",
-  "/src/plugin/sms/view/log.vue": "SmsLog"
+  "/src/plugin/email/view/index.vue": "Email"
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"strconv"
+	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -24,6 +25,70 @@ func (s *SysDepartmentService) buildAncestors(ctx context.Context, parentId uint
 		return "", errors.New("父部门不存在")
 	}
 	return parent.Ancestors + "," + strconv.Itoa(int(parent.ID)), nil
+}
+
+// buildDepartmentNamePath 依据部门自身与 id→name 映射, 拼出 "公司/部门" 全路径名(纯函数)
+// dept.Ancestors 为祖级 ID 链(顶级 "0"、不含自身, 如 "0,1,5"); "0" 与映射中缺失的祖级会被跳过
+func buildDepartmentNamePath(dept system.SysDepartment, nameByID map[uint]string) string {
+	var parts []string
+	for _, seg := range strings.Split(dept.Ancestors, ",") {
+		seg = strings.TrimSpace(seg)
+		if seg == "" || seg == "0" {
+			continue
+		}
+		id, err := strconv.ParseUint(seg, 10, 64)
+		if err != nil {
+			continue
+		}
+		if name := nameByID[uint(id)]; name != "" {
+			parts = append(parts, name)
+		}
+	}
+	if dept.Name != "" {
+		parts = append(parts, dept.Name)
+	}
+	return strings.Join(parts, "/")
+}
+
+// FillNamePaths 依据各部门 Ancestors 解析出 "公司/部门" 全路径名, 按索引写回每个部门的 NamePath。
+// 只做一次 id→name 查询; 查询失败返回 error, 调用方可容错忽略(前端会降级为裸部门名)。
+func (s *SysDepartmentService) FillNamePaths(ctx context.Context, depts []system.SysDepartment) error {
+	if len(depts) == 0 {
+		return nil
+	}
+	// 收集所有祖级 ID(去掉虚拟根 "0")
+	idSet := make(map[uint]struct{})
+	for _, d := range depts {
+		for _, seg := range strings.Split(d.Ancestors, ",") {
+			seg = strings.TrimSpace(seg)
+			if seg == "" || seg == "0" {
+				continue
+			}
+			if id, err := strconv.ParseUint(seg, 10, 64); err == nil {
+				idSet[uint(id)] = struct{}{}
+			}
+		}
+	}
+	nameByID := make(map[uint]string, len(idSet))
+	if len(idSet) > 0 {
+		ids := make([]uint, 0, len(idSet))
+		for id := range idSet {
+			ids = append(ids, id)
+		}
+		var rows []system.SysDepartment
+		if err := global.GVA_DB.WithContext(ctx).Model(&system.SysDepartment{}).
+			Select("id", "name").Where("id IN ?", ids).Find(&rows).Error; err != nil {
+			return err
+		}
+		for _, r := range rows {
+			nameByID[r.ID] = r.Name
+		}
+	}
+	// 值切片须按索引写回, 否则改的是副本
+	for i := range depts {
+		depts[i].NamePath = buildDepartmentNamePath(depts[i], nameByID)
+	}
+	return nil
 }
 
 // CreateSysDepartment 创建部门并自动维护祖级链

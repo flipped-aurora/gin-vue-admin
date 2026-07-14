@@ -5,7 +5,7 @@
       clearable
       filterable
       placeholder="请选择"
-      class="w-full"
+      class="w-full min-w-full"
     >
       <template #prefix>
         <el-icon>

@@ -268,7 +268,7 @@
               prop="package"
               class="w-full relative"
             >
-              <el-select v-model="form.package" class="w-full pr-12" filterable>
+              <el-select v-model="form.package" class="w-full pr-12 min-w-full" filterable>
                 <el-option
                   v-for="item in pkgs"
                   :key="item.ID"
@@ -309,7 +309,7 @@
                 v-model="form.businessDB"
                 clearable
                 placeholder="选择业务库"
-                class="w-full"
+                class="w-full min-w-full"
               >
                 <el-option
                   v-for="item in dbList"

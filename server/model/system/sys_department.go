@@ -14,6 +14,7 @@ type SysDepartment struct {
 	Leader    *SysUser        `json:"leader" gorm:"foreignKey:LeaderId;references:ID"` // 负责人用户(联系电话/邮箱从该用户带出)
 	Status    *bool           `json:"status" gorm:"default:true;comment:是否启用"`         // 是否启用
 	Children  []SysDepartment `json:"children" gorm:"-"`                               // 子部门(内存组装,不建列)
+	NamePath  string          `json:"namePath" gorm:"-"`                               // 公司/部门全路径名(内存组装,不建列)
 }
 
 func (SysDepartment) TableName() string {

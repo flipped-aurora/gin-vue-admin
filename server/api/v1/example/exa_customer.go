@@ -147,7 +147,7 @@ func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Param     data  query     request.PageInfo                                        true  "页码, 每页大小"
-// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取权限客户列表,返回包括列表,总数,页码,每页数量"
+// @Success   200   {object}  response.Response{data=response.PageResultT[exampleRes.ExaCustomerResponse],msg=string}  "分页获取权限客户列表,返回包括列表,总数,页码,每页数量"
 // @Router    /customer/customerList [get]
 func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {
 	var pageInfo request.PageInfo

@@ -50,7 +50,7 @@
     "tailwind-merge": "^3.6.0",
     "universal-cookie": "^7",
     "vform3-builds": "^3.0.10",
-    "vite-auto-import-svg": "^2.9.2",
+    "vite-auto-import-svg": "^2.9.4",
     "vue": "^3.5.31",
     "vue-cropper": "^1.1.4",
     "vue-echarts": "^7.0.3",

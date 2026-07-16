@@ -1,6 +1,8 @@
 package system
 
 import (
+	"context"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -24,8 +26,8 @@ var OperationRecordServiceApp = new(OperationRecordService)
 //@param: ids request.IdsReq
 //@return: err error
 
-func (operationRecordService *OperationRecordService) DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]system.SysOperationRecord{}, "id in (?)", ids.Ids).Error
+func (operationRecordService *OperationRecordService) DeleteSysOperationRecordByIds(ctx context.Context, ids request.IdsReq) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Delete(&[]system.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }
 
@@ -35,8 +37,8 @@ func (operationRecordService *OperationRecordService) DeleteSysOperationRecordBy
 //@param: sysOperationRecord model.SysOperationRecord
 //@return: err error
 
-func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Delete(&sysOperationRecord).Error
+func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(ctx context.Context, sysOperationRecord system.SysOperationRecord) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Delete(&sysOperationRecord).Error
 	return err
 }
 
@@ -46,8 +48,8 @@ func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(s
 //@param: id uint
 //@return: sysOperationRecord system.SysOperationRecord, err error
 
-func (operationRecordService *OperationRecordService) GetSysOperationRecord(id uint) (sysOperationRecord system.SysOperationRecord, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&sysOperationRecord).Error
+func (operationRecordService *OperationRecordService) GetSysOperationRecord(ctx context.Context, id uint) (sysOperationRecord system.SysOperationRecord, err error) {
+	err = global.GVA_DB.WithContext(ctx).Where("id = ?", id).First(&sysOperationRecord).Error
 	return
 }
 
@@ -58,11 +60,10 @@ func (operationRecordService *OperationRecordService) GetSysOperationRecord(id u
 //@param: info systemReq.SysOperationRecordSearch
 //@return: list interface{}, total int64, err error
 
-func (operationRecordService *OperationRecordService) GetSysOperationRecordInfoList(info systemReq.SysOperationRecordSearch) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+func (operationRecordService *OperationRecordService) GetSysOperationRecordInfoList(ctx context.Context, info systemReq.SysOperationRecordSearch) (list interface{}, total int64, err error) {
+	limit, offset := info.LimitOffset()
 	// 创建db
-	db := global.GVA_DB.Model(&system.SysOperationRecord{})
+	db := global.GVA_DB.WithContext(ctx).Model(&system.SysOperationRecord{})
 	var sysOperationRecords []system.SysOperationRecord
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Method != "" {

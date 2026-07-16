@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -108,26 +107,10 @@ func (a *RoleAPIAssigner) Handle(ctx context.Context, request mcp.CallToolReques
 	})
 }
 
+// parseAuthorityID 解析角色ID,复用 parseUintParam 的正整数解析(含非整数 float 校验),
+// 避免与 org_common.go 重复实现,并顺带修掉此前 float 分支静默截断小数(如 2.9→2)的边界
 func parseAuthorityID(v any) (uint, error) {
-	switch value := v.(type) {
-	case float64:
-		if value <= 0 {
-			return 0, errors.New("authorityId 必须大于0")
-		}
-		return uint(value), nil
-	case string:
-		id := strings.TrimSpace(value)
-		if id == "" {
-			return 0, errors.New("authorityId 参数是必需的")
-		}
-		parsed, err := strconv.ParseUint(id, 10, 64)
-		if err != nil || parsed == 0 {
-			return 0, errors.New("authorityId 格式不正确")
-		}
-		return uint(parsed), nil
-	default:
-		return 0, errors.New("authorityId 参数是必需的")
-	}
+	return parseUintParam(v, "authorityId")
 }
 
 func appendPolicyIfMissing(current []systemReq.CasbinInfo, path, method string) ([]systemReq.CasbinInfo, bool) {

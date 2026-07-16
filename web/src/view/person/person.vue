@@ -1,234 +1,160 @@
 <template>
   <div class="profile-container">
-    <!-- 顶部个人信息卡片 -->
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-8">
-      <!-- 顶部背景图 -->
-      <div class="h-48 bg-blue-50 dark:bg-slate-600 relative">
-        <div class="absolute inset-0 bg-pattern opacity-7"></div>
-      </div>
 
-      <!-- 个人信息区 -->
-      <div class="px-8 -mt-20 pb-8">
-        <div class="flex flex-col lg:flex-row items-start gap-8">
-          <!-- 左侧头像 -->
-          <div class="profile-avatar-wrapper flex-shrink-0 mx-auto lg:mx-0">
+    <!-- 页面标题 -->
+    <div class="profile-card p-4 mb-2">
+      <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">个人信息</h1>
+      <p class="mt-1 text-sm text-gray-400 dark:text-gray-500">
+        管理你的帐号资料，安全设置与联系方式
+      </p>
+    </div>
+
+    <!-- 主体两栏布局 -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 items-stretch">
+      <!-- 左侧：个人资料卡片 -->
+      <div class="lg:col-span-4 profile-card p-4">
+        <div class="flex flex-col items-center">
+          <div class="profile-avatar-wrapper">
             <SelectImage
-                v-model="userStore.userInfo.headerImg"
-                file-type="image"
-                rounded
+              v-model="userStore.userInfo.headerImg"
+              file-type="image"
+              rounded
             />
           </div>
 
-          <!-- 右侧信息 -->
-          <div class="flex-1 pt-12 lg:pt-20 w-full">
-            <div
-              class="flex flex-col lg:flex-row items-start lg:items-start justify-between gap-4"
+          <!-- 昵称（保留原有编辑功能） -->
+          <div
+            v-if="!editFlag"
+            class="mt-5 text-lg font-bold flex items-center gap-2 text-gray-800 dark:text-gray-100"
+          >
+            {{ userStore.userInfo.nickName }}
+            <el-icon
+              class="cursor-pointer text-base text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
+              @click="openEdit"
             >
-              <div class="lg:mt-4">
-                <div class="flex items-center gap-4 mb-4">
-                  <div
-                    v-if="!editFlag"
-                    class="text-2xl font-bold flex items-center gap-3 text-gray-800 dark:text-gray-100"
-                  >
-                    {{ userStore.userInfo.nickName }}
-                    <el-icon
-                      class="cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
-                      @click="openEdit"
-                    >
-                      <edit />
-                    </el-icon>
-                  </div>
-                  <div v-else class="flex items-center">
-                    <el-input v-model="nickName" class="w-48 mr-4" />
-                    <el-button type="primary" plain @click="enterEdit">
-                      确认
-                    </el-button>
-                    <el-button type="danger" plain @click="closeEdit">
-                      取消
-                    </el-button>
-                  </div>
-                </div>
-
-                <div
-                  class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 text-gray-500 dark:text-gray-400"
-                >
-                  <div class="flex items-center gap-2">
-                    <el-icon><location /></el-icon>
-                    <span>中国·北京市·朝阳区</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <el-icon><office-building /></el-icon>
-                    <span>北京翻转极光科技有限公司</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <el-icon><user /></el-icon>
-                    <span>技术部·前端事业群</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex gap-4 mt-4">
-                <el-button type="primary" plain icon="message">
-                  发送消息
-                </el-button>
-                <el-button icon="share"> 分享主页 </el-button>
-              </div>
-            </div>
+              <edit />
+            </el-icon>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 主要内容区 -->
-    <div class="grid lg:grid-cols-12 md:grid-cols-1 gap-8">
-      <!-- 左侧信息栏 -->
-      <div class="lg:col-span-4">
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 mb-6 profile-card"
-        >
-          <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-            <el-icon class="text-blue-500"><info-filled /></el-icon>
-            基本信息
-          </h2>
-          <div class="space-y-4">
-            <div
-              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
-            >
-              <el-icon class="text-blue-500"><phone /></el-icon>
-              <span class="font-medium">手机号码：</span>
-              <span>{{ userStore.userInfo.phone || '未设置' }}</span>
-              <el-button
-                link
-                type="primary"
-                class="ml-auto"
-                @click="changePhoneFlag = true"
-              >
-                修改
-              </el-button>
-            </div>
-            <div
-              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
-            >
-              <el-icon class="text-green-500"><message /></el-icon>
-              <span class="font-medium flex-shrink-0">邮箱地址：</span>
-              <span>{{ userStore.userInfo.email || '未设置' }}</span>
-              <el-button
-                link
-                type="primary"
-                class="ml-auto"
-                @click="changeEmailFlag = true"
-              >
-                修改
-              </el-button>
-            </div>
-            <div
-              class="flex items-center gap-1 lg:gap-3 text-gray-600 dark:text-gray-300"
-            >
-              <el-icon class="text-purple-500"><lock /></el-icon>
-              <span class="font-medium">账号密码：</span>
-              <span>已设置</span>
-              <el-button
-                link
-                type="primary"
-                class="ml-auto"
-                @click="showPassword = true"
-              >
-                修改
-              </el-button>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 profile-card">
-          <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-            <el-icon class="text-blue-500"><medal /></el-icon>
-            技能特长
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            <el-tag effect="plain" type="success">GoLang</el-tag>
-            <el-tag effect="plain" type="warning">JavaScript</el-tag>
-            <el-tag effect="plain" type="danger">Vue</el-tag>
-            <el-tag effect="plain" type="info">Gorm</el-tag>
-            <el-button link class="text-sm">
-              <el-icon><plus /></el-icon>
-              添加技能
+          <div v-else class="mt-5 flex items-center">
+            <el-input v-model="nickName" class="w-40 mr-3" />
+            <el-button type="primary" plain size="small" @click="enterEdit">
+              确认
+            </el-button>
+            <el-button type="danger" plain size="small" @click="closeEdit">
+              取消
             </el-button>
           </div>
+
+          <!-- 角色标签 -->
+          <span class="role-tag">
+            {{ userStore.userInfo.authority?.authorityName || '系统管理员' }}
+          </span>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <!-- 基本信息列表 -->
+        <div class="space-y-6">
+          <div class="info-item">
+            <el-icon class="info-icon"><office-building /></el-icon>
+            <div>
+              <div class="info-label">所属架构</div>
+              <div class="info-value">
+                {{ orgText }}
+              </div>
+            </div>
+          </div>
+          <div class="info-item">
+            <el-icon class="info-icon"><phone /></el-icon>
+            <div>
+              <div class="info-label">手机号码</div>
+              <div class="info-value">
+                {{ userStore.userInfo.phone || '未设置' }}
+              </div>
+            </div>
+          </div>
+          <div class="info-item">
+            <el-icon class="info-icon"><message /></el-icon>
+            <div>
+              <div class="info-label">邮箱地址</div>
+              <div class="info-value">
+                {{ userStore.userInfo.email || '未设置' }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- 右侧内容区 -->
-      <div class="lg:col-span-8">
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-6 profile-card">
-          <el-tabs class="custom-tabs">
-            <el-tab-pane>
-              <template #label>
-                <div class="flex items-center gap-2">
-                  <el-icon><data-line /></el-icon>
-                  数据统计
-                </div>
-              </template>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 py-6">
-                <div class="stat-card">
-                  <div
-                    class="text-2xl lg:text-4xl font-bold text-blue-500 mb-2"
-                  >
-                    138
-                  </div>
-                  <div class="text-gray-500 text-sm">项目参与</div>
-                </div>
-                <div class="stat-card">
-                  <div
-                    class="text-2xl lg:text-4xl font-bold text-green-500 mb-2"
-                  >
-                    2.3k
-                  </div>
-                  <div class="text-gray-500 text-sm">代码提交</div>
-                </div>
-                <div class="stat-card">
-                  <div
-                    class="text-2xl lg:text-4xl font-bold text-purple-500 mb-2"
-                  >
-                    95%
-                  </div>
-                  <div class="text-gray-500 text-sm">任务完成</div>
-                </div>
-                <div class="stat-card">
-                  <div
-                    class="text-2xl lg:text-4xl font-bold text-yellow-500 mb-2"
-                  >
-                    12
-                  </div>
-                  <div class="text-gray-500 text-sm">获得勋章</div>
-                </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane>
-              <template #label>
-                <div class="flex items-center gap-2">
-                  <el-icon><calendar /></el-icon>
-                  近期动态
-                </div>
-              </template>
-              <div class="py-6">
-                <el-timeline>
-                  <el-timeline-item
-                    v-for="(activity, index) in activities"
-                    :key="index"
-                    :type="activity.type"
-                    :timestamp="activity.timestamp"
-                    :hollow="true"
-                    class="pb-6"
-                  >
-                    <h3 class="text-base font-medium mb-1">
-                      {{ activity.title }}
-                    </h3>
-                    <p class="text-gray-500 text-sm">{{ activity.content }}</p>
-                  </el-timeline-item>
-                </el-timeline>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+      <!-- 右侧：账号资料设置 -->
+      <div class="lg:col-span-8 profile-card">
+        <div class="px-4 pt-4 pb-4">
+          <h2 class="text-base font-bold text-gray-800 dark:text-gray-100">
+            账号资料设置
+          </h2>
+          <p class="mt-1.5 text-sm text-gray-400 dark:text-gray-500">
+            统一管理头像、联系方式、密码与账号标识
+          </p>
+        </div>
+        <div class="section-divider"></div>
+
+        <div class="px-4">
+          <!-- 头像 -->
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">头像</div>
+              <div class="setting-desc">用于系统内个人资料展示</div>
+            </div>
+            <div class="setting-value">
+              <img
+                v-if="userStore.userInfo.headerImg"
+                :src="userStore.userInfo.headerImg"
+                class="w-11 h-11 rounded-full object-cover"
+                alt="avatar"
+              />
+            </div>
+            <!-- TODO: 原型图中的「更换头像」按钮，当前更换头像入口为点击左侧大头像 -->
+            <el-button class="setting-action">更换头像</el-button>
+          </div>
+
+          <!-- 手机号码 -->
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">手机号码</div>
+              <div class="setting-desc">用于安全验证与通知接收</div>
+            </div>
+            <div class="setting-value">
+              {{ userStore.userInfo.phone || '未设置' }}
+            </div>
+            <el-button class="setting-action" @click="changePhoneFlag = true">
+              修改手机
+            </el-button>
+          </div>
+
+          <!-- 邮箱地址 -->
+          <div class="setting-row">
+            <div class="setting-label">
+              <div class="setting-title">邮箱地址</div>
+              <div class="setting-desc">用于账号通知与登录验证</div>
+            </div>
+            <div class="setting-value">
+              {{ userStore.userInfo.email || '未设置' }}
+            </div>
+            <el-button class="setting-action" @click="changeEmailFlag = true">
+              修改邮箱
+            </el-button>
+          </div>
+
+          <!-- 账号密码 -->
+          <div class="setting-row last-row">
+            <div class="setting-label">
+              <div class="setting-title">账号密码</div>
+              <div class="setting-desc">建议定期更新密码以保障账号安全</div>
+            </div>
+            <div class="setting-value">已设置</div>
+            <el-button class="setting-action" @click="showPassword = true">
+              修改密码
+            </el-button>
+          </div>
         </div>
       </div>
     </div>
@@ -358,7 +284,7 @@
 
 <script setup>
   import { setSelfInfo, changePassword } from '@/api/user.js'
-  import { reactive, ref, watch } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import { useUserStore } from '@/pinia/modules/user'
   import SelectImage from '@/components/selectImage/selectImage.vue'
@@ -367,6 +293,17 @@
   })
 
   const userStore = useUserStore()
+
+  // 所属架构:当前用户各部门的「公司/部门」全路径, 多部门用「｜」分隔, 无部门显示「未定义部门」
+  const orgText = computed(() => {
+    const list = userStore.userInfo.departments || []
+    const text = list
+      .map((d) => d.namePath || d.name)
+      .filter(Boolean)
+      .join(' ｜ ')
+    return text || '未定义部门'
+  })
+
   const modifyPwdForm = ref(null)
   const showPassword = ref(false)
   const pwdModify = ref({})
@@ -521,86 +458,100 @@
       })
     }
   })
-
-  // 添加活动数据
-  const activities = [
-    {
-      timestamp: '2024-01-10',
-      title: '完成项目里程碑',
-      content: '成功完成第三季度主要项目开发任务，获得团队一致好评',
-      type: 'primary'
-    },
-    {
-      timestamp: '2024-01-11',
-      title: '代码审核完成',
-      content: '完成核心模块代码审核，提出多项改进建议并获采纳',
-      type: 'success'
-    },
-    {
-      timestamp: '2024-01-12',
-      title: '技术分享会',
-      content: '主持团队技术分享会，分享前端性能优化经验',
-      type: 'warning'
-    },
-    {
-      timestamp: '2024-01-13',
-      title: '新功能上线',
-      content: '成功上线用户反馈的新特性，显著提升用户体验',
-      type: 'danger'
-    }
-  ]
 </script>
 
 <style scoped lang="scss">
   .profile-container {
-    @apply p-4 lg:p-6 min-h-screen bg-gray-50 dark:bg-slate-900;
+    @apply py-2 min-h-screen bg-gray-50 dark:bg-slate-900;
 
-    .bg-pattern {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    /* ===== 页面头部 ===== */
+    .page-header {
+      @apply flex items-start justify-between mb-6 lg:mb-8;
     }
 
+    .page-title {
+      @apply text-lg font-bold text-gray-900 dark:text-gray-100;
+    }
+
+    .page-subtitle {
+      @apply mt-1 text-sm text-gray-400 dark:text-gray-500;
+    }
+
+    .save-btn {
+      @apply px-6 rounded-lg;
+    }
+
+    /* ===== 卡片通用 ===== */
     .profile-card {
-      @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+      @apply bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm;
+      border-radius: var(--gva-radius, 0.75rem);
     }
 
-    .profile-action-btn {
-      @apply bg-white/10 hover:bg-white/20 border-white/20;
-      .el-icon {
-        @apply mr-1;
+    /* ===== 左侧卡片 ===== */
+    .profile-avatar-wrapper {
+      @apply flex justify-center;
+    }
+
+    .role-tag {
+      @apply mt-3 inline-block px-3 py-1 rounded-md text-sm
+        text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-500/10;
+    }
+
+    .card-divider {
+      @apply my-6 border-t border-gray-100 dark:border-slate-700;
+    }
+
+    .info-item {
+      @apply flex items-start gap-3;
+    }
+
+    .info-icon {
+      @apply mt-0.5 text-lg text-gray-400 dark:text-gray-500;
+    }
+
+    .info-label {
+      @apply text-sm text-gray-400 dark:text-gray-500;
+    }
+
+    .info-value {
+      @apply mt-1 text-sm text-gray-800 dark:text-gray-200;
+    }
+
+    /* ===== 右侧卡片 ===== */
+    .section-divider {
+      @apply border-t border-gray-100 dark:border-slate-700;
+    }
+
+    .setting-row {
+      @apply flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4 py-4
+        border-b border-gray-100 dark:border-slate-700;
+
+      &.last-row {
+        @apply border-b-0;
       }
     }
 
-    .stat-card {
-      @apply p-4 lg:p-6 rounded-lg bg-gray-50 dark:bg-slate-700/50 text-center hover:shadow-md transition-all duration-300;
+    .setting-label {
+      @apply w-full lg:w-2/5 flex-shrink-0;
     }
 
-    .custom-tabs {
-      :deep(.el-tabs__nav-wrap::after) {
-        @apply h-0.5 bg-gray-100 dark:bg-gray-700;
-      }
-      :deep(.el-tabs__active-bar) {
-        @apply h-0.5 bg-blue-500;
-      }
-      :deep(.el-tabs__item) {
-        @apply text-base font-medium px-6;
-        .el-icon {
-          @apply mr-1 text-lg;
-        }
-        &.is-active {
-          @apply text-blue-500;
-        }
-      }
-      :deep(.el-timeline-item__node--normal) {
-        @apply left-[-2px];
-      }
-      :deep(.el-timeline-item__wrapper) {
-        @apply pl-8;
-      }
-      :deep(.el-timeline-item__timestamp) {
-        @apply text-gray-400 text-sm;
-      }
+    .setting-title {
+      @apply text-sm font-medium text-gray-800 dark:text-gray-200;
     }
 
+    .setting-desc {
+      @apply mt-1.5 text-sm text-gray-400 dark:text-gray-500;
+    }
+
+    .setting-value {
+      @apply flex-1 text-sm text-gray-800 dark:text-gray-200;
+    }
+
+    .setting-action {
+      @apply flex-shrink-0 rounded-lg w-24;
+    }
+
+    /* ===== 弹窗（原样保留） ===== */
     .custom-dialog {
       :deep(.el-dialog__header) {
         @apply mb-0 pb-4 border-b border-gray-100 dark:border-gray-700;
@@ -608,23 +559,8 @@
       :deep(.el-dialog__footer) {
         @apply mt-0 pt-4 border-t border-gray-100 dark:border-gray-700;
       }
-      :deep(.el-input__wrapper) {
-        @apply shadow-none;
-      }
       :deep(.el-input__prefix) {
         @apply mr-2;
-      }
-    }
-
-    .edit-input {
-      :deep(.el-input__wrapper) {
-        @apply bg-white/10 border-white/20 shadow-none;
-        input {
-          @apply text-white;
-          &::placeholder {
-            @apply text-white/60;
-          }
-        }
       }
     }
   }

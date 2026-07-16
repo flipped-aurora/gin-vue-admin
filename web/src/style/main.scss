@@ -10,9 +10,10 @@
 }
 
 .gva-table-box {
-  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply gva-surface;
   .el-table {
-    @apply border-x border-t border-b-0 rounded border-table-border border-solid -mx-[1px];
+    @apply border-x border-t border-b-0 border-table-border border-solid -mx-[1px];
+    border-radius: var(--gva-radius, 0.75rem);
   }
 }
 
@@ -40,15 +41,33 @@
 }
 
 .gva-search-box {
-  @apply p-4 pb-0 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply gva-surface pb-0;
+}
+
+.gva-content-box {
+  @apply gva-surface;
 }
 
 .gva-form-box {
-  @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded my-2;
+  @apply gva-surface;
 }
 
+/* 树节点：统一圆角 + 柔和悬浮/选中背景，观感与全站一致（作用于所有 el-tree）。
+   用插值输出 rgb()，避免 Sass 误解析 rgb() 内的 / */
+.el-tree {
+  background: transparent;
+  .el-tree-node__content {
+    height: 34px;
+    border-radius: var(--gva-radius, 8px);
+    transition: background-color 0.2s ease;
+    &:hover {
+      background: #{'rgb(var(--primary-color) / 0.08)'};
+    }
+  }
+}
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background: var(--el-color-primary-bg) !important;
+  background: #{'rgb(var(--primary-color) / 0.15)'} !important;
+  color: rgb(var(--primary-color));
 }
 
 .el-dropdown {

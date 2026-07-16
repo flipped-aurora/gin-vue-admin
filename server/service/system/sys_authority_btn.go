@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -13,9 +14,9 @@ type AuthorityBtnService struct{}
 
 var AuthorityBtnServiceApp = new(AuthorityBtnService)
 
-func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (res response.SysAuthorityBtnRes, err error) {
+func (a *AuthorityBtnService) GetAuthorityBtn(ctx context.Context, req request.SysAuthorityBtnReq) (res response.SysAuthorityBtnRes, err error) {
 	var authorityBtn []system.SysAuthorityBtn
-	err = global.GVA_DB.Find(&authorityBtn, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
+	err = global.GVA_DB.WithContext(ctx).Find(&authorityBtn, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 	if err != nil {
 		return
 	}
@@ -27,8 +28,8 @@ func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (r
 	return res, err
 }
 
-func (a *AuthorityBtnService) SetAuthorityBtn(req request.SysAuthorityBtnReq) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+func (a *AuthorityBtnService) SetAuthorityBtn(ctx context.Context, req request.SysAuthorityBtnReq) (err error) {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		var authorityBtn []system.SysAuthorityBtn
 		err = tx.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 		if err != nil {
@@ -51,8 +52,8 @@ func (a *AuthorityBtnService) SetAuthorityBtn(req request.SysAuthorityBtnReq) (e
 	})
 }
 
-func (a *AuthorityBtnService) CanRemoveAuthorityBtn(ID string) (err error) {
-	fErr := global.GVA_DB.First(&system.SysAuthorityBtn{}, "sys_base_menu_btn_id = ?", ID).Error
+func (a *AuthorityBtnService) CanRemoveAuthorityBtn(ctx context.Context, ID string) (err error) {
+	fErr := global.GVA_DB.WithContext(ctx).First(&system.SysAuthorityBtn{}, "sys_base_menu_btn_id = ?", ID).Error
 	if errors.Is(fErr, gorm.ErrRecordNotFound) {
 		return nil
 	}

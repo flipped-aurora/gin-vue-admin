@@ -4,7 +4,7 @@
  -->
 <template>
   <div
-    class="flex flex-col md:flex-row gap-2 items-center text-sm text-slate-700 dark:text-slate-500 justify-center py-2"
+    class="gva-bottom-info flex flex-col md:flex-row gap-2 items-center text-sm text-slate-700 dark:text-slate-500 justify-center py-2"
   >
     <div class="text-center">
       <span class="mr-1">Powered by</span>
@@ -42,3 +42,22 @@
     'background:transparent'
   )
 </script>
+
+<style scoped>
+  /* 白色描边：让页脚文字在彩色/深色背景（如登录页右侧蓝色 banner）上依然清晰可读。
+     用多方向 text-shadow 叠加实现描边，不会像 -webkit-text-stroke 那样把小字“掏空”变细；
+     text-shadow 可继承，设在根节点即作用到内部所有 span / a 文本。
+     白底、浅灰底上白描边几乎不可见，不影响原有观感。 */
+  .gva-bottom-info {
+    text-shadow:
+      0 0 1px #fff,
+      1px 1px 0 #fff,
+      -1px 1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px -1px 0 #fff,
+      0 1px 0 #fff,
+      0 -1px 0 #fff,
+      1px 0 0 #fff,
+      -1px 0 0 #fff;
+  }
+</style>

@@ -3,8 +3,8 @@
 
 
 .el-button {
-  font-weight: 400;
-  border-radius: 2px;
+  @apply font-normal;
+  border-radius: var(--gva-radius, 2px);
 }
 
 .gva-pagination {
@@ -16,8 +16,8 @@
   }
 
   .is-active {
-    @apply rounded text-white;
-    background: var(--el-color-primary);
+    @apply bg-primary;
+    border-radius: var(--gva-radius, 2px);
     color: #ffffff !important;
   }
 }
@@ -26,7 +26,7 @@
   margin-bottom: 0 !important;
   padding-top: 16px !important;
   padding-bottom: 16px !important;
-  @apply border-0 border-b border-solid border-gray-200;
+  @apply border-0 border-b border-solid border-border;
 }
 
 .el-form--inline {
@@ -48,7 +48,7 @@
 .el-table {
   tr {
     th {
-      @apply dark:bg-slate-900;
+      @apply dark:bg-container;
       .cell {
         @apply leading-[36px] text-gray-700 dark:text-gray-200;
       }
@@ -56,7 +56,7 @@
   }
   .el-table__row {
     td {
-      @apply dark:bg-slate-900;
+      @apply dark:bg-container;
       .cell {
         @apply leading-[32px] text-gray-600 dark:text-gray-300;
       }
@@ -65,7 +65,7 @@
   tr {
     th {
       &.is-leaf {
-        @apply dark:bg-slate-900;
+        @apply dark:bg-container;
       }
     }
   }
@@ -78,11 +78,13 @@
   @apply mt-8;
   .btn-prev,
   .btn-next {
-    @apply border border-solid border-gray-300 dark:border-gray-700 rounded;
+    @apply border border-solid border-border;
+    border-radius: var(--gva-radius, 2px);
   }
   .el-pager {
     li {
-      @apply border border-solid border-gray-300 dark:border-gray-600 rounded text-gray-600 text-sm mx-1;
+      @apply border border-solid border-border text-gray-600 text-sm mx-1;
+      border-radius: var(--gva-radius, 2px);
     }
   }
 }
@@ -93,17 +95,19 @@
   }
 }
 .el-menu--vertical {
-  .el-menu-item {
-    border-radius: 2px;
-    &.is-active {
-      background-color: var(--el-color-primary) !important;
-      color: #fff !important;
-    }
+  /* 叶子菜单项与子菜单标题共用全局圆角，保证一级/二级菜单 hover、选中背景圆角一致 */
+  .el-menu-item,
+  .el-sub-menu__title {
+    border-radius: var(--gva-radius, 2px);
+  }
+  .el-menu-item.is-active {
+    background-color: var(--gva-menu-active-bg, var(--el-color-primary)) !important;
+    color: var(--gva-menu-active-text, #fff) !important;
   }
 }
 
 .el-sub-menu.el-sub-menu__hide-arrow {
-  height: 44px;
+  @apply h-11;
 }
 
 .el-tabs__header {
@@ -112,25 +116,26 @@
 
 .el-sub-menu.is-active {
   > .el-sub-menu__title {
-    color: var(--el-color-primary) !important;
+    /* 插值输出，确保保留 !important（本版 transformer 会吞掉 @apply 尾部的 !important） */
+    color: #{'rgb(var(--primary-color))'} !important;
   }
 }
 
-.el-menu-item.is-active{
-  color: var(--el-color-primary)!important;
+.el-menu-item.is-active {
+  color: #{'rgb(var(--primary-color))'} !important;
 }
 
 .el-sub-menu__title.el-tooltip__trigger,
 .el-menu-item .el-menu-tooltip__trigger {
-  justify-content: center;
+  @apply justify-center;
 }
 
 .el-menu--horizontal .el-menu .el-sub-menu__title {
-  justify-content: flex-start;
+  @apply justify-start;
 }
 
 html.dark {
-  /* 自定义深色背景颜色 */
+  /* Element Plus 自有深色变量，待移除 EP 后统一清理 */
   --el-bg-color: rgb(30, 41, 59);
   --el-bg-color-overlay: rgb(40, 51, 69);
   --el-fill-color-light: rgb(15, 23, 42);

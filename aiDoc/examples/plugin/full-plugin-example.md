@@ -13,8 +13,11 @@ server/plugin/order/
 │   └── order.go
 ├── config/
 │   └── config.go
+├── gen/
+│   └── gen.go
 ├── initialize/
 │   ├── api.go
+│   ├── dictionary.go
 │   ├── gorm.go
 │   ├── menu.go
 │   ├── router.go
@@ -22,6 +25,8 @@ server/plugin/order/
 ├── model/
 │   ├── order.go
 │   └── request/order.go
+├── plugin/
+│   └── plugin.go
 ├── router/
 │   ├── enter.go
 │   └── order.go
@@ -33,11 +38,10 @@ server/plugin/order/
 web/src/plugin/order/
 ├── api/
 │   └── order.js
-├── components/
 ├── form/
-├── view/
-│   └── index.vue
-└── config.js
+│   └── order.vue
+└── view/
+    └── order.vue
 ```
 
 ## 推荐实现顺序

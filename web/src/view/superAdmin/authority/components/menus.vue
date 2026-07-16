@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10 pb-2">
+    <div class="sticky top-0.5 z-10 pb-2 w-192">
       <div class="flex gap-2 items-center mb-2">
         <el-input v-model="filterText" class="flex-1" placeholder="筛选" />
         <el-button type="primary" @click="relation">确 定</el-button>
@@ -23,7 +23,7 @@
         </el-select>
       </div>
     </div>
-    <div class="tree-content clear-both">
+    <div class="h-[calc(100vh-254px)] mt-2 overflow-auto  clear-both">
       <el-scrollbar>
         <el-tree
           ref="menuTree"

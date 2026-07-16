@@ -8,9 +8,10 @@
   import { graphic } from 'echarts'
   import { ref } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { useAppStore } from '@/pinia'
-  const appStore = useAppStore()
-  const { config } = storeToRefs(appStore)
+  import { useThemeStore } from '@/pinia'
+  import { addOpacityToColor } from '@/theme/color'
+  const themeStore = useThemeStore()
+  const { settings } = storeToRefs(themeStore)
 
   const prop = defineProps({
     height: {
@@ -30,7 +31,7 @@
       style: {
         text: '',
         textAlign: 'center',
-        fill: appStore.isDark ? '#FFFFFF' : '#000000',
+        fill: themeStore.isDark ? '#FFFFFF' : '#000000',
         fontSize: 12
       }
     }
@@ -39,6 +40,7 @@
     graphicFactory({ left: '5%' }),
     graphicFactory({ right: 0 })
   ])
+  const primaryColor = (opacity) => addOpacityToColor(settings.value.themeColor, opacity)
   const { chartOption } = useChartOption(() => {
     return {
       grid: {
@@ -95,15 +97,15 @@
             color: new graphic.LinearGradient(0, 0, 1, 0, [
               {
                 offset: 0,
-                color: `${config.value.primaryColor}32`
+                color: primaryColor(0.2)
               },
               {
                 offset: 0.5,
-                color: `${config.value.primaryColor}64`
+                color: primaryColor(0.39)
               },
               {
                 offset: 1,
-                color: `${config.value.primaryColor}FF`
+                color: primaryColor(1)
               }
             ])
           },
@@ -113,11 +115,11 @@
             color: new graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: `${config.value.primaryColor}20`
+                color: primaryColor(0.13)
               },
               {
                 offset: 1,
-                color: `${config.value.primaryColor}08`
+                color: primaryColor(0.03)
               }
             ])
           }

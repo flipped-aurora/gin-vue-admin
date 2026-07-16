@@ -6,6 +6,8 @@ import ElementPlus from 'element-plus'
 import { setupVueRootValidator } from 'vite-check-multiple-dom/client';
 
 import 'element-plus/dist/index.css'
+// 主题扩展样式（菜单风格/卡片盒子模式/圆角），置于 EP 基础样式之后以便覆盖
+import '@/style/theme.scss'
 // 引入gin-vue-admin前端初始化相关内容
 import './core/gin-vue-admin'
 // 引入封装的router

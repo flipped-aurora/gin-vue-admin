@@ -3,6 +3,9 @@ package utils
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"io"
+	"mime/multipart"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,4 +31,19 @@ func MD5V(str []byte, b ...byte) string {
 	h := md5.New()
 	h.Write(str)
 	return hex.EncodeToString(h.Sum(b))
+}
+
+// MD5VFile 计算上传文件的 MD5，流式读取，不会一次性占用过多内存。
+// 读取失败时返回空串与 error（调用方可容忍则忽略）。
+func MD5VFile(header *multipart.FileHeader) (string, error) {
+	f, err := header.Open()
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+	h := md5.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(h.Sum(nil)), nil
 }

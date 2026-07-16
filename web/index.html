@@ -10,7 +10,43 @@
     />
     <link rel="icon" href="/favicon.ico" />
     <title></title>
+    <script>
+      ;(() => {
+        try {
+          // 必须与 THEME_SETTINGS_VERSION 保持一致：首屏防闪脚本无法 import 常量，
+          // 缓存形态为版本信封 { version, settings }，版本不匹配时与 store 一样回落默认。
+          const VERSION = 1
+          const raw = localStorage.getItem('gva-theme-settings')
+          const parsed = raw ? JSON.parse(raw) : null
+          const settings =
+            parsed && parsed.version === VERSION && parsed.settings ? parsed.settings : null
+          const scheme = settings && settings.themeScheme ? settings.themeScheme : 'auto'
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isDark = scheme === 'dark' || (scheme === 'auto' && prefersDark)
+          const root = document.documentElement
+          root.classList.toggle('dark', isDark)
+          root.classList.toggle('light', !isDark)
+          if (settings && settings.themeColor) root.style.setProperty('--64f90c3645474bd5', settings.themeColor)
+        } catch {}
+      })()
+    </script>
     <style>
+      :root {
+        --64f90c3645474bd5: #2264f2;
+        /* 首屏 loading 背景/文字：默认浅色，与 App 的 bg-gray-50 对齐 */
+        --gva-loading-bg: #f9fafb;
+        --gva-loading-text: #6b7280;
+      }
+      /* 暗黑下与 App 的 dark:bg-slate-800 对齐，避免首屏 loading 白屏闪烁
+         （class 由 head 内联 bootstrap 脚本在首次绘制前写入） */
+      html.dark {
+        --gva-loading-bg: #1e293b;
+        --gva-loading-text: #94a3b8;
+      }
+      html,
+      body {
+        background-color: var(--gva-loading-bg);
+      }
       .transition-colors {
         transition-property: color, background-color, border-color,
           text-decoration-color, fill, stroke;
@@ -19,7 +55,6 @@
       }
       body {
         margin: 0;
-        --64f90c3645474bd5: #409eff;
       }
       #gva-loading-box {
         position: relative;
@@ -28,6 +63,7 @@
         justify-content: center;
         height: 100vh;
         width: 100vw;
+        background-color: var(--gva-loading-bg);
       }
       #loading-text {
         position: absolute;
@@ -35,7 +71,7 @@
         left: 0;
         width: 100%;
         text-align: center;
-        color: #666;
+        color: var(--gva-loading-text);
         font-size: 14px;
       }
       #loading {

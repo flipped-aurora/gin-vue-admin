@@ -1,0 +1,62 @@
+{
+  "order": 3,
+  "version": 3,
+  "minMainVersion": "2.9.0",
+  "name": "Azir-清新蓝",
+  "builtin": true,
+  "theme": {
+    "themeScheme": "auto",
+    "grayscale": false,
+    "colourWeakness": false,
+    "themeColor": "#2264f2",
+    "themeRadius": 0.5,
+    "size": "default",
+    "otherColor": {
+      "info": "#909399",
+      "success": "#60C041",
+      "warning": "#F9901F",
+      "error": "#F56C6C"
+    },
+    "layout": {
+      "mode": "vertical",
+      "sideWidth": 256,
+      "sideCollapsedWidth": 80,
+      "sideItemHeight": 48
+    },
+    "page": {
+      "transition": "slide"
+    },
+    "header": {
+      "breadcrumb": {
+        "visible": true,
+        "showIcon": true
+      },
+      "refresh": {
+        "visible": true
+      },
+      "search": {
+        "visible": true
+      },
+      "collapseButton": {
+        "visible": true
+      },
+      "bg": "rgba(255, 255, 255, 0)",
+      "shadow": "none"
+    },
+    "tab": {
+      "visible": true,
+      "shadow": "none",
+      "mode": "button",
+      "bg": "rgba(255, 255, 255, 0)"
+    },
+    "menu": {
+      "theme": "design"
+    },
+    "card": {
+      "mode": "border"
+    },
+    "watermark": {
+      "visible": false
+    }
+  }
+}

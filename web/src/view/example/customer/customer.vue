@@ -78,7 +78,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">客户</span>
+          <span class="text-base">客户</span>
           <div>
             <el-button @click="closeDrawer">取 消</el-button>
             <el-button type="primary" @click="enterDrawer">确 定</el-button>

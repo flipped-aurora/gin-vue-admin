@@ -10,13 +10,22 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
-	"go.uber.org/zap"
 )
 
 type AutoCodeApi struct{}
 
+// GetDB
+// @Tags      AutoCode
+// @Summary   获取当前所有数据库
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     businessDB  query     string                                                  false  "业务数据库别名"
+// @Success   200         {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前所有数据库"
+// @Router    /autoCode/getDB [get]
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbs, err := autoCodeService.Database(businessDB).GetDB(businessDB)
@@ -31,13 +40,23 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 		dbList = append(dbList, item)
 	}
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
 	response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, "获取成功", c)
 }
 
+// GetTables
+// @Tags      AutoCode
+// @Summary   获取当前数据库所有表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     dbName      query     string                                                  false  "数据库名"
+// @Param     businessDB  query     string                                                  false  "业务数据库别名"
+// @Success   200         {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前数据库所有表"
+// @Router    /autoCode/getTables [get]
 func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.Query("dbName")
 	businessDB := c.Query("businessDB")
@@ -54,13 +73,24 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 
 	tables, err := autoCodeService.Database(businessDB).GetTables(businessDB, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("查询table失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询table失败!")
 		response.FailWithMessage("查询table失败", c)
 		return
 	}
 	response.OkWithDetailed(gin.H{"tables": tables}, "获取成功", c)
 }
 
+// GetColumn
+// @Tags      AutoCode
+// @Summary   获取当前表所有字段
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     businessDB  query     string                                                  false  "业务数据库别名"
+// @Param     dbName      query     string                                                  false  "数据库名"
+// @Param     tableName   query     string                                                  false  "表名"
+// @Success   200         {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前表所有字段"
+// @Router    /autoCode/getColumn [get]
 func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbName := c.Query("dbName")
@@ -77,13 +107,21 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database(businessDB).GetColumn(businessDB, tableName, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 		return
 	}
 	response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
 }
 
+// LLMAuto
+// @Tags      AutoCode
+// @Summary   大模型自动生成
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      common.JSONMap                              true  "大模型请求参数"
+// @Success   200   {object}  response.Response{data=interface{},msg=string}  "大模型自动生成"
+// @Router    /autoCode/llmAuto [post]
 func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	var llm common.JSONMap
 	if err := c.ShouldBindJSON(&llm); err != nil {
@@ -93,7 +131,7 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 
 	if shouldStreamLLM(c, llm) {
 		if err := autoApi.proxyLLMStream(c, llm); err != nil {
-			global.GVA_LOG.Error("大模型流式代理失败!", zap.Error(err))
+			logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("大模型流式代理失败!")
 			if c.Writer.Written() {
 				writeLLMStreamError(c, err)
 				return
@@ -105,7 +143,7 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 
 	data, err := autoCodeService.LLMAuto(c.Request.Context(), llm)
 	if err != nil {
-		global.GVA_LOG.Error("大模型生成失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("大模型生成失败!")
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

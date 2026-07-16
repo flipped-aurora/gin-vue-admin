@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1080 1350"
+     preserveAspectRatio="xMidYMid meet"
+     role="img" aria-label="GIN Vue Admin cover">
+
+  <!-- ════════════════════════════════════════════════
+       GIN Cover Redesign — SVG 版
+       品牌色 #2264f2 · viewBox 矢量缩放，2K/4K 无损
+       字体：JetBrains Mono（页面已加载则自动继承，
+       否则回退到系统等宽字体）
+  ═════════════════════════════════════════════════ -->
+
+  <style>
+    text {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular,
+                   'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    }
+    .cursor { animation: blink 1.2s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .cursor { animation: none; }
+    }
+  </style>
+
+  <defs>
+    <!-- 整体圆角裁切（对应 overflow:hidden + border-radius:4px） -->
+    <clipPath id="posterClip">
+      <rect x="0" y="0" width="1080" height="1350" rx="4"/>
+    </clipPath>
+
+    <!-- 背景径向渐变
+         radial-gradient(120% 90% at 50% -10%, #3d7bff 0%, #2264f2 45%, #1a51cc 100%) -->
+    <radialGradient id="bgGrad" gradientUnits="userSpaceOnUse"
+        cx="540" cy="-135" r="1296"
+        gradientTransform="translate(540 -135) scale(1 0.9375) translate(-540 135)">
+      <stop offset="0%"   stop-color="#3d7bff"/>
+      <stop offset="45%"  stop-color="#2264f2"/>
+      <stop offset="100%" stop-color="#1a51cc"/>
+    </radialGradient>
+
+    <!-- 细网格 30px -->
+    <pattern id="gridFine" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none"
+            stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+    </pattern>
+    <!-- 粗网格 150px -->
+    <pattern id="gridCoarse" width="150" height="150" patternUnits="userSpaceOnUse">
+      <path d="M 150 0 L 0 0 0 150" fill="none"
+            stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+    </pattern>
+
+    <!-- 网格径向渐隐遮罩
+         mask: radial-gradient(85% 75% at 50% 45%, #000 30%, transparent 100%) -->
+    <radialGradient id="gridMaskGrad" gradientUnits="userSpaceOnUse"
+        cx="540" cy="607.5" r="918"
+        gradientTransform="translate(540 607.5) scale(1 1.103) translate(-540 -607.5)">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="30%"  stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <mask id="gridMask">
+      <rect x="0" y="0" width="1080" height="1350" fill="url(#gridMaskGrad)"/>
+    </mask>
+
+    <!-- 环境光斑
+         radial-gradient(50% 50%, rgba(120,165,255,.25), transparent 70%) -->
+    <radialGradient id="glowGrad">
+      <stop offset="0%"  stop-color="rgba(120,165,255,.25)"/>
+      <stop offset="70%" stop-color="rgba(120,165,255,0)"/>
+    </radialGradient>
+
+    <!-- 编辑器卡片渐变
+         linear-gradient(160deg, rgba(10,24,64,.92), rgba(13,30,80,.88)) -->
+    <linearGradient id="editorGrad" x1="0" y1="0" x2="0.342" y2="0.94">
+      <stop offset="0%"   stop-color="rgba(10,24,64,.92)"/>
+      <stop offset="100%" stop-color="rgba(13,30,80,.88)"/>
+    </linearGradient>
+
+    <!-- 编辑器双层投影
+         0 40px 80px -20px rgba(8,20,60,.55)
+         0 90px 140px -40px rgba(6,16,50,.6) -->
+    <filter id="editorShadow" x="-40%" y="-40%" width="180%" height="220%">
+      <feDropShadow dx="0" dy="40" stdDeviation="38"
+                    flood-color="#08143c" flood-opacity="0.5"/>
+      <feDropShadow dx="0" dy="90" stdDeviation="66"
+                    flood-color="#061032" flood-opacity="0.42"/>
+    </filter>
+
+    <!-- 基线水平渐变
+         linear-gradient(90deg, transparent, w40 20%, w40 80%, transparent) -->
+    <linearGradient id="baselineGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="rgba(255,255,255,0)"/>
+      <stop offset="20%"  stop-color="rgba(255,255,255,.4)"/>
+      <stop offset="80%"  stop-color="rgba(255,255,255,.4)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ═══ 全部内容裁切在圆角画布内 ═══ -->
+  <g clip-path="url(#posterClip)">
+
+    <!-- ── 背景层（如需透明底：删除下面这一个 rect）── -->
+    <rect x="0" y="0" width="1080" height="1350" fill="url(#bgGrad)"/>
+
+    <!-- ── 蓝图网格（细 + 粗，径向渐隐）── -->
+    <g mask="url(#gridMask)">
+      <rect x="0" y="0" width="1080" height="1350" fill="url(#gridFine)"/>
+      <rect x="0" y="0" width="1080" height="1350" fill="url(#gridCoarse)"/>
+    </g>
+
+    <!-- ── 环境光斑 ── -->
+    <ellipse cx="540" cy="540" rx="450" ry="250" fill="url(#glowGrad)"/>
+
+    <!-- ── 工程图角标（26×26，1.5px，w40）── -->
+    <path d="M 44 70 V 44 H 70"       fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+    <path d="M 1010 44 H 1036 V 70"   fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+    <path d="M 44 1280 V 1306 H 70"   fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+    <path d="M 1010 1306 H 1036 V 1280" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+
+    <!-- ── 顶部元信息行 ── -->
+    <text x="96" y="63" font-size="12.5" letter-spacing="2.75"
+          fill="rgba(255,255,255,.6)">GIN-VUE-ADMIN</text>
+    <text x="984" y="63" text-anchor="end" font-size="12.5" letter-spacing="2.75"
+          fill="rgba(255,255,255,.6)">BACKEND · GO 1.22</text>
+
+    <!-- ── 标题区 ── -->
+    <!-- [GIN] 主标：92px / 700 / ls .04em -->
+    <text x="540" y="243" text-anchor="middle"
+          font-size="92" font-weight="700" letter-spacing="3.68"
+          fill="#ffffff"><tspan fill="rgba(255,255,255,.4)" font-weight="400">[</tspan>GIN<tspan fill="rgba(255,255,255,.4)" font-weight="400">]</tspan></text>
+
+    <!-- 副标：HELLO, WORLD + 两侧短线 + 闪烁光标 -->
+    <line x1="365" y1="290" x2="421" y2="290"
+          stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+    <text x="533" y="296" text-anchor="middle"
+          font-size="17" letter-spacing="5.78"
+          fill="rgba(255,255,255,.6)">HELLO, WORLD</text>
+    <rect class="cursor" x="633" y="280" width="9" height="19"
+          fill="rgba(255,255,255,.9)"/>
+    <line x1="660" y1="290" x2="716" y2="290"
+          stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+
+    <!-- ── 主视觉：代码编辑器窗口 ── -->
+    <g filter="url(#editorShadow)">
+      <!-- 卡片主体 640×292 @ 220,459 · 圆角14 · 边框 w25 -->
+      <rect x="220" y="459" width="640" height="292" rx="14"
+            fill="url(#editorGrad)"
+            stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+    </g>
+    <!-- 内侧 1px 高光（inset 0 0 0 1px rgba(255,255,255,.04)） -->
+    <rect x="221.5" y="460.5" width="637" height="289" rx="13"
+          fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+
+    <!-- 标题栏 -->
+    <g>
+      <!-- 三个圆点 -->
+      <circle cx="247.5" cy="484" r="5.5" fill="rgba(255,255,255,.25)"/>
+      <circle cx="266.5" cy="484" r="5.5" fill="rgba(255,255,255,.25)"/>
+      <circle cx="285.5" cy="484" r="5.5" fill="rgba(255,255,255,.25)"/>
+      <!-- GO 徽标 -->
+      <rect x="305" y="475" width="30" height="18" rx="4"
+            fill="rgba(255,255,255,.12)"/>
+      <text x="320" y="488" text-anchor="middle"
+            font-size="10" font-weight="700" letter-spacing="0.8"
+            fill="rgba(255,255,255,.9)">GO</text>
+      <!-- 文件路径 -->
+      <text x="343" y="488.5" font-size="13" letter-spacing="0.65"
+            fill="rgba(255,255,255,.6)">images / GinVueAdmin.go</text>
+      <!-- 分隔线 -->
+      <line x1="221" y1="509" x2="859" y2="509"
+            stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+    </g>
+
+    <!-- 代码区：17px · line-height 2.15 -->
+    <g font-size="17">
+      <!-- 行号列（右对齐 @284, w25） -->
+      <text x="284" y="560"   text-anchor="end" fill="rgba(255,255,255,.25)">1</text>
+      <text x="284" y="596.6" text-anchor="end" fill="rgba(255,255,255,.25)">2</text>
+      <text x="284" y="633.2" text-anchor="end" fill="rgba(255,255,255,.25)">3</text>
+      <text x="284" y="669.8" text-anchor="end" fill="rgba(255,255,255,.25)">4</text>
+      <text x="284" y="706.4" text-anchor="end" fill="rgba(255,255,255,.25)">5</text>
+
+      <!-- 代码行 -->
+      <text x="310" y="560" xml:space="preserve"><tspan fill="#9db8ff">type</tspan><tspan fill="#ffffff" font-weight="500"> GinVueAdmin </tspan><tspan fill="#9db8ff">struct</tspan><tspan fill="rgba(220,230,255,.75)"> {</tspan></text>
+
+      <text x="310" y="596.6" xml:space="preserve"><tspan fill="#7fa5ff">    gorm.Model</tspan></text>
+
+      <text x="310" y="633.2" xml:space="preserve"><tspan fill="#e8eeff">    Name    </tspan><tspan fill="#7fa5ff">string</tspan><tspan fill="rgba(190,208,255,.55)" font-style="italic"> `mapstructure:"name"`</tspan></text>
+
+      <text x="310" y="669.8" xml:space="preserve"><tspan fill="#e8eeff">    Version </tspan><tspan fill="#7fa5ff">string</tspan><tspan fill="rgba(190,208,255,.55)" font-style="italic"> `mapstructure:"version"`</tspan></text>
+
+      <text x="310" y="706.4" xml:space="preserve"><tspan fill="rgba(220,230,255,.75)">}</tspan></text>
+    </g>
+
+    <!-- ── 基线 + 尺寸标注 ── -->
+    <rect x="220" y="794.5" width="640" height="1" fill="url(#baselineGrad)"/>
+    <line x1="348" y1="790" x2="348" y2="801"
+          stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+    <line x1="732" y1="790" x2="732" y2="801"
+          stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+    <text x="540" y="822" text-anchor="middle"
+          font-size="11.5" letter-spacing="3.45"
+          fill="rgba(255,255,255,.4)">STRUCT · 5 LINES · UTF-8</text>
+
+    <!-- ── 底部信息 ── -->
+    <text x="96" y="1291" font-size="13" letter-spacing="2.34"
+          fill="rgba(255,255,255,.6)">GIN <tspan fill="rgba(255,255,255,.9)" font-weight="500">+</tspan> VUE <tspan fill="rgba(255,255,255,.9)" font-weight="500">+</tspan> GORM</text>
+
+    <!-- v2.x 胶囊徽标 -->
+    <rect x="911" y="1261" width="73" height="33" rx="16.5"
+          fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+    <text x="947.5" y="1282.5" text-anchor="middle"
+          font-size="13" letter-spacing="2.34"
+          fill="rgba(255,255,255,.6)">V2.X</text>
+
+  </g>
+</svg>

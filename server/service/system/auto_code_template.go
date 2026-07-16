@@ -67,7 +67,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		return err
 	}
 	// 增加判断: 重复创建struct 或者重复的简称
-	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Abbreviation, info.Package) {
+	if AutocodeHistory.Repeat(ctx, info.BusinessDB, info.StructName, info.Abbreviation, info.Package) {
 		return errors.New("已经创建过此数据结构,请勿重复创建!")
 	}
 
@@ -164,7 +164,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			TemplateID:   name,
 			TemplateInfo: string(templateInfo),
 		}
-		err = SysExportTemplateServiceApp.CreateSysExportTemplate(&sysExportTemplate)
+		err = SysExportTemplateServiceApp.CreateSysExportTemplate(ctx, &sysExportTemplate)
 		if err != nil {
 			return err
 		}
@@ -193,7 +193,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 		return nil, errors.Wrap(err, "查询包失败!")
 	}
 	// 增加判断: 重复创建struct 或者重复的简称
-	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Abbreviation, info.Package) && !info.IsAdd {
+	if AutocodeHistory.Repeat(ctx, info.BusinessDB, info.StructName, info.Abbreviation, info.Package) && !info.IsAdd {
 		return nil, errors.New("已经创建过此数据结构或重复简称,请勿重复创建!")
 	}
 
@@ -271,9 +271,9 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 	return code, templates, injections, nil
 }
 
-func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
+func (s *autoCodeTemplate) AddFunc(ctx context.Context, info request.AutoFunc) error {
 	autoPkg := model.SysAutoCodePackage{}
-	err := global.GVA_DB.First(&autoPkg, "package_name = ?", info.Package).Error
+	err := global.GVA_DB.WithContext(ctx).First(&autoPkg, "package_name = ?", info.Package).Error
 	if err != nil {
 		return err
 	}
@@ -295,9 +295,9 @@ func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
 	return s.addTemplateToAst("router", info)
 }
 
-func (s *autoCodeTemplate) GetApiAndServer(info request.AutoFunc) (map[string]string, error) {
+func (s *autoCodeTemplate) GetApiAndServer(ctx context.Context, info request.AutoFunc) (map[string]string, error) {
 	autoPkg := model.SysAutoCodePackage{}
-	err := global.GVA_DB.First(&autoPkg, "package_name = ?", info.Package).Error
+	err := global.GVA_DB.WithContext(ctx).First(&autoPkg, "package_name = ?", info.Package).Error
 	if err != nil {
 		return nil, err
 	}

@@ -4,7 +4,7 @@
       v-for="item in wikis"
       :key="item.url"
       :href="item.url"
-      class="text-sm text-black/70 dark:text-white/70 no-underline hover:text-[var(--el-color-primary)] dark:hover:text-white"
+      class="text-sm text-base-text no-underline hover:text-active"
       target="_blank"
     >
       {{ item.title }}

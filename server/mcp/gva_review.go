@@ -18,12 +18,6 @@ func init() {
 	RegisterTool(&GVAReviewer{})
 }
 
-// ReviewRequest 审查请求结构
-type ReviewRequest struct {
-	UserRequirement string   `json:"userRequirement"` // 经过requirement_analyze后的用户需求
-	GeneratedFiles  []string `json:"generatedFiles"`  // gva_execute创建的文件列表
-}
-
 // ReviewResponse 审查响应结构
 type ReviewResponse struct {
 	Success          bool   `json:"success"`          // 是否审查成功
@@ -35,37 +29,23 @@ type ReviewResponse struct {
 // New 创建GVA代码审查工具
 func (g *GVAReviewer) New() mcp.Tool {
 	return mcp.NewTool("gva_review",
-		mcp.WithDescription(`**GVA代码审查工具 - 在gva_execute调用后使用**
+		mcp.WithDescription(`**GVA代码审查引导工具 - 在gva_execute调用后使用**
 
 **核心功能：**
 - 接收经过requirement_analyze处理的用户需求和gva_execute生成的文件列表
-- 分析生成的代码是否满足用户的原始需求
-- 检查是否涉及到关联、交互等复杂功能
-- 如果代码不满足需求，提供调整建议和新的prompt
+- 把二者拼装成一段结构化的"代码调整/自查 prompt"，交由调用方(AI)据此逐项检查并完善代码
+- 注意：本工具自身不读取文件内容、不做静态覆盖度/关联分析；分析工作由 AI 依据输出的 prompt 完成
 
 **使用场景：**
-- 在gva_execute成功执行后调用
-- 用于验证生成的代码是否完整满足用户需求
-- 检查模块间的关联关系是否正确实现
-- 发现缺失的交互功能或业务逻辑
-
-**工作流程：**
-1. 接收用户原始需求和生成的文件列表
-2. 分析需求中的关键功能点
-3. 检查生成的文件是否覆盖所有功能
-4. 识别缺失的关联关系、交互功能等
-5. 生成调整建议和新的开发prompt
+- 在gva_execute成功执行后调用，获得一份针对本次生成的自查清单
+- 提示 AI 关注：需求覆盖度、模块间关联、用户交互、业务流程完整性、前后端对接
 
 **输出内容：**
-- 审查结果和是否需要调整
-- 详细的缺失功能分析
-- 针对性的代码调整建议
-- 可直接使用的开发prompt
+- 一段可直接使用的代码调整/优化 prompt（列出用户需求与已生成文件，并给出检查项）
+- 简要的审查元信息（需求、已生成文件数量）
 
 **重要提示：**
-- 本工具专门用于代码质量审查，不执行实际的代码修改
-- 重点关注模块间关联、用户交互、业务流程完整性
-- 提供的调整建议应该具体可执行`),
+- 本工具只产出引导 prompt，不执行任何代码修改，也不替代 AI 的实际分析`),
 		mcp.WithString("userRequirement",
 			mcp.Description("经过requirement_analyze处理后的用户需求描述，包含详细的功能要求和字段信息"),
 			mcp.Required(),
@@ -127,16 +107,7 @@ func (g *GVAReviewer) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	// 序列化响应
-	responseJSON, err := json.MarshalIndent(reviewResult, "", "  ")
-	if err != nil {
-		return nil, fmt.Errorf("序列化审查结果失败: %v", err)
-	}
-
-	return &mcp.CallToolResult{
-		Content: []mcp.Content{
-			mcp.NewTextContent(fmt.Sprintf("代码审查结果：\n\n%s", string(responseJSON))),
-		},
-	}, nil
+	return textResultWithJSON("代码审查结果：", reviewResult)
 }
 
 // generateAdjustmentPrompt 生成调整代码的提示

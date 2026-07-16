@@ -6,9 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -37,20 +35,21 @@ func (a *ApiCreator) New() mcp.Tool {
 	return mcp.NewTool("create_api",
 		mcp.WithDescription(`创建后端API记录，用于AI编辑器自动添加API接口时自动创建对应的API权限记录。
 
+**两种调用模式（二选一）：**
+- 单条：传 path + description + apiGroup（+可选 method，默认POST）
+- 批量：传 apis（JSON数组字符串），一次创建多条；此模式下不需要 path/description/apiGroup
+
 **重要限制：**
 - 当使用gva_auto_generate工具且needCreatedModules=true时，模块创建会自动生成API权限，不应调用此工具
 - 仅在以下情况使用：1) 单独创建API（不涉及模块创建）；2) AI编辑器自动添加API；3) router下的文件产生路径变化时`),
 		mcp.WithString("path",
-			mcp.Required(),
-			mcp.Description("API路径，如：/user/create"),
+			mcp.Description("API路径，如：/user/create（单条模式必填；批量模式忽略）"),
 		),
 		mcp.WithString("description",
-			mcp.Required(),
-			mcp.Description("API中文描述，如：创建用户"),
+			mcp.Description("API中文描述，如：创建用户（单条模式必填；批量模式忽略）"),
 		),
 		mcp.WithString("apiGroup",
-			mcp.Required(),
-			mcp.Description("API组名称，用于分类管理，如：用户管理"),
+			mcp.Description("API组名称，用于分类管理，如：用户管理（单条模式必填；批量模式忽略）"),
 		),
 		mcp.WithString("method",
 			mcp.Description("HTTP方法"),
@@ -105,7 +104,13 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 	successCount := 0
 
 	for _, apiReq := range apis {
-		_, err := postUpstream[map[string]any](ctx, "/api/createApi", system.SysApi{
+		// 批量模式给缺省 method 兜底 POST,与单条模式及 schema 默认值一致;
+		// 否则空 method 会被上游 ApiVerify 判"Method 不能为空"导致该条静默失败
+		if apiReq.Method == "" {
+			apiReq.Method = "POST"
+		}
+		// createApi 现回传创建后的实体(含自增 ID),直接取用,免去此前逐条回查 getApiList 的 2N 次调用
+		createResp, err := postUpstream[system.SysApi](ctx, "/api/createApi", system.SysApi{
 			Path:        apiReq.Path,
 			Description: apiReq.Description,
 			ApiGroup:    apiReq.ApiGroup,
@@ -121,26 +126,10 @@ func (a *ApiCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (*
 			continue
 		}
 
-		lookupResp, lookupErr := postUpstream[pageResultData[[]system.SysApi]](ctx, "/api/getApiList", systemReq.SearchApiParams{
-			SysApi: system.SysApi{
-				Path:   apiReq.Path,
-				Method: apiReq.Method,
-			},
-			PageInfo: commonReq.PageInfo{
-				Page:     1,
-				PageSize: 1,
-			},
-		})
-
-		var apiID uint
-		if lookupErr == nil && len(lookupResp.Data.List) > 0 {
-			apiID = lookupResp.Data.List[0].ID
-		}
-
 		responses = append(responses, ApiCreateResponse{
 			Success: true,
 			Message: fmt.Sprintf("成功创建API %s %s", apiReq.Method, apiReq.Path),
-			ApiID:   apiID,
+			ApiID:   createResp.Data.ID,
 			Path:    apiReq.Path,
 			Method:  apiReq.Method,
 		})

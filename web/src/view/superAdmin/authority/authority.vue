@@ -20,6 +20,41 @@
           min-width="180"
           prop="authorityName"
         />
+        <el-table-column align="left" label="数据权限" min-width="150">
+          <template #default="scope">
+            <div class="flex items-center gap-1">
+              <el-dropdown
+                trigger="click"
+                @command="(cmd) => selectDataScope(scope.row, cmd)"
+              >
+                <el-button link type="primary">
+                  {{ dataScopeLabel(scope.row.dataScope) }}
+                  <el-icon class="ml-1"><arrow-down /></el-icon>
+                </el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      v-for="item in dataScopeOptions"
+                      :key="item.value"
+                      :command="item.value"
+                      :disabled="scope.row.dataScope === item.value"
+                    >
+                      {{ item.label }}
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+              <el-button
+                v-if="scope.row.dataScope === 5"
+                icon="setting"
+                type="primary"
+                link
+                title="配置部门集"
+                @click="openDeptScopeDialog(scope.row)"
+              />
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column align="left" label="操作" width="560">
           <template #default="scope">
             <el-button
@@ -72,7 +107,7 @@
     <el-drawer v-model="authorityFormVisible" :size="appStore.drawerSize" :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ authorityTitleForm }}</span>
+          <span class="text-base">{{ authorityTitleForm }}</span>
           <div>
             <el-button @click="closeAuthorityForm">取 消</el-button>
             <el-button type="primary" @click="submitAuthorityForm"
@@ -131,16 +166,38 @@
         <el-tab-pane label="角色api">
           <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
-        <el-tab-pane label="资源权限">
-          <Datas
-            ref="datas"
-            :authority="tableData"
-            :row="activeRow"
-            @changeRow="changeRow"
-          />
-        </el-tab-pane>
       </el-tabs>
     </el-drawer>
+
+    <!-- 自定义部门集弹窗(数据权限第5档) -->
+    <el-dialog
+      v-model="deptScopeVisible"
+      title="配置可见部门"
+      width="420px"
+      :close-on-click-modal="false"
+      :show-close="false"
+    >
+      <el-scrollbar max-height="50vh">
+        <el-tree
+          ref="deptScopeTreeRef"
+          :data="deptScopeTree"
+          node-key="ID"
+          show-checkbox
+          check-strictly
+          default-expand-all
+          :props="{ label: 'name', children: 'children' }"
+        />
+      </el-scrollbar>
+      <template #footer>
+        <el-button @click="cancelDeptScope">取 消</el-button>
+        <el-button
+          type="primary"
+          :loading="deptScopeSaving"
+          @click="confirmDeptScope"
+          >确 定</el-button
+        >
+      </template>
+    </el-dialog>
 
     <!-- 分配给用户抽屉 -->
     <el-drawer
@@ -151,7 +208,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">分配用户 - {{ assignRow.authorityName }}</span>
+          <span class="text-base">分配用户 - {{ assignRow.authorityName }}</span>
           <div>
             <el-button @click="assignDrawerVisible = false">取 消</el-button>
             <el-button type="primary" :loading="assignSubmitting" @click="confirmAssign">确 定</el-button>
@@ -211,13 +268,15 @@
     updateAuthority,
     copyAuthority,
     getUsersByAuthorityId,
-    setRoleUsers
+    setRoleUsers,
+    setDataScope,
+    getDataScopeDepts
   } from '@/api/authority'
   import { getUserList } from '@/api/user'
+  import { getDepartmentList } from '@/api/department'
 
   import Menus from '@/view/superAdmin/authority/components/menus.vue'
   import Apis from '@/view/superAdmin/authority/components/apis.vue'
-  import Datas from '@/view/superAdmin/authority/components/datas.vue'
   import WarningBar from '@/components/warningBar/warningBar.vue'
 
   import { ref, nextTick } from 'vue'
@@ -252,10 +311,20 @@
   const apiDialogFlag = ref(false)
   const copyForm = ref({})
 
+  // 数据权限档位(挂在角色上)
+  const dataScopeOptions = [
+    { value: 1, label: '全部数据' },
+    { value: 3, label: '本部门' },
+    { value: 2, label: '本部门及以下' },
+    { value: 4, label: '仅本人' },
+    { value: 5, label: '自定义部门' }
+  ]
+
   const form = ref({
     authorityId: 0,
     authorityName: '',
-    parentId: 0
+    parentId: 0,
+    dataScope: 1
   })
   const rules = ref({
     authorityId: [
@@ -275,19 +344,109 @@
     const table = await getAuthorityList()
     if (table.code === 0) {
       tableData.value = table.data
+      rememberScopes(tableData.value)
     }
   }
 
   getTableData()
+
+  // 记录每个角色当前档位, 用于自定义部门弹窗取消/失败时回退
+  const prevScope = {}
+  const rememberScopes = (rows) => {
+    rows &&
+      rows.forEach((row) => {
+        prevScope[row.authorityId] = row.dataScope
+        if (row.children && row.children.length) rememberScopes(row.children)
+      })
+  }
+
+  // 数据权限: 列表内下拉即时保存; 选"自定义部门"时先弹部门选择
+  const changeDataScope = async (row) => {
+    if (row.dataScope === 5) {
+      openDeptScopeDialog(row)
+      return
+    }
+    const res = await setDataScope({
+      authorityId: row.authorityId,
+      dataScope: row.dataScope
+    })
+    if (res.code === 0) {
+      prevScope[row.authorityId] = row.dataScope
+      ElMessage.success('数据权限设置成功')
+    } else {
+      row.dataScope = prevScope[row.authorityId]
+    }
+  }
+
+  // 档位值 -> 中文标签, 用于列表内以文字(而非常驻下拉框)展示当前数据权限
+  const dataScopeLabel = (value) =>
+    dataScopeOptions.find((item) => item.value === value)?.label || '未设置'
+
+  // 点击下拉菜单切换档位: 复用 changeDataScope 的即时保存与失败回退逻辑
+  const selectDataScope = (row, value) => {
+    if (row.dataScope === value) return
+    row.dataScope = value
+    changeDataScope(row)
+  }
+
+  // 自定义部门集弹窗
+  const deptScopeVisible = ref(false)
+  const deptScopeRow = ref({})
+  const deptScopeTree = ref([])
+  const deptScopeTreeRef = ref(null)
+  const deptScopeSaving = ref(false)
+
+  const openDeptScopeDialog = async (row) => {
+    deptScopeRow.value = row
+    deptScopeVisible.value = true
+    const [treeRes, checkedRes] = await Promise.all([
+      getDepartmentList(),
+      getDataScopeDepts(row.authorityId)
+    ])
+    if (treeRes.code === 0) {
+      deptScopeTree.value = treeRes.data || []
+    }
+    await nextTick()
+    if (checkedRes.code === 0 && deptScopeTreeRef.value) {
+      deptScopeTreeRef.value.setCheckedKeys(checkedRes.data || [])
+    }
+  }
+
+  const cancelDeptScope = () => {
+    // 取消 → 回退档位
+    deptScopeRow.value.dataScope = prevScope[deptScopeRow.value.authorityId]
+    deptScopeVisible.value = false
+  }
+
+  const confirmDeptScope = async () => {
+    const deptIds = deptScopeTreeRef.value
+      ? deptScopeTreeRef.value.getCheckedKeys()
+      : []
+    if (!deptIds.length) {
+      ElMessage.warning('请至少选择一个部门')
+      return
+    }
+    deptScopeSaving.value = true
+    const res = await setDataScope({
+      authorityId: deptScopeRow.value.authorityId,
+      dataScope: 5,
+      deptIds
+    })
+    if (res.code === 0) {
+      prevScope[deptScopeRow.value.authorityId] = 5
+      ElMessage.success('数据权限设置成功')
+      deptScopeVisible.value = false
+    }
+    deptScopeSaving.value = false
+  }
 
   const changeRow = (key, value) => {
     activeRow.value[key] = value
   }
   const menus = ref(null)
   const apis = ref(null)
-  const datas = ref(null)
   const autoEnter = (activeName, oldActiveName) => {
-    const paneArr = [menus, apis, datas]
+    const paneArr = [menus, apis]
     if (oldActiveName) {
       if (paneArr[oldActiveName].value.needConfirm) {
         paneArr[oldActiveName].value.enterAndNext()
@@ -344,7 +503,8 @@
     form.value = {
       authorityId: 0,
       authorityName: '',
-      parentId: 0
+      parentId: 0,
+      dataScope: 1
     }
   }
   // 关闭窗口
@@ -391,7 +551,6 @@
               authority: {
                 authorityId: 0,
                 authorityName: '',
-                datauthorityId: [],
                 parentId: 0
               },
               oldAuthorityId: 0
@@ -399,7 +558,7 @@
             data.authority.authorityId = form.value.authorityId
             data.authority.authorityName = form.value.authorityName
             data.authority.parentId = form.value.parentId
-            data.authority.dataAuthorityId = copyForm.value.dataAuthorityId
+            data.authority.dataScope = form.value.dataScope
             data.oldAuthorityId = copyForm.value.authorityId
             const res = await copyAuthority(data)
             if (res.code === 0) {
@@ -469,6 +628,7 @@
     for (const key in form.value) {
       form.value[key] = row[key]
     }
+    if (!form.value.dataScope) form.value.dataScope = 1
     setOptions()
     authorityForm.value && authorityForm.value.clearValidate()
     authorityFormVisible.value = true
@@ -586,10 +746,5 @@
         display: none;
       }
     }
-  }
-  .tree-content {
-    margin-top: 10px;
-    height: calc(100vh - 158px);
-    overflow: auto;
   }
 </style>

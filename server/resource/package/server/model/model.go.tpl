@@ -35,6 +35,7 @@ type {{.StructName}} struct {
     CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`
     UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
     DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
+    DeptId     uint   `gorm:"column:dept_id;comment:归属部门(数据权限)"`
     {{- end }}
     {{- if .IsTree }}
     Children   []*{{.StructName}} `json:"children" gorm:"-"`     //子节点

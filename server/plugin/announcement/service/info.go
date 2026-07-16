@@ -48,8 +48,7 @@ func (s *info) GetInfo(ID string) (info model.Info, err error) {
 // GetInfoInfoList 分页获取公告记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (s *info) GetInfoInfoList(info request.InfoSearch) (list []model.Info, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	// 创建db
 	db := global.GVA_DB.Model(&model.Info{})
 	var infos []model.Info

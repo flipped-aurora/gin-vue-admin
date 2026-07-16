@@ -8,7 +8,8 @@ import (
 // CustomClaims structure
 type CustomClaims struct {
 	BaseClaims
-	BufferTime int64
+	BufferTime    int64
+	MustChangePwd bool `json:"mustChangePwd"`
 	jwt.RegisteredClaims
 }
 

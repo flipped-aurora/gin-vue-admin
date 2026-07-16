@@ -13,38 +13,37 @@ type SysVersionService struct{}
 // CreateSysVersion 创建版本管理记录
 // Author [yourname](https://github.com/yourname)
 func (sysVersionService *SysVersionService) CreateSysVersion(ctx context.Context, sysVersion *system.SysVersion) (err error) {
-	err = global.GVA_DB.Create(sysVersion).Error
+	err = global.GVA_DB.WithContext(ctx).Create(sysVersion).Error
 	return err
 }
 
 // DeleteSysVersion 删除版本管理记录
 // Author [yourname](https://github.com/yourname)
 func (sysVersionService *SysVersionService) DeleteSysVersion(ctx context.Context, ID string) (err error) {
-	err = global.GVA_DB.Delete(&system.SysVersion{}, "id = ?", ID).Error
+	err = global.GVA_DB.WithContext(ctx).Delete(&system.SysVersion{}, "id = ?", ID).Error
 	return err
 }
 
 // DeleteSysVersionByIds 批量删除版本管理记录
 // Author [yourname](https://github.com/yourname)
 func (sysVersionService *SysVersionService) DeleteSysVersionByIds(ctx context.Context, IDs []string) (err error) {
-	err = global.GVA_DB.Where("id in ?", IDs).Delete(&system.SysVersion{}).Error
+	err = global.GVA_DB.WithContext(ctx).Where("id in ?", IDs).Delete(&system.SysVersion{}).Error
 	return err
 }
 
 // GetSysVersion 根据ID获取版本管理记录
 // Author [yourname](https://github.com/yourname)
 func (sysVersionService *SysVersionService) GetSysVersion(ctx context.Context, ID string) (sysVersion system.SysVersion, err error) {
-	err = global.GVA_DB.Where("id = ?", ID).First(&sysVersion).Error
+	err = global.GVA_DB.WithContext(ctx).Where("id = ?", ID).First(&sysVersion).Error
 	return
 }
 
 // GetSysVersionInfoList 分页获取版本管理记录
 // Author [yourname](https://github.com/yourname)
 func (sysVersionService *SysVersionService) GetSysVersionInfoList(ctx context.Context, info systemReq.SysVersionSearch) (list []system.SysVersion, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	limit, offset := info.LimitOffset()
 	// 创建db
-	db := global.GVA_DB.Model(&system.SysVersion{})
+	db := global.GVA_DB.WithContext(ctx).Model(&system.SysVersion{})
 	var sysVersions []system.SysVersion
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if len(info.CreatedAtRange) == 2 {
@@ -76,25 +75,25 @@ func (sysVersionService *SysVersionService) GetSysVersionPublic(ctx context.Cont
 
 // GetMenusByIds 根据ID列表获取菜单数据
 func (sysVersionService *SysVersionService) GetMenusByIds(ctx context.Context, ids []uint) (menus []system.SysBaseMenu, err error) {
-	err = global.GVA_DB.Where("id in ?", ids).Preload("Parameters").Preload("MenuBtn").Find(&menus).Error
+	err = global.GVA_DB.WithContext(ctx).Where("id in ?", ids).Preload("Parameters").Preload("MenuBtn").Find(&menus).Error
 	return
 }
 
 // GetApisByIds 根据ID列表获取API数据
 func (sysVersionService *SysVersionService) GetApisByIds(ctx context.Context, ids []uint) (apis []system.SysApi, err error) {
-	err = global.GVA_DB.Where("id in ?", ids).Find(&apis).Error
+	err = global.GVA_DB.WithContext(ctx).Where("id in ?", ids).Find(&apis).Error
 	return
 }
 
 // GetDictionariesByIds 根据ID列表获取字典数据
 func (sysVersionService *SysVersionService) GetDictionariesByIds(ctx context.Context, ids []uint) (dictionaries []system.SysDictionary, err error) {
-	err = global.GVA_DB.Where("id in ?", ids).Preload("SysDictionaryDetails").Find(&dictionaries).Error
+	err = global.GVA_DB.WithContext(ctx).Where("id in ?", ids).Preload("SysDictionaryDetails").Find(&dictionaries).Error
 	return
 }
 
 // ImportMenus 导入菜单数据
 func (sysVersionService *SysVersionService) ImportMenus(ctx context.Context, menus []system.SysBaseMenu) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		// 递归创建菜单
 		return sysVersionService.createMenusRecursively(tx, menus, 0)
 	})
@@ -175,8 +174,8 @@ func (sysVersionService *SysVersionService) createMenusRecursively(tx *gorm.DB, 
 }
 
 // ImportApis 导入API数据
-func (sysVersionService *SysVersionService) ImportApis(apis []system.SysApi) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+func (sysVersionService *SysVersionService) ImportApis(ctx context.Context, apis []system.SysApi) error {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		for _, api := range apis {
 			// 检查API是否已存在
 			var existingApi system.SysApi
@@ -202,8 +201,8 @@ func (sysVersionService *SysVersionService) ImportApis(apis []system.SysApi) err
 }
 
 // ImportDictionaries 导入字典数据
-func (sysVersionService *SysVersionService) ImportDictionaries(dictionaries []system.SysDictionary) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+func (sysVersionService *SysVersionService) ImportDictionaries(ctx context.Context, dictionaries []system.SysDictionary) error {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		for _, dict := range dictionaries {
 			// 检查字典是否已存在
 			var existingDict system.SysDictionary

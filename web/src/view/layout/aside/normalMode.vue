@@ -1,110 +1,43 @@
 <template>
   <div
-    class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700"
-    :class="isCollapse ? '' : '  px-2'"
-    :style="{
-      width: layoutSideWidth + 'px'
-    }"
+    class="relative z-10 flex h-full flex-col shadow-sider transition-[width] duration-300 ease-in-out"
+    :class="[surfaceClass, siderDarkClass]"
+    :style="{ width: layoutSideWidth + 'px' }"
   >
-    <el-scrollbar>
-      <el-menu
-        :collapse="isCollapse"
-        :collapse-transition="false"
-        :default-active="active"
-        class="!border-r-0 w-full"
-        unique-opened
-        @select="selectMenuItem"
-      >
-        <template v-for="item in routerStore.asyncRouters[0]?.children || []">
-          <aside-component
-            v-if="!item.hidden"
-            :key="item.name"
-            :router-info="item"
-          />
-        </template>
-      </el-menu>
+    <el-scrollbar class="flex-1 py-2">
+      <g-menu
+        :items="menus"
+        :theme="menuTheme"
+        :collapsed="sideCollapse"
+        :active="activeKey"
+        v-model:open-keys="openKeys"
+        :item-height="settings.layout.sideItemHeight"
+        @select="navigate"
+      />
     </el-scrollbar>
-    <div
-      class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer"
-      :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
-      @click="toggleCollapse"
-    >
-      <el-icon v-if="!isCollapse">
-        <DArrowLeft />
-      </el-icon>
-      <el-icon v-else>
-        <DArrowRight />
-      </el-icon>
-    </div>
+    <collapse-bar />
   </div>
 </template>
 
 <script setup>
-  import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
-  import { ref, provide, watchEffect, computed } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { useRouterStore } from '@/pinia/modules/router'
-  import { useAppStore } from '@/pinia'
+  import { computed } from 'vue'
   import { storeToRefs } from 'pinia'
-  const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
+  import { useRouterStore } from '@/pinia/modules/router'
+  import { useAppStore, useThemeStore } from '@/pinia'
+  import { useMenuActive, useMenuNavigation } from './composables/useMenu'
+  import { useSidebarTheme } from './composables/useSidebarTheme'
+  import { useSideWidth } from '@/hooks/useSideWidth'
+  import CollapseBar from './CollapseBar.vue'
 
-  defineOptions({
-    name: 'GvaAside'
-  })
-  const route = useRoute()
-  const router = useRouter()
+  defineOptions({ name: 'AsideNormalMode' })
+
+  const { sideCollapse } = storeToRefs(useAppStore())
+  const { settings } = storeToRefs(useThemeStore())
   const routerStore = useRouterStore()
-  const isCollapse = ref(false)
-  const active = ref('')
-  const layoutSideWidth = computed(() => {
-    if (!isCollapse.value) {
-      return config.value.layout_side_width
-    } else {
-      return config.value.layout_side_collapsed_width
-    }
-  })
-  watchEffect(() => {
-    if (route.name === 'gvaLayoutIframe') {
-      active.value = decodeURIComponent(route.query.url)
-      return
-    }
-    active.value = route.meta.activeName || route.name
-  })
 
-  watchEffect(() => {
-    if (device.value === 'mobile') {
-      isCollapse.value = true
-    } else {
-      isCollapse.value = false
-    }
-  })
-
-  provide('isCollapse', isCollapse)
-
-  const selectMenuItem = (index) => {
-    const query = {}
-    const params = {}
-    routerStore.routeMap[index]?.parameters &&
-      routerStore.routeMap[index]?.parameters.forEach((item) => {
-        if (item.type === 'query') {
-          query[item.key] = item.value
-        } else {
-          params[item.key] = item.value
-        }
-      })
-    if (index === route.name) return
-    if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-        window.open(index, '_blank')
-        return
-    } else {
-      router.push({ name: index, query, params })
-    }
-  }
-
-  const toggleCollapse = () => {
-    isCollapse.value = !isCollapse.value
-  }
+  const menus = computed(() => routerStore.rootMenus)
+  const { menuTheme, surfaceClass, siderDarkClass } = useSidebarTheme()
+  const { activeKey, openKeys } = useMenuActive(menus, menuTheme)
+  const { navigate } = useMenuNavigation()
+  const { sideWidth: layoutSideWidth } = useSideWidth()
 </script>
-
-<style lang="scss"></style>

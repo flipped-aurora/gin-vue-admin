@@ -18,5 +18,4 @@ func InitializeRouter(engine *gin.Engine) {
 
 	router.RouterGroupApp.InitAutoCodeRouter(private, public)
 	router.RouterGroupApp.InitAutoCodeHistoryRouter(private)
-	router.RouterGroupApp.InitSkillsRouter(private, public)
 }

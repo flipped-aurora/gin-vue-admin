@@ -8,7 +8,7 @@
         :class="[
           modelValue === mode.value
             ? 'text-white shadow-sm transform -translate-y-0.5'
-            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
+            : 'text-muted-foreground hover:text-base-text hover:bg-muted'
         ]"
         :style="modelValue === mode.value ? { backgroundColor: primaryColor } : {}"
         @click="handleModeChange(mode.value)"
@@ -26,7 +26,7 @@
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Sunny, Moon, Monitor } from '@element-plus/icons-vue'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 
 defineOptions({
   name: 'ThemeModeSelector'
@@ -41,10 +41,10 @@ defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const themeStore = useThemeStore()
+const { settings } = storeToRefs(themeStore)
 
-const primaryColor = computed(() => config.value.primaryColor)
+const primaryColor = computed(() => settings.value.themeColor)
 
 const themeModes = [
   {

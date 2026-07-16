@@ -2,6 +2,7 @@ package system
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -27,29 +28,29 @@ var SysExportTemplateServiceApp = new(SysExportTemplateService)
 
 // CreateSysExportTemplate 创建导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) CreateSysExportTemplate(sysExportTemplate *system.SysExportTemplate) (err error) {
-	err = global.GVA_DB.Create(sysExportTemplate).Error
+func (sysExportTemplateService *SysExportTemplateService) CreateSysExportTemplate(ctx context.Context, sysExportTemplate *system.SysExportTemplate) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Create(sysExportTemplate).Error
 	return err
 }
 
 // DeleteSysExportTemplate 删除导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
-	err = global.GVA_DB.Delete(&sysExportTemplate).Error
+func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplate(ctx context.Context, sysExportTemplate system.SysExportTemplate) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Delete(&sysExportTemplate).Error
 	return err
 }
 
 // DeleteSysExportTemplateByIds 批量删除导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplateByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]system.SysExportTemplate{}, "id in ?", ids.Ids).Error
+func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplateByIds(ctx context.Context, ids request.IdsReq) (err error) {
+	err = global.GVA_DB.WithContext(ctx).Delete(&[]system.SysExportTemplate{}, "id in ?", ids.Ids).Error
 	return err
 }
 
 // UpdateSysExportTemplate 更新导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplate(ctx context.Context, sysExportTemplate system.SysExportTemplate) (err error) {
+	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		conditions := sysExportTemplate.Conditions
 		e := tx.Delete(&[]system.Condition{}, "template_id = ?", sysExportTemplate.TemplateID).Error
 		if e != nil {
@@ -86,18 +87,18 @@ func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplat
 
 // GetSysExportTemplate 根据id获取导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplate(id uint) (sysExportTemplate system.SysExportTemplate, err error) {
-	err = global.GVA_DB.Where("id = ?", id).Preload("JoinTemplate").Preload("Conditions").First(&sysExportTemplate).Error
+func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplate(ctx context.Context, id uint) (sysExportTemplate system.SysExportTemplate, err error) {
+	err = global.GVA_DB.WithContext(ctx).Where("id = ?", id).Preload("JoinTemplate").Preload("Conditions").First(&sysExportTemplate).Error
 	return
 }
 
 // GetSysExportTemplateInfoList 分页获取导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateInfoList(info systemReq.SysExportTemplateSearch) (list []system.SysExportTemplate, total int64, err error) {
+func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateInfoList(ctx context.Context, info systemReq.SysExportTemplateSearch) (list []system.SysExportTemplate, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&system.SysExportTemplate{})
+	db := global.GVA_DB.WithContext(ctx).Model(&system.SysExportTemplate{})
 	var sysExportTemplates []system.SysExportTemplate
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
@@ -127,14 +128,14 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 
 // ExportExcel 导出Excel
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
+func (sysExportTemplateService *SysExportTemplateService) ExportExcel(ctx context.Context, templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
 	var params = values.Get("params")
 	paramsValues, err := url.ParseQuery(params)
 	if err != nil {
 		return nil, "", fmt.Errorf("解析 params 参数失败: %v", err)
 	}
 	var template system.SysExportTemplate
-	err = global.GVA_DB.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.WithContext(ctx).Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -168,9 +169,9 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	selects := strings.Join(selectKeyFmt, ", ")
 	var tableMap []map[string]interface{}
-	db := global.GVA_DB
+	db := global.GVA_DB.WithContext(ctx)
 	if template.DBName != "" {
-		db = global.MustGetGlobalDBByDBName(template.DBName)
+		db = global.MustGetGlobalDBByDBName(template.DBName).WithContext(ctx)
 	}
 
 	// 如果有自定义SQL，则优先使用自定义SQL
@@ -212,7 +213,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 			if len(template.JoinTemplate) > 0 {
 				for _, join := range template.JoinTemplate {
 					// 检查关联表是否有deleted_at字段
-					hasDeletedAt := sysExportTemplateService.hasDeletedAtColumn(join.Table)
+					hasDeletedAt := sysExportTemplateService.hasDeletedAtColumn(ctx, join.Table)
 					if hasDeletedAt {
 						db = db.Where(fmt.Sprintf("%s.deleted_at IS NULL", join.Table))
 					}
@@ -308,7 +309,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 			db = db.Order(orderStr)
 		}
 
-		err = db.Debug().Find(&tableMap).Error
+		err = db.Find(&tableMap).Error
 		if err != nil {
 			return nil, "", err
 		}
@@ -370,14 +371,14 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 // PreviewSQL 预览最终生成的 SQL（不执行查询，仅返回 SQL 字符串）
 // Author [piexlmax](https://github.com/piexlmax) & [trae-ai]
-func (sysExportTemplateService *SysExportTemplateService) PreviewSQL(templateID string, values url.Values) (sqlPreview string, err error) {
+func (sysExportTemplateService *SysExportTemplateService) PreviewSQL(ctx context.Context, templateID string, values url.Values) (sqlPreview string, err error) {
 	// 解析 params（与导出逻辑保持一致）
 	var params = values.Get("params")
 	paramsValues, _ := url.ParseQuery(params)
 
 	// 加载模板
 	var template system.SysExportTemplate
-	err = global.GVA_DB.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.WithContext(ctx).Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return "", err
 	}
@@ -431,7 +432,7 @@ func (sysExportTemplateService *SysExportTemplateService) PreviewSQL(templateID 
 		wheres = append(wheres, fmt.Sprintf("%s.deleted_at IS NULL", template.TableName))
 		if len(template.JoinTemplate) > 0 {
 			for _, join := range template.JoinTemplate {
-				if sysExportTemplateService.hasDeletedAtColumn(join.Table) {
+				if sysExportTemplateService.hasDeletedAtColumn(ctx, join.Table) {
 					wheres = append(wheres, fmt.Sprintf("%s.deleted_at IS NULL", join.Table))
 				}
 			}
@@ -555,9 +556,9 @@ func (sysExportTemplateService *SysExportTemplateService) PreviewSQL(templateID 
 
 // ExportTemplate 导出Excel模板
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templateID string) (file *bytes.Buffer, name string, err error) {
+func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(ctx context.Context, templateID string) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.WithContext(ctx).First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -602,17 +603,17 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 }
 
 // 辅助函数：检查表是否有deleted_at列
-func (s *SysExportTemplateService) hasDeletedAtColumn(tableName string) bool {
+func (s *SysExportTemplateService) hasDeletedAtColumn(ctx context.Context, tableName string) bool {
 	var count int64
-	global.GVA_DB.Raw("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = 'deleted_at'", tableName).Count(&count)
+	global.GVA_DB.WithContext(ctx).Raw("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = 'deleted_at'", tableName).Count(&count)
 	return count > 0
 }
 
 // ImportExcel 导入Excel
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID string, file *multipart.FileHeader) (err error) {
+func (sysExportTemplateService *SysExportTemplateService) ImportExcel(ctx context.Context, templateID string, file *multipart.FileHeader) (err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.WithContext(ctx).First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return err
 	}
@@ -642,9 +643,9 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 		return err
 	}
 
-	db := global.GVA_DB
+	db := global.GVA_DB.WithContext(ctx)
 	if template.DBName != "" {
-		db = global.MustGetGlobalDBByDBName(template.DBName)
+		db = global.MustGetGlobalDBByDBName(template.DBName).WithContext(ctx)
 	}
 
 	items, err := sysExportTemplateService.parseExcelToMap(rows, templateInfoMap)

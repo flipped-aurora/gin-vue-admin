@@ -10,6 +10,10 @@ type ServiceGroup struct {
 	AutoCodeService
 	BaseMenuService
 	AuthorityService
+	SysDepartmentService
+	SysPositionService
+	DataScopeService
+	DataAccessLogService
 	DictionaryService
 	SystemConfigService
 	OperationRecordService
@@ -17,14 +21,15 @@ type ServiceGroup struct {
 	AuthorityBtnService
 	SysExportTemplateService
 	SysParamsService
+	SecurityConfigService
 	SysVersionService
 	SkillsService
-	AIWorkflowSession aiWorkflowSession
-	AutoCodePlugin    autoCodePlugin
-	AutoCodePackage   autoCodePackage
-	AutoCodeHistory   autoCodeHistory
-	AutoCodeTemplate  autoCodeTemplate
+	AutoCodePlugin   autoCodePlugin
+	AutoCodePackage  autoCodePackage
+	AutoCodeHistory  autoCodeHistory
+	AutoCodeTemplate autoCodeTemplate
 	SysErrorService
 	LoginLogService
 	ApiTokenService
+	TimedTaskService
 }

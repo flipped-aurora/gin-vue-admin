@@ -62,10 +62,11 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 	args := request.GetArguments()
 
 	dictType := stringValue(args["dictType"])
-	includeDisabled, _ := args["includeDisabled"].(bool)
-	detailsOnly, _ := args["detailsOnly"].(bool)
+	includeDisabled := parseOptionalBool(args["includeDisabled"], false)
+	detailsOnly := parseOptionalBool(args["detailsOnly"], false)
 
-	dictionaries, err := fetchDictionaryList(ctx, dictType)
+	// 一次拉取字典及其明细,消除此前逐条 exportSysDictionary 的 N+1
+	dictionaries, err := fetchDictionaryListWithDetails(ctx, dictType)
 	if err != nil {
 		return nil, err
 	}
@@ -79,11 +80,7 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 			continue
 		}
 
-		dictInfo, err := buildDictionaryInfo(ctx, dictionary, includeDisabled)
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, dictInfo)
+		result = append(result, buildDictionaryInfo(dictionary, includeDisabled))
 	}
 
 	if detailsOnly {
@@ -107,21 +104,17 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 	})
 }
 
-func buildDictionaryInfo(ctx context.Context, dictionary system.SysDictionary, includeDisabled bool) (DictionaryInfo, error) {
-	exported, err := exportDictionary(ctx, dictionary.ID)
-	if err != nil {
-		return DictionaryInfo{}, err
-	}
-
+// buildDictionaryInfo 从已预加载 SysDictionaryDetails 的字典实体直接构建响应,不再逐条回查上游
+func buildDictionaryInfo(dictionary system.SysDictionary, includeDisabled bool) DictionaryInfo {
 	info := DictionaryInfo{
 		ID:     dictionary.ID,
-		Name:   exported.Name,
-		Type:   exported.Type,
-		Status: exported.Status,
-		Desc:   exported.Desc,
+		Name:   dictionary.Name,
+		Type:   dictionary.Type,
+		Status: dictionary.Status,
+		Desc:   dictionary.Desc,
 	}
 
-	for _, detail := range exported.SysDictionaryDetails {
+	for _, detail := range dictionary.SysDictionaryDetails {
 		if !includeDisabled && detail.Status != nil && !*detail.Status {
 			continue
 		}
@@ -135,5 +128,5 @@ func buildDictionaryInfo(ctx context.Context, dictionary system.SysDictionary, i
 		})
 	}
 
-	return info, nil
+	return info
 }

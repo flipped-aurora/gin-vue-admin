@@ -30,6 +30,8 @@ type Server struct {
 
 	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 
+	Media Media `mapstructure:"media" json:"media" yaml:"media"`
+
 	DiskList []DiskList `mapstructure:"disk-list" json:"disk-list" yaml:"disk-list"`
 
 	// 跨域配置
@@ -37,4 +39,7 @@ type Server struct {
 
 	// MCP配置
 	MCP MCP `mapstructure:"mcp" json:"mcp" yaml:"mcp"`
+
+	// 应用身份（日志静态字段 node/app_id/env）
+	App App `mapstructure:"app" json:"app" yaml:"app"`
 }

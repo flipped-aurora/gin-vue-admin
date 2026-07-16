@@ -131,22 +131,18 @@ func (m *MenuCreator) Handle(ctx context.Context, request mcp.CallToolRequest) (
 		return nil, errors.New("title 参数是必需的")
 	}
 
-	parentID := uint(0)
-	if value, ok := args["parentId"].(float64); ok {
-		parentID = uint(value)
-	}
-	hidden, _ := args["hidden"].(bool)
-	sort := 1
-	if value, ok := args["sort"].(float64); ok {
-		sort = int(value)
-	}
+	// 兼容 MCP 客户端把数字发成字符串的情况(parentId 允许 0=根,故用 parseOptionalUint;
+	// 否则字符串 "5" 断言 float64 失败会静默回落 0,把菜单错挂到根)
+	parentID := parseOptionalUint(args["parentId"], 0)
+	hidden := parseOptionalBool(args["hidden"], false)
+	sort := int(parseOptionalUint(args["sort"], 1))
 	icon := "menu"
 	if value, ok := args["icon"].(string); ok && value != "" {
 		icon = value
 	}
-	keepAlive, _ := args["keepAlive"].(bool)
-	defaultMenu, _ := args["defaultMenu"].(bool)
-	closeTab, _ := args["closeTab"].(bool)
+	keepAlive := parseOptionalBool(args["keepAlive"], false)
+	defaultMenu := parseOptionalBool(args["defaultMenu"], false)
+	closeTab := parseOptionalBool(args["closeTab"], false)
 	activeName, _ := args["activeName"].(string)
 
 	parameters := make([]system.SysBaseMenuParameter, 0)

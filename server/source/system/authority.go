@@ -52,24 +52,6 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 	if err := db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrapf(err, "%s表数据初始化失败!", sysModel.SysAuthority{}.TableName())
 	}
-	// data authority
-	if err := db.Model(&entities[0]).Association("DataAuthorityId").Replace(
-		[]*sysModel.SysAuthority{
-			{AuthorityId: 888},
-			{AuthorityId: 9528},
-			{AuthorityId: 8881},
-		}); err != nil {
-		return ctx, errors.Wrapf(err, "%s表数据初始化失败!",
-			db.Model(&entities[0]).Association("DataAuthorityId").Relationship.JoinTable.Name)
-	}
-	if err := db.Model(&entities[1]).Association("DataAuthorityId").Replace(
-		[]*sysModel.SysAuthority{
-			{AuthorityId: 9528},
-			{AuthorityId: 8881},
-		}); err != nil {
-		return ctx, errors.Wrapf(err, "%s表数据初始化失败!",
-			db.Model(&entities[1]).Association("DataAuthorityId").Relationship.JoinTable.Name)
-	}
 
 	next := context.WithValue(ctx, i.InitializerName(), entities)
 	return next, nil

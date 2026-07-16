@@ -9,7 +9,7 @@ jwt:
 # zap logger configuration
 zap:
     level: info
-    format: console
+    format: json
     prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
     director: log
     show-line: true

@@ -1,13 +1,12 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type CasbinApi struct{}
@@ -34,9 +33,9 @@ func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 		return
 	}
 	adminAuthorityID := utils.GetUserAuthorityId(c)
-	err = casbinService.UpdateCasbin(adminAuthorityID, cmr.AuthorityId, cmr.CasbinInfos)
+	err = casbinService.UpdateCasbin(c.Request.Context(), adminAuthorityID, cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
 		response.FailWithMessage("更新失败", c)
 		return
 	}

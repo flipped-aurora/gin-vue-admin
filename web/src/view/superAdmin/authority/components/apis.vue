@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10 flex space-x-2">
+    <div class="sticky top-0.5 z-10 flex space-x-2 w-192">
       <el-input
         v-model="filterTextName"
         class="flex-1"
@@ -15,7 +15,7 @@
         >确 定</el-button
       >
     </div>
-    <div class="tree-content">
+    <div class="h-[calc(100vh-208px)] mt-2 overflow-auto">
       <el-scrollbar>
         <el-tree
           ref="apiTree"
@@ -29,7 +29,7 @@
           :filter-node-method="filterNode"
           @check="nodeChange"
         >
-          <template #default="{ _, data }">
+          <template #default="{ data }">
             <div class="flex items-center justify-between w-full pr-1">
               <span>{{ data.description }} </span>
               <el-tooltip :content="data.path">

@@ -18,6 +18,8 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.PUT("setUserInfo", baseApi.SetUserInfo)                // 设置用户信息
 		userRouter.PUT("setSelfInfo", baseApi.SetSelfInfo)                // 设置自身信息
 		userRouter.POST("setUserAuthorities", baseApi.SetUserAuthorities) // 设置用户权限组
+		userRouter.POST("setUserDepartments", baseApi.SetUserDepartments) // 设置用户归属部门
+		userRouter.POST("setUserPositions", baseApi.SetUserPositions)     // 设置用户岗位
 		userRouter.POST("resetPassword", baseApi.ResetPassword)           // 重置用户密码
 		userRouter.PUT("setSelfSetting", baseApi.SetSelfSetting)          // 用户界面配置
 	}

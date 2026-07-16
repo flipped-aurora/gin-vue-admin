@@ -7,15 +7,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // 用于token一次性存储
@@ -70,8 +69,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) PreviewSQL(c *gin.Context) {
     // 直接复用导出接口的参数组织方式：使用 URL Query，其中 params 为内部编码的查询字符串
     queryParams := c.Request.URL.Query()
 
-    if sqlPreview, err := sysExportTemplateService.PreviewSQL(templateID, queryParams); err != nil {
-        global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	if sqlPreview, err := sysExportTemplateService.PreviewSQL(c.Request.Context(), templateID, queryParams); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
         response.FailWithMessage("获取失败", c)
     } else {
         response.OkWithData(gin.H{"sql": sqlPreview}, c)
@@ -101,8 +100,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) CreateSysExportTemplate(c *gin
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := sysExportTemplateService.CreateSysExportTemplate(&sysExportTemplate); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+	if err := sysExportTemplateService.CreateSysExportTemplate(c.Request.Context(), &sysExportTemplate); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -125,8 +124,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) DeleteSysExportTemplate(c *gin
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := sysExportTemplateService.DeleteSysExportTemplate(sysExportTemplate); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+	if err := sysExportTemplateService.DeleteSysExportTemplate(c.Request.Context(), sysExportTemplate); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -149,8 +148,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) DeleteSysExportTemplateByIds(c
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := sysExportTemplateService.DeleteSysExportTemplateByIds(IDS); err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+	if err := sysExportTemplateService.DeleteSysExportTemplateByIds(c.Request.Context(), IDS); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("批量删除失败!")
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -180,8 +179,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) UpdateSysExportTemplate(c *gin
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := sysExportTemplateService.UpdateSysExportTemplate(sysExportTemplate); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+	if err := sysExportTemplateService.UpdateSysExportTemplate(c.Request.Context(), sysExportTemplate); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -204,8 +203,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) FindSysExportTemplate(c *gin.C
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if resysExportTemplate, err := sysExportTemplateService.GetSysExportTemplate(sysExportTemplate.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+	if resysExportTemplate, err := sysExportTemplateService.GetSysExportTemplate(c.Request.Context(), sysExportTemplate.ID); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"resysExportTemplate": resysExportTemplate}, c)
@@ -228,8 +227,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) GetSysExportTemplateList(c *gi
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if list, total, err := sysExportTemplateService.GetSysExportTemplateInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	if list, total, err := sysExportTemplateService.GetSysExportTemplateInfoList(c.Request.Context(), pageInfo); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
@@ -247,6 +246,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) GetSysExportTemplateList(c *gi
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Param templateID query string true "导出模板ID"
+// @Success 200 {object} response.Response{data=string} "导出表格一次性下载链接"
 // @Router /sysExportTemplate/exportExcel [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")
@@ -280,9 +281,11 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 // ExportExcelByToken 导出表格
 // @Tags ExportExcelByToken
 // @Summary 导出表格
-// @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Produce application/octet-stream
+// @Param token query string true "导出一次性token"
+// @Success 200 {string} string "excel文件流"
 // @Router /sysExportTemplate/exportExcelByToken [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Context) {
 	token := c.Query("token")
@@ -298,7 +301,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 	tokenMutex.RUnlock()
 
 	if !exists || time.Now().After(expiry) {
-		global.GVA_LOG.Error("导出token无效或已过期!")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error("导出token无效或已过期!")
 		response.FailWithMessage("导出token无效或已过期", c)
 		return
 	}
@@ -306,7 +309,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 	// 从token获取参数
 	exportParams, ok := exportParamsRaw.(map[string]interface{})
 	if !ok {
-		global.GVA_LOG.Error("解析导出参数失败!")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error("解析导出参数失败!")
 		response.FailWithMessage("解析导出参数失败", c)
 		return
 	}
@@ -322,8 +325,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 	tokenMutex.Unlock()
 
 	// 导出
-	if file, name, err := sysExportTemplateService.ExportExcel(templateID, queryParams); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	if file, name, err := sysExportTemplateService.ExportExcel(c.Request.Context(), templateID, queryParams); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 	} else {
 		c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", name+utils.RandomString(6)+".xlsx"))
@@ -338,6 +341,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcelByToken(c *gin.Cont
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Param templateID query string true "导出模板ID"
+// @Success 200 {object} response.Response{data=string} "导出表格模板一次性下载链接"
 // @Router /sysExportTemplate/exportTemplate [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context) {
 	templateID := c.Query("templateID")
@@ -369,9 +374,11 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context)
 // ExportTemplateByToken 通过token导出表格模板
 // @Tags ExportTemplateByToken
 // @Summary 通过token导出表格模板
-// @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Produce application/octet-stream
+// @Param token query string true "导出一次性token"
+// @Success 200 {string} string "模板文件流"
 // @Router /sysExportTemplate/exportTemplateByToken [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.Context) {
 	token := c.Query("token")
@@ -387,7 +394,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 	tokenMutex.RUnlock()
 
 	if !exists || time.Now().After(expiry) {
-		global.GVA_LOG.Error("导出token无效或已过期!")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error("导出token无效或已过期!")
 		response.FailWithMessage("导出token无效或已过期", c)
 		return
 	}
@@ -395,7 +402,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 	// 从token获取参数
 	exportParams, ok := exportParamsRaw.(map[string]interface{})
 	if !ok {
-		global.GVA_LOG.Error("解析导出参数失败!")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error("解析导出参数失败!")
 		response.FailWithMessage("解析导出参数失败", c)
 		return
 	}
@@ -403,7 +410,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 	// 检查是否为模板导出
 	isTemplate, _ := exportParams["isTemplate"].(bool)
 	if !isTemplate {
-		global.GVA_LOG.Error("token类型错误!")
+		logger.WithCtx(c.Request.Context()).Mod("biz").Error("token类型错误!")
 		response.FailWithMessage("token类型错误", c)
 		return
 	}
@@ -418,8 +425,8 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 	tokenMutex.Unlock()
 
 	// 导出模板
-	if file, name, err := sysExportTemplateService.ExportTemplate(templateID); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	if file, name, err := sysExportTemplateService.ExportTemplate(c.Request.Context(), templateID); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败", c)
 	} else {
 		c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", name+"模板.xlsx"))
@@ -432,8 +439,11 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplateByToken(c *gin.C
 // @Tags SysImportTemplate
 // @Summary 导入表格
 // @Security ApiKeyAuth
-// @accept application/json
+// @accept multipart/form-data
 // @Produce application/json
+// @Param templateID query string true "导入模板ID"
+// @Param file formData file true "导入文件"
+// @Success 200 {object} response.Response{msg=string} "导入成功"
 // @Router /sysExportTemplate/importExcel [post]
 func (sysExportTemplateApi *SysExportTemplateApi) ImportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")
@@ -443,12 +453,12 @@ func (sysExportTemplateApi *SysExportTemplateApi) ImportExcel(c *gin.Context) {
 	}
 	file, err := c.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("文件获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("文件获取失败!")
 		response.FailWithMessage("文件获取失败", c)
 		return
 	}
-	if err := sysExportTemplateService.ImportExcel(templateID, file); err != nil {
-		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+	if err := sysExportTemplateService.ImportExcel(c.Request.Context(), templateID, file); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error(err.Error())
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		response.OkWithMessage("导入成功", c)

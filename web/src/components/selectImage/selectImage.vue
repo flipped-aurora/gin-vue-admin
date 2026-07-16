@@ -23,7 +23,7 @@
           </div>
         </template>
       </draggable>
-      <selectComponent :rounded="rounded" v-if="model?.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+      <selectComponent :rounded="rounded" v-if="currentImageCount < props.maxUpdateCount || props.maxUpdateCount === 0"
                        @chooseItem="openChooseImg" @deleteItem="openChooseImg"
       />
     </div>
@@ -149,7 +149,7 @@
 
 <script setup>
 import { getUrl, isVideoExt } from '@/utils/image'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getFileList, editFileName, deleteFile } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
@@ -285,6 +285,7 @@ const openChooseImg = async() => {
     model.value = ''
     return
   }
+  selectedImages.value = []
   await getImageList()
   await fetchCategories()
   drawer.value = true
@@ -418,6 +419,17 @@ const closeAddCategoryDialog = () => {
 
 const selectedImages = ref([])
 
+const currentImageCount = computed(() => {
+  if (Array.isArray(model.value)) {
+    return model.value.length
+  }
+  return model.value ? 1 : 0
+})
+
+const canSelectMoreImages = computed(() => {
+  return props.maxUpdateCount === 0 || currentImageCount.value + selectedImages.value.length < props.maxUpdateCount
+})
+
 const toggleImageSelection = (item) => {
   if (props.multiple === false) {
     chooseImg(item.url)
@@ -427,6 +439,13 @@ const toggleImageSelection = (item) => {
   if (index > -1) {
     selectedImages.value.splice(index, 1)
   } else {
+    if (!canSelectMoreImages.value) {
+      ElMessage({
+        type: 'warning',
+        message: `最多可选择${props.maxUpdateCount}个文件`
+      })
+      return
+    }
     selectedImages.value.push(item)
   }
 }
@@ -436,9 +455,17 @@ const isSelected = (item) => {
 }
 
 const useSelectedImages = () => {
-  selectedImages.value.forEach((item) => {
-    model.value.push(item.url)
-  })
+  if (!Array.isArray(model.value)) {
+    model.value = []
+  }
+  if (props.maxUpdateCount !== 0 && model.value.length + selectedImages.value.length > props.maxUpdateCount) {
+    ElMessage({
+      type: 'warning',
+      message: `最多可选择${props.maxUpdateCount}个文件`
+    })
+    return
+  }
+  model.value.push(...selectedImages.value.map(item => item.url))
   drawer.value = false
   selectedImages.value = []
 }

@@ -82,14 +82,14 @@ func RegisterTables() {
 	)
 	if err != nil {
 		logger.Bg().Mod("system").Err(err).Error("register table failed")
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	err = bizModel()
 
 	if err != nil {
 		logger.Bg().Mod("system").Err(err).Error("register biz_table failed")
-		os.Exit(0)
+		os.Exit(1)
 	}
 	logger.Bg().Mod("system").Info("register table success")
 }

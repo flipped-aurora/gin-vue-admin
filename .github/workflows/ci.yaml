@@ -163,7 +163,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add . && git commit -m "release: v${GVA_VERSION##v}"
       - name: Push
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c # v1.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}

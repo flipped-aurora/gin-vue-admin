@@ -156,6 +156,36 @@ function getErrorMessage(error) {
   return error.response?.data?.msg || error.response?.statusText || '请求失败'
 }
 
+// 错误提示去重：批量请求瞬间失败时，避免同一条错误反复弹出刷屏
+const MAX_ERROR_MESSAGE = 3
+const activeErrorMessages = new Map()
+
+const showErrorMessage = (rawMessage) => {
+  const message = rawMessage || '请求失败'
+
+  // 相同内容正在展示时不再重复弹出
+  if (activeErrorMessages.has(message)) {
+    return
+  }
+
+  // 不同内容也做上限保护，防止瞬间大量报错铺满整个屏幕
+  if (activeErrorMessages.size >= MAX_ERROR_MESSAGE) {
+    return
+  }
+
+  const instance = ElMessage({
+    showClose: true,
+    message,
+    type: 'error',
+    grouping: true,
+    onClose: () => {
+      activeErrorMessages.delete(message)
+    }
+  })
+
+  activeErrorMessages.set(message, instance)
+}
+
 service.interceptors.response.use(
   (response) => {
     const userStore = useUserStore()
@@ -179,11 +209,7 @@ service.interceptors.response.use(
       return response.data
     }
 
-    ElMessage({
-      showClose: true,
-      message: response.data.msg || decodeURI(response.headers.msg),
-      type: 'error'
-    })
+    showErrorMessage(response.data.msg || decodeURI(response.headers.msg))
 
     return response.data.msg ? response.data : response
   },

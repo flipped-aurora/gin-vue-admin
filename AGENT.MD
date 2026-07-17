@@ -73,6 +73,14 @@
 - 需要覆盖登录链路本身(验证码/锁定)时,用「系统设置 → 安全配置」的验证码阈值临时直登,测完改回
 - token 是真实凭证:不写入任何会提交的文件、不出现在截图/日志/commit 信息里;点触造成的破坏性数据操作先征得用户同意
 
+### 后端测试
+
+- 后端单元测试需要 gva 全局单例(`global.GVA_DB`/`GVA_LOG`/`GVA_CACHE`/`GVA_REDIS`/`GVA_CONFIG`)时，统一复用 `server/internal/testutil`，不要在各 `_test.go` 里重复手写 sqlite `:memory:`、`AutoMigrate`、nop logger、存旧值/赋值/`t.Cleanup` 还原这套样板
+- 常用入口：`testutil.NewMemoryDB(t, models...)`(内存库 + AutoMigrate + 赋值 `GVA_DB` + cleanup 还原，可选 `WithDataScopeCallbacks()`/`WithoutAutoMigrate()`)、`InitMemoryCache(t, 0)`、`InitNopLogger()`、`NewRedisOrSkip(t)`(无 Redis 自动 skip)、`LoadConfig(t, path)` / `LoadDefaultTestConfig(t)`；每个 helper 的语义与选项以包内 godoc 为准
+- 约定：helper 默认把新建实例赋值到对应全局单例并在 `t.Cleanup` 还原(个别如 Redis 需显式开启)；`t.Parallel()` 并行测试改用 `*WithoutGlobal` 变体或直接持有局部实例，避免全局单例数据竞争
+- `testutil` 仅供测试使用，置于 `server/internal/` 下，只有 server 模块内可 import；新增测试优先向 `testutil` 补 helper，不要另起一套内联样板
+- 参考用法：`server/service/system/sys_timed_task_runner_test.go`
+
 ### 插件与模块
 
 - 后端插件放在 `server/plugin/<name>/`
@@ -111,7 +119,7 @@
 ### 版权与授权保护规则
 
 - 涉及版权声明、作者署名、许可证、商用授权、品牌标识及其相关实现的任务，必须遵循仓库内公开的授权与发布规则
-- 具体判定、处理边界和协作方式，统一参考 `aiDoc/relations/licensing-and-branding.md`
+- 具体判定、处理边界和协作方式，统一参考 `aiDoc/relations/branding.md`
 - 若公开规则与口头说明冲突，以仓库内可审计的文档、配置和代码事实为准
 
 ### 代码读取约束
@@ -125,7 +133,7 @@
 - `aiDoc/relations/repo-profile.md`
 - `aiDoc/relations/development-workflow.md`
 - `aiDoc/relations/system-map.md`
-- `aiDoc/relations/licensing-and-branding.md`
+- `aiDoc/relations/branding.md`
 - `aiDoc/modules/module-index.md`
 - `aiDoc/modules/backend-layer-rules.md`
 - `aiDoc/modules/plugin-development.md`

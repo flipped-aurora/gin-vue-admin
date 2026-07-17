@@ -5,9 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/internal/testutil"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/gva_cache"
 )
 
 func TestIsPasswordExpired(t *testing.T) {
@@ -33,7 +32,7 @@ func TestIsPasswordExpired(t *testing.T) {
 }
 
 func TestLockCounting(t *testing.T) {
-	global.GVA_CACHE = gva_cache.NewMemoryCache(time.Hour)
+	testutil.InitMemoryCache(t, 0)
 	cfg := system.SysSecurityConfig{LockEnable: true, LockThreshold: 3, LockDuration: 30}
 	user := "locktester"
 	ctx := context.Background()

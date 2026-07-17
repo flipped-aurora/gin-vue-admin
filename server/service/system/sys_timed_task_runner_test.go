@@ -11,29 +11,17 @@ import (
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/internal/testutil"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/task"
-	"github.com/glebarez/sqlite"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
 )
 
-// setupTimedTaskTestDB 内存库 + 必需表(runner 失败路径会查 sys_user_authority 发告警)
+// setupTimedTaskTestDB 内存库 + 必需表(runner 失败路径会查 sys_user_authority 发告警)。
+// 复用 testutil.NewMemoryDB：内部完成 nop logger 兜底、sqlite :memory:、AutoMigrate、
+// 赋值 global.GVA_DB 并在 t.Cleanup 还原，替代原先手写的整套样板。
 func setupTimedTaskTestDB(t *testing.T) {
 	t.Helper()
-	if global.GVA_LOG == nil {
-		global.GVA_LOG = zap.NewNop()
-	}
-	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("open sqlite: %v", err)
-	}
-	if err := db.AutoMigrate(&sysModel.SysTimedTask{}, &sysModel.SysTimedTaskLog{}, &sysModel.SysUserAuthority{}); err != nil {
-		t.Fatalf("migrate: %v", err)
-	}
-	old := global.GVA_DB
-	global.GVA_DB = db
-	t.Cleanup(func() { global.GVA_DB = old })
+	testutil.NewMemoryDB(t, &sysModel.SysTimedTask{}, &sysModel.SysTimedTaskLog{}, &sysModel.SysUserAuthority{})
 }
 
 func lastLog(t *testing.T) sysModel.SysTimedTaskLog {

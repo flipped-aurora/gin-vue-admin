@@ -7,19 +7,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/internal/testutil"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemService "github.com/flipped-aurora/gin-vue-admin/server/service/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/gva_cache"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func TestAccountLockFlow(t *testing.T) {
-	global.GVA_LOG = zap.NewNop()
-	global.GVA_CACHE = gva_cache.NewMemoryCache(time.Hour)
+	testutil.InitNopLogger()
+	testutil.InitMemoryCache(t, 0)
 	cfg := sysModel.SysSecurityConfig{LockEnable: true, LockThreshold: 2, LockDuration: 30}
 	user := "integration_lock_user"
 	ctx := context.Background()

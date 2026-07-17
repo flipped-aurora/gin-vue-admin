@@ -5,13 +5,12 @@ import (
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/gva_cache"
+	"github.com/flipped-aurora/gin-vue-admin/server/internal/testutil"
 )
 
 // TestCacheStoreRoundTrip 用内存后端验证 Set/Get/Verify/clear 的完整往返语义。
 func TestCacheStoreRoundTrip(t *testing.T) {
-	global.GVA_CACHE = gva_cache.NewMemoryCache(time.Minute)
-	defer func() { global.GVA_CACHE = nil }()
+	testutil.InitMemoryCache(t, time.Minute)
 
 	s := NewCacheStore()
 	if err := s.Set("id1", "1234"); err != nil {

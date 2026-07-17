@@ -7,21 +7,14 @@ import (
 	"testing"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/internal/testutil"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/media/request"
-	"github.com/glebarez/sqlite"
-	"gorm.io/gorm"
 )
 
 func testDB(t *testing.T) {
-	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := db.AutoMigrate(&media.MediaUpload{}, &media.MediaUploadChunk{}, &media.FileUploadAndDownload{}); err != nil {
-		t.Fatal(err)
-	}
-	global.GVA_DB = db
+	t.Helper()
+	testutil.NewMemoryDB(t, &media.MediaUpload{}, &media.MediaUploadChunk{}, &media.FileUploadAndDownload{})
 }
 
 func TestInitNewAndResume(t *testing.T) {

@@ -49,6 +49,19 @@ type SetUserAuthorities struct {
 	AuthorityIds []uint `json:"authorityIds"` // 角色ID
 }
 
+// SetUserDepartments 设置用户归属部门(多部门)与主部门
+type SetUserDepartments struct {
+	ID            uint   `json:"ID"`            // 用户ID
+	DeptIds       []uint `json:"deptIds"`       // 归属部门ID集合(数据可见范围)
+	PrimaryDeptId uint   `json:"primaryDeptId"` // 主部门ID(数据归属/盖章),为空时取集合首个
+}
+
+// SetUserPositions 设置用户岗位(多岗位)
+type SetUserPositions struct {
+	ID          uint   `json:"ID"`          // 用户ID
+	PositionIds []uint `json:"positionIds"` // 岗位ID集合
+}
+
 type ChangeUserInfo struct {
 	ID           uint                  `gorm:"primarykey"`                                                                           // 主键ID
 	NickName     string                `json:"nickName" gorm:"default:系统用户;comment:用户昵称"`                                            // 用户昵称
@@ -74,4 +87,11 @@ type GetUserList struct {
 type SetRoleUsers struct {
 	AuthorityId uint   `json:"authorityId" form:"authorityId"` // 角色ID
 	UserIds     []uint `json:"userIds" form:"userIds"`         // 用户ID列表
+}
+
+// SetDataScope 设置角色数据权限
+type SetDataScope struct {
+	AuthorityId uint   `json:"authorityId" form:"authorityId"` // 角色ID
+	DataScope   int    `json:"dataScope" form:"dataScope"`     // 数据权限 1全部 2本部门及以下 3本部门 4仅本人 5自定义部门
+	DeptIds     []uint `json:"deptIds" form:"deptIds"`         // 自定义部门集(档位为5时生效)
 }

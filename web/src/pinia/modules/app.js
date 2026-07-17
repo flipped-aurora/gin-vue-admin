@@ -1,55 +1,36 @@
 import { defineStore } from 'pinia'
-import { ref, watchEffect, reactive } from 'vue'
-import { setBodyPrimaryColor } from '@/utils/format'
-import { useDark, usePreferredDark } from '@vueuse/core'
+import { computed, ref } from 'vue'
 
 export const useAppStore = defineStore('app', () => {
   const device = ref('')
   const drawerSize = ref('')
   const operateMinWith = ref('240')
-  const config = reactive({
-    weakness: false,
-    grey: false,
-    primaryColor: '#3b82f6',
-    showTabs: true,
-    darkMode: 'auto',
-    layout_side_width: 256,
-    layout_side_collapsed_width: 80,
-    layout_side_item_height: 48,
-    show_watermark: true,
-    side_mode: 'normal',
-    // 页面过渡动画配置
-    transition_type: 'slide',
-    global_size: 'default'
-  })
+  // 侧栏折叠态（运行时态，不持久化），供 vertical 布局的固定侧栏与外壳共享
+  const sideCollapse = ref(false)
+  // 移动端（<640）左侧抽屉菜单开合态
+  const mobileMenuOpen = ref(false)
+  // 当前断点区间（由 useResponsive 维护）：mobile(<640) / pad(640–1024) / desktop(>=1024)
+  const layoutZone = ref('desktop')
+  // 平板区间强制「通栏侧边」收缩布局（不改用户所选布局）
+  const isPad = computed(() => layoutZone.value === 'pad')
+  // 进入平板前的侧栏折叠态快照，离开平板时据此恢复（区分「系统收缩」与「用户收缩」）
+  const prePadCollapse = ref(false)
 
-  const isDark = useDark({
-    selector: 'html',
-    attribute: 'class',
-    valueDark: 'dark',
-    valueLight: 'light'
-  })
-
-  const preferredDark = usePreferredDark()
-
-  const toggleTheme = (darkMode) => {
-    isDark.value = darkMode
+  const toggleMobileMenu = (v) => {
+    mobileMenuOpen.value = typeof v === 'boolean' ? v : !mobileMenuOpen.value
   }
 
-  const toggleWeakness = (e) => {
-    config.weakness = e
-  }
-
-  const toggleGrey = (e) => {
-    config.grey = e
-  }
-
-  const togglePrimaryColor = (e) => {
-    config.primaryColor = e
-  }
-
-  const toggleTabs = (e) => {
-    config.showTabs = e
+  // 切换断点区间：进入平板时快照当前折叠态并强制收缩，离开平板时恢复进入前的折叠态，
+  // 从而只撤销系统自己施加的收缩，不覆盖用户在桌面手动收缩的意图。
+  const setLayoutZone = (zone) => {
+    const prev = layoutZone.value
+    if (zone === 'pad' && prev !== 'pad') {
+      prePadCollapse.value = sideCollapse.value
+      sideCollapse.value = true
+    } else if (zone !== 'pad' && prev === 'pad') {
+      sideCollapse.value = prePadCollapse.value
+    }
+    layoutZone.value = zone
   }
 
   const toggleDevice = (e) => {
@@ -63,100 +44,21 @@ export const useAppStore = defineStore('app', () => {
     device.value = e
   }
 
-  const toggleDarkMode = (e) => {
-    config.darkMode = e
+  const toggleSideCollapse = (v) => {
+    sideCollapse.value = typeof v === 'boolean' ? v : !sideCollapse.value
   }
-
-  // 监听系统主题变化
-  watchEffect(() => {
-    if (config.darkMode === 'auto') {
-      isDark.value = preferredDark.value
-      return
-    }
-    isDark.value = config.darkMode === 'dark'
-  })
-
-  const toggleConfigSideWidth = (e) => {
-    config.layout_side_width = e
-  }
-
-  const toggleConfigSideCollapsedWidth = (e) => {
-    config.layout_side_collapsed_width = e
-  }
-
-  const toggleConfigSideItemHeight = (e) => {
-    config.layout_side_item_height = e
-  }
-
-  const toggleConfigWatermark = (e) => {
-    config.show_watermark = e
-  }
-
-  const toggleSideMode = (e) => {
-    config.side_mode = e
-  }
-
-  const toggleTransition = (e) => {
-    config.transition_type = e
-  }
-
-  const toggleGlobalSize = (e) => {
-    config.global_size = e
-  }
-
-  const baseCoinfg = {
-    weakness: false,
-    grey: false,
-    primaryColor: '#3b82f6',
-    showTabs: true,
-    darkMode: 'auto',
-    layout_side_width: 256,
-    layout_side_collapsed_width: 80,
-    layout_side_item_height: 48,
-    show_watermark: true,
-    side_mode: 'normal',
-    // 页面过渡动画配置
-    transition_type: 'slide',
-    global_size: 'default'
-  }
-
-  const resetConfig = () => {
-    for (let baseCoinfgKey in baseCoinfg) {
-      config[baseCoinfgKey] = baseCoinfg[baseCoinfgKey]
-    }
-  }
-
-  // 监听色弱模式和灰色模式
-  watchEffect(() => {
-    document.documentElement.classList.toggle('html-weakenss', config.weakness)
-    document.documentElement.classList.toggle('html-grey', config.grey)
-  })
-
-  // 监听主题色
-  watchEffect(() => {
-    setBodyPrimaryColor(config.primaryColor, isDark.value ? 'dark' : 'light')
-  })
 
   return {
-    isDark,
     device,
     drawerSize,
     operateMinWith,
-    config,
-    toggleTheme,
-    toggleDevice,
-    toggleWeakness,
-    toggleGrey,
-    togglePrimaryColor,
-    toggleTabs,
-    toggleDarkMode,
-    toggleConfigSideWidth,
-    toggleConfigSideCollapsedWidth,
-    toggleConfigSideItemHeight,
-    toggleConfigWatermark,
-    toggleSideMode,
-    toggleTransition,
-    resetConfig,
-    toggleGlobalSize
+    sideCollapse,
+    toggleSideCollapse,
+    mobileMenuOpen,
+    toggleMobileMenu,
+    layoutZone,
+    isPad,
+    setLayoutZone,
+    toggleDevice
   }
 })

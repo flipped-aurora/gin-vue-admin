@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/qiniu/qmgo"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/gva_cache"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/timer"
-	"github.com/songzhibin97/gkit/cache/local_cache"
 
 	"golang.org/x/sync/singleflight"
 
@@ -37,7 +37,7 @@ var (
 	GVA_ROUTERS             gin.RoutesInfo
 	GVA_ACTIVE_DBNAME       *string
 	GVA_MCP_SERVER          *server.MCPServer
-	BlackCache              local_cache.Cache
+	GVA_CACHE               gva_cache.Cache
 	lock                    sync.RWMutex
 )
 

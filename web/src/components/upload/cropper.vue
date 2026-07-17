@@ -88,7 +88,6 @@ import { RefreshLeft, RefreshRight, Plus, Minus } from '@element-plus/icons-vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
-import { useUserStore } from "@/pinia";
 
 defineOptions({
   name: 'CropperImage'

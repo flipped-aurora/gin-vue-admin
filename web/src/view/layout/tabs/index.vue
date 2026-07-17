@@ -1,55 +1,47 @@
 <template>
-  <div class="gva-tabs">
-    <el-tabs
-      v-model="activeValue"
-      :closable="!(historys.length === 1 && $route.name === defaultRouter)"
-      type="card"
-      class="bg-white text-slate-700 dark:text-slate-500 dark:bg-slate-900 pt-1"
-      @contextmenu.prevent="openContextMenu($event)"
-      @tab-click="changeTab"
-      @tab-remove="removeTab"
-      @click.middle.prevent="middleCloseTab($event)"
+  <div
+    ref="scrollRef"
+    class="gva-tabs isolate flex items-center gap-1.5 h-11 w-full overflow-x-auto bg-[var(--gva-tabs-bg)] px-3 pt-1.5 shadow-[var(--gva-tabs-shadow)]"
+    :class="containerClass"
+  >
+    <ContextMenuRoot
+      v-for="item in historys"
+      :key="getFmtString(item)"
+      :modal="false"
+      @update:open="(open) => onContextMenuOpen(open, item)"
     >
-      <el-tab-pane
-        v-for="item in historys"
-        :key="getFmtString(item)"
-        :label="item.meta.title"
-        :name="getFmtString(item)"
-        :tab="item"
-        class="border-none"
-      >
-        <template #label>
-          <span
-            :tab="item"
-            :class="
-              activeValue === getFmtString(item)
-                ? 'text-active'
-                : 'text-gray-600 dark:text-slate-400 '
-            "
-            ><i
-              :class="
-                activeValue === getFmtString(item)
-                  ? 'text-active'
-                  : 'text-gray-600 dark:text-slate-400'
-              "
-            />
-            {{ fmtTitle(item.meta.title, item) }}</span
-          >
-        </template>
-      </el-tab-pane>
-    </el-tabs>
+      <ContextMenuTrigger as-child :disabled="contextMenuDisabled">
+        <g-page-tab
+          :mode="tabMode"
+          :active="isActive(item)"
+          :closable="isClosable(item)"
+          @click="switchTo(item)"
+          @mousedown="middleCloseTab($event, item)"
+          @close="removeTab(getFmtString(item))"
+        >
+          <template v-if="showTabIcon && item.meta.icon" #prefix>
+            <component :is="item.meta.icon" class="h-4 w-4 shrink-0" />
+          </template>
+          {{ fmtTitle(item.meta.title, item) }}
+        </g-page-tab>
+      </ContextMenuTrigger>
 
-    <!--自定义右键菜单html代码-->
-    <ul
-      v-show="contextMenuVisible"
-      :style="{ left: left + 'px', top: top + 'px' }"
-      class="contextmenu"
-    >
-      <li @click="closeAll">关闭所有</li>
-      <li @click="closeLeft">关闭左侧</li>
-      <li @click="closeRight">关闭右侧</li>
-      <li @click="closeOther">关闭其他</li>
-    </ul>
+      <ContextMenuPortal>
+        <ContextMenuContent
+          :side-offset="4"
+          class="z-[3000] min-w-[120px] overflow-hidden rounded-md border border-border bg-container py-1 text-[13px] text-base-text shadow-card"
+        >
+          <ContextMenuItem
+            v-for="action in contextMenuActions"
+            :key="action.key"
+            class="cursor-pointer select-none px-4 py-1.5 outline-none transition-colors data-[highlighted]:bg-muted"
+            @select="action.handler"
+          >
+            {{ action.label }}
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenuPortal>
+    </ContextMenuRoot>
   </div>
 </template>
 
@@ -58,7 +50,16 @@
   import { computed, onUnmounted, ref, watch, nextTick } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useUserStore } from '@/pinia/modules/user'
+  import { useThemeStore } from '@/pinia'
+  import { storeToRefs } from 'pinia'
   import { fmtTitle } from '@/utils/fmtRouterTitle'
+  import {
+    ContextMenuRoot,
+    ContextMenuTrigger,
+    ContextMenuPortal,
+    ContextMenuContent,
+    ContextMenuItem
+  } from 'reka-ui'
 
   defineOptions({
     name: 'HistoryComponent'
@@ -66,6 +67,23 @@
 
   const route = useRoute()
   const router = useRouter()
+  const userStore = useUserStore()
+  const themeStore = useThemeStore()
+  const { settings } = storeToRefs(themeStore)
+
+  // 标签风格（button / chrome / slider），由主题设置驱动，可换肤
+  const tabMode = computed(() => settings.value.tab.mode || 'button')
+  // 是否在标签上展示路由图标
+  const showTabIcon = computed(() => settings.value.tab.showIcon !== false)
+  const containerClass = computed(
+    () =>
+      ({
+        button: 'items-center',
+        chrome: 'items-end gap-0',
+        slider: 'items-end gap-1'
+      })[tabMode.value]
+  )
+
 
   const getFmtString = (item) => {
     return item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
@@ -73,36 +91,60 @@
 
   const historys = ref([])
   const activeValue = ref('')
-  const contextMenuVisible = ref(false)
+  const rightActive = ref('')
 
-  const userStore = useUserStore()
-
-  const left = ref(0)
-  const top = ref(0)
   const isCollapse = ref(false)
   const isMobile = ref(false)
-  const rightActive = ref('')
   const defaultRouter = computed(
     () => userStore.userInfo.authority.defaultRouter
   )
-  const openContextMenu = (e) => {
-    if (historys.value.length === 1 && route.name === defaultRouter.value) {
-      return false
-    }
-    let id = ''
-    if (e.srcElement.nodeName === 'SPAN') {
-      id = e.srcElement.offsetParent.id
-    } else {
-      id = e.srcElement.id
-    }
-    if (id) {
-      contextMenuVisible.value = true
 
-      left.value = e.clientX
-      top.value = e.clientY + 10
-      rightActive.value = id.substring(4)
+  // 常驻标签（首页 / 默认路由）不可关闭：不渲染关闭按钮、也不占位；其它标签始终可关。
+  const isClosable = (item) => item.name !== defaultRouter.value
+  // 右键菜单禁用条件：仅“唯一首页”时右键不弹出（保留原 el-tabs 行为）。
+  const contextMenuDisabled = computed(
+    () => historys.value.length === 1 && route.name === defaultRouter.value
+  )
+
+  const isActive = (item) => getFmtString(item) === activeValue.value
+
+  const scrollRef = ref(null)
+  // 路由变化后把激活标签滚入可视区（el-tabs 原本免费提供，这里显式补回）
+  const scrollActiveIntoView = async () => {
+    await nextTick()
+    if (!scrollRef.value) return
+    const index = historys.value.findIndex(isActive)
+    scrollRef.value.children[index]?.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'nearest',
+      block: 'nearest'
+    })
+  }
+
+  // 左键：切换路由（关闭按钮已 stop，不会触达这里）
+  const switchTo = (item) => {
+    router.push({
+      name: item.name,
+      query: item.query,
+      params: item.params
+    })
+  }
+
+  // 中键：关闭标签。保留唯一首页不可关的守卫与 preventDefault（抑制浏览器自动滚动）
+  const middleCloseTab = (e, item) => {
+    if (e.button !== 1) return
+    if (!isClosable(item)) return
+    e.preventDefault()
+    removeTab(getFmtString(item))
+  }
+
+  // 右键菜单打开时记录目标标签（替代旧的 e.srcElement.id.substring(4) DOM 取值）
+  const onContextMenuOpen = (open, item) => {
+    if (open) {
+      rightActive.value = getFmtString(item)
     }
   }
+
   const closeAll = () => {
     historys.value = [
       {
@@ -115,7 +157,6 @@
       }
     ]
     router.push({ name: defaultRouter.value })
-    contextMenuVisible.value = false
     sessionStorage.setItem('historys', JSON.stringify(historys.value))
   }
   const closeLeft = () => {
@@ -163,6 +204,14 @@
     router.push(right)
     sessionStorage.setItem('historys', JSON.stringify(historys.value))
   }
+
+  const contextMenuActions = [
+    { key: 'all', label: '关闭所有', handler: closeAll },
+    { key: 'left', label: '关闭左侧', handler: closeLeft },
+    { key: 'right', label: '关闭右侧', handler: closeRight },
+    { key: 'other', label: '关闭其他', handler: closeOther }
+  ]
+
   const isSame = (route1, route2) => {
     if (route1.name !== route2.name) {
       return false
@@ -198,18 +247,6 @@
     window.sessionStorage.setItem('activeValue', getFmtString(route))
   }
 
-  const historyMap = ref({})
-
-  const changeTab = (TabsPaneContext) => {
-    const name = TabsPaneContext?.props?.name
-    if (!name) return
-    const tab = historyMap.value[name]
-    router.push({
-      name: tab.name,
-      query: tab.query,
-      params: tab.params
-    })
-  }
   const removeTab = (tab) => {
     const index = historys.value.findIndex((item) => getFmtString(item) === tab)
     if (getFmtString(route) === tab) {
@@ -235,21 +272,6 @@
   }
 
   watch(
-    () => contextMenuVisible.value,
-    () => {
-      if (contextMenuVisible.value) {
-        document.body.addEventListener('click', () => {
-          contextMenuVisible.value = false
-        })
-      } else {
-        document.body.removeEventListener('click', () => {
-          contextMenuVisible.value = false
-        })
-      }
-    }
-  )
-
-  watch(
     () => route,
     (to) => {
       if (to.name === 'Login' || to.name === 'Reload') {
@@ -267,16 +289,15 @@
     () => historys.value,
     () => {
       sessionStorage.setItem('historys', JSON.stringify(historys.value))
-      historyMap.value = {}
-      historys.value.forEach((item) => {
-        historyMap.value[getFmtString(item)] = item
-      })
       emitter.emit('setKeepAlive', historys.value)
     },
     {
       deep: true
     }
   )
+
+  // 激活标签变化时滚动到可视区
+  watch(activeValue, scrollActiveIntoView)
 
   const initPage = () => {
     // 全局监听 关闭当前页面函数
@@ -356,66 +377,11 @@
     emitter.off('collapse')
     emitter.off('mobile')
   })
-
-  const middleCloseTab = (e) => {
-    if (historys.value.length === 1 && route.name === defaultRouter.value) {
-      return false
-    }
-    let id = ''
-    if (e.srcElement.nodeName === 'SPAN') {
-      id = e.srcElement.offsetParent.id
-    } else {
-      id = e.srcElement.id
-    }
-    if (id) {
-      removeTab(id.substring(4))
-    }
-  }
 </script>
 
-<style lang="scss" scoped>
-  .contextmenu {
-    @apply bg-white dark:bg-slate-900 w-28 m-0 py-2.5 px-0 border border-gray-200 text-sm shadow-md rounded absolute z-50 border-solid dark:border-slate-800;
-  }
-
-  .contextmenu li {
-    @apply text-slate-700 dark:text-slate-200 text-base list-none px-4 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer;
-  }
-
-  $base-tag-item-height: 4rem;
-
-  .gva-tabs {
-    ::v-deep(.el-tabs--card > .el-tabs__header) {
-      border: none;
-    }
-    ::v-deep(.el-tabs__nav-scroll) {
-      padding: 4px 4px;
-    }
-
-    ::v-deep(.el-tabs__nav) {
-      border: 0;
-    }
-
-    ::v-deep(.el-tabs__header) {
-      border-bottom: 0;
-    }
-    ::v-deep(.el-tabs__item) {
-      box-sizing: border-box;
-      border: 1px solid var(--el-border-color-darker);
-      border-radius: 2px;
-      margin-right: 5px;
-      margin-left: 2px;
-      transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
-      height: 34px;
-      &.is-active {
-        border: 1px solid var(--el-color-primary);
-      }
-    }
-    ::v-deep(.el-tabs__item):first-child {
-      border: 1px solid var(--el-border-color-darker);
-      &.is-active {
-        border: 1px solid var(--el-color-primary);
-      }
-    }
+<style scoped>
+  /* 横向滚动条不占位（保留可滚动，仅隐藏滚动条本体） */
+  .gva-tabs::-webkit-scrollbar {
+    height: 0;
   }
 </style>

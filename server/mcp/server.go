@@ -14,10 +14,13 @@ func NewMCPServer() *mcpServer.MCPServer {
 	s := mcpServer.NewMCPServer(
 		config.Name,
 		config.Version,
+		mcpServer.WithPromptCapabilities(false),
 	)
 
 	global.GVA_MCP_SERVER = s
 	RegisterAllTools(s)
+	registerDynamicTools(s)
+	registerDynamicPrompts(s)
 
 	return s
 }

@@ -1,146 +1,91 @@
 <template>
   <div class="h-full">
+    <!-- head：顶栏一级横向菜单 -->
     <div
       v-if="mode === 'head'"
-      class="bg-white h-[calc(100%-4px)] text-slate-700 dark:text-slate-300 mx-2 dark:bg-slate-900 flex items-center w-[calc(100vw-600px)] overflow-auto"
+      class="mx-2 flex h-[calc(100%-4px)] w-[calc(100vw-600px)] items-center text-base-text"
     >
-      <el-menu
-        :default-active="routerStore.topActive"
-        mode="horizontal"
-        class="!border-r-0 border-b-0 w-full flex gap-1 items-center box-border h-[calc(100%-1px)]"
-        unique-opened
-        @select="(index, _, ele) => selectMenuItem(index, _, ele, true)"
-      >
-        <template v-for="item in routerStore.topMenu">
-          <aside-component
-            v-if="!item.hidden"
-            :key="item.name"
-            :router-info="item"
-            mode="horizontal"
-          />
-        </template>
-      </el-menu>
+      <g-menu
+        orientation="horizontal"
+        :items="routerStore.topMenu"
+        :active="topActiveKey"
+        class="w-full"
+        @select="onTopSelect"
+      />
     </div>
+
+    <!-- normal：左侧二级纵向菜单（当前一级无二级时整块不渲染） -->
     <div
-      v-if="mode === 'normal'"
-      class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 shadow dark:shadow-gray-700"
-      :class="isCollapse ? '' : '  px-2'"
-      :style="{
-        width: layoutSideWidth + 'px'
-      }"
+      v-if="mode === 'normal' && showLeftAside"
+      class="relative flex h-full flex-col shadow-sider transition-[width] duration-300 ease-in-out"
+      :class="[surfaceClass, siderDarkClass]"
+      :style="{ width: layoutSideWidth + 'px' }"
     >
-      <el-scrollbar>
-        <el-menu
-          :collapse="isCollapse"
-          :collapse-transition="false"
-          :default-active="active"
-          class="!border-r-0 w-full"
-          unique-opened
-          @select="(index, _, ele) => selectMenuItem(index, _, ele, false)"
-        >
-          <template v-for="item in routerStore.leftMenu">
-            <aside-component
-              v-if="!item.hidden"
-              :key="item.name"
-              :router-info="item"
-            />
-          </template>
-        </el-menu>
+      <el-scrollbar class="flex-1">
+        <g-menu
+          :items="leftMenus"
+          :theme="menuTheme"
+          :collapsed="sideCollapse"
+          :active="activeKey"
+          v-model:open-keys="openKeys"
+          :item-height="settings.layout.sideItemHeight"
+          @select="navigate"
+        />
       </el-scrollbar>
-      <div
-        class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer"
-        :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
-        @click="toggleCollapse"
-      >
-        <el-icon v-if="!isCollapse">
-          <DArrowLeft />
-        </el-icon>
-        <el-icon v-else>
-          <DArrowRight />
-        </el-icon>
-      </div>
+      <collapse-bar />
     </div>
   </div>
 </template>
-<script setup>
-  import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
-  import { ref, provide, watchEffect, computed } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { useRouterStore } from '@/pinia/modules/router'
-  import { useAppStore } from '@/pinia'
-  import { storeToRefs } from 'pinia'
-  const appStore = useAppStore()
-  const { device, config } = storeToRefs(appStore)
 
-  defineOptions({
-    name: 'GvaAside'
-  })
+<script setup>
+  import { computed } from 'vue'
+  import { useRoute } from 'vue-router'
+  import { storeToRefs } from 'pinia'
+  import { useRouterStore } from '@/pinia/modules/router'
+  import { useAppStore, useThemeStore } from '@/pinia'
+  import { resolveActiveTop, visibleItems } from '@/core/componentLibrary/menu/shared'
+  import { useMenuActive, useMenuNavigation } from './composables/useMenu'
+  import { useSidebarTheme } from './composables/useSidebarTheme'
+  import { useSideWidth } from '@/hooks/useSideWidth'
+  import CollapseBar from './CollapseBar.vue'
+
+  defineOptions({ name: 'AsideCombinationMode' })
 
   defineProps({
-    mode: {
-      type: String,
-      default: 'normal'
-    }
+    mode: { type: String, default: 'normal' }
   })
 
+  const { sideCollapse } = storeToRefs(useAppStore())
+  const { settings } = storeToRefs(useThemeStore())
   const route = useRoute()
-  const router = useRouter()
   const routerStore = useRouterStore()
-  const isCollapse = ref(false)
-  const active = ref('')
-  const layoutSideWidth = computed(() => {
-    if (!isCollapse.value) {
-      return config.value.layout_side_width
-    } else {
-      return config.value.layout_side_collapsed_width
+
+  // 当前路由所属的一级菜单：左栏内容与顶栏高亮都从它派生，
+  // 直接读 asyncRouters（rootMenus），刷新 / 直达 / 跨一级切换都正确。
+  const activeName = computed(() => route.meta.activeName || route.name)
+  const activeTop = computed(() =>
+    resolveActiveTop(routerStore.rootMenus, activeName.value)
+  )
+  const topActiveKey = computed(() => activeTop.value?.name || '')
+  const leftMenus = computed(() => visibleItems(activeTop.value?.children))
+  const showLeftAside = computed(() => leftMenus.value.length > 0)
+
+  const { menuTheme, surfaceClass, siderDarkClass } = useSidebarTheme()
+  const { activeKey, openKeys } = useMenuActive(leftMenus, menuTheme)
+  const { navigate } = useMenuNavigation()
+  const { sideWidth: layoutSideWidth } = useSideWidth()
+
+  const isHttp = (s) =>
+    !!s && (s.indexOf('http://') > -1 || s.indexOf('https://') > -1)
+
+  // 顶栏一级点击：外链新开；否则跳到该一级下第一个可见子项（无子项则跳自身）
+  const onTopSelect = (index) => {
+    if (isHttp(index)) {
+      window.open(index, '_blank')
+      return
     }
-  })
-  watchEffect(() => {
-    active.value = route.meta.activeName || route.name
-  })
-
-  watchEffect(() => {
-    if (device.value === 'mobile') {
-      isCollapse.value = true
-    } else {
-      isCollapse.value = false
-    }
-  })
-
-  provide('isCollapse', isCollapse)
-
-  const selectMenuItem = (index, _, ele, top) => {
-    const query = {}
-    const params = {}
-    routerStore.routeMap[index]?.parameters &&
-      routerStore.routeMap[index]?.parameters.forEach((item) => {
-        if (item.type === 'query') {
-          query[item.key] = item.value
-        } else {
-          params[item.key] = item.value
-        }
-      })
-    if (index === route.name) return
-    if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-        window.open(index, '_blank')
-        return
-    }
-
-      if (!top) {
-        router.push({ name: index, query, params })
-        return
-      }
-      const leftMenu = routerStore.setLeftMenu(index)
-      if (!leftMenu) {
-        router.push({ name: index, query, params })
-        return;
-      }
-      const firstMenu = leftMenu.find((item) => !item.hidden && item.path.indexOf("http://") === -1 && item.path.indexOf("https://") === -1)
-      router.push({ name: firstMenu.name, query, params })
-
-  }
-
-  const toggleCollapse = () => {
-    isCollapse.value = !isCollapse.value
+    const top = routerStore.rootMenus.find((i) => i.name === index)
+    const first = visibleItems(top?.children).find((c) => !isHttp(c.path))
+    navigate(first ? first.name : index)
   }
 </script>

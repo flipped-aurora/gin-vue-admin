@@ -1,17 +1,17 @@
 <template>
   <div class="">
     <div class="flex items-center justify-between mb-2">
-      <div v-if="title" class="text-sm font-semibold tracking-tight text-black dark:text-white">
+      <div v-if="title" class="text-sm font-semibold tracking-tight text-base-text">
         {{ title }}
       </div>
       <slot v-else name="title" />
     </div>
     <div class="w-full relative">
       <div v-if="type !== 4">
-        <div class="mt-4 text-3xl font-mono text-black dark:text-white">
+        <div class="mt-4 text-3xl font-mono text-base-text">
           <el-statistic :value="268500" />
         </div>
-        <div class="mt-2 text-xs font-mono text-black/60 dark:text-white/60">
+        <div class="mt-2 text-xs font-mono text-muted-foreground">
           +80% <el-icon class="align-middle"><TopRight /></el-icon>
         </div>
       </div>

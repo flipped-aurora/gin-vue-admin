@@ -4,6 +4,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const MaxPageSize = 100
+
 // PageInfo Paging common input parameter structure
 type PageInfo struct {
 	Page     int    `json:"page" form:"page"`         // 页码
@@ -17,14 +19,29 @@ func (r *PageInfo) Paginate() func(db *gorm.DB) *gorm.DB {
 			r.Page = 1
 		}
 		switch {
-		case r.PageSize > 100:
-			r.PageSize = 100
+		case r.PageSize > MaxPageSize:
+			r.PageSize = MaxPageSize
 		case r.PageSize <= 0:
 			r.PageSize = 10
 		}
 		offset := (r.Page - 1) * r.PageSize
 		return db.Offset(offset).Limit(r.PageSize)
 	}
+}
+
+func (r *PageInfo) LimitOffset() (limit, offset int) {
+	limit = r.PageSize
+	if limit > MaxPageSize {
+		limit = MaxPageSize
+	}
+	if limit <= 0 {
+		return 0, 0
+	}
+	page := r.Page
+	if page <= 0 {
+		page = 1
+	}
+	return limit, limit * (page - 1)
 }
 
 // GetById Find by id structure

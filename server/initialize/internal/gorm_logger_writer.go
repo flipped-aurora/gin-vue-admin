@@ -1,41 +1,60 @@
 package internal
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	applog "github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"gorm.io/gorm/logger"
 )
 
-type Writer struct {
-	config config.GeneralDB
-	writer logger.Writer
+// GormLogger 实现 gorm logger.Interface，把 SQL 日志接到链式 logger（带 request_id）
+type GormLogger struct {
+	slowThreshold time.Duration
+	level         logger.LogLevel
 }
 
-func NewWriter(config config.GeneralDB) *Writer {
-	return &Writer{config: config}
+func NewGormLogger(cfg config.GeneralDB) *GormLogger {
+	return &GormLogger{slowThreshold: 200 * time.Millisecond, level: cfg.LogLevel()}
 }
 
-// Printf 格式化打印日志
-func (c *Writer) Printf(message string, data ...any) {
+func (g *GormLogger) LogMode(l logger.LogLevel) logger.Interface {
+	ng := *g
+	ng.level = l
+	return &ng
+}
 
-	// 当有日志时候均需要输出到控制台
-	fmt.Printf(message, data...)
+func (g *GormLogger) Info(ctx context.Context, msg string, data ...any) {
+	applog.WithCtx(ctx).Mod("sql").Info(fmt.Sprintf(msg, data...))
+}
 
-	// 当开启了zap的情况，会打印到日志记录
-	if c.config.LogZap {
-		switch c.config.LogLevel() {
-		case logger.Silent:
-			global.GVA_LOG.Debug(fmt.Sprintf(message, data...))
-		case logger.Error:
-			global.GVA_LOG.Error(fmt.Sprintf(message, data...))
-		case logger.Warn:
-			global.GVA_LOG.Warn(fmt.Sprintf(message, data...))
-		case logger.Info:
-			global.GVA_LOG.Info(fmt.Sprintf(message, data...))
-		default:
-			global.GVA_LOG.Info(fmt.Sprintf(message, data...))
-		}
+func (g *GormLogger) Warn(ctx context.Context, msg string, data ...any) {
+	applog.WithCtx(ctx).Mod("sql").Warn(fmt.Sprintf(msg, data...))
+}
+
+func (g *GormLogger) Error(ctx context.Context, msg string, data ...any) {
+	applog.WithCtx(ctx).Mod("sql").Error(fmt.Sprintf(msg, data...))
+}
+
+func (g *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (string, int64), err error) {
+	if g.level <= logger.Silent {
 		return
+	}
+	elapsed := time.Since(begin)
+	sql, rows := fc()
+	b := applog.WithCtx(ctx).Mod("sql").
+		Field("sql", sql).
+		Field("rows", rows).
+		Field("elapsed_ms", elapsed.Milliseconds())
+	switch {
+	case err != nil && g.level >= logger.Error && !errors.Is(err, logger.ErrRecordNotFound):
+		b.Err(err).Error("SQL 执行错误")
+	case elapsed > g.slowThreshold && g.level >= logger.Warn:
+		b.Warn("SQL 慢查询")
+	case g.level >= logger.Info:
+		b.Info("SQL")
 	}
 }

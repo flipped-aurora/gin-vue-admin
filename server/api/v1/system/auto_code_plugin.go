@@ -10,8 +10,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type AutoCodePluginApi struct{}
@@ -68,7 +68,7 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)
 	if err != nil {
-		global.GVA_LOG.Error("打包失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("打包失败!")
 		response.FailWithMessage("打包失败"+err.Error(), c)
 		return
 	}
@@ -90,9 +90,9 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitMenu(menuInfo)
+	err = autoCodePluginService.InitMenu(c.Request.Context(), menuInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化Menu失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化Menu失败!")
 		response.FailWithMessage("创建初始化Menu失败"+err.Error(), c)
 		return
 	}
@@ -114,9 +114,9 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitAPI(apiInfo)
+	err = autoCodePluginService.InitAPI(c.Request.Context(), apiInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化API失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化API失败!")
 		response.FailWithMessage("创建初始化API失败"+err.Error(), c)
 		return
 	}
@@ -138,9 +138,9 @@ func (a *AutoCodePluginApi) InitDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitDictionary(dictInfo)
+	err = autoCodePluginService.InitDictionary(c.Request.Context(), dictInfo)
 	if err != nil {
-		global.GVA_LOG.Error("创建初始化Dictionary失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化Dictionary失败!")
 		response.FailWithMessage("创建初始化Dictionary失败"+err.Error(), c)
 		return
 	}
@@ -208,9 +208,9 @@ func (a *AutoCodePluginApi) GetPluginList(c *gin.Context) {
 func (a *AutoCodePluginApi) Remove(c *gin.Context) {
 	pluginName := c.Query("pluginName")
 	pluginType := c.Query("pluginType")
-	err := autoCodePluginService.Remove(pluginName, pluginType)
+	err := autoCodePluginService.Remove(c.Request.Context(), pluginName, pluginType)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}

@@ -50,7 +50,7 @@ import (
 // @accept    application/json
 // @Produce   application/json
 // @Param     data  body      systemReq.OrderSearch                                   true  "分页和筛选参数"
-// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "返回列表、总数、分页信息"
+// @Success   200   {object}  response.Response{data=response.PageResult{list=[]system.Order},msg=string}  "返回列表、总数、分页信息"
 // @Router    /order/getOrderList [post]
 func (o *OrderApi) GetOrderList(c *gin.Context) {
 	var pageInfo systemReq.OrderSearch
@@ -59,7 +59,7 @@ func (o *OrderApi) GetOrderList(c *gin.Context) {
 		return
 	}
 
-	list, total, err := orderService.GetOrderList(pageInfo)
+	list, total, err := orderService.GetOrderList(c.Request.Context(), pageInfo)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 		return
@@ -99,5 +99,5 @@ func (o *OrderApi) GetOrderList(c *gin.Context) {
 - `server/api/v1/system/sys_user.go`
 - `server/api/v1/system/sys_dictionary.go`
 - `server/api/v1/system/auto_code_mcp.go`
-- `server/api/v1/example/exa_file_upload_download.go`
+- `server/api/v1/media/media_file_upload_download.go`
 - `server/utils/claims.go`

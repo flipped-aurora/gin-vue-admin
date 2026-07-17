@@ -1,0 +1,24 @@
+{
+  "order": 4,
+  "version": 3,
+  "minMainVersion": "2.9.0",
+  "name": "暗夜深色",
+  "builtin": true,
+  "theme": {
+    "themeScheme": "dark",
+    "themeColor": "#2264f2",
+    "themeRadius": 0.5,
+    "otherColor": {
+      "info": "#909399",
+      "success": "#60C041",
+      "warning": "#F9901F",
+      "error": "#F56C6C"
+    },
+    "menu": {
+      "theme": "dark"
+    },
+    "card": {
+      "mode": "shadow"
+    }
+  }
+}

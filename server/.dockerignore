@@ -1,0 +1,31 @@
+# 避免 Dockerfile 的 `COPY . .` 把本地构建产物 / 运行时数据拉进 builder 层
+# （此前会把数百 MB 的 *.exe、日志、上传文件、工作树 config.yaml 带进镜像）
+
+# 编译产物 / 调试二进制
+*.exe
+*.exe~
+__debug_bin*
+/server
+/gva
+/gvaai
+/mcp
+/mcp-cli
+/.gva-build/
+/gvaruntime/
+
+# 日志与运行时数据
+/log/
+/latest_log/
+/uploads/
+
+# 本地配置（保留 config.docker.yaml 供镜像运行时使用）
+*.local.yaml
+/config.yaml
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 杂项
+.DS_Store

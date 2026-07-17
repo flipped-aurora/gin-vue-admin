@@ -5,9 +5,10 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -36,7 +37,7 @@ func Gorm() *gorm.DB {
 
 func RegisterTables() {
 	if global.GVA_CONFIG.System.DisableAutoMigrate {
-		global.GVA_LOG.Info("auto-migrate is disabled, skipping table registration")
+		logger.Bg().Mod("system").Info("auto-migrate is disabled, skipping table registration")
 		return
 	}
 
@@ -49,6 +50,10 @@ func RegisterTables() {
 		system.SysBaseMenu{},
 		system.JwtBlacklist{},
 		system.SysAuthority{},
+		system.SysDepartment{},
+		system.SysPosition{},
+		system.SysDataAccessLog{},
+		system.SysAuthorityDepartment{},
 		system.SysDictionary{},
 		system.SysOperationRecord{},
 		system.SysAutoCodeHistory{},
@@ -61,27 +66,30 @@ func RegisterTables() {
 		system.Condition{},
 		system.JoinTemplate{},
 		system.SysParams{},
+		system.SysSecurityConfig{},
 		system.SysVersion{},
 		system.SysError{},
 		system.SysApiToken{},
 		system.SysLoginLog{},
+		system.SysTimedTask{},
+		system.SysTimedTaskLog{},
 
-		example.ExaFile{},
 		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
-		example.ExaAttachmentCategory{},
+		media.MediaUpload{},
+		media.MediaUploadChunk{},
+		media.FileUploadAndDownload{},
+		media.AttachmentCategory{},
 	)
 	if err != nil {
-		global.GVA_LOG.Error("register table failed", zap.Error(err))
+		logger.Bg().Mod("system").Err(err).Error("register table failed")
 		os.Exit(1)
 	}
 
 	err = bizModel()
 
 	if err != nil {
-		global.GVA_LOG.Error("register biz_table failed", zap.Error(err))
+		logger.Bg().Mod("system").Err(err).Error("register biz_table failed")
 		os.Exit(1)
 	}
-	global.GVA_LOG.Info("register table success")
+	logger.Bg().Mod("system").Info("register table success")
 }

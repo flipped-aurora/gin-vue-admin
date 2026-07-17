@@ -24,6 +24,15 @@ function dynamicImport(dynamicViewsModules, component) {
     return k === component
   })
   const matchKey = matchKeys[0]
-
-  return dynamicViewsModules[matchKey]
+  const matched = dynamicViewsModules[matchKey]
+  // 找不到组件时返回占位组件，避免 component 为 undefined 导致路由白屏
+  // （常见于数据库菜单记录指向已删除的组件，如历史遗留的 aiWorkflow）
+  if (!matched) {
+    console.warn(`[asyncRouter] 未找到组件: ${component}，已使用占位组件代替`)
+    return {
+      name: 'MissingComponentPlaceholder',
+      render: () => null
+    }
+  }
+  return matched
 }

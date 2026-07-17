@@ -1,5 +1,5 @@
 <template>
-  <div class="system">
+  <div class="gva-table-box">
     <el-form ref="form" :model="config" label-width="240px">
       <!--  System start  -->
       <el-tabs v-model="activeNames">
@@ -985,7 +985,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-form>
-    <div class="mt-4">
+    <div class="mt-4 flex justify-end">
       <el-button type="primary" @click="update">立即更新 </el-button>
       <el-button type="primary" @click="reload">重载服务 </el-button>
     </div>
@@ -1126,10 +1126,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .system {
-    @apply bg-white p-9 rounded dark:bg-slate-900;
-    h2 {
-      @apply p-2.5 my-2.5 text-lg shadow;
-    }
+  h2 {
+    @apply p-2.5 my-2.5 text-lg shadow;
   }
 </style>

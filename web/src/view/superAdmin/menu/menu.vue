@@ -72,7 +72,7 @@
           min-width="360"
           prop="component"
         />
-        <el-table-column min-width="360" align="left" fixed="right" label="操作" :min-width="appStore.operateMinWith">
+        <el-table-column align="left" fixed="right" label="操作" :min-width="appStore.operateMinWith">
           <template #default="scope">
             <el-button
               type="primary"
@@ -118,7 +118,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ dialogTitle }}</span>
+          <span class="text-base">{{ dialogTitle }}</span>
           <div>
             <el-button @click="closeDialog"> 取 消 </el-button>
             <el-button type="primary" @click="enterDialog"> 确 定 </el-button>
@@ -139,7 +139,7 @@
           :rules="rules"
           label-position="top"
         >
-          <el-row class="w-full">
+          <el-row class="w-full" :gutter="16">
             <el-col :span="24">
               <el-form-item label="文件路径" prop="component">
                 <components-cascader
@@ -160,7 +160,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row class="w-full">
+          <el-row class="w-full" :gutter="16">
             <el-col :span="12">
               <el-form-item label="展示名称" prop="meta.title">
                 <el-input 
@@ -185,7 +185,7 @@
       </div>
        
       <!-- 路由配置区域 -->
-      <div class="border-b border-gray-200">
+      <div class="border-b border-gray-200 mt-2">
         <h3 class="font-semibold text-gray-700 mb-4">路由配置</h3>
         <el-form
           :inline="true"
@@ -193,7 +193,7 @@
           :rules="rules"
           label-position="top"
         >
-           <el-row class="w-full">
+           <el-row class="w-full" :gutter="16">
              <el-col :span="12">
                <el-form-item label="父节点ID">
                  <el-cascader
@@ -240,14 +240,14 @@
        
       <!-- 显示设置区域 -->
       <div class="border-b border-gray-200">
-        <h3 class="font-semibold text-gray-700 mb-4">显示设置</h3>
+        <h3 class="font-semibold text-gray-700 mb-4 mt-2">显示设置</h3>
         <el-form
           :inline="true"
           :model="form"
           :rules="rules"
           label-position="top"
         >
-           <el-row class="w-full">
+           <el-row class="w-full" :gutter="16">
               <el-col :span="8">
                 <el-form-item label="图标" prop="meta.icon">
                   <icon v-model="form.meta.icon" />
@@ -279,7 +279,7 @@
       </div>
         
       <!-- 高级配置区域 -->
-      <div class="border-b border-gray-200">
+      <div class="border-b border-gray-200 mt-2">
         <h3 class="font-semibold text-gray-700 mb-4">高级配置</h3>
         <el-form
           :inline="true"
@@ -287,7 +287,7 @@
           :rules="rules"
           label-position="top"
         >
-            <el-row class="w-full">
+            <el-row class="w-full" gutter="16">
               <el-col :span="12">
                 <el-form-item prop="meta.activeName">
                   <template #label>
@@ -322,7 +322,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-             <el-row class="w-full">
+             <el-row class="w-full" :gutter="16">
                <el-col :span="8">
                  <el-form-item label="CloseTab" prop="meta.closeTab">
                    <el-select
@@ -391,7 +391,7 @@
       </div>
           
       <!-- 菜单参数配置区域 -->
-      <div class="border-b border-gray-200">
+      <div class="mt-2">
         <div class="flex justify-between items-center mb-4">
           <h3 class="font-semibold text-gray-700">菜单参数配置</h3>
           <el-button type="primary" size="small" @click="addParameter(form)">
@@ -526,7 +526,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">分配角色 - {{ assignMenuRow.meta?.title }}</span>
+          <span class="text-base">分配角色 - {{ assignMenuRow.meta?.title }}</span>
           <div>
             <el-button @click="assignRoleDrawerVisible = false">取 消</el-button>
             <el-button type="primary" :loading="assignRoleSubmitting" @click="confirmAssignRole">确 定</el-button>

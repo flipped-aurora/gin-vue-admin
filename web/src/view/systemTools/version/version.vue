@@ -100,7 +100,7 @@
       :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">创建发版</span>
+          <span class="text-base">创建发版</span>
           <div>
             <el-button @click="closeExportDialog">取消</el-button>
             <el-button type="primary" @click="handleExport" :loading="exportLoading">创建发版</el-button>
@@ -204,7 +204,7 @@
       :show-close="false">
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">导入版本</span>
+          <span class="text-base">导入版本</span>
           <div>
             <el-button @click="closeImportDialog">取消</el-button>
             <el-button type="primary" @click="handleImport" :loading="importLoading"

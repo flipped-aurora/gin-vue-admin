@@ -7,6 +7,9 @@
 .env.local
 .env.*.local
 
+# 本地私密工作区: AI 点触测试 token 等本机凭证, 永不入库(见 aiDoc/frontend-backend/page-click-testing.md)
+/.local/
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -28,6 +31,7 @@ rm_file/
 /server/latest_log
 /server/__debug_bin*
 /server/*.local.yaml
+/server/.gva-build/
 server/uploads/
 
 *.iml

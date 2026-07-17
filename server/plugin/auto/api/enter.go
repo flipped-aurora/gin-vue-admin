@@ -1,5 +1,6 @@
 package api
 
-type ApiGroup struct{}
+type ApiGroup struct {
+}
 
 var ApiGroupApp = new(ApiGroup)

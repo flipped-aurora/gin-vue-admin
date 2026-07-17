@@ -3,31 +3,33 @@ package client
 import (
 	"context"
 	"fmt"
-	"github.com/mark3labs/mcp-go/mcp"
+	"slices"
 	"testing"
+
+	"github.com/mark3labs/mcp-go/mcp"
 )
 
 // 测试 MCP 客户端连接
 func TestMcpClientConnection(t *testing.T) {
 	c, err := NewClient("http://localhost:8888/sse", "test-client", "1.0.0", "gin-vue-admin MCP服务")
-	defer c.Close()
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatal(err)
 	}
+	defer c.Close()
 }
 
 func TestTools(t *testing.T) {
 	t.Run("currentTime", func(t *testing.T) {
 		c, err := NewClient("http://localhost:8888/sse", "test-client", "1.0.0", "gin-vue-admin MCP服务")
-		defer c.Close()
 		if err != nil {
 			t.Fatalf("Failed to create client: %v", err)
 		}
+		defer c.Close()
 		ctx := context.Background()
 
 		request := mcp.CallToolRequest{}
 		request.Params.Name = "currentTime"
-		request.Params.Arguments = map[string]interface{}{
+		request.Params.Arguments = map[string]any{
 			"timezone": "UTC+8",
 		}
 
@@ -49,10 +51,10 @@ func TestTools(t *testing.T) {
 	t.Run("getNickname", func(t *testing.T) {
 
 		c, err := NewClient("http://localhost:8888/sse", "test-client", "1.0.0", "gin-vue-admin MCP服务")
-		defer c.Close()
 		if err != nil {
 			t.Fatalf("Failed to create client: %v", err)
 		}
+		defer c.Close()
 		ctx := context.Background()
 
 		// Initialize
@@ -70,7 +72,7 @@ func TestTools(t *testing.T) {
 
 		request := mcp.CallToolRequest{}
 		request.Params.Name = "getNickname"
-		request.Params.Arguments = map[string]interface{}{
+		request.Params.Arguments = map[string]any{
 			"username": "admin",
 		}
 
@@ -92,10 +94,10 @@ func TestTools(t *testing.T) {
 
 func TestGetTools(t *testing.T) {
 	c, err := NewClient("http://localhost:8888/sse", "test-client", "1.0.0", "gin-vue-admin MCP服务")
-	defer c.Close()
 	if err != nil {
 		t.Fatalf("Failed to create client: %v", err)
 	}
+	defer c.Close()
 	ctx := context.Background()
 
 	toolsRequest := mcp.ListToolsRequest{}
@@ -115,11 +117,8 @@ func TestGetTools(t *testing.T) {
 			for paramName, prop := range tool.InputSchema.Properties {
 				required := "否"
 				// 检查参数是否在必填列表中
-				for _, reqField := range tool.InputSchema.Required {
-					if reqField == paramName {
-						required = "是"
-						break
-					}
+				if slices.Contains(tool.InputSchema.Required, paramName) {
+					required = "是"
 				}
 				fmt.Printf("  - %s (类型: %s, 描述: %s, 必填: %s)\n",
 					paramName, prop.(map[string]any)["type"], prop.(map[string]any)["description"], required)

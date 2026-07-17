@@ -2,7 +2,7 @@ import { asyncRouterHandle } from '@/utils/asyncRouter'
 import { emitter } from '@/utils/bus.js'
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import pathInfo from '@/pathInfo.json'
 import {useRoute} from "vue-router";
 import {config} from "@/core/config.js";
@@ -192,11 +192,15 @@ export const useRouterStore = defineStore('router', () => {
     return true
   }
 
+  // 根级菜单（一级菜单树）：各布局取菜单数据的单一入口，避免 asyncRouters[0].children 散点解构。
+  const rootMenus = computed(() => asyncRouters.value[0]?.children || [])
+
   return {
     topActive,
     setLeftMenu,
     topMenu,
     leftMenu,
+    rootMenus,
     asyncRouters,
     keepAliveRouters,
     asyncRouterFlag,

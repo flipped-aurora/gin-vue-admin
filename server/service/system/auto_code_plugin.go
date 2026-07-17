@@ -274,7 +274,7 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 	return filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fileName), nil
 }
 
-func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
+func (s *autoCodePlugin) InitMenu(ctx context.Context, menuInfo request.InitMenu) (err error) {
 	menuPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", menuInfo.PlugName, "initialize", "menu.go")
 	src, err := os.ReadFile(menuPath)
 	if err != nil {
@@ -301,7 +301,7 @@ func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
 	}
 
 	// 查询菜单及其关联的参数和按钮
-	err = global.GVA_DB.Preload("Parameters").Preload("MenuBtn").Find(&menus, "id in (?)", menuInfo.Menus).Error
+	err = global.GVA_DB.WithContext(ctx).Preload("Parameters").Preload("MenuBtn").Find(&menus, "id in (?)", menuInfo.Menus).Error
 	if err != nil {
 		return err
 	}
@@ -317,7 +317,7 @@ func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
 	return nil
 }
 
-func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
+func (s *autoCodePlugin) InitAPI(ctx context.Context, apiInfo request.InitApi) (err error) {
 	apiPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", apiInfo.PlugName, "initialize", "api.go")
 	src, err := os.ReadFile(apiPath)
 	if err != nil {
@@ -327,7 +327,7 @@ func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
 	astFile, err := parser.ParseFile(fileSet, "", src, 0)
 	arrayAst := ast.FindArray(astFile, "model", "SysApi")
 	var apis []system.SysApi
-	err = global.GVA_DB.Find(&apis, "id in (?)", apiInfo.APIs).Error
+	err = global.GVA_DB.WithContext(ctx).Find(&apis, "id in (?)", apiInfo.APIs).Error
 	if err != nil {
 		return err
 	}
@@ -342,7 +342,7 @@ func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
 	return nil
 }
 
-func (s *autoCodePlugin) InitDictionary(dictInfo request.InitDictionary) (err error) {
+func (s *autoCodePlugin) InitDictionary(ctx context.Context, dictInfo request.InitDictionary) (err error) {
 	dictPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", dictInfo.PlugName, "initialize", "dictionary.go")
 	src, err := os.ReadFile(dictPath)
 	if err != nil {
@@ -352,7 +352,7 @@ func (s *autoCodePlugin) InitDictionary(dictInfo request.InitDictionary) (err er
 	astFile, err := parser.ParseFile(fileSet, "", src, 0)
 	arrayAst := ast.FindArray(astFile, "model", "SysDictionary")
 	var dictionaries []system.SysDictionary
-	err = global.GVA_DB.Preload("SysDictionaryDetails").Find(&dictionaries, "id in (?)", dictInfo.Dictionaries).Error
+	err = global.GVA_DB.WithContext(ctx).Preload("SysDictionaryDetails").Find(&dictionaries, "id in (?)", dictInfo.Dictionaries).Error
 	if err != nil {
 		return err
 	}
@@ -367,7 +367,7 @@ func (s *autoCodePlugin) InitDictionary(dictInfo request.InitDictionary) (err er
 	return nil
 }
 
-func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error) {
+func (s *autoCodePlugin) Remove(ctx context.Context, pluginName string, pluginType string) (err error) {
 	// 1. 删除前端代码
 	if pluginType == "web" || pluginType == "full" {
 		webDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", pluginName)
@@ -392,17 +392,23 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 	// 通过utils 获取 api 菜单 字典
 	apis, menus, dicts := pluginUtils.GetPluginData(pluginName)
 
+	// DB 清理阶段脱离请求取消:上面 1/2 的文件删除不可逆且已完成,若客户端此刻
+	// 断连,请求 ctx 取消会让下面的清理全部快速失败(循环内错误只记日志不中断),
+	// 菜单/API/字典静默残留;且进程重启后插件不再注册,GetPluginData 拿不到
+	// 数据,孤儿再也无法通过 Remove 清掉。WithoutCancel 保留链路字段、剥离取消。
+	cleanupCtx := context.WithoutCancel(ctx)
+
 	// 3. 删除菜单 (递归删除)
 	if len(menus) > 0 {
 		for _, menu := range menus {
 			var dbMenu system.SysBaseMenu
-			if err := global.GVA_DB.Where("name = ?", menu.Name).First(&dbMenu).Error; err == nil {
+			if err := global.GVA_DB.WithContext(cleanupCtx).Where("name = ?", menu.Name).First(&dbMenu).Error; err == nil {
 				// 获取该菜单及其所有子菜单的ID
 				var menuIds []int
-				GetMenuIds(dbMenu, &menuIds)
+				GetMenuIds(cleanupCtx, dbMenu, &menuIds)
 				// 逆序删除，先删除子菜单
 				for i := len(menuIds) - 1; i >= 0; i-- {
-					err := BaseMenuServiceApp.DeleteBaseMenu(menuIds[i])
+					err := BaseMenuServiceApp.DeleteBaseMenu(cleanupCtx, menuIds[i])
 					if err != nil {
 						zap.L().Error("删除菜单失败", zap.Int("id", menuIds[i]), zap.Error(err))
 					}
@@ -415,8 +421,8 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 	if len(apis) > 0 {
 		for _, api := range apis {
 			var dbApi system.SysApi
-			if err := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&dbApi).Error; err == nil {
-				err := ApiServiceApp.DeleteApi(dbApi)
+			if err := global.GVA_DB.WithContext(cleanupCtx).Where("path = ? AND method = ?", api.Path, api.Method).First(&dbApi).Error; err == nil {
+				err := ApiServiceApp.DeleteApi(cleanupCtx, dbApi)
 				if err != nil {
 					zap.L().Error("删除API失败", zap.String("path", api.Path), zap.Error(err))
 				}
@@ -428,8 +434,8 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 	if len(dicts) > 0 {
 		for _, dict := range dicts {
 			var dbDict system.SysDictionary
-			if err := global.GVA_DB.Where("type = ?", dict.Type).First(&dbDict).Error; err == nil {
-				err := DictionaryServiceApp.DeleteSysDictionary(dbDict)
+			if err := global.GVA_DB.WithContext(cleanupCtx).Where("type = ?", dict.Type).First(&dbDict).Error; err == nil {
+				err := DictionaryServiceApp.DeleteSysDictionary(cleanupCtx, dbDict)
 				if err != nil {
 					zap.L().Error("删除字典失败", zap.String("type", dict.Type), zap.Error(err))
 				}
@@ -440,13 +446,13 @@ func (s *autoCodePlugin) Remove(pluginName string, pluginType string) (err error
 	return nil
 }
 
-func GetMenuIds(menu system.SysBaseMenu, ids *[]int) {
+func GetMenuIds(ctx context.Context, menu system.SysBaseMenu, ids *[]int) {
 	*ids = append(*ids, int(menu.ID))
 	var children []system.SysBaseMenu
-	global.GVA_DB.Where("parent_id = ?", menu.ID).Find(&children)
+	global.GVA_DB.WithContext(ctx).Where("parent_id = ?", menu.ID).Find(&children)
 	for _, child := range children {
-        // 先递归收集子菜单
-		GetMenuIds(child, ids)
+		// 先递归收集子菜单
+		GetMenuIds(ctx, child, ids)
 	}
 }
 

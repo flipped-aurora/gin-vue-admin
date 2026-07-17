@@ -2,12 +2,12 @@
 // https://github.com/arco-design/arco-design-pro-vue/blob/main/arco-design-pro-vite/src/hooks/chart-option.ts
 
 import { computed } from 'vue'
-import { useAppStore } from '@/pinia'
+import { useThemeStore } from '@/pinia'
 
 export default function useChartOption(sourceOption) {
-  const appStore = useAppStore()
+  const themeStore = useThemeStore()
   const isDark = computed(() => {
-    return appStore.isDark
+    return themeStore.isDark
   })
   const chartOption = computed(() => {
     return sourceOption(isDark.value)

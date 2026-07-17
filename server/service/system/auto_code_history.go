@@ -17,8 +17,7 @@ import (
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	request "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
-	"go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 var AutocodeHistory = new(autoCodeHistory)
@@ -52,9 +51,9 @@ func (s *autoCodeHistory) First(ctx context.Context, info common.GetById) (strin
 // Repeat 检测重复
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autoCodeHistory) Repeat(businessDB, structName, abbreviation, Package string) bool {
+func (s *autoCodeHistory) Repeat(ctx context.Context, businessDB, structName, abbreviation, Package string) bool {
 	var count int64
-	global.GVA_DB.Model(&model.SysAutoCodeHistory{}).Where("business_db = ? and (struct_name = ? OR abbreviation = ?) and package = ? and flag = ?", businessDB, structName, abbreviation, Package, 0).Count(&count).Debug()
+	global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("business_db = ? and (struct_name = ? OR abbreviation = ?) and package = ? and flag = ?", businessDB, structName, abbreviation, Package, 0).Count(&count)
 	return count > 0
 }
 
@@ -63,31 +62,31 @@ func (s *autoCodeHistory) Repeat(businessDB, structName, abbreviation, Package s
 // Author [songzhibin97](https://github.com/songzhibin97)
 func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHistoryRollBack) error {
 	var history model.SysAutoCodeHistory
-	err := global.GVA_DB.Where("id = ?", info.ID).First(&history).Error
+	err := global.GVA_DB.WithContext(ctx).Where("id = ?", info.ID).First(&history).Error
 	if err != nil {
 		return err
 	}
 	if history.ExportTemplateID != 0 {
-		err = global.GVA_DB.Delete(&model.SysExportTemplate{}, "id = ?", history.ExportTemplateID).Error
+		err = global.GVA_DB.WithContext(ctx).Delete(&model.SysExportTemplate{}, "id = ?", history.ExportTemplateID).Error
 		if err != nil {
 			return err
 		}
 	}
-	if info.DeleteApi {
-		ids := info.ApiIds(history)
-		err = ApiServiceApp.DeleteApisByIds(ids)
-		if err != nil {
-			global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
-		}
-	} // 清除API表
+		if info.DeleteApi {
+			ids := info.ApiIds(history)
+			err = ApiServiceApp.DeleteApisByIds(ctx, ids)
+			if err != nil {
+				logger.WithCtx(ctx).Mod("biz").Err(err).Error("ClearTag DeleteApiByIds:")
+			}
+		} // 清除API表
 	if info.DeleteMenu {
-		err = BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID))
+		err = BaseMenuServiceApp.DeleteBaseMenu(ctx, int(history.MenuID))
 		if err != nil {
 			return errors.Wrap(err, "删除菜单失败!")
 		}
 	} // 清除菜单表
 	if info.DeleteTable {
-		err = s.DropTable(history.BusinessDB, history.Table)
+		err = s.DropTable(ctx, history.BusinessDB, history.Table)
 		if err != nil {
 			return errors.Wrap(err, "删除表失败!")
 		}
@@ -208,10 +207,10 @@ func (s *autoCodeHistory) GetList(ctx context.Context, info common.PageInfo) (li
 
 // DropTable 获取指定数据库和指定数据表的所有字段名,类型值等
 // @author: [piexlmax](https://github.com/piexlmax)
-func (s *autoCodeHistory) DropTable(BusinessDb, tableName string) error {
+func (s *autoCodeHistory) DropTable(ctx context.Context, BusinessDb, tableName string) error {
 	if BusinessDb != "" {
-		return global.MustGetGlobalDBByDBName(BusinessDb).Exec("DROP TABLE " + tableName).Error
+		return global.MustGetGlobalDBByDBName(BusinessDb).WithContext(ctx).Exec("DROP TABLE " + tableName).Error
 	} else {
-		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
+		return global.GVA_DB.WithContext(ctx).Exec("DROP TABLE " + tableName).Error
 	}
 }

@@ -4,7 +4,7 @@
       <el-table-column prop="name" label="插件标题" show-overflow-tooltip width="200">
         <template #default="{ row }">
           <a
-            class="text-black dark:text-white decoration-black/20 dark:decoration-white/20 hover:text-active"
+            class="text-base-text decoration-black/20 dark:decoration-white/20 hover:text-active"
             :href="`https://plugin.gin-vue-admin.com/details/${row.ID}`"
             target="_blank"
           >{{ row.name }}</a>

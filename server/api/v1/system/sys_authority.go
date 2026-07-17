@@ -7,9 +7,9 @@ import (
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type AuthorityApi struct{}
@@ -41,14 +41,14 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		authority.ParentId = utils.Pointer(utils.GetUserAuthorityId(c))
 	}
 
-	if authBack, err = authorityService.CreateAuthority(authority); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+	if authBack, err = authorityService.CreateAuthority(c.Request.Context(), authority); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
 		response.FailWithMessage("创建失败"+err.Error(), c)
 		return
 	}
 	err = casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建成功，权限刷新失败。")
 		response.FailWithMessage("创建成功，权限刷新失败。"+err.Error(), c)
 		return
 	}
@@ -82,9 +82,9 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 		return
 	}
 	adminAuthorityID := utils.GetUserAuthorityId(c)
-	authBack, err := authorityService.CopyAuthority(adminAuthorityID, copyInfo)
+	authBack, err := authorityService.CopyAuthority(c.Request.Context(), adminAuthorityID, copyInfo)
 	if err != nil {
-		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("拷贝失败!")
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
 		return
 	}
@@ -112,8 +112,8 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 		return
 	}
 	// 删除角色之前需要判断是否有用户正在使用此角色
-	if err = authorityService.DeleteAuthority(&authority); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+	if err = authorityService.DeleteAuthority(c.Request.Context(), &authority); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}
@@ -142,9 +142,9 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	authority, err := authorityService.UpdateAuthority(auth)
+	authority, err := authorityService.UpdateAuthority(c.Request.Context(), auth)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
 		response.FailWithMessage("更新失败"+err.Error(), c)
 		return
 	}
@@ -162,44 +162,66 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 // @Router    /authority/getAuthorityList [post]
 func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	authorityID := utils.GetUserAuthorityId(c)
-	list, err := authorityService.GetAuthorityInfoList(authorityID)
+	list, err := authorityService.GetAuthorityInfoList(c.Request.Context(), authorityID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败"+err.Error(), c)
 		return
 	}
 	response.OkWithDetailed(list, "获取成功", c)
 }
 
-// SetDataAuthority
+// SetDataScope
 // @Tags      Authority
-// @Summary   设置角色资源权限
+// @Summary   设置角色数据范围(数据权限)
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      system.SysAuthority            true  "设置角色资源权限"
-// @Success   200   {object}  response.Response{msg=string}  "设置角色资源权限"
-// @Router    /authority/setDataAuthority [post]
-func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
-	var auth system.SysAuthority
-	err := c.ShouldBindJSON(&auth)
-	if err != nil {
+// @Param     data  body      systemReq.SetDataScope         true  "角色ID, 数据范围"
+// @Success   200   {object}  response.Response{msg=string}  "设置角色数据范围"
+// @Router    /authority/setDataScope [post]
+func (a *AuthorityApi) SetDataScope(c *gin.Context) {
+	var req systemReq.SetDataScope
+	if err := c.ShouldBindJSON(&req); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(auth, utils.AuthorityIdVerify)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+	if req.AuthorityId == 0 {
+		response.FailWithMessage("角色ID不能为空", c)
 		return
 	}
-	adminAuthorityID := utils.GetUserAuthorityId(c)
-	err = authorityService.SetDataAuthority(adminAuthorityID, auth)
-	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+	if err := authorityService.SetDataScope(c.Request.Context(), req.AuthorityId, req.DataScope, req.DeptIds); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}
 	response.OkWithMessage("设置成功", c)
+}
+
+// GetDataScopeDepts
+// @Tags      Authority
+// @Summary   获取角色自定义部门集(数据权限第5档)
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     authorityId  query     uint                                       true  "角色ID"
+// @Success   200          {object}  response.Response{data=[]uint,msg=string}  "获取成功"
+// @Router    /authority/getDataScopeDepts [get]
+func (a *AuthorityApi) GetDataScopeDepts(c *gin.Context) {
+	var req systemReq.SetDataScope
+	if err := c.ShouldBindQuery(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	ids, err := authorityService.GetDataScopeDepts(c.Request.Context(), req.AuthorityId)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		response.FailWithMessage("获取失败"+err.Error(), c)
+		return
+	}
+	if ids == nil {
+		ids = []uint{}
+	}
+	response.OkWithDetailed(ids, "获取成功", c)
 }
 
 // GetUsersByAuthority
@@ -217,9 +239,9 @@ func (a *AuthorityApi) GetUsersByAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	userIds, err := authorityService.GetUserIdsByAuthorityId(req.AuthorityId)
+	userIds, err := authorityService.GetUserIdsByAuthorityId(c.Request.Context(), req.AuthorityId)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
 		response.FailWithMessage("获取失败"+err.Error(), c)
 		return
 	}
@@ -248,8 +270,8 @@ func (a *AuthorityApi) SetRoleUsers(c *gin.Context) {
 		response.FailWithMessage("角色ID不能为空", c)
 		return
 	}
-	if err := authorityService.SetRoleUsers(req.AuthorityId, req.UserIds); err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+	if err := authorityService.SetRoleUsers(c.Request.Context(), req.AuthorityId, req.UserIds); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("设置失败!")
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}

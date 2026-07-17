@@ -27,6 +27,8 @@
 - `frontend-backend/boundary.md`: 前后端契约与字段类型约束
 - `frontend-backend/frontend-rules.md`: 前端代码、状态、路由、样式规范
 - `frontend-backend/frontend-utils.md`: `src/utils/` 工具库的强制复用规则
+- `frontend-backend/component-library.md`: reka-ui 基础组件库（位置 / 全局 `g-` 前缀 / 主题与构建约束）
+- `frontend-backend/theme-classnames.md`: 主题化语义 token 类名参考（取色来源 / 明暗表现 / 使用约定）
 - `examples/README.md`: 示例层总入口
 - `memory/project-memory.md`: 记忆层总入口
 - `memory/long-term/`: 长期记忆

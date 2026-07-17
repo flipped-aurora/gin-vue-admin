@@ -14,10 +14,10 @@
                 <span class="rounded-md px-2 py-0.5 text-[11px] font-semibold leading-4" :class="item.tagClass">
                   {{ item.typeTitle }}
                 </span>
-                <span class="shrink-0 text-[11px] text-black/45 dark:text-white/45">{{ item.time }}</span>
+                <span class="shrink-0 text-[11px] text-muted-foreground">{{ item.time }}</span>
               </div>
               <el-tooltip effect="light" :content="item.title" placement="top">
-                <p class="mt-1.5 line-clamp-2 text-sm text-black/75 dark:text-white/75">
+                <p class="mt-1.5 line-clamp-2 text-sm text-base-text">
                   {{ item.title }}
                 </p>
               </el-tooltip>

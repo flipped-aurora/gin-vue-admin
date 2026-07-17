@@ -1,0 +1,60 @@
+{
+  "order": 2,
+  "version": 3,
+  "minMainVersion": "2.9.0",
+  "name": "GVA 经典蓝",
+  "builtin": true,
+  "theme": {
+    "themeScheme": "auto",
+    "grayscale": false,
+    "colourWeakness": false,
+    "themeColor": "#3b82f6",
+    "themeRadius": 0.25,
+    "size": "default",
+    "otherColor": {
+      "info": "#909399",
+      "success": "#67c23a",
+      "warning": "#e6a23c",
+      "error": "#f56c6c"
+    },
+    "layout": {
+      "mode": "normal",
+      "sideWidth": 256,
+      "sideCollapsedWidth": 80,
+      "sideItemHeight": 48
+    },
+    "page": {
+      "transition": "slide"
+    },
+    "header": {
+      "breadcrumb": {
+        "visible": true,
+        "showIcon": false
+      },
+      "refresh": {
+        "visible": true
+      },
+      "search": {
+        "visible": true
+      },
+      "collapseButton": {
+        "visible": true
+      },
+      "bg": "",
+      "shadow": "sm"
+    },
+    "tab": {
+      "visible": true,
+      "bg": ""
+    },
+    "menu": {
+      "theme": "light"
+    },
+    "card": {
+      "mode": "border"
+    },
+    "watermark": {
+      "visible": false
+    }
+  }
+}

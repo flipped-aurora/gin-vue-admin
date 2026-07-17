@@ -68,7 +68,7 @@ func (a *PackageModuleEnter) Rollback(file *ast.File) error {
 				if v1.Tok == token.VAR && len(v1.Specs) == 0 {
 					_ = NewImport(a.ImportPath).Rollback(file)
 					if i == len(file.Decls) {
-						file.Decls = append(file.Decls[:i-1])
+						file.Decls = file.Decls[:i-1]
 						break
 					} // 空的var(), 如果不删除则会影响的注入变量, 因为识别不到*ast.ValueSpec
 					file.Decls = append(file.Decls[:i], file.Decls[i+1:]...)

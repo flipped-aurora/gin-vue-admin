@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="h-full space-y-5">
     <div>
-      <div class="mb-2 text-xs tracking-wide text-black/55 dark:text-white/55">常用入口</div>
+      <div class="mb-2 text-xs tracking-wide text-muted-foreground">常用入口</div>
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <button
           v-for="(item, index) in shortcuts"
@@ -11,17 +11,17 @@
           @click="toPath(item)"
         >
           <span
-            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition-colors group-hover:bg-[var(--el-color-primary)] group-hover:text-white dark:bg-slate-800 dark:text-slate-200"
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-muted text-base-text transition-colors group-hover:bg-[var(--el-color-primary)] group-hover:text-white"
           >
             <el-icon><component :is="item.icon" /></el-icon>
           </span>
-          <span class="min-w-0 text-sm text-black/75 dark:text-white/75">{{ item.title }}</span>
+          <span class="min-w-0 text-sm text-base-text">{{ item.title }}</span>
         </button>
       </div>
     </div>
 
     <div>
-      <div class="mb-2 text-xs tracking-wide text-black/55 dark:text-white/55">常用外链</div>
+      <div class="mb-2 text-xs tracking-wide text-muted-foreground">常用外链</div>
       <div class="space-y-2">
         <button
           v-for="(item, index) in recentVisits"
@@ -30,11 +30,11 @@
           type="button"
           @click="openLink(item)"
         >
-          <span class="flex items-center gap-2 text-sm text-black/75 dark:text-white/75">
+          <span class="flex items-center gap-2 text-sm text-base-text">
             <el-icon><component :is="item.icon" /></el-icon>
             {{ item.title }}
           </span>
-          <span class="text-xs text-black/45 dark:text-white/45">打开</span>
+          <span class="text-xs text-muted-foreground">打开</span>
         </button>
       </div>
     </div>

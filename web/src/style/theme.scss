@@ -1,0 +1,56 @@
+/* ============================================================
+ * 主题扩展样式：卡片盒子模式 / 全局圆角
+ * 由 <html> 上的 gva-card--* 类驱动（见 pinia/modules/theme.js）
+ * ============================================================ */
+
+/* ---------- 顶栏 / 标签栏配色与阴影默认值（按明暗自适应，可被内联变量覆盖） ---------- */
+:root {
+  --gva-header-bg: #ffffff;
+  --gva-header-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --gva-tabs-bg: #ffffff;
+  --gva-tabs-shadow: 0 1px 2px rgba(0, 21, 41, 0.08);
+}
+
+html.dark {
+  --gva-header-bg: rgb(15, 23, 42);
+  --gva-header-shadow: 0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.35);
+  --gva-tabs-bg: rgb(15, 23, 42);
+  --gva-tabs-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- 卡片盒子模式：作用于 ElCard / GvaCard / 各类盒子容器 / 警告条 ---------- */
+.gva-card--border {
+  .el-card,
+  .gva-card,
+  .gva-form-box,
+  .gva-search-box,
+  .gva-table-box,
+  .gva-warning-bar {
+    border: 1px solid var(--el-border-color-light) !important;
+    box-shadow: none !important;
+  }
+}
+
+.gva-card--shadow {
+  .el-card,
+  .gva-card,
+  .gva-form-box,
+  .gva-search-box,
+  .gva-table-box,
+  .gva-warning-bar {
+    border-color: transparent !important;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.04),
+      0 6px 18px rgba(0, 0, 0, 0.06) !important;
+  }
+}
+
+/* 全局圆角：卡片与各类盒子容器统一跟随 --gva-radius */
+.el-card,
+.gva-card,
+.gva-form-box,
+.gva-search-box,
+.gva-table-box,
+.gva-warning-bar {
+  border-radius: var(--gva-radius, 0.75rem);
+}

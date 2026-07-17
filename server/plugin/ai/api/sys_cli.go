@@ -1,0 +1,322 @@
+package api
+
+import (
+	"fmt"
+	"net/http"
+
+	commonReq "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	autoReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/ai/model/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
+	"github.com/gin-gonic/gin"
+)
+
+type CliApi struct{}
+
+// CreateCli 创建CLI
+// @Tags Cli
+// @Summary 创建CLI
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.CreateSysCliRequest true "CLI基础信息"
+// @Success 200 {object} response.Response{data=object,msg=string} "创建成功"
+// @Router /cli/createCli [post]
+func (a *CliApi) CreateCli(c *gin.Context) {
+	var req autoReq.CreateSysCliRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.CreateCli(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建CLI失败!")
+		response.FailWithMessage("创建CLI失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "创建成功", c)
+}
+
+// GetCliList 获取CLI列表
+// @Tags Cli
+// @Summary 获取CLI列表
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.SysCliSearch true "查询条件"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
+// @Router /cli/getCliList [post]
+func (a *CliApi) GetCliList(c *gin.Context) {
+	var req autoReq.SysCliSearch
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.GetCliList(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取CLI列表失败!")
+		response.FailWithMessage("获取CLI列表失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(response.PageResult{List: res.List, Total: res.Total, Page: res.Page, PageSize: res.PageSize}, "获取成功", c)
+}
+
+// GetCliDetail 获取CLI详情
+// @Tags Cli
+// @Summary 获取CLI详情
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.FindSysCliRequest true "CLI ID"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
+// @Router /cli/getCliDetail [post]
+func (a *CliApi) GetCliDetail(c *gin.Context) {
+	var req autoReq.FindSysCliRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.GetCliDetail(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取CLI详情失败!")
+		response.FailWithMessage("获取CLI详情失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "获取成功", c)
+}
+
+// UpdateCli 更新CLI
+// @Tags Cli
+// @Summary 更新CLI
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.UpdateSysCliRequest true "CLI基础信息"
+// @Success 200 {object} response.Response{data=object,msg=string} "更新成功"
+// @Router /cli/updateCli [post]
+func (a *CliApi) UpdateCli(c *gin.Context) {
+	var req autoReq.UpdateSysCliRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.UpdateCli(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新CLI失败!")
+		response.FailWithMessage("更新CLI失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "更新成功", c)
+}
+
+// DeleteCli 删除CLI
+// @Tags Cli
+// @Summary 删除CLI
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.DeleteSysCliRequest true "CLI ID"
+// @Success 200 {object} response.Response{msg=string} "删除成功"
+// @Router /cli/deleteCli [post]
+func (a *CliApi) DeleteCli(c *gin.Context) {
+	var req autoReq.DeleteSysCliRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := cliService.DeleteCli(c.Request.Context(), req); err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除CLI失败!")
+		response.FailWithMessage("删除CLI失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}
+
+// AddCliApis 增加CLI关联API
+// @Tags Cli
+// @Summary 增加CLI关联API
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.AddSysCliApisRequest true "CLI绑定API"
+// @Success 200 {object} response.Response{data=object,msg=string} "保存成功"
+// @Router /cli/addCliApis [post]
+func (a *CliApi) AddCliApis(c *gin.Context) {
+	var req autoReq.AddSysCliApisRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.AddCliApis(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("增加CLI关联API失败!")
+		response.FailWithMessage("增加CLI关联API失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "保存成功", c)
+}
+
+// RemoveCliApis 减少CLI关联API
+// @Tags Cli
+// @Summary 减少CLI关联API
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.RemoveSysCliApisRequest true "CLI解绑API"
+// @Success 200 {object} response.Response{data=object,msg=string} "移除成功"
+// @Router /cli/removeCliApis [post]
+func (a *CliApi) RemoveCliApis(c *gin.Context) {
+	var req autoReq.RemoveSysCliApisRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.RemoveCliApis(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("减少CLI关联API失败!")
+		response.FailWithMessage("减少CLI关联API失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "移除成功", c)
+}
+
+// PreviewManifest 预览CLI Manifest
+// @Tags Cli
+// @Summary 预览CLI Manifest
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.PreviewSysCliManifestRequest true "CLI ID"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
+// @Router /cli/previewManifest [post]
+func (a *CliApi) PreviewManifest(c *gin.Context) {
+	var req autoReq.PreviewSysCliManifestRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.PreviewManifest(c.Request.Context(), req.CliID)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("预览CLI Manifest失败!")
+		response.FailWithMessage("预览CLI Manifest失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "获取成功", c)
+}
+
+// PreviewApiCommand 预览单个 API 的命令定义（用于选中即预填）
+// @Tags Cli
+// @Summary 预览单个API命令定义
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.PreviewApiCommandRequest true "API ID 与 CLI ID"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
+// @Router /cli/previewApiCommand [post]
+func (a *CliApi) PreviewApiCommand(c *gin.Context) {
+	var req autoReq.PreviewApiCommandRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.PreviewApiCommand(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("预览API命令定义失败!")
+		response.FailWithMessage("预览API命令定义失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "获取成功", c)
+}
+
+// DownloadManifest 下载CLI Manifest
+// @Tags Cli
+// @Summary 下载CLI Manifest
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/json
+// @Param data body autoReq.PreviewSysCliManifestRequest true "CLI ID"
+// @Success 200 {file} file "manifest json"
+// @Router /cli/downloadManifest [post]
+func (a *CliApi) DownloadManifest(c *gin.Context) {
+	var req autoReq.PreviewSysCliManifestRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	fileName, payload, err := cliService.DownloadManifest(c.Request.Context(), req.CliID)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("下载CLI Manifest失败!")
+		response.FailWithMessage("下载CLI Manifest失败: "+err.Error(), c)
+		return
+	}
+	c.Header("Content-Type", "application/json")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", fileName))
+	c.Data(http.StatusOK, "application/json", payload)
+}
+
+// BuildCliBinary 编译并下载可直接运行的 CLI 二进制
+// @Tags Cli
+// @Summary 编译并下载CLI二进制
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/octet-stream
+// @Param data body autoReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
+// @Success 200 {file} file "cli binary"
+// @Router /cli/buildCli [post]
+func (a *CliApi) BuildCliBinary(c *gin.Context) {
+	var req autoReq.BuildSysCliBinaryRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	fileName, payload, err := cliService.BuildCliBinary(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("编译CLI二进制失败!")
+		response.FailWithMessage("编译CLI二进制失败: "+err.Error(), c)
+		return
+	}
+	c.Header("Content-Type", "application/octet-stream")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", fileName))
+	c.Data(http.StatusOK, "application/octet-stream", payload)
+}
+
+// DownloadCliSkill 生成并下载该 CLI 的 AI 使用说明（SKILL.md + references + cli 二进制的 zip）
+// @Tags Cli
+// @Summary 下载CLI的AI Skill
+// @Security ApiKeyAuth
+// @Accept application/json
+// @Produce application/zip
+// @Param data body autoReq.BuildSysCliBinaryRequest true "CLI ID 与目标平台"
+// @Success 200 {file} file "skill zip"
+// @Router /cli/downloadSkill [post]
+func (a *CliApi) DownloadCliSkill(c *gin.Context) {
+	var req autoReq.BuildSysCliBinaryRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	fileName, payload, err := cliService.BuildCliSkill(c.Request.Context(), req)
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("生成CLI Skill失败!")
+		response.FailWithMessage("生成CLI Skill失败: "+err.Error(), c)
+		return
+	}
+	c.Header("Content-Type", "application/zip")
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%q", fileName))
+	c.Data(http.StatusOK, "application/zip", payload)
+}
+
+func (a *CliApi) FindCli(c *gin.Context) {
+	var req commonReq.GetById
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := cliService.GetCliDetail(c.Request.Context(), autoReq.FindSysCliRequest{ID: uint(req.ID)})
+	if err != nil {
+		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取CLI详情失败!")
+		response.FailWithMessage("获取CLI详情失败: "+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(res, "获取成功", c)
+}

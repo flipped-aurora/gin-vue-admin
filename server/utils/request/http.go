@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 )
 
 func HttpRequest(
@@ -98,6 +100,10 @@ func doJSONRequest(
 	for k, v := range headers {
 		req.Header.Set(k, v)
 	}
+
+	// 出站链路传播:ctx 带链路字段时注入 traceparent/X-Trace-Id/X-Request-Id,
+	// 下游服务(LLM 网关/Dify 等)可延续同一条 trace;Background ctx 自动 no-op
+	logger.InjectTraceHeaders(ctx, req)
 
 	if data != nil {
 		req.Header.Set("Content-Type", "application/json")

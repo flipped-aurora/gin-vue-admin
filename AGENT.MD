@@ -85,6 +85,7 @@
 
 - 后端插件放在 `server/plugin/<name>/`
 - 前端插件放在 `web/src/plugin/<name>/`
+- 插件私有路由组的中间件链必须与主系统 PrivateGroup（`server/initialize/router.go`）对齐且顺序一致：`JWTAuth -> MustChangePwdGuard -> CasbinHandler -> DataScope`；v2 插件在各自 `initialize/router.go` 显式挂载，插件代码生成模板同样适用；细则见 `aiDoc/modules/plugin-development.md`
 - 稳定的模块职责、入口和边界说明放到 `aiDoc/modules/`
 
 ### 示例文档

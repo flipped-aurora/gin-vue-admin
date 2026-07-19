@@ -35,6 +35,20 @@
 
 > 遗留的 v1 接口（带 `RouterPath()` 方法，仅 email 插件仍在使用，由 `plugin_biz_v1.go` 手动挂载）不要用于新插件。
 
+## 路由注册约束
+
+v2 插件在各自 `initialize/router.go` 中从 `*gin.Engine` 自建 public/private 组。私有组的中间件链必须与主系统 PrivateGroup（`server/initialize/router.go`）完全对齐、顺序一致：
+
+```go
+private.Use(middleware.JWTAuth()).Use(middleware.MustChangePwdGuard()).Use(middleware.CasbinHandler()).Use(middleware.DataScope())
+```
+
+- `MustChangePwdGuard`：强制改密守卫。JWT 携带 `MustChangePwd=true` 时仅放行改密/用户信息/登出接口，其余一律 403
+- `DataScope`：行级数据权限身份注入。依据 claims 构建数据权限身份并写入 `c.Request.Context()`，供 Service 层 `WithContext(ctx)` 透传到 GORM 全局回调消费
+- 缺了这两个中间件：插件接口会绕过强制改密拦截，且数据权限身份不会注入，行级数据过滤对插件接口失效
+- v1 遗留插件（email）挂在主 PrivateGroup 上，自动继承完整中间件链，无需在插件内重复挂载
+- 插件代码生成模板 `server/resource/plugin/server/initialize/router.go.tpl` 同步保持该链，不要回退成旧的两件套
+
 ## 插件设计原则
 
 - 尽量自包含

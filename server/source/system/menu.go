@@ -117,7 +117,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		// systemTools子菜单(编程辅助)
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "autoCode", Name: "autoCode", Component: "plugin/auto/view/autoCode/index.vue", Sort: 1, Meta: Meta{Title: "代码生成器", Icon: "magic-stick"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "autoPkg", Name: "autoPkg", Component: "plugin/auto/view/autoPkg/autoPkg.vue", Sort: 2, Meta: Meta{Title: "模板配置", Icon: "files"}},
-		{MenuLevel: 1, Hidden: true, ParentId: menuNameMap["systemTools"], Path: "autoCodeAdmin", Name: "AutoCodeAdmin", Component: "plugin/auto/view/autoCodeAdmin/index.vue", Sort: 3, Meta: Meta{Title: "自动代码管理", Icon: "tools"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "autoCodeAdmin", Name: "AutoCodeAdmin", Component: "plugin/auto/view/autoCodeAdmin/index.vue", Sort: 3, Meta: Meta{Title: "自动代码管理", Icon: "file-code-2-gva"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "formCreate", Name: "formCreate", Component: "plugin/auto/view/formCreate/index.vue", Sort: 4, Meta: Meta{Title: "表单生成器", Icon: "edit", KeepAlive: true}},
 		{MenuLevel: 1, Hidden: true, ParentId: menuNameMap["systemTools"], Path: "autoCodeEdit/:id", Name: "autoCodeEdit", Component: "plugin/auto/view/autoCode/index.vue", Sort: 0, Meta: Meta{Title: "自动化代码-${id}", Icon: "magic-stick"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["systemTools"], Path: "exportTemplate", Name: "exportTemplate", Component: "plugin/auto/view/exportTemplate/exportTemplate.vue", Sort: 6, Meta: Meta{Title: "导出模板", Icon: "download"}},

@@ -30,10 +30,10 @@ func Menu(ctx context.Context) {
 		{
 			Path:      "autoCodeAdmin",
 			Name:      "AutoCodeAdmin",
-			Hidden:    true,
+			Hidden:    false,
 			Component: "plugin/auto/view/autoCodeAdmin/index.vue",
 			Sort:      2,
-			Meta:      model.Meta{Title: "自动代码管理", Icon: "setting"},
+			Meta:      model.Meta{Title: "自动代码管理", Icon: "file-code-2-gva"},
 		},
 		{
 			Path:      "autoPkg",

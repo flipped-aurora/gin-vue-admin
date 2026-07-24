@@ -2,7 +2,6 @@ package {{.Package}}
 
 import (
 	{{if not .OnlyTemplate}}
-	"{{.Module}}/global"
     "{{.Module}}/model/common/response"
     "{{.Module}}/model/{{.Package}}"
     {{- if not .IsTree}}

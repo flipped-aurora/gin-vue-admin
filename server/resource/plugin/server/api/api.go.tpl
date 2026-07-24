@@ -2,7 +2,6 @@ package api
 
 import (
 {{if not .OnlyTemplate}}
-	"{{.Module}}/global"
     "{{.Module}}/model/common/response"
     "{{.Module}}/plugin/{{.Package}}/model"
     {{- if not .IsTree}}

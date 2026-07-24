@@ -342,6 +342,7 @@ func (userService *UserService) SetUserInfo(ctx context.Context, req system.SysU
 func (userService *UserService) SetSelfInfo(ctx context.Context, req system.SysUser) error {
 	return global.GVA_DB.WithContext(ctx).Model(&system.SysUser{}).
 		Where("id=?", req.ID).
+	    Select("HeaderImg", "NickName").
 		Updates(req).Error
 }
 

@@ -29,7 +29,7 @@ const modelValue = defineModel({ type: Boolean, default: false })
     <!-- 旋钮固定浅色：需在 off=control-track / on=primary 两种轨道色上都清晰可见，
          故不随暗色翻深、不走 bg-container（旋钮无描边，仅靠填充色与轨道对比） -->
     <SwitchThumb
-      class="pointer-events-none block h-4 w-4 translate-x-0.5 rounded-full bg-white shadow transition-transform duration-200 data-[state=checked]:translate-x-[14px]"
+      class="pointer-events-none block h-4 w-4 translate-x-0.5 rounded-full bg-white shadow transition-transform duration-200 data-[state=checked]:translate-x-[16px]"
     />
   </SwitchRoot>
 </template>

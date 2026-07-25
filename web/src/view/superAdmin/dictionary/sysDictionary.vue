@@ -27,33 +27,30 @@
             >
               <template #append>
                 <el-button
-                  :type="searchName ? 'primary' : 'info'"
+                  type="primary"
                   @click="getTableData"
                   >搜索</el-button
                 >
               </template>
             </el-input>
-            <el-button-group class="ml-auto">
+            <div class="ml-auto flex items-center gap-1">
               <el-tooltip content="搜索" placement="top">
-                <el-button
-                  :icon="Search"
+                <button
+                  class="dict-tool-btn"
                   @click="showSearchInputHandler"
-                />
+                >
+                  <el-icon><Search /></el-icon>
+                </button>
               </el-tooltip>
               <el-tooltip content="导入字典" placement="top">
-                <el-button
-                  type="success"
-                  :icon="Upload"
-                  @click="openImportDialog"
-                />
+                <button class="dict-tool-btn" @click="openImportDialog">
+                  <el-icon><Upload /></el-icon>
+                </button>
               </el-tooltip>
               <el-tooltip content="AI 生成字典" placement="top">
-                <el-button
-                  type="warning"
-                  @click="openAiDialog"
-                >
-                  AI
-                </el-button>
+                <button class="dict-tool-btn" @click="openAiDialog">
+                  <el-icon><MagicStick /></el-icon>
+                </button>
               </el-tooltip>
               <el-tooltip content="新建字典" placement="top">
                 <el-button
@@ -62,7 +59,7 @@
                   @click="openDrawer"
                 />
               </el-tooltip>
-            </el-button-group>
+            </div>
           </div>
           <el-scrollbar class="mt-4 flex-1">
             <div
@@ -365,7 +362,7 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
-  import { Edit, Plus, Search, Download, Upload } from '@element-plus/icons-vue'
+  import { Edit, Plus, Search, Download, Upload, MagicStick } from '@element-plus/icons-vue'
   import { useAppStore } from '@/pinia'
 
   defineOptions({
@@ -867,6 +864,32 @@
   .active {
     background-color: var(--el-color-primary) !important;
     color: #fff;
+  }
+
+  /* 字典列表标题栏的工具按钮：32px 淡色块图标按钮（无边框），
+     色块托底保证可见性又不显杂乱，hover 变主色淡底；
+     主操作「新建」保留实心主色突出层级 */
+  .dict-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: var(--el-fill-color);
+    color: rgb(var(--muted-foreground-color));
+    font-size: 15px;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .dict-tool-btn:hover {
+    background: rgb(var(--primary-color) / 0.12);
+    color: rgb(var(--primary-color));
   }
 
   .import-drawer-content {

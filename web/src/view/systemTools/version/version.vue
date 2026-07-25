@@ -44,9 +44,9 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="success" icon="download" @click="openExportDialog">创建发版</el-button>
-        <el-button type="warning" icon="upload" @click="openImportDialog">导入版本</el-button>
-        <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length"
+        <el-button type="primary" icon="download" @click="openExportDialog">创建发版</el-button>
+        <el-button type="primary" icon="upload" @click="openImportDialog">导入版本</el-button>
+        <el-button  icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length"
           @click="onDelete">删除</el-button>
       </div>
       <el-table ref="multipleTable" style="width: 100%" tooltip-effect="dark" :data="tableData" row-key="ID"

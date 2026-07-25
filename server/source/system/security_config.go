@@ -3,7 +3,6 @@ package system
 import (
 	"context"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -44,7 +43,7 @@ func (i *initSecurityConfig) InitializeData(ctx context.Context) (context.Contex
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	cfg := sysModel.DefaultSecurityConfig(global.GVA_CONFIG.Captcha)
+	cfg := sysModel.DefaultSecurityConfig()
 	cfg.ID = 1
 	if err := db.Create(&cfg).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysSecurityConfig{}.TableName()+"默认配置初始化失败!")

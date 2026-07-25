@@ -28,7 +28,6 @@ type GeneralDB struct {
 	MaxOpenConns    int    `mapstructure:"max-open-conns" json:"max-open-conns" yaml:"max-open-conns"`          // 打开到数据库的最大连接数
 	ConnMaxLifetime int    `mapstructure:"conn-max-lifetime" json:"conn-max-lifetime" yaml:"conn-max-lifetime"` // 连接最长复用时间,单位秒
 	Singular        bool   `mapstructure:"singular" json:"singular" yaml:"singular"`                            // 是否开启全局禁用复数，true表示开启
-	LogZap          bool   `mapstructure:"log-zap" json:"log-zap" yaml:"log-zap"`                               // 是否通过zap写入日志文件
 }
 
 func (c GeneralDB) LogLevel() logger.LogLevel {

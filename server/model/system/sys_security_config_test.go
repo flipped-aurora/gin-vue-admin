@@ -3,8 +3,6 @@ package system
 import (
 	"testing"
 	"time"
-
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
 )
 
 func TestSysSecurityConfigTableName(t *testing.T) {
@@ -21,18 +19,12 @@ func TestCaptchaTimeoutDuration(t *testing.T) {
 }
 
 func TestDefaultSecurityConfig(t *testing.T) {
-	cfg := DefaultSecurityConfig(config.Captcha{
-		KeyLong:            6,
-		ImgWidth:           240,
-		ImgHeight:          80,
-		OpenCaptcha:        0,
-		OpenCaptchaTimeOut: 3600,
-	})
-	if cfg.KeyLong != 6 || cfg.ImgWidth != 240 || cfg.ImgHeight != 80 {
-		t.Fatalf("captcha fields not copied: %+v", cfg)
-	}
+	cfg := DefaultSecurityConfig()
 	if cfg.CaptchaOpen != 0 || cfg.CaptchaTimeout != 3600 {
-		t.Fatalf("captcha open/timeout not copied: %+v", cfg)
+		t.Fatalf("captcha open/timeout defaults wrong: %+v", cfg)
+	}
+	if cfg.KeyLong != 6 || cfg.ImgWidth != 240 || cfg.ImgHeight != 80 {
+		t.Fatalf("captcha dimension defaults wrong: %+v", cfg)
 	}
 	if cfg.PwdMinLength != 8 {
 		t.Fatalf("PwdMinLength default = %d, want 8", cfg.PwdMinLength)

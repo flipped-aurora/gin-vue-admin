@@ -8691,6 +8691,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/sysDictionary/getSysDictionaryListWithDetails": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "获取字典列表(含字典项明细)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "字典名（中）",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "字典列表(每项含 SysDictionaryDetails)",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/system.SysDictionary"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysDictionary/importSysDictionary": {
             "post": {
                 "security": [
@@ -12134,6 +12187,469 @@ const docTemplate = `{
                 }
             }
         },
+        "/timedTask/alertStream": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "text/event-stream"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "订阅定时任务失败告警(SSE)",
+                "responses": {
+                    "200": {
+                        "description": "SSE 流",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/createTimedTask": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "创建定时任务",
+                "parameters": [
+                    {
+                        "description": "任务定义",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysTimedTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/deleteTimedTask": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "删除定时任务",
+                "parameters": [
+                    {
+                        "description": "任务ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.TriggerTimedTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/getRegisteredMethods": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "获取已注册方法列表(供下拉选择)",
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/getTimedTaskList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "分页获取定时任务列表(含下次执行时间)",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "name": "enabled",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "executorType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/getTimedTaskLogList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "分页获取执行日志",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "taskId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/toggleTimedTask": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "启用/停用定时任务",
+                "parameters": [
+                    {
+                        "description": "ID与目标状态",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ToggleTimedTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "操作成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/triggerTimedTask": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "手动触发一次执行",
+                "parameters": [
+                    {
+                        "description": "任务ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.TriggerTimedTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "已触发",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/timedTask/updateTimedTask": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysTimedTask"
+                ],
+                "summary": "更新定时任务",
+                "parameters": [
+                    {
+                        "description": "任务定义(含ID)",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysTimedTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/SetSelfInfo": {
             "put": {
                 "security": [
@@ -12914,31 +13430,6 @@ const docTemplate = `{
                 }
             }
         },
-        "config.Captcha": {
-            "type": "object",
-            "properties": {
-                "img-height": {
-                    "description": "验证码高度",
-                    "type": "integer"
-                },
-                "img-width": {
-                    "description": "验证码宽度",
-                    "type": "integer"
-                },
-                "key-long": {
-                    "description": "验证码长度",
-                    "type": "integer"
-                },
-                "open-captcha": {
-                    "description": "防爆破验证码开启此数，0代表每次登录都需要验证码，其他数字代表错误密码次数，如3代表错误三次后出现验证码",
-                    "type": "integer"
-                },
-                "open-captcha-timeout": {
-                    "description": "防爆破验证码超时时间，单位：s(秒)",
-                    "type": "integer"
-                }
-            }
-        },
         "config.CloudflareR2": {
             "type": "object",
             "properties": {
@@ -12966,14 +13457,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "mount-point": {
-                    "type": "string"
-                }
-            }
-        },
-        "config.Excel": {
-            "type": "object",
-            "properties": {
-                "dir": {
                     "type": "string"
                 }
             }
@@ -13044,9 +13527,6 @@ const docTemplate = `{
                 "base_url": {
                     "type": "string"
                 },
-                "message_path": {
-                    "type": "string"
-                },
                 "name": {
                     "type": "string"
                 },
@@ -13056,17 +13536,7 @@ const docTemplate = `{
                 "request_timeout": {
                     "type": "integer"
                 },
-                "separate": {
-                    "type": "boolean"
-                },
-                "sse_path": {
-                    "description": "Deprecated fields kept for backward compatibility with older configs.",
-                    "type": "string"
-                },
                 "upstream_base_url": {
-                    "type": "string"
-                },
-                "url_prefix": {
                     "type": "string"
                 },
                 "version": {
@@ -13210,10 +13680,6 @@ const docTemplate = `{
                     "description": "是否开启Gorm全局日志",
                     "type": "string"
                 },
-                "log-zap": {
-                    "description": "是否通过zap写入日志文件",
-                    "type": "boolean"
-                },
                 "max-idle-conns": {
                     "description": "空闲中的最大连接数",
                     "type": "integer"
@@ -13271,10 +13737,6 @@ const docTemplate = `{
                 "log-mode": {
                     "description": "是否开启Gorm全局日志",
                     "type": "string"
-                },
-                "log-zap": {
-                    "description": "是否通过zap写入日志文件",
-                    "type": "boolean"
                 },
                 "max-idle-conns": {
                     "description": "空闲中的最大连接数",
@@ -13334,10 +13796,6 @@ const docTemplate = `{
                     "description": "是否开启Gorm全局日志",
                     "type": "string"
                 },
-                "log-zap": {
-                    "description": "是否通过zap写入日志文件",
-                    "type": "boolean"
-                },
                 "max-idle-conns": {
                     "description": "空闲中的最大连接数",
                     "type": "integer"
@@ -13395,10 +13853,6 @@ const docTemplate = `{
                 "log-mode": {
                     "description": "是否开启Gorm全局日志",
                     "type": "string"
-                },
-                "log-zap": {
-                    "description": "是否通过zap写入日志文件",
-                    "type": "boolean"
                 },
                 "max-idle-conns": {
                     "description": "空闲中的最大连接数",
@@ -13524,9 +13978,6 @@ const docTemplate = `{
                 "aws-s3": {
                     "$ref": "#/definitions/config.AwsS3"
                 },
-                "captcha": {
-                    "$ref": "#/definitions/config.Captcha"
-                },
                 "cloudflare-r2": {
                     "$ref": "#/definitions/config.CloudflareR2"
                 },
@@ -13552,9 +14003,6 @@ const docTemplate = `{
                 },
                 "email": {
                     "$ref": "#/definitions/github_com_flipped-aurora_gin-vue-admin_server_config.Email"
-                },
-                "excel": {
-                    "$ref": "#/definitions/config.Excel"
                 },
                 "hua-wei-obs": {
                     "$ref": "#/definitions/config.HuaWeiObs"
@@ -13660,10 +14108,6 @@ const docTemplate = `{
                     "description": "是否开启Gorm全局日志",
                     "type": "string"
                 },
-                "log-zap": {
-                    "description": "是否通过zap写入日志文件",
-                    "type": "boolean"
-                },
                 "max-idle-conns": {
                     "description": "空闲中的最大连接数",
                     "type": "integer"
@@ -13724,10 +14168,6 @@ const docTemplate = `{
                 "log-mode": {
                     "description": "是否开启Gorm全局日志",
                     "type": "string"
-                },
-                "log-zap": {
-                    "description": "是否通过zap写入日志文件",
-                    "type": "boolean"
                 },
                 "max-idle-conns": {
                     "description": "空闲中的最大连接数",
@@ -15441,7 +15881,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/system.SysUser"
+                    "description": "所属用户(Preload 填充);form:\"-\" 阻止 gin 查询绑定递归进 SysUser",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    ]
                 },
                 "userId": {
                     "type": "integer"
@@ -15671,6 +16116,31 @@ const docTemplate = `{
                 "status": {
                     "description": "是否启用",
                     "type": "boolean"
+                }
+            }
+        },
+        "request.ToggleTimedTask": {
+            "type": "object",
+            "required": [
+                "ID"
+            ],
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "enabled": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "request.TriggerTimedTask": {
+            "type": "object",
+            "required": [
+                "ID"
+            ],
+            "properties": {
+                "ID": {
+                    "type": "integer"
                 }
             }
         },
@@ -16235,7 +16705,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/system.SysUser"
+                    "description": "所属用户(Preload 填充);form:\"-\" 阻止 gin 查询绑定递归进 SysUser",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    ]
                 },
                 "userId": {
                     "type": "integer"
@@ -16501,7 +16976,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "leader": {
-                    "description": "负责人用户(联系电话/邮箱从该用户带出)",
+                    "description": "负责人用户(联系电话/邮箱从该用户带出);form:\"-\" 阻断 gin 绑定递归(与 SysUser.Dept 成环会栈溢出)",
                     "allOf": [
                         {
                             "$ref": "#/definitions/system.SysUser"
@@ -16514,6 +16989,10 @@ const docTemplate = `{
                 },
                 "name": {
                     "description": "部门名称",
+                    "type": "string"
+                },
+                "namePath": {
+                    "description": "公司/部门全路径名(内存组装,不建列)",
                     "type": "string"
                 },
                 "parentId": {
@@ -16786,7 +17265,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/system.SysUser"
+                    "description": "登录用户(Preload 填充);form:\"-\" 阻止 gin 查询绑定递归进 SysUser",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    ]
                 },
                 "userId": {
                     "type": "integer"
@@ -16942,7 +17426,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "$ref": "#/definitions/system.SysUser"
+                    "description": "操作人(Preload 填充);form:\"-\" 阻止 gin 查询绑定递归进 SysUser",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    ]
                 },
                 "user_id": {
                     "description": "用户id",
@@ -17101,6 +17590,62 @@ const docTemplate = `{
                 }
             }
         },
+        "system.SysTimedTask": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "executorType": {
+                    "type": "string"
+                },
+                "httpAllowPrivate": {
+                    "type": "boolean"
+                },
+                "httpBody": {
+                    "type": "string"
+                },
+                "httpHeader": {
+                    "type": "object"
+                },
+                "httpMethod": {
+                    "type": "string"
+                },
+                "httpUrl": {
+                    "type": "string"
+                },
+                "methodName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "object"
+                },
+                "spec": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "withSeconds": {
+                    "type": "boolean"
+                }
+            }
+        },
         "system.SysUser": {
             "type": "object",
             "properties": {
@@ -17139,7 +17684,7 @@ const docTemplate = `{
                     }
                 },
                 "dept": {
-                    "description": "主部门",
+                    "description": "主部门;form:\"-\" 阻断 gin 绑定递归(与 SysDepartment.Leader 成环会栈溢出)",
                     "allOf": [
                         {
                             "$ref": "#/definitions/system.SysDepartment"

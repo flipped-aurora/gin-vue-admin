@@ -8,7 +8,6 @@ type Server struct {
 	Mongo     Mongo   `mapstructure:"mongo" json:"mongo" yaml:"mongo"`
 	Email     Email   `mapstructure:"email" json:"email" yaml:"email"`
 	System    System  `mapstructure:"system" json:"system" yaml:"system"`
-	Captcha   Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	// auto
 	AutoCode Autocode `mapstructure:"autocode" json:"autocode" yaml:"autocode"`
 	// gorm
@@ -27,8 +26,6 @@ type Server struct {
 	AwsS3        AwsS3        `mapstructure:"aws-s3" json:"aws-s3" yaml:"aws-s3"`
 	CloudflareR2 CloudflareR2 `mapstructure:"cloudflare-r2" json:"cloudflare-r2" yaml:"cloudflare-r2"`
 	Minio        Minio        `mapstructure:"minio" json:"minio" yaml:"minio"`
-
-	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 
 	Media Media `mapstructure:"media" json:"media" yaml:"media"`
 

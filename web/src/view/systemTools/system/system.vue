@@ -272,7 +272,7 @@
           </el-form-item>
           <el-form-item label="连接超时时间">
             <el-input-number
-              v-model="config.mongo['socket-timeout-ms']"
+              v-model="config.mongo['connect-timeout-ms']"
               min="0"
             />
           </el-form-item>
@@ -311,21 +311,6 @@
               :icon="Plus"
               @click="addNode"
             />
-          </el-form-item>
-        </el-tab-pane>
-        <el-tab-pane label="验证码配置" name="7" class="mt-3.5">
-          <el-form-item label="字符长度">
-            <el-input-number
-              v-model="config.captcha['key-long']"
-              :min="4"
-              :max="6"
-            />
-          </el-form-item>
-          <el-form-item label="图片宽度">
-            <el-input-number v-model.number="config.captcha['img-width']" />
-          </el-form-item>
-          <el-form-item label="图片高度">
-            <el-input-number v-model.number="config.captcha['img-height']" />
           </el-form-item>
         </el-tab-pane>
         <el-tab-pane label="数据库配置" name="9" class="mt-3.5">
@@ -383,9 +368,6 @@
                 v-model="config.mysql['max-open-conns']"
                 :min="1"
               />
-            </el-form-item>
-            <el-form-item label="写入日志">
-              <el-switch v-model="config.mysql['log-zap']" />
             </el-form-item>
             <el-form-item label="日志模式">
               <el-select v-model="config.mysql['log-mode']">
@@ -447,9 +429,6 @@
             </el-form-item>
             <el-form-item label="maxOpenConns">
               <el-input-number v-model="config.pgsql['max-open-conns']" />
-            </el-form-item>
-            <el-form-item label="写入日志">
-              <el-switch v-model="config.pgsql['log-zap']" />
             </el-form-item>
             <el-form-item label="日志模式">
               <el-select v-model="config.pgsql['log-mode']">
@@ -518,9 +497,6 @@
             <el-form-item label="maxOpenConns">
               <el-input-number v-model="config.mssql['max-open-conns']" />
             </el-form-item>
-            <el-form-item label="写入日志">
-              <el-switch v-model="config.mssql['log-zap']" />
-            </el-form-item>
             <el-form-item label="日志模式">
               <el-select v-model="config.mssql['log-mode']">
                 <el-option value="off" label="关闭" />
@@ -572,9 +548,6 @@
             </el-form-item>
             <el-form-item label="maxOpenConns">
               <el-input-number v-model="config.sqlite['max-open-conns']" />
-            </el-form-item>
-            <el-form-item label="写入日志">
-              <el-switch v-model="config.sqlite['log-zap']" />
             </el-form-item>
             <el-form-item label="日志模式">
               <el-select v-model="config.sqlite['log-mode']">
@@ -642,9 +615,6 @@
                 v-model="config.oracle['max-open-conns']"
                 :min="1"
               />
-            </el-form-item>
-            <el-form-item label="写入日志">
-              <el-switch v-model="config.oracle['log-zap']" />
             </el-form-item>
             <el-form-item label="日志模式">
               <el-select v-model="config.oracle['log-mode']">
@@ -901,18 +871,7 @@
             </el-form-item>
           </template>
         </el-tab-pane>
-        <el-tab-pane label="Excel上传配置" name="11" class="mt-3.5">
-          <el-form-item label="合成目标地址">
-            <el-input
-              v-model.trim="config.excel.dir"
-              placeholder="请输入合成目标地址"
-            />
-          </el-form-item>
-        </el-tab-pane>
         <el-tab-pane label="自动化代码配置" name="12" class="mt-3.5">
-          <el-form-item label="是否自动重启(linux)">
-            <el-switch v-model="config.autocode['transfer-restart']" />
-          </el-form-item>
           <el-form-item label="root(项目根路径)">
             <el-input v-model="config.autocode.root" disabled />
           </el-form-item>
@@ -922,64 +881,22 @@
               placeholder="请输入后端代码地址"
             />
           </el-form-item>
-          <el-form-item label="SApi(后端api文件夹地址)">
-            <el-input
-              v-model.trim="config.autocode['server-api']"
-              placeholder="请输入后端api文件夹地址"
-            />
-          </el-form-item>
-          <el-form-item label="SInitialize(后端Initialize文件夹)">
-            <el-input
-              v-model.trim="config.autocode['server-initialize']"
-              placeholder="请输入后端Initialize文件夹"
-            />
-          </el-form-item>
-          <el-form-item label="SModel(后端Model文件地址)">
-            <el-input
-              v-model.trim="config.autocode['server-model']"
-              placeholder="请输入后端Model文件地址"
-            />
-          </el-form-item>
-          <el-form-item label="SRequest(后端Request文件夹地址)">
-            <el-input
-              v-model.trim="config.autocode['server-request']"
-              placeholder="请输入后端Request文件夹地址"
-            />
-          </el-form-item>
-          <el-form-item label="SRouter(后端Router文件夹地址)">
-            <el-input
-              v-model.trim="config.autocode['server-router']"
-              placeholder="请输入后端Router文件夹地址"
-            />
-          </el-form-item>
-          <el-form-item label="SService(后端Service文件夹地址)">
-            <el-input
-              v-model.trim="config.autocode['server-service']"
-              placeholder="请输入后端Service文件夹地址"
-            />
-          </el-form-item>
           <el-form-item label="Web(前端文件夹地址)">
             <el-input
               v-model.trim="config.autocode.web"
               placeholder="请输入前端文件夹地址"
             />
           </el-form-item>
-          <el-form-item label="WApi(后端WApi文件夹地址)">
+          <el-form-item label="Module(后端 Go Module)">
             <el-input
-              v-model.trim="config.autocode['web-api']"
-              placeholder="请输入后端WApi文件夹地址"
+              v-model.trim="config.autocode.module"
+              placeholder="请输入后端 Go Module"
             />
           </el-form-item>
-          <el-form-item label="WForm(后端WForm文件夹地址)">
+          <el-form-item label="AI服务路径">
             <el-input
-              v-model.trim="config.autocode['web-form']"
-              placeholder="请输入后端WForm文件夹地址"
-            />
-          </el-form-item>
-          <el-form-item label="WTable(后端WTable文件夹地址)">
-            <el-input
-              v-model.trim="config.autocode['web-table']"
-              placeholder="请输入后端WTable文件夹地址"
+              v-model.trim="config.autocode['ai-path']"
+              placeholder="请输入AI服务路径"
             />
           </el-form-item>
         </el-tab-pane>
@@ -1016,7 +933,6 @@
     sqlite: {},
     pgsql: {},
     oracle: {},
-    excel: {},
     autocode: {},
     redis: {},
     mongo: {
@@ -1043,7 +959,6 @@
     'hua-wei-obs': {},
     'cloudflare-r2': {},
     minio: {},
-    captcha: {},
     zap: {},
     local: {},
     email: {},

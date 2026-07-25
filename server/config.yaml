@@ -79,7 +79,6 @@ email:
 
 # system configuration
 system:
-    env: local # 修改为public可以关闭路由日志输出
     addr: 8888
     db-type: mysql
     oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
@@ -97,14 +96,6 @@ system:
     #  禁用自动迁移数据库表结构，生产环境建议设为true，手动迁移
     disable-auto-migrate: false
 
-# captcha configuration
-captcha:
-    key-long: 6
-    img-width: 240
-    img-height: 80
-    open-captcha: 0 # 0代表一直开启，大于0代表限制次数
-    open-captcha-timeout: 3600 # open-captcha大于0时才生效
-
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
@@ -118,7 +109,6 @@ mysql:
     max-open-conns: 100
     conn-max-lifetime: 0
     log-mode: ""
-    log-zap: false
 
 # pgsql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
@@ -133,7 +123,6 @@ pgsql:
     max-open-conns: 100
     conn-max-lifetime: 0
     log-mode: ""
-    log-zap: false
 oracle:
     path: ""
     port: ""
@@ -145,7 +134,6 @@ oracle:
     max-open-conns: 100
     conn-max-lifetime: 0
     log-mode: ""
-    log-zap: false
 mssql:
     path: ""
     port: ""
@@ -157,7 +145,6 @@ mssql:
     max-open-conns: 100
     conn-max-lifetime: 0
     log-mode: ""
-    log-zap: false
 sqlite:
     path: ""
     port: ""
@@ -169,7 +156,6 @@ sqlite:
     max-open-conns: 100
     conn-max-lifetime: 0
     log-mode: ""
-    log-zap: false
 db-list:
     - disable: true # 是否禁用
       type: "" # 数据库的类型,目前支持mysql、pgsql、mssql、oracle
@@ -184,7 +170,6 @@ db-list:
       max-open-conns: 100
       conn-max-lifetime: 0
       log-mode: ""
-      log-zap: false
 
 # local configuration
 local:
@@ -266,10 +251,6 @@ hua-wei-obs:
     access-key: you-access-key
     secret-key: you-secret-key
 
-# excel configuration
-excel:
-    dir: ./resource/excel/
-
 # disk usage configuration
 disk-list:
     - mount-point: "/"
@@ -293,4 +274,3 @@ mcp:
     name: GVA_MCP
     version: v1.0.0
     addr: 8889
-    separate: false

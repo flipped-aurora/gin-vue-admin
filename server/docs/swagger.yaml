@@ -85,24 +85,6 @@ definitions:
       expose-headers:
         type: string
     type: object
-  config.Captcha:
-    properties:
-      img-height:
-        description: 验证码高度
-        type: integer
-      img-width:
-        description: 验证码宽度
-        type: integer
-      key-long:
-        description: 验证码长度
-        type: integer
-      open-captcha:
-        description: 防爆破验证码开启此数，0代表每次登录都需要验证码，其他数字代表错误密码次数，如3代表错误三次后出现验证码
-        type: integer
-      open-captcha-timeout:
-        description: 防爆破验证码超时时间，单位：s(秒)
-        type: integer
-    type: object
   config.CloudflareR2:
     properties:
       access-key-id:
@@ -121,11 +103,6 @@ definitions:
   config.DiskList:
     properties:
       mount-point:
-        type: string
-    type: object
-  config.Excel:
-    properties:
-      dir:
         type: string
     type: object
   config.HuaWeiObs:
@@ -173,23 +150,13 @@ definitions:
         type: string
       base_url:
         type: string
-      message_path:
-        type: string
       name:
         type: string
       path:
         type: string
       request_timeout:
         type: integer
-      separate:
-        type: boolean
-      sse_path:
-        description: Deprecated fields kept for backward compatibility with older
-          configs.
-        type: string
       upstream_base_url:
-        type: string
-      url_prefix:
         type: string
       version:
         type: string
@@ -291,9 +258,6 @@ definitions:
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      log-zap:
-        description: 是否通过zap写入日志文件
-        type: boolean
       max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
@@ -337,9 +301,6 @@ definitions:
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      log-zap:
-        description: 是否通过zap写入日志文件
-        type: boolean
       max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
@@ -383,9 +344,6 @@ definitions:
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      log-zap:
-        description: 是否通过zap写入日志文件
-        type: boolean
       max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
@@ -429,9 +387,6 @@ definitions:
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      log-zap:
-        description: 是否通过zap写入日志文件
-        type: boolean
       max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
@@ -518,8 +473,6 @@ definitions:
         description: auto
       aws-s3:
         $ref: '#/definitions/config.AwsS3'
-      captcha:
-        $ref: '#/definitions/config.Captcha'
       cloudflare-r2:
         $ref: '#/definitions/config.CloudflareR2'
       cors:
@@ -536,8 +489,6 @@ definitions:
         type: array
       email:
         $ref: '#/definitions/github_com_flipped-aurora_gin-vue-admin_server_config.Email'
-      excel:
-        $ref: '#/definitions/config.Excel'
       hua-wei-obs:
         $ref: '#/definitions/config.HuaWeiObs'
       jwt:
@@ -605,9 +556,6 @@ definitions:
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      log-zap:
-        description: 是否通过zap写入日志文件
-        type: boolean
       max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
@@ -653,9 +601,6 @@ definitions:
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      log-zap:
-        description: 是否通过zap写入日志文件
-        type: boolean
       max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
@@ -1852,7 +1797,9 @@ definitions:
         description: 更新时间
         type: string
       user:
-        $ref: '#/definitions/system.SysUser'
+        allOf:
+        - $ref: '#/definitions/system.SysUser'
+        description: 所属用户(Preload 填充);form:"-" 阻止 gin 查询绑定递归进 SysUser
       userId:
         type: integer
     type: object
@@ -2011,6 +1958,22 @@ definitions:
       status:
         description: 是否启用
         type: boolean
+    type: object
+  request.ToggleTimedTask:
+    properties:
+      ID:
+        type: integer
+      enabled:
+        type: boolean
+    required:
+    - ID
+    type: object
+  request.TriggerTimedTask:
+    properties:
+      ID:
+        type: integer
+    required:
+    - ID
     type: object
   request.UpdateSysCliRequest:
     properties:
@@ -2389,7 +2352,9 @@ definitions:
         description: 更新时间
         type: string
       user:
-        $ref: '#/definitions/system.SysUser'
+        allOf:
+        - $ref: '#/definitions/system.SysUser'
+        description: 所属用户(Preload 填充);form:"-" 阻止 gin 查询绑定递归进 SysUser
       userId:
         type: integer
     type: object
@@ -2579,12 +2544,15 @@ definitions:
       leader:
         allOf:
         - $ref: '#/definitions/system.SysUser'
-        description: 负责人用户(联系电话/邮箱从该用户带出)
+        description: 负责人用户(联系电话/邮箱从该用户带出);form:"-" 阻断 gin 绑定递归(与 SysUser.Dept 成环会栈溢出)
       leaderId:
         description: 负责人(关联 sys_users)
         type: integer
       name:
         description: 部门名称
+        type: string
+      namePath:
+        description: 公司/部门全路径名(内存组装,不建列)
         type: string
       parentId:
         description: 父部门ID(0为顶级)
@@ -2781,7 +2749,9 @@ definitions:
         description: 更新时间
         type: string
       user:
-        $ref: '#/definitions/system.SysUser'
+        allOf:
+        - $ref: '#/definitions/system.SysUser'
+        description: 登录用户(Preload 填充);form:"-" 阻止 gin 查询绑定递归进 SysUser
       userId:
         type: integer
       username:
@@ -2891,7 +2861,9 @@ definitions:
         description: 更新时间
         type: string
       user:
-        $ref: '#/definitions/system.SysUser'
+        allOf:
+        - $ref: '#/definitions/system.SysUser'
+        description: 操作人(Preload 填充);form:"-" 阻止 gin 查询绑定递归进 SysUser
       user_id:
         description: 用户id
         type: integer
@@ -3004,6 +2976,44 @@ definitions:
         description: 更新时间
         type: string
     type: object
+  system.SysTimedTask:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      description:
+        type: string
+      enabled:
+        type: boolean
+      executorType:
+        type: string
+      httpAllowPrivate:
+        type: boolean
+      httpBody:
+        type: string
+      httpHeader:
+        type: object
+      httpMethod:
+        type: string
+      httpUrl:
+        type: string
+      methodName:
+        type: string
+      name:
+        type: string
+      params:
+        type: object
+      spec:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      withSeconds:
+        type: boolean
+    type: object
   system.SysUser:
     properties:
       ID:
@@ -3032,7 +3042,7 @@ definitions:
       dept:
         allOf:
         - $ref: '#/definitions/system.SysDepartment'
-        description: 主部门
+        description: 主部门;form:"-" 阻断 gin 绑定递归(与 SysDepartment.Leader 成环会栈溢出)
       deptId:
         description: 主部门ID(数据归属)
         type: integer
@@ -8032,6 +8042,36 @@ paths:
       summary: 分页获取SysDictionary列表
       tags:
       - SysDictionary
+  /sysDictionary/getSysDictionaryListWithDetails:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 字典名（中）
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 字典列表(每项含 SysDictionaryDetails)
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/system.SysDictionary'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取字典列表(含字典项明细)
+      tags:
+      - SysDictionary
   /sysDictionary/importSysDictionary:
     post:
       consumes:
@@ -10053,6 +10093,269 @@ paths:
       summary: 设置配置文件内容
       tags:
       - System
+  /timedTask/alertStream:
+    get:
+      produces:
+      - text/event-stream
+      responses:
+        "200":
+          description: SSE 流
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 订阅定时任务失败告警(SSE)
+      tags:
+      - SysTimedTask
+  /timedTask/createTimedTask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 任务定义
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysTimedTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建定时任务
+      tags:
+      - SysTimedTask
+  /timedTask/deleteTimedTask:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 任务ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.TriggerTimedTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除定时任务
+      tags:
+      - SysTimedTask
+  /timedTask/getRegisteredMethods:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取已注册方法列表(供下拉选择)
+      tags:
+      - SysTimedTask
+  /timedTask/getTimedTaskList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: enabled
+        type: boolean
+      - in: query
+        name: executorType
+        type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取定时任务列表(含下次执行时间)
+      tags:
+      - SysTimedTask
+  /timedTask/getTimedTaskLogList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: status
+        type: string
+      - in: query
+        name: taskId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取执行日志
+      tags:
+      - SysTimedTask
+  /timedTask/toggleTimedTask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID与目标状态
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.ToggleTimedTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 操作成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 启用/停用定时任务
+      tags:
+      - SysTimedTask
+  /timedTask/triggerTimedTask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 任务ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.TriggerTimedTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 已触发
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 手动触发一次执行
+      tags:
+      - SysTimedTask
+  /timedTask/updateTimedTask:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 任务定义(含ID)
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysTimedTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新定时任务
+      tags:
+      - SysTimedTask
   /user/SetSelfInfo:
     put:
       consumes:

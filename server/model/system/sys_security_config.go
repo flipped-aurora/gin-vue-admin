@@ -3,8 +3,15 @@ package system
 import (
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+)
+
+const (
+	defaultCaptchaOpen    = 0
+	defaultCaptchaTimeout = 3600
+	defaultCaptchaKeyLong = 6
+	defaultCaptchaWidth   = 240
+	defaultCaptchaHeight  = 80
 )
 
 // SysSecurityConfig 安全配置 单行表 固定 id=1 启动加载入内存缓存 保存即热更新
@@ -54,14 +61,14 @@ func (c SysSecurityConfig) LimitWindowDuration() time.Duration {
 	return time.Duration(c.LimitWindow) * time.Second
 }
 
-// DefaultSecurityConfig 由 config.yaml 的 captcha 生成默认单行配置 调用方负责设 id=1
-func DefaultSecurityConfig(captcha config.Captcha) SysSecurityConfig {
+// DefaultSecurityConfig 返回首次初始化和缺行回退使用的安全配置默认值
+func DefaultSecurityConfig() SysSecurityConfig {
 	return SysSecurityConfig{
-		CaptchaOpen:       captcha.OpenCaptcha,
-		CaptchaTimeout:    captcha.OpenCaptchaTimeOut,
-		KeyLong:           captcha.KeyLong,
-		ImgWidth:          captcha.ImgWidth,
-		ImgHeight:         captcha.ImgHeight,
+		CaptchaOpen:       defaultCaptchaOpen,
+		CaptchaTimeout:    defaultCaptchaTimeout,
+		KeyLong:           defaultCaptchaKeyLong,
+		ImgWidth:          defaultCaptchaWidth,
+		ImgHeight:         defaultCaptchaHeight,
 		PwdMinLength:      8,
 		PwdRequireUpper:   false,
 		PwdRequireLower:   false,

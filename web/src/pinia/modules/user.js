@@ -3,9 +3,8 @@ import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElLoading, ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useRouterStore } from './router'
-import { useCookies } from '@vueuse/integrations/useCookies'
 import { useStorage } from '@vueuse/core'
 
 import { useThemeStore } from '@/pinia'
@@ -22,8 +21,6 @@ export const useUserStore = defineStore('user', () => {
     authority: {}
   })
   const token = useStorage('token', '')
-  const xToken = useCookies()
-  const currentToken = computed(() => token.value || xToken.get('x-token') || '')
 
   const setUserInfo = (val) => {
     userInfo.value = val
@@ -35,7 +32,6 @@ export const useUserStore = defineStore('user', () => {
 
   const setToken = (val) => {
     token.value = val
-    xToken.value = val
   }
 
   const NeedInit = async () => {
@@ -131,8 +127,6 @@ export const useUserStore = defineStore('user', () => {
   /* 清理数据 */
   const ClearStorage = async () => {
     token.value = ''
-    // 使用remove方法正确删除cookie
-    xToken.remove()
     sessionStorage.clear()
     // 清理所有相关的localStorage项
     localStorage.removeItem('originSetting')
@@ -143,7 +137,7 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     userInfo,
-    token: currentToken,
+    token,
     NeedInit,
     ResetUserInfo,
     GetUserInfo,

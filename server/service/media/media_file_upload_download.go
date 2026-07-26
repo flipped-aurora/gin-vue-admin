@@ -155,6 +155,9 @@ func (e *FileUploadAndDownloadService) GetFileRecordInfoList(ctx context.Context
 //@return: file model.FileUploadAndDownload, err error
 
 func (e *FileUploadAndDownloadService) UploadFile(ctx context.Context, header *multipart.FileHeader, noSave string, classId int, userID uint) (file media.FileUploadAndDownload, err error) {
+	if err = upload.ValidateFileExtension(header.Filename); err != nil {
+		return file, err
+	}
 	oss := upload.NewOss()
 	filePath, key, uploadErr := oss.UploadFile(ctx, header)
 	if uploadErr != nil {
@@ -164,15 +167,15 @@ func (e *FileUploadAndDownloadService) UploadFile(ctx context.Context, header *m
 	// 计算文件 MD5（读取文件内容），用于去重校验
 	md5sum, _ := utils.MD5VFile(header)
 	f := media.FileUploadAndDownload{
-		Url:    filePath,
-		Name:   header.Filename,
+		Url:     filePath,
+		Name:    header.Filename,
 		ClassId: classId,
-		Tag:    s[len(s)-1],
-		Key:    key,
-		Size:   header.Size,
-		Mime:   utils.DetectMIME(header),
-		Md5:    md5sum,
-		UserID: userID,
+		Tag:     s[len(s)-1],
+		Key:     key,
+		Size:    header.Size,
+		Mime:    utils.DetectMIME(header),
+		Md5:     md5sum,
+		UserID:  userID,
 	}
 	if noSave == "0" {
 		// 检查是否已存在相同key的记录

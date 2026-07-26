@@ -147,15 +147,21 @@ func installation(path string, formPath string, toPath string) error {
 }
 
 func ensurePluginRegisterImport(packageName string) error {
+	if err := utils.ValidatePluginName(packageName); err != nil {
+		return err
+	}
 	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
 	if module == "" {
 		return errors.New("autocode module is empty")
 	}
-	if packageName == "" {
-		return errors.New("plugin package is empty")
+	serverPluginRoot, err := utils.JoinWithinRoot(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin")
+	if err != nil {
+		return err
 	}
-
-	registerPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go")
+	registerPath, err := utils.JoinWithinRoot(serverPluginRoot, "register.go")
+	if err != nil {
+		return err
+	}
 	src, err := os.ReadFile(registerPath)
 	if err != nil {
 		return err
@@ -199,7 +205,9 @@ func ensurePluginRegisterImport(packageName string) error {
 
 	var out []byte
 	bf := bytes.NewBuffer(out)
-	printer.Fprint(bf, fileSet, astFile)
+	if err := printer.Fprint(bf, fileSet, astFile); err != nil {
+		return err
+	}
 
 	return os.WriteFile(registerPath, bf.Bytes(), 0666)
 }
@@ -223,15 +231,17 @@ func skipMacSpecialDocument(_ os.FileInfo, src, _ string) (bool, error) {
 }
 
 func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
-	if plugName == "" {
-		return "", errors.New("插件名称不能为空")
+	if err = utils.ValidatePluginName(plugName); err != nil {
+		return "", err
 	}
-
-	// 防止路径穿越
-	plugName = filepath.Clean(plugName)
-
-	webPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", plugName)
-	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", plugName)
+	webPath, err := pluginPath(global.GVA_CONFIG.AutoCode.Web, plugName)
+	if err != nil {
+		return "", err
+	}
+	serverPath, err := pluginPath(global.GVA_CONFIG.AutoCode.Server, plugName)
+	if err != nil {
+		return "", err
+	}
 	// 创建一个新的zip文件
 
 	// 判断目录是否存在
@@ -275,14 +285,10 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 }
 
 func (s *autoCodePlugin) InitMenu(ctx context.Context, menuInfo request.InitMenu) (err error) {
-	menuPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", menuInfo.PlugName, "initialize", "menu.go")
-	src, err := os.ReadFile(menuPath)
+	menuPath, fileSet, astFile, arrayAst, err := loadPluginInitializeArray(menuInfo.PlugName, "menu.go", "SysBaseMenu")
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	fileSet := token.NewFileSet()
-	astFile, err := parser.ParseFile(fileSet, "", src, 0)
-	arrayAst := ast.FindArray(astFile, "model", "SysBaseMenu")
 	var menus []system.SysBaseMenu
 
 	parentMenu := []system.SysBaseMenu{
@@ -309,23 +315,14 @@ func (s *autoCodePlugin) InitMenu(ctx context.Context, menuInfo request.InitMenu
 	menuExpr := ast.CreateMenuStructAst(menus)
 	arrayAst.Elts = *menuExpr
 
-	var out []byte
-	bf := bytes.NewBuffer(out)
-	printer.Fprint(bf, fileSet, astFile)
-
-	os.WriteFile(menuPath, bf.Bytes(), 0666)
-	return nil
+	return writePluginInitializeFile(menuPath, fileSet, astFile)
 }
 
 func (s *autoCodePlugin) InitAPI(ctx context.Context, apiInfo request.InitApi) (err error) {
-	apiPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", apiInfo.PlugName, "initialize", "api.go")
-	src, err := os.ReadFile(apiPath)
+	apiPath, fileSet, astFile, arrayAst, err := loadPluginInitializeArray(apiInfo.PlugName, "api.go", "SysApi")
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	fileSet := token.NewFileSet()
-	astFile, err := parser.ParseFile(fileSet, "", src, 0)
-	arrayAst := ast.FindArray(astFile, "model", "SysApi")
 	var apis []system.SysApi
 	err = global.GVA_DB.WithContext(ctx).Find(&apis, "id in (?)", apiInfo.APIs).Error
 	if err != nil {
@@ -334,23 +331,14 @@ func (s *autoCodePlugin) InitAPI(ctx context.Context, apiInfo request.InitApi) (
 	apisExpr := ast.CreateApiStructAst(apis)
 	arrayAst.Elts = *apisExpr
 
-	var out []byte
-	bf := bytes.NewBuffer(out)
-	printer.Fprint(bf, fileSet, astFile)
-
-	os.WriteFile(apiPath, bf.Bytes(), 0666)
-	return nil
+	return writePluginInitializeFile(apiPath, fileSet, astFile)
 }
 
 func (s *autoCodePlugin) InitDictionary(ctx context.Context, dictInfo request.InitDictionary) (err error) {
-	dictPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", dictInfo.PlugName, "initialize", "dictionary.go")
-	src, err := os.ReadFile(dictPath)
+	dictPath, fileSet, astFile, arrayAst, err := loadPluginInitializeArray(dictInfo.PlugName, "dictionary.go", "SysDictionary")
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
-	fileSet := token.NewFileSet()
-	astFile, err := parser.ParseFile(fileSet, "", src, 0)
-	arrayAst := ast.FindArray(astFile, "model", "SysDictionary")
 	var dictionaries []system.SysDictionary
 	err = global.GVA_DB.WithContext(ctx).Preload("SysDictionaryDetails").Find(&dictionaries, "id in (?)", dictInfo.Dictionaries).Error
 	if err != nil {
@@ -359,18 +347,33 @@ func (s *autoCodePlugin) InitDictionary(ctx context.Context, dictInfo request.In
 	dictExpr := ast.CreateDictionaryStructAst(dictionaries)
 	arrayAst.Elts = *dictExpr
 
-	var out []byte
-	bf := bytes.NewBuffer(out)
-	printer.Fprint(bf, fileSet, astFile)
-
-	os.WriteFile(dictPath, bf.Bytes(), 0666)
-	return nil
+	return writePluginInitializeFile(dictPath, fileSet, astFile)
 }
 
 func (s *autoCodePlugin) Remove(ctx context.Context, pluginName string, pluginType string) (err error) {
+	if err = utils.ValidatePluginName(pluginName); err != nil {
+		return err
+	}
+	if pluginType != "web" && pluginType != "server" && pluginType != "full" {
+		return errors.New("invalid plugin type")
+	}
+
+	var webDir, serverDir string
+	if pluginType == "web" || pluginType == "full" {
+		webDir, err = pluginPath(global.GVA_CONFIG.AutoCode.Web, pluginName)
+		if err != nil {
+			return err
+		}
+	}
+	if pluginType == "server" || pluginType == "full" {
+		serverDir, err = pluginPath(global.GVA_CONFIG.AutoCode.Server, pluginName)
+		if err != nil {
+			return err
+		}
+	}
+
 	// 1. 删除前端代码
 	if pluginType == "web" || pluginType == "full" {
-		webDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", pluginName)
 		err = os.RemoveAll(webDir)
 		if err != nil {
 			return errors.Wrap(err, "删除前端插件目录失败")
@@ -379,14 +382,15 @@ func (s *autoCodePlugin) Remove(ctx context.Context, pluginName string, pluginTy
 
 	// 2. 删除后端代码
 	if pluginType == "server" || pluginType == "full" {
-		serverDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", pluginName)
 		err = os.RemoveAll(serverDir)
 		if err != nil {
 			return errors.Wrap(err, "删除后端插件目录失败")
 		}
 
 		// 移除注册
-		removePluginRegisterImport(pluginName)
+		if err = removePluginRegisterImport(pluginName); err != nil {
+			return errors.Wrap(err, "移除插件注册失败")
+		}
 	}
 
 	// 通过utils 获取 api 菜单 字典
@@ -457,15 +461,21 @@ func GetMenuIds(ctx context.Context, menu system.SysBaseMenu, ids *[]int) {
 }
 
 func removePluginRegisterImport(packageName string) error {
+	if err := utils.ValidatePluginName(packageName); err != nil {
+		return err
+	}
 	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
 	if module == "" {
 		return errors.New("autocode module is empty")
 	}
-	if packageName == "" {
-		return errors.New("plugin package is empty")
+	serverPluginRoot, err := utils.JoinWithinRoot(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin")
+	if err != nil {
+		return err
 	}
-
-	registerPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "register.go")
+	registerPath, err := utils.JoinWithinRoot(serverPluginRoot, "register.go")
+	if err != nil {
+		return err
+	}
 	src, err := os.ReadFile(registerPath)
 	if err != nil {
 		return err
@@ -477,9 +487,9 @@ func removePluginRegisterImport(packageName string) error {
 	}
 
 	importPath := fmt.Sprintf("%s/plugin/%s", module, packageName)
-    importLit := fmt.Sprintf("%q", importPath)
+	importLit := fmt.Sprintf("%q", importPath)
 
-    // 移除 import
+	// 移除 import
 	var newDecls []goast.Decl
 	for _, decl := range astFile.Decls {
 		genDecl, ok := decl.(*goast.GenDecl)
@@ -499,7 +509,7 @@ func removePluginRegisterImport(packageName string) error {
 					newSpecs = append(newSpecs, spec)
 				}
 			}
-            // 如果还有其他import，保留该 decl
+			// 如果还有其他import，保留该 decl
 			if len(newSpecs) > 0 {
 				genDecl.Specs = newSpecs
 				newDecls = append(newDecls, genDecl)
@@ -512,7 +522,53 @@ func removePluginRegisterImport(packageName string) error {
 
 	var out []byte
 	bf := bytes.NewBuffer(out)
-	printer.Fprint(bf, fileSet, astFile)
+	if err := printer.Fprint(bf, fileSet, astFile); err != nil {
+		return err
+	}
 
 	return os.WriteFile(registerPath, bf.Bytes(), 0666)
+}
+
+func pluginPath(component, pluginName string, elems ...string) (string, error) {
+	if err := utils.ValidatePluginName(pluginName); err != nil {
+		return "", err
+	}
+	root, err := utils.JoinWithinRoot(global.GVA_CONFIG.AutoCode.Root, component, "plugin")
+	if err != nil {
+		return "", err
+	}
+	parts := append([]string{pluginName}, elems...)
+	return utils.JoinWithinRoot(root, parts...)
+}
+
+func loadPluginInitializeArray(pluginName, fileName, selectorName string) (string, *token.FileSet, *goast.File, *goast.CompositeLit, error) {
+	path, err := pluginPath(global.GVA_CONFIG.AutoCode.Server, pluginName, "initialize", fileName)
+	if err != nil {
+		return "", nil, nil, nil, err
+	}
+	src, err := os.ReadFile(path)
+	if err != nil {
+		return "", nil, nil, nil, errors.Wrap(err, "读取插件初始化文件失败")
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, path, src, parser.ParseComments)
+	if err != nil {
+		return "", nil, nil, nil, errors.Wrap(err, "解析插件初始化文件失败")
+	}
+	arrayAst := ast.FindArray(astFile, "model", selectorName)
+	if arrayAst == nil {
+		return "", nil, nil, nil, errors.Errorf("插件初始化文件缺少 []model.%s 数组", selectorName)
+	}
+	return path, fileSet, astFile, arrayAst, nil
+}
+
+func writePluginInitializeFile(path string, fileSet *token.FileSet, astFile *goast.File) error {
+	var out bytes.Buffer
+	if err := printer.Fprint(&out, fileSet, astFile); err != nil {
+		return errors.Wrap(err, "打印插件初始化文件失败")
+	}
+	if err := os.WriteFile(path, out.Bytes(), 0666); err != nil {
+		return errors.Wrap(err, "写入插件初始化文件失败")
+	}
+	return nil
 }

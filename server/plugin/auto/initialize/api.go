@@ -20,6 +20,9 @@ func Api(ctx context.Context) {
 		{Path: "/autoCode/installPlugin", Description: "安装插件", ApiGroup: "代码生成器", Method: "POST"},
 		{Path: "/autoCode/removePlugin", Description: "移除插件", ApiGroup: "代码生成器", Method: "POST"},
 		{Path: "/autoCode/getPluginList", Description: "获取插件列表", ApiGroup: "代码生成器", Method: "GET"},
+		{Path: "/autoCode/initMenu", Description: "生成插件菜单初始化文件", ApiGroup: "代码生成器", Method: "POST"},
+		{Path: "/autoCode/initAPI", Description: "生成插件 API 初始化文件", ApiGroup: "代码生成器", Method: "POST"},
+		{Path: "/autoCode/initDictionary", Description: "生成插件字典初始化文件", ApiGroup: "代码生成器", Method: "POST"},
 
 		// 模板配置
 		{Path: "/autoCode/getPackage", Description: "获取自动化包列表", ApiGroup: "模板配置", Method: "POST"},

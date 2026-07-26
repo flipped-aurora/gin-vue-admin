@@ -24,6 +24,9 @@ type MediaUploadService struct{}
 
 func (s *MediaUploadService) Init(ctx context.Context, userID uint, req request.UploadInitReq) (response.UploadInitResp, error) {
 	var resp response.UploadInitResp
+	if err := upload.ValidateFileExtension(req.FileName); err != nil {
+		return resp, err
+	}
 
 	// 1) 秒传:同用户已完成同 hash
 	var done media.MediaUpload
@@ -100,6 +103,9 @@ func (s *MediaUploadService) Complete(ctx context.Context, userID, uploadID uint
 	}
 	if up.UserID != userID {
 		return m, errors.New("无权操作该上传")
+	}
+	if err := upload.ValidateFileExtension(up.FileName); err != nil {
+		return m, err
 	}
 	// 原子抢占:仅 uploading -> merging 的赢家继续
 	res := global.GVA_DB.WithContext(ctx).Model(&media.MediaUpload{}).

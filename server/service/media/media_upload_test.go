@@ -37,7 +37,7 @@ func TestSaveChunkIdempotent(t *testing.T) {
 	testDB(t)
 	global.GVA_CONFIG.Media.ChunkDir = t.TempDir()
 	s := &MediaUploadService{}
-	r, _ := s.Init(context.Background(), 1, request.UploadInitReq{FileName: "a", FileHash: "h", FileSize: 3, ChunkSize: 3, ChunkTotal: 1})
+	r, _ := s.Init(context.Background(), 1, request.UploadInitReq{FileName: "a.bin", FileHash: "h", FileSize: 3, ChunkSize: 3, ChunkTotal: 1})
 	data := []byte("abc")
 	import_md5 := "900150983cd24fb0d6963f7d28e17f72" // md5("abc")
 	if err := s.SaveChunk(context.Background(), 1, r.UploadID, 0, import_md5, data); err != nil {

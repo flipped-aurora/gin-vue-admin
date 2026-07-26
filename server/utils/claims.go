@@ -1,7 +1,8 @@
 package utils
 
 import (
-	"net"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -12,46 +13,41 @@ import (
 )
 
 func ClearToken(c *gin.Context) {
-	// 增加cookie x-token 向来源的web添加
-	host, _, err := net.SplitHostPort(c.Request.Host)
-	if err != nil {
-		host = c.Request.Host
-	}
-
-	if net.ParseIP(host) != nil {
-		c.SetCookie("x-token", "", -1, "/", "", false, false)
-	} else {
-		c.SetCookie("x-token", "", -1, "/", host, false, false)
-	}
+	setTokenCookie(c, "", -1, time.Unix(1, 0))
 }
 
 func SetToken(c *gin.Context, token string, maxAge int) {
-	// 增加cookie x-token 向来源的web添加
-	host, _, err := net.SplitHostPort(c.Request.Host)
-	if err != nil {
-		host = c.Request.Host
-	}
-
-	if net.ParseIP(host) != nil {
-		c.SetCookie("x-token", token, maxAge, "/", "", false, false)
-	} else {
-		c.SetCookie("x-token", token, maxAge, "/", host, false, false)
-	}
+	setTokenCookie(c, token, maxAge, time.Time{})
 }
 
 func GetToken(c *gin.Context) string {
 	token := c.Request.Header.Get("x-token")
-	if token == "" {
-		j := NewJWT()
-		token, _ = c.Cookie("x-token")
-		claims, err := j.ParseToken(token)
-		if err != nil {
-			logger.WithCtx(c.Request.Context()).Mod("system").Error("重新写入cookie token失败,未能成功解析token,请检查请求头是否存在x-token且claims是否为规定结构")
-			return token
-		}
-		SetToken(c, token, int(claims.ExpiresAt.Unix()-time.Now().Unix()))
+	if token != "" {
+		return token
 	}
+	token, _ = c.Cookie("x-token")
 	return token
+}
+
+func setTokenCookie(c *gin.Context, value string, maxAge int, expires time.Time) {
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:     "x-token",
+		Value:    value,
+		Path:     "/",
+		Expires:  expires,
+		MaxAge:   maxAge,
+		Secure:   requestUsesHTTPS(c.Request),
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+}
+
+func requestUsesHTTPS(r *http.Request) bool {
+	if r.TLS != nil {
+		return true
+	}
+	forwardedProto := strings.SplitN(r.Header.Get("X-Forwarded-Proto"), ",", 2)[0]
+	return strings.EqualFold(strings.TrimSpace(forwardedProto), "https")
 }
 
 func GetClaims(c *gin.Context) (*systemReq.CustomClaims, error) {

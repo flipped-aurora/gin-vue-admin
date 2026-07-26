@@ -23,7 +23,7 @@ import { dispatchTheme } from '@/theme/adapters/runtime'
 // 轻量登录态判断：避免在登录页等未登录场景向 setSelfSetting 发请求。
 // 直接读 token，不依赖 userStore，规避 user <-> theme 的循环引用。
 const hasAuthToken = () =>
-  Boolean(localStorage.getItem('token')) || document.cookie.includes('x-token=')
+  Boolean(localStorage.getItem('token'))
 
 export const useThemeStore = defineStore('theme', () => {
   const settings = reactive(readCachedThemeSettings() || cloneThemeSettings())

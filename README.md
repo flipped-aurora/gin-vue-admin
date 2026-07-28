@@ -63,12 +63,6 @@
 3. 您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)。
 4. 本项目采用 BSL 1.1 授权。非商用、学习、评估等用途请遵循仓库许可证；如将此项目用于商用或生产环境，或需要移除版权与署名信息，请[购买授权](https://plugin.gin-vue-admin.com/license)。您需保留仓库、日志和代码中的版权声明信息。
 
-<br>
-
-<div align="center">
-  <img src="https://qmplusimg.henrongyi.top/openSource/login.jpg" width="49%" alt="登录界面" style="border-radius: 8px;" />
-  <img src="https://qmplusimg.henrongyi.top/openSource/dashboard.jpg" width="49%" alt="仪表盘" style="border-radius: 8px;" />
-</div>
 
 ## 1. 基本介绍
 

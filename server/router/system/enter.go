@@ -29,6 +29,7 @@ type RouterGroup struct {
 	SkillsRouter
 	SecurityConfigRouter
 	TimedTaskRouter
+	LogViewerRouter
 }
 
 var (
@@ -59,4 +60,5 @@ var (
 	skillsApi           = api.ApiGroupApp.SystemApiGroup.SkillsApi
 	securityConfigApi   = api.ApiGroupApp.SystemApiGroup.SecurityConfigApi
 	timedTaskApi        = api.ApiGroupApp.SystemApiGroup.TimedTaskApi
+	logViewerApi        = api.ApiGroupApp.SystemApiGroup.LogViewerApi
 )

@@ -32,6 +32,7 @@ type ApiGroup struct {
 	SkillsApi
 	SecurityConfigApi
 	TimedTaskApi
+	LogViewerApi
 }
 
 var (
@@ -64,4 +65,5 @@ var (
 	skillsService           = service.ServiceGroupApp.SystemServiceGroup.SkillsService
 	securityConfigService   = service.ServiceGroupApp.SystemServiceGroup.SecurityConfigService
 	timedTaskService        = service.ServiceGroupApp.SystemServiceGroup.TimedTaskService
+	logViewerService        = service.ServiceGroupApp.SystemServiceGroup.LogViewerService
 )

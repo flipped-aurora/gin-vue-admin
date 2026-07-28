@@ -52,6 +52,10 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysLoginLog/findLoginLog", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysLoginLog/getLoginLogList", V2: "GET"},
 
+		{Ptype: "p", V0: "888", V1: "/logViewer/dates", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/logViewer/files", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/logViewer/content", V2: "GET"},
+
 		{Ptype: "p", V0: "888", V1: "/sysApiToken/createApiToken", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/sysApiToken/getApiTokenList", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/sysApiToken/deleteApiToken", V2: "POST"},

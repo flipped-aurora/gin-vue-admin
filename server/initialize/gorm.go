@@ -38,6 +38,7 @@ func Gorm() *gorm.DB {
 func RegisterTables() {
 	if global.GVA_CONFIG.System.DisableAutoMigrate {
 		logger.Bg().Mod("system").Info("auto-migrate is disabled, skipping table registration")
+		ensureLogViewerMetadata()
 		return
 	}
 
@@ -91,5 +92,12 @@ func RegisterTables() {
 		logger.Bg().Mod("system").Err(err).Error("register biz_table failed")
 		os.Exit(1)
 	}
+	ensureLogViewerMetadata()
 	logger.Bg().Mod("system").Info("register table success")
+}
+
+func ensureLogViewerMetadata() {
+	if err := EnsureLogViewerData(); err != nil {
+		logger.Bg().Mod("log-viewer").Err(err).Warn("log viewer metadata seed skipped")
+	}
 }

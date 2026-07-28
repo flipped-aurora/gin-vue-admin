@@ -106,6 +106,7 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "state", Name: "state", Component: "view/system/state.vue", Sort: 5, Meta: Meta{Title: "服务器状态", Icon: "server"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "dataAccessLog", Name: "dataAccessLog", Component: "view/superAdmin/dataAccessLog/dataAccessLog.vue", Sort: 6, Meta: Meta{Title: "数据权限审计", Icon: "warning"}},
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "timedTask", Name: "timedTask", Component: "view/systemTools/timedTask/index.vue", Sort: 7, Meta: Meta{Title: "定时任务", Icon: "timer"}},
+		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["monitor"], Path: "logViewer", Name: "logViewer", Component: "view/systemTools/logViewer/index.vue", Sort: 8, Meta: Meta{Title: "文件日志", Icon: "document"}},
 
 		// 媒体管理
 		{MenuLevel: 1, Hidden: false, ParentId: menuNameMap["media"], Path: "upload", Name: "upload", Component: "view/media/upload.vue", Sort: 1, Meta: Meta{Title: "媒体库（上传下载）", Icon: "upload"}},

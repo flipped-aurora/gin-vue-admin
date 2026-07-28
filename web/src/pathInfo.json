@@ -75,6 +75,7 @@
   "/src/view/systemTools/apiToken/index.vue": "Index",
   "/src/view/systemTools/installPlugin/index.vue": "Index",
   "/src/view/systemTools/loginLog/index.vue": "Index",
+  "/src/view/systemTools/logViewer/index.vue": "LogViewer",
   "/src/view/systemTools/pubPlug/pubPlug.vue": "PubPlug",
   "/src/view/systemTools/sysError/sysError.vue": "SysError",
   "/src/view/systemTools/system/system.vue": "Config",

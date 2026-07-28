@@ -32,4 +32,5 @@ type ServiceGroup struct {
 	LoginLogService
 	ApiTokenService
 	TimedTaskService
+	LogViewerService
 }

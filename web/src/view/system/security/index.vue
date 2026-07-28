@@ -76,9 +76,12 @@
         </el-tab-pane>
 
         <el-tab-pane label="密码过期" name="expire" class="mt-4">
-          <el-form :model="form" label-width="160px" class="max-w-2xl">
+          <el-form :model="form" label-width="200px" class="max-w-2xl">
             <el-form-item label="开启密码过期">
               <el-switch v-model="form.pwdExpireEnable" />
+            </el-form-item>
+            <el-form-item label="新用户首次登录强制改密">
+              <el-switch v-model="form.forceNewUserChangePassword" />
             </el-form-item>
             <el-form-item label="有效天数">
               <el-input-number v-model="form.pwdExpireDays" :min="1" />
@@ -121,7 +124,8 @@ const form = ref({
   lockThreshold: 5,
   lockDuration: 30,
   pwdExpireEnable: false,
-  pwdExpireDays: 90
+  pwdExpireDays: 90,
+  forceNewUserChangePassword: false
 })
 
 const load = async () => {

@@ -97,8 +97,8 @@ func (b *BaseApi) Login(c *gin.Context) {
 	// 4. 登录成功 清除失败计数与锁
 	systemSvc.ClearLoginFail(c.Request.Context(), l.Username)
 
-	// 5. 密码过期检查
-	needChange := systemSvc.IsPasswordExpired(c.Request.Context(), user.PasswordUpdatedAt, cfg, time.Now())
+	// 5. 初始密码或密码过期检查
+	needChange := systemSvc.ShouldForcePasswordChange(c.Request.Context(), *user, cfg, time.Now())
 	b.TokenNext(c, *user, needChange)
 }
 

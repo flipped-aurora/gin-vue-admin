@@ -17532,6 +17532,9 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
+                "forceNewUserChangePassword": {
+                    "type": "boolean"
+                },
                 "imgHeight": {
                     "type": "integer"
                 },

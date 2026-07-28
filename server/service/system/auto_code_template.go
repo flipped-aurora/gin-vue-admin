@@ -26,6 +26,10 @@ var AutoCodeTemplate = new(autoCodeTemplate)
 
 type autoCodeTemplate struct{}
 
+func autoCodeCreateContext(ctx context.Context) context.Context {
+	return context.WithoutCancel(ctx)
+}
+
 func (s *autoCodeTemplate) checkPackage(Pkg string, template string) (err error) {
 	switch template {
 	case "package":
@@ -75,6 +79,9 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return err
 	}
+
+	// File writes are irreversible; keep persistence running if Vite disconnects the client.
+	createCtx := autoCodeCreateContext(ctx)
 	for key, builder := range generate {
 		err = os.MkdirAll(filepath.Dir(key), os.ModePerm)
 		if err != nil {
@@ -89,7 +96,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	// 自动创建api
 	if info.AutoCreateApiToSql && !info.OnlyTemplate {
 		apis := info.Apis()
-		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		err := global.GVA_DB.WithContext(createCtx).Transaction(func(tx *gorm.DB) error {
 			for _, v := range apis {
 				var api model.SysApi
 				var id uint
@@ -115,7 +122,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if info.AutoCreateMenuToSql {
 		var entity model.SysBaseMenu
 		var id uint
-		err := global.GVA_DB.WithContext(ctx).First(&entity, "name = ?", info.Abbreviation).Error
+		err := global.GVA_DB.WithContext(createCtx).First(&entity, "name = ?", info.Abbreviation).Error
 		if err == nil {
 			id = entity.ID
 		} else {
@@ -137,7 +144,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 					entity.MenuBtn = append(entity.MenuBtn, excelBtn...)
 				}
 			}
-			err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
+			err = global.GVA_DB.WithContext(createCtx).Create(&entity).Error
 			id = entity.ID
 			if err != nil {
 				return errors.Wrap(err, "创建菜单失败!")
@@ -164,7 +171,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			TemplateID:   name,
 			TemplateInfo: string(templateInfo),
 		}
-		err = SysExportTemplateServiceApp.CreateSysExportTemplate(ctx, &sysExportTemplate)
+		err = SysExportTemplateServiceApp.CreateSysExportTemplate(createCtx, &sysExportTemplate)
 		if err != nil {
 			return err
 		}
@@ -178,7 +185,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		bytes, _ := json.Marshal(value)
 		history.Injections[key] = string(bytes)
 	}
-	err = AutocodeHistory.Create(ctx, history)
+	err = AutocodeHistory.Create(createCtx, history)
 	if err != nil {
 		return err
 	}

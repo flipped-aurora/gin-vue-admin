@@ -54,3 +54,8 @@ func IsPasswordExpired(ctx context.Context, passwordUpdatedAt *time.Time, cfg sy
 	deadline := passwordUpdatedAt.AddDate(0, 0, cfg.PwdExpireDays)
 	return now.After(deadline)
 }
+
+// ShouldForcePasswordChange combines the persisted initial-password obligation with expiry policy.
+func ShouldForcePasswordChange(ctx context.Context, user system.SysUser, cfg system.SysSecurityConfig, now time.Time) bool {
+	return user.MustChangePassword || IsPasswordExpired(ctx, user.PasswordUpdatedAt, cfg, now)
+}

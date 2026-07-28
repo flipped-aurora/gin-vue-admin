@@ -35,4 +35,7 @@ func TestDefaultSecurityConfig(t *testing.T) {
 	if cfg.PwdExpireDays != 90 {
 		t.Fatalf("PwdExpireDays default = %d, want 90", cfg.PwdExpireDays)
 	}
+	if cfg.ForceNewUserChangePassword {
+		t.Fatal("ForceNewUserChangePassword default = true, want false")
+	}
 }

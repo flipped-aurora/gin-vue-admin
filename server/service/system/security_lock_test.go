@@ -31,6 +31,45 @@ func TestIsPasswordExpired(t *testing.T) {
 	}
 }
 
+func TestShouldForcePasswordChange(t *testing.T) {
+	now := time.Date(2026, time.July, 28, 0, 0, 0, 0, time.UTC)
+	expired := now.AddDate(0, 0, -40)
+
+	tests := []struct {
+		name string
+		user system.SysUser
+		cfg  system.SysSecurityConfig
+		want bool
+	}{
+		{
+			name: "new user obligation",
+			user: system.SysUser{MustChangePassword: true},
+			want: true,
+		},
+		{
+			name: "expired password",
+			user: system.SysUser{PasswordUpdatedAt: &expired},
+			cfg:  system.SysSecurityConfig{PwdExpireEnable: true, PwdExpireDays: 30},
+			want: true,
+		},
+		{
+			name: "no obligation",
+			user: system.SysUser{PasswordUpdatedAt: &now},
+			cfg:  system.SysSecurityConfig{PwdExpireEnable: true, PwdExpireDays: 30},
+			want: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ShouldForcePasswordChange(context.Background(), tt.user, tt.cfg, now)
+			if got != tt.want {
+				t.Fatalf("ShouldForcePasswordChange() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestLockCounting(t *testing.T) {
 	testutil.InitMemoryCache(t, 0)
 	cfg := system.SysSecurityConfig{LockEnable: true, LockThreshold: 3, LockDuration: 30}

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ var mustChangePwdAllowList = []string{
 	"/jwt/jsonInBlacklist",
 }
 
-// MustChangePwdGuard 当 jwt 携带 MustChangePwd=true 时 仅放行改密/用户信息/登出 其余 403
+// MustChangePwdGuard 当 jwt 携带 MustChangePwd=true 时 仅放行改密/用户信息/登出 其余返回账号状态冲突
 func MustChangePwdGuard() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		raw, exists := c.Get("claims")
@@ -35,10 +36,10 @@ func MustChangePwdGuard() gin.HandlerFunc {
 				return
 			}
 		}
-		c.JSON(http.StatusForbidden, gin.H{
-			"code": 7,
-			"data": gin.H{"needChangePassword": true},
-			"msg":  "密码已过期，请先修改密码",
+		c.JSON(http.StatusConflict, response.Response{
+			Code: response.PASSWORD_CHANGE_REQUIRED,
+			Data: gin.H{"needChangePassword": true},
+			Msg:  "密码已过期，请先修改密码",
 		})
 		c.Abort()
 	}

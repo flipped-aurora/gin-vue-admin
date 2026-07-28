@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -29,16 +30,29 @@ func TestMustChangePwdGuard(t *testing.T) {
 	if w := setupRouterWithClaims(false, "/user/getUserList"); w.Code != http.StatusOK {
 		t.Fatalf("not-must-change should pass, got %d", w.Code)
 	}
-	// 强制改密 改密路径放行
-	if w := setupRouterWithClaims(true, "/user/changePassword"); w.Code != http.StatusOK {
-		t.Fatalf("changePassword should pass under must-change, got %d", w.Code)
+	for _, path := range []string{
+		"/user/changePassword",
+		"/user/getUserInfo",
+		"/jwt/jsonInBlacklist",
+	} {
+		t.Run("allow "+path, func(t *testing.T) {
+			if w := setupRouterWithClaims(true, path); w.Code != http.StatusOK {
+				t.Fatalf("%s should pass under must-change, got %d", path, w.Code)
+			}
+		})
 	}
-	// 强制改密 用户信息放行
-	if w := setupRouterWithClaims(true, "/user/getUserInfo"); w.Code != http.StatusOK {
-		t.Fatalf("getUserInfo should pass under must-change, got %d", w.Code)
-	}
-	// 强制改密 其它路径 403
-	if w := setupRouterWithClaims(true, "/user/getUserList"); w.Code != http.StatusForbidden {
-		t.Fatalf("other path should be 403 under must-change, got %d", w.Code)
+	// 强制改密 其它路径返回账号状态冲突和专用业务码
+	if w := setupRouterWithClaims(true, "/user/getUserList"); w.Code != http.StatusConflict {
+		t.Fatalf("other path should be 409 under must-change, got %d", w.Code)
+	} else {
+		var body struct {
+			Code int `json:"code"`
+		}
+		if err := json.Unmarshal(w.Body.Bytes(), &body); err != nil {
+			t.Fatalf("decode response: %v", err)
+		}
+		if body.Code != 10001 {
+			t.Fatalf("must-change response code = %d, want 10001", body.Code)
+		}
 	}
 }

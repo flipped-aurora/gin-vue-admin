@@ -53,8 +53,8 @@ func TestMustChangePwdMiddlewareBlocks(t *testing.T) {
 
 	w1 := httptest.NewRecorder()
 	r.ServeHTTP(w1, httptest.NewRequest(http.MethodPost, "/user/getUserList", nil))
-	if w1.Code != http.StatusForbidden {
-		t.Fatalf("getUserList under must-change should be 403, got %d", w1.Code)
+	if w1.Code != http.StatusConflict {
+		t.Fatalf("getUserList under must-change should be 409, got %d", w1.Code)
 	}
 
 	w2 := httptest.NewRecorder()

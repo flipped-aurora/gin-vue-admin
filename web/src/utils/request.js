@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useUserStore } from '@/pinia/modules/user'
 import { ElLoading, ElMessage } from 'element-plus'
 import { emitter } from '@/utils/bus'
+import { isPasswordChangeRequiredError } from '@/utils/requestError'
 import router from '@/router/index'
 
 const DEFAULT_REQUEST_TIMEOUT = 1000 * 60 * 10
@@ -240,10 +241,7 @@ service.interceptors.response.use(
       return Promise.reject(error)
     }
 
-    if (
-      error.response.status === 403 &&
-      (error.response?.data?.data?.needChangePassword || error.response?.data?.code === 7)
-    ) {
+    if (isPasswordChangeRequiredError(error)) {
       router.push({ name: 'ForceChangePassword', replace: true })
       return Promise.reject(error)
     }

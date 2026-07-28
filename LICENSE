@@ -3,6 +3,7 @@ Business Source License 1.1
 Licensed Work:       gin-vue-admin
 Licensor:            北京翻转极光科技有限责任公司
 
+
 Additional Use Grant:
 
 The following uses are permitted without a commercial license:
@@ -12,30 +13,40 @@ The following uses are permitted without a commercial license:
     on infrastructure owned and funded entirely by that
     individual, provided that all of the following
     conditions are satisfied simultaneously:
+
     (i)  such use is not conducted in the individual's
          capacity as an employee, contractor, agent, or
          representative of any Legal Entity;
+
     (ii) such use does not occur on equipment provided,
          funded, reimbursed, or authorized by any Legal
          Entity; and
+
     (iii)such use is not conducted at the direction of,
          or for the benefit of, any Legal Entity.
+
     Personal Use includes individual personal projects
     accessible via public internet, provided all
     conditions above are satisfied.
 
+
 (b) Evaluation and Development Use: use solely for
     internal technical evaluation, testing, or development
-    purposes, provided that all of the following
-    conditions are satisfied simultaneously:
+    purposes, provided that all of the following conditions
+    are satisfied simultaneously:
+
     (i)  the Licensed Work does not process real user
          data or real business data;
+
     (ii) the Licensed Work is not used to support any
          actual business operations or workflows;
+
     (iii)the Licensed Work is not deployed or delivered
          to any third party; and
+
     (iv) the Licensed Work is not accessible via public
          internet.
+
 
 (c) Educational Use: use by educational institutions or
     individuals for non-commercial teaching, research,
@@ -43,202 +54,298 @@ The following uses are permitted without a commercial license:
     conducted on behalf of or for the benefit of any
     commercial Legal Entity.
 
+
 Any use not expressly described in (a), (b), or (c)
 above constitutes Production Use and requires a
 commercial license.
 
-Change Date: The Change Date for each version is the
-date falling three (3) years after the date on which
-that version was first publicly released. The release
-date of each version shall be determined by reference
-to the version release records published by the
-Licensor in the official code repository or on the
-official website.
 
-Change License: Apache License, Version 2.0
+Change Date:
+
+The Change Date for each version is the date falling
+three (3) years after the date on which that version was
+first publicly released.
+
+
+Change License:
+
+Apache License, Version 2.0
+
 
 ------------------------------------------------------------------------
 
 Definitions
 
+
 "Licensed Work" means the software and associated
 documentation files made available under this License.
 
-"Licensor" means the copyright holder(s) of the
-Licensed Work.
+
+"Licensor" means the copyright holder(s) of the Licensed
+Work.
+
 
 "Legal Entity" means any corporation, partnership,
 limited liability company, sole proprietorship,
 individually registered business, or other organization
 recognized as a legal entity under applicable law,
-including any entity engaged in commercial activity
-regardless of profit motive.
+including any entity engaged in commercial activity.
+
 
 "Production Use" means any of the following:
 
-(a) Deployment for External Parties: deploying,
-    installing, hosting, configuring, integrating, or
-    otherwise making the Licensed Work available to any
-    third party — whether or not for compensation,
-    whether or not under a separate agreement, and
-    whether or not the deployment is accessible via
-    public internet — including but not limited to
-    providing the Licensed Work as part of a service,
-    product, solution, or deliverable to any client,
-    customer, or other party;
 
-(b) Organizational Deployment: any installation,
-    execution, or operation of the Licensed Work in
-    any of the following ways:
+(a) Deployment for External Parties:
+
+    deploying, installing, hosting, configuring,
+    integrating, or otherwise making the Licensed Work
+    available to any third party — whether or not for
+    compensation, whether or not under a separate
+    agreement, and whether or not the deployment is
+    accessible via public internet.
+
+
+(b) Organizational Deployment:
+
+    any installation, execution, or operation of the
+    Licensed Work:
+
     (i)  running on infrastructure owned, leased,
-         managed, or controlled by a Legal Entity,
-         including but not limited to servers, virtual
-         machines, containers, cloud instances, or
-         shared computing resources; or
-    (ii) by an individual acting in their capacity as
-         an employee, contractor, agent, or
-         representative of a Legal Entity, where such
-         use occurs on equipment provided by, or under
-         the direction or authorization of, such Legal
-         Entity; or
-    (iii)in a manner that is funded by, reimbursed by,
-         or conducted at the expense of a Legal Entity;
-    regardless of whether such use processes real data,
-    is integrated into any system, or is accessible
-    via any network;
+         managed, or controlled by a Legal Entity;
 
-(c) Commercial Integration: incorporating the Licensed
-    Work into any product, service, or system that is
-    sold, licensed, subscribed to, or otherwise
-    monetized, directly or indirectly.
+    (ii) by an individual acting in their capacity as
+         an employee, contractor, agent, or representative
+         of a Legal Entity;
+
+    (iii) in a manner funded by, reimbursed by, or
+          conducted at the expense of a Legal Entity.
+
+
+(c) Commercial Integration:
+
+    incorporating the Licensed Work into any product,
+    service, system, or solution that is sold, licensed,
+    subscribed to, or otherwise monetized.
+
 
 "Non-Production Use" means use that satisfies all
-conditions specified in Additional Use Grant section
-(b) above simultaneously. To facilitate compliance,
-users are advised to retain written records sufficient
-to demonstrate that all conditions of Non-Production
-Use are satisfied. The Licensor shall bear the burden
-of proof in accordance with applicable law when
-asserting any claim of breach or infringement.
+conditions specified in Additional Use Grant section (b).
+
 
 "Third Party" means any natural person or Legal Entity
-other than the user themselves. For the avoidance of
-doubt, a Legal Entity and its affiliates, subsidiaries,
-parent companies, or related entities each constitute
-separate parties for the purposes of this License,
-unless they are incorporated as a single unified legal
-entity under applicable law.
+other than the user themselves.
+
 
 ------------------------------------------------------------------------
 
 Terms
 
-The Licensor hereby grants you the right to copy,
-modify, create derivative works, redistribute, and
-make Non-Production Use and Personal Use of the
-Licensed Work. The foregoing rights are subject to
-the following conditions:
 
 Section 1  Production Use Restriction
+
 You may not make Production Use of the Licensed Work
 except as expressly permitted by a separate commercial
-license obtained from the Licensor. For the avoidance
-of doubt:
-(a) the scale of deployment, number of users,
-    transaction volume, or revenue generated does not
-    affect the applicability of this restriction;
-(b) absence of commercial intent or profit motive does
-    not exempt any use from this restriction; and
-(c) any Production Use, regardless of scale, intent,
-    or organizational structure, requires a commercial
-    license.
+license obtained from the Licensor.
+
+For avoidance of doubt:
+
+(a) deployment scale, number of users, transaction volume,
+    or revenue generated does not affect this restriction;
+
+(b) absence of commercial intent does not exempt any
+    Production Use;
+
+(c) any Production Use requires a valid commercial license.
+
 
 Section 2  Automatic Termination
-Any use of the Licensed Work in violation of this
-License will automatically terminate your rights
-under this License for the current version and all
-other versions of the Licensed Work released after
-the date of first violation. For the avoidance of
-doubt, versions of the Licensed Work released under
-a prior open source license before the adoption of
-this License remain governed by that prior license
-and are not affected by termination under this
-section.
+
+Any use of the Licensed Work in violation of this License
+will automatically terminate your rights under this
+License for the current version and all versions released
+after the date of first violation.
+
+Versions released under prior licenses remain governed
+by those licenses.
+
 
 Section 3  Distribution Requirements
+
 You must provide all recipients of the Licensed Work
 with a copy of this License.
 
+
 Section 4  Modification Notices
-You must cause any modified files to carry prominent
-notices stating that you changed the files and the
-date of such changes.
+
+You must cause modified files to carry prominent notices
+stating that you changed the files and the date of such
+changes.
+
 
 Section 5  Notice Preservation
-You must not remove, alter, or obscure any licensing,
-copyright, attribution, or other notices of the
-Licensor in the Licensed Work except as expressly
-permitted by a separate commercial license.
+
+You must not remove, alter, or obscure licensing,
+copyright, attribution, or other notices.
+
 
 Section 6  No Trademark License
-This License does not grant you any right in the
-trademarks, service marks, trade names, or logos
-of the Licensor.
+
+This License does not grant any right in trademarks,
+service marks, trade names, or logos of the Licensor.
+
 
 Section 7  Disclaimer of Warranties
-TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE
-LICENSED WORK IS PROVIDED ON AN "AS IS" BASIS.
-LICENSOR HEREBY DISCLAIMS ALL WARRANTIES, WHETHER
-EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE, AND
-SPECIFICALLY DISCLAIMS ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,
-TITLE, AND NON-INFRINGEMENT. THE FOREGOING DISCLAIMER
-SHALL NOT APPLY TO THE EXTENT PROHIBITED BY
-APPLICABLE MANDATORY LAW.
+
+THE LICENSED WORK IS PROVIDED "AS IS".
+
 
 Section 8  Limitation of Liability
-TO THE EXTENT PERMITTED BY APPLICABLE LAW, IN NO
-EVENT WILL THE LICENSOR BE LIABLE FOR ANY INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES ARISING OUT OF OR RELATED TO THIS LICENSE
-OR THE USE OR INABILITY TO USE THE LICENSED WORK,
-EVEN IF THE LICENSOR HAS BEEN ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGES. THE FOREGOING LIMITATION
-SHALL NOT APPLY TO THE EXTENT PROHIBITED BY
-APPLICABLE MANDATORY LAW.
+
+TO THE EXTENT PERMITTED BY LAW, THE LICENSOR SHALL
+NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES.
+
 
 Section 9  Change Date
-If the Change Date applicable to a specific version
-has passed, this License shall, with respect to that
-version, be replaced by the Change License, and from
-that date you may use that version of the Licensed
-Work under the terms of the Change License.
+
+After the Change Date, this License shall be replaced
+by the Change License for that version.
+
 
 Section 10  Governing Interpretation
-This License shall be interpreted in accordance with
-its plain meaning and the overall purpose of this
-License. The Licensor hereby declares that the core
-purpose of this License is to require a commercial
-license for all Production Use as defined herein.
-This License shall be interpreted in accordance with
-applicable law.
+
+This License shall be interpreted according to its
+plain meaning and purpose.
+
+The Licensor declares that the core purpose of this
+License is to require a commercial license for all
+Production Use.
 
 This License constitutes a standard form contract.
-The Licensor has drawn the attention of users to all
-terms that exclude or limit the Licensor's liability,
-restrict users' rights, or impose obligations on
-users, by presenting such terms prominently in this
-License, in fulfillment of the Licensor's obligation
-to give notice and explanation as required by
-applicable law.
+The Licensor has provided reasonable notice regarding
+terms restricting user rights and imposing obligations.
+
 
 ------------------------------------------------------------------------
 
-For information about the Business Source License,
-see https://mariadb.com/bsl11/
+Section 11  License Verification Mechanism
 
-For commercial licensing inquiries, contact:
-  Beijing Flipped Aurora Technology Co., Ltd.
-  (北京翻转极光科技有限责任公司)
-  Email: business@gin-vue-admin.com
-  Website: https://www.gin-vue-admin.com
+
+The Licensed Work may include license verification
+mechanisms for the purposes of:
+
+(a) verifying authorization status;
+
+(b) preventing unauthorized Production Use;
+
+(c) protecting the legitimate rights and interests of
+    the Licensor.
+
+
+Such mechanisms may process limited information
+necessary for license verification, including:
+
+(a) publicly accessible deployment addresses;
+
+(b) domain names or access addresses associated with
+    the deployment environment;
+
+(c) software version information;
+
+(d) license verification results;
+
+(e) verification timestamps.
+
+
+The Licensor shall use such information only for:
+
+(a) license management;
+
+(b) authorization verification;
+
+(c) compliance notification;
+
+(d) enforcement of this License.
+
+
+The license verification mechanism shall not be used
+for collecting user business data unrelated to license
+verification.
+
+
+------------------------------------------------------------------------
+
+Section 12  Unauthorized Mode
+
+
+If the Licensor determines that the Licensed Work is
+being used for Production Use without a valid commercial
+license, the Licensed Work may enter an unauthorized
+mode.
+
+
+In unauthorized mode, the Licensed Work may:
+
+(a) display authorization status notices;
+
+(b) display license reminder messages;
+
+(c) display authorization status watermarks;
+
+(d) limit certain non-essential functions;
+
+(e) request completion of authorization verification.
+
+
+The purpose of unauthorized mode is to notify users of
+authorization status and facilitate compliance with this
+License.
+
+
+The Licensor shall provide reasonable methods for users
+who believe the authorization status is incorrect to
+submit proof of authorization and request verification.
+
+
+Upon successful verification or completion of licensing
+requirements, authorized use may be restored.
+
+
+------------------------------------------------------------------------
+
+Section 13  Compliance Records
+
+
+The Licensor may maintain records relating to
+authorization verification, including:
+
+(a) publicly accessible deployment addresses;
+
+(b) authorization verification results;
+
+(c) verification timestamps;
+
+(d) publicly available deployment environment evidence.
+
+
+Such records may be used as compliance verification
+materials for enforcing this License.
+
+
+------------------------------------------------------------------------
+
+For information about the Business Source License:
+
+https://mariadb.com/bsl11/
+
+
+For commercial licensing inquiries:
+
+Beijing Flipped Aurora Technology Co., Ltd.
+北京翻转极光科技有限责任公司
+
+Email:
+business@gin-vue-admin.com
+
+Website:
+https://www.gin-vue-admin.com

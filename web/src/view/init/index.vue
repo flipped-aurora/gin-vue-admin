@@ -1,5 +1,5 @@
 <template>
-  <div id="userLayout" class="relative h-full w-full bg-white dark:bg-slate-900 md:h-screen">
+  <div id="userLayout" class="init-layout relative w-full overflow-hidden bg-white dark:bg-slate-900">
     <!-- 右侧蓝色斜切 banner（仅桌面端显示） -->
     <div class="banner-oblique absolute inset-y-0 right-0 hidden w-[56%] overflow-hidden bg-[#2264f2] md:block">
       <img class="absolute right-0 top-0 h-full w-auto max-w-none" src="@/assets/cover-redesign.svg" alt="banner" />
@@ -7,13 +7,22 @@
 
     <!-- 左侧内容区 -->
     <div class="relative z-10 h-full w-full md:w-1/2">
-      <div class="flex h-full items-center justify-center">
-        <div class="w-4/5 md:w-96">
+      <div class="flex h-full min-h-0 items-center justify-center p-6 md:p-8">
+        <div class="flex max-h-full min-h-0 w-4/5 flex-col overflow-hidden md:w-96">
           <!-- 顶部 logo + 大写字标（无副标题） -->
-          <EntryBrand class="mb-9" />
-          <div v-if="!page.showForm" class="anim-fade-up">
-            <h2 class="mb-6 text-2xl font-bold dark:text-white">初始化须知</h2>
-            <div class="space-y-5">
+          <EntryBrand class="mb-6 shrink-0 md:mb-9" />
+          <div v-if="!page.showForm" class="anim-fade-up flex min-h-0 flex-1 flex-col overflow-hidden">
+            <h2 id="init-notice-title" class="mb-6 shrink-0 text-2xl font-bold dark:text-white">初始化须知</h2>
+            <div
+              ref="noticeScrollRef"
+              class="min-h-0 flex-1 overflow-y-auto pr-2"
+              role="region"
+              aria-labelledby="init-notice-title"
+              tabindex="0"
+              @scroll="updateNoticeReadState"
+            >
+              <div ref="noticeContentRef">
+                <div class="space-y-5">
               <div class="notice-group">
                 <h4 class="mb-2 flex items-center gap-1.5 text-sm font-semibold text-[#2264f2]">
                   <el-icon><Reading /></el-icon>使用前准备
@@ -108,22 +117,43 @@
                   </p>
                 </div>
               </div>
-            </div>
+                </div>
 
-            <p class="mt-4 text-sm text-gray-400 dark:text-gray-500">
-              注：官方文档及社区主要用于项目学习与使用指导。
-              商业部署支持、技术服务及定制开发需求，请联系官方获取对应服务。
+                <p class="mt-4 text-sm text-gray-400 dark:text-gray-500">
+                  注：官方文档及社区主要用于项目学习与使用指导。
+                  商业部署支持、技术服务及定制开发需求，请联系官方获取对应服务。
+                </p>
+              </div>
+            </div>
+            <p
+              id="init-notice-hint"
+              class="mt-2 flex h-5 shrink-0 items-center gap-1 text-xs text-gray-500 dark:text-gray-400"
+              aria-live="polite"
+            >
+              <template v-if="noticeHint">
+                <el-icon aria-hidden="true"><Bottom /></el-icon>
+                <span>{{ noticeHint }}</span>
+              </template>
             </p>
-            <div class="mt-8 flex gap-4">
+            <div class="mt-2 flex shrink-0 gap-4">
               <el-button type="primary" size="large" class="flex-1" @click="goDoc">
                 阅读文档
               </el-button>
-              <el-button type="primary" plain size="large" class="btn-hollow flex-1" @click="showNext">
+              <el-button
+                type="primary"
+                plain
+                size="large"
+                class="btn-hollow flex-1"
+                :disabled="!canConfirmNotice"
+                :title="canConfirmNotice ? '' : '请先阅读至底部'"
+                aria-describedby="init-notice-hint"
+                @click="showNext"
+              >
                 我已确认
               </el-button>
             </div>
           </div>
-          <div v-if="page.showForm" class="anim-fade-up">
+          <div v-if="page.showForm" class="anim-fade-up min-h-0 flex-1 overflow-y-auto pr-2">
             <el-form ref="formRef" :model="form" label-position="top" size="large" class="init-form">
               <el-form-item label="管理员密码">
                 <el-input v-model="form.adminPassword" show-password placeholder="admin账号的默认密码" />
@@ -178,11 +208,12 @@
 <script setup>
 // @ts-ignore
 import { initDB } from '@/api/initdb'
-import { reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
-import { Coin, Lock, Reading } from '@element-plus/icons-vue'
+import { Bottom, Coin, Lock, Reading } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import EntryBrand from '@/components/entryBrand/index.vue'
+import { getScrollGateHint, isScrollAtBottom } from './scroll-gate'
 
 defineOptions({
   name: 'Init'
@@ -195,7 +226,40 @@ const page = reactive({
   showForm: false
 })
 
+const noticeScrollRef = ref(null)
+const noticeContentRef = ref(null)
+const canConfirmNotice = ref(false)
+const noticeHint = computed(() => getScrollGateHint(canConfirmNotice.value))
+let noticeResizeObserver
+
+const updateNoticeReadState = () => {
+  if (!noticeScrollRef.value) {
+    canConfirmNotice.value = false
+    return
+  }
+  canConfirmNotice.value = isScrollAtBottom(noticeScrollRef.value)
+}
+
+const disconnectNoticeObserver = () => {
+  noticeResizeObserver?.disconnect()
+  noticeResizeObserver = undefined
+}
+
+onMounted(async () => {
+  await nextTick()
+  updateNoticeReadState()
+
+  noticeResizeObserver = new ResizeObserver(updateNoticeReadState)
+  noticeResizeObserver.observe(noticeScrollRef.value)
+  noticeResizeObserver.observe(noticeContentRef.value)
+})
+
+onBeforeUnmount(disconnectNoticeObserver)
+
 const showNext = () => {
+  if (!canConfirmNotice.value) return
+
+  disconnectNoticeObserver()
   page.showReadme = false
   setTimeout(() => {
     page.showForm = true
@@ -347,6 +411,11 @@ const onSubmit = async () => {
 </script>
 
 <style lang="scss" scoped>
+.init-layout {
+  height: 100vh;
+  height: 100dvh;
+}
+
 /* 右侧蓝色面板的左边缘斜切：顶部靠右、底部靠左，蓝色区上窄下宽 */
 .banner-oblique {
   clip-path: polygon(22% 0, 100% 0, 100% 100%, 4% 100%);

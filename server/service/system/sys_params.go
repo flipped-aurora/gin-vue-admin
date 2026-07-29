@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"gorm.io/gorm/clause"
 )
 
 type SysParamsService struct{}
@@ -60,7 +61,10 @@ func (sysParamsService *SysParamsService) GetSysParamsInfoList(ctx context.Conte
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
 	if info.Key != "" {
-		db = db.Where("key LIKE ?", "%"+info.Key+"%")
+		db = db.Where(clause.Like{
+			Column: clause.Column{Name: "key"},
+			Value:  "%" + info.Key + "%",
+		})
 	}
 	err = db.Count(&total).Error
 	if err != nil {

@@ -55,7 +55,10 @@ func (e *FileUploadAndDownloadService) DeleteFile(ctx context.Context, file medi
 	// 引用计数：同一 key 可能被秒传复制出多条记录，仅当最后一条时才真正删 OSS 对象，
 	// 避免删一个副本导致其他副本文件丢失。
 	var count int64
-	if err = global.GVA_DB.WithContext(ctx).Model(&media.FileUploadAndDownload{}).Where("key = ?", fileFromDb.Key).Count(&count).Error; err != nil {
+	if err = global.GVA_DB.WithContext(ctx).
+		Model(&media.FileUploadAndDownload{}).
+		Where(&media.FileUploadAndDownload{Key: fileFromDb.Key}, "Key").
+		Count(&count).Error; err != nil {
 		return err
 	}
 	if count <= 1 {

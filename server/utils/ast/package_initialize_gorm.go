@@ -87,11 +87,19 @@ func (a *PackageInitializeGorm) Rollback(file *ast.File) error {
 }
 
 func (a *PackageInitializeGorm) Injection(file *ast.File) error {
-	_ = NewImport(a.ImportPath).Injection(file)
-	bizModelDecl := FindFunction(file, "bizModel")
-	if bizModelDecl != nil {
-		a.addDbVar(bizModelDecl.Body)
+	if file == nil {
+		return fmt.Errorf("gorm 注入目标不能为空")
 	}
+	bizModelDecl := FindFunction(file, "bizModel")
+	if bizModelDecl == nil || bizModelDecl.Body == nil {
+		return fmt.Errorf("gorm 注入目标缺少 bizModel 函数")
+	}
+	if a.Business != "" {
+		if err := a.addDbVar(bizModelDecl.Body); err != nil {
+			return err
+		}
+	}
+	found := false
 	// 寻找目标结构
 	ast.Inspect(file, func(n ast.Node) bool {
 		// 总调用的db变量根据business来决定
@@ -118,6 +126,7 @@ func (a *PackageInitializeGorm) Injection(file *ast.File) error {
 			return true
 		}
 
+		found = true
 		// 添加结构体参数
 		callExpr.Args = append(callExpr.Args, &ast.CompositeLit{
 			Type: &ast.SelectorExpr{
@@ -125,8 +134,14 @@ func (a *PackageInitializeGorm) Injection(file *ast.File) error {
 				Sel: ast.NewIdent(a.StructName),
 			},
 		})
-		return true
+		return false
 	})
+	if !found {
+		return fmt.Errorf("bizModel 中未找到 %s.AutoMigrate 调用", a.autoMigrateDBName())
+	}
+	if err := NewImport(a.ImportPath).Injection(file); err != nil {
+		return fmt.Errorf("注入 gorm import 失败: %w", err)
+	}
 	return nil
 }
 
@@ -137,16 +152,26 @@ func (a *PackageInitializeGorm) Format(filename string, writer io.Writer, file *
 	return a.Base.Format(filename, writer, file)
 }
 
+func (a *PackageInitializeGorm) autoMigrateDBName() string {
+	if a.Business == "" {
+		return "db"
+	}
+	return a.Business + "Db"
+}
+
 // 创建businessDB变量
-func (a *PackageInitializeGorm) addDbVar(astBody *ast.BlockStmt) {
+func (a *PackageInitializeGorm) addDbVar(astBody *ast.BlockStmt) error {
 	for i := range astBody.List {
 		if assignStmt, ok := astBody.List[i].(*ast.AssignStmt); ok {
 			if ident, ok := assignStmt.Lhs[0].(*ast.Ident); ok {
 				if (a.Business == "" && ident.Name == "db") || ident.Name == a.Business+"Db" {
-					return
+					return nil
 				}
 			}
 		}
+	}
+	if len(astBody.List) == 0 {
+		return fmt.Errorf("bizModel 函数体为空，无法注入业务数据库")
 	}
 
 	// 添加 businessDb := global.GetGlobalDBByDBName("business") 变量
@@ -193,4 +218,5 @@ func (a *PackageInitializeGorm) addDbVar(astBody *ast.BlockStmt) {
 
 	returnNode := astBody.List[len(astBody.List)-1]
 	astBody.List = append(astBody.List[:len(astBody.List)-1], assignNode, autoMigrateCall, returnNode)
+	return nil
 }

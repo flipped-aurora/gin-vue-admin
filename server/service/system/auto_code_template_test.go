@@ -29,28 +29,6 @@ func TestAutoCodeCreateContextSurvivesRequestCancellation(t *testing.T) {
 	}
 }
 
-func Test_autoCodeTemplate_Create(t *testing.T) {
-	type args struct {
-		ctx  context.Context
-		info request.AutoCode
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &autoCodeTemplate{}
-			if err := s.Create(tt.args.ctx, tt.args.info); (err != nil) != tt.wantErr {
-				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
 func Test_autoCodeTemplate_Preview(t *testing.T) {
 	type args struct {
 		ctx  context.Context

@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"text/template"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -19,10 +20,10 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	utilsAst "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
-	"gorm.io/gorm"
 )
 
 var AutoCodeTemplate = new(autoCodeTemplate)
+var autoCodeCreateMu sync.Mutex
 
 type autoCodeTemplate struct{}
 
@@ -60,9 +61,14 @@ func (s *autoCodeTemplate) checkPackage(Pkg string, template string) (err error)
 
 // Create 创建生成自动化代码
 func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) error {
-	history := info.History()
+	autoCodeCreateMu.Lock()
+	defer autoCodeCreateMu.Unlock()
+
+	// Frontend files are published last, but their Vite refresh may still cancel
+	// the HTTP request before the handler returns. The accepted create task must finish.
+	createCtx := autoCodeCreateContext(ctx)
 	var autoPkg model.SysAutoCodePackage
-	err := global.GVA_DB.WithContext(ctx).Where("package_name = ?", info.Package).First(&autoPkg).Error
+	err := global.GVA_DB.WithContext(createCtx).Where("package_name = ?", info.Package).First(&autoPkg).Error
 	if err != nil {
 		return errors.Wrap(err, "查询包失败!")
 	}
@@ -70,126 +76,47 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return err
 	}
-	// 增加判断: 重复创建struct 或者重复的简称
-	if AutocodeHistory.Repeat(ctx, info.BusinessDB, info.StructName, info.Abbreviation, info.Package) {
+	exists, err := autoCodeIdentityExists(createCtx, global.GVA_DB, info)
+	if err != nil {
+		return err
+	}
+	if exists {
 		return errors.New("已经创建过此数据结构,请勿重复创建!")
 	}
 
-	generate, templates, injections, err := s.generate(ctx, info, autoPkg)
+	layout, err := newAutoCodeTaskLayout(
+		global.GVA_CONFIG.AutoCode.Root,
+		global.GVA_CONFIG.AutoCode.Server,
+		global.GVA_CONFIG.AutoCode.WebRoot(),
+	)
 	if err != nil {
 		return err
 	}
-
-	// File writes are irreversible; keep persistence running if Vite disconnects the client.
-	createCtx := autoCodeCreateContext(ctx)
-	for key, builder := range generate {
-		err = os.MkdirAll(filepath.Dir(key), os.ModePerm)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", key)
-		}
-		err = os.WriteFile(key, []byte(builder.String()), 0666)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]写入文件失败!", key)
-		}
+	generated, templates, injections, err := s.generate(createCtx, info, autoPkg)
+	if err != nil {
+		return err
 	}
-
-	// 自动创建api
-	if info.AutoCreateApiToSql && !info.OnlyTemplate {
-		apis := info.Apis()
-		err := global.GVA_DB.WithContext(createCtx).Transaction(func(tx *gorm.DB) error {
-			for _, v := range apis {
-				var api model.SysApi
-				var id uint
-				err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error
-				if errors.Is(err, gorm.ErrRecordNotFound) {
-					if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
-						return err
-					}
-					id = v.ID
-				} else {
-					id = api.ID
-				}
-				history.ApiIDs = append(history.ApiIDs, id)
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-	}
-
-	// 自动创建menu
-	if info.AutoCreateMenuToSql {
-		var entity model.SysBaseMenu
-		var id uint
-		err := global.GVA_DB.WithContext(createCtx).First(&entity, "name = ?", info.Abbreviation).Error
-		if err == nil {
-			id = entity.ID
-		} else {
-			entity = info.Menu(autoPkg.Template)
-			if info.AutoCreateBtnAuth && !info.OnlyTemplate {
-				entity.MenuBtn = []model.SysBaseMenuBtn{
-					{SysBaseMenuID: entity.ID, Name: "add", Desc: "新增"},
-					{SysBaseMenuID: entity.ID, Name: "batchDelete", Desc: "批量删除"},
-					{SysBaseMenuID: entity.ID, Name: "delete", Desc: "删除"},
-					{SysBaseMenuID: entity.ID, Name: "edit", Desc: "编辑"},
-					{SysBaseMenuID: entity.ID, Name: "info", Desc: "详情"},
-				}
-				if info.HasExcel {
-					excelBtn := []model.SysBaseMenuBtn{
-						{SysBaseMenuID: entity.ID, Name: "exportTemplate", Desc: "导出模板"},
-						{SysBaseMenuID: entity.ID, Name: "exportExcel", Desc: "导出Excel"},
-						{SysBaseMenuID: entity.ID, Name: "importExcel", Desc: "导入Excel"},
-					}
-					entity.MenuBtn = append(entity.MenuBtn, excelBtn...)
-				}
-			}
-			err = global.GVA_DB.WithContext(createCtx).Create(&entity).Error
-			id = entity.ID
-			if err != nil {
-				return errors.Wrap(err, "创建菜单失败!")
-			}
-		}
-		history.MenuID = id
-	}
-
-	if info.HasExcel {
-		dbName := info.BusinessDB
-		name := info.Package + "_" + info.StructName
-		tableName := info.TableName
-		fieldsMap := make(map[string]string, len(info.Fields))
-		for _, field := range info.Fields {
-			if field.Excel {
-				fieldsMap[field.ColumnName] = field.FieldDesc
-			}
-		}
-		templateInfo, _ := json.Marshal(fieldsMap)
-		sysExportTemplate := model.SysExportTemplate{
-			DBName:       dbName,
-			Name:         name,
-			TableName:    tableName,
-			TemplateID:   name,
-			TemplateInfo: string(templateInfo),
-		}
-		err = SysExportTemplateServiceApp.CreateSysExportTemplate(createCtx, &sysExportTemplate)
-		if err != nil {
-			return err
-		}
-		history.ExportTemplateID = sysExportTemplate.ID
-	}
-
-	// 创建历史记录
+	history := info.History()
 	history.Templates = templates
 	history.Injections = make(map[string]string, len(injections))
 	for key, value := range injections {
-		bytes, _ := json.Marshal(value)
+		bytes, marshalErr := json.Marshal(value)
+		if marshalErr != nil {
+			return errors.Wrapf(marshalErr, "序列化自动代码注入信息 %s 失败", key)
+		}
 		history.Injections[key] = string(bytes)
 	}
-	err = AutocodeHistory.Create(createCtx, history)
+	files := make(map[string][]byte, len(generated))
+	for target, builder := range generated {
+		files[target] = []byte(builder.String())
+	}
+	fileTask, err := prepareAutoCodeFileTask(layout, files)
 	if err != nil {
 		return err
 	}
-	return nil
+	return commitAutoCodeFileTask(fileTask, publishPreparedAutoCodeFile, func() error {
+		return persistAutoCodeMetadata(createCtx, global.GVA_DB, info, autoPkg.Template, history)
+	})
 }
 
 // Preview 预览自动化代码
@@ -243,6 +170,19 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		}
 		code[create] = builder
 	} // 生成文件
+	injectedCode, injections, err := renderAutoCodeInjections(info, asts)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	for key, builder := range injectedCode {
+		code[key] = builder
+	}
+	// 注入代码
+	return code, templates, injections, nil
+}
+
+func renderAutoCodeInjections(info request.AutoCode, asts map[string]utilsAst.Ast) (map[string]strings.Builder, map[string]utilsAst.Ast, error) {
+	code := make(map[string]strings.Builder, len(asts))
 	injections := make(map[string]utilsAst.Ast, len(asts))
 	for key, value := range asts {
 		keys := strings.Split(key, "=>")
@@ -261,21 +201,25 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 				}
 			}
 			var builder strings.Builder
-			parse, _ := value.Parse("", &builder)
-			if parse != nil {
-				_ = value.Injection(parse)
-				err = value.Format("", &builder, parse)
-				if err != nil {
-					return nil, nil, nil, err
-				}
-				code[keys[0]] = builder
-				injections[keys[1]] = value
-				fmt.Println(keys[0], "注入成功!")
+			parsed, err := value.Parse("", &builder)
+			if err != nil {
+				return nil, nil, errors.Wrapf(err, "[filepath:%s]解析注入目标失败", keys[0])
 			}
+			if parsed == nil {
+				return nil, nil, errors.Errorf("[filepath:%s]解析注入目标为空", keys[0])
+			}
+			if err = value.Injection(parsed); err != nil {
+				return nil, nil, errors.Wrapf(err, "[filepath:%s]注入代码失败", keys[0])
+			}
+			if err = value.Format("", &builder, parsed); err != nil {
+				return nil, nil, errors.Wrapf(err, "[filepath:%s]格式化注入代码失败", keys[0])
+			}
+			code[keys[0]] = builder
+			injections[keys[1]] = value
+			fmt.Println(keys[0], "注入成功!")
 		}
 	}
-	// 注入代码
-	return code, templates, injections, nil
+	return code, injections, nil
 }
 
 func (s *autoCodeTemplate) AddFunc(ctx context.Context, info request.AutoFunc) error {

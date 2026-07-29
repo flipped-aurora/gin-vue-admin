@@ -212,12 +212,13 @@ func (r *AutoCode) Pretreatment() error {
 func (r *AutoCode) History() SysAutoHistoryCreate {
 	bytes, _ := json.Marshal(r)
 	return SysAutoHistoryCreate{
-		Table:       r.TableName,
-		Package:     r.Package,
-		Request:     string(bytes),
-		StructName:  r.StructName,
-		BusinessDB:  r.BusinessDB,
-		Description: r.Description,
+		Table:        r.TableName,
+		Package:      r.Package,
+		Request:      string(bytes),
+		StructName:   r.StructName,
+		Abbreviation: r.Abbreviation,
+		BusinessDB:   r.BusinessDB,
+		Description:  r.Description,
 	}
 }
 

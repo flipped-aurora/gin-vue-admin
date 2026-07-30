@@ -40,6 +40,7 @@ web/pnpm-lock.yaml
 
 # binary files
 *.exe
+*.exe~
 
 # SQLite database files
 *.db

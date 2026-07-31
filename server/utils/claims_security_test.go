@@ -115,11 +115,17 @@ func TestLoginTokenWithExpireSetsMustChangePwd(t *testing.T) {
 	if !claims.MustChangePwd {
 		t.Fatalf("claims.MustChangePwd = false, want true")
 	}
+	if claims.UserType != system.UserTypeAdmin {
+		t.Fatalf("claims.UserType = %q, want %q", claims.UserType, system.UserTypeAdmin)
+	}
 	parsed, err := NewJWT().ParseToken(token)
 	if err != nil {
 		t.Fatalf("ParseToken err = %v", err)
 	}
 	if !parsed.MustChangePwd {
 		t.Fatalf("parsed.MustChangePwd = false, want true")
+	}
+	if parsed.UserType != system.UserTypeAdmin {
+		t.Fatalf("parsed.UserType = %q, want %q", parsed.UserType, system.UserTypeAdmin)
 	}
 }

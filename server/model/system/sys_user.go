@@ -14,6 +14,7 @@ type Login interface {
 	GetUUID() uuid.UUID
 	GetUserId() uint
 	GetAuthorityId() uint
+	GetUserType() UserType
 	GetUserInfo() any
 }
 
@@ -63,6 +64,10 @@ func (s *SysUser) GetUserId() uint {
 
 func (s *SysUser) GetAuthorityId() uint {
 	return s.AuthorityId
+}
+
+func (s *SysUser) GetUserType() UserType {
+	return UserTypeAdmin
 }
 
 func (s *SysUser) GetUserInfo() any {

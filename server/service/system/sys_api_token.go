@@ -46,6 +46,7 @@ func (apiVersion *ApiTokenService) CreateApiToken(ctx context.Context, apiToken 
 			Username:    user.Username,
 			NickName:    user.NickName,
 			AuthorityId: apiToken.AuthorityID,
+			UserType:    user.GetUserType(),
 		},
 		BufferTime: int64(bf / time.Second), // 缓冲时间
 		RegisteredClaims: jwt.RegisteredClaims{

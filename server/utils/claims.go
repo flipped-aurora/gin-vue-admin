@@ -130,6 +130,20 @@ func GetUserName(c *gin.Context) string {
 	}
 }
 
+// GetUserType 从Gin的Context中获取从jwt解析出来的用户类型
+func GetUserType(c *gin.Context) system.UserType {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetClaims(c); err != nil {
+			return ""
+		} else {
+			return cl.UserType
+		}
+	} else {
+		waitUse := claims.(*systemReq.CustomClaims)
+		return waitUse.UserType
+	}
+}
+
 func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims, err error) {
 	j := NewJWT()
 	claims = j.CreateClaims(systemReq.BaseClaims{
@@ -138,6 +152,7 @@ func LoginToken(user system.Login) (token string, claims systemReq.CustomClaims,
 		NickName:    user.GetNickname(),
 		Username:    user.GetUsername(),
 		AuthorityId: user.GetAuthorityId(),
+		UserType:    user.GetUserType(),
 	})
 	token, err = j.CreateToken(claims)
 	return
@@ -152,6 +167,7 @@ func LoginTokenWithExpire(user system.Login, mustChangePwd bool) (token string, 
 		NickName:    user.GetNickname(),
 		Username:    user.GetUsername(),
 		AuthorityId: user.GetAuthorityId(),
+		UserType:    user.GetUserType(),
 	})
 	claims.MustChangePwd = mustChangePwd
 	token, err = j.CreateToken(claims)

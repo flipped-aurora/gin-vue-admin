@@ -1,6 +1,7 @@
 package request
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -19,4 +20,5 @@ type BaseClaims struct {
 	Username    string
 	NickName    string
 	AuthorityId uint
+	UserType    system.UserType
 }

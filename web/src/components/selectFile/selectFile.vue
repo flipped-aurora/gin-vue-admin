@@ -22,6 +22,7 @@
   import { ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
+  import { getUploadErrorMessage } from '@/utils/uploadResponse'
   import { useUserStore } from "@/pinia";
 
   defineOptions({
@@ -52,15 +53,13 @@
   const emits = defineEmits(['on-success', 'on-error'])
 
   const uploadSuccess = (res) => {
-    const { data, code } = res
-    if (code !== 0) {
-      ElMessage({
-        type: 'error',
-        message: '上传失败' + res.msg
-      })
+    const errorMessage = getUploadErrorMessage(res)
+    if (errorMessage) {
+      ElMessage.error(errorMessage)
       fileList.value.pop()
       return
     }
+    const { data } = res
     model.value.push({
       name: data.file.name,
       url: data.file.url

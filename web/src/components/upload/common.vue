@@ -21,6 +21,7 @@
   import { ElMessage } from 'element-plus'
   import { isVideoMime, isImageMime } from '@/utils/image'
   import { getBaseUrl } from '@/utils/format'
+  import { getUploadErrorMessage } from '@/utils/uploadResponse'
   import { Upload } from "@element-plus/icons-vue";
   import { useUserStore } from "@/pinia";
 
@@ -74,8 +75,15 @@
   }
 
   const uploadSuccess = (res) => {
+    fullscreenLoading.value = false
+    const errorMessage = getUploadErrorMessage(res)
+    if (errorMessage) {
+      ElMessage.error(errorMessage)
+      return
+    }
+
     const { data } = res
-    if (data.file) {
+    if (data?.file) {
       emit('on-success', data.file.url)
     }
   }

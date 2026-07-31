@@ -83,6 +83,7 @@ import { RefreshLeft, RefreshRight, Plus, Minus } from '@element-plus/icons-vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
+import { getUploadErrorMessage } from '@/utils/uploadResponse'
 import { useRouter } from 'vue-router'
 
 defineOptions({
@@ -193,6 +194,13 @@ const handleUpload = () => {
 }
 
 const handleImageSuccess = (res) => {
+  const errorMessage = getUploadErrorMessage(res)
+  if (errorMessage) {
+    uploading.value = false
+    ElMessage.error(errorMessage)
+    return
+  }
+
   const { data } = res
   if (data) {
     imgSrc.value = null

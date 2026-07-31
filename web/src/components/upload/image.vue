@@ -18,6 +18,7 @@
   import ImageCompress from '@/utils/image'
   import { ElMessage } from 'element-plus'
   import { getBaseUrl } from '@/utils/format'
+  import { getUploadErrorMessage } from '@/utils/uploadResponse'
   import { Upload } from "@element-plus/icons-vue";
   import { useUserStore } from "@/pinia";
 
@@ -67,8 +68,14 @@
   }
 
   const handleImageSuccess = (res) => {
+    const errorMessage = getUploadErrorMessage(res)
+    if (errorMessage) {
+      ElMessage.error(errorMessage)
+      return
+    }
+
     const { data } = res
-    if (data.file) {
+    if (data?.file) {
       emit('on-success', data.file.url)
     }
   }

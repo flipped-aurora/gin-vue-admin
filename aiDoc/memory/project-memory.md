@@ -9,7 +9,7 @@
 
 ### 2026-04-01
 
-- `AGENT.MD` 是项目级 AI 规则的唯一真源
+- `AGENTS.md` 是项目级 AI 规则的唯一真源
 - `aiDoc/` 是结构化 AI 文档层
 - `aiDoc/examples/` 是讲解型示例层
 - `aiDoc/memory/` 正式拆分为“长期记忆”和“业务记忆”

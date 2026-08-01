@@ -7,7 +7,7 @@
 ## 文档组织偏好
 
 - 不希望在多个工具目录中重复维护同一份 project rule
-- 更倾向于 `AGENT.MD + aiDoc/` 的单一真源结构
+- 更倾向于 `AGENTS.md + aiDoc/` 的单一真源结构
 - 更偏好 harness engineering 风格的分层文档设计
 - 更偏好“讲解型示例”，而不是纯模板式示例
 

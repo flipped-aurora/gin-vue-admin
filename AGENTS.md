@@ -1,4 +1,4 @@
-# AGENT.MD
+# AGENTS.md
 
 ## 目的
 
@@ -10,7 +10,7 @@
 
 按下面顺序加载项目上下文：
 
-1. `AGENT.MD`
+1. `AGENTS.md`
 2. `aiDoc/README.md`
 3. 按任务读取以下目录中的相关文件：
    - `aiDoc/relations/`
@@ -20,7 +20,7 @@
    - `aiDoc/memory/`
 4. 仅在当前工具确实依赖时，再读取工具目录下的适配文件
 
-若内容冲突，以 `AGENT.MD` 为准。
+若内容冲突，以 `AGENTS.md` 为准。
 
 ## 仓库概览
 
@@ -110,12 +110,12 @@
 
 ### 文档维护
 
-- `AGENT.MD` 只保留高层、稳定、跨任务的规则
+- `AGENTS.md` 只保留高层、稳定、跨任务的规则
 - 细节上下文写入 `aiDoc/`
 - 结构关系放在 `aiDoc/relations/`
 - 示例写法放在 `aiDoc/examples/`
 - 长期记忆与业务记忆放在 `aiDoc/memory/`
-- 若项目级 AI 规则发生变化，先改 `AGENT.MD`，再按需更新适配层
+- 若项目级 AI 规则发生变化，先改 `AGENTS.md`，再按需更新适配层
 
 ### 版权与授权保护规则
 

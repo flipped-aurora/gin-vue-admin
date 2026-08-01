@@ -60,6 +60,11 @@
 - 避免内联 `style`；动态样式用绑定的原子 class 或 CSS 变量，主题相关能力优先走 CSS 变量
 - 细则见 `aiDoc/frontend-backend/frontend-rules.md`
 
+### 前端代码可读性
+- 前端代码优先一行表达一个独立语句，禁止使用分号把多个语句拼在同一行
+- Vue 模板中的嵌套元素、多属性组件，以及 JavaScript 中的多字段对象/数组、控制流和函数体，应按结构换行并保持清晰缩进；CSS 规则中的声明也应逐行书写
+- 只有简短且语义单一的表达式或标签可以保留单行；当单行内容需要横向滚动或难以快速辨认结构时，必须拆行
+
 ### 图标
 
 - **菜单图标**(`server/source/system/menu.go` 的 `Icon` 字段)优先用空心(线框)风格,避免填充式/实心款(如 Element Plus 的 `*-filled`,及 `avatar`/`platform`/`management`/`lock` 等视觉实心款);**找不到合适的空心图标时,去 Iconify(优先 `lucide`)挑一个合适的空心 svg、规整后存为本地 `web/src/assets/icons/<name>-gva.svg`(不要手画自己发挥,也不要将就用实心款)**;由 `web/src/core/global.js` 自动注册、菜单按名引用,新增后需重启/重新构建前端以重生成 sprite(线宽统一由 `svgIcon.vue` 提供,**根 svg 勿写 `stroke-width`**——构建插件会破坏它)

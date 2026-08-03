@@ -23,6 +23,7 @@ type AutoCodePluginApi struct{}
 // @accept    multipart/form-data
 // @Produce   application/json
 // @Param     plug  formData  file                                              true  "this is a test file"
+// @Param     parentPlugin  formData  string                                    false  "optional parent plugin"
 // @Success   200   {object}  response.Response{data=[]interface{},msg=string}  "安装插件成功"
 // @Router    /autoCode/installPlugin [post]
 func (a *AutoCodePluginApi) Install(c *gin.Context) {
@@ -31,7 +32,8 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	web, server, err := autoCodePluginService.Install(header)
+	parentPlugin := c.PostForm("parentPlugin")
+	web, server, err := autoCodePluginService.Install(header, parentPlugin)
 	webStr := "web插件安装成功"
 	serverStr := "server插件安装成功"
 	if web == -1 {

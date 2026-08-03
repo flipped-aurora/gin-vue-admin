@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	goast "go/ast"
+	"go/format"
 	"go/parser"
 	"go/printer"
 	"go/token"
@@ -12,6 +13,7 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -30,8 +32,18 @@ var AutoCodePlugin = new(autoCodePlugin)
 
 type autoCodePlugin struct{}
 
+func (s *autoCodePlugin) Install(file *multipart.FileHeader, parentPlugin string) (web, server int, err error) {
+	if parentPlugin == "" {
+		return s.installTopLevel(file)
+	}
+	if err = utils.ValidatePluginName(parentPlugin); err != nil {
+		return -1, -1, err
+	}
+	return s.installSubPlugin(file, parentPlugin)
+}
+
 // Install 插件安装
-func (s *autoCodePlugin) Install(file *multipart.FileHeader) (web, server int, err error) {
+func (s *autoCodePlugin) installTopLevel(file *multipart.FileHeader) (web, server int, err error) {
 	const GVAPLUGPINATH = "./gva-plug-temp/"
 	defer os.RemoveAll(GVAPLUGPINATH)
 	_, err = os.Stat(GVAPLUGPINATH)
@@ -144,6 +156,538 @@ func installation(path string, formPath string, toPath string) error {
 		return errors.New(toPath + "已存在同名插件，请自行手动安装")
 	}
 	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+}
+
+func (s *autoCodePlugin) installSubPlugin(file *multipart.FileHeader, parentPlugin string) (web, server int, err error) {
+	serverRoot, err := utils.JoinWithinRoot(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+	if err != nil {
+		return -1, -1, err
+	}
+	if err = os.MkdirAll(serverRoot, 0755); err != nil {
+		return -1, -1, err
+	}
+	tempDir, err := os.MkdirTemp(serverRoot, "gva-plugin-")
+	if err != nil {
+		return -1, -1, err
+	}
+	defer os.RemoveAll(tempDir)
+
+	src, err := file.Open()
+	if err != nil {
+		return -1, -1, err
+	}
+	defer src.Close()
+
+	archiveName := filepath.Base(strings.TrimSpace(file.Filename))
+	if archiveName == "." || archiveName == string(filepath.Separator) {
+		return -1, -1, errors.New("invalid plugin archive name")
+	}
+	archivePath, err := utils.JoinWithinRoot(tempDir, archiveName)
+	if err != nil {
+		return -1, -1, err
+	}
+	out, err := os.Create(archivePath)
+	if err != nil {
+		return -1, -1, err
+	}
+	if _, err = io.Copy(out, src); err != nil {
+		out.Close()
+		return -1, -1, err
+	}
+	if err = out.Close(); err != nil {
+		return -1, -1, err
+	}
+
+	paths, err := utils.Unzip(archivePath, tempDir)
+	if err != nil {
+		return -1, -1, err
+	}
+	archive, err := findPluginArchive(tempDir, filterFile(paths))
+	if err != nil {
+		return -1, -1, err
+	}
+	if archive.server != nil && archive.web != nil && archive.server.name != archive.web.name {
+		return -1, -1, errors.New("server and web plugin names must match")
+	}
+
+	var serverTarget, webTarget string
+	if archive.server != nil {
+		serverTarget, err = pluginInstallRoot(global.GVA_CONFIG.AutoCode.Server, parentPlugin)
+		if err != nil {
+			return -1, -1, err
+		}
+		if err = ensurePluginTargetAvailable(serverTarget, archive.server.name); err != nil {
+			return -1, -1, err
+		}
+	}
+	if archive.web != nil {
+		webTarget, err = pluginInstallRoot(global.GVA_CONFIG.AutoCode.Web, parentPlugin)
+		if err != nil {
+			return -1, -1, err
+		}
+		if err = ensurePluginTargetAvailable(webTarget, archive.web.name); err != nil {
+			return -1, -1, err
+		}
+	}
+
+	if archive.server != nil {
+		if err = prepareSubPluginSource(archive.server.path(), parentPlugin, archive.server.name); err != nil {
+			return -1, -1, err
+		}
+		if err = copyPluginArchive(archive.server.root, serverTarget); err != nil {
+			return -1, -1, err
+		}
+		if err = ensureParentSubPluginRegistration(parentPlugin, archive.server.name); err != nil {
+			return -1, -1, err
+		}
+		server = 1
+	}
+	if archive.web != nil {
+		if err = prepareSubPluginWebSource(archive.web.path(), parentPlugin, archive.web.name); err != nil {
+			return -1, server, err
+		}
+		if err = copyPluginArchive(archive.web.root, webTarget); err != nil {
+			return -1, server, err
+		}
+		web = 1
+	}
+	return web, server, nil
+}
+
+type pluginArchive struct {
+	server *pluginArchivePart
+	web    *pluginArchivePart
+}
+
+type pluginArchivePart struct {
+	root string
+	name string
+}
+
+func (p *pluginArchivePart) path() string {
+	return filepath.Join(p.root, p.name)
+}
+
+func findPluginArchive(tempDir string, paths []string) (pluginArchive, error) {
+	archive := pluginArchive{}
+	for _, path := range paths {
+		relativePath, err := filepath.Rel(tempDir, path)
+		if err != nil {
+			return pluginArchive{}, err
+		}
+		parts := strings.Split(filepath.ToSlash(relativePath), "/")
+		for index := 0; index+2 < len(parts); index++ {
+			if parts[index+1] != "plugin" || (parts[index] != "server" && parts[index] != "web") {
+				continue
+			}
+			name := parts[index+2]
+			if err := utils.ValidatePluginName(name); err != nil {
+				return pluginArchive{}, err
+			}
+			part := &pluginArchivePart{
+				root: filepath.Join(tempDir, filepath.FromSlash(strings.Join(parts[:index+2], "/"))),
+				name: name,
+			}
+			if parts[index] == "server" {
+				if archive.server != nil && (archive.server.name != part.name || archive.server.root != part.root) {
+					return pluginArchive{}, errors.New("plugin archive contains multiple server plugins")
+				}
+				archive.server = part
+			} else {
+				if archive.web != nil && (archive.web.name != part.name || archive.web.root != part.root) {
+					return pluginArchive{}, errors.New("plugin archive contains multiple web plugins")
+				}
+				archive.web = part
+			}
+			break
+		}
+	}
+	if archive.server == nil && archive.web == nil {
+		return pluginArchive{}, errors.New("invalid plugin archive")
+	}
+	return archive, nil
+}
+
+func pluginInstallRoot(component, parentPlugin string) (string, error) {
+	root, err := utils.JoinWithinRoot(global.GVA_CONFIG.AutoCode.Root, component, "plugin")
+	if err != nil || parentPlugin == "" {
+		return root, err
+	}
+	parentPath, err := utils.JoinWithinRoot(root, parentPlugin)
+	if err != nil {
+		return "", err
+	}
+	info, err := os.Stat(parentPath)
+	if err != nil {
+		return "", errors.Wrap(err, "parent plugin does not exist")
+	}
+	if !info.IsDir() {
+		return "", errors.New("parent plugin is not a directory")
+	}
+	return utils.JoinWithinRoot(parentPath, "subPlugin")
+}
+
+func ensurePluginTargetAvailable(root, pluginName string) error {
+	target, err := utils.JoinWithinRoot(root, pluginName)
+	if err != nil {
+		return err
+	}
+	if _, err = os.Stat(target); err == nil {
+		return errors.New("plugin already exists")
+	} else if !os.IsNotExist(err) {
+		return err
+	}
+	return nil
+}
+
+func copyPluginArchive(sourceRoot, destinationRoot string) error {
+	if err := os.MkdirAll(destinationRoot, 0755); err != nil {
+		return err
+	}
+	return cp.Copy(sourceRoot, destinationRoot, cp.Options{Skip: skipMacSpecialDocument})
+}
+
+func prepareSubPluginSource(childPath, parentPlugin, childPlugin string) error {
+	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
+	if module == "" {
+		return errors.New("autocode module is empty")
+	}
+	oldImportPrefix := fmt.Sprintf("%s/plugin/%s", module, childPlugin)
+	newImportPrefix := fmt.Sprintf("%s/plugin/%s/subPlugin/%s", module, parentPlugin, childPlugin)
+	err := filepath.Walk(childPath, func(path string, info os.FileInfo, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if info.IsDir() || filepath.Ext(path) != ".go" {
+			return nil
+		}
+		return rewriteGoImportPaths(path, oldImportPrefix, newImportPrefix)
+	})
+	if err != nil {
+		return err
+	}
+	entryPath := filepath.Join(childPath, "plugin.go")
+	if err = suppressSubPluginSelfRegistration(entryPath); err != nil {
+		return err
+	}
+	menuPath := filepath.Join(childPath, "initialize", "menu.go")
+	if _, statErr := os.Stat(menuPath); statErr == nil {
+		return rewriteSubPluginMenuComponentPaths(menuPath, parentPlugin, childPlugin)
+	} else if !os.IsNotExist(statErr) {
+		return statErr
+	}
+	return nil
+}
+
+func prepareSubPluginWebSource(childPath, parentPlugin, childPlugin string) error {
+	return filepath.Walk(childPath, func(path string, info os.FileInfo, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if info.IsDir() || !isSubPluginWebSourceFile(path) {
+			return nil
+		}
+		return rewriteSubPluginWebImportPaths(path, parentPlugin, childPlugin)
+	})
+}
+
+func isSubPluginWebSourceFile(path string) bool {
+	switch strings.ToLower(filepath.Ext(path)) {
+	case ".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".jsx", ".tsx", ".vue":
+		return true
+	default:
+		return false
+	}
+}
+
+func rewriteSubPluginWebImportPaths(path, parentPlugin, childPlugin string) error {
+	source, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	legacyPrefix := fmt.Sprintf("@/plugin/%s", childPlugin)
+	nestedPrefix := fmt.Sprintf("@/plugin/%s/subPlugin/%s", parentPlugin, childPlugin)
+	rewritten := rewriteSubPluginWebAliasPrefix(string(source), legacyPrefix, nestedPrefix)
+	if rewritten == string(source) {
+		return nil
+	}
+	return os.WriteFile(path, []byte(rewritten), 0666)
+}
+
+func rewriteSubPluginWebAliasPrefix(source, legacyPrefix, nestedPrefix string) string {
+	var rewritten strings.Builder
+	rewritten.Grow(len(source) + len(nestedPrefix))
+
+	position := 0
+	for {
+		index := strings.Index(source[position:], legacyPrefix)
+		if index < 0 {
+			rewritten.WriteString(source[position:])
+			return rewritten.String()
+		}
+		index += position
+		prefixEnd := index + len(legacyPrefix)
+		if strings.HasPrefix(source[index:], nestedPrefix) || (prefixEnd < len(source) && isPluginNameCharacter(source[prefixEnd])) {
+			rewritten.WriteString(source[position:prefixEnd])
+			position = prefixEnd
+			continue
+		}
+
+		rewritten.WriteString(source[position:index])
+		rewritten.WriteString(nestedPrefix)
+		position = prefixEnd
+	}
+}
+
+func isPluginNameCharacter(value byte) bool {
+	return value == '_' || (value >= 'a' && value <= 'z') || (value >= '0' && value <= '9')
+}
+
+func rewriteGoImportPaths(path, oldPrefix, newPrefix string) error {
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, path, nil, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+	changed := false
+	for _, spec := range astFile.Imports {
+		importPath, err := strconv.Unquote(spec.Path.Value)
+		if err != nil {
+			return err
+		}
+		if importPath == oldPrefix || strings.HasPrefix(importPath, oldPrefix+"/") {
+			spec.Path.Value = strconv.Quote(newPrefix + strings.TrimPrefix(importPath, oldPrefix))
+			changed = true
+		}
+	}
+	if !changed {
+		return nil
+	}
+	return writeGoFile(path, fileSet, astFile)
+}
+
+func suppressSubPluginSelfRegistration(path string) error {
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, path, nil, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+	registryAliases := map[string]bool{}
+	registryPath := fmt.Sprintf("%s/utils/plugin/v2", strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module))
+	for _, spec := range astFile.Imports {
+		importPath, err := strconv.Unquote(spec.Path.Value)
+		if err != nil {
+			return err
+		}
+		if importPath != registryPath {
+			continue
+		}
+		if spec.Name == nil {
+			registryAliases["plugin"] = true
+		} else {
+			registryAliases[spec.Name.Name] = true
+		}
+	}
+
+	changed := false
+	decls := make([]goast.Decl, 0, len(astFile.Decls))
+	for _, decl := range astFile.Decls {
+		funcDecl, ok := decl.(*goast.FuncDecl)
+		if !ok || funcDecl.Name.Name != "init" || funcDecl.Body == nil {
+			decls = append(decls, decl)
+			continue
+		}
+		statements := make([]goast.Stmt, 0, len(funcDecl.Body.List))
+		for _, statement := range funcDecl.Body.List {
+			if isPluginRegistryRegisterStatement(statement, registryAliases) {
+				changed = true
+				continue
+			}
+			statements = append(statements, statement)
+		}
+		if len(statements) > 0 {
+			funcDecl.Body.List = statements
+			decls = append(decls, funcDecl)
+		} else if len(funcDecl.Body.List) > 0 {
+			changed = true
+		}
+	}
+	if !changed {
+		return nil
+	}
+	astFile.Decls = decls
+	return writeGoFile(path, fileSet, astFile)
+}
+
+func isPluginRegistryRegisterStatement(statement goast.Stmt, registryAliases map[string]bool) bool {
+	expressionStatement, ok := statement.(*goast.ExprStmt)
+	if !ok {
+		return false
+	}
+	call, ok := expressionStatement.X.(*goast.CallExpr)
+	if !ok {
+		return false
+	}
+	selector, ok := call.Fun.(*goast.SelectorExpr)
+	if !ok || selector.Sel.Name != "Register" {
+		return false
+	}
+	ident, ok := selector.X.(*goast.Ident)
+	return ok && registryAliases[ident.Name]
+}
+
+func rewriteSubPluginMenuComponentPaths(path, parentPlugin, childPlugin string) error {
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, path, nil, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+	legacyPrefix := fmt.Sprintf("plugin/%s/", childPlugin)
+	nestedPrefix := fmt.Sprintf("plugin/%s/subPlugin/%s/", parentPlugin, childPlugin)
+	changed := false
+	goast.Inspect(astFile, func(node goast.Node) bool {
+		literal, ok := node.(*goast.BasicLit)
+		if !ok || literal.Kind != token.STRING {
+			return true
+		}
+		value, err := strconv.Unquote(literal.Value)
+		if err != nil || strings.HasPrefix(value, nestedPrefix) || !strings.HasPrefix(value, legacyPrefix) {
+			return true
+		}
+		literal.Value = strconv.Quote(nestedPrefix + strings.TrimPrefix(value, legacyPrefix))
+		changed = true
+		return true
+	})
+	if !changed {
+		return nil
+	}
+	return writeGoFile(path, fileSet, astFile)
+}
+
+func ensureParentSubPluginRegistration(parentPlugin, childPlugin string) error {
+	module := strings.TrimSpace(global.GVA_CONFIG.AutoCode.Module)
+	if module == "" {
+		return errors.New("autocode module is empty")
+	}
+	parentPath, err := pluginPath(global.GVA_CONFIG.AutoCode.Server, parentPlugin, "plugin.go")
+	if err != nil {
+		return err
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, parentPath, nil, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+	childImportPath := fmt.Sprintf("%s/plugin/%s/subPlugin/%s", module, parentPlugin, childPlugin)
+	alias := "subPlugin_" + childPlugin
+	imported := false
+	for _, spec := range astFile.Imports {
+		importPath, err := strconv.Unquote(spec.Path.Value)
+		if err != nil {
+			return err
+		}
+		if importPath != childImportPath {
+			continue
+		}
+		imported = true
+		if spec.Name == nil {
+			alias = childPlugin
+		} else {
+			alias = spec.Name.Name
+		}
+	}
+	if alias == "_" || alias == "." {
+		return errors.New("child plugin import cannot be blank or dot imported")
+	}
+	if !imported {
+		importSpec := &goast.ImportSpec{
+			Name: goast.NewIdent(alias),
+			Path: &goast.BasicLit{Kind: token.STRING, Value: strconv.Quote(childImportPath)},
+		}
+		if importDecl := firstImportDeclaration(astFile); importDecl == nil {
+			astFile.Decls = append([]goast.Decl{
+				&goast.GenDecl{Tok: token.IMPORT, Specs: []goast.Spec{importSpec}},
+			}, astFile.Decls...)
+		} else {
+			importDecl.Specs = append(importDecl.Specs, importSpec)
+		}
+	}
+
+	registerFunc := findPluginRegisterFunction(astFile)
+	if registerFunc == nil {
+		return errors.New("parent plugin does not implement Register")
+	}
+	if hasChildPluginRegisterCall(registerFunc.Body, alias) {
+		return nil
+	}
+	groupName := "group"
+	if registerFunc.Type.Params != nil && len(registerFunc.Type.Params.List) > 0 && len(registerFunc.Type.Params.List[0].Names) > 0 {
+		groupName = registerFunc.Type.Params.List[0].Names[0].Name
+	}
+	registerFunc.Body.List = append(registerFunc.Body.List, &goast.ExprStmt{
+		X: &goast.CallExpr{
+			Fun: &goast.SelectorExpr{
+				X:   &goast.SelectorExpr{X: goast.NewIdent(alias), Sel: goast.NewIdent("Plugin")},
+				Sel: goast.NewIdent("Register"),
+			},
+			Args: []goast.Expr{goast.NewIdent(groupName)},
+		},
+	})
+	return writeGoFile(parentPath, fileSet, astFile)
+}
+
+func firstImportDeclaration(astFile *goast.File) *goast.GenDecl {
+	for _, decl := range astFile.Decls {
+		genDecl, ok := decl.(*goast.GenDecl)
+		if ok && genDecl.Tok == token.IMPORT {
+			return genDecl
+		}
+	}
+	return nil
+}
+
+func findPluginRegisterFunction(astFile *goast.File) *goast.FuncDecl {
+	for _, decl := range astFile.Decls {
+		funcDecl, ok := decl.(*goast.FuncDecl)
+		if ok && funcDecl.Name.Name == "Register" && funcDecl.Body != nil {
+			return funcDecl
+		}
+	}
+	return nil
+}
+
+func hasChildPluginRegisterCall(body *goast.BlockStmt, alias string) bool {
+	for _, statement := range body.List {
+		expressionStatement, ok := statement.(*goast.ExprStmt)
+		if !ok {
+			continue
+		}
+		call, ok := expressionStatement.X.(*goast.CallExpr)
+		if !ok {
+			continue
+		}
+		registerSelector, ok := call.Fun.(*goast.SelectorExpr)
+		if !ok || registerSelector.Sel.Name != "Register" {
+			continue
+		}
+		pluginSelector, ok := registerSelector.X.(*goast.SelectorExpr)
+		if !ok || pluginSelector.Sel.Name != "Plugin" {
+			continue
+		}
+		ident, ok := pluginSelector.X.(*goast.Ident)
+		if ok && ident.Name == alias {
+			return true
+		}
+	}
+	return false
+}
+
+func writeGoFile(path string, fileSet *token.FileSet, astFile *goast.File) error {
+	var out bytes.Buffer
+	if err := format.Node(&out, fileSet, astFile); err != nil {
+		return err
+	}
+	return os.WriteFile(path, out.Bytes(), 0666)
 }
 
 func ensurePluginRegisterImport(packageName string) error {

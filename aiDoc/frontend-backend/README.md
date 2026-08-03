@@ -14,6 +14,7 @@
 当前已拆分出的核心说明：
 
 - `boundary.md`
+- `plugin-sub-plugin-installation.md`
 - `frontend-rules.md`
 - `frontend-utils.md`
 - `component-library.md`

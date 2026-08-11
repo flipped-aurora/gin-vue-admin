@@ -7,6 +7,11 @@
 
 {{- if .IsAdd}}
 
+{{- if NeedsGormClause .Fields }}
+// service.go import 新增依赖
+import "gorm.io/gorm/clause"
+{{- end }}
+
 // Get{{.StructName}}InfoList 新增搜索语句
 
     {{ GenerateSearchConditions .Fields }}
@@ -37,6 +42,9 @@ import (
 	"{{.Module}}/plugin/{{.Package}}/model"
 	{{- if not .IsTree }}
     "{{.Module}}/plugin/{{.Package}}/model/request"
+		{{- if or .NeedSort (NeedsGormClause .Fields) }}
+	"gorm.io/gorm/clause"
+		{{- end }}
     {{- else }}
     "errors"
     {{- end }}
@@ -164,7 +172,6 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
     	return
     }
     {{- if .NeedSort}}
-        var OrderStr string
         orderMap := make(map[string]bool)
       {{- if .GvaModel }}
         orderMap["id"] = true
@@ -176,11 +183,10 @@ func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(ctx context.Context, info
         {{- end}}
        {{- end}}
        if orderMap[info.Sort] {
-          OrderStr = info.Sort
-          if info.Order == "descending" {
-             OrderStr = OrderStr + " desc"
-          }
-          db = db.Order(OrderStr)
+          db = db.Order(clause.OrderByColumn{
+             Column: clause.Column{Name: info.Sort},
+             Desc: info.Order == "descending",
+          })
        }
     {{- end}}
 

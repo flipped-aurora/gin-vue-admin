@@ -15,12 +15,27 @@ func GetTemplateFuncMap() template.FuncMap {
 		"GenerateField":            GenerateField,
 		"GenerateSearchField":      GenerateSearchField,
 		"GenerateSearchConditions": GenerateSearchConditions,
+		"NeedsGormClause":          NeedsGormClause,
 		"GenerateSearchFormItem":   GenerateSearchFormItem,
 		"GenerateTableColumn":      GenerateTableColumn,
 		"GenerateFormItem":         GenerateFormItem,
 		"GenerateDescriptionItem":  GenerateDescriptionItem,
 		"GenerateDefaultFormValue": GenerateDefaultFormValue,
 	}
+}
+
+// NeedsGormClause 判断生成的搜索条件是否使用 GORM clause 表达式。
+func NeedsGormClause(fields []*systemReq.AutoCodeField) bool {
+	for _, field := range fields {
+		if field == nil || field.FieldSearchType == "" {
+			continue
+		}
+		if slices.Contains([]string{"pictures", "picture", "video", "json", "richtext", "array"}, field.FieldType) {
+			continue
+		}
+		return true
+	}
+	return false
 }
 
 // 渲染Model中的字段
@@ -137,15 +152,21 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 				if field.FieldSearchType == "LIKE" {
 					condition = fmt.Sprintf(`
     if info.%s != "" {
-        db = db.Where("%s LIKE ?", "%%"+ info.%s+"%%")
+        db = db.Where(clause.Expr{
+            SQL: "? LIKE ?",
+            Vars: []any{clause.Column{Name: "%s"}, "%%" + info.%s + "%%"},
+        })
     }`,
 						field.FieldName, field.ColumnName, field.FieldName)
 				} else {
 					condition = fmt.Sprintf(`
     if info.%s != "" {
-        db = db.Where("%s %s ?", info.%s)
+        db = db.Where(clause.Expr{
+            SQL: "? %s ?",
+            Vars: []any{clause.Column{Name: "%s"}, info.%s},
+        })
     }`,
-						field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName)
+						field.FieldName, field.FieldSearchType, field.ColumnName, field.FieldName)
 				}
 			} else {
 				condition = fmt.Sprintf(`
@@ -158,16 +179,22 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 			if field.FieldType == "time.Time" {
 				condition = fmt.Sprintf(`
 			if len(info.%sRange) == 2 {
-				db = db.Where("%s %s ? AND ? ", info.%sRange[0], info.%sRange[1])
+				db = db.Where(clause.Expr{
+					SQL: "? %s ? AND ?",
+					Vars: []any{clause.Column{Name: "%s"}, info.%sRange[0], info.%sRange[1]},
+				})
 			}`,
-					field.FieldName, field.ColumnName, field.FieldSearchType, field.FieldName, field.FieldName)
+					field.FieldName, field.FieldSearchType, field.ColumnName, field.FieldName, field.FieldName)
 			} else {
 				condition = fmt.Sprintf(`
 	if info.Start%s != nil && info.End%s != nil {
-		db = db.Where("%s %s ? AND ? ", *info.Start%s, *info.End%s)
+		db = db.Where(clause.Expr{
+			SQL: "? %s ? AND ?",
+			Vars: []any{clause.Column{Name: "%s"}, *info.Start%s, *info.End%s},
+		})
 	}`,
-					field.FieldName, field.FieldName, field.ColumnName,
-					field.FieldSearchType, field.FieldName, field.FieldName)
+					field.FieldName, field.FieldName, field.FieldSearchType,
+					field.ColumnName, field.FieldName, field.FieldName)
 			}
 		} else {
 			nullCheck := "info." + field.FieldName + " != nil"
@@ -181,14 +208,20 @@ func GenerateSearchConditions(fields []*systemReq.AutoCodeField) string {
 
 			if field.FieldSearchType == "LIKE" {
 				condition += fmt.Sprintf(`
-        db = db.Where("%s LIKE ?", "%%"+ *info.%s+"%%")
+        db = db.Where(clause.Expr{
+            SQL: "? LIKE ?",
+            Vars: []any{clause.Column{Name: "%s"}, "%%" + *info.%s + "%%"},
+        })
     }`,
 					field.ColumnName, field.FieldName)
 			} else {
 				condition += fmt.Sprintf(`
-        db = db.Where("%s %s ?", *info.%s)
+        db = db.Where(clause.Expr{
+            SQL: "? %s ?",
+            Vars: []any{clause.Column{Name: "%s"}, *info.%s},
+        })
     }`,
-					field.ColumnName, field.FieldSearchType, field.FieldName)
+					field.FieldSearchType, field.ColumnName, field.FieldName)
 			}
 		}
 

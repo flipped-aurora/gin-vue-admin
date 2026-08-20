@@ -2,6 +2,7 @@ package utils
 
 import (
 	"sync"
+	"time"
 
 	"github.com/casbin/casbin/v3"
 	"github.com/casbin/casbin/v3/model"
@@ -49,7 +50,7 @@ func GetCasbin() *casbin.SyncedCachedEnforcer {
 			zap.L().Error("casbin enforcer 初始化失败", zap.Error(err))
 			return
 		}
-		enforcer.SetExpireTime(60 * 60)
+		enforcer.SetExpireTime(time.Hour)
 		if err = enforcer.LoadPolicy(); err != nil {
 			zap.L().Error("casbin 策略加载失败", zap.Error(err))
 			return

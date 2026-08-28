@@ -42,6 +42,18 @@ func TestBuilderErrAndDetail(t *testing.T) {
 	if m["error_msg"] != "boom" || m["detail"] == nil || e.Level != zapcore.ErrorLevel {
 		t.Fatalf("bad err/detail: %+v lvl=%s", m, e.Level)
 	}
+	foundErrorField := false
+	for _, field := range e.Context {
+		if field.Key == FieldErrorMsg {
+			foundErrorField = true
+			if field.Type != zapcore.ErrorType {
+				t.Fatalf("error_msg field type = %v, want %v", field.Type, zapcore.ErrorType)
+			}
+		}
+	}
+	if !foundErrorField {
+		t.Fatal("error_msg field not found")
+	}
 }
 
 func TestBuilderBgEmptyEnvelope(t *testing.T) {

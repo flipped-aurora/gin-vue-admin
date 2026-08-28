@@ -61,7 +61,7 @@ func (b *Builder) assemble() []zap.Field {
 		f = append(f, zap.String(FieldParentSpanID, fields.ParentSpanID))
 	}
 	if b.err != nil {
-		f = append(f, zap.String(FieldErrorMsg, b.err.Error()), zap.Stack(FieldErrorStack))
+		f = append(f, zap.NamedError(FieldErrorMsg, b.err), zap.Stack(FieldErrorStack))
 	}
 	if b.hasDetail {
 		f = append(f, zap.Any(FieldDetail, b.detail))

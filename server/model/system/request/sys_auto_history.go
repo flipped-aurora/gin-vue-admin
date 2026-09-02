@@ -10,7 +10,6 @@ type SysAutoHistoryCreate struct {
 	Package          string            // 模块名/插件名
 	Request          string            // 前端传入的结构化信息
 	StructName       string            // 结构体名称
-	Abbreviation     string            // 结构体名称缩写
 	BusinessDB       string            // 业务库
 	Description      string            // Struct中文名称
 	Injections       map[string]string // 注入路径
@@ -26,7 +25,7 @@ func (r *SysAutoHistoryCreate) Create() model.SysAutoCodeHistory {
 		Request:          r.Request,
 		Table:            r.Table,
 		StructName:       r.StructName,
-		Abbreviation:     r.Abbreviation,
+		Abbreviation:     r.StructName,
 		BusinessDB:       r.BusinessDB,
 		Description:      r.Description,
 		Injections:       r.Injections,

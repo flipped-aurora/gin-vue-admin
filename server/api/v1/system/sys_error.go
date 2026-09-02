@@ -1,11 +1,12 @@
 package system
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type SysErrorApi struct{}
@@ -31,7 +32,7 @@ func (sysErrorApi *SysErrorApi) CreateSysError(c *gin.Context) {
 	}
 	err = sysErrorService.CreateSysError(ctx, &sysError)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败:"+err.Error(), c)
 		return
 	}
@@ -54,7 +55,7 @@ func (sysErrorApi *SysErrorApi) DeleteSysError(c *gin.Context) {
 	ID := c.Query("ID")
 	err := sysErrorService.DeleteSysError(ctx, ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败:"+err.Error(), c)
 		return
 	}
@@ -76,7 +77,7 @@ func (sysErrorApi *SysErrorApi) DeleteSysErrorByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
 	err := sysErrorService.DeleteSysErrorByIds(ctx, IDs)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("批量删除失败!")
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败:"+err.Error(), c)
 		return
 	}
@@ -104,7 +105,7 @@ func (sysErrorApi *SysErrorApi) UpdateSysError(c *gin.Context) {
 	}
 	err = sysErrorService.UpdateSysError(ctx, sysError)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败:"+err.Error(), c)
 		return
 	}
@@ -127,7 +128,7 @@ func (sysErrorApi *SysErrorApi) FindSysError(c *gin.Context) {
 	ID := c.Query("ID")
 	resysError, err := sysErrorService.GetSysError(ctx, ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败:"+err.Error(), c)
 		return
 	}
@@ -155,7 +156,7 @@ func (sysErrorApi *SysErrorApi) GetSysErrorList(c *gin.Context) {
 	}
 	list, total, err := sysErrorService.GetSysErrorInfoList(ctx, pageInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败:"+err.Error(), c)
 		return
 	}
@@ -189,7 +190,7 @@ func (sysErrorApi *SysErrorApi) GetSysErrorSolution(c *gin.Context) {
 
 	err := sysErrorService.GetSysErrorSolution(ctx, ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("处理触发失败!")
+		global.GVA_LOG.Error("处理触发失败!", zap.Error(err))
 		response.FailWithMessage("处理触发失败:"+err.Error(), c)
 		return
 	}

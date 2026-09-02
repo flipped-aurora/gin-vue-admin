@@ -6,13 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"slices"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -23,6 +21,12 @@ func init() {
 
 // GVAExecutor GVA代码生成器
 type GVAExecutor struct{}
+
+// ExecuteRequest 执行请求结构体
+type ExecuteRequest struct {
+	ExecutionPlan ExecutionPlan `json:"executionPlan"` // 执行计划
+	Requirement   string        `json:"requirement"`   // 原始需求（可选，用于日志记录）
+}
 
 // ExecuteResponse 执行响应结构体
 type ExecuteResponse struct {
@@ -133,12 +137,12 @@ func (g *GVAExecutor) New() mcp.Tool {
 									"properties": map[string]interface{}{
 										"fieldName":       map[string]interface{}{"type": "string", "description": "字段名（必须大写开头示例:UserName）"},
 										"fieldDesc":       map[string]interface{}{"type": "string", "description": "字段描述"},
-										"fieldType":       map[string]interface{}{"type": "string", "description": "字段类型：string（字符串）、richtext（富文本）、int（整型）、int64（长整型）、bool（布尔值）、float64（浮点型）、time.Time（时间）、enum（枚举）、picture（单图片）、pictures（多图片）、video（视频）、file（文件）、json（JSON）、array（数组）"},
+										"fieldType":       map[string]interface{}{"type": "string", "description": "字段类型：string（字符串）、richtext（富文本）、int（整型）、bool（布尔值）、float64（浮点型）、time.Time（时间）、enum（枚举）、picture（单图片）、pictures（多图片）、video（视频）、file（文件）、json（JSON）、array（数组）"},
 										"fieldJson":       map[string]interface{}{"type": "string", "description": "JSON标签,示例: userName"},
 										"dataTypeLong":    map[string]interface{}{"type": "string", "description": "数据长度"},
 										"comment":         map[string]interface{}{"type": "string", "description": "注释"},
 										"columnName":      map[string]interface{}{"type": "string", "description": "数据库列名,示例: user_name"},
-										"fieldSearchType": map[string]interface{}{"type": "string", "description": "搜索类型：=、!=、>、>=、<、<=、LIKE、BETWEEN、NOT BETWEEN、IN、NOT IN"},
+										"fieldSearchType": map[string]interface{}{"type": "string", "description": "搜索类型：=、!=、>、>=、<、<=、LIKE、BETWEEN、IN、NOT IN、NOT BETWEEN"},
 										"fieldSearchHide": map[string]interface{}{"type": "boolean", "description": "是否隐藏搜索"},
 										"dictType":        map[string]interface{}{"type": "string", "description": "字典类型，使用字典类型时系统会自动检查并创建字典"},
 										"form":            map[string]interface{}{"type": "boolean", "description": "表单显示"},
@@ -231,7 +235,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	}
 
 	// 验证执行计划的完整性
-	if err := g.validateExecutionPlan(ctx, &plan); err != nil {
+	if err := g.validateExecutionPlan(&plan); err != nil {
 		return nil, fmt.Errorf("执行计划验证失败: %v", err)
 	}
 
@@ -249,7 +253,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 	// 如果执行成功且有原始需求，提供代码复检建议
 	var reviewMessage string
 	if result.Success && originalRequirement != "" {
-		logger.WithCtx(ctx).Mod("mcp").Info("执行完成，返回生成的文件路径供AI进行代码复检...")
+		global.GVA_LOG.Info("执行完成，返回生成的文件路径供AI进行代码复检...")
 
 		// 构建文件路径信息供AI使用
 		var pathsInfo []string
@@ -286,7 +290,7 @@ func (g *GVAExecutor) Handle(ctx context.Context, request mcp.CallToolRequest) (
 }
 
 // validateExecutionPlan 验证执行计划的完整性
-func (g *GVAExecutor) validateExecutionPlan(ctx context.Context, plan *ExecutionPlan) error {
+func (g *GVAExecutor) validateExecutionPlan(plan *ExecutionPlan) error {
 	if plan.PackageName == "" {
 		return errors.New("packageName 不能为空")
 	}
@@ -371,13 +375,27 @@ func (g *GVAExecutor) validateExecutionPlan(ctx context.Context, plan *Execution
 				}
 
 				validFieldTypes := []string{"string", "int", "int64", "float64", "bool", "time.Time", "enum", "picture", "video", "file", "pictures", "array", "richtext", "json"}
-				if !slices.Contains(validFieldTypes, field.FieldType) {
+				validType := false
+				for _, validFieldType := range validFieldTypes {
+					if field.FieldType == validFieldType {
+						validType = true
+						break
+					}
+				}
+				if !validType {
 					return fmt.Errorf("模块 %d 字段 %d 的 fieldType '%s' 不支持", moduleIndex+1, i+1, field.FieldType)
 				}
 
 				if field.FieldSearchType != "" {
-					validSearchTypes := []string{"=", "!=", ">", ">=", "<", "<=", "LIKE", "BETWEEN", "NOT BETWEEN", "IN", "NOT IN"}
-					if !slices.Contains(validSearchTypes, field.FieldSearchType) {
+					validSearchTypes := []string{"=", "!=", ">", ">=", "<", "<=", "LIKE", "BETWEEN", "IN", "NOT IN"}
+					validSearchType := false
+					for _, validSearchTypeValue := range validSearchTypes {
+						if field.FieldSearchType == validSearchTypeValue {
+							validSearchType = true
+							break
+						}
+					}
+					if !validSearchType {
 						return fmt.Errorf("模块 %d 字段 %d 的 fieldSearchType '%s' 不支持", moduleIndex+1, i+1, field.FieldSearchType)
 					}
 				}
@@ -385,7 +403,7 @@ func (g *GVAExecutor) validateExecutionPlan(ctx context.Context, plan *Execution
 				if field.DataSource != nil {
 					associationValue := field.DataSource.Association
 					if associationValue == 2 && field.FieldType != "array" {
-						logger.WithCtx(ctx).Mod("mcp").Info(fmt.Sprintf("module %d field %d association=2, force fieldType to array", moduleIndex+1, i+1))
+						global.GVA_LOG.Info(fmt.Sprintf("module %d field %d association=2, force fieldType to array", moduleIndex+1, i+1))
 						moduleInfo.Fields[i].FieldType = "array"
 					}
 					if associationValue != 1 && associationValue != 2 {
@@ -431,12 +449,10 @@ func (g *GVAExecutor) executeCreation(ctx context.Context, plan *ExecutionPlan) 
 	// 无论如何都先构建目录结构信息，确保paths始终返回
 	result.Paths = g.buildDirectoryStructure(plan)
 
-	// 记录预期生成的文件路径（复用已构建的目录结构，避免重复计算）
-	result.GeneratedPaths = g.collectExpectedFilePathsFromDir(plan, result.Paths)
+	// 记录预期生成的文件路径
+	result.GeneratedPaths = g.collectExpectedFilePaths(plan)
 
-	// 仅当"不创建任何东西"时才走纯列目录分支;否则下方的建包/建字典/建模块各自按标志独立执行。
-	// 若只用 NeedCreatedModules 做门槛,只建包或只建字典的计划会被静默跳过却仍报成功。
-	if !plan.NeedCreatedModules && !plan.NeedCreatedPackage && !plan.NeedCreatedDictionaries {
+	if !plan.NeedCreatedModules {
 		result.Success = true
 		result.Message += "已列出当前功能所涉及的目录结构信息; 请在paths中查看; 并且在对应指定文件中实现相关的业务逻辑; "
 		return result
@@ -491,6 +507,10 @@ func (g *GVAExecutor) executeCreation(ctx context.Context, plan *ExecutionPlan) 
 
 	result.Message += "已构建目录结构信息; "
 	result.Success = true
+
+	if result.Message == "" {
+		result.Message = "执行计划完成"
+	}
 
 	return result
 }
@@ -615,12 +635,10 @@ func (g *GVAExecutor) buildDirectoryStructure(plan *ExecutionPlan) map[string]st
 
 // collectExpectedFilePaths 收集预期生成的文件路径
 func (g *GVAExecutor) collectExpectedFilePaths(plan *ExecutionPlan) []string {
-	return g.collectExpectedFilePathsFromDir(plan, g.buildDirectoryStructure(plan))
-}
-
-// collectExpectedFilePathsFromDir 基于已构建的目录结构收集预期生成的文件路径，避免重复构建目录结构
-func (g *GVAExecutor) collectExpectedFilePathsFromDir(plan *ExecutionPlan, dirPaths map[string]string) []string {
 	var paths []string
+
+	// 获取目录结构
+	dirPaths := g.buildDirectoryStructure(plan)
 
 	// 如果需要创建模块，添加预期的文件路径
 	if plan.NeedCreatedModules && len(plan.ModulesInfo) > 0 {
@@ -660,8 +678,7 @@ func (g *GVAExecutor) collectExpectedFilePathsFromDir(plan *ExecutionPlan, dirPa
 	return paths
 }
 
-// checkDictionaryExists 检查字典是否存在。必须透传请求 ctx:鉴权 token 只存在于请求 ctx 中,
-// 用 context.Background() 会丢 token 致上游报"缺少鉴权头",使字典存在性检查恒失败、指定字典永远建不出
+// checkDictionaryExists 检查字典是否存在
 func (g *GVAExecutor) checkDictionaryExists(ctx context.Context, dictType string) (bool, error) {
 	dictionary, err := findDictionaryByType(ctx, dictType)
 	if err != nil {
@@ -684,7 +701,7 @@ func (g *GVAExecutor) createDictionariesFromInfo(ctx context.Context, dictionari
 		}
 
 		if !exists {
-			_, err = createDictionary(ctx, system.SysDictionary{
+			err = createDictionary(ctx, system.SysDictionary{
 				Name:   dictInfo.DictName,
 				Type:   dictInfo.DictType,
 				Status: enabledBoolPointer(),

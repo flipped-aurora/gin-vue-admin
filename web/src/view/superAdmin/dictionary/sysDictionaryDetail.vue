@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full">
-    <div class="gva-table-box !my-0 h-full flex flex-col overflow-hidden">
-      <div class="gva-btn-list justify-between flex items-center flex-none">
+  <div>
+    <div class="gva-table-box">
+      <div class="gva-btn-list justify-between flex items-center">
         <span class="text font-bold">字典详细内容</span>
         <div class="flex items-center gap-2">
           <el-input
@@ -28,9 +28,7 @@
         </div>
       </div>
       <!-- 表格视图 -->
-      <div class="flex-1 min-h-0">
       <el-table
-        height="100%"
         :data="displayTreeData"
         style="width: 100%"
         tooltip-effect="dark"
@@ -100,7 +98,6 @@
           </template>
         </el-table-column>
       </el-table>
-      </div>
     </div>
 
     <el-drawer
@@ -111,7 +108,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-base">{{
+          <span class="text-lg">{{
             type === 'create' ? '添加字典项' : '修改字典项'
           }}</span>
           <div>
@@ -190,7 +187,7 @@
   } from '@/api/sysDictionaryDetail' // 此处请自行替换地址
   import { ref, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import { formatBoolean } from '@/utils/format'
+  import { formatBoolean, formatDate } from '@/utils/format'
   import { useAppStore } from '@/pinia'
   import { Search } from '@element-plus/icons-vue'
 

@@ -11,7 +11,6 @@ func init() {
 	// 注入数据库就绪回调到 service 层
 	system.SetDBReadyCallback(func() {
 		GetDBReadyNotifier().NotifyDBReady()
-		LoadTimedTasks() // 运行时 initdb 完成后立即调度种子任务(无需重启)
 	})
 }
 

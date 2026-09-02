@@ -1,9 +1,9 @@
 <template>
   <div
-    class="bg-main text-base-text w-screen h-screen"
+    class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
   >
     <el-watermark
-      v-if="settings.watermark.visible"
+      v-if="config.show_watermark"
       :font="font"
       :z-index="9999"
       :gap="[180, 150]"
@@ -11,42 +11,33 @@
       :content="userStore.userInfo.nickName"
     />
     <gva-header />
-    <div
-      class="flex flex-row w-full gva-container pt-16 box-border !h-full"
-      :style="
-        effectiveMode === 'vertical' && !isMobile
-          ? { paddingLeft: verticalSideWidth + 'px' }
-          : {}
-      "
-    >
+    <div class="flex flex-row w-full gva-container pt-16 box-border !h-full">
       <gva-aside
         v-if="
-          !isMobile &&
-          (effectiveMode === 'normal' ||
-            effectiveMode === 'sidebar' ||
-            effectiveMode === 'vertical')
+          config.side_mode === 'normal' ||
+          config.side_mode === 'sidebar' ||
+          (device === 'mobile' && config.side_mode == 'head') ||
+          (device === 'mobile' && config.side_mode == 'combination')
         "
       />
       <gva-aside
-        v-if="!isMobile && effectiveMode === 'combination'"
+        v-if="config.side_mode === 'combination' && device !== 'mobile'"
         mode="normal"
-        class="z-10"
       />
-      <mobile-menu-drawer v-if="isMobile" />
       <div class="flex-1 w-0 h-full">
-        <gva-tabs v-if="settings.tab.visible" />
+        <gva-tabs v-if="config.showTabs" />
         <div
           class="overflow-auto px-2"
-          :class="settings.tab.visible ? 'gva-container2' : 'gva-container pt-1'"
+          :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
         >
           <router-view v-if="reloadFlag" v-slot="{ Component, route }">
             <div
               id="gva-base-load-dom"
-              class="gva-body-h bg-main"
+              class="gva-body-h bg-gray-50 dark:bg-slate-800"
             >
               <transition
                 mode="out-in"
-                :name="route.meta.transitionType || settings.page.transition"
+                :name="route.meta.transitionType || config.transition_type"
               >
                 <keep-alive :include="routerStore.keepAliveRouters">
                   <component :is="Component" :key="route.fullPath" />
@@ -63,28 +54,20 @@
 
 <script setup>
   import GvaAside from '@/view/layout/aside/index.vue'
-  import MobileMenuDrawer from '@/view/layout/aside/MobileMenuDrawer.vue'
   import GvaHeader from '@/view/layout/header/index.vue'
-  import { useLayoutMode } from '@/hooks/useLayoutMode'
-  import { useSideWidth } from '@/hooks/useSideWidth'
   import useResponsive from '@/hooks/responsive'
   import GvaTabs from './tabs/index.vue'
   import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
   import { emitter } from '@/utils/bus.js'
-  import { computed, ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
+  import { ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
   import { useUserStore } from '@/pinia/modules/user'
-  import { useAppStore, useThemeStore } from '@/pinia'
+  import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
   import '@/style/transition.scss'
   const appStore = useAppStore()
-  const themeStore = useThemeStore()
-  const { device } = storeToRefs(appStore)
-  const { settings, isDark } = storeToRefs(themeStore)
-  const isMobile = computed(() => device.value === 'mobile')
-  const { effectiveMode } = useLayoutMode()
-  const { sideWidth: verticalSideWidth } = useSideWidth()
+  const { config, isDark, device } = storeToRefs(appStore)
 
   defineOptions({
     name: 'GvaLayout'

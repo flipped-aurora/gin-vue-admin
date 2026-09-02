@@ -3,27 +3,43 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
+
+var respPool sync.Pool
+var bufferSize = 1024
+
+func init() {
+	respPool.New = func() interface{} {
+		return make([]byte, bufferSize)
+	}
+}
 
 func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var body []byte
 		var userId int
 		if c.Request.Method != http.MethodGet {
-			// 请求体已由 AccessLog 中间件统一读取并缓存，避免重复读取 Body
-			body = []byte(c.GetString(ctxReqBodyKey))
+			var err error
+			body, err = io.ReadAll(c.Request.Body)
+			if err != nil {
+				global.GVA_LOG.Error("read body from request error:", zap.Error(err))
+			} else {
+				c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
+			}
 		} else {
 			query := c.Request.URL.RawQuery
 			query, _ = url.QueryUnescape(query)
@@ -48,41 +64,39 @@ func OperationRecord() gin.HandlerFunc {
 			userId = id
 		}
 		record := system.SysOperationRecord{
-			Ip:        c.ClientIP(),
-			Method:    c.Request.Method,
-			Path:      c.Request.URL.Path,
-			Agent:     c.Request.UserAgent(),
-			Body:      "",
-			UserID:    userId,
-			RequestID: logger.FromCtx(c.Request.Context()).GetRequestID(),
-			TraceID:   logger.FromCtx(c.Request.Context()).GetTraceID(),
-			DeviceID:  logger.FromCtx(c.Request.Context()).GetDeviceID(),
+			Ip:     c.ClientIP(),
+			Method: c.Request.Method,
+			Path:   c.Request.URL.Path,
+			Agent:  c.Request.UserAgent(),
+			Body:   "",
+			UserID: userId,
 		}
 
 		// 上传文件时候 中间件日志进行裁断操作
 		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data") {
 			record.Body = "[文件]"
 		} else {
-			if len(body) > logger.AccessLogMaxBytes() {
+			if len(body) > bufferSize {
 				record.Body = "[超出记录长度]"
 			} else {
 				record.Body = string(body)
 			}
 		}
 
+		writer := responseBodyWriter{
+			ResponseWriter: c.Writer,
+			body:           &bytes.Buffer{},
+		}
+		c.Writer = writer
 		now := time.Now()
 
 		c.Next()
 
+		latency := time.Since(now)
 		record.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
 		record.Status = c.Writer.Status()
-		record.LatencyMs = time.Since(now).Milliseconds()
-		// 响应体由 AccessLog 中间件统一捕获（pre 阶段缓存缓冲区指针），此处读取
-		if v, ok := c.Get(ctxRespBufferKey); ok {
-			if buf, bok := v.(*bytes.Buffer); bok {
-				record.Resp = buf.String()
-			}
-		}
+		record.Latency = latency
+		record.Resp = writer.body.String()
 
 		if strings.Contains(c.Writer.Header().Get("Pragma"), "public") ||
 			strings.Contains(c.Writer.Header().Get("Expires"), "0") ||
@@ -93,13 +107,23 @@ func OperationRecord() gin.HandlerFunc {
 			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/download") ||
 			strings.Contains(c.Writer.Header().Get("Content-Disposition"), "attachment") ||
 			strings.Contains(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") {
-			if len(record.Resp) > logger.AccessLogMaxBytes() {
-				// 下载类响应体超长时截断的是 Resp(此处原误写为 Body)
-				record.Resp = "[超出记录长度]"
+			if len(record.Resp) > bufferSize {
+				// 截断
+				record.Body = "超出记录长度"
 			}
 		}
 		if err := global.GVA_DB.Create(&record).Error; err != nil {
-			logger.WithCtx(c.Request.Context()).Mod("http").Err(err).Error("create operation record error")
+			global.GVA_LOG.Error("create operation record error:", zap.Error(err))
 		}
 	}
+}
+
+type responseBodyWriter struct {
+	gin.ResponseWriter
+	body *bytes.Buffer
+}
+
+func (r responseBodyWriter) Write(b []byte) (int, error) {
+	r.body.Write(b)
+	return r.ResponseWriter.Write(b)
 }

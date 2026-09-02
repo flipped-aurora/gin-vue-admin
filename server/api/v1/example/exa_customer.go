@@ -1,13 +1,14 @@
 package example
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	exampleRes "github.com/flipped-aurora/gin-vue-admin/server/model/example/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type CustomerApi struct{}
@@ -35,9 +36,9 @@ func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 	}
 	customer.SysUserID = utils.GetUserID(c)
 	customer.SysUserAuthorityID = utils.GetUserAuthorityId(c)
-	err = customerService.CreateExaCustomer(c.Request.Context(), customer)
+	err = customerService.CreateExaCustomer(customer)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -65,9 +66,9 @@ func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = customerService.DeleteExaCustomer(c.Request.Context(), customer)
+	err = customerService.DeleteExaCustomer(customer)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -100,9 +101,9 @@ func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = customerService.UpdateExaCustomer(c.Request.Context(), &customer)
+	err = customerService.UpdateExaCustomer(&customer)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 		return
 	}
@@ -130,9 +131,9 @@ func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	data, err := customerService.GetExaCustomer(c.Request.Context(), customer.ID)
+	data, err := customerService.GetExaCustomer(customer.ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -160,9 +161,9 @@ func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	customerList, total, err := customerService.GetCustomerInfoList(c.Request.Context(), utils.GetUserAuthorityId(c), pageInfo)
+	customerList, total, err := customerService.GetCustomerInfoList(utils.GetUserAuthorityId(c), pageInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)
 		return
 	}

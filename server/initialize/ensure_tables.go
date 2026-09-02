@@ -4,7 +4,6 @@ import (
 	"context"
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/media"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/announcement/model"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
@@ -44,6 +43,7 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		sysModel.JwtBlacklist{},
 		sysModel.SysDictionary{},
 		sysModel.SysAutoCodeHistory{},
+		sysModel.SysAIWorkflowSession{},
 		sysModel.SysOperationRecord{},
 		sysModel.SysDictionaryDetail{},
 		sysModel.SysBaseMenuParameter{},
@@ -60,11 +60,11 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		sysModel.SysApiToken{},
 		adapter.CasbinRule{},
 
+		example.ExaFile{},
 		example.ExaCustomer{},
-		media.MediaUpload{},
-		media.MediaUploadChunk{},
-		media.FileUploadAndDownload{},
-		media.AttachmentCategory{},
+		example.ExaFileChunk{},
+		example.ExaFileUploadAndDownload{},
+		example.ExaAttachmentCategory{},
 
 		model.Info{},
 	}
@@ -89,6 +89,7 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 		sysModel.JwtBlacklist{},
 		sysModel.SysDictionary{},
 		sysModel.SysAutoCodeHistory{},
+		sysModel.SysAIWorkflowSession{},
 		sysModel.SysOperationRecord{},
 		sysModel.SysDictionaryDetail{},
 		sysModel.SysBaseMenuParameter{},
@@ -101,11 +102,11 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 
 		adapter.CasbinRule{},
 
+		example.ExaFile{},
 		example.ExaCustomer{},
-		media.MediaUpload{},
-		media.MediaUploadChunk{},
-		media.FileUploadAndDownload{},
-		media.AttachmentCategory{},
+		example.ExaFileChunk{},
+		example.ExaFileUploadAndDownload{},
+		example.ExaAttachmentCategory{},
 
 		model.Info{},
 	}

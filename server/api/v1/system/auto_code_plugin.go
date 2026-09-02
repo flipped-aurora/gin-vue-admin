@@ -10,8 +10,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type AutoCodePluginApi struct{}
@@ -23,7 +23,6 @@ type AutoCodePluginApi struct{}
 // @accept    multipart/form-data
 // @Produce   application/json
 // @Param     plug  formData  file                                              true  "this is a test file"
-// @Param     parentPlugin  formData  string                                    false  "optional parent plugin"
 // @Success   200   {object}  response.Response{data=[]interface{},msg=string}  "安装插件成功"
 // @Router    /autoCode/installPlugin [post]
 func (a *AutoCodePluginApi) Install(c *gin.Context) {
@@ -32,8 +31,7 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	parentPlugin := c.PostForm("parentPlugin")
-	web, server, err := autoCodePluginService.Install(header, parentPlugin)
+	web, server, err := autoCodePluginService.Install(header)
 	webStr := "web插件安装成功"
 	serverStr := "server插件安装成功"
 	if web == -1 {
@@ -70,7 +68,7 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("打包失败!")
+		global.GVA_LOG.Error("打包失败!", zap.Error(err))
 		response.FailWithMessage("打包失败"+err.Error(), c)
 		return
 	}
@@ -92,9 +90,9 @@ func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitMenu(c.Request.Context(), menuInfo)
+	err = autoCodePluginService.InitMenu(menuInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化Menu失败!")
+		global.GVA_LOG.Error("创建初始化Menu失败!", zap.Error(err))
 		response.FailWithMessage("创建初始化Menu失败"+err.Error(), c)
 		return
 	}
@@ -116,9 +114,9 @@ func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitAPI(c.Request.Context(), apiInfo)
+	err = autoCodePluginService.InitAPI(apiInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化API失败!")
+		global.GVA_LOG.Error("创建初始化API失败!", zap.Error(err))
 		response.FailWithMessage("创建初始化API失败"+err.Error(), c)
 		return
 	}
@@ -140,9 +138,9 @@ func (a *AutoCodePluginApi) InitDictionary(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodePluginService.InitDictionary(c.Request.Context(), dictInfo)
+	err = autoCodePluginService.InitDictionary(dictInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建初始化Dictionary失败!")
+		global.GVA_LOG.Error("创建初始化Dictionary失败!", zap.Error(err))
 		response.FailWithMessage("创建初始化Dictionary失败"+err.Error(), c)
 		return
 	}
@@ -210,9 +208,9 @@ func (a *AutoCodePluginApi) GetPluginList(c *gin.Context) {
 func (a *AutoCodePluginApi) Remove(c *gin.Context) {
 	pluginName := c.Query("pluginName")
 	pluginType := c.Query("pluginType")
-	err := autoCodePluginService.Remove(c.Request.Context(), pluginName, pluginType)
+	err := autoCodePluginService.Remove(pluginName, pluginType)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}

@@ -12,6 +12,7 @@ import (
 
 func Gorm(ctx context.Context) {
 	err := global.GVA_DB.WithContext(ctx).AutoMigrate(
+		new(autoModel.SysAIWorkflowSession),
 		new(autoModel.SysAutoCodeHistory),
 		new(autoModel.SysAutoCodePackage),
 	)

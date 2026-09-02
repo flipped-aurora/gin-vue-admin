@@ -1,7 +1,6 @@
 package system
 
 import (
-	"context"
 	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -13,9 +12,9 @@ import (
 
 type ApiTokenService struct{}
 
-func (apiVersion *ApiTokenService) CreateApiToken(ctx context.Context, apiToken system.SysApiToken, days int) (string, error) {
+func (apiVersion *ApiTokenService) CreateApiToken(apiToken system.SysApiToken, days int) (string, error) {
 	var user system.SysUser
-	if err := global.GVA_DB.WithContext(ctx).Preload("Authorities").Where("id = ?", apiToken.UserID).First(&user).Error; err != nil {
+	if err := global.GVA_DB.Preload("Authorities").Where("id = ?", apiToken.UserID).First(&user).Error; err != nil {
 		return "", errors.New("用户不存在")
 	}
 
@@ -46,7 +45,6 @@ func (apiVersion *ApiTokenService) CreateApiToken(ctx context.Context, apiToken 
 			Username:    user.Username,
 			NickName:    user.NickName,
 			AuthorityId: apiToken.AuthorityID,
-			UserType:    user.GetUserType(),
 		},
 		BufferTime: int64(bf / time.Second), // 缓冲时间
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -65,13 +63,14 @@ func (apiVersion *ApiTokenService) CreateApiToken(ctx context.Context, apiToken 
 	apiToken.Token = token
 	apiToken.Status = true
 	apiToken.ExpiresAt = time.Now().Add(expireTime)
-	err = global.GVA_DB.WithContext(ctx).Create(&apiToken).Error
+	err = global.GVA_DB.Create(&apiToken).Error
 	return token, err
 }
 
-func (apiVersion *ApiTokenService) GetApiTokenList(ctx context.Context, info sysReq.SysApiTokenSearch) (list []system.SysApiToken, total int64, err error) {
-	limit, offset := info.LimitOffset()
-	db := global.GVA_DB.WithContext(ctx).Model(&system.SysApiToken{})
+func (apiVersion *ApiTokenService) GetApiTokenList(info sysReq.SysApiTokenSearch) (list []system.SysApiToken, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&system.SysApiToken{})
 
 	db = db.Preload("User")
 
@@ -90,18 +89,18 @@ func (apiVersion *ApiTokenService) GetApiTokenList(ctx context.Context, info sys
 	return list, total, err
 }
 
-func (apiVersion *ApiTokenService) DeleteApiToken(ctx context.Context, id uint) error {
+func (apiVersion *ApiTokenService) DeleteApiToken(id uint) error {
 	var apiToken system.SysApiToken
-	err := global.GVA_DB.WithContext(ctx).First(&apiToken, id).Error
+	err := global.GVA_DB.First(&apiToken, id).Error
 	if err != nil {
 		return err
 	}
 
 	jwtService := JwtService{}
-	err = jwtService.JsonInBlacklist(ctx, system.JwtBlacklist{Jwt: apiToken.Token})
+	err = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: apiToken.Token})
 	if err != nil {
 		return err
 	}
 
-	return global.GVA_DB.WithContext(ctx).Model(&apiToken).Update("status", false).Error
+	return global.GVA_DB.Model(&apiToken).Update("status", false).Error
 }

@@ -4,7 +4,7 @@
 
 ## 使用方式
 
-1. 先读取 `AGENTS.md`
+1. 先读取 `AGENT.MD`
 2. 再查看本索引文件
 3. 按任务只打开相关子目录
 4. 不再把项目级规则塞回 `.codex/`、`.claude/`、`.cursor/`、`.trae/`
@@ -27,8 +27,6 @@
 - `frontend-backend/boundary.md`: 前后端契约与字段类型约束
 - `frontend-backend/frontend-rules.md`: 前端代码、状态、路由、样式规范
 - `frontend-backend/frontend-utils.md`: `src/utils/` 工具库的强制复用规则
-- `frontend-backend/component-library.md`: reka-ui 基础组件库（位置 / 全局 `g-` 前缀 / 主题与构建约束）
-- `frontend-backend/theme-classnames.md`: 主题化语义 token 类名参考（取色来源 / 明暗表现 / 使用约定）
 - `examples/README.md`: 示例层总入口
 - `memory/project-memory.md`: 记忆层总入口
 - `memory/long-term/`: 长期记忆
@@ -38,6 +36,6 @@
 
 - 稳定规则放这里，不放到工具私有目录里
 - 临时会话草稿不要入库，只有变成长期知识时才记录
-- 适用于所有 AI 的项目级规则，先写进 `AGENTS.md`
+- 适用于所有 AI 的项目级规则，先写进 `AGENT.MD`
 - 细节说明再拆到 `aiDoc/` 对应子目录
 - 只要用户提出业务需求，就要同步更新 `memory/business/`

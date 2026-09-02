@@ -30,6 +30,11 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 		autoCodeRouter.POST("getPackage", autoCodePackageApi.All)
 		autoCodeRouter.POST("delPackage", autoCodePackageApi.Delete)
 		autoCodeRouter.POST("createPackage", autoCodePackageApi.Create)
+		autoCodeRouter.POST("saveAIWorkflowSession", aiWorkflowSessionApi.Save)
+		autoCodeRouter.POST("getAIWorkflowSessionList", aiWorkflowSessionApi.GetList)
+		autoCodeRouter.POST("getAIWorkflowSessionDetail", aiWorkflowSessionApi.GetDetail)
+		autoCodeRouter.POST("deleteAIWorkflowSession", aiWorkflowSessionApi.Delete)
+		autoCodeRouter.POST("dumpAIWorkflowMarkdown", aiWorkflowSessionApi.DumpMarkdown)
 	}
 	{
 		autoCodeRouter.GET("getTemplates", autoCodePackageApi.Templates)
@@ -39,12 +44,12 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 		autoCodeRouter.POST("installPlugin", autoCodePluginApi.Install)
 		autoCodeRouter.POST("removePlugin", autoCodePluginApi.Remove)
 		autoCodeRouter.GET("getPluginList", autoCodePluginApi.GetPluginList)
-		autoCodeRouter.POST("initMenu", autoCodePluginApi.InitMenu)
-		autoCodeRouter.POST("initAPI", autoCodePluginApi.InitAPI)
-		autoCodeRouter.POST("initDictionary", autoCodePluginApi.InitDictionary)
 	}
 	{
 		publicAutoCodeRouter.POST("llmAuto", autoCodeApi.LLMAuto)
 		publicAutoCodeRouter.POST("llmAutoSSE", autoCodeApi.LLMAutoSSE)
+		publicAutoCodeRouter.POST("initMenu", autoCodePluginApi.InitMenu)
+		publicAutoCodeRouter.POST("initAPI", autoCodePluginApi.InitAPI)
+		publicAutoCodeRouter.POST("initDictionary", autoCodePluginApi.InitDictionary)
 	}
 }

@@ -1,50 +1,41 @@
 <template>
   <el-drawer
     v-model="drawer"
+    title="系统配置"
     direction="rtl"
     :size="width"
-    append-to-body
     :show-close="false"
     class="gva-theme-drawer"
   >
     <template #header>
-      <div class="flex items-center justify-between">
-        <span class="text-base">系统配置</span>
-        <div class="flex items-center gap-2">
-          <g-button
-            size="sm"
-            class="rounded-lg font-medium hover:-translate-y-0.5"
-            @click="resetConfig"
-          >
-            重置配置
-          </g-button>
-          <g-button
-            variant="ghost"
-            size="icon"
-            class="rounded-full"
-            aria-label="关闭系统配置"
-            @click="closeDrawer"
-          >
-            <svg-icon local-icon="close" class="h-3.5 w-3.5" />
-          </g-button>
-        </div>
+      <div class="flex items-center justify-between w-full px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-xl font-semibold gva-theme-text-main gva-theme-font">系统配置</h2>
+        <el-button
+          type="primary"
+          size="small"
+          class="reset-btn"
+          :style="{ backgroundColor: config.primaryColor, borderColor: config.primaryColor }"
+          @click="resetConfig"
+        >
+          重置配置
+        </el-button>
       </div>
     </template>
 
-    <div class="bg-container px-5">
-      <div class="pt-3 pb-4">
+    <div class="bg-white dark:bg-gray-900 px-6">
+      <div class="px-8 pt-4 pb-6">
         <div class="flex justify-center">
-          <div class="inline-flex bg-muted rounded-lg p-1 gap-0.5">
+          <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1.5 border border-gray-200 dark:border-gray-700 shadow-sm">
             <div
               v-for="tab in tabs"
               :key="tab.key"
-              class="px-4 py-1.5 text-[13px] text-center cursor-pointer font-medium rounded-md transition-colors duration-150 ease-in-out min-w-[60px]"
+              class="px-4 py-2 text-base text-center cursor-pointer font-medium rounded-lg transition-all duration-150 ease-in-out min-w-[80px]"
               :class="[
                 activeTab === tab.key
-                  ? 'text-white shadow-sm'
-                  : 'text-muted-foreground hover:text-base-text'
+                  ? 'text-white shadow-md transform -translate-y-0.5'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
               ]"
-              :style="activeTab === tab.key ? { backgroundColor: settings.themeColor } : {}"
+              :style="activeTab === tab.key ? { backgroundColor: config.primaryColor } : {}"
               @click="activeTab = tab.key"
             >
               {{ tab.label }}
@@ -57,7 +48,6 @@
         <div class="transition-all duration-300 ease-in-out">
           <AppearanceSettings v-if="activeTab === 'appearance'" />
           <LayoutSettings v-else-if="activeTab === 'layout'" />
-          <PresetSettings v-else-if="activeTab === 'presets'" />
           <GeneralSettings v-else-if="activeTab === 'general'" />
         </div>
       </div>
@@ -66,12 +56,13 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { useAppStore, useThemeStore } from '@/pinia'
+  import { ElMessage } from 'element-plus'
+  import { useAppStore } from '@/pinia'
+  import { setSelfSetting } from '@/api/user'
   import AppearanceSettings from './modules/appearance/index.vue'
   import LayoutSettings from './modules/layout/index.vue'
-  import PresetSettings from './modules/presets/index.vue'
   import GeneralSettings from './modules/general/index.vue'
 
   defineOptions({
@@ -79,21 +70,18 @@
   })
 
   const appStore = useAppStore()
-  const themeStore = useThemeStore()
-  const { device } = storeToRefs(appStore)
-  const { settings } = storeToRefs(themeStore)
+  const { config, device } = storeToRefs(appStore)
 
   const activeTab = ref('appearance')
 
   const tabs = [
     { key: 'appearance', label: '外观' },
     { key: 'layout', label: '布局' },
-    { key: 'presets', label: '预设' },
     { key: 'general', label: '通用' }
   ]
 
   const width = computed(() => {
-    return device.value === 'mobile' ? '100%' : '440px'
+    return device.value === 'mobile' ? '100%' : '500px'
   })
 
   const drawer = defineModel('drawer', {
@@ -101,19 +89,31 @@
     type: Boolean
   })
 
-  const resetConfig = () => {
-    themeStore.resetConfig()
+  const saveConfig = async () => {
+    const res = await setSelfSetting(config.value)
+    if (res.code === 0) {
+      localStorage.setItem('originSetting', JSON.stringify(config.value))
+      ElMessage.success('保存成功')
+    }
   }
 
-  const closeDrawer = () => {
-    drawer.value = false
+  const resetConfig = () => {
+    appStore.resetConfig()
   }
+
+  watch(config, async () => {
+    await saveConfig();
+  }, { deep: true });
 </script>
 
 <style lang="scss">
 .gva-theme-drawer {
   .el-drawer {
-    @apply bg-container;
+    @apply bg-white dark:bg-gray-900;
+  }
+
+  .el-drawer__header {
+    @apply p-0 border-0;
   }
 
   .el-drawer__body {
@@ -126,31 +126,31 @@
 }
 
 .gva-theme-card-bg {
-  @apply bg-layout border border-border rounded-lg px-3.5 py-0.5;
+  @apply bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm;
 }
 
 .gva-theme-card-white {
-  @apply bg-container border border-border rounded-lg px-3 py-2.5 transition-colors duration-150;
+  @apply bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-5 hover:shadow-md transition-all duration-150 ease-in-out hover:-translate-y-0.5;
 }
 
 .gva-theme-section-header {
-  @apply flex items-center mb-2 mt-0.5;
+  @apply flex items-center justify-center mb-6;
 }
 
 .gva-theme-section-title {
-  @apply text-xs font-semibold tracking-wide text-muted-foreground;
+  @apply px-6 text-lg font-semibold text-gray-700 dark:text-gray-300;
 }
 
 .gva-theme-divider {
-  @apply hidden;
+  @apply h-px bg-gray-200 dark:bg-gray-700 flex-1;
 }
 
 .gva-theme-text-main {
-  @apply text-base-text;
+  @apply text-gray-900 dark:text-white;
 }
 
 .gva-theme-text-sub {
-  @apply text-muted-foreground;
+  @apply text-gray-600 dark:text-gray-400;
 }
 
 .gva-theme-section-content {
@@ -158,15 +158,15 @@
 }
 
 .gva-theme-setting-item {
-  @apply flex items-center justify-between py-2.5 gva-theme-font border-0 border-b border-solid border-border last:border-b-0;
+  @apply flex items-center justify-between py-4 gva-theme-font border-b border-gray-100 dark:border-gray-700 last:border-b-0;
 }
 
 .gva-theme-setting-label {
-  @apply text-[13px] font-medium gva-theme-text-main;
+  @apply text-sm font-medium gva-theme-text-main;
 }
 
 .gva-theme-mode-selector {
-  @apply inline-flex bg-layout border border-border rounded-lg p-1 gap-1;
+  @apply inline-flex bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 gap-1;
 }
 
 .gva-theme-mode-item {
@@ -174,7 +174,7 @@
 }
 
 .gva-theme-layout-card {
-  @apply bg-container border border-border rounded-lg p-2 cursor-pointer transition-colors duration-150 ease-in-out hover:border-primary;
+  @apply bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl p-3 cursor-pointer transition-all duration-150 ease-in-out hover:-translate-y-1 hover:shadow-xl;
 }
 
 @keyframes fadeInUp {
@@ -218,5 +218,11 @@
   &:hover {
     background: #6b7280;
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.reset-btn {
+  @apply rounded-lg font-medium transition-all duration-150 ease-in-out hover:-translate-y-0.5 hover:brightness-90 hover:shadow-lg;
 }
 </style>

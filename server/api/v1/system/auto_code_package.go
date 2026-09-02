@@ -1,12 +1,13 @@
 package system
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"strings"
 )
 
@@ -34,7 +35,7 @@ func (a *AutoCodePackageApi) Create(c *gin.Context) {
 	} // PackageName可能导致路径穿越的问题 / 和 \ 都要防止
 	err := autoCodePackageService.Create(c.Request.Context(), &info)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -55,7 +56,7 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&info)
 	err := autoCodePackageService.Delete(c.Request.Context(), info)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -73,7 +74,7 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 func (a *AutoCodePackageApi) All(c *gin.Context) {
 	data, err := autoCodePackageService.All(c.Request.Context())
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -91,7 +92,7 @@ func (a *AutoCodePackageApi) All(c *gin.Context) {
 func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 	data, err := autoCodePackageService.Templates(c.Request.Context())
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}

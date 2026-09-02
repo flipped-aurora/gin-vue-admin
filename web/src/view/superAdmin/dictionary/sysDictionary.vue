@@ -1,17 +1,14 @@
 <template>
-  <div
-    ref="dictRoot"
-    class="flex flex-col overflow-hidden"
-    :style="{ height: rootHeight }"
-  >
+  <div>
     <warning-bar
-      class="flex-none"
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <el-splitter class="flex-1 min-h-0 gva-dict-splitter">
+    <el-splitter class="h-full">
       <el-splitter-panel size="300px" min="200px" max="800px" collapsible>
-        <div class="gva-table-box !my-0 mr-2 h-full flex flex-col overflow-hidden">
-          <div class="flex justify-between items-center relative flex-none">
+        <div
+          class="flex-none bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded p-4"
+        >
+          <div class="flex justify-between items-center relative">
             <span class="text font-bold">字典列表</span>
             <el-input
               class="!absolute top-0 left-0 z-2 ease-in-out animate-slide-left"
@@ -27,30 +24,33 @@
             >
               <template #append>
                 <el-button
-                  type="primary"
+                  :type="searchName ? 'primary' : 'info'"
                   @click="getTableData"
                   >搜索</el-button
                 >
               </template>
             </el-input>
-            <div class="ml-auto flex items-center gap-1">
+            <el-button-group class="ml-auto">
               <el-tooltip content="搜索" placement="top">
-                <button
-                  class="dict-tool-btn"
+                <el-button
+                  :icon="Search"
                   @click="showSearchInputHandler"
-                >
-                  <el-icon><Search /></el-icon>
-                </button>
+                />
               </el-tooltip>
               <el-tooltip content="导入字典" placement="top">
-                <button class="dict-tool-btn" @click="openImportDialog">
-                  <el-icon><Upload /></el-icon>
-                </button>
+                <el-button
+                  type="success"
+                  :icon="Upload"
+                  @click="openImportDialog"
+                />
               </el-tooltip>
               <el-tooltip content="AI 生成字典" placement="top">
-                <button class="dict-tool-btn" @click="openAiDialog">
-                  <el-icon><MagicStick /></el-icon>
-                </button>
+                <el-button
+                  type="warning"
+                  @click="openAiDialog"
+                >
+                  AI
+                </el-button>
               </el-tooltip>
               <el-tooltip content="新建字典" placement="top">
                 <el-button
@@ -59,9 +59,9 @@
                   @click="openDrawer"
                 />
               </el-tooltip>
-            </div>
+            </el-button-group>
           </div>
-          <el-scrollbar class="mt-4 flex-1">
+          <el-scrollbar class="mt-4" style="height: calc(100vh - 300px)">
             <div
               v-for="dictionary in dictionaryData"
               :key="dictionary.ID"
@@ -110,7 +110,9 @@
         </div>
       </el-splitter-panel>
       <el-splitter-panel :min="200">
-        <div class="ml-2 h-full overflow-hidden">
+        <div
+          class="flex-1 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900"
+        >
           <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
         </div>
       </el-splitter-panel>
@@ -124,7 +126,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-base">{{
+          <span class="text-lg">{{
             type === 'create' ? '添加字典' : '修改字典'
           }}</span>
           <div>
@@ -198,7 +200,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-base">导入字典JSON</span>
+          <span class="text-lg">导入字典JSON</span>
           <div>
             <el-button @click="closeImportDrawer"> 取 消 </el-button>
             <el-button type="primary" @click="handleImport" :loading="importing">
@@ -351,18 +353,11 @@
   } from '@/api/sysDictionary' // 此处请自行替换地址
   import { llmAuto } from '@/api/autoCode'
   import WarningBar from '@/components/warningBar/warningBar.vue'
-  import {
-    ref,
-    watch,
-    onMounted,
-    onActivated,
-    onBeforeUnmount,
-    nextTick
-  } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
 
   import sysDictionaryDetail from './sysDictionaryDetail.vue'
-  import { Edit, Plus, Search, Download, Upload, MagicStick } from '@element-plus/icons-vue'
+  import { Edit, Plus, Search, Download, Upload } from '@element-plus/icons-vue'
   import { useAppStore } from '@/pinia'
 
   defineOptions({
@@ -370,23 +365,6 @@
   })
 
   const appStore = useAppStore()
-
-  // 让整页填满视口高度：动态测量根节点距视口顶部的距离，填满到视口底部，
-  // 避免写死 magic number（顶栏/标签栏/告警条高度变化时仍自适应）。
-  const dictRoot = ref(null)
-  const rootHeight = ref('auto')
-  const updateRootHeight = () => {
-    const el = dictRoot.value
-    if (!el) return
-    const top = el.getBoundingClientRect().top
-    rootHeight.value = `${Math.max(320, window.innerHeight - top - 32)}px`
-  }
-  onMounted(() => {
-    nextTick(updateRootHeight)
-    window.addEventListener('resize', updateRootHeight)
-  })
-  onActivated(updateRootHeight)
-  onBeforeUnmount(() => window.removeEventListener('resize', updateRootHeight))
 
   const selectID = ref(0)
 
@@ -451,6 +429,11 @@
     focused.value = false
   }
 
+  // 触发图片选择
+  const triggerImageSelect = () => {
+    imageFileInputRef.value?.click()
+  }
+
   const handlePaste = (event) => {
     const items = event.clipboardData.items;
     for (let i = 0; i < items.length; i++) {
@@ -509,6 +492,12 @@
       jsonPreviewError.value = 'JSON格式错误: ' + e.message
       jsonPreview.value = null
     }
+  })
+
+  // 格式化JSON预览
+  const jsonPreviewFormatted = computed(() => {
+    if (!jsonPreview.value) return ''
+    return JSON.stringify(jsonPreview.value, null, 2)
   })
 
 
@@ -690,12 +679,12 @@
   }
 
   // 处理拖拽进入
-  const handleDragOver = () => {
+  const handleDragOver = (e) => {
     isDragging.value = true
   }
 
   // 处理拖拽离开
-  const handleDragLeave = () => {
+  const handleDragLeave = (e) => {
     isDragging.value = false
   }
   // 处理文件拖拽
@@ -829,34 +818,6 @@
 </script>
 
 <style scoped>
-  /* 拖拽分隔条：去掉默认整条实线，改成居中一颗浅色小握把；
-     hover 变主色并变长，保留拖拽能力，观感更克制。 */
-  :deep(.el-splitter-bar__dragger) {
-    background-color: transparent !important;
-  }
-  :deep(.el-splitter-bar) {
-    position: relative;
-  }
-  :deep(.el-splitter-bar)::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 4px;
-    height: 40px;
-    border-radius: 999px;
-    background-color: var(--el-border-color);
-    transition:
-      background-color 0.2s ease,
-      height 0.2s ease;
-    pointer-events: none;
-  }
-  :deep(.el-splitter-bar:hover)::after {
-    background-color: var(--el-color-primary);
-    height: 56px;
-  }
-
   .dict-box {
     height: calc(100vh - 240px);
   }
@@ -864,32 +825,6 @@
   .active {
     background-color: var(--el-color-primary) !important;
     color: #fff;
-  }
-
-  /* 字典列表标题栏的工具按钮：32px 淡色块图标按钮（无边框），
-     色块托底保证可见性又不显杂乱，hover 变主色淡底；
-     主操作「新建」保留实心主色突出层级 */
-  .dict-tool-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: none;
-    border-radius: 8px;
-    background: var(--el-fill-color);
-    color: rgb(var(--muted-foreground-color));
-    font-size: 15px;
-    cursor: pointer;
-    transition:
-      background-color 0.15s ease,
-      color 0.15s ease;
-  }
-
-  .dict-tool-btn:hover {
-    background: rgb(var(--primary-color) / 0.12);
-    color: rgb(var(--primary-color));
   }
 
   .import-drawer-content {

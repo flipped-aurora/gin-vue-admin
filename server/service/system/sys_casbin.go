@@ -1,7 +1,6 @@
 package system
 
 import (
-	"context"
 	"errors"
 	"strconv"
 
@@ -24,15 +23,15 @@ type CasbinService struct{}
 
 var CasbinServiceApp = new(CasbinService)
 
-func (casbinService *CasbinService) UpdateCasbin(ctx context.Context, adminAuthorityID, AuthorityID uint, casbinInfos []request.CasbinInfo) error {
+func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID uint, casbinInfos []request.CasbinInfo) error {
 
-	err := AuthorityServiceApp.CheckAuthorityIDAuth(ctx, adminAuthorityID, AuthorityID)
+	err := AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, AuthorityID)
 	if err != nil {
 		return err
 	}
 
 	if global.GVA_CONFIG.System.UseStrictAuth {
-		apis, e := ApiServiceApp.GetAllApis(ctx, adminAuthorityID)
+		apis, e := ApiServiceApp.GetAllApis(adminAuthorityID)
 		if e != nil {
 			return e
 		}
@@ -86,8 +85,8 @@ func (casbinService *CasbinService) UpdateCasbin(ctx context.Context, adminAutho
 //@param: oldPath string, newPath string, oldMethod string, newMethod string
 //@return: error
 
-func (casbinService *CasbinService) UpdateCasbinApi(ctx context.Context, oldPath string, newPath string, oldMethod string, newMethod string) error {
-	err := global.GVA_DB.WithContext(ctx).Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
+func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
+	err := global.GVA_DB.Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
@@ -192,9 +191,9 @@ func (casbinService *CasbinService) FreshCasbin() (err error) {
 }
 
 // GetAuthoritiesByApi 获取拥有指定API权限的所有角色ID
-func (casbinService *CasbinService) GetAuthoritiesByApi(ctx context.Context, path, method string) (authorityIds []uint, err error) {
+func (casbinService *CasbinService) GetAuthoritiesByApi(path, method string) (authorityIds []uint, err error) {
 	var rules []gormadapter.CasbinRule
-	err = global.GVA_DB.WithContext(ctx).Where("ptype = 'p' AND v1 = ? AND v2 = ?", path, method).Find(&rules).Error
+	err = global.GVA_DB.Where("ptype = 'p' AND v1 = ? AND v2 = ?", path, method).Find(&rules).Error
 	if err != nil {
 		return nil, err
 	}
@@ -208,8 +207,8 @@ func (casbinService *CasbinService) GetAuthoritiesByApi(ctx context.Context, pat
 }
 
 // SetApiAuthorities 全量覆盖某API关联的角色列表
-func (casbinService *CasbinService) SetApiAuthorities(ctx context.Context, path, method string, authorityIds []uint) error {
-	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+func (casbinService *CasbinService) SetApiAuthorities(path, method string, authorityIds []uint) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		// 1. 删除该API所有已有的角色关联
 		if err := tx.Where("ptype = 'p' AND v1 = ? AND v2 = ?", path, method).Delete(&gormadapter.CasbinRule{}).Error; err != nil {
 			return err

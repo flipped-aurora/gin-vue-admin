@@ -23,6 +23,10 @@
   <a href="./README-en.md">English</a> | 简体中文
 </p>
 
+## 支持 Claw 生态
+
+[🦞 GvaClaw](https://plugin.gin-vue-admin.com/details/159)
+
 ## 一分钟生成前后端基础代码
 
 <table>
@@ -52,6 +56,15 @@
 - **插件市场**: [点击进入](https://plugin.gin-vue-admin.com/)
 - **软件著作权证书**: [查看证书](https://www.gin-vue-admin.com/copyright.pdf)
 
+## 在线演示
+
+- **演示站**: [http://demo.gin-vue-admin.com](http://demo.gin-vue-admin.com)
+- **授权版演示站**: [https://vip.gin-vue-admin.com](https://vip.gin-vue-admin.com)
+- **演示站测试用户名**: `admin`
+- **演示站测试密码**: `123456`
+
+想了解授权版提供的完整体验，可先访问[授权版演示站](https://vip.gin-vue-admin.com)；用于商用或生产环境时，请[购买商业授权](https://plugin.gin-vue-admin.com/license)。
+
 ## 重要提示
 
 1. 本项目从起步到开发到部署均有文档和详细视频教程。
@@ -59,16 +72,18 @@
 3. 您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)。
 4. 本项目采用 BSL 1.1 授权。非商用、学习、评估等用途请遵循仓库许可证；如将此项目用于商用或生产环境，或需要移除版权与署名信息，请[购买授权](https://plugin.gin-vue-admin.com/license)。您需保留仓库、日志和代码中的版权声明信息。
 
+<br>
+
+<div align="center">
+  <img src="https://qmplusimg.henrongyi.top/openSource/login.jpg" width="49%" alt="登录界面" style="border-radius: 8px;" />
+  <img src="https://qmplusimg.henrongyi.top/openSource/dashboard.jpg" width="49%" alt="仪表盘" style="border-radius: 8px;" />
+</div>
 
 ## 1. 基本介绍
 
 ### 1.1 项目介绍
 
 > Gin-vue-admin是一个基于 [vue](https://vuejs.org) 和 [gin](https://gin-gonic.com) 开发的全栈前后端分离的开发基础平台，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
-
-- **在线预览**: [http://demo.gin-vue-admin.com](http://demo.gin-vue-admin.com)
-- **测试用户名**: `admin`
-- **测试密码**: `123456`
 
 ### 1.2 贡献指南
 

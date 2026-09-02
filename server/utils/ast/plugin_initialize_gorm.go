@@ -81,9 +81,7 @@ func (a *PluginInitializeGorm) Rollback(file *ast.File) error {
 }
 
 func (a *PluginInitializeGorm) Injection(file *ast.File) error {
-	if file == nil {
-		return fmt.Errorf("插件 gorm 注入目标不能为空")
-	}
+	_ = NewImport(a.ImportPath).Injection(file)
 
 	var targetCall *ast.CallExpr
 	ast.Inspect(file, func(n ast.Node) bool {
@@ -109,14 +107,11 @@ func (a *PluginInitializeGorm) Injection(file *ast.File) error {
 		targetCall = a.appendAutoMigrateBlock(file)
 	}
 	if targetCall == nil {
-		return fmt.Errorf("插件 gorm 注入目标缺少 Gorm 函数或 AutoMigrate 调用")
+		return nil
 	}
 
 	if a.hasModelArg(targetCall) {
 		return nil
-	}
-	if err := NewImport(a.ImportPath).Injection(file); err != nil {
-		return fmt.Errorf("注入插件 gorm import 失败: %w", err)
 	}
 
 	targetCall.Args = append(targetCall.Args, &ast.CompositeLit{

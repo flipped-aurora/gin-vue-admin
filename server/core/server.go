@@ -1,7 +1,6 @@
 package core
 
 import (
-	"context"
 	"fmt"
 	"time"
 
@@ -20,9 +19,6 @@ func RunServer() {
 		}
 	}
 
-	// 初始化通用缓存（必须在 Redis 之后：有 Redis 用 Redis，否则用内存）
-	initialize.InitGvaCache()
-
 	if global.GVA_CONFIG.System.UseMongo {
 		if err := initialize.Mongo.Initialization(); err != nil {
 			zap.L().Error(fmt.Sprintf("%+v", err))
@@ -30,8 +26,7 @@ func RunServer() {
 	}
 
 	if global.GVA_DB != nil {
-		system.LoadAll(context.Background())
-		(&system.SecurityConfigService{}).LoadAll(context.Background())
+		system.LoadAll()
 	}
 
 	Router := initialize.Routers()

@@ -88,7 +88,7 @@ import { RefreshLeft, RefreshRight, Plus, Minus } from '@element-plus/icons-vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
-import { getUploadErrorMessage } from '@/utils/uploadResponse'
+import { useUserStore } from "@/pinia";
 
 defineOptions({
   name: 'CropperImage'
@@ -216,13 +216,6 @@ const handleUpload = () => {
 }
 
 const handleImageSuccess = (res) => {
-  const errorMessage = getUploadErrorMessage(res)
-  if (errorMessage) {
-    uploading.value = false
-    ElMessage.error(errorMessage)
-    return
-  }
-
   const { data } = res
   if (data) {
     setTimeout(() => {
@@ -230,7 +223,7 @@ const handleImageSuccess = (res) => {
       dialogVisible.value = false
       previews.value = {}
       ElMessage.success('上传成功')
-      emit('on-success', data.file?.url || data.url)
+      emit('on-success', data.url)
     }, 1000)
   }
 }

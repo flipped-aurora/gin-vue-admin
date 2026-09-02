@@ -8,6 +8,7 @@ type Server struct {
 	Mongo     Mongo   `mapstructure:"mongo" json:"mongo" yaml:"mongo"`
 	Email     Email   `mapstructure:"email" json:"email" yaml:"email"`
 	System    System  `mapstructure:"system" json:"system" yaml:"system"`
+	Captcha   Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	// auto
 	AutoCode Autocode `mapstructure:"autocode" json:"autocode" yaml:"autocode"`
 	// gorm
@@ -27,7 +28,7 @@ type Server struct {
 	CloudflareR2 CloudflareR2 `mapstructure:"cloudflare-r2" json:"cloudflare-r2" yaml:"cloudflare-r2"`
 	Minio        Minio        `mapstructure:"minio" json:"minio" yaml:"minio"`
 
-	Media Media `mapstructure:"media" json:"media" yaml:"media"`
+	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 
 	DiskList []DiskList `mapstructure:"disk-list" json:"disk-list" yaml:"disk-list"`
 
@@ -36,7 +37,4 @@ type Server struct {
 
 	// MCP配置
 	MCP MCP `mapstructure:"mcp" json:"mcp" yaml:"mcp"`
-
-	// 应用身份（日志静态字段 node/app_id/env）
-	App App `mapstructure:"app" json:"app" yaml:"app"`
 }

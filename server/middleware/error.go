@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -9,8 +10,11 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志
@@ -31,25 +35,43 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					logger.WithCtx(c.Request.Context()).Mod("http").
-						Field("error", fmt.Sprintf("%v", err)).
-						Field("request", string(httpRequest)).
-						Error(c.Request.URL.Path)
+					global.GVA_LOG.Error(c.Request.URL.Path,
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
 					// If the connection is dead, we can't write a status to it.
 					_ = c.Error(err.(error)) // nolint: errcheck
 					c.Abort()
 					return
 				}
 
-				// 仅记录一次结构化日志：Error 级日志已由 zap core 统一落 sys_error 表，
-				// 此处不再直接写库，消除此前每次 panic 产生两条 sys_error 记录的双写。
-				b := logger.WithCtx(c.Request.Context()).Mod("http").
-					Field("error", fmt.Sprintf("%v", err)).
-					Field("request", string(httpRequest))
 				if stack {
-					b = b.Field("stack", string(debug.Stack()))
+					form := "后端"
+					info := fmt.Sprintf("Panic: %v\nRequest: %s\nStack: %s", err, string(httpRequest), string(debug.Stack()))
+					level := "error"
+					_ = service.ServiceGroupApp.SystemServiceGroup.SysErrorService.CreateSysError(context.Background(), &system.SysError{
+						Form:  &form,
+						Info:  &info,
+						Level: level,
+					})
+					global.GVA_LOG.Error("[Recovery from panic]",
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
+				} else {
+					form := "后端"
+					info := fmt.Sprintf("Panic: %v\nRequest: %s", err, string(httpRequest))
+					level := "error"
+					_ = service.ServiceGroupApp.SystemServiceGroup.SysErrorService.CreateSysError(context.Background(), &system.SysError{
+						Form:  &form,
+						Info:  &info,
+						Level: level,
+					})
+					global.GVA_LOG.Error("[Recovery from panic]",
+						zap.Any("error", err),
+						zap.String("request", string(httpRequest)),
+					)
 				}
-				b.Error("[Recovery from panic]")
 				c.AbortWithStatus(http.StatusInternalServerError)
 			}
 		}()

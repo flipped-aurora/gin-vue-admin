@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"bufio"
+	"github.com/songzhibin97/gkit/cache/local_cache"
 	"os"
 	"strings"
 
@@ -10,7 +11,7 @@ import (
 )
 
 func OtherInit() {
-	_, err := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
+	dr, err := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
 	if err != nil {
 		panic(err)
 	}
@@ -19,6 +20,9 @@ func OtherInit() {
 		panic(err)
 	}
 
+	global.BlackCache = local_cache.NewCache(
+		local_cache.SetDefaultExpire(dr),
+	)
 	file, err := os.Open("go.mod")
 	if err == nil && global.GVA_CONFIG.AutoCode.Module == "" {
 		scanner := bufio.NewScanner(file)

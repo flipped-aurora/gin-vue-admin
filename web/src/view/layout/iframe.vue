@@ -1,11 +1,11 @@
 <template>
   <div
-    class="bg-main text-base-text w-screen h-screen"
+    class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
   >
     <iframe
         v-if="reloadFlag"
         id="gva-base-load-dom"
-        class="gva-body-h bg-main w-full border-t border-border"
+        class="gva-body-h bg-gray-50 dark:bg-slate-800 w-full border-t border-gray-200 dark:border-slate-700"
         :src="url"
     ></iframe>
   </div>
@@ -17,10 +17,10 @@
   import { ref, onMounted, nextTick, reactive, watchEffect } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import { useUserStore } from '@/pinia/modules/user'
-  import { useThemeStore } from '@/pinia'
+  import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  const themeStore = useThemeStore()
-  const { isDark } = storeToRefs(themeStore)
+  const appStore = useAppStore()
+  const { isDark } = storeToRefs(appStore)
 
 
   defineOptions({

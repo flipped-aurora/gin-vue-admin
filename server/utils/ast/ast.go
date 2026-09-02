@@ -7,12 +7,11 @@ import (
 	"go/parser"
 	"go/token"
 	"log"
-	"strconv"
 )
 
 // AddImport 增加 import 方法
 func AddImport(astNode ast.Node, imp string) {
-	impStr := strconv.Quote(imp)
+	impStr := fmt.Sprintf("\"%s\"", imp)
 	ast.Inspect(astNode, func(node ast.Node) bool {
 		if genDecl, ok := node.(*ast.GenDecl); ok {
 			if genDecl.Tok == token.IMPORT {
@@ -59,12 +58,9 @@ func FindArray(astNode ast.Node, identName, selectorExprName string) *ast.Compos
 			for _, expr := range node.Rhs {
 				if exprType, ok := expr.(*ast.CompositeLit); ok {
 					if arrayType, ok := exprType.Type.(*ast.ArrayType); ok {
-						sel, ok := arrayType.Elt.(*ast.SelectorExpr)
-						if !ok {
-							continue
-						}
-						x, ok := sel.X.(*ast.Ident)
-						if ok && x.Name == identName && sel.Sel.Name == selectorExprName {
+						sel, ok1 := arrayType.Elt.(*ast.SelectorExpr)
+						x, ok2 := sel.X.(*ast.Ident)
+						if ok1 && ok2 && x.Name == identName && sel.Sel.Name == selectorExprName {
 							assignStmt = exprType
 							return false
 						}
@@ -87,11 +83,11 @@ func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Path"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(menus[i].Path)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Path)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Name"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(menus[i].Name)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Name)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Hidden"},
@@ -99,7 +95,7 @@ func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Component"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(menus[i].Component)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Component)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Sort"},
@@ -115,11 +111,11 @@ func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
 					Elts: []ast.Expr{
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Title"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(menus[i].Title)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Title)},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Icon"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(menus[i].Icon)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Icon)},
 						},
 					},
 				},
@@ -138,15 +134,15 @@ func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
 					Elts: []ast.Expr{
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Type"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(param.Type)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", param.Type)},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Key"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(param.Key)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", param.Key)},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Value"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(param.Value)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", param.Value)},
 						},
 					},
 				})
@@ -177,11 +173,11 @@ func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
 					Elts: []ast.Expr{
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Name"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(btn.Name)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", btn.Name)},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Desc"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(btn.Desc)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", btn.Desc)},
 						},
 					},
 				})
@@ -214,19 +210,19 @@ func CreateApiStructAst(apis []system.SysApi) *[]ast.Expr {
 		elts := []ast.Expr{ // 结构体的字段
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Path"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(apis[i].Path)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].Path)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Description"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(apis[i].Description)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].Description)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "ApiGroup"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(apis[i].ApiGroup)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].ApiGroup)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Method"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(apis[i].Method)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].Method)},
 			},
 		}
 		apiElts = append(apiElts, &ast.CompositeLit{
@@ -320,11 +316,11 @@ func CreateDictionaryStructAst(dictionaries []system.SysDictionary) *[]ast.Expr 
 		elts := []ast.Expr{
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Name"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(dictionaries[i].Name)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Name)},
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Type"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(dictionaries[i].Type)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Type)},
 			},
 			&ast.KeyValueExpr{
 				Key: &ast.Ident{Name: "Status"},
@@ -340,7 +336,7 @@ func CreateDictionaryStructAst(dictionaries []system.SysDictionary) *[]ast.Expr 
 			},
 			&ast.KeyValueExpr{
 				Key:   &ast.Ident{Name: "Desc"},
-				Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(dictionaries[i].Desc)},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", dictionaries[i].Desc)},
 			},
 		}
 
@@ -360,15 +356,15 @@ func CreateDictionaryStructAst(dictionaries []system.SysDictionary) *[]ast.Expr 
 					Elts: []ast.Expr{
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Label"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(detail.Label)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Label)},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Value"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(detail.Value)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Value)},
 						},
 						&ast.KeyValueExpr{
 							Key:   &ast.Ident{Name: "Extend"},
-							Value: &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(detail.Extend)},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", detail.Extend)},
 						},
 						&ast.KeyValueExpr{
 							Key: &ast.Ident{Name: "Status"},

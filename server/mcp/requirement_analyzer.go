@@ -2,6 +2,7 @@ package mcpTool
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -13,6 +14,11 @@ func init() {
 }
 
 type RequirementAnalyzer struct{}
+
+// RequirementAnalysisRequest 需求分析请求
+type RequirementAnalysisRequest struct {
+	UserRequirement string `json:"userRequirement"`
+}
 
 // RequirementAnalysisResponse 需求分析响应
 type RequirementAnalysisResponse struct {
@@ -73,7 +79,16 @@ func (t *RequirementAnalyzer) Handle(ctx context.Context, request mcp.CallToolRe
 	}
 
 	// 序列化响应
-	return textResultWithJSON("", analysisResponse)
+	responseData, err := json.Marshal(analysisResponse)
+	if err != nil {
+		return nil, fmt.Errorf("序列化响应失败: %v", err)
+	}
+
+	return &mcp.CallToolResult{
+		Content: []mcp.Content{
+			mcp.NewTextContent(string(responseData)),
+		},
+	}, nil
 }
 
 // analyzeRequirement 分析用户需求 - 专注于AI需求传递

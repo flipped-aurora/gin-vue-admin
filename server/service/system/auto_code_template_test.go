@@ -8,24 +8,25 @@ import (
 	"testing"
 )
 
-func TestAutoCodeCreateContextSurvivesRequestCancellation(t *testing.T) {
-	type contextKey struct{}
-
-	key := contextKey{}
-	requestCtx, cancel := context.WithCancel(
-		context.WithValue(context.Background(), key, "request-123"),
-	)
-	createCtx := autoCodeCreateContext(requestCtx)
-	cancel()
-
-	if err := requestCtx.Err(); err != context.Canceled {
-		t.Fatalf("request context error = %v, want %v", err, context.Canceled)
+func Test_autoCodeTemplate_Create(t *testing.T) {
+	type args struct {
+		ctx  context.Context
+		info request.AutoCode
 	}
-	if err := createCtx.Err(); err != nil {
-		t.Fatalf("create context error = %v, want nil", err)
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		// TODO: Add test cases.
 	}
-	if got := createCtx.Value(key); got != "request-123" {
-		t.Fatalf("create context value = %v, want request-123", got)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &autoCodeTemplate{}
+			if err := s.Create(tt.args.ctx, tt.args.info); (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
 	}
 }
 

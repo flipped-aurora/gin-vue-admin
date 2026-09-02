@@ -1,13 +1,14 @@
 package system
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type OperationRecordApi struct{}
@@ -28,9 +29,9 @@ func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = operationRecordService.DeleteSysOperationRecord(c.Request.Context(), sysOperationRecord)
+	err = operationRecordService.DeleteSysOperationRecord(sysOperationRecord)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -53,9 +54,9 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = operationRecordService.DeleteSysOperationRecordByIds(c.Request.Context(), IDS)
+	err = operationRecordService.DeleteSysOperationRecordByIds(IDS)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("批量删除失败!")
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 		return
 	}
@@ -83,9 +84,9 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	reSysOperationRecord, err := operationRecordService.GetSysOperationRecord(c.Request.Context(), sysOperationRecord.ID)
+	reSysOperationRecord, err := operationRecordService.GetSysOperationRecord(sysOperationRecord.ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -108,9 +109,9 @@ func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := operationRecordService.GetSysOperationRecordInfoList(c.Request.Context(), pageInfo)
+	list, total, err := operationRecordService.GetSysOperationRecordInfoList(pageInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}

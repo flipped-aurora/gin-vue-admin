@@ -1,10 +1,11 @@
 package system
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type AuthorityBtnApi struct{}
@@ -25,9 +26,9 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	res, err := authorityBtnService.GetAuthorityBtn(c.Request.Context(), req)
+	res, err := authorityBtnService.GetAuthorityBtn(req)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -50,9 +51,9 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = authorityBtnService.SetAuthorityBtn(c.Request.Context(), req)
+	err = authorityBtnService.SetAuthorityBtn(req)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("分配失败!")
+		global.GVA_LOG.Error("分配失败!", zap.Error(err))
 		response.FailWithMessage("分配失败", c)
 		return
 	}
@@ -69,9 +70,9 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 // @Router    /authorityBtn/canRemoveAuthorityBtn [post]
 func (a *AuthorityBtnApi) CanRemoveAuthorityBtn(c *gin.Context) {
 	id := c.Query("id")
-	err := authorityBtnService.CanRemoveAuthorityBtn(c.Request.Context(), id)
+	err := authorityBtnService.CanRemoveAuthorityBtn(id)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

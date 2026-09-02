@@ -39,11 +39,11 @@
   import { reactive, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { useRouterStore } from '@/pinia/modules/router'
-  import { useThemeStore, useUserStore } from '@/pinia'
+  import { useAppStore, useUserStore } from '@/pinia'
   defineOptions({
     name: 'CommandMenu'
   })
-  const themeStore = useThemeStore()
+  const appStore = useAppStore()
   const userStore = useUserStore()
 
   const router = useRouter()
@@ -136,7 +136,7 @@
   }
 
   const changeMode = (darkMode) => {
-    themeStore.toggleTheme(darkMode)
+    appStore.toggleTheme(darkMode)
   }
 
   const close = () => {

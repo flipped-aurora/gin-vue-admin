@@ -62,11 +62,10 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 	args := request.GetArguments()
 
 	dictType := stringValue(args["dictType"])
-	includeDisabled := parseOptionalBool(args["includeDisabled"], false)
-	detailsOnly := parseOptionalBool(args["detailsOnly"], false)
+	includeDisabled, _ := args["includeDisabled"].(bool)
+	detailsOnly, _ := args["detailsOnly"].(bool)
 
-	// 一次拉取字典及其明细,消除此前逐条 exportSysDictionary 的 N+1
-	dictionaries, err := fetchDictionaryListWithDetails(ctx, dictType)
+	dictionaries, err := fetchDictionaryList(ctx, dictType)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +79,11 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 			continue
 		}
 
-		result = append(result, buildDictionaryInfo(dictionary, includeDisabled))
+		dictInfo, err := buildDictionaryInfo(ctx, dictionary, includeDisabled)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, dictInfo)
 	}
 
 	if detailsOnly {
@@ -104,17 +107,21 @@ func (d *DictionaryQuery) Handle(ctx context.Context, request mcp.CallToolReques
 	})
 }
 
-// buildDictionaryInfo 从已预加载 SysDictionaryDetails 的字典实体直接构建响应,不再逐条回查上游
-func buildDictionaryInfo(dictionary system.SysDictionary, includeDisabled bool) DictionaryInfo {
-	info := DictionaryInfo{
-		ID:     dictionary.ID,
-		Name:   dictionary.Name,
-		Type:   dictionary.Type,
-		Status: dictionary.Status,
-		Desc:   dictionary.Desc,
+func buildDictionaryInfo(ctx context.Context, dictionary system.SysDictionary, includeDisabled bool) (DictionaryInfo, error) {
+	exported, err := exportDictionary(ctx, dictionary.ID)
+	if err != nil {
+		return DictionaryInfo{}, err
 	}
 
-	for _, detail := range dictionary.SysDictionaryDetails {
+	info := DictionaryInfo{
+		ID:     dictionary.ID,
+		Name:   exported.Name,
+		Type:   exported.Type,
+		Status: exported.Status,
+		Desc:   exported.Desc,
+	}
+
+	for _, detail := range exported.SysDictionaryDetails {
 		if !includeDisabled && detail.Status != nil && !*detail.Status {
 			continue
 		}
@@ -128,5 +135,5 @@ func buildDictionaryInfo(dictionary system.SysDictionary, includeDisabled bool) 
 		})
 	}
 
-	return info
+	return info, nil
 }

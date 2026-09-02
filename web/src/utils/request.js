@@ -2,7 +2,6 @@ import axios from 'axios'
 import { useUserStore } from '@/pinia/modules/user'
 import { ElLoading, ElMessage } from 'element-plus'
 import { emitter } from '@/utils/bus'
-import { isPasswordChangeRequiredError } from '@/utils/requestError'
 import router from '@/router/index'
 
 const DEFAULT_REQUEST_TIMEOUT = 1000 * 60 * 10
@@ -157,36 +156,6 @@ function getErrorMessage(error) {
   return error.response?.data?.msg || error.response?.statusText || '请求失败'
 }
 
-// 错误提示去重：批量请求瞬间失败时，避免同一条错误反复弹出刷屏
-const MAX_ERROR_MESSAGE = 3
-const activeErrorMessages = new Map()
-
-const showErrorMessage = (rawMessage) => {
-  const message = rawMessage || '请求失败'
-
-  // 相同内容正在展示时不再重复弹出
-  if (activeErrorMessages.has(message)) {
-    return
-  }
-
-  // 不同内容也做上限保护，防止瞬间大量报错铺满整个屏幕
-  if (activeErrorMessages.size >= MAX_ERROR_MESSAGE) {
-    return
-  }
-
-  const instance = ElMessage({
-    showClose: true,
-    message,
-    type: 'error',
-    grouping: true,
-    onClose: () => {
-      activeErrorMessages.delete(message)
-    }
-  })
-
-  activeErrorMessages.set(message, instance)
-}
-
 service.interceptors.response.use(
   (response) => {
     const userStore = useUserStore()
@@ -210,7 +179,11 @@ service.interceptors.response.use(
       return response.data
     }
 
-    showErrorMessage(response.data.msg || decodeURI(response.headers.msg))
+    ElMessage({
+      showClose: true,
+      message: response.data.msg || decodeURI(response.headers.msg),
+      type: 'error'
+    })
 
     return response.data.msg ? response.data : response
   },
@@ -238,11 +211,6 @@ service.interceptors.response.use(
           router.push({ name: 'Login', replace: true })
         }
       })
-      return Promise.reject(error)
-    }
-
-    if (isPasswordChangeRequiredError(error)) {
-      router.push({ name: 'ForceChangePassword', replace: true })
       return Promise.reject(error)
     }
 

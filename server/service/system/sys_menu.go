@@ -1,7 +1,6 @@
 package system
 
 import (
-	"context"
 	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -20,14 +19,14 @@ type MenuService struct{}
 
 var MenuServiceApp = new(MenuService)
 
-func (menuService *MenuService) getMenuTreeMap(ctx context.Context, authorityId uint) (treeMap map[uint][]system.SysMenu, err error) {
+func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[uint][]system.SysMenu, err error) {
 	var allMenus []system.SysMenu
 	var baseMenu []system.SysBaseMenu
 	var btns []system.SysAuthorityBtn
 	treeMap = make(map[uint][]system.SysMenu)
 
 	var SysAuthorityMenus []system.SysAuthorityMenu
-	err = global.GVA_DB.WithContext(ctx).Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
 	if err != nil {
 		return
 	}
@@ -38,7 +37,7 @@ func (menuService *MenuService) getMenuTreeMap(ctx context.Context, authorityId 
 		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
 	}
 
-	err = global.GVA_DB.WithContext(ctx).Where("id in (?)", MenuIds).Order("sort").Preload("Parameters").Find(&baseMenu).Error
+	err = global.GVA_DB.Where("id in (?)", MenuIds).Order("sort").Preload("Parameters").Find(&baseMenu).Error
 	if err != nil {
 		return
 	}
@@ -52,7 +51,7 @@ func (menuService *MenuService) getMenuTreeMap(ctx context.Context, authorityId 
 		})
 	}
 
-	err = global.GVA_DB.WithContext(ctx).Where("authority_id = ?", authorityId).Preload("SysBaseMenuBtn").Find(&btns).Error
+	err = global.GVA_DB.Where("authority_id = ?", authorityId).Preload("SysBaseMenuBtn").Find(&btns).Error
 	if err != nil {
 		return
 	}
@@ -76,8 +75,8 @@ func (menuService *MenuService) getMenuTreeMap(ctx context.Context, authorityId 
 //@param: authorityId string
 //@return: menus []system.SysMenu, err error
 
-func (menuService *MenuService) GetMenuTree(ctx context.Context, authorityId uint) (menus []system.SysMenu, err error) {
-	menuTree, err := menuService.getMenuTreeMap(ctx, authorityId)
+func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.SysMenu, err error) {
+	menuTree, err := menuService.getMenuTreeMap(authorityId)
 	menus = menuTree[0]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getChildrenList(&menus[i], menuTree)
@@ -104,9 +103,9 @@ func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap ma
 //@description: 获取路由分页
 //@return: list interface{}, total int64,err error
 
-func (menuService *MenuService) GetInfoList(ctx context.Context, authorityID uint) (list interface{}, err error) {
+func (menuService *MenuService) GetInfoList(authorityID uint) (list interface{}, err error) {
 	var menuList []system.SysBaseMenu
-	treeMap, err := menuService.getBaseMenuTreeMap(ctx, authorityID)
+	treeMap, err := menuService.getBaseMenuTreeMap(authorityID)
 	menuList = treeMap[0]
 	for i := 0; i < len(menuList); i++ {
 		err = menuService.getBaseChildrenList(&menuList[i], treeMap)
@@ -134,8 +133,8 @@ func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, tr
 //@param: menu model.SysBaseMenu
 //@return: error
 
-func (menuService *MenuService) AddBaseMenu(ctx context.Context, menu system.SysBaseMenu) error {
-	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		// 检查name是否重复
 		if !errors.Is(tx.Where("name = ?", menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 			return errors.New("存在重复name，请修改name")
@@ -188,20 +187,20 @@ func (menuService *MenuService) AddBaseMenu(ctx context.Context, menu system.Sys
 //@description: 获取路由总树map
 //@return: treeMap map[string][]system.SysBaseMenu, err error
 
-func (menuService *MenuService) getBaseMenuTreeMap(ctx context.Context, authorityID uint) (treeMap map[uint][]system.SysBaseMenu, err error) {
-	parentAuthorityID, err := AuthorityServiceApp.GetParentAuthorityID(ctx, authorityID)
+func (menuService *MenuService) getBaseMenuTreeMap(authorityID uint) (treeMap map[uint][]system.SysBaseMenu, err error) {
+	parentAuthorityID, err := AuthorityServiceApp.GetParentAuthorityID(authorityID)
 	if err != nil {
 		return nil, err
 	}
 
 	var allMenus []system.SysBaseMenu
 	treeMap = make(map[uint][]system.SysBaseMenu)
-	db := global.GVA_DB.WithContext(ctx).Order("sort").Preload("MenuBtn").Preload("Parameters")
+	db := global.GVA_DB.Order("sort").Preload("MenuBtn").Preload("Parameters")
 
 	// 当开启了严格的树角色并且父角色不为0时需要进行菜单筛选
 	if global.GVA_CONFIG.System.UseStrictAuth && parentAuthorityID != 0 {
 		var authorityMenus []system.SysAuthorityMenu
-		err = global.GVA_DB.WithContext(ctx).Where("sys_authority_authority_id = ?", authorityID).Find(&authorityMenus).Error
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityID).Find(&authorityMenus).Error
 		if err != nil {
 			return nil, err
 		}
@@ -224,8 +223,8 @@ func (menuService *MenuService) getBaseMenuTreeMap(ctx context.Context, authorit
 //@description: 获取基础路由树
 //@return: menus []system.SysBaseMenu, err error
 
-func (menuService *MenuService) GetBaseMenuTree(ctx context.Context, authorityID uint) (menus []system.SysBaseMenu, err error) {
-	treeMap, err := menuService.getBaseMenuTreeMap(ctx, authorityID)
+func (menuService *MenuService) GetBaseMenuTree(authorityID uint) (menus []system.SysBaseMenu, err error) {
+	treeMap, err := menuService.getBaseMenuTreeMap(authorityID)
 	menus = treeMap[0]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getBaseChildrenList(&menus[i], treeMap)
@@ -239,24 +238,24 @@ func (menuService *MenuService) GetBaseMenuTree(ctx context.Context, authorityID
 //@param: menus []model.SysBaseMenu, authorityId string
 //@return: err error
 
-func (menuService *MenuService) AddMenuAuthority(ctx context.Context, menus []system.SysBaseMenu, adminAuthorityID, authorityId uint) (err error) {
+func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, adminAuthorityID, authorityId uint) (err error) {
 	var auth system.SysAuthority
 	auth.AuthorityId = authorityId
 	auth.SysBaseMenus = menus
 
-	err = AuthorityServiceApp.CheckAuthorityIDAuth(ctx, adminAuthorityID, authorityId)
+	err = AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, authorityId)
 	if err != nil {
 		return err
 	}
 
 	var authority system.SysAuthority
-	_ = global.GVA_DB.WithContext(ctx).First(&authority, "authority_id = ?", adminAuthorityID).Error
+	_ = global.GVA_DB.First(&authority, "authority_id = ?", adminAuthorityID).Error
 	var menuIds []string
 
 	// 当开启了严格的树角色并且父角色不为0时需要进行菜单筛选
 	if global.GVA_CONFIG.System.UseStrictAuth && *authority.ParentId != 0 {
 		var authorityMenus []system.SysAuthorityMenu
-		err = global.GVA_DB.WithContext(ctx).Where("sys_authority_authority_id = ?", adminAuthorityID).Find(&authorityMenus).Error
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", adminAuthorityID).Find(&authorityMenus).Error
 		if err != nil {
 			return err
 		}
@@ -278,7 +277,7 @@ func (menuService *MenuService) AddMenuAuthority(ctx context.Context, menus []sy
 		}
 	}
 
-	err = AuthorityServiceApp.SetMenuAuthority(ctx, &auth)
+	err = AuthorityServiceApp.SetMenuAuthority(&auth)
 	return err
 }
 
@@ -288,10 +287,10 @@ func (menuService *MenuService) AddMenuAuthority(ctx context.Context, menus []sy
 //@param: info *request.GetAuthorityId
 //@return: menus []system.SysMenu, err error
 
-func (menuService *MenuService) GetMenuAuthority(ctx context.Context, info *request.GetAuthorityId) (menus []system.SysMenu, err error) {
+func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (menus []system.SysMenu, err error) {
 	var baseMenu []system.SysBaseMenu
 	var SysAuthorityMenus []system.SysAuthorityMenu
-	err = global.GVA_DB.WithContext(ctx).Where("sys_authority_authority_id = ?", info.AuthorityId).Find(&SysAuthorityMenus).Error
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", info.AuthorityId).Find(&SysAuthorityMenus).Error
 	if err != nil {
 		return
 	}
@@ -302,7 +301,7 @@ func (menuService *MenuService) GetMenuAuthority(ctx context.Context, info *requ
 		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
 	}
 
-	err = global.GVA_DB.WithContext(ctx).Where("id in (?) ", MenuIds).Order("sort").Find(&baseMenu).Error
+	err = global.GVA_DB.Where("id in (?) ", MenuIds).Order("sort").Find(&baseMenu).Error
 
 	for i := range baseMenu {
 		menus = append(menus, system.SysMenu{
@@ -316,9 +315,9 @@ func (menuService *MenuService) GetMenuAuthority(ctx context.Context, info *requ
 }
 
 // GetAuthoritiesByMenuId 获取拥有指定菜单的所有角色ID
-func (menuService *MenuService) GetAuthoritiesByMenuId(ctx context.Context, menuId uint) (authorityIds []uint, err error) {
+func (menuService *MenuService) GetAuthoritiesByMenuId(menuId uint) (authorityIds []uint, err error) {
 	var records []system.SysAuthorityMenu
-	err = global.GVA_DB.WithContext(ctx).Where("sys_base_menu_id = ?", menuId).Find(&records).Error
+	err = global.GVA_DB.Where("sys_base_menu_id = ?", menuId).Find(&records).Error
 	if err != nil {
 		return nil, err
 	}
@@ -332,14 +331,14 @@ func (menuService *MenuService) GetAuthoritiesByMenuId(ctx context.Context, menu
 }
 
 // GetDefaultRouterAuthorityIds 获取将指定菜单设为首页的角色ID列表
-func (menuService *MenuService) GetDefaultRouterAuthorityIds(ctx context.Context, menuId uint) (authorityIds []uint, err error) {
+func (menuService *MenuService) GetDefaultRouterAuthorityIds(menuId uint) (authorityIds []uint, err error) {
 	var menu system.SysBaseMenu
-	err = global.GVA_DB.WithContext(ctx).First(&menu, menuId).Error
+	err = global.GVA_DB.First(&menu, menuId).Error
 	if err != nil {
 		return nil, err
 	}
 	var authorities []system.SysAuthority
-	err = global.GVA_DB.WithContext(ctx).Where("default_router = ?", menu.Name).Find(&authorities).Error
+	err = global.GVA_DB.Where("default_router = ?", menu.Name).Find(&authorities).Error
 	if err != nil {
 		return nil, err
 	}
@@ -350,8 +349,8 @@ func (menuService *MenuService) GetDefaultRouterAuthorityIds(ctx context.Context
 }
 
 // SetMenuAuthorities 全量覆盖某菜单关联的角色列表
-func (menuService *MenuService) SetMenuAuthorities(ctx context.Context, menuId uint, authorityIds []uint) error {
-	return global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+func (menuService *MenuService) SetMenuAuthorities(menuId uint, authorityIds []uint) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		// 1. 删除该菜单所有已有的角色关联
 		if err := tx.Where("sys_base_menu_id = ?", menuId).Delete(&system.SysAuthorityMenu{}).Error; err != nil {
 			return err
@@ -377,14 +376,14 @@ func (menuService *MenuService) SetMenuAuthorities(ctx context.Context, menuId u
 // UserAuthorityDefaultRouter 用户角色默认路由检查
 //
 //	Author [SliverHorn](https://github.com/SliverHorn)
-func (menuService *MenuService) UserAuthorityDefaultRouter(ctx context.Context, user *system.SysUser) {
+func (menuService *MenuService) UserAuthorityDefaultRouter(user *system.SysUser) {
 	var menuIds []string
-	err := global.GVA_DB.WithContext(ctx).Model(&system.SysAuthorityMenu{}).Where("sys_authority_authority_id = ?", user.AuthorityId).Pluck("sys_base_menu_id", &menuIds).Error
+	err := global.GVA_DB.Model(&system.SysAuthorityMenu{}).Where("sys_authority_authority_id = ?", user.AuthorityId).Pluck("sys_base_menu_id", &menuIds).Error
 	if err != nil {
 		return
 	}
 	var am system.SysBaseMenu
-	err = global.GVA_DB.WithContext(ctx).First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, menuIds).Error
+	err = global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, menuIds).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		user.Authority.DefaultRouter = "404"
 	}

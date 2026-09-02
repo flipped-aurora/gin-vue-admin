@@ -22,13 +22,7 @@ const routes = [
       title: '扫码上传',
       client: true
     },
-    component: () => import('@/view/media/scanUpload.vue')
-  },
-  {
-    path: '/forceChangePassword',
-    name: 'ForceChangePassword',
-    component: () => import('@/view/system/security/forceChangePassword.vue'),
-    meta: { title: '修改密码' }
+    component: () => import('@/view/example/upload/scanUpload.vue')
   },
   {
     path: '/:catchAll(.*)',

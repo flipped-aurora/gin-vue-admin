@@ -1,11 +1,12 @@
 package api
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/announcement/model"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/announcement/model/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 var Info = new(info)
@@ -30,7 +31,7 @@ func (a *info) CreateInfo(c *gin.Context) {
 	}
 	err = serviceInfo.CreateInfo(&info)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -50,7 +51,7 @@ func (a *info) DeleteInfo(c *gin.Context) {
 	ID := c.Query("ID")
 	err := serviceInfo.DeleteInfo(ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -68,7 +69,7 @@ func (a *info) DeleteInfo(c *gin.Context) {
 func (a *info) DeleteInfoByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
 	if err := serviceInfo.DeleteInfoByIds(IDs); err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("批量删除失败!")
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 		return
 	}
@@ -93,7 +94,7 @@ func (a *info) UpdateInfo(c *gin.Context) {
 	}
 	err = serviceInfo.UpdateInfo(info)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 		return
 	}
@@ -113,7 +114,7 @@ func (a *info) FindInfo(c *gin.Context) {
 	ID := c.Query("ID")
 	reinfo, err := serviceInfo.GetInfo(ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -138,7 +139,7 @@ func (a *info) GetInfoList(c *gin.Context) {
 	}
 	list, total, err := serviceInfo.GetInfoInfoList(pageInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -161,7 +162,7 @@ func (a *info) GetInfoDataSource(c *gin.Context) {
 	// 此接口为获取数据源定义的数据
 	dataSource, err := serviceInfo.GetInfoDataSource()
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}

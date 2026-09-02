@@ -7,11 +7,10 @@
   import useChartOption from '@/hooks/charts'
   import { graphic } from 'echarts'
   import { computed, ref } from 'vue'
-  import { useThemeStore } from '@/pinia'
+  import { useAppStore } from '@/pinia'
   import { storeToRefs } from 'pinia'
-  import { addOpacityToColor } from '@/theme/color'
-  const themeStore = useThemeStore()
-  const { settings } = storeToRefs(themeStore)
+  const appStore = useAppStore()
+  const { config } = storeToRefs(appStore)
   defineProps({
     height: {
       type: String,
@@ -19,12 +18,11 @@
     }
   })
   const axisTextColor = computed(() => {
-    return themeStore.isDark ? 'rgba(255,255,255,0.70)' : 'rgba(0,0,0,0.70)'
+    return appStore.isDark ? 'rgba(255,255,255,0.70)' : 'rgba(0,0,0,0.70)'
   })
   const dotColor = computed(() => {
-    return themeStore.isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'
+    return appStore.isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'
   })
-  const primaryColor = (opacity) => addOpacityToColor(settings.value.themeColor, opacity)
   const graphicFactory = (side) => {
     return {
       type: 'text',
@@ -94,7 +92,7 @@
         axisPointer: {
           show: true,
           lineStyle: {
-            color: primaryColor(1),
+            color: `${config.value.primaryColor}FF`,
             width: 2
           }
         }
@@ -152,15 +150,15 @@
             color: new graphic.LinearGradient(0, 0, 1, 0, [
               {
                 offset: 0,
-                color: primaryColor(0.5)
+                color: `${config.value.primaryColor}80`
               },
               {
                 offset: 0.5,
-                color: primaryColor(0.57)
+                color: `${config.value.primaryColor}92`
               },
               {
                 offset: 1,
-                color: primaryColor(1)
+                color: `${config.value.primaryColor}FF`
               }
             ])
           },
@@ -170,11 +168,11 @@
             color: new graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: primaryColor(0.13)
+                color: `${config.value.primaryColor}20`
               },
               {
                 offset: 1,
-                color: primaryColor(0.03)
+                color: `${config.value.primaryColor}08`
               }
             ])
           }

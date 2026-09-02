@@ -1,7 +1,6 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -9,8 +8,7 @@ import (
 // CustomClaims structure
 type CustomClaims struct {
 	BaseClaims
-	BufferTime    int64
-	MustChangePwd bool `json:"mustChangePwd"`
+	BufferTime int64
 	jwt.RegisteredClaims
 }
 
@@ -20,5 +18,4 @@ type BaseClaims struct {
 	Username    string
 	NickName    string
 	AuthorityId uint
-	UserType    system.UserType
 }

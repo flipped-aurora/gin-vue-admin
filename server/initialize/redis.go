@@ -5,9 +5,9 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 func initRedisClient(redisCfg config.Redis) (redis.UniversalClient, error) {
@@ -28,11 +28,11 @@ func initRedisClient(redisCfg config.Redis) (redis.UniversalClient, error) {
 	}
 	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		logger.Bg().Mod("system").Field("name", redisCfg.Name).Err(err).Error("redis connect ping failed, err:")
+		global.GVA_LOG.Error("redis connect ping failed, err:", zap.String("name", redisCfg.Name), zap.Error(err))
 		return nil, err
 	}
 
-	logger.Bg().Mod("system").Field("name", redisCfg.Name).Field("pong", pong).Info("redis connect ping response:")
+	global.GVA_LOG.Info("redis connect ping response:", zap.String("name", redisCfg.Name), zap.String("pong", pong))
 	return client, nil
 }
 

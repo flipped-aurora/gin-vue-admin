@@ -1,6 +1,5 @@
 package service
 
-type ServiceGroup struct {
-}
+type ServiceGroup struct{}
 
 var ServiceGroupApp = new(ServiceGroup)

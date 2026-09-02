@@ -15,7 +15,7 @@
         >确 定</el-button
       >
     </div>
-    <div class="h-[calc(100vh-208px)] mt-2 overflow-auto">
+    <div class="tree-content">
       <el-scrollbar>
         <el-tree
           ref="apiTree"
@@ -29,7 +29,7 @@
           :filter-node-method="filterNode"
           @check="nodeChange"
         >
-          <template #default="{ data }">
+          <template #default="{ _, data }">
             <div class="flex items-center justify-between w-full pr-1">
               <span>{{ data.description }} </span>
               <el-tooltip :content="data.path">

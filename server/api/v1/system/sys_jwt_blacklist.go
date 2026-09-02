@@ -1,11 +1,12 @@
 package system
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type JwtApi struct{}
@@ -21,9 +22,9 @@ type JwtApi struct{}
 func (j *JwtApi) JsonInBlacklist(c *gin.Context) {
 	token := utils.GetToken(c)
 	jwt := system.JwtBlacklist{Jwt: token}
-	err := jwtService.JsonInBlacklist(c.Request.Context(), jwt)
+	err := jwtService.JsonInBlacklist(jwt)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("jwt作废失败!")
+		global.GVA_LOG.Error("jwt作废失败!", zap.Error(err))
 		response.FailWithMessage("jwt作废失败", c)
 		return
 	}

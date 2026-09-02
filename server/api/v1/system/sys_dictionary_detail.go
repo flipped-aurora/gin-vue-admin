@@ -3,12 +3,13 @@ package system
 import (
 	"strconv"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/logger"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type DictionaryDetailApi struct{}
@@ -29,9 +30,9 @@ func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryDetailService.CreateSysDictionaryDetail(c.Request.Context(), detail)
+	err = dictionaryDetailService.CreateSysDictionaryDetail(detail)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("创建失败!")
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 		return
 	}
@@ -54,9 +55,9 @@ func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryDetailService.DeleteSysDictionaryDetail(c.Request.Context(), detail)
+	err = dictionaryDetailService.DeleteSysDictionaryDetail(detail)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("删除失败!")
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 		return
 	}
@@ -79,9 +80,9 @@ func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = dictionaryDetailService.UpdateSysDictionaryDetail(c.Request.Context(), &detail)
+	err = dictionaryDetailService.UpdateSysDictionaryDetail(&detail)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("更新失败!")
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 		return
 	}
@@ -109,9 +110,9 @@ func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	reSysDictionaryDetail, err := dictionaryDetailService.GetSysDictionaryDetail(c.Request.Context(), detail.ID)
+	reSysDictionaryDetail, err := dictionaryDetailService.GetSysDictionaryDetail(detail.ID)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("查询失败!")
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 		return
 	}
@@ -134,9 +135,9 @@ func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := dictionaryDetailService.GetSysDictionaryDetailInfoList(c.Request.Context(), pageInfo)
+	list, total, err := dictionaryDetailService.GetSysDictionaryDetailInfoList(pageInfo)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -172,9 +173,9 @@ func (s *DictionaryDetailApi) GetDictionaryTreeList(c *gin.Context) {
 		id = uint(idUint64)
 	}
 	
-	list, err := dictionaryDetailService.GetDictionaryTreeList(c.Request.Context(), id)
+	list, err := dictionaryDetailService.GetDictionaryTreeList(id)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -197,9 +198,9 @@ func (s *DictionaryDetailApi) GetDictionaryTreeListByType(c *gin.Context) {
 		return
 	}
 	
-	list, err := dictionaryDetailService.GetDictionaryTreeListByType(c.Request.Context(), dictType)
+	list, err := dictionaryDetailService.GetDictionaryTreeListByType(dictType)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -223,9 +224,9 @@ func (s *DictionaryDetailApi) GetDictionaryDetailsByParent(c *gin.Context) {
 		return
 	}
 	
-	list, err := dictionaryDetailService.GetDictionaryDetailsByParent(c.Request.Context(), req)
+	list, err := dictionaryDetailService.GetDictionaryDetailsByParent(req)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
@@ -256,9 +257,9 @@ func (s *DictionaryDetailApi) GetDictionaryPath(c *gin.Context) {
 		id = uint(idUint64)
 	}
 	
-	path, err := dictionaryDetailService.GetDictionaryPath(c.Request.Context(), id)
+	path, err := dictionaryDetailService.GetDictionaryPath(id)
 	if err != nil {
-		logger.WithCtx(c.Request.Context()).Mod("biz").Err(err).Error("获取失败!")
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}

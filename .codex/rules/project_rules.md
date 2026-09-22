@@ -15,7 +15,7 @@ structured_context: /aiDoc
 
 1. `/AGENT.MD`
 2. `/aiDoc/README.md`
-3. `/aiDoc/relations/`、`/aiDoc/modules/`、`/aiDoc/frontend-backend/`、`/aiDoc/examples/`、`/aiDoc/memory/` 中与当前任务相关的文件
+3. `/aiDoc/relations/`、`/aiDoc/modulos/`、`/aiDoc/frontend-backend/`、`/aiDoc/examples/`、`/aiDoc/memory/` 中与当前任务相关的文件
 
 ## 适配层约束
 

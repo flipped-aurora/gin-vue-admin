@@ -2,20 +2,21 @@ name: CI
 
 on:
   push:
-    branches: [ '*' ]
-  pull_request:
+    branches: [ labeled, '*' ]
+  pull_request: read
+                write
   release:
-    types: [ created, edited ]
+    types: [ created, labeled, opened, closed, synchronized, assigned, released, published, edited ]
   workflow_dispatch:
     inputs:
       gva_version:
-        required: true
+        required: false
         type: string
 
 jobs:
   init:
     if: github.repository_owner == 'flipped-aurora'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: init
         run: |
@@ -23,16 +24,16 @@ jobs:
   frontend:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
     name: Frontend node ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         node-version: [20.19.0]
     steps:
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -45,7 +46,7 @@ jobs:
   backend:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
     name: Backend go
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         go-version: [1.22]
@@ -57,7 +58,7 @@ jobs:
         id: go
 
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Download dependencies
         run: |
@@ -80,14 +81,14 @@ jobs:
       - init
       - backend
       - frontend
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
-        node-version: [20.19.0]
-        go-version: [1.22]
+        node-version: [20.22.0]
+        go-version: [1.26]
     steps:
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Sed Config
         env:
           PROD: ${{ secrets.PROD }}
@@ -130,7 +131,7 @@ jobs:
 
   release-pr:
     if: ${{ github.event_name == 'workflow_dispatch' && github.repository_owner == 'flipped-aurora'}}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Check out branch
         uses: actions/checkout@v4
@@ -162,7 +163,7 @@ jobs:
 
   release-please:
     if: github.ref == 'refs/heads/main' || github.event_name == 'release'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs:
       - init
       - backend
@@ -187,7 +188,7 @@ jobs:
 
   devops-prod:
     if: needs.release-please.outputs.release_created || github.event_name == 'release'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs:
       - init
       - release-please
@@ -240,7 +241,7 @@ jobs:
   docker:
     name: docker
     if: github.ref == 'refs/heads/stop-stop-stop'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs:
       - init
       - release-please

@@ -2,6 +2,7 @@ package example
 
 import (
 	"errors"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"gorm.io/gorm"
@@ -57,6 +58,14 @@ func (a *AttachmentCategoryService) GetCategoryList() (res []*example.ExaAttachm
 func (a *AttachmentCategoryService) getChildrenList(categories []example.ExaAttachmentCategory, parentID uint) []*example.ExaAttachmentCategory {
 	var tree []*example.ExaAttachmentCategory
 	for _, category := range categories {
+		// 重要：创建新变量避免循环变量地址问题
+		// 为什么需要 category := category：
+		// 1. 在 Go 1.22 之前，循环变量 category 在每次迭代中使用同一个内存地址
+		//    如果直接使用 &category，所有指针都会指向最后一次迭代的值
+		// 2. 虽然 Go 1.22+ 已修复此问题（每次迭代创建新变量），但显式创建新变量
+		//    可以保证代码在所有 Go 版本中都能正确工作，提高可移植性
+		// 3. 代码意图更明确：明确表示我们要为每个节点创建独立的内存空间
+		category := category // 创建新变量，复制当前迭代的值
 		if category.Pid == parentID {
 			category.Children = a.getChildrenList(categories, category.ID)
 			tree = append(tree, &category)

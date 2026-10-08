@@ -3,13 +3,13 @@
     <el-upload
         ref="uploadRef"
         class="h5-uploader"
-        :action="`${getBaseUrl()}/fileUploadAndDownload/upload`"
+        :action="`${getBaseUrl()}/fileUploadAndDownload/uploadByScanToken`"
         accept="image/*"
         :show-file-list="false"
         :auto-upload="false"
-        :headers="{ 'x-token': token }"
-        :data="{'classId': classId}"
+        :headers="{ 'x-upload-token': uploadToken }"
         :on-success="handleImageSuccess"
+        :on-error="handleImageError"
         :on-change="handleFileChange"
     >
       <el-icon class="h5-uploader-icon"><Plus /></el-icon>
@@ -84,14 +84,12 @@ import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { getBaseUrl } from '@/utils/format'
 import { useRouter } from 'vue-router'
-import { useUserStore } from "@/pinia";
 
 defineOptions({
   name: 'scanUpload'
 })
 
-const classId = ref(0)
-const token = ref('')
+const uploadToken = ref('')
 const isCrop = ref(false)
 
 const windowWidth = ref(300)
@@ -109,10 +107,11 @@ onMounted(() => {
 
 const router = useRouter()
 router.isReady().then(() => {
-  let query = router.currentRoute.value.query
-  //console.log(query)
-  classId.value = query.id
-  token.value = query.token
+  const query = router.currentRoute.value.query
+  uploadToken.value = query.uploadToken || ''
+  if (uploadToken.value) {
+    router.replace({ path: '/scanUpload' })
+  }
 }).catch((err) => {
   console.log(err)
 })
@@ -194,13 +193,22 @@ const handleUpload = () => {
 }
 
 const handleImageSuccess = (res) => {
+  uploading.value = false
+  if (res.code !== 0) {
+    ElMessage.error(res.msg || '上传失败，请重新扫码')
+    return
+  }
   const { data } = res
   if (data) {
     imgSrc.value = null
-    uploading.value = false
     previews.value = {}
     ElMessage.success('上传成功')
   }
+}
+
+const handleImageError = () => {
+  uploading.value = false
+  ElMessage.error('上传凭证无效或已过期，请重新扫码')
 }
 
 </script>

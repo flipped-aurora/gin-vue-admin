@@ -65,3 +65,19 @@ export const uploadFile = (data) => {
     data,
   });
 };
+
+/**
+ * 上传文件（FormData）：粘贴图片等场景使用，noSave=1 不保存进媒体库
+ * @param data FormData
+ * @returns {*}
+ */
+export const uploadAttachment = (data) => {
+  return service({
+    url: '/fileUploadAndDownload/upload?noSave=1',
+    method: 'post',
+    data,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}

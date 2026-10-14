@@ -1,6 +1,6 @@
 <template>
   <div>
-    <selectComponent :rounded="rounded" v-if="!props.multiple" :model="model" @chooseItem="openChooseImg" @deleteItem="openChooseImg" />
+    <selectComponent :rounded="rounded" v-if="!props.multiple" :model="model" @chooseItem="openChooseImg" @deleteItem="openChooseImg" @pasteFile="onPasteFile" />
     <div v-else class="w-full gap-4 flex flex-wrap">
       <draggable 
         v-model="model" 
@@ -24,7 +24,7 @@
         </template>
       </draggable>
       <selectComponent :rounded="rounded" v-if="currentImageCount < props.maxUpdateCount || props.maxUpdateCount === 0"
-                       @chooseItem="openChooseImg" @deleteItem="openChooseImg"
+                       @chooseItem="openChooseImg" @deleteItem="openChooseImg" @pasteFile="onPasteFile"
       />
     </div>
 
@@ -150,7 +150,7 @@
 <script setup>
 import { getUrl, isVideoExt } from '@/utils/image'
 import { computed, ref } from 'vue'
-import { getFileList, editFileName, deleteFile } from '@/api/fileUploadAndDownload'
+import {getFileList, editFileName, deleteFile, uploadAttachment} from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -485,6 +485,55 @@ const onDragEnd = () => {
   }
 }
 
+// 粘贴上传：noSave 不保存进媒体库，成功后直接回填 model（单图覆盖 / 多图追加）
+const onPasteFile = async(file) => {
+  if (props.fileType && props.fileType !== 'image') {
+    ElMessage({
+      type: 'error',
+      message: '当前类型不支持使用'
+    })
+    return
+  }
+  if (props.multiple && props.maxUpdateCount > 0 && (model.value?.length || 0) >= props.maxUpdateCount) {
+    ElMessage({
+      type: 'error',
+      message: `最多只能选择 ${props.maxUpdateCount} 张图片`
+    })
+    return
+  }
+  // 截图类文件常无可用文件名，补一个（后端按文件名识别类型）
+  const ext = (file.type.split('/')[1] || 'png').replace('jpeg', 'jpg')
+  const fd = new FormData()
+  fd.append('file', file, file.name || `paste-${Date.now()}.${ext}`)
+
+  const res = await uploadAttachment(fd)
+  if (res.code !== 0) return // 失败提示由响应拦截器统一处理
+  const url = res.data?.file.url
+  if (!url) {
+    ElMessage({
+      type: 'error',
+      message: '上传失败'
+    })
+    return
+  }
+  if (props.multiple) {
+    // 并发粘贴多张时可能同时通过上限校验，回填前再检查一次
+    if (props.maxUpdateCount > 0 && (model.value?.length || 0) >= props.maxUpdateCount) {
+      ElMessage({
+        type: 'error',
+        message: `最多只能选择 ${props.maxUpdateCount} 张图片`
+      })
+      return
+    }
+    model.value = [...(model.value || []), url]
+  } else {
+    model.value = url
+  }
+  ElMessage({
+    type: 'success',
+    message: '粘贴上传成功'
+  })
+}
 </script>
 <style scoped>
 .selected {

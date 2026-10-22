@@ -3,7 +3,7 @@
 </div>
 
 <div align="center">
-  <img src="https://img.shields.io/badge/golang-1.20-blue" />
+  <img src="https://img.shields.io/badge/golang-1.26.10-blue" />
   <img src="https://img.shields.io/badge/gin-1.9.1-lightBlue" />
   <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen" />
   <img src="https://img.shields.io/badge/element--plus-2.3.8-green" />
@@ -105,7 +105,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ## 2. 使用说明
 
 - node版本 > v18.16.0
-- golang版本 >= v1.22
+- golang版本 >= v1.26.10
 - IDE推荐：Goland
 
 ### 2.1 server项目

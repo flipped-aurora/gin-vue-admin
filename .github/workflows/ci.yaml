@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.22]
+        go-version: ['1.26.10']
     steps:
       - name: Set up Go ${{ matrix.go-version }}
         uses: actions/setup-go@v5
@@ -84,7 +84,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.19.0]
-        go-version: [1.22]
+        go-version: ['1.26.10']
     steps:
       - name: Check out branch
         uses: actions/checkout@v4
@@ -195,7 +195,7 @@ jobs:
     strategy:
       matrix:
         node-version: ['20.x']
-        go-version: ['1.22']
+        go-version: ['1.26.10']
     steps:
       - uses: actions/checkout@v4
       - name: tag major and minor versions

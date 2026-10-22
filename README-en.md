@@ -3,7 +3,7 @@
 <img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width="300" height="300" />
 </div>
 <div align=center>
-<img src="https://img.shields.io/badge/golang-1.18-blue"/>
+<img src="https://img.shields.io/badge/golang-1.26.10-blue"/>
 <img src="https://img.shields.io/badge/gin-1.9.1-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-2.3.8-green"/>
@@ -75,7 +75,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 ```
 - node version > v8.6.0
-- golang version >= v1.14
+- golang version >= v1.26.10
 - IDE recommendation: Goland
 - initialization project: different versions of the database are not initialized. See synonyms at initialization https://www.gin-vue-admin.com/docs/first
 - Replace the Qiniuyun public key, private key, warehouse name and default url address in the project to avoid data confusion in the test file.

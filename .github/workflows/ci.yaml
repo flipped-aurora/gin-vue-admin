@@ -36,6 +36,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Use npm 11.19.1
+        run: npm install --global npm@11.19.1
+
       - name: Build test
         run: |
           npm install

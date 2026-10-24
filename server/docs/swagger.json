@@ -4,7 +4,7 @@
         "description": "使用gin+vue进行极速开发的全栈开发基础平台",
         "title": "Gin-Vue-Admin Swagger API接口文档",
         "contact": {},
-        "version": "v2.7.9-beta"
+        "version": "v2.8.6"
     },
     "paths": {
         "/api/createApi": {
@@ -1797,9 +1797,7 @@
                                     "properties": {
                                         "data": {
                                             "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            }
+                                            "items": {}
                                         },
                                         "msg": {
                                             "type": "string"
@@ -1807,6 +1805,120 @@
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/mcp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mcp"
+                ],
+                "summary": "自动McpTool",
+                "parameters": [
+                    {
+                        "description": "创建自动代码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AutoMcpTool"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/mcpList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mcp"
+                ],
+                "summary": "自动McpTool",
+                "parameters": [
+                    {
+                        "description": "创建自动代码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AutoMcpTool"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/mcpTest": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mcp"
+                ],
+                "summary": "测试McpTool",
+                "parameters": [
+                    {
+                        "description": "调用MCP Tool的参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"测试成功\"}",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -2437,7 +2549,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.PageResult"
+                                            "$ref": "#/definitions/response.PageResultT-response_ExaCustomerResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4067,6 +4179,12 @@
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "description": "父级字典ID",
+                        "name": "parentID",
+                        "in": "query"
+                    },
+                    {
                         "type": "boolean",
                         "description": "状态",
                         "name": "status",
@@ -4128,6 +4246,14 @@
                     "SysDictionary"
                 ],
                 "summary": "分页获取SysDictionary列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "字典名（中）",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量",
@@ -4334,6 +4460,12 @@
                         "in": "query"
                     },
                     {
+                        "type": "boolean",
+                        "description": "禁用状态，根据status字段动态计算",
+                        "name": "disabled",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "扩展值",
                         "name": "extend",
@@ -4343,6 +4475,24 @@
                         "type": "string",
                         "description": "展示值",
                         "name": "label",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "层级深度，从0开始",
+                        "name": "level",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "父级字典详情ID",
+                        "name": "parentID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "层级路径，如 \"1,2,3\"",
+                        "name": "path",
                         "in": "query"
                     },
                     {
@@ -4402,6 +4552,234 @@
                 }
             }
         },
+        "/sysDictionaryDetail/getDictionaryDetailsByParent": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "根据父级ID获取字典详情",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "是否包含子级数据",
+                        "name": "includeChildren",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "父级字典详情ID，为空时获取顶级",
+                        "name": "parentID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "字典ID",
+                        "name": "sysDictionaryID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取字典详情列表",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/system.SysDictionaryDetail"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/getDictionaryPath": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "获取字典详情的完整路径",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "字典详情ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取字典详情路径",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/system.SysDictionaryDetail"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/getDictionaryTreeList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "获取字典详情树形结构",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "字典ID",
+                        "name": "sysDictionaryID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取字典详情树形结构",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/system.SysDictionaryDetail"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/getDictionaryTreeListByType": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "根据字典类型获取字典详情树形结构",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "字典类型",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取字典详情树形结构",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/system.SysDictionaryDetail"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysDictionaryDetail/getSysDictionaryDetailList": {
             "get": {
                 "security": [
@@ -4433,6 +4811,12 @@
                         "in": "query"
                     },
                     {
+                        "type": "boolean",
+                        "description": "禁用状态，根据status字段动态计算",
+                        "name": "disabled",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "扩展值",
                         "name": "extend",
@@ -4452,6 +4836,12 @@
                     },
                     {
                         "type": "integer",
+                        "description": "层级深度，用于查询指定层级的数据",
+                        "name": "level",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "页码",
                         "name": "page",
                         "in": "query"
@@ -4460,6 +4850,18 @@
                         "type": "integer",
                         "description": "每页大小",
                         "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "父级字典详情ID，用于查询指定父级下的子项",
+                        "name": "parentID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "层级路径，如 \"1,2,3\"",
+                        "name": "path",
                         "in": "query"
                     },
                     {
@@ -4566,26 +4968,6 @@
                         }
                     }
                 }
-            }
-        },
-        "/sysExportTemplate/ExportTemplate": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysExportTemplate"
-                ],
-                "summary": "导出表格模板",
-                "responses": {}
             }
         },
         "/sysExportTemplate/createSysExportTemplate": {
@@ -4719,6 +5101,66 @@
                     "SysExportTemplate"
                 ],
                 "summary": "导出表格",
+                "responses": {}
+            }
+        },
+        "/sysExportTemplate/exportExcelByToken": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExportExcelByToken"
+                ],
+                "summary": "导出表格",
+                "responses": {}
+            }
+        },
+        "/sysExportTemplate/exportTemplate": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "导出表格模板",
+                "responses": {}
+            }
+        },
+        "/sysExportTemplate/exportTemplateByToken": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExportTemplateByToken"
+                ],
+                "summary": "通过token导出表格模板",
                 "responses": {}
             }
         },
@@ -4977,56 +5419,6 @@
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/sysOperationRecord/createSysOperationRecord": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysOperationRecord"
-                ],
-                "summary": "创建SysOperationRecord",
-                "parameters": [
-                    {
-                        "description": "创建SysOperationRecord",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/system.SysOperationRecord"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "创建SysOperationRecord",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     }
                 }
@@ -5806,6 +6198,415 @@
                 }
             }
         },
+        "/sysVersion/deleteSysVersion": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "删除版本管理",
+                "parameters": [
+                    {
+                        "description": "删除版本管理",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysVersion"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/deleteSysVersionByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "批量删除版本管理",
+                "responses": {
+                    "200": {
+                        "description": "批量删除成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/downloadVersionJson": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "下载版本JSON数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "版本ID",
+                        "name": "ID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "下载成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/exportVersion": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "创建发版数据",
+                "parameters": [
+                    {
+                        "description": "创建发版数据",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ExportVersionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/findSysVersion": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "用id查询版本管理",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用id查询版本管理",
+                        "name": "ID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/system.SysVersion"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/getSysVersionList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "分页获取版本管理列表",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "name": "createdAtRange",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "versionCode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "versionName",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/getSysVersionPublic": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "不需要鉴权的版本管理接口",
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysVersion/importVersion": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysVersion"
+                ],
+                "summary": "导入版本数据",
+                "parameters": [
+                    {
+                        "description": "版本JSON数据",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ImportVersionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "导入成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/system/getServerInfo": {
             "post": {
                 "security": [
@@ -5898,10 +6699,10 @@
                 "tags": [
                     "System"
                 ],
-                "summary": "重启系统",
+                "summary": "重载系统",
                 "responses": {
                     "200": {
-                        "description": "重启系统",
+                        "description": "重载系统",
                         "schema": {
                             "allOf": [
                                 {
@@ -6647,7 +7448,7 @@
                     "type": "integer"
                 },
                 "open-captcha": {
-                    "description": "防爆破验证码开启此数，0代表每次登录都需要验证码，其他数字代表错误密码此数，如3代表错误三次后出现验证码",
+                    "description": "防爆破验证码开启此数，0代表每次登录都需要验证码，其他数字代表错误密码次数，如3代表错误三次后出现验证码",
                     "type": "integer"
                 },
                 "open-captcha-timeout": {
@@ -6745,6 +7546,39 @@
                 },
                 "store-path": {
                     "description": "本地文件存储路径",
+                    "type": "string"
+                }
+            }
+        },
+        "config.MCP": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "description": "独立MCP服务端口",
+                    "type": "integer"
+                },
+                "message_path": {
+                    "description": "消息路径",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "MCP名称",
+                    "type": "string"
+                },
+                "separate": {
+                    "description": "是否独立运行MCP服务",
+                    "type": "boolean"
+                },
+                "sse_path": {
+                    "description": "SSE路径",
+                    "type": "string"
+                },
+                "url_prefix": {
+                    "description": "URL前缀",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "MCP版本",
                     "type": "string"
                 }
             }
@@ -7204,6 +8038,14 @@
                         }
                     ]
                 },
+                "mcp": {
+                    "description": "MCP配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/config.MCP"
+                        }
+                    ]
+                },
                 "minio": {
                     "$ref": "#/definitions/config.Minio"
                 },
@@ -7388,6 +8230,10 @@
                 "db-type": {
                     "description": "数据库类型:mysql(默认)|sqlite|sqlserver|postgresql",
                     "type": "string"
+                },
+                "disable-auto-migrate": {
+                    "description": "自动迁移数据库表结构，生产环境建议设为false，手动迁移",
+                    "type": "boolean"
                 },
                 "iplimit-count": {
                     "type": "integer"
@@ -7665,6 +8511,10 @@
                 "host": {
                     "description": "服务器地址 例如 smtp.qq.com  请前往QQ或者你要发邮件的邮箱查看其smtp协议",
                     "type": "string"
+                },
+                "is-loginauth": {
+                    "description": "是否LoginAuth   是否使用LoginAuth认证方式（适用于IBM、微软邮箱服务器等）",
+                    "type": "boolean"
                 },
                 "is-ssl": {
                     "description": "是否SSL   是否开启SSL",
@@ -7952,6 +8802,65 @@
                 }
             }
         },
+        "request.AutoMcpTool": {
+            "type": "object",
+            "required": [
+                "description",
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "description",
+                            "name",
+                            "type"
+                        ],
+                        "properties": {
+                            "default": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "required": {
+                                "type": "boolean"
+                            },
+                            "type": {
+                                "description": "string, number, boolean, object, array",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "response": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "type"
+                        ],
+                        "properties": {
+                            "type": {
+                                "description": "text, image",
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "request.CasbinInReceive": {
             "type": "object",
             "properties": {
@@ -8040,6 +8949,48 @@
                 }
             }
         },
+        "request.ExportVersionRequest": {
+            "type": "object",
+            "required": [
+                "versionCode",
+                "versionName"
+            ],
+            "properties": {
+                "apiIds": {
+                    "description": "选中的API ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "description": "版本描述",
+                    "type": "string"
+                },
+                "dictIds": {
+                    "description": "选中的字典ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "menuIds": {
+                    "description": "选中的菜单ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "versionCode": {
+                    "description": "版本号",
+                    "type": "string"
+                },
+                "versionName": {
+                    "description": "版本名称",
+                    "type": "string"
+                }
+            }
+        },
         "request.GetAuthorityId": {
             "type": "object",
             "properties": {
@@ -8095,6 +9046,43 @@
                     "items": {
                         "type": "integer"
                     }
+                }
+            }
+        },
+        "request.ImportVersionRequest": {
+            "type": "object",
+            "required": [
+                "version"
+            ],
+            "properties": {
+                "apis": {
+                    "description": "API数据，直接复用SysApi",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysApi"
+                    }
+                },
+                "dictionaries": {
+                    "description": "字典数据，直接复用SysDictionary",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysDictionary"
+                    }
+                },
+                "menus": {
+                    "description": "菜单数据，直接复用SysBaseMenu",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysBaseMenu"
+                    }
+                },
+                "version": {
+                    "description": "版本信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.VersionInfo"
+                        }
+                    ]
                 }
             }
         },
@@ -8357,6 +9345,31 @@
                 }
             }
         },
+        "request.VersionInfo": {
+            "type": "object",
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "code": {
+                    "description": "版本号",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "版本描述",
+                    "type": "string"
+                },
+                "exportTime": {
+                    "description": "导出时间",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "版本名称",
+                    "type": "string"
+                }
+            }
+        },
         "response.Email": {
             "type": "object",
             "properties": {
@@ -8424,6 +9437,26 @@
             "type": "object",
             "properties": {
                 "list": {},
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.PageResultT-response_ExaCustomerResponse": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.ExaCustomerResponse"
+                    }
+                },
                 "page": {
                     "type": "integer"
                 },
@@ -8654,6 +9687,10 @@
                 "title": {
                     "description": "菜单名",
                     "type": "string"
+                },
+                "transitionType": {
+                    "description": "路由切换动画",
+                    "type": "string"
                 }
             }
         },
@@ -8878,6 +9915,13 @@
                     "description": "主键ID",
                     "type": "integer"
                 },
+                "children": {
+                    "description": "子字典",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysDictionary"
+                    }
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -8889,6 +9933,10 @@
                 "name": {
                     "description": "字典名（中）",
                     "type": "string"
+                },
+                "parentID": {
+                    "description": "父级字典ID",
+                    "type": "integer"
                 },
                 "status": {
                     "description": "状态",
@@ -8917,9 +9965,20 @@
                     "description": "主键ID",
                     "type": "integer"
                 },
+                "children": {
+                    "description": "子字典详情",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysDictionaryDetail"
+                    }
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
+                },
+                "disabled": {
+                    "description": "禁用状态，根据status字段动态计算",
+                    "type": "boolean"
                 },
                 "extend": {
                     "description": "扩展值",
@@ -8927,6 +9986,18 @@
                 },
                 "label": {
                     "description": "展示值",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "层级深度，从0开始",
+                    "type": "integer"
+                },
+                "parentID": {
+                    "description": "父级字典详情ID",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "层级路径，如 \"1,2,3\"",
                     "type": "string"
                 },
                 "sort": {
@@ -9254,6 +10325,43 @@
                 },
                 "uuid": {
                     "description": "用户UUID",
+                    "type": "string"
+                }
+            }
+        },
+        "system.SysVersion": {
+            "type": "object",
+            "required": [
+                "versionCode",
+                "versionName"
+            ],
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "版本描述",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "versionCode": {
+                    "description": "版本号",
+                    "type": "string"
+                },
+                "versionData": {
+                    "description": "版本数据",
+                    "type": "string"
+                },
+                "versionName": {
+                    "description": "版本名称",
                     "type": "string"
                 }
             }

@@ -2,20 +2,20 @@ name: CI
 
 on:
   push:
-    branches: [ '*' ]
+    branches: [ '*', 'xyw' ]
   pull_request:
   release:
-    types: [ created, edited ]
+    types: [ created, edited, labeled, assigned ]
   workflow_dispatch:
     inputs:
       gva_version:
-        required: true
-        type: string
+        required: false
+        type: 
 
 jobs:
   init:
     if: github.repository_owner == 'flipped-aurora'
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     steps:
       - name: init
         run: |
@@ -23,21 +23,21 @@ jobs:
   frontend:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
     name: Frontend node ${{ matrix.node-version }}
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     strategy:
       matrix:
         node-version: [20.19.0]
     steps:
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Use npm 11.19.1
-        run: npm install --global npm@11.19.1
+      - name: Use npm 12.20.5
+        run: npm install --global npm@12.20.5
 
       - name: Build test
         run: |
@@ -48,19 +48,19 @@ jobs:
   backend:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
     name: Backend go
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     strategy:
       matrix:
-        go-version: ['1.26.10']
+        go-version: ['1.28.13']
     steps:
       - name: Set up Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go-version }}
         id: go
 
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download dependencies
         run: |
@@ -86,11 +86,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.19.0]
-        go-version: ['1.26.10']
+        node-version: [21.20.5]
+        go-version: ['1.28.13']
     steps:
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Sed Config
         env:
           PROD: ${{ secrets.PROD }}
@@ -136,7 +136,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Sed Config
         env:
           GVA_VERSION: ${{ inputs.gva_version }}
@@ -165,7 +165,7 @@ jobs:
 
   release-please:
     if: github.ref == 'refs/heads/main' || github.event_name == 'release'
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     needs:
       - init
       - backend
@@ -190,17 +190,17 @@ jobs:
 
   devops-prod:
     if: needs.release-please.outputs.release_created || github.event_name == 'release'
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     needs:
       - init
       - release-please
     name: devops-prod
     strategy:
       matrix:
-        node-version: ['20.x']
-        go-version: ['1.26.10']
+        node-version: ['24.x']
+        go-version: ['1.28.15']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: tag major and minor versions
         run: |
           echo " ${{ needs.release-please.outputs.tag_name }}"
@@ -211,7 +211,7 @@ jobs:
           ls -l
           sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Build-Node
@@ -243,15 +243,15 @@ jobs:
   docker:
     name: docker
     if: github.ref == 'refs/heads/stop-stop-stop'
-    runs-on: ubuntu-latest
+    runs-on: linux-xarm92
     needs:
       - init
       - release-please
     steps:
       - name: Check out branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Login to Aliyun Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ secrets.ALIYUN_REGISTRY }}
           username: ${{ secrets.ALIYUN_DOCKERHUB_USER }}

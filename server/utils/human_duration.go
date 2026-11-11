@@ -15,11 +15,17 @@ func ParseDuration(d string) (time.Duration, error) {
 	if strings.Contains(d, "d") {
 		index := strings.Index(d, "d")
 
-		hour, _ := strconv.Atoi(d[:index])
-		dr = time.Hour * 24 * time.Duration(hour)
+		day, err := strconv.Atoi(d[:index])
+		if err != nil {
+			return 0, err
+		}
+		dr = time.Hour * 24 * time.Duration(day)
+		if index+1 == len(d) {
+			return dr, nil
+		}
 		ndr, err := time.ParseDuration(d[index+1:])
 		if err != nil {
-			return dr, nil
+			return 0, err
 		}
 		return dr + ndr, nil
 	}

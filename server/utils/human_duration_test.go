@@ -33,6 +33,21 @@ func TestParseDuration(t *testing.T) {
 			want:    24 * time.Hour,
 			wantErr: false,
 		},
+		{
+			name:    "7days",
+			args:    args{"7days"},
+			wantErr: true,
+		},
+		{
+			name:    "xd",
+			args:    args{"xd"},
+			wantErr: true,
+		},
+		{
+			name:    "1d5hours",
+			args:    args{"1d5hours"},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

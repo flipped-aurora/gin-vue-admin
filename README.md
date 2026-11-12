@@ -23,10 +23,6 @@
   <a href="./README-en.md">English</a> | 简体中文
 </p>
 
-## 支持 Claw 生态
-
-[🦞 GvaClaw](https://plugin.gin-vue-admin.com/details/159)
-
 ## 一分钟生成前后端基础代码
 
 <table>

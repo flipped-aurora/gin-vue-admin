@@ -11,10 +11,10 @@
   </div>
 </template>
 <script setup>
-  import '@wangeditor/editor/dist/css/style.css' // 引入 css
+  import '@wangeditor-next/editor/dist/css/style.css' // 引入 css
 
   import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
-  import { Editor } from '@wangeditor/editor-for-vue'
+  import { Editor } from '@wangeditor-next/editor-for-vue'
 
   const emits = defineEmits(['change', 'update:modelValue'])
   const editorConfig = ref({

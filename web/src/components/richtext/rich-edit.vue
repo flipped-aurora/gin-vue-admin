@@ -18,12 +18,12 @@
 </template>
 
 <script setup>
-  import '@wangeditor/editor/dist/css/style.css' // 引入 css
+  import '@wangeditor-next/editor/dist/css/style.css' // 引入 css
 
   const basePath = import.meta.env.VITE_BASE_API
 
   import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
-  import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+  import { Editor, Toolbar } from '@wangeditor-next/editor-for-vue'
 
   import { ElMessage } from 'element-plus'
   import { getUrl } from '@/utils/image'
